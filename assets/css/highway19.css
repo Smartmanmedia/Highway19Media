@@ -672,13 +672,11 @@ body.road-debug .lane-guide{opacity:.9}
 .foot-brand p{margin:.9em 0 0;font-size:.94rem;color:rgba(255,255,255,.72);max-width:34ch}
 .socials{display:flex;gap:.65rem;margin-top:1.15rem}
 .socials a{
-  width:38px;height:38px;border-radius:9px;
-  background:var(--brand-red);color:#fff;
-  display:grid;place-items:center;
+  display:block;width:40px;height:40px;
   transition:transform .16s ease,filter .16s ease;
 }
-.socials a:hover{transform:translateY(-2px);filter:brightness(1.12)}
-.socials svg{width:20px;height:20px;fill:currentColor}
+.socials a:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.socials img{width:100%;height:100%;display:block}
 
 .foot-rule{
   border-top:1px solid rgba(255,255,255,.17);

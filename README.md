@@ -67,18 +67,18 @@ does the conversion and must be re-run on any new Illustrator export;
 layout as well as colour. Everything below about proportion is my call, not
 yours, until it turns up.
 
-**2. Two things are still my redraws, not your artwork.** Renaming to
-`.svg.txt` works — that is how the signs arrived. Still outstanding:
+**2. One thing is still my redraw.** The green "road ahead" plate on section 7
+has no supplied equivalent — send something that means distance or a mile
+marker and it goes in, or say the word and I'll point that slot at one of the
+signs you've already sent.
 
-- **the interstate shield**, used in the header and in both guide signs
-- **the hero banner** (the photoreal one)
-- the green "road ahead" plate on section 7, which has no supplied equivalent
-
-Everything in `assets/brand/` is yours, unaltered:
+Everything in `assets/brand/` is yours, used unaltered:
 
 | File | Where it appears |
 |---|---|
-| `highway-sign.svg` | section 4 and section 9 headlines |
+| `shield.png` | header, hero plate, footer plate |
+| `social-youtube/facebook/instagram.png` | footer marks |
+| `highway-sign.svg` | sections 4 and 9 headlines |
 | `road-work-sign.svg` | section 3 — the detour |
 | `road-bridge-sign.svg` | section 2 — the problem |
 | `lane-arrows-sign.svg` | section 5 — "Pick Your Lane" |
@@ -88,14 +88,13 @@ Everything in `assets/brand/` is yours, unaltered:
 Signs are sized by **height**, not width: they range from a 0.65 portrait plate
 to a 1.13 triangle, and matching widths would make the tall ones tower.
 
-The hero banner is a stand-in meanwhile: the guide sign and shield over four
-service signs, each an actual sign face — rounded, white-bordered, bolted to a
-metal post. Swap in the real artwork by replacing `.hero-banner__art` with an
-`<img>`; the guide sign overlays it either way.
+Two notes on resolution. `shield.png` is 300px and renders up to 118px, so it
+is under 3x on the largest phones — a 600px export would fix that. The social
+marks are 67px against a 40px slot, likewise slightly under 2x. Neither is
+visible on a normal screen.
 
-**3. The typeface.** "Anke" isn't a released family. The site is set in **Anek
-Latin**, the closest match and genuinely signage-like. If you have a licensed
-file under that name, send the `.woff2` and it's two lines in `:root`.
+**3. The hero arrows are mine.** Built to your gantry mockup, but the four
+arrow curves are drawn rather than yours. Send those as SVG and they swap in.
 
 **4. How much page the road should take.** Each section reserves a lane and the
 animation *measures* that lane rather than being told a number, so moving the
