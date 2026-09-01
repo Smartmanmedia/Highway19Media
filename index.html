@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Highway 19 Media — Marketing for Local Businesses That Already Do Good Work</title>
+<meta name="description" content="You've done the hard part. Highway 19 Media builds websites, video, print and social from your actual business — not off a shelf. Send us what you've got and we'll come back within 24 hours.">
+<meta name="theme-color" content="#052a56">
+<meta property="og:title" content="Highway 19 Media — A Clear Road Forward for Your Business">
+<meta property="og:description" content="Websites, video, print and social built from your business, not pulled off a shelf.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2060%2066%22%3E%3Cpath%20d%3D%22M30%201.5c8.5%204.6%2017.4%206.3%2026.5%206.3v27.6c0%2013.2-9.9%2022-26.5%2029.1C13.4%2057.4%203.5%2048.6%203.5%2035.4V7.8c9.1%200%2018-1.7%2026.5-6.3z%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M30%206.6c7.6%203.9%2015.4%205.5%2023.4%205.6v23.2c0%2011.1-8.6%2018.9-23.4%2025.2C15.2%2054.3%206.6%2046.5%206.6%2035.4V12.2c8-.1%2015.8-1.7%2023.4-5.6z%22%20fill%3D%22%230b3d91%22%2F%3E%3Ctext%20x%3D%2230%22%20y%3D%2245%22%20text-anchor%3D%22middle%22%20fill%3D%22%23fff%22%20font-family%3D%22Helvetica%2CArial%2Csans-serif%22%20font-size%3D%2231%22%20font-weight%3D%22700%22%3E19%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="assets/css/highway19.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+<button id="road-pause" type="button" aria-pressed="false">Pause traffic animation</button>
+
+<!-- The interstate shield, defined once and referenced by the header and the
+     footer guide sign. Red HIGHWAY band, blue field, silver rim — the owner's
+     logo. Replace with the real vector file when it's to hand. -->
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <!-- Interstate shield. STILL A REDRAW, not the owner's file: rebuilt by eye
+         from the supplied logo, so proportions, the chrome rim and the blue
+         field gradient are close but not exact. Replace wholesale when the
+         PNG/vector arrives. -->
+    <clipPath id="h19-shield-clip">
+      <path d="M150 6c-42 0-88 3-120 7-12 2-20 12-20 25v58c0 84 50 148 140 190 90-42 140-106 140-190V38c0-13-8-23-20-25-32-4-78-7-120-7z" transform="translate(150 146) scale(.865) translate(-150 -146)"/>
+    </clipPath>
+    <linearGradient id="h19-chrome" x1="0" y1="0" x2=".85" y2="1">
+      <stop offset="0" stop-color="#f2f5f7"/><stop offset=".18" stop-color="#aeb6bd"/>
+      <stop offset=".38" stop-color="#fbfdfe"/><stop offset=".58" stop-color="#8b949c"/>
+      <stop offset=".78" stop-color="#dfe5ea"/><stop offset="1" stop-color="#79828a"/>
+    </linearGradient>
+    <linearGradient id="h19-blue" x1=".15" y1="0" x2=".9" y2="1">
+      <stop offset="0" stop-color="#3579c8"/><stop offset=".45" stop-color="#1a5aa8"/>
+      <stop offset="1" stop-color="#0c3d78"/>
+    </linearGradient>
+    <linearGradient id="h19-red" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a81b26"/><stop offset=".42" stop-color="#c9262f"/>
+      <stop offset="1" stop-color="#9d1720"/>
+    </linearGradient>
+    <linearGradient id="h19-type" x1="0" y1="0" x2=".3" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".62" stop-color="#f4f7f9"/>
+      <stop offset="1" stop-color="#c3ccd3"/>
+    </linearGradient>
+    <symbol id="h19-shield" viewBox="0 0 300 292">
+      <path d="M150 6c-42 0-88 3-120 7-12 2-20 12-20 25v58c0 84 50 148 140 190 90-42 140-106 140-190V38c0-13-8-23-20-25-32-4-78-7-120-7z" fill="#15181b"/>
+      <path d="M150 6c-42 0-88 3-120 7-12 2-20 12-20 25v58c0 84 50 148 140 190 90-42 140-106 140-190V38c0-13-8-23-20-25-32-4-78-7-120-7z" fill="url(#h19-chrome)"
+            transform="translate(150 146) scale(.972) translate(-150 -146)"/>
+      <g clip-path="url(#h19-shield-clip)">
+        <rect width="300" height="78" fill="url(#h19-red)"/>
+        <rect y="78" width="300" height="214" fill="url(#h19-blue)"/>
+        <rect y="74" width="300" height="5" fill="#0f1417" opacity=".45"/>
+      </g>
+      <path d="M150 6c-42 0-88 3-120 7-12 2-20 12-20 25v58c0 84 50 148 140 190 90-42 140-106 140-190V38c0-13-8-23-20-25-32-4-78-7-120-7z" fill="none" stroke="#0b1a2c" stroke-width="4" opacity=".55"
+            transform="translate(150 146) scale(.865) translate(-150 -146)"/>
+      <g text-anchor="middle" font-family="Anek Latin,Helvetica Neue,Arial,sans-serif">
+        <text x="150" y="62" font-size="44" font-weight="800" letter-spacing="1"
+              fill="url(#h19-type)">HIGHWAY</text>
+        <text x="150" y="204" font-size="128" font-weight="800" letter-spacing="-3"
+              fill="url(#h19-type)">19</text>
+        <text x="150" y="246" font-size="37" font-weight="800" letter-spacing="3"
+              fill="url(#h19-type)">MEDIA</text>
+      </g>
+    </symbol>
+
+    <!-- Road signs. Drawn to the real vocabulary — red-bordered warning
+         triangles, green guide plates, blue information panels — so each one
+         is recognisable before it is read. -->
+    <!-- Road works — the detour. Owner's artwork, unaltered. -->
+    <symbol id="sg-works" viewBox="0 0 322.92 285.09">
+        <g>
+            <path d="M319.8,255.09c3.5,6.07,3.5,13.6,0,19.67-3.5,6.07-10.03,9.84-17.03,9.84H20.16c-7.01,0-13.53-3.77-17.03-9.83-3.5-6.07-3.5-13.6,0-19.67L144.02,11.05c1.73-3.31,4.35-6.05,7.6-7.92,9.39-5.42,21.45-2.19,26.87,7.2l141.31,244.76Z" fill="#fff"/>
+            <path d="M302.76,285.09H20.16c-7.18,0-13.88-3.87-17.47-10.08-3.59-6.22-3.59-13.95,0-20.17L143.59,10.8c1.76-3.38,4.46-6.18,7.78-8.1,3.06-1.77,6.53-2.7,10.05-2.7,7.2,0,13.91,3.86,17.5,10.08l141.31,244.76c3.59,6.22,3.59,13.95,0,20.17-3.59,6.22-10.28,10.08-17.47,10.08ZM161.42,1c-3.34,0-6.65.89-9.55,2.56-3.16,1.83-5.72,4.5-7.41,7.72L3.56,255.34c-3.41,5.91-3.41,13.26,0,19.17,3.41,5.91,9.77,9.58,16.6,9.58h282.6c6.83,0,13.19-3.67,16.6-9.58,3.41-5.91,3.41-13.26,0-19.17L178.05,10.58c-3.41-5.91-9.79-9.58-16.63-9.58Z"/>
+          </g>
+          <polygon points="161.46 48.18 278.51 250.92 44.41 250.92 161.46 48.18" fill="#fff"/>
+          <path d="M148.99,13.78L8.04,257.92c-2.49,4.32-2.49,9.68,0,14,2.49,4.32,7.14,7,12.12,7h282.6c4.99,0,9.63-2.68,12.12-7,2.49-4.32,2.49-9.68,0-14L173.58,13.17c-3.86-6.69-12.44-8.98-19.12-5.12-2.34,1.35-4.23,3.34-5.46,5.73ZM161.46,48.18l117.05,202.74H44.41S161.46,48.18,161.46,48.18Z" fill="#ea2127"/>
+          <g>
+            <path d="M261.33,241l-28.07-48.61-21.63,21.71-28.83-17.57c.2-.77.22-1.6-.01-2.42l-5.72-20.04-5.16-18.53s0,0,0-.02c0,0,0-.02-.01-.03-.61-2.16-1.9-3.93-3.56-5.17h0s0,0,0,0c-.74-.55-1.55-.99-2.41-1.31l-6.88-3.74c-1.81-1.14-3.98-1.69-6.2-1.45-.01,0-.02-.02-.03-.03,0,0-11.51-.81-18.28-1.28-3.02-.21-5.95,1.05-7.88,3.39l-9,10.94-4.38-2.67c-.72-.44-1.65-.26-2.16.4-.6.78-.39,1.9.45,2.41l4.58,2.79c-.3,1.63.13,3.35,1.37,4.57,1.91,1.87,4.8,1.92,6.75.38l13.26,8.08-3.57,8.69-.09.14c-.54,1.63-2.01,3.71-.3,9.1-.01.18.43,22.14.43,22.14l-15.54,14.09c-2.74,2.47-2.96,6.69-.5,9.43,2.46,2.74,6.69,2.96,9.43.5l17.82-16.14c1.39-1.25,2.12-2.96,2.19-4.69l-.44-24.42s1.53-.23,1.57,1.48c.02.77.07,3.57.12,6.95l11.64,10.94.26,21.58c.05,3.69,3.08,6.64,6.76,6.59,3.68-.05,6.64-3.08,6.58-6.76l-.3-24.65c-.03-2.03-.95-3.82-2.39-5.03h0s-14.07-12.97-14.07-12.97l1.47-4.09,14.69,8.95.74,2.21c.81,2.41,3.42,3.71,5.83,2.88.35-.12.68-.29.98-.49l28.39,17.3-24.42,24.5h76.51ZM126.47,162.22l7.27-8.95,11.33,1.2-6.28,15.26-12.32-7.51ZM159.75,182.5l5.65-15.71.88,6.82,5.4,16.15-11.93-7.27Z"/>
+            <path d="M167.06,145.81c6.75,1.14,13.16-3.41,14.3-10.17,1.14-6.76-3.41-13.17-10.17-14.31-6.76-1.14-13.17,3.42-14.31,10.18-1.14,6.76,3.41,13.16,10.18,14.31Z"/>
+          </g>
+    </symbol>
+    <!-- Motorway / the open road. Owner's artwork, unaltered. -->
+    <symbol id="sg-motorway" viewBox="0 0 285.08 435.17">
+        <g>
+            <rect x="-74.55" y="75.55" width="434.17" height="284.08" rx="5.42" ry="5.42" transform="translate(-75.05 360.13) rotate(-90)" fill="#fff"/>
+            <path d="M279.16,435.17H5.92c-3.26,0-5.92-2.65-5.92-5.92V5.92C0,2.65,2.65,0,5.92,0h273.25c3.26,0,5.92,2.65,5.92,5.92v423.34c0,3.26-2.65,5.92-5.92,5.92ZM5.92,1C3.21,1,1,3.21,1,5.92v423.34c0,2.71,2.21,4.92,4.92,4.92h273.25c2.71,0,4.92-2.21,4.92-4.92V5.92c0-2.71-2.21-4.92-4.92-4.92H5.92Z"/>
+          </g>
+          <rect x="4.66" y="4.66" width="275.76" height="425.86" rx="4" ry="4" transform="translate(285.08 435.17) rotate(-180)" fill="#059236"/>
+          <g>
+            <polygon points="26.87 176.06 26.87 192.52 48.97 192.52 48.97 204.85 66.34 204.85 66.34 192.52 220.8 192.52 220.8 204.85 238.16 204.85 238.16 192.52 258.21 192.52 258.21 176.06 26.87 176.06" fill="#fff"/>
+            <polygon points="135.86 58.85 113.24 58.85 98.69 162.7 129.77 162.7 135.86 58.85" fill="#fff"/>
+            <polygon points="69.02 374.51 117.35 374.51 127.3 204.85 92.79 204.85 69.02 374.51" fill="#fff"/>
+            <polygon points="186.39 162.7 171.84 58.85 149.22 58.85 155.31 162.7 186.39 162.7" fill="#fff"/>
+            <polygon points="157.78 204.85 167.73 374.51 216.06 374.51 192.29 204.85 157.78 204.85" fill="#fff"/>
+          </g>
+    </symbol>
+    <!-- Rough road ahead. Owner's artwork, unaltered. -->
+    <symbol id="sg-bridge" viewBox="0 0 322.92 285.09">
+        <g>
+            <path d="M319.8,255.09c3.5,6.07,3.5,13.6,0,19.67-3.5,6.07-10.03,9.84-17.03,9.84H20.16c-7.01,0-13.53-3.77-17.03-9.83-3.5-6.07-3.5-13.6,0-19.67L144.02,11.05c1.73-3.31,4.35-6.05,7.6-7.92,9.39-5.42,21.45-2.19,26.87,7.2l141.31,244.76Z" fill="#fff"/>
+            <path d="M302.76,285.09H20.16c-7.18,0-13.88-3.87-17.47-10.08-3.59-6.22-3.59-13.95,0-20.17L143.58,10.8c1.76-3.38,4.45-6.19,7.78-8.11,3.06-1.77,6.53-2.7,10.05-2.7,7.2,0,13.91,3.86,17.5,10.08l141.31,244.76c3.59,6.22,3.59,13.95,0,20.17-3.59,6.22-10.28,10.09-17.47,10.09ZM161.42,1c-3.34,0-6.65.89-9.55,2.56-3.16,1.83-5.72,4.5-7.41,7.72L3.56,255.34c-3.41,5.91-3.41,13.26,0,19.17,3.41,5.91,9.77,9.58,16.6,9.58h282.6c6.83,0,13.19-3.67,16.6-9.58,3.41-5.91,3.41-13.26,0-19.17L178.05,10.58c-3.41-5.91-9.79-9.58-16.63-9.58Z"/>
+          </g>
+          <path d="M148.99,13.77L8.04,257.92c-2.49,4.32-2.49,9.68,0,14,2.49,4.32,7.14,7,12.12,7h282.6c4.99,0,9.63-2.68,12.12-7,2.49-4.32,2.49-9.68,0-14L173.58,13.17c-3.86-6.69-12.44-8.98-19.12-5.12-2.34,1.35-4.23,3.34-5.46,5.73ZM161.46,48.18l117.05,202.74H44.41S161.46,48.18,161.46,48.18Z" fill="#ea2127"/>
+          <g>
+            <polygon points="199.6 241 261.33 241 237.69 200.07 199.6 200.07 199.6 241"/>
+            <polygon points="123.32 200.07 85.23 200.07 61.59 241 123.32 241 123.32 200.07"/>
+          </g>
+          <rect x="114.08" y="173.36" width="66.48" height="6.9" transform="translate(-77.78 128.89) rotate(-38.18)"/>
+          <path d="M192.32,226.71c-3.83,0-7.65-.51-10.57-1.52-5.39-1.87-14.15-1.87-19.53,0-5.83,2.02-15.31,2.02-21.13,0-5.39-1.87-14.15-1.87-19.53,0l-.8-2.3c5.83-2.02,15.31-2.02,21.13,0,5.38,1.87,14.15,1.87,19.53,0,5.83-2.02,15.31-2.02,21.13,0,5.38,1.87,14.15,1.87,19.53,0l.8,2.3c-2.91,1.01-6.74,1.52-10.57,1.52Z"/>
+          <path d="M192.32,232.8c-3.83,0-7.65-.51-10.57-1.52-5.39-1.87-14.15-1.87-19.53,0-5.83,2.02-15.31,2.02-21.13,0-5.39-1.87-14.15-1.87-19.53,0l-.8-2.3c5.83-2.02,15.31-2.02,21.13,0,5.38,1.87,14.15,1.87,19.53,0,5.83-2.02,15.31-2.02,21.13,0,5.38,1.87,14.15,1.87,19.53,0l.8,2.3c-2.91,1.01-6.74,1.52-10.57,1.52Z"/>
+          <path d="M192.32,238.89c-3.83,0-7.65-.51-10.57-1.52-5.39-1.87-14.15-1.87-19.53,0-5.83,2.02-15.31,2.02-21.13,0-5.39-1.87-14.15-1.87-19.53,0l-.8-2.3c5.83-2.02,15.31-2.02,21.13,0,5.38,1.87,14.15,1.87,19.53,0,5.83-2.02,15.31-2.02,21.13,0,5.38,1.87,14.15,1.87,19.53,0l.8,2.3c-2.91,1.01-6.74,1.52-10.57,1.52Z"/>
+    </symbol>
+
+    <!-- Lane arrows — pick your lane. Owner's artwork, unaltered. -->
+    <symbol id="sg-lanes" viewBox="0 0 284.23 284.23">
+        <rect width="284.23" height="284.23" fill="#0067b1"/>
+          <path d="M261.46,268.38H22.77c-3.81,0-6.92-3.1-6.92-6.92V22.77c0-3.81,3.1-6.92,6.92-6.92h238.69c3.81,0,6.92,3.1,6.92,6.92v238.69c0,3.81-3.1,6.92-6.92,6.92ZM22.77,18.85c-2.16,0-3.92,1.76-3.92,3.92v238.69c0,2.16,1.76,3.92,3.92,3.92h238.69c2.16,0,3.92-1.76,3.92-3.92V22.77c0-2.16-1.76-3.92-3.92-3.92H22.77Z" fill="#fff"/>
+          <polygon points="141.48 54.85 128.08 79.03 135.77 77.74 135.77 240.58 147.18 240.58 147.18 77.74 154.87 79.03 141.48 54.85" fill="#fff"/>
+          <polygon points="247.04 117.03 254.67 90.46 228.1 98.09 234.46 102.63 217.36 119.18 217.36 77.74 225.05 79.03 211.65 54.85 198.26 79.03 205.95 77.74 205.95 240.52 217.36 240.52 217.36 135.05 242.52 110.7 247.04 117.03" fill="#fff"/>
+          <path d="M80.27,240.59l-.11-145.81c0-.48-.2-.94-.54-1.27l-27.86-26.86,6.37-4.54-26.57-7.63,7.63,26.57,4.52-6.33,25.19,24.36-.02,141.51h11.41Z" fill="#fff"/>
+          <g>
+            <rect x="96.94" y="33.35" width="7.1" height="32.46" fill="#fff"/>
+            <rect x="96.94" y="94.95" width="7.1" height="32.46" fill="#fff"/>
+            <rect x="96.94" y="156.55" width="7.1" height="32.46" fill="#fff"/>
+            <rect x="96.94" y="218.15" width="7.1" height="32.46" fill="#fff"/>
+          </g>
+          <g>
+            <rect x="179.09" y="33.35" width="7.1" height="32.46" fill="#fff"/>
+            <rect x="179.09" y="94.95" width="7.1" height="32.46" fill="#fff"/>
+            <rect x="179.09" y="156.55" width="7.1" height="32.46" fill="#fff"/>
+            <rect x="179.09" y="218.15" width="7.1" height="32.46" fill="#fff"/>
+          </g>
+    </symbol>
+    <!-- Rest stop — the destination. Owner's artwork, unaltered. -->
+    <symbol id="sg-rest" viewBox="0 0 285.08 415.16">
+        <g>
+            <path d="M-59.12,65.54h403.33c2.99,0,5.42,2.43,5.42,5.42v273.25c0,2.99-2.43,5.42-5.42,5.42H-59.12c-2.99,0-5.42-2.43-5.42-5.42V70.96c0-2.99,2.43-5.42,5.42-5.42Z" transform="translate(350.12 65.04) rotate(90)" fill="#fff"/>
+            <path d="M279.16,415.16H5.92c-3.26,0-5.92-2.65-5.92-5.92V5.92C0,2.66,2.65,0,5.92,0h273.25c3.26,0,5.92,2.66,5.92,5.92v403.33c0,3.26-2.65,5.92-5.92,5.92ZM5.92,1C3.21,1,1,3.21,1,5.92v403.33c0,2.71,2.21,4.92,4.92,4.92h273.25c2.71,0,4.92-2.21,4.92-4.92V5.92c0-2.71-2.21-4.92-4.92-4.92H5.92Z"/>
+          </g>
+          <rect x="4.66" y="4.66" width="275.76" height="405.85" rx="4" ry="4" fill="#0067b1"/>
+          <rect x="55.54" y="54.77" width="173.99" height="217.49" fill="#fff"/>
+          <g>
+            <path d="M183.94,229.83c-2.15-16.18-3.41-37.26-4.11-52.97,4.97.76,10.72,1.87,16.97,3.54l1.26-.61c3.27,1.2,9.82.44,9.82.44l-4.68-1.46s4.74,1.18,9.13-.73c0,0-9.87-3.18-19.45-11.07,2.65.55,5.5.54,5.5.54l-2.97-1.48c2.98,1.1,8.96.4,8.96.4l-4.28-1.33s4.33,1.08,8.34-.66c0,0-8.86-3.24-17.61-11.03,1.77.22,3.26.21,3.26.21l-2.69-1.34c2.7.99,8.11.36,8.11.36l-3.87-1.2s3.92.98,7.54-.6c0,0-8.21-3.41-16.29-11.43,1.94.32,3.8.31,3.8.31l-2.41-1.2c2.41.89,7.26.32,7.26.32l-3.46-1.08s3.51.87,6.75-.54c0,0-7.49-3.56-14.88-11.74,1.03.29,1.88.34,1.88.34,0,0-2.72-2.4-1.21-1.23,1.6,1.24,5.76,1.22,5.76,1.22l-1.9-.94c1.91.7,5.73.26,5.73.26l-2.74-.85s2.77.69,5.33-.42c0,0-12.83-7.02-19.61-23.54h0s0,0,0,0c-1.26-3.07-2.31-6.47-3.03-10.21,0,0-1.92,7.14-3.17,10.21h0s0,0,0,0c-6.78,16.53-19.61,23.54-19.61,23.54,2.56,1.12,5.33.42,5.33.42l-2.74.85s3.83.45,5.73-.26l-1.9.94s4.16.02,5.76-1.22c1.51-1.17-1.21,1.23-1.21,1.23,0,0,.84-.05,1.88-.34-7.39,8.17-14.88,11.74-14.88,11.74,3.24,1.41,6.75.54,6.75.54l-3.46,1.08s4.84.56,7.25-.32l-2.41,1.2s1.86,0,3.8-.31c-8.09,8.02-16.29,11.43-16.29,11.43,3.62,1.58,7.54.6,7.54.6l-3.87,1.2s5.41.63,8.11-.36l-2.69,1.34s1.49,0,3.26-.21c-8.75,7.79-17.61,11.03-17.61,11.03,4,1.74,8.34.66,8.34.66l-4.28,1.33s5.98.7,8.96-.4l-2.97,1.48s2.85.01,5.5-.54c-9.59,7.89-19.45,11.07-19.45,11.07,4.39,1.91,9.13.73,9.13.73l-4.68,1.46s3.42.15,6.56.17c7.33.04,15.08-3.03,21.52-4.09-.69,15.76-1.95,37.15-4.13,53.52h-32.8v-14.64l-23.97-40.31h-8.41l-23.97,40.31v14.64h-10.23v3.26h159.02v-3.26h-39.89ZM113.71,208.03h7.46v19.09h-7.46v-19.09ZM109.37,228.17h16.94v1.02h-16.94v-1.02ZM103.21,187.94h5.35v9.04h-5.35v-9.04ZM97.06,187.94h5.35v9.04h-5.35v-9.04ZM90.8,207.29h5.35v9.05h-5.35v-9.05ZM84.65,207.29h5.35v9.05h-5.35v-9.05Z"/>
+            <polygon points="69.49 214.54 75.04 214.54 75.04 212.21 98.69 172.27 107.73 172.27 131.38 212.21 131.38 214.54 136.93 214.54 103.21 158.71 92.67 176.16 94.91 170.9 94.91 163.39 96.15 163.39 96.15 162.15 88.67 162.15 88.67 163.39 89.91 163.39 89.91 180.73 69.49 214.54"/>
+            <polygon points="120.75 217.77 119.11 217.77 119.11 218.17 120.75 218.57 120.75 217.77"/>
+          </g>
+    </symbol>
+
+    <symbol id="sg-warning" viewBox="0 0 64 60">
+      <path d="M32 3.6 61.4 55.4H2.6z" fill="#fff" stroke="#e01b24" stroke-width="6.4" stroke-linejoin="round"/>
+      <path d="M29.9 20h4.2l-.8 18h-2.6z" fill="#161616"/>
+      <circle cx="32" cy="44.6" r="2.9" fill="#161616"/>
+    </symbol>
+
+
+
+
+
+    <symbol id="sg-ahead" viewBox="0 0 52 64">
+      <rect x="2.2" y="2.2" width="47.6" height="59.6" rx="5" fill="#0a7d2e" stroke="#fff" stroke-width="3.2"/>
+      <path d="M26 12 40 30.5h-8.6V52h-10.8V30.5H12z" fill="#fff"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ==========================================================================
+     HEADER
+     Interstate shield + wordmark. This is the only place the full logo appears
+     above the fold. No phone number here or anywhere else on the site.
+     ======================================================================= -->
+<header class="site-header">
+  <div class="site-header__inner">
+
+    <a class="brand" href="/" aria-label="Highway 19 Media — home">
+      <svg class="brand__shield" viewBox="0 0 300 292" aria-hidden="true" focusable="false">
+        <use href="#h19-shield"/>
+      </svg>
+      <span class="brand__name">
+        <b>HIGHWAY 19</b>
+        <span>Media</span>
+      </span>
+    </a>
+
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#services">Services</a>
+      <a href="#promise">How We Work</a>
+      <a href="#payoff">Results</a>
+      <a href="#close">Contact</a>
+      <a class="btn btn--primary" href="#close"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Your Road Map</a>
+    </nav>
+
+    <a class="btn btn--primary" href="#close"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Your Road Map</a>
+
+    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+
+  </div>
+</header>
+
+<main id="main" class="page">
+
+  <!-- The road lives here: stacked SVG tiles painted above the section colour
+       bands and below the copy, so one continuous road crosses every boundary.
+       Everything inside is generated by assets/js/road.js. -->
+  <div id="road-layer" aria-hidden="true"></div>
+
+  <!-- ========================================================================
+       01 · HERO — hook and orient
+       ===================================================================== -->
+  <section id="hero" class="sec sec--road-right" data-road="right" data-run="a" data-section="01-hero">
+    <div class="sec__inner">
+      <!-- STAND-IN. Replace with the owner's banner file when it arrives:
+           <img class="hero-banner__art" src="assets/brand/hero-banner.jpg"
+                alt="All roads lead to your business — video, print, website, social">
+           Same composition, drawn as vector so it stays sharp at any width. -->
+      <div class="hero-banner">
+        <svg class="hero-banner__art" viewBox="0 0 1900 660" role="img"
+             aria-label="Overhead gantry carrying four service signs — video production, print design, website design and social media">
+          <defs>
+            <linearGradient id="hb-bg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#0a3f7d"/><stop offset="1" stop-color="#062f5e"/>
+            </linearGradient>
+            <!-- Round steel tube: dark edge, a bright specular highlight just
+                 off centre, then mid grey falling to a dark far edge. One
+                 across for the uprights, one down for the cross-rails. -->
+            <linearGradient id="hb-tube-v" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#4b5259"/><stop offset=".18" stop-color="#9aa2a9"/>
+              <stop offset=".34" stop-color="#f2f5f7"/><stop offset=".52" stop-color="#b8bfc5"/>
+              <stop offset=".78" stop-color="#7c848b"/><stop offset="1" stop-color="#454c53"/>
+            </linearGradient>
+            <linearGradient id="hb-tube-h" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#4b5259"/><stop offset=".18" stop-color="#9aa2a9"/>
+              <stop offset=".34" stop-color="#f2f5f7"/><stop offset=".52" stop-color="#b8bfc5"/>
+              <stop offset=".78" stop-color="#7c848b"/><stop offset="1" stop-color="#454c53"/>
+            </linearGradient>
+          </defs>
+          <rect width="1900" height="660" fill="url(#hb-bg)"/>
+          <rect y="566" width="1900" height="94" fill="#0a2a52"/>
+          <rect y="566" width="1900" height="3" fill="#12569f" opacity=".8"/>
+
+          <!-- ONE gantry carries all four panels: a pair of continuous rails
+               between two uprights, with the signs hung across them. Four
+               separate frames read as four structures; a real overhead sign
+               run is one. -->
+          <rect x="92" y="238" width="1716" height="17" rx="8.5" fill="url(#hb-tube-h)"/>
+          <rect x="92" y="356" width="1716" height="17" rx="8.5" fill="url(#hb-tube-h)"/>
+          <rect x="78" y="150" width="26" height="428" rx="13" fill="url(#hb-tube-v)"/>
+          <rect x="1796" y="150" width="26" height="428" rx="13" fill="url(#hb-tube-v)"/>
+          <rect x="64" y="570" width="54" height="12" rx="4" fill="#3d444b"/>
+          <rect x="1782" y="570" width="54" height="12" rx="4" fill="#3d444b"/>
+
+          <g transform="translate(314 0)">
+            <rect x="-190" y="205" width="380" height="200" rx="17" fill="#12605c"/>
+            <rect x="-190" y="205" width="380" height="200" rx="17" fill="none"
+                  stroke="#04121f" stroke-width="2" opacity=".35"/>
+            <rect x="-175" y="220" width="350" height="170" rx="9" fill="none"
+                  stroke="#fff" stroke-width="5.5"/>
+            <g transform="translate(-118 305)">
+              <circle r="38" fill="#0f8f8a" stroke="#fff" stroke-width="4"/>
+              <g transform="translate(-15 -15) scale(1.25)" fill="none" stroke="#fff"
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.7" cy="6" r="2.9"/><circle cx="15.1" cy="6" r="2.9"/><rect x="2.6" y="10.4" width="12.9" height="7" rx="1.6"/><path d="M15.5 12.4l5.9-2.4v7.8l-5.9-2.4z"/></g>
+            </g>
+            <text x="-62" y="300" font-size="36" font-weight="700" letter-spacing="1.5"
+                  fill="#fff">VIDEO</text>
+            <text x="-62" y="337" font-size="23" font-weight="600" letter-spacing="1.5"
+                  fill="#fff" opacity=".9">PRODUCTION</text>
+          </g>
+
+          <g transform="translate(738 0)">
+            <rect x="-190" y="205" width="380" height="200" rx="17" fill="#6d1a7d"/>
+            <rect x="-190" y="205" width="380" height="200" rx="17" fill="none"
+                  stroke="#04121f" stroke-width="2" opacity=".35"/>
+            <rect x="-175" y="220" width="350" height="170" rx="9" fill="none"
+                  stroke="#fff" stroke-width="5.5"/>
+            <g transform="translate(-118 305)">
+              <circle r="38" fill="#8b1ba2" stroke="#fff" stroke-width="4"/>
+              <g transform="translate(-15 -15) scale(1.25)" fill="none" stroke="#fff"
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19.6 12.6v5.9a2.2 2.2 0 0 1-2.2 2.2H5.6a2.2 2.2 0 0 1-2.2-2.2V6.7a2.2 2.2 0 0 1 2.2-2.2h6"/><path d="M16.4 3.3l3.9 3.9-8 8-4.4.5.5-4.4z"/></g>
+            </g>
+            <text x="-62" y="300" font-size="36" font-weight="700" letter-spacing="1.5"
+                  fill="#fff">PRINT</text>
+            <text x="-62" y="337" font-size="23" font-weight="600" letter-spacing="1.5"
+                  fill="#fff" opacity=".9">DESIGN</text>
+          </g>
+
+          <g transform="translate(1162 0)">
+            <rect x="-190" y="205" width="380" height="200" rx="17" fill="#164f96"/>
+            <rect x="-190" y="205" width="380" height="200" rx="17" fill="none"
+                  stroke="#04121f" stroke-width="2" opacity=".35"/>
+            <rect x="-175" y="220" width="350" height="170" rx="9" fill="none"
+                  stroke="#fff" stroke-width="5.5"/>
+            <g transform="translate(-118 305)">
+              <circle r="38" fill="#1068b6" stroke="#fff" stroke-width="4"/>
+              <g transform="translate(-15 -15) scale(1.25)" fill="none" stroke="#fff"
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.6" y="4.4" width="18.8" height="15.2" rx="2.2"/><path d="M2.6 8.7h18.8"/><path d="M10 11.9L7.6 14.3l2.4 2.4M14 11.9l2.4 2.4-2.4 2.4M12.9 11.4l-1.8 5.8"/></g>
+            </g>
+            <text x="-62" y="300" font-size="36" font-weight="700" letter-spacing="1.5"
+                  fill="#fff">WEBSITE</text>
+            <text x="-62" y="337" font-size="23" font-weight="600" letter-spacing="1.5"
+                  fill="#fff" opacity=".9">DESIGN</text>
+          </g>
+
+          <g transform="translate(1586 0)">
+            <rect x="-190" y="205" width="380" height="200" rx="17" fill="#b5541a"/>
+            <rect x="-190" y="205" width="380" height="200" rx="17" fill="none"
+                  stroke="#04121f" stroke-width="2" opacity=".35"/>
+            <rect x="-175" y="220" width="350" height="170" rx="9" fill="none"
+                  stroke="#fff" stroke-width="5.5"/>
+            <g transform="translate(-118 305)">
+              <circle r="38" fill="#f37020" stroke="#fff" stroke-width="4"/>
+              <g transform="translate(-15 -15) scale(1.25)" fill="none" stroke="#fff"
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11.6 3.4H4.2a2.1 2.1 0 0 0-2.1 2.1v5.7a2.1 2.1 0 0 0 2.1 2.1h.6v3.3l3.4-3.3h3.4a2.1 2.1 0 0 0 2.1-2.1V5.5a2.1 2.1 0 0 0-2.1-2.1z"/><path d="M16 10.6v9.9M16 12.3l2.1-3.4c1.1.3 1.6 1.2 1.4 2.3l-.3 1.5h2.2c1 0 1.7.9 1.5 1.9l-.8 4.1c-.2.9-1 1.6-2 1.6H16"/></g>
+            </g>
+            <text x="-62" y="300" font-size="36" font-weight="700" letter-spacing="1.5"
+                  fill="#fff">SOCIAL</text>
+            <text x="-62" y="337" font-size="23" font-weight="600" letter-spacing="1.5"
+                  fill="#fff" opacity=".9">MEDIA</text>
+          </g>
+        </svg>
+
+        <div class="guide-sign hero-banner__sign">
+          <span>All Roads Lead To</span>
+          <svg class="guide-sign__shield" viewBox="0 0 300 292" aria-hidden="true" focusable="false">
+            <use href="#h19-shield"/>
+          </svg>
+          <span>Your Business</span>
+        </div>
+      </div>
+
+      <div class="sec__body">
+        <span class="eyebrow">Highway 19 Media</span>
+        <h1>A Clear Road Forward for Your Business</h1>
+        <p class="sub">You've done the hard part. Now let's make sure people can see it.</p>
+        <p class="body-copy">
+          Running a local business means wearing every hat. Manager, salesperson,
+          customer service, and somehow marketer too. You're stretched thin, and your
+          competitors are getting noticed while you're still figuring out where to start.
+        </p>
+        <div class="sec__cta">
+          <a class="btn btn--primary" href="#close"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Your Road Map</a>
+        </div>
+      </div>
+      <div class="road-slot" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       02 · THE PROBLEM — name the pain
+       No CTA here by design. This section builds tension; a button releases it.
+       ===================================================================== -->
+  <section id="problem" class="sec sec--road-left band-white" data-road="left" data-run="a" data-section="02-problem">
+    <div class="sec__inner">
+      <div class="road-slot" aria-hidden="true"></div>
+      <div class="sec__body">
+        <span class="eyebrow" style="background:var(--asphalt);box-shadow:0 0 0 1.5px #3d3d3d">The Problem</span>
+        <div class="headline">
+          <svg class="sign" viewBox="0 0 322.92 285.09" aria-hidden="true" focusable="false"><use href="#sg-bridge"/></svg>
+          <div>
+            <h2>Great Work, No Signage</h2>
+          <p class="sub">The best shop on the road is worthless if nobody sees the sign.</p>
+          </div>
+        </div>
+        <p class="body-copy">
+          You finish a job and it looks great. Then it disappears. No photos, no video,
+          nothing a future customer can find. The guy down the road does worse work with
+          better pictures, and he's the one getting the call.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       03 · THE OBJECTION — disarm the past bad experience
+       Deliberately undesigned: narrow centred column, big type, no ornament.
+       The section that argues against templates must not look like one.
+       No CTA. This is the differentiator — do not soften it.
+       ===================================================================== -->
+  <section id="objection" class="sec sec--edge-left" data-road="edge-left" data-run="a" data-section="03-objection">
+    <div class="detour" aria-hidden="true">DETOUR</div>
+    <div class="road-slot" aria-hidden="true"></div>
+    <div class="sec__inner">
+      <div class="sec__body">
+        <div class="headline">
+          <svg class="sign" viewBox="0 0 322.92 285.09" aria-hidden="true" focusable="false"><use href="#sg-works"/></svg>
+          <div>
+            <h2>You've Been Down This Road Before</h2>
+          <p class="sub">And somebody sold you a detour.</p>
+          </div>
+        </div>
+        <p class="body-copy">
+          A template website that looks like nine hundred others. Stock photos posted to
+          your page for a monthly fee. You saw nothing come back and figured this stuff
+          doesn't work for businesses like yours. <strong>It works. It just has to be
+          built from your business, not pulled off a shelf.</strong>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       04 · THE PROMISE — position the solution
+       Mirrors 02. First CTA of the page: soft, exploratory, not a commitment.
+       ===================================================================== -->
+  <section id="promise" class="sec sec--road-right band-blue-lt" data-road="right" data-run="a" data-section="04-promise">
+    <div class="sec__inner">
+      <div class="sec__body">
+        <span class="eyebrow">What We Do</span>
+        <div class="headline">
+          <svg class="sign" viewBox="0 0 285.08 435.17" aria-hidden="true" focusable="false"><use href="#sg-motorway"/></svg>
+          <div>
+            <h2>We Handle the Marketing.<br>You Run the Business.</h2>
+          <p class="sub">One team, one vision, one goal: growing your business.</p>
+          </div>
+        </div>
+        <p class="body-copy">
+          From video production and print design to websites, social media, and paid ads,
+          Highway 19 Media handles every aspect of your marketing so you don't have to.
+          We come to your job site, shoot what you actually do, and turn it into what your
+          customers see.
+        </p>
+        <div class="sec__cta">
+          <a class="btn btn--primary" href="#services"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Explore Our Services</a>
+        </div>
+      </div>
+      <div class="road-slot" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       05 · SERVICES — the four lanes
+       Highest-traffic section. Each card links to its own service page.
+       ===================================================================== -->
+  <section id="services" class="sec sec--noroad band-white" data-road="none" data-section="05-services">
+    <div class="sec__inner">
+      <div class="sec__head">
+        <span class="eyebrow">Four Lanes</span>
+        <div class="headline">
+          <svg class="sign" viewBox="0 0 284.23 284.23" aria-hidden="true" focusable="false"><use href="#sg-lanes"/></svg>
+          <div>
+            <h2>Pick Your Lane. We Handle the Drive.</h2>
+          <p class="sub">Take one lane to start, or let us run all four.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cards">
+
+        <a class="card card--web" href="/services/website-design/">
+          <span class="card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="2.6" y="4.4" width="18.8" height="15.2" rx="2.2"/>
+              <path d="M2.6 8.7h18.8"/>
+              <circle class="solid" cx="5.4" cy="6.6" r=".85"/>
+              <circle class="solid" cx="8.1" cy="6.6" r=".85"/>
+              <circle class="solid" cx="10.8" cy="6.6" r=".85"/>
+              <path d="M10 11.9L7.6 14.3l2.4 2.4M14 11.9l2.4 2.4-2.4 2.4M12.9 11.4l-1.8 5.8"/>
+            </svg>
+          </span>
+          <h3>Website Design</h3>
+          <p>From custom websites and landing pages to ecommerce and site management.
+             Your website isn't just a page, it's your business working 24/7.</p>
+          <span class="card__more">Learn More</span>
+        </a>
+
+        <a class="card card--video" href="/services/video-production/">
+          <span class="card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="7.7" cy="6" r="2.9"/>
+              <circle cx="15.1" cy="6" r="2.9"/>
+              <rect x="2.6" y="10.4" width="12.9" height="7" rx="1.6"/>
+              <path d="M15.5 12.4l5.9-2.4v7.8l-5.9-2.4z"/>
+              <path d="M7.3 17.4L5.6 21M10.8 17.4L12.5 21"/>
+            </svg>
+          </span>
+          <h3>Video Production</h3>
+          <p>Brand films, social ads, drone, animated content. Videos that tell your story
+             and drive real engagement.</p>
+          <span class="card__more">Learn More</span>
+        </a>
+
+        <a class="card card--print" href="/services/print-branding/">
+          <span class="card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M19.6 12.6v5.9a2.2 2.2 0 0 1-2.2 2.2H5.6a2.2 2.2 0 0 1-2.2-2.2V6.7a2.2 2.2 0 0 1 2.2-2.2h6"/>
+              <path d="M16.4 3.3l3.9 3.9-8 8-4.4.5.5-4.4z"/>
+            </svg>
+          </span>
+          <h3>Print &amp; Branding</h3>
+          <p>Logos, flyers, signage, vehicle wraps, catalogs, branded merchandise.
+             Everything that represents your business visually.</p>
+          <span class="card__more">Learn More</span>
+        </a>
+
+        <a class="card card--social" href="/services/social-paid-ads/">
+          <span class="card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M11.6 3.4H4.2a2.1 2.1 0 0 0-2.1 2.1v5.7a2.1 2.1 0 0 0 2.1 2.1h.6v3.3l3.4-3.3h3.4a2.1 2.1 0 0 0 2.1-2.1V5.5a2.1 2.1 0 0 0-2.1-2.1z"/>
+              <path class="solid" d="M7.9 11c-1.6-1.1-3-2.2-3-3.4 0-1.3 1.5-1.8 2.4-.9l.6.6.6-.6c.9-.9 2.4-.4 2.4.9 0 1.2-1.4 2.3-3 3.4z"/>
+              <path d="M16 10.6v9.9M16 12.3l2.1-3.4c1.1.3 1.6 1.2 1.4 2.3l-.3 1.5h2.2c1 0 1.7.9 1.5 1.9l-.8 4.1c-.2.9-1 1.6-2 1.6H16"/>
+            </svg>
+          </span>
+          <h3>Social Media &amp; Paid Ads</h3>
+          <p>Campaign creation, page management, audience engagement, Google Ads, Meta Ads,
+             full budget management.</p>
+          <span class="card__more">Learn More</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       06 · WHY US — build trust
+       Full-width guide-sign green. Second CTA: warmer, relationship-framed.
+       ===================================================================== -->
+  <section id="whyus" class="sec sec--edge-left band-green" data-road="wrap" data-run="b" data-section="06-whyus">
+    <!-- The hook leaves this section down its own left lane; the payoff then
+         jogs the road to centre at the timeline, not before it. -->
+    <div class="road-slot" aria-hidden="true"></div>
+    <div class="sec__inner">
+      <div class="sec__body" style="max-width:58ch;margin:0 auto;text-align:center">
+        <div class="headline">
+          <svg class="sign" viewBox="0 0 285.08 415.16" aria-hidden="true" focusable="false"><use href="#sg-rest"/></svg>
+          <div>
+            <h2>Your Success Is Our Destination.</h2>
+          <p class="sub">We're not here to sell you services you don't need.</p>
+          </div>
+        </div>
+        <p class="body-copy" style="margin-left:auto;margin-right:auto">
+          We listen, we plan, and we execute with your budget and your goals in mind.
+          From the first conversation to the final deliverable, we stay the course until
+          you see real results. Your win is our win.
+        </p>
+        <div class="sec__cta" style="justify-content:center">
+          <a class="btn btn--primary" href="#close"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Let's Hit the Road Together</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       07 · THE PAYOFF — make them want it
+       The road becomes the timeline: milestones are mile markers pinned either
+       side of the actual asphalt. Peak-desire point. CTA still an open question
+       (Open Items #7) — currently omitted, per the draft.
+       ===================================================================== -->
+  <section id="payoff" class="sec sec--centre band-blue-lt" data-road="centre" data-run="b" data-jog="slot" data-section="07-payoff">
+    <div class="sec__inner">
+      <div class="sec__head">
+        <span class="eyebrow">Down the Road</span>
+        <div class="headline">
+          <svg class="sign" viewBox="0 0 52 64" aria-hidden="true" focusable="false"><use href="#sg-ahead"/></svg>
+          <div>
+            <h2>Check Your Mirrors in Six Months</h2>
+          <p class="sub">Same crew, same work, a business you barely recognize.</p>
+          </div>
+        </div>
+        <p class="body-copy">
+          Three to six months of real, consistent content and you'll feel it in the calls
+          you get, the kind of customer calling, and what you can charge them. Your crew
+          feels it too. People work differently for a company that looks like it's going
+          somewhere.
+        </p>
+      </div>
+
+      <!-- The road jogs to the centre here and the milestones become mile
+           markers either side of it. Marker copy below is NEW and not part of
+           approved Draft 1 — the layout sheet only specifies Month 1 / 3 / 6. -->
+      <div class="milestones">
+        <div class="road-slot" aria-hidden="true"></div>
+
+        <div class="milestone milestone--1">
+          <span class="marker">Month 1</span>
+          <h3>The camera shows up</h3>
+          <p>We shoot your real jobs. For the first time there's a library of proof
+             with your name on it instead of a stock photo.</p>
+        </div>
+
+        <div class="milestone milestone--2">
+          <span class="marker">Month 3</span>
+          <h3>The calls change</h3>
+          <p>People arrive already knowing what you do and how well you do it.
+             You spend less of the call convincing anybody.</p>
+        </div>
+
+        <div class="milestone milestone--3">
+          <span class="marker">Month 6</span>
+          <h3>The number changes</h3>
+          <p>Better customers, bigger jobs, and a rate you stop apologising for.
+             Your crew feels it too.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       08 · PROOF — kill the last doubt
+       SHIPS HIDDEN ON PURPOSE. This is the one section where real photographs
+       belong, because "real" is the whole point. Three unbranded Smart Man
+       Media jobs as before/after pairs. Drop the images in, write the three
+       captions, then remove the `hidden` attribute below. Launching this
+       filled with stock would argue against section 03.
+       ===================================================================== -->
+  <section id="proof" class="sec sec--edge-right band-white" data-road="edge-right" data-run="b" data-section="08-proof" hidden>
+    <div class="road-slot" aria-hidden="true"></div>
+    <div class="sec__inner">
+      <div class="sec__head">
+        <span class="eyebrow">Receipts</span>
+        <h2>Same Business. Six Months Apart.</h2>
+        <p class="sub">Real jobs, real before and after.</p>
+      </div>
+      <div class="work">
+        <article class="work__item">
+          <div class="work__pair">
+            <figure><figcaption>Before</figcaption></figure>
+            <figure><figcaption>After</figcaption></figure>
+          </div>
+          <h3>Job one</h3>
+          <p>One sentence on what changed and what it did for them.</p>
+        </article>
+        <article class="work__item">
+          <div class="work__pair">
+            <figure><figcaption>Before</figcaption></figure>
+            <figure><figcaption>After</figcaption></figure>
+          </div>
+          <h3>Job two</h3>
+          <p>One sentence on what changed and what it did for them.</p>
+        </article>
+        <article class="work__item">
+          <div class="work__pair">
+            <figure><figcaption>Before</figcaption></figure>
+            <figure><figcaption>After</figcaption></figure>
+          </div>
+          <h3>Job three</h3>
+          <p>Blank truck to wrapped truck — rhymes with section 02.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       09 · CLOSE — convert
+       Form sits on the page, not behind a link. Since we don't take calls,
+       every extra click costs a lead. Booking link is the quieter second option.
+       ===================================================================== -->
+  <section id="close" class="sec sec--edge-left" data-road="edge-left" data-run="b" data-section="09-close">
+    <div class="road-slot" aria-hidden="true"></div>
+    <div class="sec__inner">
+      <div class="sec__head">
+        <span class="eyebrow" style="background:var(--yellow-500);color:var(--ink);box-shadow:0 0 0 1.5px var(--yellow-600)">Start Here</span>
+        <div class="headline">
+          <svg class="sign" viewBox="0 0 285.08 435.17" aria-hidden="true" focusable="false"><use href="#sg-motorway"/></svg>
+          <div>
+            <h2>Ready to Take the Wheel?</h2>
+          <p class="sub">The Road to Success Starts Here.</p>
+          </div>
+        </div>
+      </div>
+      <p class="body-copy">
+        Send us what you've got right now. Your site, your page, your logo, whatever exists.
+        We'll come back within 24 hours with an honest read and what we'd do about it.
+      </p>
+
+      <!-- NOT WIRED YET. Booking tool and business email are still open
+           (Open Items #11). Set data-endpoint to the form handler once chosen
+           and site.js will POST to it; until then it fails loudly rather than
+           silently swallowing a lead. -->
+      <form class="form" id="contact-form" data-endpoint="" novalidate>
+        <div class="field">
+          <label for="f-name">Your name</label>
+          <input id="f-name" name="name" type="text" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="f-business">Business name</label>
+          <input id="f-business" name="business" type="text" autocomplete="organization">
+        </div>
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="f-have">What have you got right now?</label>
+          <input id="f-have" name="existing" type="text"
+                 placeholder="Website, Facebook page, logo — paste a link or just tell us">
+        </div>
+        <div class="field">
+          <label for="f-msg">What do you want it to do?</label>
+          <textarea id="f-msg" name="message"></textarea>
+        </div>
+
+        <p class="form__promise">
+          <i class="btn__tri" aria-hidden="true" style="width:1.1em;height:1.1em;color:var(--yellow-600)"></i>
+          <span><b>We reply within 24 hours.</b> An honest read, not a sales call.</span>
+        </p>
+
+        <button class="btn btn--primary btn--block" type="submit">
+          <svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Send It Over
+        </button>
+
+        <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
+
+        <p class="form__alt">
+          Prefer to talk it through? <a href="#" data-booking>Book a free consult</a>.
+        </p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       10 · FOOTER
+       ===================================================================== -->
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <!-- The banner's own device: green guide sign, lane arrows, shield
+           breaking out of the panel top and bottom. -->
+      <div class="guide-sign">
+        <svg class="guide-sign__arrows" viewBox="0 0 78 26" aria-hidden="true" focusable="false">
+          <g fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 24v-9c0-3.3 2.7-6 6-6h1"/><path d="M26 24v-9c0-3.3 2.7-6 6-6h1"/>
+            <path d="M50 24V9"/><path d="M68 24V9"/>
+          </g>
+          <g fill="#fff">
+            <path d="M15 4l6 5-6 5z"/><path d="M33 4l6 5-6 5z"/>
+            <path d="M50 2l5.5 7h-11z"/><path d="M68 2l5.5 7h-11z"/>
+          </g>
+        </svg>
+        <span>All Roads Lead To</span>
+        <svg class="guide-sign__shield" viewBox="0 0 300 292" aria-hidden="true" focusable="false">
+          <use href="#h19-shield"/>
+        </svg>
+        <span>Your Business</span>
+        <svg class="guide-sign__arrows guide-sign__arrows--r" viewBox="0 0 78 26" aria-hidden="true" focusable="false">
+          <g fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 24V9"/><path d="M28 24V9"/>
+            <path d="M52 24v-9c0-3.3-2.7-6-6-6h-1"/><path d="M70 24v-9c0-3.3-2.7-6-6-6h-1"/>
+          </g>
+          <g fill="#fff">
+            <path d="M10 2l5.5 7h-11z"/><path d="M28 2l5.5 7h-11z"/>
+            <path d="M45 4l-6 5 6 5z"/><path d="M63 4l-6 5 6 5z"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="foot-cols">
+
+        <div class="foot-brand">
+          <h4>Highway 19 Media</h4>
+          <p>Marketing built from your business, for the trades and local operators
+             along the US 19 corridor and around Tampa Bay.</p>
+          <div class="socials">
+            <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 12s0-3.5-.45-5.2a2.7 2.7 0 0 0-1.9-1.9C18.9 4.5 12 4.5 12 4.5s-6.9 0-8.65.4a2.7 2.7 0 0 0-1.9 1.9C1 8.5 1 12 1 12s0 3.5.45 5.2a2.7 2.7 0 0 0 1.9 1.9c1.75.4 8.65.4 8.65.4s6.9 0 8.65-.4a2.7 2.7 0 0 0 1.9-1.9C23 15.5 23 12 23 12zM9.75 15.3V8.7L15.5 12z"/></svg></a>
+            <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.45 2.89h-2.33v6.99A10 10 0 0 0 22 12z"/></svg></a>
+            <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zm0 3.68A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zm0 10.16A4 4 0 1 1 16 12a4 4 0 0 1-4 4zm6.4-11.85a1.44 1.44 0 1 0 1.44 1.44 1.44 1.44 0 0 0-1.44-1.44z"/></svg></a>
+          </div>
+        </div>
+
+        <div>
+          <h4>Services</h4>
+          <ul>
+            <li><a href="/services/website-design/">Website Design</a></li>
+            <li><a href="/services/video-production/">Video Production</a></li>
+            <li><a href="/services/print-branding/">Print &amp; Branding</a></li>
+            <li><a href="/services/social-paid-ads/">Social Media &amp; Paid Ads</a></li>
+            <li><a href="/services/landing-pages/">Starter Landing Pages</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#promise">How We Work</a></li>
+            <li><a href="#services">Our Services</a></li>
+            <li><a href="#payoff">What to Expect</a></li>
+            <li><a href="#close">Get a Road Map</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Contact</h4>
+          <ul>
+            <!-- Business email still to be chosen (Open Items #11). -->
+            <li><a href="mailto:hello@highway19media.com">hello@highway19media.com</a></li>
+            <li><a href="#close">Send us your site</a></li>
+            <li><a href="#" data-booking>Book a free consult</a></li>
+          </ul>
+          <p style="margin:1em 0 0;font-size:.9rem;color:rgba(255,255,255,.65)">
+            On location up and down the coast. Replies within 24 hours.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="foot-rule">
+        <span>&copy; <span id="year">2026</span> Highway 19 Media. Powered by Smart Man Media.</span>
+        <span class="foot-legal">
+          <a href="/privacy-policy/">Privacy Policy</a>
+          <a href="/terms/">Terms</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+<div id="road-toast" role="status" aria-live="polite"></div>
+<div id="road-dev"></div>
+
+<script src="assets/js/cars-sprite.js"></script>
+<script src="assets/js/road.js"></script>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

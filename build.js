@@ -1,0 +1,43 @@
+/* Inlines the home page into one self-contained file.
+   Two outputs:
+     dist/highway19-home.html      full standalone document — hand to WPVibe,
+                                   email, or open straight off disk
+     dist/highway19-artifact.html  body-only, for publishing as an Artifact
+                                   (the host supplies doctype/head/body)
+   Source of truth stays the multi-file version; this is generated. */
+const fs = require('fs');
+const path = require('path');
+const R = __dirname;
+
+const read = p => fs.readFileSync(path.join(R, p), 'utf8');
+let html = read('index.html');
+const css = read('assets/css/highway19.css');
+const js = ['assets/js/cars-sprite.js', 'assets/js/road.js', 'assets/js/site.js']
+  .map(f => '/* ==== ' + f + ' ==== */\n' + read(f)).join('\n');
+
+if (/<\/script>/i.test(js)) throw new Error('script payload contains </script>');
+
+html = html
+  .replace(/\n?\s*<link rel="stylesheet"[^>]*>/i, '\n<style>\n' + css + '\n</style>')
+  .replace(/\n?\s*<script src="assets\/js\/[^"]*"><\/script>/gi, '')
+  .replace(/(\n?<\/body>)/i, '\n<script>\n' + js + '\n</script>\n$1');
+
+fs.writeFileSync(path.join(R, 'dist/highway19-home.html'), html);
+
+/* Artifact build: the host wraps the file in its own doctype/head/body, so
+   ship only what belongs inside the body — plus the title and styles, which
+   it hoists. Charset, viewport and the favicon come from the host. */
+const body = html
+  .slice(html.indexOf('<body>') + 6, html.lastIndexOf('</body>'))
+  .trim();
+/* index.html carries the long SEO title; a hosted preview wants the short
+   name, which is what shows in the browser tab and the artifact gallery. */
+const title = 'Highway 19 Media';
+const style = (html.match(/<style>[\s\S]*?<\/style>/i) || [''])[0];
+
+fs.writeFileSync(path.join(R, 'dist/highway19-artifact.html'),
+  '<title>' + title.trim() + '</title>\n' + style + '\n' + body + '\n');
+
+for (const f of ['dist/highway19-home.html', 'dist/highway19-artifact.html']) {
+  console.log(f, (fs.statSync(path.join(R, f)).size / 1024).toFixed(0) + ' KB');
+}
