@@ -219,111 +219,97 @@
                 alt="All roads lead to your business — video, print, website, social">
            Same composition, drawn as vector so it stays sharp at any width. -->
       <div class="hero-banner">
-        <svg class="hero-banner__art" viewBox="0 0 1900 660" role="img"
-             aria-label="Overhead gantry carrying four service signs — video production, print design, website design and social media">
+        <svg class="hero-banner__art" viewBox="0 0 1900 620" role="img"
+             aria-label="Overhead gantry sign: video production, print design, website design and social media">
           <defs>
-            <linearGradient id="hb-bg" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#0a3f7d"/><stop offset="1" stop-color="#062f5e"/>
-            </linearGradient>
-            <!-- Round steel tube: dark edge, a bright specular highlight just
-                 off centre, then mid grey falling to a dark far edge. One
-                 across for the uprights, one down for the cross-rails. -->
-            <linearGradient id="hb-tube-v" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#4b5259"/><stop offset=".18" stop-color="#9aa2a9"/>
-              <stop offset=".34" stop-color="#f2f5f7"/><stop offset=".52" stop-color="#b8bfc5"/>
-              <stop offset=".78" stop-color="#7c848b"/><stop offset="1" stop-color="#454c53"/>
-            </linearGradient>
-            <linearGradient id="hb-tube-h" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#4b5259"/><stop offset=".18" stop-color="#9aa2a9"/>
-              <stop offset=".34" stop-color="#f2f5f7"/><stop offset=".52" stop-color="#b8bfc5"/>
-              <stop offset=".78" stop-color="#7c848b"/><stop offset="1" stop-color="#454c53"/>
+            <linearGradient id="hb-rail" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#8d959c"/><stop offset=".3" stop-color="#f6f8fa"/>
+              <stop offset=".7" stop-color="#c8cfd5"/><stop offset="1" stop-color="#79828a"/>
             </linearGradient>
           </defs>
-          <rect width="1900" height="660" fill="url(#hb-bg)"/>
-          <rect y="566" width="1900" height="94" fill="#0a2a52"/>
-          <rect y="566" width="1900" height="3" fill="#12569f" opacity=".8"/>
 
-          <!-- ONE gantry carries all four panels: a pair of continuous rails
-               between two uprights, with the signs hung across them. Four
-               separate frames read as four structures; a real overhead sign
-               run is one. -->
-          <rect x="92" y="238" width="1716" height="17" rx="8.5" fill="url(#hb-tube-h)"/>
-          <rect x="92" y="356" width="1716" height="17" rx="8.5" fill="url(#hb-tube-h)"/>
-          <rect x="78" y="150" width="26" height="428" rx="13" fill="url(#hb-tube-v)"/>
-          <rect x="1796" y="150" width="26" height="428" rx="13" fill="url(#hb-tube-v)"/>
-          <rect x="64" y="570" width="54" height="12" rx="4" fill="#3d444b"/>
-          <rect x="1782" y="570" width="54" height="12" rx="4" fill="#3d444b"/>
+          <!-- Lattice truss, edge to edge. It passes BEHIND the sign, so only
+               the bracing either side of the panel shows — which is what makes
+               the sign read as hung from a real gantry rather than floating. -->
+          <g stroke="#c3cad1" stroke-width="9" opacity=".92">
+            <path d="M0 268 L95 352 M0 352 L95 268"/>
+            <path d="M95 268 L190 352 M95 352 L190 268"/>
+            <path d="M190 268 L285 352 M190 352 L285 268"/>
+            <path d="M285 268 L380 352 M285 352 L380 268"/>
+            <path d="M380 268 L475 352 M380 352 L475 268"/>
+            <path d="M475 268 L570 352 M475 352 L570 268"/>
+            <path d="M570 268 L665 352 M570 352 L665 268"/>
+            <path d="M665 268 L760 352 M665 352 L760 268"/>
+            <path d="M760 268 L855 352 M760 352 L855 268"/>
+            <path d="M855 268 L950 352 M855 352 L950 268"/>
+            <path d="M950 268 L1045 352 M950 352 L1045 268"/>
+            <path d="M1045 268 L1140 352 M1045 352 L1140 268"/>
+            <path d="M1140 268 L1235 352 M1140 352 L1235 268"/>
+            <path d="M1235 268 L1330 352 M1235 352 L1330 268"/>
+            <path d="M1330 268 L1425 352 M1330 352 L1425 268"/>
+            <path d="M1425 268 L1520 352 M1425 352 L1520 268"/>
+            <path d="M1520 268 L1615 352 M1520 352 L1615 268"/>
+            <path d="M1615 268 L1710 352 M1615 352 L1710 268"/>
+            <path d="M1710 268 L1805 352 M1710 352 L1805 268"/>
+            <path d="M1805 268 L1900 352 M1805 352 L1900 268"/>
+          </g>
+          <g stroke="#aab2b9" stroke-width="7" opacity=".85">
+            <path d="M0 268 V352"/>
+            <path d="M190 268 V352"/>
+            <path d="M380 268 V352"/>
+            <path d="M570 268 V352"/>
+            <path d="M760 268 V352"/>
+            <path d="M950 268 V352"/>
+            <path d="M1140 268 V352"/>
+            <path d="M1330 268 V352"/>
+            <path d="M1520 268 V352"/>
+            <path d="M1710 268 V352"/>
+            <path d="M1900 268 V352"/>
+          </g>
+          <rect y="250" width="1900" height="19" fill="url(#hb-rail)"/>
+          <rect y="351" width="1900" height="19" fill="url(#hb-rail)"/>
 
-          <g transform="translate(314 0)">
-            <rect x="-190" y="205" width="380" height="200" rx="17" fill="#12605c"/>
-            <rect x="-190" y="205" width="380" height="200" rx="17" fill="none"
-                  stroke="#04121f" stroke-width="2" opacity=".35"/>
-            <rect x="-175" y="220" width="350" height="170" rx="9" fill="none"
-                  stroke="#fff" stroke-width="5.5"/>
-            <g transform="translate(-118 305)">
-              <circle r="38" fill="#0f8f8a" stroke="#fff" stroke-width="4"/>
-              <g transform="translate(-15 -15) scale(1.25)" fill="none" stroke="#fff"
-                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.7" cy="6" r="2.9"/><circle cx="15.1" cy="6" r="2.9"/><rect x="2.6" y="10.4" width="12.9" height="7" rx="1.6"/><path d="M15.5 12.4l5.9-2.4v7.8l-5.9-2.4z"/></g>
-            </g>
-            <text x="-62" y="300" font-size="36" font-weight="700" letter-spacing="1.5"
-                  fill="#fff">VIDEO</text>
-            <text x="-62" y="337" font-size="23" font-weight="600" letter-spacing="1.5"
-                  fill="#fff" opacity=".9">PRODUCTION</text>
+          <!-- hangers from the truss up to the sign panel -->
+          <g fill="url(#hb-rail)">
+            <rect x="750" y="120" width="17" height="140"/>
+            <rect x="1133" y="120" width="17" height="140"/>
           </g>
 
-          <g transform="translate(738 0)">
-            <rect x="-190" y="205" width="380" height="200" rx="17" fill="#6d1a7d"/>
-            <rect x="-190" y="205" width="380" height="200" rx="17" fill="none"
-                  stroke="#04121f" stroke-width="2" opacity=".35"/>
-            <rect x="-175" y="220" width="350" height="170" rx="9" fill="none"
-                  stroke="#fff" stroke-width="5.5"/>
-            <g transform="translate(-118 305)">
-              <circle r="38" fill="#8b1ba2" stroke="#fff" stroke-width="4"/>
-              <g transform="translate(-15 -15) scale(1.25)" fill="none" stroke="#fff"
-                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19.6 12.6v5.9a2.2 2.2 0 0 1-2.2 2.2H5.6a2.2 2.2 0 0 1-2.2-2.2V6.7a2.2 2.2 0 0 1 2.2-2.2h6"/><path d="M16.4 3.3l3.9 3.9-8 8-4.4.5.5-4.4z"/></g>
-            </g>
-            <text x="-62" y="300" font-size="36" font-weight="700" letter-spacing="1.5"
-                  fill="#fff">PRINT</text>
-            <text x="-62" y="337" font-size="23" font-weight="600" letter-spacing="1.5"
-                  fill="#fff" opacity=".9">DESIGN</text>
+          <!-- One panel divided into four, not four panels: the dividers are
+               how a real guide sign splits destinations. -->
+          <rect x="320" y="190" width="1260" height="350" rx="22" fill="#059236"/>
+          <g stroke="#fff" stroke-width="3.5" opacity=".9">
+            <path d="M635 206 V524"/>
+            <path d="M950 206 V524"/>
+            <path d="M1265 206 V524"/>
           </g>
 
-          <g transform="translate(1162 0)">
-            <rect x="-190" y="205" width="380" height="200" rx="17" fill="#164f96"/>
-            <rect x="-190" y="205" width="380" height="200" rx="17" fill="none"
-                  stroke="#04121f" stroke-width="2" opacity=".35"/>
-            <rect x="-175" y="220" width="350" height="170" rx="9" fill="none"
-                  stroke="#fff" stroke-width="5.5"/>
-            <g transform="translate(-118 305)">
-              <circle r="38" fill="#1068b6" stroke="#fff" stroke-width="4"/>
-              <g transform="translate(-15 -15) scale(1.25)" fill="none" stroke="#fff"
-                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.6" y="4.4" width="18.8" height="15.2" rx="2.2"/><path d="M2.6 8.7h18.8"/><path d="M10 11.9L7.6 14.3l2.4 2.4M14 11.9l2.4 2.4-2.4 2.4M12.9 11.4l-1.8 5.8"/></g>
-            </g>
-            <text x="-62" y="300" font-size="36" font-weight="700" letter-spacing="1.5"
-                  fill="#fff">WEBSITE</text>
-            <text x="-62" y="337" font-size="23" font-weight="600" letter-spacing="1.5"
-                  fill="#fff" opacity=".9">DESIGN</text>
+          <g transform="translate(477.5 0)">
+            <path transform="translate(0 296)" d="M6,74 V16 C6,-16 -22,-26 -44,-48" fill="none" stroke="#fff" stroke-width="38" stroke-linecap="butt"/>
+            <g transform="translate(-40 250) rotate(-135)"><polygon points="0,-34 0,34 60,0" fill="#fff"/></g>
+            <text y="428" font-size="46" font-weight="700" text-anchor="middle" fill="#fff">Video</text>
+            <text y="480" font-size="46" font-weight="700" text-anchor="middle" fill="#fff">Production</text>
           </g>
-
-          <g transform="translate(1586 0)">
-            <rect x="-190" y="205" width="380" height="200" rx="17" fill="#b5541a"/>
-            <rect x="-190" y="205" width="380" height="200" rx="17" fill="none"
-                  stroke="#04121f" stroke-width="2" opacity=".35"/>
-            <rect x="-175" y="220" width="350" height="170" rx="9" fill="none"
-                  stroke="#fff" stroke-width="5.5"/>
-            <g transform="translate(-118 305)">
-              <circle r="38" fill="#f37020" stroke="#fff" stroke-width="4"/>
-              <g transform="translate(-15 -15) scale(1.25)" fill="none" stroke="#fff"
-                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11.6 3.4H4.2a2.1 2.1 0 0 0-2.1 2.1v5.7a2.1 2.1 0 0 0 2.1 2.1h.6v3.3l3.4-3.3h3.4a2.1 2.1 0 0 0 2.1-2.1V5.5a2.1 2.1 0 0 0-2.1-2.1z"/><path d="M16 10.6v9.9M16 12.3l2.1-3.4c1.1.3 1.6 1.2 1.4 2.3l-.3 1.5h2.2c1 0 1.7.9 1.5 1.9l-.8 4.1c-.2.9-1 1.6-2 1.6H16"/></g>
-            </g>
-            <text x="-62" y="300" font-size="36" font-weight="700" letter-spacing="1.5"
-                  fill="#fff">SOCIAL</text>
-            <text x="-62" y="337" font-size="23" font-weight="600" letter-spacing="1.5"
-                  fill="#fff" opacity=".9">MEDIA</text>
+          <g transform="translate(792.5 0)">
+            <path transform="translate(0 296)" d="M-19,74 L-19,-20 L-56,-20 L0,-82 L56,-20 L19,-20 L19,74 Z" fill="#fff"/>
+            <text y="428" font-size="46" font-weight="700" text-anchor="middle" fill="#fff">Print</text>
+            <text y="480" font-size="46" font-weight="700" text-anchor="middle" fill="#fff">Design</text>
+          </g>
+          <g transform="translate(1107.5 0)">
+            <path transform="translate(0 296)" d="M6,74 V16 C6,-16 -22,-26 -44,-48" fill="none" stroke="#fff" stroke-width="38" stroke-linecap="butt"/>
+            <g transform="translate(-40 250) rotate(-135)"><polygon points="0,-34 0,34 60,0" fill="#fff"/></g>
+            <text y="428" font-size="46" font-weight="700" text-anchor="middle" fill="#fff">Website</text>
+            <text y="480" font-size="46" font-weight="700" text-anchor="middle" fill="#fff">Design</text>
+          </g>
+          <g transform="translate(1422.5 0)">
+            <path transform="translate(0 296)" d="M-6,74 V16 C-6,-16 22,-26 44,-48" fill="none" stroke="#fff" stroke-width="38" stroke-linecap="butt"/>
+            <g transform="translate(40 250) rotate(-45)"><polygon points="0,-34 0,34 60,0" fill="#fff"/></g>
+            <text y="428" font-size="46" font-weight="700" text-anchor="middle" fill="#fff">Social</text>
+            <text y="480" font-size="46" font-weight="700" text-anchor="middle" fill="#fff">Media</text>
           </g>
         </svg>
 
-        <div class="guide-sign hero-banner__sign">
+        <div class="guide-sign guide-sign--amber hero-banner__sign">
           <span>All Roads Lead To</span>
           <svg class="guide-sign__shield" viewBox="0 0 300 292" aria-hidden="true" focusable="false">
             <use href="#h19-shield"/>
