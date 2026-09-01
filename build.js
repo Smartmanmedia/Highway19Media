@@ -8,6 +8,9 @@
 const fs = require('fs');
 const path = require('path');
 const R = __dirname;
+const OUT = path.join(R, 'dist');
+fs.mkdirSync(OUT, { recursive: true });   /* dist/ is gitignored, so a fresh
+                                             clone starts without it */
 
 const read = p => fs.readFileSync(path.join(R, p), 'utf8');
 let html = read('index.html');
@@ -22,7 +25,7 @@ html = html
   .replace(/\n?\s*<script src="assets\/js\/[^"]*"><\/script>/gi, '')
   .replace(/(\n?<\/body>)/i, '\n<script>\n' + js + '\n</script>\n$1');
 
-fs.writeFileSync(path.join(R, 'dist/highway19-home.html'), html);
+fs.writeFileSync(path.join(OUT, 'highway19-home.html'), html);
 
 /* Artifact build: the host wraps the file in its own doctype/head/body, so
    ship only what belongs inside the body — plus the title and styles, which
@@ -35,7 +38,7 @@ const body = html
 const title = 'Highway 19 Media';
 const style = (html.match(/<style>[\s\S]*?<\/style>/i) || [''])[0];
 
-fs.writeFileSync(path.join(R, 'dist/highway19-artifact.html'),
+fs.writeFileSync(path.join(OUT, 'highway19-artifact.html'),
   '<title>' + title.trim() + '</title>\n' + style + '\n' + body + '\n');
 
 for (const f of ['dist/highway19-home.html', 'dist/highway19-artifact.html']) {
