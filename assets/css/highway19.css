@@ -241,20 +241,29 @@ h3{font-size:clamp(1.15rem,1.5vw,1.4rem);letter-spacing:-.012em}
    ----------------------------------------------------------------------------
    Stacking is deliberate:
      section backgrounds  → normal flow background layer
+     #scene-layer         → z-index 0  (painted scenery, under the asphalt)
      #road-layer          → z-index 1  (road crosses the colour bands)
-     .sec__inner          → z-index 2  (copy always sits above the road)
+     .sec__inner          → z-index 3  (copy always sits above everything)
+     #fg-layer            → z-index 2  (passes IN FRONT of the traffic)
    That is what lets one continuous road run across section boundaries
-   instead of being clipped inside each band.
+   instead of being clipped inside each band — and it is also how a vehicle
+   gets to drive into a tunnel. Anything in #fg-layer paints over the cars,
+   so the tunnel mouth hides them; no mask, no clip path, nothing per frame.
    ========================================================================= */
 
 .page{position:relative;overflow:hidden}
 
-#road-layer{
+#scene-layer,#road-layer,#fg-layer{
   position:absolute;inset:0;
-  z-index:1;
   pointer-events:none;
   overflow:hidden;
 }
+#scene-layer{z-index:0}
+#road-layer{z-index:1}
+/* Everything here paints over the traffic. Keep it to pieces the road really
+   does pass behind — anything else here will quietly swallow a car. */
+#fg-layer{z-index:2}
+#scene-layer svg,#fg-layer svg{position:absolute;display:block}
 /* Tiles MUST clip. Each one carries the whole road path and shows its own
    slice; without the clip every tile paints the full page and the later ones
    cover the earlier ones' traffic. */
@@ -282,7 +291,7 @@ body.road-debug .lane-guide{opacity:.9}
 
 .sec{position:relative;padding:var(--sec-pad) 0}
 .sec__inner{
-  position:relative;z-index:2;
+  position:relative;z-index:3;
   max-width:var(--shell);
   margin:0 auto;
   padding:0 var(--gutter);
