@@ -1,0 +1,208 @@
+{
+  "canvas": {
+    "w": 2472.320068359375,
+    "h": 5119.77001953125
+  },
+  "layers": [
+    {
+      "name": "Deseret and sand",
+      "file": "deseret-and-sand.webp",
+      "x": 226.93,
+      "y": 2234.4,
+      "w": 2015.15,
+      "h": 1410.9,
+      "shapes": 2337,
+      "kb": 88
+    },
+    {
+      "name": "Boat",
+      "file": "boat.svg",
+      "x": 1946.24,
+      "y": 1158.54,
+      "w": 78.18,
+      "h": 201.4,
+      "shapes": 41,
+      "kb": 41
+    },
+    {
+      "name": "Waves",
+      "file": "waves.svg",
+      "x": 35.63,
+      "y": 1922.42,
+      "w": 2436.7,
+      "h": 469.73,
+      "shapes": 8,
+      "kb": 13
+    },
+    {
+      "name": "Highwaysign",
+      "file": "highwaysign.svg",
+      "x": 768.19,
+      "y": 653.55,
+      "w": 98.76,
+      "h": 150.75,
+      "shapes": 8,
+      "kb": 10
+    },
+    {
+      "name": "Your road map",
+      "file": "your-road-map.svg",
+      "x": 867.81,
+      "y": 1128.86,
+      "w": 323.09,
+      "h": 66.66,
+      "shapes": 7,
+      "kb": 11
+    },
+    {
+      "name": "Bridge sign",
+      "file": "bridge-sign.svg",
+      "x": 1215.6,
+      "y": 1536.56,
+      "w": 145.01,
+      "h": 128.03,
+      "shapes": 9,
+      "kb": 11
+    },
+    {
+      "name": "Bad road sign",
+      "file": "bad-road-sign.svg",
+      "x": 769.17,
+      "y": 2436.8,
+      "w": 322.92,
+      "h": 285.09,
+      "shapes": 5,
+      "kb": 10
+    },
+    {
+      "name": "Explore Our Services",
+      "file": "explore-our-services.svg",
+      "x": 1299.83,
+      "y": 4323.9,
+      "w": 370.8,
+      "h": 65.2,
+      "shapes": 14,
+      "kb": 11
+    },
+    {
+      "name": "Forest",
+      "file": "forest.webp",
+      "x": 118.83,
+      "y": 3287.49,
+      "w": 2207.92,
+      "h": 770.84,
+      "shapes": 10112,
+      "kb": 282
+    },
+    {
+      "name": "Trees",
+      "file": "trees.svg",
+      "x": 224.49,
+      "y": 4240.47,
+      "w": 671.16,
+      "h": 362.68,
+      "shapes": 703,
+      "kb": 186
+    },
+    {
+      "name": "End rocks",
+      "file": "end-rocks.svg",
+      "x": 223.69,
+      "y": 4277.08,
+      "w": 2015.15,
+      "h": 842.69,
+      "shapes": 837,
+      "kb": 150
+    },
+    {
+      "name": "Stright",
+      "file": "stright.svg",
+      "x": 1592.68,
+      "y": 1.04,
+      "w": 105.66,
+      "h": 360.93,
+      "shapes": 10,
+      "kb": 10
+    },
+    {
+      "name": "Curve",
+      "file": "curve.svg",
+      "x": 1253.92,
+      "y": 968.87,
+      "w": 444.63,
+      "h": 471.47,
+      "shapes": 25,
+      "kb": 12
+    },
+    {
+      "name": "Cloud5",
+      "file": "cloud5.svg",
+      "x": 225.1,
+      "y": 1643.06,
+      "w": 516.76,
+      "h": 277.96,
+      "shapes": 30,
+      "kb": 16
+    },
+    {
+      "name": "Cloud4",
+      "file": "cloud4.svg",
+      "x": 1856.95,
+      "y": 1618.26,
+      "w": 516.78,
+      "h": 277.96,
+      "shapes": 30,
+      "kb": 16
+    },
+    {
+      "name": "Cloud3",
+      "file": "cloud3.svg",
+      "x": 1887.06,
+      "y": 586.03,
+      "w": 213.98,
+      "h": 215.27,
+      "shapes": 16,
+      "kb": 12
+    },
+    {
+      "name": "Cloud2",
+      "file": "cloud2.svg",
+      "x": 404.83,
+      "y": 3330.26,
+      "w": 571.48,
+      "h": 352.12,
+      "shapes": 38,
+      "kb": 18
+    },
+    {
+      "name": "Cloud1",
+      "file": "cloud1.svg",
+      "x": 1634.72,
+      "y": 3099.33,
+      "w": 484.23,
+      "h": 325.67,
+      "shapes": 30,
+      "kb": 16
+    },
+    {
+      "name": "Hero Sign",
+      "file": "hero-sign.svg",
+      "x": 287.07,
+      "y": 143.26,
+      "w": 1929.28,
+      "h": 400.99,
+      "shapes": 41,
+      "kb": 222
+    },
+    {
+      "name": "Our sign",
+      "file": "our-sign.svg",
+      "x": 1018.03,
+      "y": 3744.4,
+      "w": 1250.45,
+      "h": 331.6,
+      "shapes": 12,
+      "kb": 11
+    }
+  ]
+}
