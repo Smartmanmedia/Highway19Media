@@ -427,7 +427,8 @@ body.road-debug .lane-guide{opacity:.9}
   color:#fff;
 }
 .signplate__copy .sub{
-  font-size:2.45cqi;         /* 30.49 of 1245                             */
+  font-size:2.9cqi;          /* his 30.49 of 1245, nudged up so it clears the
+                                18.66px bold threshold in the real column */
   line-height:1.2;
   margin:0;
   color:#fff;
