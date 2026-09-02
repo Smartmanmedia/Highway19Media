@@ -427,8 +427,12 @@ body.road-debug .lane-guide{opacity:.9}
   color:#fff;
 }
 .signplate__copy .sub{
-  font-size:2.9cqi;          /* his 30.49 of 1245, nudged up so it clears the
-                                18.66px bold threshold in the real column */
+  font-size:3.05cqi;         /* his 30.49 of 1245, nudged up: the plate renders
+                                636px wide in this column, not the 840 it is
+                                allowed, which put the subhead at 18.5px — a
+                                sixth of a pixel under the bold-text threshold */
+  /* (was: nudged so it clears the
+                                18.66px bold threshold) */
   line-height:1.2;
   margin:0;
   color:#fff;
