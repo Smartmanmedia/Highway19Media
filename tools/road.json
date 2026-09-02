@@ -1,0 +1,108 @@
+{
+  "_note": "His road, as three separate runs \u2014 which is his design, not mine. Nothing crosses the forest. A straight may stretch along its own axis and nobody can tell; a curve may not, so curves are placed at their own size and the straights either side take up the slack.",
+  "runs": [
+    {
+      "name": "coast",
+      "parts": [
+        {
+          "kind": "straight-v",
+          "file": "tile2.svg",
+          "x": 1592.68,
+          "y": 1.04,
+          "w": 105.66,
+          "h": 970.13
+        },
+        {
+          "kind": "curve",
+          "file": "tile13.svg",
+          "x": 1253.92,
+          "y": 968.87,
+          "w": 444.63,
+          "h": 471.47
+        },
+        {
+          "kind": "straight-h",
+          "file": "tile12.svg",
+          "x": 929.49,
+          "y": 1334.92,
+          "w": 360.93,
+          "h": 105.66
+        },
+        {
+          "kind": "curve",
+          "file": "tile16.svg",
+          "x": 541.23,
+          "y": 1334.18,
+          "w": 444.62,
+          "h": 471.48
+        },
+        {
+          "kind": "straight-v",
+          "file": "tile5.svg",
+          "x": 541.65,
+          "y": 1800.86,
+          "w": 105.66,
+          "h": 574.91
+        },
+        {
+          "kind": "curve",
+          "file": "tile14.svg",
+          "x": 202.09,
+          "y": 2251.59,
+          "w": 444.62,
+          "h": 471.47
+        }
+      ]
+    },
+    {
+      "name": "mountains",
+      "parts": [
+        {
+          "kind": "curve",
+          "file": "tile1.svg",
+          "x": 0,
+          "y": 2868.69,
+          "w": 444.62,
+          "h": 471.48
+        },
+        {
+          "kind": "straight-h",
+          "file": "tile0.svg",
+          "x": 439.9,
+          "y": 2869.21,
+          "w": 1772.18,
+          "h": 105.66
+        }
+      ]
+    },
+    {
+      "name": "grass",
+      "parts": [
+        {
+          "kind": "straight-h",
+          "file": "tile11.svg",
+          "x": 292.88,
+          "y": 4132.12,
+          "w": 360.93,
+          "h": 105.66
+        },
+        {
+          "kind": "curve",
+          "file": "tile15.svg",
+          "x": 649.46,
+          "y": 4132.21,
+          "w": 471.47,
+          "h": 444.62
+        },
+        {
+          "kind": "straight-v",
+          "file": "tile17.svg",
+          "x": 1014.95,
+          "y": 4575.36,
+          "w": 105.66,
+          "h": 360.93
+        }
+      ]
+    }
+  ]
+}

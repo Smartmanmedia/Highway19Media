@@ -418,11 +418,14 @@
         /* The widest asphalt stroke doubles as the tap target — hit-tested on
            the stroke, so only the road itself is clickable, never the gaps. */
         road.appendChild(el('path', { 'class': 'road-hit', d: d, fill: 'none',
-                                      stroke: ASPHALT, 'stroke-width': W_ROAD * scaleNow }));
-        road.appendChild(el('path', { d: d, fill: 'none', stroke: LINE, 'stroke-width': EDGE_OUT * 2 * scaleNow }));
-        road.appendChild(el('path', { d: d, fill: 'none', stroke: ASPHALT, 'stroke-width': EDGE_IN * 2 * scaleNow }));
-        road.appendChild(el('path', { d: d, fill: 'none', stroke: LINE, 'stroke-width': DASH_W * scaleNow,
-                                      'stroke-dasharray': dash }));
+                                      stroke: DRAW_ROAD ? ASPHALT : 'transparent',
+                                      'stroke-width': W_ROAD * scaleNow }));
+        if (DRAW_ROAD) {
+          road.appendChild(el('path', { d: d, fill: 'none', stroke: LINE, 'stroke-width': EDGE_OUT * 2 * scaleNow }));
+          road.appendChild(el('path', { d: d, fill: 'none', stroke: ASPHALT, 'stroke-width': EDGE_IN * 2 * scaleNow }));
+          road.appendChild(el('path', { d: d, fill: 'none', stroke: LINE, 'stroke-width': DASH_W * scaleNow,
+                                        'stroke-dasharray': dash }));
+        }
         svg.appendChild(road);
         guides.appendChild(el('path', { 'class': 'lane-guide', d: '' }));
         guides.appendChild(el('path', { 'class': 'lane-guide', d: '' }));
@@ -454,6 +457,13 @@
   var VAN = { Red_Van: 1, Blue_Van: 1, Blue_Minivan: 1, 'Blue_Minivan-2': 1, Grey_Minivan: 1 };
   var BIG = { Green_Truck: 1, Semitrailer: 1, Gas_Truck: 1, Blue_bus: 1,
               Brown_Truck: 1, Yellow_truck: 1, Brown_Big_Truck: 1 };
+
+  /* The asphalt belongs to the owner now — his own tiles, laid by
+     scene-build.js from the runs he actually drew. This engine keeps the
+     traffic and the physics. DRAW_ROAD off stops it painting a second
+     road of its own underneath his. The hit target for tap-to-pause has
+     to survive, so that one stroke stays, transparent. */
+  var DRAW_ROAD = false;
 
   var runs = [], pool = [], scaleNow = 1, gmul = 1, carScale = 1;
 

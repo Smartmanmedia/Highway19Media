@@ -45,6 +45,10 @@
   var ART_X = scene.art.x, ART_W = scene.art.w;
   var nodes = [];          /* {el, piece} */
   var bandEls = [];
+  /* Declared up here, not beside the road code below. place() runs before that
+     point, and a `var` hoists as undefined — so placeRoad threw on
+     roadParts.length and the whole builder died before laying a single tile. */
+  var roadData = window.H19_ROAD_DATA, roadParts = [];
 
   /* ==========================================================================
      1. Build the piecewise map from his canvas Y to page Y.
@@ -175,10 +179,13 @@
       b.el.style.height = Math.max(0, bot - top).toFixed(1) + 'px';
     });
 
+    placeRoad(pts, S);
+
     if (window.__scene && window.__scene.recollect) window.__scene.recollect();
   }
 
   create();
+  createRoad();
 
   /* Fonts change line wrapping, which moves every anchor. Place once now so
      nothing flashes, and again once the fonts have actually landed. */
@@ -195,5 +202,60 @@
     ro.observe(document.getElementById('main'));
   }
 
-  window.__sceneBuild = { place: place, map: buildMap, pieces: nodes, bands: bandEls };
+  /* ==========================================================================
+     4. His road.
+     Laid tile by tile rather than scaled as one picture, because his road IS a
+     tile set and that is what makes it survive a page twice the height of his
+     canvas: a straight may stretch along its own axis and nobody can tell, a
+     curve may not. Curves are placed at their own size; the straights either
+     side take up whatever slack the map introduces.
+
+     Three runs, which is his design — the coast, the horizontal at the edge of
+     the mountains, and the one down in the grass. Nothing crosses the forest.
+     ====================================================================== */
+
+  function createRoad() {
+    if (!roadData) return;
+    roadData.runs.forEach(function (run) {
+      run.parts.forEach(function (p) {
+        var el = document.createElement('div');
+        el.innerHTML = p.markup;
+        var svg = el.querySelector('svg');
+        if (svg) { svg.setAttribute('width','100%'); svg.setAttribute('height','100%'); }
+        el.className = 'scene-piece road-tile-art';
+        el.dataset.run = run.name;
+        back.appendChild(el);
+        roadParts.push({ el: el, part: p, run: run.name });
+      });
+    });
+  }
+
+  function placeRoad(pts, S) {
+    if (!roadParts.length) return;
+    roadData.runs.forEach(function (run) {
+      var mine = roadParts.filter(function (r) { return r.run === run.name; });
+      /* First pass: everything at its mapped top, at its own size. */
+      mine.forEach(function (r) {
+        r.top = mapY(pts, r.part.y);
+        r.h   = r.part.h * S;
+      });
+      /* Second pass: a vertical straight grows to meet whatever follows it,
+         so the chain stays joined however far the map has pulled it apart. */
+      mine.forEach(function (r, i) {
+        if (r.part.kind !== 'straight-v') return;
+        var next = mine[i + 1];
+        if (next) r.h = Math.max(r.h, next.top - r.top);
+        else r.h = Math.max(r.h, mapY(pts, r.part.y + r.part.h) - r.top);
+      });
+      mine.forEach(function (r) {
+        r.el.style.left   = ((r.part.x - ART_X) * S).toFixed(1) + 'px';
+        r.el.style.top    = r.top.toFixed(1) + 'px';
+        r.el.style.width  = (r.part.w * S).toFixed(1) + 'px';
+        r.el.style.height = r.h.toFixed(1) + 'px';
+      });
+    });
+  }
+
+  window.__sceneBuild = { place: place, map: buildMap, pieces: nodes, bands: bandEls,
+                          road: roadParts };
 })();
