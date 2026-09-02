@@ -443,6 +443,26 @@ body.road-debug .lane-guide{opacity:.9}
 .gantry__plate{flex:0 0 auto;position:relative;container-type:inline-size}
 .gantry__plate > img{display:block;width:100%;height:auto}
 
+/* The truss height comes off the PLATE WIDTH, not from a percentage. A
+   percentage height on a flex item resolves against the container's height,
+   the container's height here is auto, and an auto height makes a percentage
+   indeterminate — which rendered the truss zero pixels tall. A percentage
+   margin was worse: those resolve against WIDTH, so it pushed the truss right
+   off the sign. One variable per gantry, and both derive from it. */
+.gantry__truss{height:calc(var(--plate-w) * var(--truss-ratio, .167))}
+
+/* Hero: his plate at its designed size, truss reaching both edges.
+   179.6 of truss against a 1076-wide plate = .1669 */
+#hero .gantry{--plate-w:min(1076px,62vw); --truss-ratio:.1669}
+#hero .gantry__plate{width:var(--plate-w)}
+
+/* Section seven: plate on the left of its column, truss running off the right
+   edge of the screen, which is how he drew it.
+   179.6 of truss against a 946-wide plate = .1898 */
+#promise .gantry{width:calc(100% + var(--gutter) + 6vw);
+                 --plate-w:min(946px,52vw); --truss-ratio:.1898}
+#promise .gantry__plate{width:var(--plate-w)}
+
 /* --------------------------------------------------------------------------
    THE GANTRY SIGN
    The owner's OurSign.svg is 1245.1 x 333.6. Inside it the green plate runs
@@ -463,11 +483,7 @@ body.road-debug .lane-guide{opacity:.9}
    bleeds off the right edge, with the truss carrying on past it. Boxing it
    inside the copy column instead put the whole sign on the wrong side of the
    page and shrank it to 636px. */
-#promise .signplate{
-  max-width:none;
-  width:calc(100% + var(--gutter) + 4vw);
-  margin-left:0;
-}
+#promise .signplate{margin-left:0}
 #promise .sec__body{ text-align:left }
 /* The CTA container was full width, so it measured 44-89% against his
    57-69%. Shrink it to its button. */

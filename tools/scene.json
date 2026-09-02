@@ -20,6 +20,13 @@
       "sel": "#problem h2"
     },
     {
+      "text": "waves meet the copy",
+      "y": 1922,
+      "sel": "#problem .sec__body",
+      "edge": "bottom",
+      "_why": "the owner: the waves should start right after the text"
+    },
+    {
       "text": "You've Been Down",
       "y": 2440,
       "sel": "#objection h2"

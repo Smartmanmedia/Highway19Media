@@ -64,7 +64,12 @@
       var el = document.querySelector(a.sel);
       if (!el) continue;
       var r = el.getBoundingClientRect();
-      pts.push({ src: a.y, dst: r.top + window.pageYOffset });
+      /* An anchor normally pins his y to the TOP of the element. "edge":
+         "bottom" pins it to the foot instead, which is what the shoreline
+         needs: he wants the waves to start right after the copy, and the copy
+         is taller here than on his canvas. */
+      var dst = (a.edge === 'bottom' ? r.bottom : r.top) + window.pageYOffset;
+      pts.push({ src: a.y, dst: dst });
     }
     if (pts.length < 2) return null;
     pts.sort(function (p, q) { return p.src - q.src; });
