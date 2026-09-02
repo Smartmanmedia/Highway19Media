@@ -1,4 +1,29 @@
 /* ============================================================================
+   HIS OWN FONT FILES
+   Self-hosted rather than pulled from Google. Same family either way, but
+   these are the files his artwork was actually drawn against, so the metrics
+   are his and not a rebuild of them — and the page stops depending on a third
+   party to render its own headline.
+
+   Subset to Latin and compressed to WOFF2 by tools/subset_fonts.py: 673 KB of
+   TTF becomes 104 KB, and only the two weights this section sets are loaded.
+   ========================================================================= */
+@font-face{ font-family:"Be Vietnam Pro"; font-weight:300; font-style:normal;
+            font-display:swap; src:url("../../assets/fonts/BeVietnamPro-Light.woff2") format("woff2") }
+@font-face{ font-family:"Be Vietnam Pro"; font-weight:500; font-style:normal;
+            font-display:swap; src:url("../../assets/fonts/BeVietnamPro-Medium.woff2") format("woff2") }
+@font-face{ font-family:"Be Vietnam Pro"; font-weight:700; font-style:normal;
+            font-display:swap; src:url("../../assets/fonts/BeVietnamPro-Bold.woff2") format("woff2") }
+@font-face{ font-family:"Be Vietnam Pro"; font-weight:800; font-style:normal;
+            font-display:swap; src:url("../../assets/fonts/BeVietnamPro-ExtraBold.woff2") format("woff2") }
+@font-face{ font-family:"Be Vietnam Pro"; font-weight:900; font-style:normal;
+            font-display:swap; src:url("../../assets/fonts/BeVietnamPro-Black.woff2") format("woff2") }
+/* His road-sign face — the real one. HWYGEXPD.TTF, whose internal family name
+   is exactly the "Highway Gothic Expanded" his SVG asks for. */
+@font-face{ font-family:"Highway Gothic Expanded"; font-weight:400; font-style:normal;
+            font-display:swap; src:url("../../assets/fonts/HighwayGothic-Expanded.woff2") format("woff2") }
+
+/* ============================================================================
    SECTION ONE
    ----------------------------------------------------------------------------
    One rule holds this together: the section is 0.9409 as tall as it is wide,
@@ -42,11 +67,16 @@
    ---------------------------------------------------------------------- */
 .sec1 .truss{
   /* absolute+block explicitly: the shared placement rule matches [data-at] and
-     this is a bare span, so without these it stays an inline box 0px wide and
-     paints nothing — no error, just an invisible truss. */
+     this is a bare span, so without these it stays an inline box 0px wide. */
   position:absolute; display:block;
   left:0; right:0; width:100%;
-  top:17.09%; height:7.07%;
+  /* His tile is 131.8 x 156.57 and its X centres on the X of the cells baked
+     into his section (y 311.22 + 123.7/2 = 373.07), so the band runs from
+     373.07 - 156.57/2 = 294.77 for 156.57 — as shares of the section height,
+     16.28% and 8.65%. background-size:auto 100% then makes each repeat 6.85%
+     of the column wide, which is his own 131.8. Centred, so the four cells
+     either side of the sign stay symmetrical however wide the screen is. */
+  top:16.28%; height:8.65%;
   background:url("../../assets/v2/section-01/truss-cell.webp") repeat-x center;
   background-size:auto 100%;
   z-index:2;
@@ -76,23 +106,25 @@
 .sec1 .l3{ font-size:1.621cqw }                 /* his 31.19 */
 .sec1 h2.copy{ font-size:2.749cqw; white-space:nowrap }   /* his 52.90 */
 
-/* HIS ROAD-SIGN FACE, standing in.
-   His subheads are Highway Gothic Expanded. It is not on Google Fonts —
-   checked, HTTP 400 for both spellings — and Overpass is, drawn from the same
-   FHWA Highway Gothic series, so that stands in.
+/* HIS ROAD-SIGN FACE — the real one, self-hosted.
+   Highway Gothic Expanded, from his own files. No stand-in and no scaling: the
+   subheads are set at his size in his measure because it is his font.
 
-   It is not metrically the same, though, and at his size it re-wrapped his
-   one-line subhead into two and pushed it into the copy below. Measured on two
-   different lines it wants 0.742x and 0.736x to occupy the same measure, which
-   is a uniform difference in the face rather than a wrapping accident — so the
-   stand-in is set at 0.739 of his size and his line breaks hold exactly.
-
-   Put Highway Gothic Expanded in assets/brand/ and set --sub-fit to 1. */
-.sec1{ --sub-fit:0.739 }
+   For the record, what the stand-ins cost, measured on both of his subhead
+   lines: Overpass wanted 0.739 (it was drawn from the same FHWA series but is
+   26% wider, which put his subhead SMALLER than his body copy when he set it
+   larger), PT Sans Narrow 0.952. Neither is needed now.
+   ---------------------------------------------------------------------- */
+/* His subhead line breaks are explicit in his file, so they are explicit here
+   too: one span per line, none of them allowed to wrap. Left to the browser a
+   fraction of a percent of metric difference re-wrapped his two lines into
+   three and pushed them into the copy below — and no box width is the right
+   width when the breaks are already decided. */
+.sec1 .sub span{ display:block; white-space:nowrap }
 .sec1 .sub{
-  font-size:calc(1.230cqw * var(--sub-fit));    /* his 23.66 */
+  font-size:1.230cqw;                           /* his 23.66 */
   font-weight:400; line-height:1.28;
-  font-family:"Highway Gothic Expanded","Overpass","Be Vietnam Pro",Arial,sans-serif;
+  font-family:"Highway Gothic Expanded","Be Vietnam Pro",Arial,sans-serif;
 }
 .sec1 .body{ font-size:1.025cqw; font-weight:300; line-height:1.42 }  /* his 19.72 */
 
@@ -105,4 +137,21 @@
 .sec1 .cta span{
   position:absolute; left:26%; right:6%; top:50%; transform:translateY(-50%);
   color:#fff; font-weight:700; font-size:5.6cqi; white-space:nowrap;
+}
+
+/* --- HIS HORIZONTAL SCALE ------------------------------------------------
+   Every text block in his file carries a scale(k 1): the headlines .97, the
+   second heading .9666, the road-sign subheads .82. He is squeezing the type,
+   and it is not decoration — it is why Highway Gothic Expanded fits the
+   measure he drew. Without it the subheads run 22% long and wrap into the copy
+   below, which is exactly what two rounds of stand-in fonts were compensating
+   for by accident.
+
+   The box is widened by 1/k so the line breaks fall where his do, and scaleX
+   brings it back to his measure. transform-origin is the centre, so a centred
+   block stays on its own axis.
+   ---------------------------------------------------------------------- */
+.sec1 [style*="--sx"]{
+  transform:scaleX(var(--sx));
+  transform-origin:50% 0;
 }

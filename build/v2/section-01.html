@@ -3,24 +3,27 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Highway 19 — section one</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;700;800;900&family=Overpass:wght@400;600;700&display=swap">
+<!-- Both families are his own files, self-hosted. No external font requests. -->
 <link rel="stylesheet" href="section-01.css">
 <style>body{margin:0;background:#04264f}</style>
 
 <section class="sec1">
 
   <!-- ROAD — his own tiles, in the order the road runs -->
+  <!-- each tile is its own cut from his export. The two curves are the same
+       shape flipped, and his file already carries Curve-2 flipped — pointing
+       both at one file sent the road out of the left edge instead of down. -->
   <img class="z-road" data-at src="../../assets/v2/section-01/stright.svg" alt=""
        style="left:64.40%;top:0.06%;width:4.94%">
-  <img class="z-road" data-at src="../../assets/v2/section-01/stright.svg" alt=""
+  <img class="z-road" data-at src="../../assets/v2/section-01/stright-2.svg" alt=""
        style="left:64.40%;top:14.05%;width:4.94%">
-  <img class="z-road" data-at src="../../assets/v2/section-01/stright.svg" alt=""
+  <img class="z-road" data-at src="../../assets/v2/section-01/stright-3.svg" alt=""
        style="left:64.40%;top:30.33%;width:4.94%">
   <img class="z-road" data-at src="../../assets/v2/section-01/curve.svg" alt=""
        style="left:48.56%;top:48.14%;width:20.79%">
   <img class="z-road" data-at src="../../assets/v2/section-01/stright-4.svg" alt=""
        style="left:33.40%;top:66.33%;width:16.87%">
-  <img class="z-road" data-at src="../../assets/v2/section-01/curve.svg" alt=""
+  <img class="z-road" data-at src="../../assets/v2/section-01/curve-2.svg" alt=""
        style="left:15.25%;top:66.30%;width:20.79%">
 
   <!-- BOAT -->
@@ -40,11 +43,11 @@
   <!-- Copy positions, sizes and weights come from tools/read_text.js reading
        his own <text> elements out of the export — not measured off the render.
        left/top/width are shares of his art column. -->
-  <div class="copy z-copy" style="left:36.79%;top:33.85%;width:16.46%">
+  <div class="copy z-copy" style="left:36.54%;top:33.85%;width:16.97%;--sx:0.97">
     <h1><span class="l1">A Clear Road</span><span class="l2">Forward</span><span class="l3">for Your Business</span></h1>
   </div>
 
-  <p class="copy sub z-copy" style="left:31.97%;top:44.28%;width:15.35%">You've done the hard part.<br>Now let's make sure people can see it.</p>
+  <p class="copy sub z-copy" style="left:30.29%;top:44.28%;width:18.72%;--sx:0.82"><span>You've done the hard part.</span><span>Now let's make sure people can see it.</span></p>
 
   <p class="copy body z-copy" style="left:26.93%;top:48.42%;width:29.85%">Running a local business means wearing every hat. Manager,
       salesperson, customer service, and somehow marketer too. You're stretched
@@ -61,9 +64,9 @@
   <img class="z-copy" data-at src="../../assets/v2/section-01/bridge-sign.svg" alt=""
        style="left:27.67%;top:80.91%;width:7.54%">
 
-  <h2 class="copy z-copy" style="left:38.39%;top:80.98%;width:32.75%">Great Work, No Signage</h2>
+  <h2 class="copy z-copy" style="left:37.82%;top:80.98%;width:33.88%;--sx:0.9666">Great Work, No Signage</h2>
 
-  <p class="copy sub z-copy" style="left:38.86%;top:85.5%;width:25.16%">The best shop on the road is worthless if nobody sees the sign.</p>
+  <p class="copy sub z-copy" style="left:36.10%;top:85.5%;width:30.68%;--sx:0.82"><span>The best shop on the road is worthless if nobody sees the sign.</span></p>
 
   <p class="copy body z-copy" style="left:36.94%;top:88.37%;width:34.9%">You finish a job and it looks great. Then it disappears. No
       photos, no video, nothing a future customer can find. The guy down the road

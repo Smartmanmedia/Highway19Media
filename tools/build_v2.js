@@ -8,7 +8,8 @@ const fs = require('fs'), path = require('path');
 const ROOT = path.join(__dirname, '..');
 const SRC = process.argv[2] || 'build/v2/section-01.html';
 const OUT = process.argv[3] || 'dist/highway19-v2.html';
-const MIME = { '.svg':'image/svg+xml', '.webp':'image/webp', '.png':'image/png', '.jpg':'image/jpeg' };
+const MIME = { '.svg':'image/svg+xml', '.webp':'image/webp', '.png':'image/png',
+               '.jpg':'image/jpeg', '.woff2':'font/woff2' };
 
 let html = fs.readFileSync(path.join(ROOT, SRC), 'utf8');
 const base = path.dirname(path.join(ROOT, SRC));

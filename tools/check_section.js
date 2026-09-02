@@ -39,7 +39,20 @@ const PAIRS = [
     const out = {};
     document.querySelectorAll('.sec1 .copy').forEach(el => {
       const k = (el.textContent || '').trim().replace(/\s+/g,' ').slice(0, 18);
-      out[k] = ink(el);
+      /* For a block he squeezes, the element's own rect already carries the
+         transform, and its box is his measure by construction (his width over
+         his scale). A Range reports the LAYOUT width instead — unsqueezed, and
+         for a nowrap line it can overflow the box — so use the rect there. */
+      const sx = parseFloat(getComputedStyle(el).getPropertyValue('--sx')) || 1;
+      let r;
+      if (sx !== 1) {
+        const b2 = el.getBoundingClientRect();
+        const t = ink(el);
+        r = { left:(b2.left-sec.left)/sec.width*100, width:b2.width/sec.width*100,
+              top: t ? t.top : (b2.top-sec.top)/sec.height*100, lines: t ? t.lines : 1 };
+      } else r = ink(el);
+      if (!r) return;
+      out[k] = r;
     });
     return out;
   });
