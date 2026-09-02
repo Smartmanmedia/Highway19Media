@@ -1,0 +1,18 @@
+[
+  {
+    "name": "ocean",
+    "px": "2880x840",
+    "kb": "33",
+    "top": "#0254b1 (2% pure)",
+    "bottom": "#fdedd1 (100% pure)",
+    "ratio": "29.167"
+  },
+  {
+    "name": "land",
+    "px": "2880x2550",
+    "kb": "277",
+    "top": "#fdeacc (50% pure)",
+    "bottom": "#249843 (100% pure)",
+    "ratio": "88.542"
+  }
+]

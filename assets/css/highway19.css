@@ -350,13 +350,24 @@ body.road-debug .lane-guide{opacity:.9}
    the part that can stretch safely, because a gradient has no proportions to
    distort. The drawn pieces are placed as .sec__art and never stretched.
    ----------------------------------------------------------------------- */
-.band-sky   {background:linear-gradient(180deg,#004ba0 0%,#0561ca 100%);color:#fff}
-.band-sand  {background:linear-gradient(180deg,#fdf6e4 0%,#fde5c1 91%,#fde5c1 100%)}
+/* Each band ends on the exact colour the slice above or below it begins
+   with, sampled from the slice itself. That is what makes the joins
+   invisible — not a strip of artwork laid over a guessed seam. */
+/* HORIZONTAL. Measured off his own linear-gradient-3: x1 293.7 to x2 2213.7
+   at a constant y — left to right, not top to bottom. Built vertically it is
+   the same two colours and still looks nothing like his sky. Because every
+   sky section shares one horizontal gradient, there is also no seam where two
+   of them meet. */
+.band-sky   {background:linear-gradient(90deg,#004ba0 0%,#0561ca 100%);color:#fff}
+/* Starts on #fdedd1, the exact bottom row of band-ocean.webp, so the slice
+   hands off to the flat band with nothing to see. His own stops carry on
+   from there. */
+.band-sand  {background:linear-gradient(180deg,#fdedd1 0%,#fde5c1 91%,#fde5c1 100%)}
 .band-dune  {background:#fde5c1}
 /* The owner's green runs #006837 to #39b54a. The bright end will not carry
    light body copy — measured 3.33 against 4.5 — so the band stops short of
    it where text sits. The full range still appears in the artwork itself. */
-.band-grass {background:linear-gradient(180deg,#006837 0%,#0f7a3c 100%);color:#fff}
+.band-grass {background:linear-gradient(180deg,#249843 0%,#39b54a 100%);color:#fff}
 
 /* Copy sitting on a sky band. The body grey is unreadable on #004ba0, so the
    whole type scale lifts rather than one heading being patched. */
@@ -379,6 +390,61 @@ body.road-debug .lane-guide{opacity:.9}
 .band-grass .form label,.band-grass .form li{color:var(--ink-soft)}
 .band-grass .milestone h3{color:#fff}
 
+/* --------------------------------------------------------------------------
+   THE GANTRY SIGN
+   The owner's OurSign.svg is 1245.1 x 333.6. Inside it the green plate runs
+   from x 1 to 947 and the copy area starts at x 217 — his own text was set
+   there before it was stripped out. Every number below is that geometry as a
+   percentage, so the words stay locked to the plate at any size.
+   Container units rather than viewport units: the type must scale with the
+   SIGN, not with the window, or the words drift off the plate the moment the
+   column changes width.
+   ----------------------------------------------------------------------- */
+.signplate{
+  position:relative;
+  container-type:inline-size;
+  max-width:840px;
+  margin:0 0 clamp(20px,2.4vw,34px);
+}
+.signplate__art{display:block;width:100%;height:auto}
+.signplate__copy{
+  position:absolute;
+  left:17.4%;                /* x 217 of 1245 — where his text began       */
+  right:24.5%;               /* clear of the plate's right edge at x 947   */
+  top:50%;transform:translateY(-50%);
+}
+.signplate__copy h2{
+  font-size:5.35cqi;         /* 66.64 of 1245, his own size                */
+  line-height:1.06;
+  margin:0 0 .34em;
+  color:#fff;
+}
+.signplate__copy .sub{
+  font-size:2.45cqi;         /* 30.49 of 1245                             */
+  line-height:1.2;
+  margin:0;
+  color:#fff;
+  font-weight:600;
+}
+/* Below the point where the plate can hold two lines of headline legibly, the
+   sign becomes a band behind the copy rather than a shrinking billboard. */
+@media (max-width:720px){
+  .signplate{max-width:none}
+  .signplate__copy{left:12%;right:12%}
+  .signplate__copy h2{font-size:7.6cqi}
+  .signplate__copy .sub{font-size:3.4cqi}
+}
+
+/* --- A slice of the composed artwork ------------------------------------
+   Full bleed, aspect locked by the image's own proportions so his waves and
+   his canopy are never squashed. The band above and below carries the slice's
+   own edge colour, so there is nothing to see at the join.
+   --------------------------------------------------------------------- */
+.band-strip{position:absolute;left:0;right:0;z-index:0;pointer-events:none;line-height:0}
+.band-strip img{display:block;width:100%;height:auto}
+.band-strip--bottom{bottom:-1px}
+.band-strip--top{top:-1px}
+
 /* --- Scenery inside a section -------------------------------------------
    Anchored to the section rather than to the page, because the page's height
    depends on how the copy reflows and the artwork's does not. z-index 0 keeps
@@ -391,7 +457,10 @@ body.road-debug .lane-guide{opacity:.9}
 .sec__art--front{z-index:2}
 /* Sections carrying a scenery strip reserve room for it, so the copy is
    never pushed onto the artwork by a longer line or a narrower window. */
-#promise{padding-top:calc(var(--sec-pad) + clamp(150px,24vw,360px))}
+/* Room for the slices these sections carry: the ocean is 26.6% of the page
+   width tall, the land 81.8%, both fixed by their own artwork. */
+#problem{padding-bottom:calc(var(--sec-pad) + 27vw)}
+#promise{padding-top:calc(var(--sec-pad) + 82vw)}
 .sec__art img{display:block;width:100%;height:auto}
 
 .band-blue    {background:var(--blue-700);color:#fff}
@@ -454,7 +523,7 @@ body.road-debug .lane-guide{opacity:.9}
    ========================================================================= */
 
 #hero{
-  background:linear-gradient(178deg,#004ba0 0%,#0561ca 100%);
+  background:linear-gradient(90deg,#004ba0 0%,#0561ca 100%);
   color:#fff;
   padding-top:clamp(64px,7vw,104px);
   padding-bottom:clamp(96px,11vw,168px);
