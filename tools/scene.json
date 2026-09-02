@@ -40,6 +40,12 @@
       "text": "Explore Our Services",
       "y": 4345,
       "sel": "#promise .sec__cta"
+    },
+    {
+      "text": "the foot of his canvas",
+      "y": 5119.77,
+      "sel": "#services",
+      "_why": "His composition ends with the rocks at the very bottom of his artboard. Pinning that to the top of the first section that is NOT his gives the tail of the scene a real destination instead of extrapolating: without it the rocks are placed at his height times the page scale, which at 3840 is 1685px instead of 842 and runs a long way past the handover."
     }
   ],
   "bands": [
@@ -183,7 +189,9 @@
       "y": 4277.08,
       "w": 2015.15,
       "h": 842.69,
-      "z": 40
+      "z": 40,
+      "fit": "span",
+      "_fit": "span, not stretch: stretch takes the LARGER of his height and the mapped span, which is the right guard for a band in the middle of the scene that must never leave a gap. This is the closing band and has to meet the handover exactly, at every width, so it takes the span as given."
     }
   ],
   "_signs": "Hero Sign and Our sign are deliberately NOT placed here. They are in index.html with real HTML copy over the owner's plate, so the headlines stay selectable and findable rather than being pictures of words.",

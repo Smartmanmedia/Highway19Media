@@ -981,6 +981,13 @@
     ro.observe(page);
   }
   window.addEventListener('load', function () { fit(true); });
+  /* The scenery is laid from the owner's canvas and re-laid whenever the copy
+     re-wraps — fonts arriving, mainly. When it moves, the centrelines it hands
+     us move with it, and traffic still driving the old line ends up in the
+     ocean. Debounced with the same timer as a resize so a burst settles once. */
+  window.addEventListener('h19:road-moved', function () {
+    clearTimeout(rt); rt = setTimeout(function () { fit(false); }, 60);
+  });
 
   /* ==========================================================================
      12. Dev panel — ?road=debug. Not shipped to visitors.

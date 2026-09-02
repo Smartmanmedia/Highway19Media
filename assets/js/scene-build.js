@@ -76,6 +76,20 @@
     return pts;
   }
 
+  /* THE LAYER'S OWN ORIGIN.
+     mapY answers in PAGE coordinates, because that is what the anchors are
+     measured in — getBoundingClientRect().top + pageYOffset. But a piece is
+     positioned inside #scene-layer, an absolutely-positioned box inside
+     .page, and .page starts below the header. Setting a piece's `top` to a
+     page coordinate therefore put the whole scene a header's height too low:
+     measured 77px at every width, which is exactly why his waves were landing
+     77px past the foot of the copy when he asked for them to start right
+     after it. Every `top` goes through layerY instead; differences (a mapped
+     span, a band's height) are unaffected either way. */
+  var originY = 0;
+
+  function layerY(pts, y) { return mapY(pts, y) - originY; }
+
   function mapY(pts, y) {
     var n = pts.length;
     if (y <= pts[0].src) {
@@ -208,9 +222,13 @@
     if (!pts) return;
     var pageW = back.clientWidth || window.innerWidth;
     var S = pageW / ART_W;
+    /* Measured with the clip cleared, or last frame's height moves the box. */
+    back.style.height = '';
+    if (front) front.style.height = '';
+    originY = back.getBoundingClientRect().top + window.pageYOffset;
 
     nodes.forEach(function (n) {
-      var p = n.piece, top = mapY(pts, p.y);
+      var p = n.piece, top = layerY(pts, p.y);
       n.el.style.left  = ((p.x - ART_X) * S).toFixed(1) + 'px';
       n.el.style.top   = top.toFixed(1) + 'px';
       n.el.style.width = (p.w * S).toFixed(1) + 'px';
@@ -219,9 +237,17 @@
          two landscape bands are flagged to stretch to their mapped extent
          instead — they are horizontal strata, so a little vertical give is
          invisible. Nothing with a recognisable shape is ever stretched. */
-      n.el.style.height = (p.fit === 'stretch'
-        ? Math.max(p.h * S, mapY(pts, p.y + p.h) - top)
-        : p.h * S).toFixed(1) + 'px';
+      /* stretch: never shorter than he drew it, so a band in the middle of the
+         scene cannot leave a gap when the page is taller than his canvas.
+         span:    exactly the mapped extent, longer OR shorter. That is what
+                  the closing band needs — it has to meet the handover to the
+                  page's own design precisely, and on a page wider than his
+                  canvas his height times the page scale overshoots it badly
+                  (1685px against 842 at 3840). */
+      n.el.style.height = (
+        p.fit === 'span'    ? Math.max(1, layerY(pts, p.y + p.h) - top) :
+        p.fit === 'stretch' ? Math.max(p.h * S, layerY(pts, p.y + p.h) - top)
+                            : p.h * S).toFixed(1) + 'px';
 
       if (p.tile) tile(n, p, S, pageW);
     });
@@ -229,7 +255,7 @@
     /* Bands stretch between their own mapped start and end — that is where all
        the slack from a taller page goes, and a gradient absorbs it silently. */
     bandEls.forEach(function (b) {
-      var top = mapY(pts, b.band.y), bot = mapY(pts, b.band.y + b.band.h);
+      var top = layerY(pts, b.band.y), bot = layerY(pts, b.band.y + b.band.h);
       /* A band that starts at the top of HIS canvas starts at the top of the
          page. Mapping y=0 lands it below the fold by however much the first
          heading has moved, which showed as a white strip under the header. */
@@ -240,7 +266,36 @@
 
     placeRoad(pts, S);
 
+    /* Stop the scene where HIS CANVAS stops.
+       The layer is inset:0 on a relatively-positioned page, so it covers the
+       whole document — and it paints ABOVE the section backgrounds, which are
+       in flow with no z-index of their own. Below his artwork that is a layer
+       of nothing, which costs nothing, until the page is wider than his canvas
+       and every piece scales up with it: at 3840 his end rocks are 1685px tall
+       instead of 842 and reach down into the section past them, where they
+       painted green and grey over a white ground and put "Pick Your Lane" on a
+       2.6:1 background.
+
+       Clipping to the foot of his canvas is not a patch for that one piece —
+       it is the honest statement of what the layer is. His composition ends at
+       the rocks; everything below is the page's own design and owns its own
+       ground. overflow:hidden is already on the layer, so this clips rather
+       than just shrinking the box. */
+    var foot = layerY(pts, scene.canvas.h);
+    [back, front].forEach(function (layer) {
+      if (layer) layer.style.height = Math.max(0, foot).toFixed(1) + 'px';
+    });
+
     if (window.__scene && window.__scene.recollect) window.__scene.recollect();
+
+    /* Tell the traffic the road has moved. road.js reads H19_ROAD_PATHS once
+       per fit, and it fits on load and on resize — neither of which covers
+       this: the fonts landing re-wraps the copy, which moves every anchor,
+       which moves the road under cars that are still driving the old line.
+       Silent when it goes wrong, too — the cars just quietly leave the
+       asphalt. A plain 'resize' would do it but would also re-enter place()
+       through scene.js's own resize handler, so this is its own event. */
+    window.dispatchEvent(new Event('h19:road-moved'));
   }
 
   create();
@@ -306,14 +361,14 @@
 
       var first = mine[0].part, last = mine[mine.length - 1].part;
       var naturalH = (last.y + last.h - first.y) * S;
-      var mappedH  = mapY(pts, last.y + last.h) - mapY(pts, first.y);
+      var mappedH  = layerY(pts, last.y + last.h) - layerY(pts, first.y);
       var slack    = Math.max(0, mappedH - naturalH);
 
       var vTotal = mine.reduce(function (a, r) {
         return a + (r.part.kind === 'straight-v' ? r.part.h * S : 0);
       }, 0);
 
-      var top0 = mapY(pts, first.y), shift = 0;
+      var top0 = layerY(pts, first.y), shift = 0;
       mine.forEach(function (r) {
         var natural = r.part.h * S;
         var grow = (r.part.kind === 'straight-v' && vTotal > 0)

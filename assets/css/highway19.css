@@ -489,6 +489,15 @@ body.road-debug .lane-guide{opacity:.9}
 @media (min-width:901px){
   #promise .gantry{margin-left:-20.3%; width:185.7%}
 }
+/* Past the composition cap his 102.9% is 102.9% of a 1925px box, which stops
+   short of the screen — and the one thing he was explicit about is that the
+   pole keeps going: "when u zoom out more poll can be reveled streached to the
+   end of the screen". A whole viewport of extra width does that at any size.
+   It all lands on the truss: the plate is flex:0 0 auto at its own width, so
+   nothing else moves, and the overrun is clipped like the hero's bleed. */
+@media (min-width:1926px){
+  #promise .gantry{width:calc(185.7% + 100vw)}
+}
 
 /* Below his desktop composition both plates fill the width instead of
    shrinking with it. His rule still holds — the plate keeps its size and the
@@ -646,9 +655,27 @@ body.road-debug .lane-guide{opacity:.9}
    his own centrelines now, so nothing reads .road-slot for geometry.
    ----------------------------------------------------------------------- */
 @media (min-width:901px){
+  /* THE COMPOSITION BOX. His art column is 1924.33 units wide, and every
+     number below is a share of it, so the box that those shares resolve
+     against IS his canvas. Up to 1925px it is the page and nothing changes.
+     Past that it caps and centres, which is the only way his composition
+     survives a 4K screen: the scene layer scales with the page (it is a
+     landscape — the ocean and the forest have to reach the edges of any
+     screen), while the type and the sign plates cap at the size he drew. Left
+     as a share of the whole page, the copy columns kept spreading while the
+     words inside them stopped growing, so at 3840 his sign was 28% of the
+     screen where he drew it at 56% and the copy had drifted out to meet the
+     edges. Capping the box is the same instruction he gave for the sign,
+     applied to the whole composition: it holds its size, and the landscape
+     and the truss are what stretch.
+
+     A max-width, not a custom property: a percentage inside a custom property
+     is re-resolved against each element that reads it, so `--comp:min(100%,
+     1925px)` would mean something different in every child. An element makes
+     the box real, and every share below then resolves against it for free. */
   #hero .sec__inner, #problem .sec__inner,
   #objection .sec__inner, #promise .sec__inner{
-    display:block;max-width:none;margin:0;padding:0;
+    display:block;max-width:1925px;margin:0 auto;padding:0;
   }
   /* left edge, then width — his span is left..right, written out so the
      arithmetic against tools/compare-layout.js is visible */
@@ -892,6 +919,22 @@ body.road-debug .lane-guide{opacity:.9}
    ========================================================================= */
 
 #services{padding-block:clamp(84px,10vw,150px)}
+/* This section paints OVER the scene, not under it. The scene layer is
+   z-index 0 and the section backgrounds are in flow with no z-index at all,
+   so the scenery covers them — which is right for the four sections that ARE
+   his composition and wrong for the first one that is not. His artwork ends
+   at the rocks; everything from here down is the page's own design and owns
+   its own ground.
+
+   It only shows as a fault once the page is wider than his canvas: at 3840
+   every piece scales up with the page, his end rocks are 1685px tall instead
+   of 842, and they reached down over this section's white ground and put
+   "Pick Your Lane" on green and rock at 2.6:1.
+
+   z-index 2, not 1: 1 is the road layer, and a tie would be settled by DOM
+   order. Safe here because this is the one section with no asphalt in it by
+   design — run A leaves the screen above it and run B comes back below. */
+#services{position:relative;z-index:2}
 #services .sec__inner{display:block;text-align:center}
 #services .sec__head{max-width:none;margin:0 auto}
 #services .sec__head h2{max-width:20ch;margin-inline:auto}
