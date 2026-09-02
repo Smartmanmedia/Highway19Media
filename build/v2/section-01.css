@@ -12,6 +12,9 @@
   position: relative;
   width: 100%;
   aspect-ratio: 1924.34 / 1810.6;
+  /* a size container, so the type below can be a share of THIS box rather than
+     of the viewport — the section is full width today and might not always be */
+  container-type: inline-size;
   /* his ocean is one polygon with a horizontal gradient — a CSS gradient here,
      no shapes at all, and it stretches to any screen */
   background: linear-gradient(90deg, #004ca2 0%, #045dc3 100%);
@@ -50,9 +53,11 @@
 }
 
 /* --- the copy ------------------------------------------------------------
-   Sizes are his, in canvas units, expressed as a share of the column: a size
-   of N is N/1924.34 of the page width. Capped at what he drew, which the page
-   reaches when it is as wide as his column.
+   His sizes, in canvas units, as a share of the column: a size of N is
+   N/1924.34 of it. In cqw, not px — the section is a fixed-aspect picture and
+   everything in it scales together. A px cap on the type would hold the words
+   still while the artwork kept growing, which is exactly the split that made
+   the last build drift apart at 4K.
    ---------------------------------------------------------------------- */
 .sec1 .copy{
   position:absolute;
@@ -62,19 +67,19 @@
 }
 .sec1 .copy h1,.sec1 .copy h2{ margin:0; font-weight:800; line-height:1.04 }
 .sec1 .copy h1 span{ display:block }
-.sec1 .copy .l1{ font-size:min(48.68px, 2.530vw) }
-.sec1 .copy .l2{ font-size:min(84.17px, 4.374vw) }
-.sec1 .copy .l3{ font-size:min(34.74px, 1.805vw) }
-.sec1 .copy .sub{ font-size:min(26.00px, 1.351vw); font-weight:400; line-height:1.3;
+.sec1 .copy .l1{ font-size:2.530cqw }
+.sec1 .copy .l2{ font-size:4.374cqw }
+.sec1 .copy .l3{ font-size:1.805cqw }
+.sec1 .copy .sub{ font-size:1.351cqw; font-weight:400; line-height:1.3;
                   margin:.85em 0 0 }
-.sec1 .copy .body{ font-size:min(21.96px, 1.141vw); font-weight:300; line-height:1.45;
+.sec1 .copy .body{ font-size:1.141cqw; font-weight:300; line-height:1.45;
                    margin:1.5em 0 0 }
-.sec1 .copy h2{ font-size:min(58.90px, 3.061vw) }
+.sec1 .copy h2{ font-size:3.061cqw }
 
 /* the hero headline sits to the right of his motorway shield */
 .sec1 .head{ display:flex; align-items:center; justify-content:center;
-             gap:min(24px,1.2vw) }
-.sec1 .head img{ flex:0 0 auto; width:min(88.65px, 4.61vw); height:auto }
+             gap:1.2cqw }
+.sec1 .head img{ flex:0 0 auto; width:4.607cqw; height:auto }
 
 /* his button: the guide-sign green plate, with the copy laid over it */
 .sec1 .cta{ position:relative; display:inline-block; text-decoration:none }
