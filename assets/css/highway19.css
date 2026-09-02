@@ -412,6 +412,10 @@ body.road-debug .lane-guide{opacity:.9}
   margin:clamp(20px,2.4vw,38px) 0 clamp(34px,4vw,56px) calc(50% - 50vw);
 }
 .hero-banner__art{display:block;width:100%;height:auto}
+/* Hint the compositor: the sign is the only thing on the page that moves on
+   scroll, and it carries a large inline SVG. */
+.hero-banner{will-change:transform}
+@media (prefers-reduced-motion:reduce){ .hero-banner{will-change:auto;transform:none!important} }
 
 /* The owner drew a "Hover line" under one lane. It only does anything if
    something drives it, so each lane carries its own and the whole lane is a
