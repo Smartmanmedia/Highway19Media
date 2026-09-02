@@ -49,6 +49,39 @@ are already decided.
 With his real font at his real size and his squeeze, both of his subhead lines
 measure ratio 1.000 of his width. That is the check that says the type is right.
 
+## ABUTTING SLIVERS — the other thing that will keep happening
+
+Illustrator draws a gradient inside a clip as a row of rects placed edge to
+edge — his truss rails are ~130 rects each 0.14 units tall, his surf is 219
+of them. Edge to edge is the problem: at any scale where the edges land on a
+fraction of a pixel, each antialiases against its neighbour and leaves a
+hairline of whatever is behind showing through.
+
+It looks like two different bugs and it is one:
+
+  - rasterised against transparency, the slivers never accumulate — a rail he
+    draws as solid white came out at alpha 197 of 255 and the truss looked
+    see-through
+  - drawn at page scale, it draws visible vertical lines across his water
+
+`tools/close_gaps.js` grows each sliver by a hair so they overlap. Neighbours
+differ by about one step of 255, so the overlap cannot be seen.
+
+**The overlap has to be about a device pixel at the size the thing is actually
+drawn.** 0.06 units was right for a tile rasterised at 10x and did nothing at
+all for artwork drawn at page scale, which needed 1.5.
+
+For anything rasterised, also solve the alpha rather than screenshotting it:
+render the same frame on black and on white, then
+
+    alpha  = 1 - (white - black)
+    colour = black / alpha
+
+A pixel the artwork covers fully reads the same on both; one it covers partly
+differs by exactly the background showing through. That returns his artwork at
+the opacity he drew it, with edges that butt together invisibly. There is no
+opacity anywhere in his files — any transparency is the rasteriser's.
+
 ## His type — measured, not chosen
 
 Two families, both from his file:
@@ -127,6 +160,21 @@ straight stretches along its own axis invisibly, a curve goes visibly oval.
 Both clear the bar for **bold** text (3.0) and fail for regular (4.5), and only
 once the text is actually bold-SIZED — under 18.66px it is judged as regular.
 `tools/check-contrast.js <width>` measures against actual painted pixels.
+
+## The sections so far
+
+    section  artboard        art column          ratio    shapes
+    01       2011.33 x 1810.6  x 86.99 w 1924.34  0.9409   4362 (95% baked truss)
+    02       1938.1  x  931.4  x 15.23 w 1920.80  0.4849    344
+
+The art column is whatever his ground is — an ocean polygon in one, a sand rect
+in the next. The ratios stack: a page of both is 1.4258 x its own width at every
+screen size, measured at 1024, 1400, 1920 and 2560.
+
+Known gap: his road stops at 89.73% of section one and restarts at 1.02% of
+section two, so there is about 10% of section one with no road under it. The
+left edges line up to 0.14%, so it is a vertical gap rather than a misalignment.
+Worth resolving before the driving path is drawn.
 
 ## Reading a section export
 
