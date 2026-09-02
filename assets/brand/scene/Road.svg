@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="2010" height="4935.2" viewBox="202.1 74.6 2010 4935.2">
+<defs>
+    <linearGradient id="linear-gradient" x1="1251.13" y1="3472.04" x2="1251.13" y2="4794.04" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#006837"></stop>
+      <stop offset="1" stop-color="#39b54a"></stop>
+    </linearGradient>
+    <clipPath id="clippath">
+      <rect x="292.03" y="2833.34" width="1920" height="724.8" fill="none"></rect>
+    </clipPath>
+    <clipPath id="clippath-1">
+      <rect x="1013.93" y="4644.65" width="132.8" height="155.2" fill="none"></rect>
+    </clipPath>
+    <linearGradient id="linear-gradient-2" x1="1251.03" y1="1977.14" x2="1251.03" y2="2951.14" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fdf6e4"></stop>
+      <stop offset=".91" stop-color="#fde5c1"></stop>
+      <stop offset="1" stop-color="#fde5c1" stop-opacity="0"></stop>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="293.7" y1="1097.4" x2="2213.7" y2="1097.4" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#004ba0"></stop>
+      <stop offset="1" stop-color="#0561ca"></stop>
+    </linearGradient>
+    <clipPath id="clippath-2">
+      <rect x="290.43" y="1951.14" width="1922.47" height="453.06" fill="none"></rect>
+    </clipPath>
+    <linearGradient id="linear-gradient-4" x1="139.42" y1="2310.58" x2="2357.52" y2="2310.58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9fe3ff"></stop>
+      <stop offset="1" stop-color="#0561ca"></stop>
+    </linearGradient>
+    <linearGradient id="linear-gradient-5" x1="47.53" y1="2241.35" x2="2232.88" y2="2241.35" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00d4ff"></stop>
+      <stop offset="1" stop-color="#0561ca"></stop>
+    </linearGradient>
+    <linearGradient id="linear-gradient-6" x1="224.71" y1="2175.82" x2="2362.92" y2="2175.82" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff"></stop>
+      <stop offset="1" stop-color="#0561ca"></stop>
+    </linearGradient>
+    <linearGradient id="linear-gradient-7" x1="240.09" y1="2171.89" x2="2378.3" y2="2171.89" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0094f6"></stop>
+      <stop offset="1" stop-color="#0561ca"></stop>
+    </linearGradient>
+    <linearGradient id="linear-gradient-8" x1="160.19" y1="2088.67" x2="2346.34" y2="2088.67" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0066e2"></stop>
+      <stop offset="1" stop-color="#0561ca"></stop>
+    </linearGradient>
+    <linearGradient id="linear-gradient-9" x1="43.53" y1="2035.05" x2="2463" y2="2035.05" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#004ba0"></stop>
+      <stop offset="1" stop-color="#0561ca"></stop>
+    </linearGradient>
+    <linearGradient id="linear-gradient-10" x1="1892.28" y1="333.1" x2="1892.28" y2="345.86" gradientTransform="translate(-4.16 102.12)" gradientUnits="userSpaceOnUse">
+      <stop offset=".37" stop-color="#fff"></stop>
+      <stop offset="1" stop-color="gray"></stop>
+    </linearGradient>
+    <linearGradient id="linear-gradient-11" x1="2140.97" y1="330.38" x2="2140.97" y2="317.62" gradientTransform="translate(-251.43 117.6)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-12" x1="1983.82" y1="424.64" x2="1983.82" y2="437.4" gradientTransform="translate(33.75 10.58)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-13" x1="2049.43" y1="421.92" x2="2049.43" y2="409.16" gradientTransform="translate(-30.43 26.06)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-14" x1="2073.2" y1="514.02" x2="2073.2" y2="526.78" gradientTransform="translate(70.78 -78.8)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-15" x1="1960.05" y1="511.3" x2="1960.05" y2="498.54" gradientTransform="translate(185.35 -63.32)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-16" x1="1801.75" y1="242.57" x2="1801.75" y2="255.33" gradientTransform="translate(-41.66 192.65)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-17" x1="2231.5" y1="239.85" x2="2231.5" y2="227.09" gradientTransform="translate(-469.99 208.13)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-18" x1="897.92" y1="-661.26" x2="897.92" y2="-648.5" gradientTransform="translate(-416.0391 1096.4794)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-19" x1="3135.33" y1="-663.98" x2="3135.33" y2="-676.74" gradientTransform="translate(-2652.0225 1111.9602)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-20" x1="983.42" y1="-575.75" x2="983.42" y2="-562.99" gradientTransform="translate(-380.6224 1010.9761)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-21" x1="3049.82" y1="-578.47" x2="3049.82" y2="-591.23" gradientTransform="translate(-2445.5992 1026.4569)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-22" x1="810.32" y1="-748.85" x2="810.32" y2="-736.09" gradientTransform="translate(-452.3227 1184.0758)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-23" x1="3222.92" y1="-751.57" x2="3222.92" y2="-764.33" gradientTransform="translate(-2863.4989 1199.5566)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-24" x1="1074.96" y1="-484.21" x2="1074.96" y2="-471.46" gradientTransform="translate(-342.71 919.44)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-25" x1="2958.29" y1="-486.94" x2="2958.29" y2="-499.69" gradientTransform="translate(-2224.6049 934.918)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-26" x1="1252.39" y1="350.58" x2="1252.39" y2="383.65" gradientTransform="matrix(1,0,0,1,0,0)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-27" x1="1252.39" y1="497.1" x2="1252.39" y2="530.18" gradientTransform="matrix(1,0,0,1,0,0)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-28" x1="743.9" y1="562.4" x2="1758.3" y2="-452" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#004ba0"></stop>
+      <stop offset=".86" stop-color="#003f87"></stop>
+    </linearGradient>
+    <linearGradient id="linear-gradient-29" x1="820.22" y1="-3318.66" x2="825.05" y2="-3318.66" gradientTransform="translate(-1311.9306 3853.7454) rotate(-90) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#171714"></stop>
+      <stop offset=".04" stop-color="#21211e"></stop>
+      <stop offset=".23" stop-color="#474745"></stop>
+      <stop offset=".33" stop-color="#565654"></stop>
+      <stop offset="1" stop-color="#171714"></stop>
+    </linearGradient>
+    <linearGradient id="linear-gradient-30" x1="852.51" x2="857.35" xlink:href="#linear-gradient-29"></linearGradient>
+    <linearGradient id="linear-gradient-31" x1="823.66" y1="-3285.18" x2="828.49" y2="-3285.18" xlink:href="#linear-gradient-29"></linearGradient>
+    <linearGradient id="linear-gradient-32" x1="849.07" y1="-3285.18" x2="853.9" y2="-3285.18" xlink:href="#linear-gradient-29"></linearGradient>
+    <linearGradient id="linear-gradient-33" x1="829.43" y1="-3277.05" x2="848.13" y2="-3277.05" xlink:href="#linear-gradient-29"></linearGradient>
+    <linearGradient id="linear-gradient-34" x1="818.01" y1="-3267.14" x2="822.58" y2="-3267.14" xlink:href="#linear-gradient-29"></linearGradient>
+    <linearGradient id="linear-gradient-35" x1="854.98" y1="-3267.14" x2="859.55" y2="-3267.14" xlink:href="#linear-gradient-29"></linearGradient>
+    <linearGradient id="linear-gradient-36" x1="818.01" y1="-3252.51" x2="822.58" y2="-3252.51" xlink:href="#linear-gradient-29"></linearGradient>
+    <linearGradient id="linear-gradient-37" x1="854.98" y1="-3252.51" x2="859.55" y2="-3252.51" xlink:href="#linear-gradient-29"></linearGradient>
+    <linearGradient id="linear-gradient-38" x1="818.01" y1="-3174.34" x2="822.58" y2="-3174.34" xlink:href="#linear-gradient-29"></linearGradient>
+    <linearGradient id="linear-gradient-39" x1="854.98" y1="-3174.34" x2="859.55" y2="-3174.34" xlink:href="#linear-gradient-29"></linearGradient>
+    <linearGradient id="linear-gradient-40" x1="818.01" y1="-3159.71" x2="822.58" y2="-3159.71" xlink:href="#linear-gradient-29"></linearGradient>
+    <linearGradient id="linear-gradient-41" x1="854.98" y1="-3159.71" x2="859.55" y2="-3159.71" xlink:href="#linear-gradient-29"></linearGradient>
+    <linearGradient id="linear-gradient-42" x1="819.18" y1="-3214.15" x2="858.81" y2="-3214.15" gradientTransform="translate(-1311.9306 3853.7454) rotate(-90) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ad723d"></stop>
+      <stop offset=".09" stop-color="#b87d47"></stop>
+      <stop offset=".25" stop-color="#d69b61"></stop>
+      <stop offset=".26" stop-color="#d99e64"></stop>
+      <stop offset="1" stop-color="#9e6836"></stop>
+    </linearGradient>
+    <linearGradient id="linear-gradient-43" x1="823.8" y1="-3307.72" x2="853.76" y2="-3307.72" xlink:href="#linear-gradient-42"></linearGradient>
+    <linearGradient id="linear-gradient-44" x1="822.89" y1="-3288.93" x2="826.37" y2="-3288.93" xlink:href="#linear-gradient-29"></linearGradient>
+    <linearGradient id="linear-gradient-45" x1="822.89" y1="-3300" x2="826.37" y2="-3300" xlink:href="#linear-gradient-29"></linearGradient>
+    <linearGradient id="linear-gradient-46" x1="837.47" y1="-3306.25" x2="830.59" y2="-3305.02" gradientTransform="translate(-1311.9306 3853.7454) rotate(-90) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#171714"></stop>
+      <stop offset=".17" stop-color="#2a2a29"></stop>
+      <stop offset=".33" stop-color="#393938"></stop>
+      <stop offset="1" stop-color="#171714"></stop>
+    </linearGradient>
+    <linearGradient id="linear-gradient-47" x1="820.47" y1="-3309.47" x2="823.4" y2="-3309.47" xlink:href="#linear-gradient-29"></linearGradient>
+    <linearGradient id="linear-gradient-48" x1="815.57" y1="-3308.12" x2="821.93" y2="-3308.12" xlink:href="#linear-gradient-29"></linearGradient>
+    <linearGradient id="linear-gradient-49" x1="342.77" y1="3558" x2="349.22" y2="3558" gradientTransform="translate(-1561.1049 3381.172) rotate(-90)" xlink:href="#linear-gradient-42"></linearGradient>
+    <linearGradient id="linear-gradient-50" x1="854.16" y1="-3309.47" x2="857.09" y2="-3309.47" xlink:href="#linear-gradient-29"></linearGradient>
+    <linearGradient id="linear-gradient-51" x1="855.64" y1="-3308.12" x2="862" y2="-3308.12" xlink:href="#linear-gradient-29"></linearGradient>
+    <linearGradient id="linear-gradient-52" x1="383.19" y1="3558" x2="389.65" y2="3558" gradientTransform="translate(-1561.1049 3381.172) rotate(-90)" xlink:href="#linear-gradient-42"></linearGradient>
+    <clipPath id="clippath-3">
+      <rect x="290.63" y="2928.54" width="777.6" height="271.2" fill="none"></rect>
+    </clipPath>
+    <linearGradient id="linear-gradient-53" x1="1070.73" y1="4686.54" x2="1070.73" y2="4652.94" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000"></stop>
+      <stop offset="1" stop-color="#fff"></stop>
+    </linearGradient>
+    <linearGradient id="linear-gradient-54" x1="953.38" y1="4743.49" x2="1187.08" y2="4743.49" gradientUnits="userSpaceOnUse">
+      <stop offset=".17" stop-color="#34ae48"></stop>
+      <stop offset=".23" stop-color="#279d44"></stop>
+      <stop offset=".35" stop-color="#12803c"></stop>
+      <stop offset=".45" stop-color="#046e38"></stop>
+      <stop offset=".53" stop-color="#006837"></stop>
+      <stop offset="1" stop-color="#35af49"></stop>
+    </linearGradient>
+    <clipPath id="clippath-4">
+      <rect x="290.83" y="3405.74" width="1917.6" height="891.6" fill="none"></rect>
+    </clipPath>
+    <linearGradient id="linear-gradient-55" x1="-515.84" y1="2917.72" x2="-515.84" y2="2930.48" gradientTransform="translate(2528.7608 1047.9035)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-56" x1="-443.65" y1="-2077.74" x2="-443.65" y2="-2090.5" gradientTransform="translate(2457.9896 6056.1239)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-57" x1="-424.3" y1="3009.26" x2="-424.3" y2="3022.02" gradientTransform="translate(2566.6775 956.3647)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-58" x1="-535.19" y1="-1986.2" x2="-535.19" y2="-1998.96" gradientTransform="translate(2678.984 5964.585)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-59" x1="-606.38" y1="2827.19" x2="-606.38" y2="2839.95" gradientTransform="translate(2491.2609 1138.4364)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-60" x1="-353.12" y1="-2168.27" x2="-353.12" y2="-2181.03" gradientTransform="translate(2239.4238 6146.6568)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-61" x1="1786.13" y1="3880.78" x2="1786.13" y2="3913.85" gradientTransform="translate(1355.1331 .7702) scale(.3422 1)" xlink:href="#linear-gradient-10"></linearGradient>
+    <linearGradient id="linear-gradient-62" x1="1786.13" y1="4027.3" x2="1786.13" y2="4060.38" gradientTransform="translate(1354.8917 .77) scale(.3422 1)" xlink:href="#linear-gradient-10"></linearGradient>
+    <clipPath id="clippath-5">
+      <rect x="289.63" y="4304.54" width="628.8" height="385.2" fill="none"></rect>
+    </clipPath>
+  </defs>
+<g clip-path="url(#clippath-1)">
+        <g id="Stright">
+          <rect x="1014.95" y="4648.9" width="105.66" height="360.93" fill="#575757"></rect>
+          <rect x="1021.47" y="4648.9" width="3.66" height="360.93" fill="#fff"></rect>
+          <rect x="1110.67" y="4648.9" width="3.66" height="360.93" fill="#fff"></rect>
+          <g>
+            <rect x="1065.21" y="4662.89" width="3.93" height="31.42" fill="#fff"></rect>
+            <rect x="1065.21" y="4715.48" width="3.93" height="31.42" fill="#fff"></rect>
+            <rect x="1065.21" y="4768.07" width="3.93" height="31.42" fill="#fff"></rect>
+            <rect x="1065.21" y="4820.65" width="3.93" height="31.41" fill="#fff"></rect>
+            <rect x="1065.21" y="4873.23" width="3.93" height="31.42" fill="#fff"></rect>
+            <rect x="1065.21" y="4925.82" width="3.93" height="31.41" fill="#fff"></rect>
+            <rect x="1065.21" y="4978.41" width="3.93" height="31.42" fill="#fff"></rect>
+          </g>
+        </g>
+      </g>
+<g id="Stright-2" data-name="Stright">
+        <rect x="1592.68" y="74.58" width="105.66" height="360.93" fill="#575757"></rect>
+        <rect x="1688.17" y="74.58" width="3.66" height="360.93" fill="#fff"></rect>
+        <rect x="1598.96" y="74.58" width="3.66" height="360.93" fill="#fff"></rect>
+        <g>
+          <rect x="1644.16" y="390.1" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="1644.16" y="337.51" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="1644.16" y="284.92" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="1644.16" y="232.34" width="3.93" height="31.41" fill="#fff"></rect>
+          <rect x="1644.16" y="179.75" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="1644.16" y="127.17" width="3.93" height="31.41" fill="#fff"></rect>
+          <rect x="1644.16" y="74.58" width="3.93" height="31.42" fill="#fff"></rect>
+        </g>
+      </g>
+<g id="Stright-3" data-name="Stright">
+        <rect x="1592.68" y="356.18" width="105.66" height="360.93" fill="#575757"></rect>
+        <rect x="1688.17" y="356.18" width="3.66" height="360.93" fill="#fff"></rect>
+        <rect x="1598.96" y="356.18" width="3.66" height="360.93" fill="#fff"></rect>
+        <g>
+          <rect x="1644.16" y="671.7" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="1644.16" y="619.11" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="1644.16" y="566.52" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="1644.16" y="513.94" width="3.93" height="31.41" fill="#fff"></rect>
+          <rect x="1644.16" y="461.35" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="1644.16" y="408.77" width="3.93" height="31.41" fill="#fff"></rect>
+          <rect x="1644.16" y="356.18" width="3.93" height="31.42" fill="#fff"></rect>
+        </g>
+      </g>
+<g id="Stright-4" data-name="Stright">
+        <rect x="1592.68" y="683.78" width="105.66" height="360.93" fill="#575757"></rect>
+        <rect x="1688.17" y="683.78" width="3.66" height="360.93" fill="#fff"></rect>
+        <rect x="1598.96" y="683.78" width="3.66" height="360.93" fill="#fff"></rect>
+        <g>
+          <rect x="1644.16" y="999.3" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="1644.16" y="946.71" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="1644.16" y="894.12" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="1644.16" y="841.54" width="3.93" height="31.41" fill="#fff"></rect>
+          <rect x="1644.16" y="788.95" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="1644.16" y="736.37" width="3.93" height="31.41" fill="#fff"></rect>
+          <rect x="1644.16" y="683.78" width="3.93" height="31.42" fill="#fff"></rect>
+        </g>
+      </g>
+<g id="Stright-5" data-name="Stright">
+        <rect x="541.65" y="1874.4" width="105.66" height="360.93" fill="#575757"></rect>
+        <rect x="637.13" y="1874.4" width="3.66" height="360.93" fill="#fff"></rect>
+        <rect x="547.92" y="1874.4" width="3.66" height="360.93" fill="#fff"></rect>
+        <g>
+          <rect x="593.12" y="2189.92" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="593.12" y="2137.33" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="593.12" y="2084.74" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="593.12" y="2032.16" width="3.93" height="31.41" fill="#fff"></rect>
+          <rect x="593.12" y="1979.57" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="593.12" y="1926.99" width="3.93" height="31.41" fill="#fff"></rect>
+          <rect x="593.12" y="1874.4" width="3.93" height="31.42" fill="#fff"></rect>
+        </g>
+      </g>
+<g id="Stright-6" data-name="Stright">
+        <rect x="541.65" y="2088.38" width="105.66" height="360.93" fill="#575757"></rect>
+        <rect x="637.13" y="2088.38" width="3.66" height="360.93" fill="#fff"></rect>
+        <rect x="547.92" y="2088.38" width="3.66" height="360.93" fill="#fff"></rect>
+        <g>
+          <rect x="593.12" y="2403.9" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="593.12" y="2351.31" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="593.12" y="2298.72" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="593.12" y="2246.14" width="3.93" height="31.41" fill="#fff"></rect>
+          <rect x="593.12" y="2193.55" width="3.93" height="31.42" fill="#fff"></rect>
+          <rect x="593.12" y="2140.97" width="3.93" height="31.41" fill="#fff"></rect>
+          <rect x="593.12" y="2088.38" width="3.93" height="31.42" fill="#fff"></rect>
+        </g>
+      </g>
+<g id="Stright-7" data-name="Stright">
+        <rect x="1851.15" y="2942.75" width="360.93" height="105.66" fill="#575757"></rect>
+        <rect x="1851.15" y="3038.23" width="360.93" height="3.66" fill="#fff"></rect>
+        <rect x="1851.15" y="2949.02" width="360.93" height="3.66" fill="#fff"></rect>
+        <g>
+          <rect x="1865.14" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="1917.73" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="1970.32" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="2022.91" y="2994.22" width="31.41" height="3.93" fill="#fff"></rect>
+          <rect x="2075.49" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="2128.08" y="2994.22" width="31.41" height="3.93" fill="#fff"></rect>
+          <rect x="2180.66" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+        </g>
+      </g>
+<g id="Stright-8" data-name="Stright">
+        <rect x="1505.55" y="2942.75" width="360.93" height="105.66" fill="#575757"></rect>
+        <rect x="1505.55" y="3038.23" width="360.93" height="3.66" fill="#fff"></rect>
+        <rect x="1505.55" y="2949.02" width="360.93" height="3.66" fill="#fff"></rect>
+        <g>
+          <rect x="1519.54" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="1572.13" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="1624.72" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="1677.31" y="2994.22" width="31.41" height="3.93" fill="#fff"></rect>
+          <rect x="1729.89" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="1782.48" y="2994.22" width="31.41" height="3.93" fill="#fff"></rect>
+          <rect x="1835.06" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+        </g>
+      </g>
+<g id="Stright-9" data-name="Stright">
+        <rect x="1150.35" y="2942.75" width="360.93" height="105.66" fill="#575757"></rect>
+        <rect x="1150.35" y="3038.23" width="360.93" height="3.66" fill="#fff"></rect>
+        <rect x="1150.35" y="2949.02" width="360.93" height="3.66" fill="#fff"></rect>
+        <g>
+          <rect x="1164.34" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="1216.93" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="1269.52" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="1322.11" y="2994.22" width="31.41" height="3.93" fill="#fff"></rect>
+          <rect x="1374.69" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="1427.28" y="2994.22" width="31.41" height="3.93" fill="#fff"></rect>
+          <rect x="1479.86" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+        </g>
+      </g>
+<g id="Stright-10" data-name="Stright">
+        <rect x="794.67" y="2942.75" width="360.93" height="105.66" fill="#575757"></rect>
+        <rect x="794.67" y="3038.23" width="360.93" height="3.66" fill="#fff"></rect>
+        <rect x="794.67" y="2949.02" width="360.93" height="3.66" fill="#fff"></rect>
+        <g>
+          <rect x="808.66" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="861.25" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="913.83" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="966.42" y="2994.22" width="31.41" height="3.93" fill="#fff"></rect>
+          <rect x="1019" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="1071.59" y="2994.22" width="31.41" height="3.93" fill="#fff"></rect>
+          <rect x="1124.18" y="2994.22" width="31.42" height="3.93" fill="#fff"></rect>
+        </g>
+      </g>
+<g id="Stright-11" data-name="Stright">
+        <rect x="292.88" y="4205.66" width="360.93" height="105.66" fill="#575757"></rect>
+        <rect x="292.88" y="4301.15" width="360.93" height="3.66" fill="#fff"></rect>
+        <rect x="292.88" y="4211.94" width="360.93" height="3.66" fill="#fff"></rect>
+        <g>
+          <rect x="306.87" y="4257.14" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="359.46" y="4257.14" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="412.05" y="4257.14" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="464.63" y="4257.14" width="31.41" height="3.93" fill="#fff"></rect>
+          <rect x="517.21" y="4257.14" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="569.8" y="4257.14" width="31.41" height="3.93" fill="#fff"></rect>
+          <rect x="622.39" y="4257.14" width="31.42" height="3.93" fill="#fff"></rect>
+        </g>
+      </g>
+<g id="Stright-12" data-name="Stright">
+        <rect x="929.49" y="1408.46" width="360.93" height="105.66" fill="#575757"></rect>
+        <rect x="929.49" y="1503.94" width="360.93" height="3.66" fill="#fff"></rect>
+        <rect x="929.49" y="1414.74" width="360.93" height="3.66" fill="#fff"></rect>
+        <g>
+          <rect x="943.47" y="1459.94" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="996.06" y="1459.94" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="1048.65" y="1459.94" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="1101.24" y="1459.94" width="31.41" height="3.93" fill="#fff"></rect>
+          <rect x="1153.82" y="1459.94" width="31.42" height="3.93" fill="#fff"></rect>
+          <rect x="1206.41" y="1459.94" width="31.41" height="3.93" fill="#fff"></rect>
+          <rect x="1259" y="1459.94" width="31.42" height="3.93" fill="#fff"></rect>
+        </g>
+      </g>
+<g id="Curve">
+        <rect x="1253.92" y="1408.18" width="165.88" height="105.62" fill="#575757"></rect>
+        <g>
+          <path d="M1419.69,1513.88c81.94-2.38,148.7-33.52,199.29-85.9,49.88-51.66,79.57-121.69,79.57-193.52h-105.62c0,42.39-19.31,85.54-50.5,118.98-29.49,31.62-69,51.79-122.73,54.72v105.72Z" fill="#575757"></path>
+          <path d="M1419.69,1507.32c149.36-2.22,270.36-123.44,272.33-272.86h-3.62c-1.97,147.43-121.34,267.02-268.71,269.24v3.62Z" fill="#fff"></path>
+          <path d="M1419.69,1418.1c100.18-2.21,181.2-83.39,183.15-183.63h-3.62c-1.95,98.25-81.35,177.8-179.53,180.01v3.63Z" fill="#fff"></path>
+          <g>
+            <path d="M1413.45,1462.73c8.61-.21,17.13-.69,25.53-1.42-.14-1.16-.28-2.36-.47-3.58-8.26.71-16.61,1.19-25.06,1.39v3.61Z" fill="#fff"></path>
+            <path d="M1454.38,1460.41l-.39-3.59c7.76-.97,15.35-2.36,22.8-4.07.28,1.21.52,2.38.75,3.53-7.56,1.74-15.3,3.15-23.17,4.13Z" fill="#fff"></path>
+            <path d="M1492.93,1452.45l-1.06-3.44c7.43-2.44,14.63-5.26,21.63-8.37.5,1.13.96,2.24,1.4,3.32-7.09,3.15-14.42,6.02-21.97,8.49Z" fill="#fff"></path>
+            <path d="M1529.08,1436.9l-1.79-3.12c6.73-4.02,13.12-8.37,19.27-12.95.74.99,1.43,1.97,2.09,2.92-6.22,4.66-12.76,9.07-19.56,13.16Z" fill="#fff"></path>
+            <path d="M1562.23,1413.54l-2.31-2.77c5.93-5.14,11.48-10.54,16.74-16.12.9.85,1.74,1.69,2.57,2.51-5.33,5.67-11,11.15-17,16.38Z" fill="#fff"></path>
+            <path d="M1590.83,1384.74l-2.75-2.33c4.95-6.09,9.49-12.38,13.71-18.79,1.03.68,2.02,1.36,2.96,2.02-4.28,6.51-8.9,12.91-13.92,19.1Z" fill="#fff"></path>
+            <path d="M1616.54,1351.38l-3.1-1.82c3.81-6.86,7.2-13.84,10.25-20.9,1.13.49,2.22,1,3.26,1.48-3.09,7.16-6.54,14.27-10.41,21.24Z" fill="#fff"></path>
+            <path d="M1633.64,1314.47l-3.37-1.24c2.58-7.43,4.7-14.89,6.48-22.38,1.21.28,2.37.6,3.47.89-1.8,7.58-3.97,15.19-6.58,22.74Z" fill="#fff"></path>
+            <path d="M1644.12,1275.12l-3.53-.63c1.26-7.75,2.06-15.48,2.53-23.18,1.23.08,2.42.18,3.57.27-.47,7.78-1.3,15.66-2.56,23.53Z" fill="#fff"></path>
+          </g>
+        </g>
+        <rect x="1592.93" y="1042.41" width="105.62" height="192.05" fill="#575757"></rect>
+        <rect x="1599.19" y="1042.41" width="3.66" height="192.05" fill="#fff"></rect>
+        <rect x="1688.37" y="1042.41" width="3.65" height="192.05" fill="#fff"></rect>
+        <g>
+          <rect x="1646.26" y="1051.38" width="3.92" height="30.4" fill="#fff"></rect>
+          <rect x="1646.26" y="1102.27" width="3.92" height="30.4" fill="#fff"></rect>
+          <rect x="1646.26" y="1153.16" width="3.92" height="30.41" fill="#fff"></rect>
+          <rect x="1646.26" y="1204.05" width="3.92" height="34.41" fill="#fff"></rect>
+        </g>
+        <rect x="1253.92" y="1503.67" width="165.88" height="3.65" fill="#fff"></rect>
+        <rect x="1253.92" y="1414.44" width="165.88" height="3.66" fill="#fff"></rect>
+        <rect x="1264.47" y="1459.04" width="30.41" height="3.92" fill="#fff"></rect>
+        <rect x="1315.36" y="1459.04" width="30.41" height="3.92" fill="#fff"></rect>
+        <rect x="1366.25" y="1459.04" width="30.4" height="3.92" fill="#fff"></rect>
+      </g>
+<g id="Curve-2" data-name="Curve">
+        <rect x="202.09" y="2690.9" width="165.88" height="105.62" fill="#575757"></rect>
+        <g>
+          <path d="M367.85,2796.59c81.94-2.38,148.7-33.52,199.29-85.9,49.88-51.66,79.57-121.69,79.57-193.52h-105.62c0,42.39-19.31,85.54-50.5,118.98-29.49,31.62-69,51.79-122.73,54.72v105.72Z" fill="#575757"></path>
+          <path d="M367.85,2790.04c149.36-2.22,270.36-123.44,272.33-272.86h-3.62c-1.97,147.43-121.34,267.02-268.71,269.24v3.62Z" fill="#fff"></path>
+          <path d="M367.85,2700.81c100.18-2.21,181.2-83.39,183.15-183.63h-3.62c-1.95,98.25-81.35,177.8-179.53,180.01v3.63Z" fill="#fff"></path>
+          <g>
+            <path d="M361.61,2745.45c8.61-.21,17.13-.69,25.53-1.42-.14-1.16-.28-2.36-.47-3.58-8.26.71-16.61,1.19-25.06,1.39v3.61Z" fill="#fff"></path>
+            <path d="M402.54,2743.13l-.39-3.59c7.76-.97,15.35-2.36,22.8-4.07.28,1.21.52,2.38.75,3.53-7.56,1.74-15.3,3.15-23.17,4.13Z" fill="#fff"></path>
+            <path d="M441.1,2735.16l-1.06-3.44c7.43-2.44,14.63-5.26,21.63-8.37.5,1.13.96,2.24,1.4,3.32-7.09,3.15-14.42,6.02-21.97,8.49Z" fill="#fff"></path>
+            <path d="M477.24,2719.61l-1.79-3.12c6.73-4.02,13.12-8.37,19.27-12.95.74.99,1.43,1.97,2.09,2.92-6.22,4.66-12.76,9.07-19.56,13.16Z" fill="#fff"></path>
+            <path d="M510.39,2696.26l-2.31-2.77c5.93-5.14,11.48-10.54,16.74-16.12.9.85,1.74,1.69,2.57,2.51-5.33,5.67-11,11.15-17,16.38Z" fill="#fff"></path>
+            <path d="M538.99,2667.45l-2.75-2.33c4.95-6.09,9.49-12.38,13.71-18.79,1.03.68,2.02,1.36,2.96,2.02-4.28,6.51-8.9,12.91-13.92,19.1Z" fill="#fff"></path>
+            <path d="M564.7,2634.09l-3.1-1.82c3.81-6.86,7.2-13.84,10.25-20.9,1.13.49,2.22,1,3.26,1.48-3.09,7.16-6.54,14.27-10.41,21.24Z" fill="#fff"></path>
+            <path d="M581.8,2597.18l-3.37-1.24c2.58-7.43,4.7-14.89,6.48-22.38,1.21.28,2.37.6,3.47.89-1.8,7.58-3.97,15.19-6.58,22.74Z" fill="#fff"></path>
+            <path d="M592.28,2557.83l-3.53-.63c1.26-7.75,2.06-15.48,2.53-23.18,1.23.08,2.42.18,3.57.27-.47,7.78-1.3,15.66-2.56,23.53Z" fill="#fff"></path>
+          </g>
+        </g>
+        <rect x="541.09" y="2325.12" width="105.62" height="192.05" fill="#575757"></rect>
+        <rect x="547.35" y="2325.12" width="3.66" height="192.05" fill="#fff"></rect>
+        <rect x="636.53" y="2325.12" width="3.65" height="192.05" fill="#fff"></rect>
+        <g>
+          <rect x="594.42" y="2334.1" width="3.92" height="30.4" fill="#fff"></rect>
+          <rect x="594.42" y="2384.99" width="3.92" height="30.4" fill="#fff"></rect>
+          <rect x="594.42" y="2435.87" width="3.92" height="30.41" fill="#fff"></rect>
+          <rect x="594.42" y="2486.76" width="3.92" height="34.41" fill="#fff"></rect>
+        </g>
+        <rect x="202.09" y="2786.39" width="165.88" height="3.65" fill="#fff"></rect>
+        <rect x="202.09" y="2697.15" width="165.88" height="3.66" fill="#fff"></rect>
+        <rect x="212.64" y="2741.76" width="30.41" height="3.92" fill="#fff"></rect>
+        <rect x="263.53" y="2741.76" width="30.41" height="3.92" fill="#fff"></rect>
+        <rect x="314.41" y="2741.76" width="30.4" height="3.92" fill="#fff"></rect>
+      </g>
+<g id="Curve-3" data-name="Curve">
+        <rect x="1015.24" y="4484.49" width="105.62" height="165.88" fill="#575757"></rect>
+        <g>
+          <path d="M1120.93,4484.6c-2.38-81.94-33.52-148.7-85.9-199.29-51.66-49.88-121.69-79.57-193.52-79.57v105.62c42.39,0,85.54,19.31,118.98,50.5,31.62,29.49,51.79,69,54.72,122.73h105.72Z" fill="#575757"></path>
+          <path d="M1114.38,4484.6c-2.22-149.36-123.44-270.36-272.86-272.33v3.62c147.43,1.97,267.02,121.34,269.24,268.71h3.62Z" fill="#fff"></path>
+          <path d="M1025.15,4484.6c-2.21-100.18-83.39-181.2-183.63-183.15v3.62c98.25,1.95,177.8,81.35,180.01,179.53h3.63Z" fill="#fff"></path>
+          <g>
+            <path d="M1069.79,4490.85c-.21-8.61-.69-17.13-1.42-25.53-1.16.14-2.36.28-3.58.47.71,8.26,1.19,16.61,1.39,25.06h3.61Z" fill="#fff"></path>
+            <path d="M1067.47,4449.92l-3.59.39c-.97-7.76-2.36-15.35-4.07-22.8,1.21-.28,2.38-.52,3.53-.75,1.74,7.56,3.15,15.3,4.13,23.17Z" fill="#fff"></path>
+            <path d="M1059.5,4411.36l-3.44,1.06c-2.44-7.43-5.26-14.63-8.37-21.63,1.13-.5,2.24-.96,3.32-1.4,3.15,7.09,6.02,14.42,8.49,21.97Z" fill="#fff"></path>
+            <path d="M1043.95,4375.22l-3.12,1.79c-4.02-6.73-8.37-13.12-12.95-19.27.99-.74,1.97-1.43,2.92-2.09,4.66,6.22,9.07,12.76,13.16,19.56Z" fill="#fff"></path>
+            <path d="M1020.59,4342.07l-2.77,2.31c-5.14-5.93-10.54-11.48-16.12-16.74.85-.9,1.69-1.74,2.51-2.57,5.67,5.33,11.15,11,16.38,17Z" fill="#fff"></path>
+            <path d="M991.79,4313.46l-2.33,2.75c-6.09-4.95-12.38-9.49-18.79-13.71.68-1.03,1.36-2.02,2.02-2.96,6.51,4.28,12.91,8.9,19.1,13.92Z" fill="#fff"></path>
+            <path d="M958.43,4287.75l-1.82,3.1c-6.86-3.81-13.84-7.2-20.9-10.25.49-1.13,1-2.22,1.48-3.26,7.16,3.09,14.27,6.54,21.24,10.41Z" fill="#fff"></path>
+            <path d="M921.52,4270.65l-1.24,3.37c-7.43-2.58-14.89-4.7-22.38-6.48.28-1.21.6-2.37.89-3.47,7.58,1.8,15.19,3.97,22.74,6.58Z" fill="#fff"></path>
+            <path d="M882.17,4260.18l-.63,3.53c-7.75-1.26-15.48-2.06-23.18-2.53.08-1.23.18-2.42.27-3.57,7.78.47,15.66,1.3,23.53,2.56Z" fill="#fff"></path>
+          </g>
+        </g>
+        <rect x="649.46" y="4205.75" width="192.05" height="105.62" fill="#575757"></rect>
+        <rect x="649.46" y="4301.45" width="192.05" height="3.66" fill="#fff"></rect>
+        <rect x="649.46" y="4212.28" width="192.05" height="3.65" fill="#fff"></rect>
+        <g>
+          <rect x="658.44" y="4254.12" width="30.4" height="3.92" fill="#fff"></rect>
+          <rect x="709.33" y="4254.12" width="30.4" height="3.92" fill="#fff"></rect>
+          <rect x="760.21" y="4254.12" width="30.41" height="3.92" fill="#fff"></rect>
+          <rect x="811.1" y="4254.12" width="34.41" height="3.92" fill="#fff"></rect>
+        </g>
+        <rect x="1110.73" y="4484.49" width="3.65" height="165.88" fill="#fff"></rect>
+        <rect x="1021.49" y="4484.49" width="3.66" height="165.88" fill="#fff"></rect>
+        <rect x="1066.1" y="4609.42" width="3.92" height="30.41" fill="#fff"></rect>
+        <rect x="1066.1" y="4558.53" width="3.92" height="30.41" fill="#fff"></rect>
+        <rect x="1066.1" y="4507.64" width="3.92" height="30.4" fill="#fff"></rect>
+      </g>
+<g id="Curve-4" data-name="Curve">
+        <rect x="819.97" y="1407.79" width="165.88" height="105.62" fill="#575757"></rect>
+        <g>
+          <path d="M820.09,1407.72c-81.94,2.38-148.7,33.52-199.29,85.9-49.88,51.66-79.57,121.69-79.57,193.52h105.62c0-42.39,19.31-85.54,50.5-118.98,29.49-31.62,69-51.79,122.73-54.72v-105.72Z" fill="#575757"></path>
+          <path d="M820.09,1414.28c-149.36,2.22-270.36,123.44-272.33,272.86h3.62c1.97-147.43,121.34-267.02,268.71-269.24v-3.62Z" fill="#fff"></path>
+          <path d="M820.09,1503.5c-100.18,2.21-181.2,83.39-183.15,183.63h3.62c1.95-98.25,81.35-177.8,179.53-180.01v-3.63Z" fill="#fff"></path>
+          <g>
+            <path d="M826.34,1458.87c-8.61.21-17.13.69-25.53,1.42.14,1.16.28,2.36.47,3.58,8.26-.71,16.61-1.19,25.06-1.39v-3.61Z" fill="#fff"></path>
+            <path d="M785.41,1461.19l.39,3.59c-7.76.97-15.35,2.36-22.8,4.07-.28-1.21-.52-2.38-.75-3.53,7.56-1.74,15.3-3.15,23.17-4.13Z" fill="#fff"></path>
+            <path d="M746.85,1469.15l1.06,3.44c-7.43,2.44-14.63,5.26-21.63,8.37-.5-1.13-.96-2.24-1.4-3.32,7.09-3.15,14.42-6.02,21.97-8.49Z" fill="#fff"></path>
+            <path d="M710.7,1484.7l1.79,3.12c-6.73,4.02-13.12,8.37-19.27,12.95-.74-.99-1.43-1.97-2.09-2.92,6.22-4.66,12.76-9.07,19.56-13.16Z" fill="#fff"></path>
+            <path d="M677.55,1508.06l2.31,2.77c-5.93,5.14-11.48,10.54-16.74,16.12-.9-.85-1.74-1.69-2.57-2.51,5.33-5.67,11-11.15,17-16.38Z" fill="#fff"></path>
+            <path d="M648.95,1536.86l2.75,2.33c-4.95,6.09-9.49,12.38-13.71,18.79-1.03-.68-2.02-1.36-2.96-2.02,4.28-6.51,8.9-12.91,13.92-19.1Z" fill="#fff"></path>
+            <path d="M623.24,1570.22l3.1,1.82c-3.81,6.86-7.2,13.84-10.25,20.9-1.13-.49-2.22-1-3.26-1.48,3.09-7.16,6.54-14.27,10.41-21.24Z" fill="#fff"></path>
+            <path d="M606.14,1607.13l3.37,1.24c-2.58,7.43-4.7,14.89-6.48,22.38-1.21-.28-2.37-.6-3.47-.89,1.8-7.58,3.97-15.19,6.58-22.74Z" fill="#fff"></path>
+            <path d="M595.67,1646.48l3.53.63c-1.26,7.75-2.06,15.48-2.53,23.18-1.23-.08-2.42-.18-3.57-.27.47-7.78,1.3-15.66,2.56-23.53Z" fill="#fff"></path>
+          </g>
+        </g>
+        <rect x="541.23" y="1687.14" width="105.62" height="192.05" fill="#575757"></rect>
+        <rect x="636.94" y="1687.14" width="3.66" height="192.05" fill="#fff"></rect>
+        <rect x="547.76" y="1687.14" width="3.65" height="192.05" fill="#fff"></rect>
+        <g>
+          <rect x="589.6" y="1839.82" width="3.92" height="30.4" fill="#fff"></rect>
+          <rect x="589.6" y="1788.92" width="3.92" height="30.4" fill="#fff"></rect>
+          <rect x="589.6" y="1738.03" width="3.92" height="30.41" fill="#fff"></rect>
+          <rect x="589.6" y="1683.14" width="3.92" height="34.41" fill="#fff"></rect>
+        </g>
+        <rect x="819.97" y="1414.28" width="165.88" height="3.65" fill="#fff"></rect>
+        <rect x="819.97" y="1503.5" width="165.88" height="3.66" fill="#fff"></rect>
+        <rect x="944.9" y="1458.64" width="30.41" height="3.92" fill="#fff"></rect>
+        <rect x="894.01" y="1458.64" width="30.41" height="3.92" fill="#fff"></rect>
+        <rect x="843.13" y="1458.64" width="30.4" height="3.92" fill="#fff"></rect>
+      </g>
+</svg>
