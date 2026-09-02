@@ -90,6 +90,7 @@
            drawn at the moment it is centred in the window */
         mid: box.top + window.pageYOffset + box.height / 2,
         rate: parseFloat(n.getAttribute('data-parallax')) || 0,
+        cap: Math.max(60, box.height * 0.6),
         drift: null,
         x: 0, y: 0, rot: 0
       };
@@ -146,7 +147,13 @@
         /* Assign, never accumulate: the bob below adds to this, and a piece
            that drifts without a parallax rate would otherwise creep down the
            page a few pixels every frame. */
+        /* Offset is measured from the viewport centre, so an unusually tall
+           window would shove a piece hundreds of pixels off its mark — a
+           full-page screenshot at 9000px lifted the hero sign clean out of
+           frame. Cap the travel against the piece's own height so it can
+           drift but never leave. */
         m.y = m.rate ? (mid - m.mid) * m.rate : 0;
+        if (m.y > m.cap) m.y = m.cap; else if (m.y < -m.cap) m.y = -m.cap;
 
         if (m.drift) {
           var a = (secs / m.drift.period) * Math.PI * 2 + m.drift.phase;

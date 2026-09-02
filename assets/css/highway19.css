@@ -342,6 +342,58 @@ body.road-debug .lane-guide{opacity:.9}
 .sec__cta{margin-top:2.1em;display:flex;gap:.9em;flex-wrap:wrap}
 
 /* Bands */
+/* --------------------------------------------------------------------------
+   SCENE BANDS
+   Every value below was read out of the owner's composed Highway_19_Website.svg
+   rather than picked by eye — an earlier guess at the sky was badly wrong.
+   The page is responsive text; the scenery is a fixed illustration. These are
+   the part that can stretch safely, because a gradient has no proportions to
+   distort. The drawn pieces are placed as .sec__art and never stretched.
+   ----------------------------------------------------------------------- */
+.band-sky   {background:linear-gradient(180deg,#004ba0 0%,#0561ca 100%);color:#fff}
+.band-sand  {background:linear-gradient(180deg,#fdf6e4 0%,#fde5c1 91%,#fde5c1 100%)}
+.band-dune  {background:#fde5c1}
+/* The owner's green runs #006837 to #39b54a. The bright end will not carry
+   light body copy — measured 3.33 against 4.5 — so the band stops short of
+   it where text sits. The full range still appears in the artwork itself. */
+.band-grass {background:linear-gradient(180deg,#006837 0%,#0f7a3c 100%);color:#fff}
+
+/* Copy sitting on a sky band. The body grey is unreadable on #004ba0, so the
+   whole type scale lifts rather than one heading being patched. */
+.band-sky h1,.band-sky h2,.band-sky h3,.band-sky p,.band-sky li{color:#fff}
+.band-sky .sec__lead,.band-sky .sub{color:#dce9f7}
+.band-sky p{color:#c8dcf1}
+/* Light bands keep the soft grey; dark ones cannot. Naming both means adding
+   a band later is one line, not a hunt for whatever is still dark on dark. */
+.band-white .sub,.band-sand .sub,.band-dune .sub,.band-concrete .sub{color:var(--ink-soft)}
+.band-white .milestone p,.band-sand .milestone p,.band-dune .milestone p{color:var(--ink-soft)}
+/* Grass runs from #006837 to #2a9b45; white holds against both, the soft grey
+   does not, so it is not used here. */
+.band-grass h1,.band-grass h2,.band-grass h3,.band-grass p,.band-grass li{color:#fff}
+.band-grass p{color:#e2f3e6}
+.band-grass .sub,.band-grass .milestone p,.band-grass .milestone h3{color:#e2f3e6}
+/* The form paints its own white ground, so the band's light copy colour must
+   not reach inside it. Scoped rather than blanket, because the next card added
+   to a dark band would inherit the same invisible text. */
+.band-grass .form p,.band-grass .form__promise,
+.band-grass .form label,.band-grass .form li{color:var(--ink-soft)}
+.band-grass .milestone h3{color:#fff}
+
+/* --- Scenery inside a section -------------------------------------------
+   Anchored to the section rather than to the page, because the page's height
+   depends on how the copy reflows and the artwork's does not. z-index 0 keeps
+   a piece under the traffic; 2 puts it in front, which is how the mountains
+   cover the cars.
+   --------------------------------------------------------------------- */
+.sec{position:relative}
+.sec__art{position:absolute;left:0;right:0;z-index:0;pointer-events:none;
+          overflow:hidden;line-height:0}
+.sec__art--front{z-index:2}
+/* Sections carrying a scenery strip reserve room for it, so the copy is
+   never pushed onto the artwork by a longer line or a narrower window. */
+#whyus{padding-bottom:calc(var(--sec-pad) + clamp(120px,20vw,300px))}
+.sec__art img{display:block;width:100%;height:auto}
+
 .band-blue    {background:var(--blue-700);color:#fff}
 .band-blue-lt {background:var(--blue-100)}
 .band-green   {background:var(--green-700);color:#fff}
@@ -402,7 +454,7 @@ body.road-debug .lane-guide{opacity:.9}
    ========================================================================= */
 
 #hero{
-  background:linear-gradient(178deg,var(--blue-700) 0%,var(--blue-800) 100%);
+  background:linear-gradient(178deg,#004ba0 0%,#0561ca 100%);
   color:#fff;
   padding-top:clamp(64px,7vw,104px);
   padding-bottom:clamp(96px,11vw,168px);
@@ -459,11 +511,16 @@ body.road-debug .lane-guide{opacity:.9}
    needs more clear air below the copy than a normal section. */
 #promise{padding-bottom:clamp(190px,17vw,260px)}
 
-#objection{background:var(--paper);padding-block:clamp(96px,12vw,168px)}
+/* No background here: the band class on the section owns it now. An id
+   would beat that class and silently win, which is exactly what put
+   white copy on a white ground when the scene bands went in. */
+#objection{padding-block:clamp(96px,12vw,168px)}
 #objection .sec__inner{text-align:center}
 #objection .sec__body{max-width:730px;margin:0 auto}
 #objection h2{font-size:clamp(2.1rem,4.2vw,3.1rem)}
-#objection .sub{color:var(--ink-soft);font-weight:600}
+/* Colour comes from the band, not from here. An id would beat the band
+   rule and this section would keep a dark grey on a dark sky. */
+#objection .sub{font-weight:600}
 #objection .body-copy{
   margin:2.1em auto 0;max-width:none;
   font-size:clamp(1.14rem,1.65vw,1.32rem);line-height:1.66;
@@ -610,7 +667,7 @@ body.road-debug .lane-guide{opacity:.9}
    10. SECTION 9 — CLOSE + FORM
    ========================================================================= */
 
-#close{background:var(--blue-700);color:#fff;padding-bottom:clamp(88px,10vw,140px)}
+#close{color:#fff;padding-bottom:clamp(88px,10vw,140px)}
 #close .sec__inner{display:block}
 #close .sec__head{text-align:center;max-width:44ch;margin:0 auto}
 #close .body-copy{margin-left:auto;margin-right:auto;text-align:center}
