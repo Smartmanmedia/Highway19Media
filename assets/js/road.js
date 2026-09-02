@@ -557,13 +557,115 @@
   }
 
   /* ==========================================================================
+     7b. Incidents. A stretch of one lane where the limit drops for a while —
+     a stalled van on the verge, someone slowing for a look. Nothing is
+     scripted onto individual vehicles: the zone caps the speed limit and the
+     queue that builds behind it, and the way it unwinds afterwards, falls out
+     of the same car-following model that already stacks traffic behind a semi.
+     One or two land in a typical visit, so the loop never settles into a
+     pattern you can recognise.
+     ====================================================================== */
+
+  var incidents = [], nextInc = 22 + Math.random() * 20;
+
+  /* The road is roughly twenty screens long, so a zone dropped anywhere along
+     it would almost always be off in a section nobody is looking at. Pick from
+     the stretch that is actually on screen instead, and only fall back to a
+     free choice if the road has scrolled out of view entirely. */
+  function onScreenSpots() {
+    var pageTop = page.getBoundingClientRect().top + window.pageYOffset;
+    var top = window.pageYOffset - pageTop + 80;
+    var bot = top + window.innerHeight - 160;
+    var spots = [];
+    for (var ri = 0; ri < runs.length; ri++) {
+      var lanes = runs[ri].lanes;
+      for (var li = 0; li < lanes.length; li++) {
+        var y = lanes[li].y, hit = [];
+        for (var i = 0; i <= lanes[li].n; i++) if (y[i] > top && y[i] < bot) hit.push(i);
+        if (hit.length) spots.push({ run: ri, lane: li, idx: hit });
+      }
+    }
+    return spots;
+  }
+
+  function spawnIncident(opts) {
+    if (!runs.length) return null;
+    opts = opts || {};
+    var ri = opts.run, li = opts.lane, d = opts.d;
+    if (ri == null || li == null || d == null) {
+      var spots = onScreenSpots();
+      if (spots.length) {
+        var pick = spots[(Math.random() * spots.length) | 0];
+        if (ri == null) ri = pick.run;
+        if (li == null) li = pick.lane;
+        if (d == null && ri === pick.run && li === pick.lane) {
+          d = pick.idx[(Math.random() * pick.idx.length) | 0] * STEP;
+        }
+      }
+      if (ri == null) ri = (Math.random() * runs.length) | 0;
+      if (li == null) li = (Math.random() * 2) | 0;
+    }
+    var run = runs[ri];
+    if (!run || !run.lanes.length) return null;
+    var lane = run.lanes[li];
+    if (!lane) return null;
+    var inc = {
+      run: ri, lane: li, L: lane.L,
+      d: d != null ? d : Math.random() * lane.L,
+      /* the zone is a road distance, so it narrows with the road on small
+         screens the same way gaps and stopping distances already do */
+      half:  (opts.half != null ? opts.half : 130 + Math.random() * 90) * scaleNow,
+      floor: opts.floor != null ? opts.floor : 0.07 + Math.random() * 0.10,
+      dur:   opts.dur   != null ? opts.dur   : 16 + Math.random() * 9,
+      inT: 1.2, outT: 3.0, age: 0
+    };
+    incidents.push(inc);
+    return inc;
+  }
+
+  /* Eases on and off rather than snapping, so the queue forms and clears. */
+  function envelope(inc) {
+    if (inc.age < inc.inT) return inc.age / inc.inT;
+    var left = inc.dur - inc.age;
+    if (left < inc.outT) return Math.max(0, left / inc.outT);
+    return 1;
+  }
+
+  function tickIncidents(dt) {
+    for (var i = incidents.length - 1; i >= 0; i--) {
+      incidents[i].age += dt;
+      if (incidents[i].age >= incidents[i].dur) incidents.splice(i, 1);
+    }
+    nextInc -= dt;
+    if (nextInc <= 0) { spawnIncident(); nextInc = 55 + Math.random() * 55; }
+  }
+
+  /* Fraction of the free-flow limit this vehicle is allowed right now:
+     1 clear of every zone, falling to the zone's floor at its centre. */
+  function capFor(c, ri, li) {
+    var cap = 1;
+    for (var i = 0; i < incidents.length; i++) {
+      var inc = incidents[i];
+      if (inc.run !== ri || inc.lane !== li) continue;
+      var L = inc.L;
+      var dist = Math.abs(((c.d - inc.d + 1.5 * L) % L) - 0.5 * L);
+      if (dist > inc.half) continue;
+      var f = 1 - (1 - inc.floor) * envelope(inc) * (1 - dist / inc.half);
+      if (f < cap) cap = f;
+    }
+    return cap;
+  }
+
+  /* ==========================================================================
      8. Physics. Unchanged from the original: measure the gap to the car ahead,
      check the tightest curve in the lookahead window, take whichever speed is
      lower. Queues behind the semi are emergent, never scripted.
      ====================================================================== */
 
-  function step(dt) {
+  function step(dt, real) {
     var moving = false;
+    tickIncidents(real == null ? dt : real);
+    var slowed = incidents.length > 0;
     for (var ri = 0; ri < runs.length; ri++) {
       var run = runs[ri];
       for (var li = 0; li < 2; li++) {
@@ -575,6 +677,7 @@
           var gap = (lead.d - c.d + L) % L - lead.len; if (gap < 0) gap = 0;
           var idx = Math.min(lane.n, Math.max(0, Math.round(c.d / STEP)));
           var t = Math.min(c.top, lane.lim[idx] * scaleNow);
+          if (slowed) t *= capFor(c, ri, li);
           var safe = c.gapMin + c.v * c.headTime;
           if (gap < safe) {
             var f = gap / safe;
@@ -678,6 +781,7 @@
       if (cs) cs.forEach(function (c) { if (c.node) unbind(c.node); });
     });
     pool.forEach(function (p) { p.id = null; });
+    incidents.length = 0;          /* placed against geometry that just changed */
     sizePool();
 
     runs.forEach(function (r) {
@@ -744,7 +848,7 @@
   function frame(now) {
     var dt = Math.min(0.05, (now - last) / 1000); last = now;
     if (running && runs.length) {
-      if (!reduced && !settled) step(dt * gmul);
+      if (!reduced && !settled) step(dt * gmul, dt);
       render();
     }
     requestAnimationFrame(frame);
@@ -800,6 +904,27 @@
     var btn = document.getElementById('road-pause');
     if (btn) btn.addEventListener('click', togglePaused);
   })();
+
+  /* Test hook, so the incident behaviour can be driven from the console
+     instead of waiting for one to land. Harmless to leave in. */
+  window.__sim = {
+    incidents: incidents,
+    spawn: spawnIncident,
+    setCount: function (n) {
+      auto = false;
+      manualCount = Math.max(4, n | 0);
+      if (dev.tod) dev.tod.textContent = 'manual';
+      spread(manualCount);
+      return totalCars();
+    }
+  };
+  /* getters, because fit() replaces the run list wholesale on a resize */
+  Object.defineProperty(window.__sim, 'cars', {
+    get: function () {
+      return runs.reduce(function (a, r) { return a.concat(r.cars); }, []);
+    }
+  });
+  Object.defineProperty(window.__sim, 'runs', { get: function () { return runs; } });
 
   var dev = {};
   (function () {
