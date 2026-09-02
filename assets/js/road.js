@@ -804,6 +804,13 @@
   var WEEKEND = [0.22, 0.16, 0.11, 0.06, 0.05, 0.07, 0.11, 0.16, 0.24, 0.34, 0.46, 0.55,
                  0.62, 0.66, 0.66, 0.64, 0.60, 0.58, 0.54, 0.48, 0.42, 0.36, 0.32, 0.27];
 
+  /* Time of day is built and works, but it is parked while we are testing.
+     Left on, the page is a near-empty road at 4am and a jam at 6pm, so no two
+     people — and no two test runs — ever see the same thing. Everything runs
+     at FIXED_LOAD instead, a normal midday level. Set TOD back to true to
+     hand the road back to the clock; the debug hour slider overrides both. */
+  var TOD = false, FIXED_LOAD = 0.5;
+
   var auto = true, weekend = false, previewHour = -1, manualCount = 0;
   function applyManual() { spread(manualCount || totalCapacity()); }
 
@@ -822,16 +829,21 @@
   }
   function applyAuto() {
     if (!auto || !runs.length || paused) return;
-    var now = new Date(), h, wk;
-    if (previewHour >= 0) { h = previewHour; wk = weekend; }
-    else { h = now.getHours() + now.getMinutes() / 60; wk = (now.getDay() === 0 || now.getDay() === 6); }
-    var L = loadAt(h, wk);
+    var now = new Date(), h = -1, wk = false, L;
+    if (previewHour >= 0) { h = previewHour; wk = weekend; L = loadAt(h, wk); }
+    else if (!TOD) { L = FIXED_LOAD; }
+    else {
+      h = now.getHours() + now.getMinutes() / 60;
+      wk = (now.getDay() === 0 || now.getDay() === 6);
+      L = loadAt(h, wk);
+    }
     var cap = totalCapacity();
     var n = Math.max(4, Math.round(4 + L * (cap - 4)));
     gmul = 1.15 - 0.45 * L;                     /* empty roads run faster */
     spread(n);
     n = totalCars();
-    if (dev.tod) dev.tod.textContent = clockText(h) + (wk ? ' Sat/Sun' : '') +
+    if (dev.tod) dev.tod.textContent =
+      (h < 0 ? 'fixed' : clockText(h) + (wk ? ' Sat/Sun' : '')) +
       ' · ' + labelFor(L) + ' · ' + n + ' vehicles';
     if (dev.dens) { dev.dens.value = Math.min(dev.dens.max, n); dev.densV.textContent = n; }
     if (dev.spd) { dev.spd.value = Math.round(gmul * 100); dev.spdV.textContent = Math.round(gmul * 100) + '%'; }
