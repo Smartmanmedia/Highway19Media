@@ -532,12 +532,60 @@ body.road-debug .lane-guide{opacity:.9}
    place in each section — centre-left in the hero, right in the second, near
    centre in the third. Left to itself the page put the hero copy at 11-56%
    where he has 32-48%, which is most of why the sections did not read like his.
+
+   These have to be fractions of the SECTION, which is why the shell and the
+   road grid are switched off here rather than worked around. His composition
+   is full-bleed: a block at 49% is at 49% of the page, and it stays there at
+   every width. Inside the 1200px shell a percentage means a fraction of 1200
+   centred in the window, and inside the road grid it means a fraction of one
+   track — so the same numbers landed a copy column 12% wide where he drew one
+   24% wide, and moved it as the window changed. Percentages of the section
+   are the only frame in which his numbers mean what he drew.
+
+   The scene layer, the road and the traffic are unaffected: the road runs on
+   his own centrelines now, so nothing reads .road-slot for geometry.
    ----------------------------------------------------------------------- */
 @media (min-width:901px){
-  #hero      .sec__body{margin-left:25%; max-width:26%}
-  #problem   .sec__body{margin-left:50%; max-width:26%}
-  #objection .sec__body{margin-left:42%; max-width:42%; margin-right:0}
-  #promise   .sec__body{margin-left:0;   max-width:40%}
+  #hero .sec__inner, #problem .sec__inner,
+  #objection .sec__inner, #promise .sec__inner{
+    display:block;max-width:none;margin:0;padding:0;
+  }
+  /* left edge, then width — his span is left..right, written out so the
+     arithmetic against tools/compare-layout.js is visible */
+  #hero      .sec__body{margin-left:25%; width:23%; max-width:none} /* 25–48 */
+  #problem   .sec__body{margin-left:49%; width:24%; max-width:none} /* 49–73 */
+  #objection .sec__body{margin-left:43%; width:40%; max-width:none} /* 43–83 */
+  #promise   .sec__body{margin-left:45%; width:34%; max-width:none} /* 45–79 */
+
+  /* And every line is CENTRED in that column. Not a detail: he set all four
+     sections ragged-both-sides on the column axis, and left-aligned copy in a
+     column that narrow reads as a different composition however exactly the
+     column edges land. The sign stays beside the headline rather than above
+     it, which is where he drew it in all four. */
+  #hero .sec__body, #problem .sec__body{text-align:center}
+  #hero .sec__cta, #problem .sec__cta, #objection .sec__cta{justify-content:center}
+  #hero .headline, #problem .headline, #objection .headline{
+    flex-direction:row;align-items:center;justify-content:center;
+  }
+  #hero .sign, #problem .sign{margin-top:0;flex:0 0 auto}
+
+  /* The one sign he hung OUTSIDE its column. In the hero and the problem the
+     sign sits at the left edge of the copy column and the words start after
+     it; in the objection the triangle is bigger and lives entirely to the
+     left of the column, so leaving it in the flow squeezed the heading from
+     43–82% of the page into 53–80%. Taken out of the flow it stops pushing,
+     and the percentages below are his: the triangle spans 13% of the page and
+     clears the column by 3%, written as fractions of the 40%-wide column. */
+  #objection .sec__body{position:relative}
+  #objection .headline{justify-content:flex-start}
+  #objection .headline .sign{
+    position:absolute;top:0;right:100%;margin-right:7.5%;
+    width:32.5%;height:auto;
+  }
+
+  /* His promise copy is LEFT-aligned inside the green plate, with the arrow
+     at the plate's left edge — the only one of the four he did not centre. */
+  #promise .sec__body{text-align:left}
 }
 
 /* --- The scene, built from the owner's canvas ---------------------------
@@ -710,10 +758,15 @@ body.road-debug .lane-guide{opacity:.9}
    white copy on a white ground when the scene bands went in. */
 #objection{padding-block:clamp(96px,12vw,168px)}
 #objection .sec__inner{text-align:center}
-/* Wide enough for "You've Been Down This Road Before" to hold one line at
-   desktop, as it does in the composed design, and to wrap on its own terms
-   below that rather than being forced to by a 730px cage. */
-#objection .sec__body{max-width:min(1040px,100%);margin:0 auto}
+/* Below 901px there is no composition to match — his canvas is a desktop
+   drawing — so the copy just needs room to wrap on its own terms rather than
+   being forced to by a 730px cage. Above it the column comes from his
+   composition, and this must not re-centre it: `margin:0 auto` here was
+   quietly overriding the 43% left edge and centring the column at 30%,
+   because it is later in the file than the composition block. */
+@media (max-width:900px){
+  #objection .sec__body{max-width:min(1040px,100%);margin:0 auto}
+}
 #objection h2{font-size:clamp(2.1rem,4.2vw,3.1rem)}
 /* Colour comes from the band, not from here. An id would beat the band
    rule and this section would keep a dark grey on a dark sky. */

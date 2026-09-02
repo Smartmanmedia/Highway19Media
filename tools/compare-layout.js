@@ -61,14 +61,28 @@ const PAIRS = [
   await page.goto('http://127.0.0.1:9023/index.html', { waitUntil:'load' });
   await sleep(3000);
 
+  /* Measure the INK, not the box. His side is the glyph bounds of an SVG
+     <text>; an element rect is the whole column whether the words fill it or
+     not, so comparing the two can never converge -- a heading that fits in
+     half its column reads as a column half the width. A Range over the
+     element's own text gives the union of its line boxes, which is the same
+     thing his <text> gives. The column itself is reported separately. */
   const live = await page.evaluate(sels => {
     const W = document.getElementById('main').getBoundingClientRect().width;
     const o = {};
     sels.forEach(s => {
       const el = document.querySelector(s);
       if (!el) return;
-      const r = el.getBoundingClientRect();
-      o[s] = { l: r.left / W * 100, rt: r.right / W * 100 };
+      const rng = document.createRange();
+      rng.selectNodeContents(el);
+      const boxes = [...rng.getClientRects()].filter(r => r.width > 1 && r.height > 1);
+      const r = boxes.length
+        ? { left: Math.min(...boxes.map(b => b.left)),
+            right: Math.max(...boxes.map(b => b.right)) }
+        : el.getBoundingClientRect();
+      const col = el.getBoundingClientRect();
+      o[s] = { l: r.left / W * 100, rt: r.right / W * 100,
+               cl: col.left / W * 100, cr: col.right / W * 100 };
     });
     return o;
   }, PAIRS.map(p => p[1]));
@@ -91,5 +105,46 @@ const PAIRS = [
   });
   console.log('\n  ' + worst.length + ' out by more than a few percent' +
     (worst.length ? ': ' + worst.join(', ') : ''));
+
+  /* --- the columns themselves -----------------------------------------
+     His column is the union of every text run he set in that section, not
+     just the three I match by name -- a wrapped paragraph is a separate
+     <text> per line in his file, and the widest line is what sets the
+     column. The page's column is the .sec__body box. This is the number
+     the CSS actually controls. */
+  const SECTIONS = [['#hero','A Clear Road'], ['#problem','Great Work'],
+                    ['#objection',"You've Been Down"], ['#promise','We Handle the Marketing']];
+  const byY = design.slice().sort((a,b) => a.y - b.y);
+  const starts = SECTIONS.map(([, needle]) => {
+    const d = byY.find(t => t.txt.startsWith(needle));
+    return d ? d.y : null;
+  });
+
+  const cols = await page.evaluate(sels => {
+    const W = document.getElementById('main').getBoundingClientRect().width;
+    return sels.map(s => {
+      const el = document.querySelector(s + ' .sec__body');
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      return { l: r.left / W * 100, rt: r.right / W * 100 };
+    });
+  }, SECTIONS.map(s => s[0]));
+
+  console.log('\n\ncolumn the copy sits in, as a share of the art column\n');
+  console.log('  section       his          page         drift');
+  SECTIONS.forEach(([sel], i) => {
+    const from = starts[i], to = starts[i + 1] != null ? starts[i + 1] : 1e9;
+    if (from == null) return;
+    const runs = byY.filter(t => t.y >= from - 40 && t.y < to - 40 && t.txt);
+    if (!runs.length || !cols[i]) return;
+    const hl = (Math.min(...runs.map(r => r.x)) - ART_X) / ART_W * 100;
+    const hr = (Math.max(...runs.map(r => r.x + r.w)) - ART_X) / ART_W * 100;
+    const dl = cols[i].l - hl, dr = cols[i].rt - hr;
+    console.log('  ' + sel.padEnd(14) +
+      (hl.toFixed(0) + '–' + hr.toFixed(0) + '%').padEnd(13) +
+      (cols[i].l.toFixed(0) + '–' + cols[i].rt.toFixed(0) + '%').padEnd(13) +
+      ((dl>0?'+':'') + dl.toFixed(0) + ' / ' + (dr>0?'+':'') + dr.toFixed(0)) +
+      ((Math.abs(dl) > 4 || Math.abs(dr) > 4) ? '  <<' : ''));
+  });
   await browser.close(); srv.close();
 })();
