@@ -486,7 +486,7 @@ body.road-debug .lane-guide{opacity:.9}
 /* The escape is DESKTOP ONLY. It is expressed as a fraction of .sec__body,
    and .sec__body is only 35% of the section above 901px — below that the copy
    is full-bleed, so the same 185.7% threw the sign a page and a half wide. */
-@media (min-width:901px){
+@media (min-width:1320px){
   #promise .gantry{margin-left:-20.3%; width:185.7%}
 }
 /* Past the composition cap his 102.9% is 102.9% of a 1925px box, which stops
@@ -621,7 +621,7 @@ body.road-debug .lane-guide{opacity:.9}
    white copy on a dark band need it; the objection's dark copy on sand
    reads fine over a cloud.
    ---------------------------------------------------------------------- */
-@media (max-width:900px){
+@media (max-width:1319.98px){
   #hero .sec__body, #problem .sec__body{position:relative;z-index:0}
   #hero .sec__body::before, #problem .sec__body::before{
     content:"";
@@ -654,7 +654,20 @@ body.road-debug .lane-guide{opacity:.9}
    The scene layer, the road and the traffic are unaffected: the road runs on
    his own centrelines now, so nothing reads .road-slot for geometry.
    ----------------------------------------------------------------------- */
-@media (min-width:901px){
+/* THE COMPOSITION BREAKPOINT — 1320px, not 901.
+   His composition scales as a whole: the columns are shares of his art column
+   and the type is his size times the page over 1924.33. Scaled DOWN that
+   means the words shrink with it, and measured across the tablet sizes the
+   body copy reads 11.7px at 1024 (iPad Pro 12.9 portrait) and 12.3px at 1080.
+   His drawing is intact at those widths and unreadable, which is the worst
+   of both.
+
+   1320 is where his 21.96px body clears 15px, which is the smallest this
+   copy should ever be set. Below it the page uses its own responsive layout,
+   where the copy has the full width and holds 16.9px. His composition is a
+   desktop drawing; it starts when there is room to read it.
+   ------------------------------------------------------------------------ */
+@media (min-width:1320px){
   /* THE COMPOSITION BOX. His art column is 1924.33 units wide, and every
      number below is a share of it, so the box that those shares resolve
      against IS his canvas. Up to 1925px it is the page and nothing changes.
@@ -885,13 +898,14 @@ body.road-debug .lane-guide{opacity:.9}
    white copy on a white ground when the scene bands went in. */
 #objection{padding-block:clamp(96px,12vw,168px)}
 #objection .sec__inner{text-align:center}
-/* Below 901px there is no composition to match — his canvas is a desktop
-   drawing — so the copy just needs room to wrap on its own terms rather than
+/* Below the composition breakpoint there is no composition to match — his
+   canvas is a desktop drawing — so the copy just needs room to wrap on its
+   own terms rather than
    being forced to by a 730px cage. Above it the column comes from his
    composition, and this must not re-centre it: `margin:0 auto` here was
    quietly overriding the 43% left edge and centring the column at 30%,
    because it is later in the file than the composition block. */
-@media (max-width:900px){
+@media (max-width:1319.98px){
   #objection .sec__body{max-width:min(1040px,100%);margin:0 auto}
 }
 #objection h2{font-size:clamp(2.1rem,4.2vw,3.1rem)}
@@ -1376,7 +1390,7 @@ body.road-debug #road-dev{display:block}
    "A Clear RoadForwardfor Your Business" and pushed it off the right edge. */
 #hero h1 > span{display:block}
 
-@media (min-width:901px){
+@media (min-width:1320px){
   /* His hero headline is a STACK of three sizes in one heading */
   #hero h1{line-height:1.04;font-weight:800}
   #hero h1 > span:nth-child(1){font-size:min(48.68px, 2.530vw)}  /* A Clear Road      */
