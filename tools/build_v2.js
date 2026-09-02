@@ -6,7 +6,7 @@
  * drawn at 37% opacity, which composites correctly however it is wrapped. */
 const fs = require('fs'), path = require('path');
 const ROOT = path.join(__dirname, '..');
-const SRC = process.argv[2] || 'build/v2/section-01.html';
+const SRC = process.argv[2] || 'build/v2/page.html';
 const OUT = process.argv[3] || 'dist/highway19-v2.html';
 const MIME = { '.svg':'image/svg+xml', '.webp':'image/webp', '.png':'image/png',
                '.jpg':'image/jpeg', '.woff2':'font/woff2' };
