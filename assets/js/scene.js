@@ -104,7 +104,19 @@
           phase: Math.random() * Math.PI * 2
         };
       }
-      n.style.willChange = 'transform';
+      /* An element carrying a multiply shadow must NOT be moved by transform:
+         a transform creates a stacking context, the blend is isolated, and the
+         shadow renders flat grey instead of darkening what it sits on. Those
+         are moved by top/left instead, which costs a little layout and is
+         worth it. Measured both ways over the same blue: #022751 by top,
+         #666666 by transform. */
+      m.byTop = n.getAttribute('data-move') === 'top';
+      if (m.byTop) {
+        m.baseTop  = parseFloat(n.style.top)  || 0;
+        m.baseLeft = parseFloat(n.style.left) || 0;
+      } else {
+        n.style.willChange = 'transform';
+      }
       movers.push(m);
     }
   }
@@ -163,9 +175,14 @@
           m.rot = Math.cos(a) * 1.2;
         }
 
-        m.node.style.transform =
-          'translate3d(' + m.x.toFixed(1) + 'px,' + m.y.toFixed(1) + 'px,0)' +
-          (m.rot ? ' rotate(' + m.rot.toFixed(2) + 'deg)' : '');
+        if (m.byTop) {
+          m.node.style.top  = (m.baseTop  + m.y).toFixed(1) + 'px';
+          m.node.style.left = (m.baseLeft + m.x).toFixed(1) + 'px';
+        } else {
+          m.node.style.transform =
+            'translate3d(' + m.x.toFixed(1) + 'px,' + m.y.toFixed(1) + 'px,0)' +
+            (m.rot ? ' rotate(' + m.rot.toFixed(2) + 'deg)' : '');
+        }
       }
     }
     requestAnimationFrame(paint);

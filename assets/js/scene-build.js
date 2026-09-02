@@ -100,7 +100,11 @@
       bandEls.push({ el: d, band: b });
     });
 
-    scene.pieces.forEach(function (p) {
+    /* Appended in paint order: DOM order is the only way to stack these
+       without a z-index, and a z-index would isolate the blending. */
+    scene.pieces.slice().sort(function (a, b) {
+      return (a.z == null ? 80 : a.z) - (b.z == null ? 80 : b.z);
+    }).forEach(function (p) {
       var el;
       if (p.markup) {
         /* Inlined, not an <img>. An <img> renders its SVG in an isolated
@@ -119,6 +123,13 @@
       }
       el.className = 'scene-piece';
       el.dataset.name = p.name;
+      /* NO z-index, and never a transform. Both create a stacking context, and
+         a stacking context isolates blending — his multiply shadows then blend
+         against nothing and render flat grey. Measured over the same blue:
+         #022751 plain, #666666 with either. Paint order comes from DOM order
+         instead (pieces are appended sorted by p.z), and parallax moves them
+         by top/left, which costs a little layout and keeps the shadows. */
+      if (p.parallax || p.drift) el.setAttribute('data-move', 'top');
       if (p.parallax) el.setAttribute('data-parallax', p.parallax);
       if (p.drift) el.setAttribute('data-drift', p.drift);
       (p.role === 'front' ? front : back).appendChild(el);

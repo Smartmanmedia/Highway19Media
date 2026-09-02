@@ -65,7 +65,8 @@
       "y": 586.03,
       "w": 213.98,
       "h": 215.27,
-      "parallax": 0.09
+      "parallax": 0.09,
+      "z": 80
     },
     {
       "name": "Boat",
@@ -75,7 +76,8 @@
       "y": 1158.54,
       "w": 78.18,
       "h": 201.4,
-      "drift": "26,7,22"
+      "drift": "26,7,22",
+      "z": 95
     },
     {
       "name": "Cloud4",
@@ -85,7 +87,8 @@
       "y": 1618.26,
       "w": 516.78,
       "h": 277.96,
-      "parallax": 0.13
+      "parallax": 0.13,
+      "z": 80
     },
     {
       "name": "Cloud5",
@@ -95,7 +98,8 @@
       "y": 1643.06,
       "w": 516.76,
       "h": 277.96,
-      "parallax": 0.13
+      "parallax": 0.13,
+      "z": 80
     },
     {
       "name": "Waves",
@@ -104,7 +108,8 @@
       "x": 35.63,
       "y": 1922.42,
       "w": 2436.7,
-      "h": 469.73
+      "h": 469.73,
+      "z": 90
     },
     {
       "name": "Deseret and sand",
@@ -114,7 +119,8 @@
       "y": 2234.4,
       "w": 2015.15,
       "h": 1410.9,
-      "fit": "stretch"
+      "fit": "stretch",
+      "z": 10
     },
     {
       "name": "Cloud1",
@@ -124,7 +130,8 @@
       "y": 3099.33,
       "w": 484.23,
       "h": 325.67,
-      "parallax": 0.16
+      "parallax": 0.16,
+      "z": 80
     },
     {
       "name": "Forest",
@@ -134,7 +141,8 @@
       "y": 3287.49,
       "w": 2207.92,
       "h": 770.84,
-      "fit": "stretch"
+      "fit": "stretch",
+      "z": 20
     },
     {
       "name": "Cloud2",
@@ -144,7 +152,8 @@
       "y": 3330.26,
       "w": 571.48,
       "h": 352.12,
-      "parallax": 0.2
+      "parallax": 0.2,
+      "z": 80
     },
     {
       "name": "Trees",
@@ -153,7 +162,8 @@
       "x": 224.49,
       "y": 4240.47,
       "w": 671.16,
-      "h": 362.68
+      "h": 362.68,
+      "z": 30
     },
     {
       "name": "End rocks",
@@ -162,8 +172,10 @@
       "x": 223.69,
       "y": 4277.08,
       "w": 2015.15,
-      "h": 842.69
+      "h": 842.69,
+      "z": 40
     }
   ],
-  "_signs": "Hero Sign and Our sign are deliberately NOT placed here. They are in index.html with real HTML copy over the owner's plate, so the headlines stay selectable and findable rather than being pictures of words."
+  "_signs": "Hero Sign and Our sign are deliberately NOT placed here. They are in index.html with real HTML copy over the owner's plate, so the headlines stay selectable and findable rather than being pictures of words.",
+  "_z": "Paint order inside the scene layer. The sand goes down first and the water's edge cuts over it \u2014 the other way round buries his shoreline under the sand."
 }
