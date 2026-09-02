@@ -416,6 +416,14 @@ body.road-debug .lane-guide{opacity:.9}
 /* The owner drew a "Hover line" under one lane. It only does anything if
    something drives it, so each lane carries its own and the whole lane is a
    link through to that service page. */
+/* Two adjustments the owner asked for, made here rather than in hero.svg so
+   the supplied artwork stays byte-for-byte his. Every one of the truss's 14
+   gradients inherits its stops from the first, so darkening those two stops
+   darkens all the steel. */
+.hero-banner__art text{font-weight:700}
+#h19h-linear-gradient stop:first-of-type{stop-color:#c9d0d6}
+#h19h-linear-gradient stop:last-of-type{stop-color:#4a5158}
+
 .hero-lane{cursor:pointer}
 .hero-lane__line{opacity:0;transition:opacity .18s ease}
 .hero-lane:hover .hero-lane__line,
