@@ -749,10 +749,12 @@
 <div id="road-dev"></div>
 
 <script src="assets/js/cars-sprite.js"></script>
-<script src="assets/js/road.js"></script>
+<!-- The scene goes first: it lays the owner's road tiles and hands back a
+     centreline per run, which the traffic engine then drives. -->
 <script src="assets/js/scene-data.js"></script>
 <script src="assets/js/road-data.js"></script>
 <script src="assets/js/scene-build.js"></script>
+<script src="assets/js/road.js"></script>
 <script src="assets/js/scene.js"></script>
 <script src="assets/js/site.js"></script>
 </body>

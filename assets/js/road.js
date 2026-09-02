@@ -352,6 +352,35 @@
      vehicle slows into a bend before it reaches it rather than on top of it.
      ====================================================================== */
 
+  /* Walk a centreline and step sideways by `off` at every sample. The two lane
+     paths come out of the same line the asphalt was laid on, so they cannot
+     drift from it however the page has stretched. A polyline is enough: the
+     step is small against the tightest radius he draws. */
+  function offsetPath(d, off) {
+    var probe = offsetPath._p;
+    if (!probe) {
+      var host = el('svg', { width: '0', height: '0',
+                             style: 'position:absolute;visibility:hidden' });
+      probe = el('path', {});
+      host.appendChild(probe);
+      document.body.appendChild(host);
+      offsetPath._p = probe;
+    }
+    probe.setAttribute('d', d);
+    var L = probe.getTotalLength();
+    if (!L) return d;
+    var step = 6, out = [], s;
+    for (s = 0; s <= L; s += step) {
+      var a = probe.getPointAtLength(Math.max(0, s - 1.5));
+      var b = probe.getPointAtLength(Math.min(L, s + 1.5));
+      var dx = b.x - a.x, dy = b.y - a.y;
+      var m = Math.sqrt(dx * dx + dy * dy) || 1;
+      var pt = probe.getPointAtLength(s);
+      out.push((pt.x - dy / m * off).toFixed(1) + ',' + (pt.y + dx / m * off).toFixed(1));
+    }
+    return 'M' + out.join(' L');
+  }
+
   function sample(p, rev) {
     var L = p.getTotalLength(), n = Math.floor(L / STEP);
     var x = [], y = [], a = [], lim = [], i;
@@ -810,8 +839,18 @@
     if (!SECS.length) return;
 
     var g = measure(W, scaleNow);
-    var built = [buildRunA(g, scaleNow), buildRunB(g, scaleNow)]
-      .filter(function (p) { return !!p; });
+    /* Prefer the owner's own road. scene-build.js lays his tiles and hands
+       back a centreline per run, in this page's pixels, measured AFTER the
+       straights have stretched — so the cars drive the road that is actually
+       drawn rather than a second one generated to match it. Falls back to the
+       generated geometry if his data is not present. */
+    var supplied = window.H19_ROAD_PATHS ? window.H19_ROAD_PATHS() : [];
+    var built = supplied.length
+      ? supplied.map(function (r) {
+          return function (off) { return offsetPath(r.d, off); };
+        })
+      : [buildRunA(g, scaleNow), buildRunB(g, scaleNow)]
+          .filter(function (p) { return !!p; });
     if (!built.length) return;
 
     makeTiles(W, H, built.map(function (p) { return p(0); }));

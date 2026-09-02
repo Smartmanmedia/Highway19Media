@@ -230,31 +230,108 @@
     });
   }
 
+  /* Lay a run as a CHAIN, not as a set of independently positioned tiles.
+     Each part sits directly after the one before it, so the road cannot come
+     apart. All the slack the map introduces is handed to the vertical
+     straights — a straight stretched along its own axis is indistinguishable
+     from a longer straight, whereas a stretched curve goes visibly oval. Place
+     the parts independently and the curves disconnect from their neighbours by
+     exactly the amount the page is taller than his canvas, which is what put
+     half the traffic in the ocean. */
   function placeRoad(pts, S) {
     if (!roadParts.length) return;
+
     roadData.runs.forEach(function (run) {
       var mine = roadParts.filter(function (r) { return r.run === run.name; });
-      /* First pass: everything at its mapped top, at its own size. */
+      if (!mine.length) return;
+
+      var first = mine[0].part, last = mine[mine.length - 1].part;
+      var naturalH = (last.y + last.h - first.y) * S;
+      var mappedH  = mapY(pts, last.y + last.h) - mapY(pts, first.y);
+      var slack    = Math.max(0, mappedH - naturalH);
+
+      var vTotal = mine.reduce(function (a, r) {
+        return a + (r.part.kind === 'straight-v' ? r.part.h * S : 0);
+      }, 0);
+
+      var top0 = mapY(pts, first.y), shift = 0;
       mine.forEach(function (r) {
-        r.top = mapY(pts, r.part.y);
-        r.h   = r.part.h * S;
-      });
-      /* Second pass: a vertical straight grows to meet whatever follows it,
-         so the chain stays joined however far the map has pulled it apart. */
-      mine.forEach(function (r, i) {
-        if (r.part.kind !== 'straight-v') return;
-        var next = mine[i + 1];
-        if (next) r.h = Math.max(r.h, next.top - r.top);
-        else r.h = Math.max(r.h, mapY(pts, r.part.y + r.part.h) - r.top);
-      });
-      mine.forEach(function (r) {
-        r.el.style.left   = ((r.part.x - ART_X) * S).toFixed(1) + 'px';
+        var natural = r.part.h * S;
+        var grow = (r.part.kind === 'straight-v' && vTotal > 0)
+          ? slack * (natural / vTotal) : 0;
+
+        r.left = (r.part.x - ART_X) * S;
+        r.w    = r.part.w * S;
+        r.top  = top0 + (r.part.y - first.y) * S + shift;
+        r.h    = natural + grow;
+        shift += grow;
+
+        r.el.style.left   = r.left.toFixed(1) + 'px';
         r.el.style.top    = r.top.toFixed(1) + 'px';
-        r.el.style.width  = (r.part.w * S).toFixed(1) + 'px';
+        r.el.style.width  = r.w.toFixed(1) + 'px';
         r.el.style.height = r.h.toFixed(1) + 'px';
       });
+
+      run.d = centreline(mine);
     });
   }
+
+  /* The centreline of a laid run, in page pixels.
+     Every part carries its own line as points normalised to its box, read from
+     the dashed stripe he actually drew — so a curve is his arc rather than my
+     approximation of one, and a straight that has been stretched carries its
+     line with it. Each part is oriented to start at whichever end is nearer
+     where the previous one finished, which is all the chaining needed.
+     ====================================================================== */
+  function centreline(parts) {
+    var out = [];
+    parts.forEach(function (r) {
+      var L = r.part.line;
+      if (!L || L.length < 2) return;
+      var pts = L.map(function (p) {
+        return { x: r.left + p.u * r.w, y: r.top + p.v * r.h };
+      });
+      if (out.length) {
+        var last = out[out.length - 1];
+        var dFirst = Math.pow(pts[0].x - last.x, 2) + Math.pow(pts[0].y - last.y, 2);
+        var dLast  = Math.pow(pts[pts.length-1].x - last.x, 2) +
+                     Math.pow(pts[pts.length-1].y - last.y, 2);
+        if (dLast < dFirst) pts.reverse();
+      }
+      out = out.concat(pts);
+    });
+    if (out.length < 2) return '';
+
+    /* His tiles overlap by design, so a straight's line ends INSIDE the curve
+       that follows it. Concatenated raw, that shows as a short diagonal
+       doubling back across the road at every join — and any car on it is off
+       the asphalt. Drop points that reverse direction: what is left is the
+       line going one way round. */
+    var clean = [out[0]], i;
+    for (i = 1; i < out.length; i++) {
+      var prev = clean[clean.length - 1];
+      var dx = out[i].x - prev.x, dy = out[i].y - prev.y;
+      if (dx * dx + dy * dy < 4) continue;                 /* duplicate */
+      if (clean.length > 1) {
+        var b = clean[clean.length - 2];
+        var px = prev.x - b.x, py = prev.y - b.y;
+        /* reversal: the new step points back the way we came */
+        if (px * dx + py * dy < 0) { clean.pop(); i--; continue; }
+      }
+      clean.push(out[i]);
+    }
+    if (clean.length < 2) return '';
+    return 'M' + clean.map(function (p) {
+      return p.x.toFixed(1) + ',' + p.y.toFixed(1);
+    }).join(' L');
+  }
+
+  /* The traffic engine asks for these; they are rebuilt on every resize. */
+  window.H19_ROAD_PATHS = function () {
+    return roadData ? roadData.runs.map(function (r) {
+      return { name: r.name, d: r.d || '' };
+    }).filter(function (r) { return r.d; }) : [];
+  };
 
   window.__sceneBuild = { place: place, map: buildMap, pieces: nodes, bands: bandEls,
                           road: roadParts };
