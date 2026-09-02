@@ -1,0 +1,49 @@
+{
+  "note": "Layout read out of the owner's composed Highway_19_Website.svg by measuring every layer's rendered bounding box. This is the source of truth for placing the separately-exported assets.",
+  "canvas": { "w": 2472.32, "h": 5180.59 },
+  "bands": {
+    "sky":          { "x": 294, "y": 55,   "w": 1920, "h": 2086, "kind": "polygon" },
+    "ocean":        { "x": 44,  "y": 1953, "w": 2429, "h": 440,  "asset": "Beach.svg" },
+    "sand":         { "x": 292, "y": 1977, "w": 1919, "h": 974,  "kind": "rect" },
+    "desertForest": { "x": 119, "y": 3441, "w": 2199, "h": 771,  "asset": "DesertForest.webp", "shapes": 10112 },
+    "green":        { "x": 289, "y": 3472, "w": 1924, "h": 1322, "kind": "rect" }
+  },
+  "objects": {
+    "heroGantry":   { "x": 287,  "y": 217,  "w": 1929, "h": 401 },
+    "mountainsTop": { "x": 227,  "y": 2713, "w": 2015, "h": 1086, "asset": "Mountains.svg" },
+    "mountainsLow": { "x": 235,  "y": 4338, "w": 2015, "h": 843,  "asset": "Mountains.svg" },
+    "trees":        { "x": 224,  "y": 4314, "w": 671,  "h": 363,  "asset": "Trees.svg" },
+    "boat":         { "x": 1946, "y": 1232, "w": 78,   "h": 201,  "asset": "Boat.svg" },
+    "ourSign":      { "x": 972,  "y": 3813, "w": 1248, "h": 332,  "asset": "OurSign.svg" },
+    "clouds": [
+      { "x": 225,  "y": 1717, "w": 517, "h": 278 },
+      { "x": 1857, "y": 1692, "w": 517, "h": 278 },
+      { "x": 1887, "y": 660,  "w": 214, "h": 215 },
+      { "x": 769,  "y": 2510, "w": 323, "h": 285 },
+      { "x": 768,  "y": 727,  "w": 99,  "h": 151 }
+    ]
+  },
+  "road": {
+    "note": "Assembled from 16 tile groups, each 105.7 wide. Straights are 360.9 long; curves are 445 x 471 quarter turns. The centreline is chained from these in paint order.",
+    "tileWidth": 105.7,
+    "straightLength": 360.9,
+    "tiles": [
+      { "id": "Stright-2",  "x": 1593, "y": 75,   "w": 106, "h": 361 },
+      { "id": "Stright-3",  "x": 1593, "y": 356,  "w": 106, "h": 361 },
+      { "id": "Stright-4",  "x": 1593, "y": 684,  "w": 106, "h": 361 },
+      { "id": "Curve",      "x": 1254, "y": 1042, "w": 445, "h": 471 },
+      { "id": "Stright-12", "x": 929,  "y": 1408, "w": 361, "h": 106 },
+      { "id": "Curve-4",    "x": 541,  "y": 1408, "w": 445, "h": 471 },
+      { "id": "Stright-5",  "x": 542,  "y": 1874, "w": 106, "h": 361 },
+      { "id": "Stright-6",  "x": 542,  "y": 2088, "w": 106, "h": 361 },
+      { "id": "Curve-2",    "x": 202,  "y": 2325, "w": 445, "h": 471 },
+      { "id": "Stright-10", "x": 795,  "y": 2943, "w": 361, "h": 106 },
+      { "id": "Stright-9",  "x": 1150, "y": 2943, "w": 361, "h": 106 },
+      { "id": "Stright-8",  "x": 1506, "y": 2943, "w": 361, "h": 106 },
+      { "id": "Stright-7",  "x": 1851, "y": 2943, "w": 361, "h": 106 },
+      { "id": "Stright-11", "x": 293,  "y": 4206, "w": 361, "h": 106 },
+      { "id": "Curve-3",    "x": 649,  "y": 4206, "w": 471, "h": 445 },
+      { "id": "(unnamed)",  "x": 1015, "y": 4649, "w": 106, "h": 361 }
+    ]
+  }
+}

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="2015.15" height="842.69" viewBox="0 0 2015.15 842.69"><metadata><?xpacket begin="" id="mountains-W5M0MpCehiHzreSzNTczkc9d"?><x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="XMP Core 6.0.0"><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="" xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmpMM:DocumentID="xmp.did:cb9f5498-bb58-4572-8043-8c369e6bfb9b" xmpMM:InstanceID="xmp.iid:cb9f5498-bb58-4572-8043-8c369e6bfb9b" dcterms:provenance="https://cai-manifests.adobe.com/manifests/urn-c2pa-0070b1fa-f25e-41e1-8c8c-64db5035e142-adobe"> </rdf:Description></rdf:RDF></x:xmpmeta>
+<svg xmlns="http://www.w3.org/2000/svg" width="2017.15" height="403.68" viewBox="-1 205.7 2017.15 403.68"><metadata><?xpacket begin="" id="mountains-W5M0MpCehiHzreSzNTczkc9d"?><x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="XMP Core 6.0.0"><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="" xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmpMM:DocumentID="xmp.did:cb9f5498-bb58-4572-8043-8c369e6bfb9b" xmpMM:InstanceID="xmp.iid:cb9f5498-bb58-4572-8043-8c369e6bfb9b" dcterms:provenance="https://cai-manifests.adobe.com/manifests/urn-c2pa-0070b1fa-f25e-41e1-8c8c-64db5035e142-adobe"> </rdf:Description></rdf:RDF></x:xmpmeta>
 <?xpacket end="w"?></metadata>
   <g isolation="isolate">
     <g id="mountains-a" data-name="Layer 1">
-      <rect x="711.08" y="218.56" width="628.8" height="385.2" fill="none"/>
       <g>
         <polygon points="1502.61 321.14 1401.63 262.73 1375.98 258.64 1336.07 264.23 1321.13 280.19 1287.5 258.64 1251.19 240.62 1176.25 266.08 1110.08 235.98 1037.88 301.33 990.16 321.14 937.78 321.14 884.29 314.99 833.47 333.83 815.02 353.55 776.42 366.51 728.48 382.86 656.56 409.73 644.9 417.72 623.74 440.04 1057.82 531.33 1525.54 342.18 1502.61 321.14" fill="#006837" style="mix-blend-mode:multiply"/>
         <g>
@@ -993,8 +992,7 @@
             <path d="M1155.49,273.79c-.19-.22.5-1.13,1.55-2.02,1.05-.89,2.05-1.43,2.24-1.21.19.22-.5,1.13-1.55,2.02-1.05.89-2.05,1.43-2.24,1.21Z" fill="#757071"/>
           </g>
         </g>
-        <rect x="1292.86" y="140.45" width="842.69" height="561.79" transform="translate(2135.5458 -1292.8595) rotate(90)" fill="none"/>
-      </g>
+        </g>
     </g>
   </g>
 </svg>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="oursign-a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="1244.1" height="404.64" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1244.1 404.64">
+<svg id="oursign-a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="1245.1" height="333.6" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 71.04 1245.1 333.6">
   <defs>
     <linearGradient id="oursign-b" x1="1018.7" y1="-87.35" x2="1018.7" y2="-74.59" gradientTransform="translate(23.58 311.87)" gradientUnits="userSpaceOnUse">
       <stop offset=".37" stop-color="#fff"/>
@@ -13,7 +13,6 @@
     <linearGradient id="oursign-h" x1="99.39" y1="140.29" x2="99.39" y2="173.36" gradientTransform="translate(961.78 .17) scale(.34 1)" xlink:href="#oursign-b"/>
     <linearGradient id="oursign-i" x1="99.39" y1="286.81" x2="99.39" y2="319.89" gradientTransform="translate(961.54 .17) scale(.34 1)" xlink:href="#oursign-b"/>
   </defs>
-  <rect x="365.22" width="628.8" height="385.2" fill="none"/>
   <g>
     <rect x="948.34" y="224.52" width="187.89" height="12.76" transform="translate(142 804.64) rotate(-45)" fill="url(#oursign-b)"/>
     <rect x="949.76" y="224.52" width="187.89" height="12.76" transform="translate(1618.4469 1132.1891) rotate(-135)" fill="url(#oursign-c)"/>
