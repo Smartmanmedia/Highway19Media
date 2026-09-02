@@ -42,38 +42,12 @@
     });
   });
 
-  /* -- Hero sign parallax --------------------------------------------------
-     The gantry lifts a little faster than the page scrolls, so you pass under
-     it rather than past it. Transform only — it never touches layout, so the
-     road engine's measurements and the page height are unaffected.
-     RATE is the whole dial: 0 is off, 0.35 is brisk. */
-  var RATE = 0.2;
-  var banner = document.querySelector('.hero-banner');
-  var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (banner && !still) {
-    var queued = false, lastY = -1;
-
-    var paint = function () {
-      queued = false;
-      var y = window.pageYOffset;
-      /* Stop once the banner has cleared the top: no point animating what
-         nobody can see, and it leaves the transform parked where it belongs. */
-      if (y > banner.offsetTop + banner.offsetHeight + 200) return;
-      banner.style.transform = 'translate3d(0,' + (-y * RATE).toFixed(1) + 'px,0)';
-    };
-
-    var onScroll = function () {
-      if (queued || window.pageYOffset === lastY) return;
-      lastY = window.pageYOffset;
-      queued = true;
-      requestAnimationFrame(paint);
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-    paint();
-  }
+  /* -- Hero sign parallax -------------------------------------------------
+     Moved out. Every moving piece — the hero gantry, the section-seven sign,
+     the clouds, the boat — now runs through one driver in assets/js/scene.js,
+     and each one carries its own rate and direction in the markup. Two
+     parallax implementations in two files is how they drift apart.
+     ---------------------------------------------------------------------- */
 
   /* -- Contact form -------------------------------------------------------- */
   /* No endpoint is wired yet. Rather than pretending a submission succeeded,

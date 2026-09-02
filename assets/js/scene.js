@@ -20,9 +20,16 @@
    2. MOTION.  Two kinds, both opt-in by data attribute so the artwork decides
       what moves rather than this file:
 
-        data-parallax="0.18"   drifts against the scroll. 0 is pinned to the
-                               page, 1 would hold still on screen. Clouds want
-                               0.1 to 0.3; the further back, the smaller.
+        data-parallax="0.18"   drifts against the scroll. The SIGN sets the
+                               direction and is the whole control:
+                                 positive lags behind the page, sinking as you
+                                 scroll down — that reads as distance, which is
+                                 what clouds and scenery want (0.08 to 0.3,
+                                 smaller the further back);
+                                 negative runs ahead, rising as you scroll down
+                                 — that reads as nearness, which is what a sign
+                                 standing in front of the scene wants (-0.2).
+                               0 pins it to the page.
         data-drift="30,9,26"   travels on its own clock: horizontal reach in
                                px, vertical bob in px, seconds for a full
                                cycle. The boat.
