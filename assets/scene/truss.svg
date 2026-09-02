@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg preserveAspectRatio="none" id="truss-Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="256.466" height="179.6" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 256.466 179.6">
+  <defs>
+    <linearGradient id="truss-linear-gradient" x1="1419.01" y1="-94.04" x2="1419.01" y2="-81.28" gradientTransform="translate(48.03 178.69)" gradientUnits="userSpaceOnUse">
+      <stop offset=".37" stop-color="#fff"/>
+      <stop offset="1" stop-color="gray"/>
+    </linearGradient>
+    <linearGradient id="truss-linear-gradient-2" x1="1761.51" y1="-240" x2="1761.51" y2="-252.76" gradientTransform="translate(-293.04 337.41)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-3" x1="1510.55" y1="-2.5" x2="1510.55" y2="10.26" gradientTransform="translate(85.95 87.15)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-4" x1="1669.97" y1="-148.46" x2="1669.97" y2="-161.22" gradientTransform="translate(-72.05 245.87)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-5" x1="1599.93" y1="86.88" x2="1599.93" y2="99.63" gradientTransform="translate(122.97 -2.23)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-6" x1="1580.59" y1="-59.09" x2="1580.59" y2="-71.84" gradientTransform="translate(143.73 156.49)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-7" x1="1328.48" y1="-184.57" x2="1328.48" y2="-171.82" gradientTransform="translate(10.53 269.22)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-8" x1="1852.04" y1="-330.54" x2="1852.04" y2="-343.29" gradientTransform="translate(-511.61 427.94)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-9" x1="1057.54" y1="-455.51" x2="1057.54" y2="-442.76" gradientTransform="translate(-101.7 540.16)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-10" x1="2122.98" y1="-601.48" x2="2122.98" y2="-614.23" gradientTransform="translate(-1165.7147 698.8811)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-11" x1="1149.08" y1="-363.98" x2="1149.08" y2="-351.22" gradientTransform="translate(-63.78 448.62)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-12" x1="2031.44" y1="-509.94" x2="2031.44" y2="-522.7" gradientTransform="translate(-944.72 607.34)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-13" x1="1238.46" y1="-274.6" x2="1238.46" y2="-261.84" gradientTransform="translate(-26.76 359.24)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-14" x1="1942.06" y1="-420.56" x2="1942.06" y2="-433.32" gradientTransform="translate(-728.94 517.96)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-15" x1="967.01" y1="-546.05" x2="967.01" y2="-533.29" gradientTransform="translate(-139.2 630.69)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-16" x1="2213.51" y1="-692.01" x2="2213.51" y2="-704.77" gradientTransform="translate(-1384.2805 789.4141)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-17" x1="690.98" y1="-822.08" x2="690.98" y2="-809.32" gradientTransform="translate(-253.53 906.73)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-18" x1="2489.54" y1="-968.04" x2="2489.54" y2="-980.8" gradientTransform="translate(-2050.6788 1065.4453)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-19" x1="782.51" y1="-730.54" x2="782.51" y2="-717.78" gradientTransform="translate(-215.62 815.19)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-20" x1="2398" y1="-876.5" x2="2398" y2="-889.26" gradientTransform="translate(-1829.6845 973.9064)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-21" x1="871.89" y1="-641.16" x2="871.89" y2="-628.4" gradientTransform="translate(-178.6 725.81)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-22" x1="2308.63" y1="-787.12" x2="2308.63" y2="-799.88" gradientTransform="translate(-1613.9062 884.5281)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-23" x1="600.44" y1="-912.61" x2="600.44" y2="-899.85" gradientTransform="translate(-291.03 997.26)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-24" x1="2580.08" y1="-1058.57" x2="2580.08" y2="-1071.33" gradientTransform="translate(-2269.2446 1155.9782)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-25" x1="522.97" y1="-990.09" x2="522.97" y2="-977.33" gradientTransform="translate(-323.1249 1074.7346)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-26" x1="2657.55" y1="-1136.05" x2="2657.55" y2="-1148.81" gradientTransform="translate(-2456.2874 1233.4539)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-27" x1="432.43" y1="-1080.62" x2="432.43" y2="-1067.86" gradientTransform="translate(-360.6249 1165.2675)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-28" x1="2748.08" y1="-1226.58" x2="2748.08" y2="-1239.34" gradientTransform="translate(-2674.8532 1323.9868)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-29" x1="896.21" y1="0" x2="896.21" y2="33.08" gradientTransform="matrix(1,0,0,1,0,0)" xlink:href="#truss-linear-gradient"/>
+    <linearGradient id="truss-linear-gradient-30" x1="896.21" y1="146.53" x2="896.21" y2="179.6" gradientTransform="matrix(1,0,0,1,0,0)" xlink:href="#truss-linear-gradient"/>
+  </defs>
+  <rect x="1373.09" y="84.65" width="187.89" height="12.76" transform="translate(365.3213 1064.0163) rotate(-45)" fill="url(#truss-linear-gradient)"/>
+  <rect x="1374.52" y="84.65" width="187.89" height="12.76" transform="translate(2442.4605 1193.7528) rotate(-135)" fill="url(#truss-linear-gradient-2)"/>
+  <rect x="1502.55" y="84.65" width="187.89" height="12.76" transform="translate(403.238 1155.5551) rotate(-45)" fill="url(#truss-linear-gradient-3)"/>
+  <rect x="1503.97" y="84.65" width="187.89" height="12.76" transform="translate(2663.4548 1285.2917) rotate(-135)" fill="url(#truss-linear-gradient-4)"/>
+  <rect x="1628.95" y="84.65" width="187.89" height="12.76" transform="translate(440.2597 1244.9334) rotate(-45)" fill="url(#truss-linear-gradient-5)"/>
+  <rect x="1630.37" y="84.65" width="187.89" height="12.76" transform="translate(2879.2331 1374.67) rotate(-135)" fill="url(#truss-linear-gradient-6)"/>
+  <rect x="1245.06" y="84.65" width="187.89" height="12.76" transform="translate(327.82 973.48) rotate(-45)" fill="url(#truss-linear-gradient-7)"/>
+  <rect x="1246.48" y="84.65" width="187.89" height="12.76" transform="translate(2223.8946 1103.2199) rotate(-135)" fill="url(#truss-linear-gradient-8)"/>
+  <rect x="861.89" y="84.65" width="187.89" height="12.76" transform="translate(215.59 702.54) rotate(-45)" fill="url(#truss-linear-gradient-9)"/>
+  <rect x="863.32" y="84.65" width="187.89" height="12.76" transform="translate(1569.7875 832.2798) rotate(-135)" fill="url(#truss-linear-gradient-10)"/>
+  <rect x="991.35" y="84.65" width="187.89" height="12.76" transform="translate(253.51 794.08) rotate(-45)" fill="url(#truss-linear-gradient-11)"/>
+  <rect x="992.77" y="84.65" width="187.89" height="12.76" transform="translate(1790.7818 923.8187) rotate(-135)" fill="url(#truss-linear-gradient-12)"/>
+  <rect x="1117.75" y="84.65" width="187.89" height="12.76" transform="translate(290.53 883.46) rotate(-45)" fill="url(#truss-linear-gradient-13)"/>
+  <rect x="1119.17" y="84.65" width="187.89" height="12.76" transform="translate(2006.5601 1013.197) rotate(-135)" fill="url(#truss-linear-gradient-14)"/>
+  <rect x="733.86" y="84.65" width="187.89" height="12.76" transform="translate(178.09 612.01) rotate(-45)" fill="url(#truss-linear-gradient-15)"/>
+  <rect x="735.28" y="84.65" width="187.89" height="12.76" transform="translate(1351.2216 741.7469) rotate(-135)" fill="url(#truss-linear-gradient-16)"/>
+  <rect x="343.49" y="84.65" width="187.89" height="12.76" transform="translate(63.76 335.98) rotate(-45)" fill="url(#truss-linear-gradient-17)"/>
+  <rect x="344.92" y="84.65" width="187.89" height="12.76" transform="translate(684.82 465.72) rotate(-135)" fill="url(#truss-linear-gradient-18)"/>
+  <rect x="472.95" y="84.65" width="187.89" height="12.76" transform="translate(101.68 427.52) rotate(-45)" fill="url(#truss-linear-gradient-19)"/>
+  <rect x="474.37" y="84.65" width="187.89" height="12.76" transform="translate(905.82 557.25) rotate(-135)" fill="url(#truss-linear-gradient-20)"/>
+  <rect x="599.35" y="84.65" width="187.89" height="12.76" transform="translate(138.7 516.9) rotate(-45)" fill="url(#truss-linear-gradient-21)"/>
+  <rect x="600.77" y="84.65" width="187.89" height="12.76" transform="translate(1121.596 646.6328) rotate(-135)" fill="url(#truss-linear-gradient-22)"/>
+  <rect x="215.46" y="84.65" width="187.89" height="12.76" transform="translate(26.26 245.45) rotate(-45)" fill="url(#truss-linear-gradient-23)"/>
+  <rect x="216.88" y="84.65" width="187.89" height="12.76" transform="translate(466.26 375.18) rotate(-135)" fill="url(#truss-linear-gradient-24)"/>
+  <rect x="105.89" y="84.65" width="187.89" height="12.76" transform="translate(-5.83 167.97) rotate(-45)" fill="url(#truss-linear-gradient-25)"/>
+  <rect x="107.32" y="84.65" width="187.89" height="12.76" transform="translate(279.21 297.71) rotate(-135)" fill="url(#truss-linear-gradient-26)"/>
+  <rect x="-22.14" y="84.65" width="187.89" height="12.76" transform="translate(-43.33 77.44) rotate(-45)" fill="url(#truss-linear-gradient-27)"/>
+  <rect x="-20.72" y="84.65" width="187.89" height="12.76" transform="translate(60.65 207.17) rotate(-135)" fill="url(#truss-linear-gradient-28)"/>
+  <rect width="1792.42" height="33.08" fill="url(#truss-linear-gradient-29)"/>
+  <rect y="146.53" width="1792.42" height="33.08" fill="url(#truss-linear-gradient-30)"/>
+</svg>

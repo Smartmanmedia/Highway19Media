@@ -423,6 +423,27 @@ body.road-debug .lane-guide{opacity:.9}
 .band-grass .milestone h3{color:#fff}
 
 /* --------------------------------------------------------------------------
+   THE GANTRY — one component, both signs
+   His sign is a fixed-size plate on a truss. The plate must never scale with
+   the window: it carries the headline and the artwork is drawn for one size.
+   The TRUSS is what gives, and because it is a repeating X-cell it can be
+   tiled to any width — so the gantry reaches the edge of a wide screen by
+   revealing more truss, exactly as a real one is built.
+   The hero has truss on both sides; the section-seven sign has it on one.
+   ----------------------------------------------------------------------- */
+.gantry{display:flex;align-items:center;width:100%}
+.gantry__truss{
+  flex:1 1 0;
+  min-width:0;
+  align-self:center;
+  /* his own truss cell, tiled — never stretched, so the X never skews */
+  background:url("../scene/truss.svg") repeat-x left center;
+  background-size:auto 100%;
+}
+.gantry__plate{flex:0 0 auto;position:relative;container-type:inline-size}
+.gantry__plate > img{display:block;width:100%;height:auto}
+
+/* --------------------------------------------------------------------------
    THE GANTRY SIGN
    The owner's OurSign.svg is 1245.1 x 333.6. Inside it the green plate runs
    from x 1 to 947 and the copy area starts at x 217 — his own text was set
