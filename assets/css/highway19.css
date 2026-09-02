@@ -481,9 +481,49 @@ body.road-debug .lane-guide{opacity:.9}
    here resolve against .sec__body, which is 35% of the section — the
    arithmetic is (37.9 − 45) / 35 and (102.9 − 37.9) / 35, written out so the
    numbers stay checkable against tools/compare-layout.js. */
-#promise .gantry{margin-left:-20.3%; width:185.7%;
-                 --plate-w:min(946px,49.2vw); --truss-ratio:.1898}
+#promise .gantry{--plate-w:min(946px,49.2vw); --truss-ratio:.1898}
 #promise .gantry__plate{width:var(--plate-w)}
+/* The escape is DESKTOP ONLY. It is expressed as a fraction of .sec__body,
+   and .sec__body is only 35% of the section above 901px — below that the copy
+   is full-bleed, so the same 185.7% threw the sign a page and a half wide. */
+@media (min-width:901px){
+  #promise .gantry{margin-left:-20.3%; width:185.7%}
+}
+
+/* Below his desktop composition both plates fill the width instead of
+   shrinking with it. His rule still holds — the plate keeps its size and the
+   truss gives — but 49.2% of a phone is 192px, and his four guide-sign labels
+   and the Our sign headline are drawn to be read, not to be a thumbnail. The
+   truss simply has nothing left to reveal at this width, which is correct:
+   there is no room for it either. */
+@media (max-width:900px){
+  /* The plate is its container, full stop — no arithmetic to get wrong. Every
+     attempt to compute this from the viewport was off by whatever indent the
+     section happened to carry at that width (the two differ, and neither is
+     just the gutter), which either clipped the plate's right edge or left a
+     stub of truss showing, both of which read as a broken sign rather than a
+     stretchable one.
+
+     A percentage here also collapses the truss, deliberately: its height is
+     calculated from --plate-w, and a percentage height against an auto-height
+     flex container is indeterminate, so it resolves to nothing. That is the
+     right answer at this width — the truss has nothing to reveal because
+     there is no room for it. */
+  #hero    .gantry,
+  #promise .gantry{--plate-w:100%}
+
+  /* And the hero banner stops full-bleeding. Its `width:100vw` +
+     `margin-left:calc(50% - 50vw)` escape is right on desktop, where the
+     truss has to reach both edges of the page, but at 390px it resolved 23px
+     off and carried the plate with it — so the sign sat a thumb's width right
+     of centre with its right edge over the gutter. Inside the column both
+     signs are the same shape and neither needs arithmetic. The truss has
+     nothing to reveal at this width anyway. */
+  /* Id in the selector on purpose: the base .hero-banner rule that sets the
+     bleed sits several hundred lines further down, so a bare class here loses
+     to it on order however specific the media query looks. */
+  #hero .hero-banner{width:100%;margin-left:0}
+}
 
 /* --------------------------------------------------------------------------
    THE GANTRY SIGN
@@ -532,12 +572,12 @@ body.road-debug .lane-guide{opacity:.9}
   color:#fff;
 }
 .signplate__copy .sub{
-  font-size:3.05cqi;         /* his 30.49 of 1245, nudged up: the plate renders
-                                636px wide in this column, not the 840 it is
-                                allowed, which put the subhead at 18.5px — a
-                                sixth of a pixel under the bold-text threshold */
-  /* (was: nudged so it clears the
-                                18.66px bold threshold) */
+  /* White on his plate green is 4.15:1 — enough for BOLD text, but only once
+     it is actually bold-SIZED. The floor is what keeps it there: 3.05cqi
+     alone put this at 17.9px on a 768px screen, under the 18.66px threshold,
+     where it gets judged as regular text and fails. Scaling with the plate is
+     still right; it just must not scale below the line. */
+  font-size:max(18.7px, 3.05cqi);
   line-height:1.2;
   margin:0;
   color:#fff;
@@ -546,12 +586,42 @@ body.road-debug .lane-guide{opacity:.9}
   font-weight:700;
 }
 /* Below the point where the plate can hold two lines of headline legibly, the
-   sign becomes a band behind the copy rather than a shrinking billboard. */
+   sign becomes a band behind the copy rather than a shrinking billboard.
+   The max-width here no longer does anything — the plate's width comes from
+   --plate-w now — but the copy insets and sizes still do, and they open the
+   copy area out from his 61% of the plate to 76%, which is what lets the
+   headline hold at a readable size on a phone. */
 @media (max-width:720px){
   .signplate{max-width:none}
   .signplate__copy{left:12%;right:12%}
   .signplate__copy h2{font-size:7.6cqi}
-  .signplate__copy .sub{font-size:3.4cqi}
+  .signplate__copy .sub{font-size:max(18.7px, 3.4cqi)}
+}
+
+/* --- Narrow: the copy needs its own ground -------------------------------
+   His composition is a desktop drawing, and it places every piece of scenery
+   clear of the column he set the copy in. Below 901px the copy goes
+   full-bleed while the scenery stays where he drew it, so the two collide —
+   measured at 768px, the problem section's white body copy sat on a white
+   cloud at 1.25:1, which is not readable by any standard.
+
+   The fix is a scrim in the band's own colour rather than moving or hiding
+   his artwork: the clouds still drift past, they just stop being the thing
+   directly behind the words. Same technique the grass band already uses for
+   the one paragraph that sits on open green. Only the two sections with
+   white copy on a dark band need it; the objection's dark copy on sand
+   reads fine over a cloud.
+   ---------------------------------------------------------------------- */
+@media (max-width:900px){
+  #hero .sec__body, #problem .sec__body{position:relative;z-index:0}
+  #hero .sec__body::before, #problem .sec__body::before{
+    content:"";
+    position:absolute;
+    inset:-0.8em -1.1em;
+    background:rgba(4,34,72,.58);
+    border-radius:12px;
+    z-index:-1;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -1256,10 +1326,16 @@ body.road-debug #road-dev{display:block}
    drawing.
    ========================================================================= */
 
+/* The three parts of the hero headline are separate LINES at every width.
+   This one rule has to live outside the desktop block below: the sizes are
+   his desktop composition and belong in there, but the line breaks are
+   structure, and without them a narrow window ran the spans together into
+   "A Clear RoadForwardfor Your Business" and pushed it off the right edge. */
+#hero h1 > span{display:block}
+
 @media (min-width:901px){
   /* His hero headline is a STACK of three sizes in one heading */
   #hero h1{line-height:1.04;font-weight:800}
-  #hero h1 > span{display:block}
   #hero h1 > span:nth-child(1){font-size:min(48.68px, 2.530vw)}  /* A Clear Road      */
   #hero h1 > span:nth-child(2){font-size:min(84.17px, 4.374vw)}  /* Forward           */
   #hero h1 > span:nth-child(3){font-size:min(34.74px, 1.805vw)}  /* for Your Business */
@@ -1294,7 +1370,11 @@ body.road-debug #road-dev{display:block}
      text at this size (3.0) but not for regular (4.5). Bold is the smallest
      departure that keeps the line readable; darkening his plate would change
      his artwork, which is worse. Revisit if the plate colour ever moves. */
-  #promise   .sub      {font-size:3.22cqi; font-weight:700;
+  /* Floored for the same reason as the base rule: between about 1000 and
+     1200px the plate is small enough that 3.22cqi lands at 17.4px, under the
+     18.66px bold threshold, and white on his plate green (4.15:1) is then
+     judged as regular text and fails. */
+  #promise   .sub      {font-size:max(18.7px, 3.22cqi); font-weight:700;
                         font-family:var(--font-plate)}
   #promise   .body-copy{font-size:min(26.00px, 1.351vw); font-weight:500}
 

@@ -32,7 +32,12 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
   const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
     args: ['--no-proxy-server','--ignore-certificate-errors','--no-sandbox'] });
-  const page = await browser.newPage({ viewport: { width: 1400, height: 900 } });
+  /* Width is an argument now: his composition is a desktop drawing, and the
+     scene is laid across whatever the page is wide — so at 390px the road he
+     drew running down the right of the art column crosses copy that is now
+     full-bleed. That only shows up if you measure at that width. */
+  const VW = parseInt(process.argv[2], 10) || 1400;
+  const page = await browser.newPage({ viewport: { width: VW, height: 900 } });
   const errs = []; page.on('pageerror', e => errs.push(e.message));
   await page.goto('http://127.0.0.1:8991/index.html', { waitUntil: 'load' });
   await sleep(2200);
