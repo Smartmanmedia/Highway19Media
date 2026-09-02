@@ -562,16 +562,18 @@
      scripted onto individual vehicles: the zone caps the speed limit and the
      queue that builds behind it, and the way it unwinds afterwards, falls out
      of the same car-following model that already stacks traffic behind a semi.
-     One or two land in a typical visit, so the loop never settles into a
-     pattern you can recognise.
+     They form where the visitor is looking, once they have stopped to read.
+     Nobody watches the road for its own sake; they stop on a section, and that
+     is the moment a queue building in the corner of the eye is worth anything.
+     A blind timer put them somewhere along twenty screens of road, which
+     almost always meant somewhere nobody was.
      ====================================================================== */
 
-  var incidents = [], nextInc = 22 + Math.random() * 20;
+  var DWELL = 5,          /* seconds held still before one forms      */
+      COOL  = 18;         /* seconds of quiet afterwards, plus 0-12   */
+  var incidents = [], dwell = 0, cool = 0, lastScrollY = -1;
 
-  /* The road is roughly twenty screens long, so a zone dropped anywhere along
-     it would almost always be off in a section nobody is looking at. Pick from
-     the stretch that is actually on screen instead, and only fall back to a
-     free choice if the road has scrolled out of view entirely. */
+  /* Every point of road currently on screen, by run and lane. */
   function onScreenSpots() {
     var pageTop = page.getBoundingClientRect().top + window.pageYOffset;
     var top = window.pageYOffset - pageTop + 80;
@@ -588,22 +590,40 @@
     return spots;
   }
 
+  /* On screen is not enough on its own — a zone with nothing coming towards it
+     is just an empty piece of road. Try a handful of visible points and take
+     the one with the most traffic approaching, so a queue actually forms. */
+  function pickSpot() {
+    var spots = onScreenSpots();
+    if (!spots.length) return null;
+    var reach = 900 * scaleNow, best = null, bestScore = -1;
+    for (var k = 0; k < 12; k++) {
+      var sp = spots[(Math.random() * spots.length) | 0];
+      var d = sp.idx[(Math.random() * sp.idx.length) | 0] * STEP;
+      var list = runs[sp.run].byLane[sp.lane], L = runs[sp.run].lanes[sp.lane].L;
+      var score = 0;
+      for (var i = 0; i < list.length; i++) {
+        if ((d - list[i].d + L) % L < reach) score++;   /* on its way here */
+      }
+      score += Math.random() * 0.5;                     /* break ties quietly */
+      if (score > bestScore) { bestScore = score; best = { run: sp.run, lane: sp.lane, d: d }; }
+    }
+    return best;
+  }
+
   function spawnIncident(opts) {
     if (!runs.length) return null;
     opts = opts || {};
     var ri = opts.run, li = opts.lane, d = opts.d;
     if (ri == null || li == null || d == null) {
-      var spots = onScreenSpots();
-      if (spots.length) {
-        var pick = spots[(Math.random() * spots.length) | 0];
-        if (ri == null) ri = pick.run;
-        if (li == null) li = pick.lane;
-        if (d == null && ri === pick.run && li === pick.lane) {
-          d = pick.idx[(Math.random() * pick.idx.length) | 0] * STEP;
-        }
-      }
-      if (ri == null) ri = (Math.random() * runs.length) | 0;
-      if (li == null) li = (Math.random() * 2) | 0;
+      var pick = pickSpot();
+      /* Section five is full-width with no road through it. Park there and
+         there is nothing to hold up, so let it be rather than starting a jam
+         two sections away that nobody will ever see. */
+      if (!pick) return null;
+      if (ri == null) ri = pick.run;
+      if (li == null) li = pick.lane;
+      if (d == null) d = pick.d;
     }
     var run = runs[ri];
     if (!run || !run.lanes.length) return null;
@@ -631,13 +651,40 @@
     return 1;
   }
 
+  /* Page-space y of a zone, for working out whether it is still worth having. */
+  function incY(inc) {
+    var lane = runs[inc.run] && runs[inc.run].lanes[inc.lane];
+    if (!lane) return null;
+    return lane.y[Math.min(lane.n, Math.max(0, Math.round(inc.d / STEP)))];
+  }
+
   function tickIncidents(dt) {
+    var pageTop = page.getBoundingClientRect().top + window.pageYOffset;
+    var top = window.pageYOffset - pageTop, h = window.innerHeight;
+
     for (var i = incidents.length - 1; i >= 0; i--) {
-      incidents[i].age += dt;
-      if (incidents[i].age >= incidents[i].dur) incidents.splice(i, 1);
+      var inc = incidents[i];
+      inc.age += dt;
+      /* Scrolled well clear of it: let it go, so the next one can form where
+         the reader has actually stopped instead of waiting out this one. */
+      var y = incY(inc);
+      if (y != null && (y < top - h || y > top + h * 2)) {
+        if (inc.age < inc.dur - inc.outT) inc.age = inc.dur - inc.outT;
+      }
+      if (inc.age >= inc.dur) incidents.splice(i, 1);
     }
-    nextInc -= dt;
-    if (nextInc <= 0) { spawnIncident(); nextInc = 55 + Math.random() * 55; }
+    if (cool > 0) cool -= dt;
+
+    /* Reading, not scrolling. A little movement is a hand on a trackpad, not
+       someone leaving, so only a real jump resets the clock. */
+    var y = window.pageYOffset;
+    if (lastScrollY < 0 || Math.abs(y - lastScrollY) > 40) { lastScrollY = y; dwell = 0; }
+    else dwell += dt;
+
+    if (!incidents.length && cool <= 0 && dwell >= DWELL && spawnIncident()) {
+      dwell = 0;
+      cool = COOL + Math.random() * 12;
+    }
   }
 
   /* Fraction of the free-flow limit this vehicle is allowed right now:
