@@ -76,7 +76,8 @@ Everything in `assets/brand/` is yours, used unaltered:
 
 | File | Where it appears |
 |---|---|
-| `shield.png` | header, hero plate, footer plate |
+| `hero.svg` | the whole hero — used as supplied |
+| `shield.png` | header and footer plate |
 | `social-youtube/facebook/instagram.png` | footer marks |
 | `highway-sign.svg` | sections 4 and 9 headlines |
 | `road-work-sign.svg` | section 3 — the detour |
@@ -93,8 +94,14 @@ is under 3x on the largest phones — a 600px export would fix that. The social
 marks are 67px against a 40px slot, likewise slightly under 2x. Neither is
 visible on a normal screen.
 
-**3. The hero arrows are mine.** Built to your gantry mockup, but the four
-arrow curves are drawn rather than yours. Send those as SVG and they swap in.
+**3. The hero labels need a webfont.** `hero.svg` sets
+`HighwayGothicExpanded` — a desktop face, not a webfont, so browsers fall back.
+The font stack names it first, then Anek Latin, so the moment a `.woff2` is
+self-hosted it takes over with no other change. Alternatively outline the type
+in Illustrator and re-export, which is exact but kills the live text.
+
+**4. Two different greens.** `hero.svg` uses `#1c9022`; `highway-sign.svg` uses
+`#059236`. Both are yours. Say which is canonical and I'll align them.
 
 **4. How much page the road should take.** Each section reserves a lane and the
 animation *measures* that lane rather than being told a number, so moving the

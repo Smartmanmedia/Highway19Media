@@ -20,6 +20,30 @@ const js = ['assets/js/cars-sprite.js', 'assets/js/road.js', 'assets/js/site.js'
 
 if (/<\/script>/i.test(js)) throw new Error('script payload contains </script>');
 
+/* An unbalanced <div> does not throw either — it silently reparents whole
+   sections, which is how the hero copy ended up outside its own grid. */
+(() => {
+  const bare = html.replace(/<!--[\s\S]*?-->/g, '');
+  const open = (bare.match(/<div\b/g) || []).length;
+  const close = (bare.match(/<\/div>/g) || []).length;
+  if (open !== close) throw new Error(`HTML: ${open} <div> vs ${close} </div>`);
+})();
+
+/* A stray brace in the stylesheet does not throw — it silently swallows every
+   rule after it, or leaks a media query's contents to all widths. Cheap to
+   check, and it has already bitten once. */
+(() => {
+  const bare = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  let d = 0;
+  for (const ch of bare) {
+    if (ch === '{') d++;
+    else if (ch === '}' && --d < 0) throw new Error('CSS: unbalanced brace (extra closing)');
+  }
+  if (d !== 0) throw new Error(`CSS: ${d} unclosed block(s)`);
+  const opens = (bare.match(/@media[^{]*\{/g) || []).length;
+  if (opens < 5) throw new Error(`CSS: only ${opens} media queries survived — expected the full set`);
+})();
+
 /* Inline every local image as a data URI. Both outputs have to stand alone:
    the single file is opened straight off disk, and the hosted preview's CSP
    blocks external images outright — an <img src="assets/..."> silently shows

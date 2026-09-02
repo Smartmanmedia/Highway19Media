@@ -412,11 +412,17 @@ body.road-debug .lane-guide{opacity:.9}
   margin:clamp(20px,2.4vw,38px) 0 clamp(34px,4vw,56px) calc(50% - 50vw);
 }
 .hero-banner__art{display:block;width:100%;height:auto}
-.hero-banner__sign{
-  position:absolute;left:50%;top:1%;
-  transform:translateX(-50%);
-  width:min(72%,820px);margin:0;
-}
+
+/* The owner drew a "Hover line" under one lane. It only does anything if
+   something drives it, so each lane carries its own and the whole lane is a
+   link through to that service page. */
+.hero-lane{cursor:pointer}
+.hero-lane__line{opacity:0;transition:opacity .18s ease}
+.hero-lane:hover .hero-lane__line,
+.hero-lane:focus-visible .hero-lane__line{opacity:1}
+.hero-lane:focus-visible{outline:3px solid var(--yellow-500);outline-offset:-4px}
+@media (prefers-reduced-motion:reduce){ .hero-lane__line{transition:none} }
+
 #hero h1{max-width:16ch}
 #hero .sub{max-width:34ch}
 #hero .body-copy{color:rgba(255,255,255,.87)}
@@ -639,15 +645,8 @@ body.road-debug .lane-guide{opacity:.9}
   padding:clamp(15px,2vw,24px) clamp(16px,3vw,36px);
   margin:0 0 clamp(46px,5vw,68px);
 }
-/* Hero variant: the mockup puts this plate in warning yellow with dark type,
-   sitting above the green panel rather than being a green sign itself. */
-.guide-sign--amber{
-  background:var(--yellow-500);
-  border-color:#fff;
-  border-radius:999px;
-  padding:clamp(13px,1.6vw,20px) clamp(30px,4vw,58px);
-}
-.guide-sign--amber span{color:var(--ink)}
+
+
 
 .guide-sign span{
   font-family:var(--font-sign);font-weight:800;color:#fff;
@@ -860,15 +859,8 @@ body.road-debug #road-dev{display:block}
 
   .guide-sign{flex-wrap:wrap;gap:8px 14px;padding:16px 18px}
   .guide-sign__arrows{display:none}
-  /* Hero variant: the mockup puts this plate in warning yellow with dark type,
-   sitting above the green panel rather than being a green sign itself. */
-.guide-sign--amber{
-  background:var(--yellow-500);
-  border-color:#fff;
-  border-radius:999px;
-  padding:clamp(13px,1.6vw,20px) clamp(30px,4vw,58px);
-}
-.guide-sign--amber span{color:var(--ink)}
+
+
 
 .guide-sign span{font-size:1.18rem;white-space:normal}
   .guide-sign__shield{height:52px;margin:0}
