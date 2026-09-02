@@ -53,33 +53,51 @@
 }
 
 /* --- the copy ------------------------------------------------------------
-   His sizes, in canvas units, as a share of the column: a size of N is
-   N/1924.34 of it. In cqw, not px — the section is a fixed-aspect picture and
-   everything in it scales together. A px cap on the type would hold the words
-   still while the artwork kept growing, which is exactly the split that made
-   the last build drift apart at 4K.
+   His sizes and weights, read out of his export, as a share of the column: a
+   size of N is N/1924.34 of it. In cqw, not px — the section is a fixed-aspect
+   picture and everything in it scales together.
+
+   His subheads are set in Highway Gothic Expanded, the road-sign face, and so
+   is the plate copy. It is not a webfont we have and it is NOT on Google Fonts
+   (checked: HTTP 400 for both spellings). Overpass is, and was drawn from the
+   same FHWA Highway Gothic series, so it stands in until his file lands.
    ---------------------------------------------------------------------- */
 .sec1 .copy{
   position:absolute;
+  margin:0;
   text-align:center;
   color:#fff;
   font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
 }
-.sec1 .copy h1,.sec1 .copy h2{ margin:0; font-weight:800; line-height:1.04 }
+.sec1 .copy h1,.sec1 .copy h2,.sec1 h2.copy{ margin:0; font-weight:900; line-height:1.06 }
 .sec1 .copy h1 span{ display:block }
-.sec1 .copy .l1{ font-size:2.530cqw }
-.sec1 .copy .l2{ font-size:4.374cqw }
-.sec1 .copy .l3{ font-size:1.805cqw }
-.sec1 .copy .sub{ font-size:1.351cqw; font-weight:400; line-height:1.3;
-                  margin:.85em 0 0 }
-.sec1 .copy .body{ font-size:1.141cqw; font-weight:300; line-height:1.45;
-                   margin:1.5em 0 0 }
-.sec1 .copy h2{ font-size:3.061cqw }
+.sec1 .l1{ font-size:2.271cqw }                 /* his 43.70 */
+.sec1 .l2{ font-size:3.927cqw }                 /* his 75.56 */
+.sec1 .l3{ font-size:1.621cqw }                 /* his 31.19 */
+.sec1 h2.copy{ font-size:2.749cqw; white-space:nowrap }   /* his 52.90 */
 
-/* the hero headline sits to the right of his motorway shield */
-.sec1 .head{ display:flex; align-items:center; justify-content:center;
-             gap:1.2cqw }
-.sec1 .head img{ flex:0 0 auto; width:4.607cqw; height:auto }
+/* HIS ROAD-SIGN FACE, standing in.
+   His subheads are Highway Gothic Expanded. It is not on Google Fonts —
+   checked, HTTP 400 for both spellings — and Overpass is, drawn from the same
+   FHWA Highway Gothic series, so that stands in.
+
+   It is not metrically the same, though, and at his size it re-wrapped his
+   one-line subhead into two and pushed it into the copy below. Measured on two
+   different lines it wants 0.742x and 0.736x to occupy the same measure, which
+   is a uniform difference in the face rather than a wrapping accident — so the
+   stand-in is set at 0.739 of his size and his line breaks hold exactly.
+
+   Put Highway Gothic Expanded in assets/brand/ and set --sub-fit to 1. */
+.sec1{ --sub-fit:0.739 }
+.sec1 .sub{
+  font-size:calc(1.230cqw * var(--sub-fit));    /* his 23.66 */
+  font-weight:400; line-height:1.28;
+  font-family:"Highway Gothic Expanded","Overpass","Be Vietnam Pro",Arial,sans-serif;
+}
+.sec1 .body{ font-size:1.025cqw; font-weight:300; line-height:1.42 }  /* his 19.72 */
+
+
+
 
 /* his button: the guide-sign green plate, with the copy laid over it */
 .sec1 .cta{ position:relative; display:inline-block; text-decoration:none }
