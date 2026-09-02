@@ -524,6 +524,22 @@ body.road-debug .lane-guide{opacity:.9}
   .signplate__copy .sub{font-size:3.4cqi}
 }
 
+/* --------------------------------------------------------------------------
+   COPY COLUMNS, MEASURED OFF HIS COMPOSITION
+   Every span below is where he actually put that block, as a share of the
+   1924-wide art column, read by tools/compare-layout.js. His copy sits in a
+   much narrower column than a default page would give it, and in a different
+   place in each section — centre-left in the hero, right in the second, near
+   centre in the third. Left to itself the page put the hero copy at 11-56%
+   where he has 32-48%, which is most of why the sections did not read like his.
+   ----------------------------------------------------------------------- */
+@media (min-width:901px){
+  #hero      .sec__body{margin-left:25%; max-width:26%}
+  #problem   .sec__body{margin-left:50%; max-width:26%}
+  #objection .sec__body{margin-left:42%; max-width:42%; margin-right:0}
+  #promise   .sec__body{margin-left:0;   max-width:40%}
+}
+
 /* --- The scene, built from the owner's canvas ---------------------------
    One layer over the whole page rather than a background per section, because
    his pieces overlap and flow past each other and a section boundary is a hard
@@ -534,6 +550,15 @@ body.road-debug .lane-guide{opacity:.9}
 .scene-piece{position:absolute;display:block;pointer-events:none;max-width:none;
              line-height:0}
 .scene-piece > svg{display:block;width:100%;height:100%}
+
+/* A tiled piece: one drawing repeated across the page with an overlap, so his
+   tree line reaches the edge of any screen without being stretched. The copies
+   are laid by scene-build.js, which is the only thing that knows how many fit.
+   Overflow is hidden so the run can start left of the page and end past its
+   right edge -- both of a tile's own vertical edges are ragged, and the point
+   is that you never see one. */
+.scene-tiles{overflow:hidden}
+.scene-tiles > img{position:absolute;top:0;height:100%;max-width:none;display:block}
 
 /* --- A slice of the composed artwork ------------------------------------
    Full bleed, aspect locked by the image's own proportions so his waves and

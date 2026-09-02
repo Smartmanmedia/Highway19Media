@@ -141,15 +141,18 @@
       "z": 80
     },
     {
-      "name": "Forest",
-      "file": "forest.webp",
+      "name": "Tree line",
+      "file": "tree-tile.webp",
       "role": "back",
       "x": 118.83,
       "y": 3287.49,
-      "w": 2207.92,
-      "h": 770.84,
-      "fit": "stretch",
-      "z": 20
+      "w": 964.57,
+      "h": 766.26,
+      "tile": {
+        "overlap": 150
+      },
+      "z": 20,
+      "_why": "His idea: one set of trees repeated horizontally with a 150px overlap, instead of one enormous forest that cannot stretch. Rasterised, not vector - the set is 4,185 shapes, so three across (12,555) would be worse than the 10,112-shape forest it replaces. As an image the browser decodes it once and every repeat after that is free, however wide the screen."
     },
     {
       "name": "Cloud2",
@@ -184,5 +187,5 @@
     }
   ],
   "_signs": "Hero Sign and Our sign are deliberately NOT placed here. They are in index.html with real HTML copy over the owner's plate, so the headlines stay selectable and findable rather than being pictures of words.",
-  "_z": "Paint order inside the scene layer. The sand goes down first and the water's edge cuts over it \u2014 the other way round buries his shoreline under the sand."
+  "_z": "Paint order inside the scene layer. The sand goes down first and the water's edge cuts over it — the other way round buries his shoreline under the sand."
 }

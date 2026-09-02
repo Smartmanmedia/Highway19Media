@@ -115,7 +115,14 @@
       return (a.z == null ? 80 : a.z) - (b.z == null ? 80 : b.z);
     }).forEach(function (p) {
       var el;
-      if (p.markup) {
+      if (p.tile) {
+        /* A TILED piece: one drawing repeated across the page with an overlap,
+           so a tree line reaches the edge of any screen without stretching and
+           without shipping a forest. The container is empty here; place() fills
+           it, because how many copies fit is a function of the page width. */
+        el = document.createElement('div');
+        el.className = 'scene-tiles';
+      } else if (p.markup) {
         /* Inlined, not an <img>. An <img> renders its SVG in an isolated
            context, so the multiply shadows inside his clouds and boat blend
            against nothing and come out flat grey. Inlined, they darken the
@@ -130,7 +137,7 @@
         el.src = p.src || ('assets/scene/' + p.file);
         el.alt = '';
       }
-      el.className = 'scene-piece';
+      el.className += (el.className ? ' ' : '') + 'scene-piece';
       el.dataset.name = p.name;
       /* NO z-index, and never a transform. Both create a stacking context, and
          a stacking context isolates blending — his multiply shadows then blend
@@ -151,6 +158,51 @@
      his vertical order and overlaps come through unchanged.
      ====================================================================== */
 
+  /* One drawing, repeated. His own idea, and the right one: a single tree set
+     stepped across the page with a 150px overlap reads as a continuous tree
+     line at any width, where one enormous forest could only be stretched.
+     The overlap is what hides the seam — step by less than the tile is wide
+     and each copy's ragged right edge is buried under the next copy's trees.
+
+     Rasterised on purpose. His set is 4,185 shapes; three across as vector
+     would be 12,555, worse than the 10,112-shape forest this replaces. As an
+     image the browser decodes it once and every repeat after that is free.
+
+     The container spans the full page, not his art column: a tree line that
+     stops at the column edge shows the grass behind it. */
+  function tile(n, p, S, pageW) {
+    var tileW = p.w * S;
+    var step  = Math.max(1, (p.w - (p.tile.overlap || 0)) * S);
+    var left  = (p.x - ART_X) * S;
+    /* Start the run left of the page edge so the first copy's own left edge,
+       which is as ragged as any other, is never the thing you see first, and
+       lay enough copies to reach past the right edge from there. */
+    var x0    = Math.min(left, 0) - step;
+    var count = Math.ceil((pageW - x0) / step) + 1;
+
+    n.el.style.left   = '0px';
+    n.el.style.width  = pageW.toFixed(1) + 'px';
+    n.el.style.height = (p.h * S).toFixed(1) + 'px';
+
+    /* Rebuild only when the count changes — a resize otherwise churns the DOM
+       on every frame of a drag for no visible difference. */
+    if (n.count !== count) {
+      n.el.innerHTML = '';
+      for (var i = 0; i < count; i++) {
+        var img = document.createElement('img');
+        img.src = p.src || ('assets/scene/' + p.file);
+        img.alt = '';
+        n.el.appendChild(img);
+      }
+      n.count = count;
+    }
+    for (var j = 0; j < n.el.children.length; j++) {
+      var c = n.el.children[j];
+      c.style.left  = (x0 + j * step).toFixed(1) + 'px';
+      c.style.width = tileW.toFixed(1) + 'px';
+    }
+  }
+
   function place() {
     var pts = buildMap();
     if (!pts) return;
@@ -170,6 +222,8 @@
       n.el.style.height = (p.fit === 'stretch'
         ? Math.max(p.h * S, mapY(pts, p.y + p.h) - top)
         : p.h * S).toFixed(1) + 'px';
+
+      if (p.tile) tile(n, p, S, pageW);
     });
 
     /* Bands stretch between their own mapped start and end — that is where all
