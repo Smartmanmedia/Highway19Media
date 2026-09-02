@@ -5,12 +5,18 @@
 const { chromium } = require('/home/user/storyboard-app/node_modules/playwright');
 const fs = require('fs');
 const SRC = process.argv[2];
+/* His ground is a different shape in every section — an ocean polygon in one,
+   a sand rect in the next — so the column can be given explicitly as x,width
+   when it cannot be found automatically. It is the same column either way:
+   the part of the artboard that maps to the page. */
+const COL = process.argv[3] ? process.argv[3].split(',').map(Number) : null;
 (async () => {
   const svg = fs.readFileSync(SRC, 'utf8');
   const [, , VW, VH] = /viewBox="([\d.\s-]+)"/.exec(svg)[1].trim().split(/\s+/).map(Number);
   let x0 = 0, cw = VW;
   const oc = /<polygon id="ocean" points="([^"]+)"/.exec(svg);
-  if (oc) { const p = oc[1].replace(/,/g,' ').split(/\s+/).map(Number);
+  if (COL) { x0 = COL[0]; cw = COL[1]; }
+  else if (oc) { const p = oc[1].replace(/,/g,' ').split(/\s+/).map(Number);
             const xs = p.filter((_, i) => i % 2 === 0);
             x0 = Math.min(...xs); cw = Math.max(...xs) - x0; }
 

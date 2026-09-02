@@ -1,0 +1,81 @@
+{
+  "file": "section-02.svg",
+  "artboard": {
+    "w": 1938.1,
+    "h": 931.4
+  },
+  "column": {
+    "x": 15.23,
+    "w": 1920.8
+  },
+  "bleed": {
+    "left": 15.23,
+    "right": 2.07
+  },
+  "aspect": 0.4849,
+  "layers": [
+    {
+      "name": "Clouds",
+      "shapes": 340,
+      "left": -15.17,
+      "top": -1.93,
+      "width": 126,
+      "height": 101.93,
+      "bleeds": true
+    },
+    {
+      "name": "Waves",
+      "shapes": 259,
+      "left": -15.17,
+      "top": -1.93,
+      "width": 126,
+      "height": 52.27,
+      "bleeds": true
+    },
+    {
+      "name": "Stright",
+      "shapes": 10,
+      "left": 15.11,
+      "top": 1.02,
+      "width": 4.95,
+      "height": 34.86,
+      "bleeds": false
+    },
+    {
+      "name": "Cloud4",
+      "shapes": 30,
+      "left": 71.9,
+      "top": 8.22,
+      "width": 26.91,
+      "height": 29.84,
+      "bleeds": false
+    },
+    {
+      "name": "Stright-2",
+      "shapes": 10,
+      "left": 15.11,
+      "top": 22.15,
+      "width": 4.95,
+      "height": 34.86,
+      "bleeds": false
+    },
+    {
+      "name": "Curve",
+      "shapes": 25,
+      "left": -0.79,
+      "top": 47.59,
+      "width": 20.82,
+      "height": 45.54,
+      "bleeds": true
+    },
+    {
+      "name": "Bad_road_sign",
+      "shapes": 5,
+      "left": 25.92,
+      "top": 63.71,
+      "width": 14.53,
+      "height": 26.46,
+      "bleeds": false
+    }
+  ]
+}

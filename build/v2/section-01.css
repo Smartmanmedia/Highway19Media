@@ -1,29 +1,4 @@
 /* ============================================================================
-   HIS OWN FONT FILES
-   Self-hosted rather than pulled from Google. Same family either way, but
-   these are the files his artwork was actually drawn against, so the metrics
-   are his and not a rebuild of them — and the page stops depending on a third
-   party to render its own headline.
-
-   Subset to Latin and compressed to WOFF2 by tools/subset_fonts.py: 673 KB of
-   TTF becomes 104 KB, and only the two weights this section sets are loaded.
-   ========================================================================= */
-@font-face{ font-family:"Be Vietnam Pro"; font-weight:300; font-style:normal;
-            font-display:swap; src:url("../../assets/fonts/BeVietnamPro-Light.woff2") format("woff2") }
-@font-face{ font-family:"Be Vietnam Pro"; font-weight:500; font-style:normal;
-            font-display:swap; src:url("../../assets/fonts/BeVietnamPro-Medium.woff2") format("woff2") }
-@font-face{ font-family:"Be Vietnam Pro"; font-weight:700; font-style:normal;
-            font-display:swap; src:url("../../assets/fonts/BeVietnamPro-Bold.woff2") format("woff2") }
-@font-face{ font-family:"Be Vietnam Pro"; font-weight:800; font-style:normal;
-            font-display:swap; src:url("../../assets/fonts/BeVietnamPro-ExtraBold.woff2") format("woff2") }
-@font-face{ font-family:"Be Vietnam Pro"; font-weight:900; font-style:normal;
-            font-display:swap; src:url("../../assets/fonts/BeVietnamPro-Black.woff2") format("woff2") }
-/* His road-sign face — the real one. HWYGEXPD.TTF, whose internal family name
-   is exactly the "Highway Gothic Expanded" his SVG asks for. */
-@font-face{ font-family:"Highway Gothic Expanded"; font-weight:400; font-style:normal;
-            font-display:swap; src:url("../../assets/fonts/HighwayGothic-Expanded.woff2") format("woff2") }
-
-/* ============================================================================
    SECTION ONE
    ----------------------------------------------------------------------------
    One rule holds this together: the section is 0.9409 as tall as it is wide,

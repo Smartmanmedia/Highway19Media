@@ -1,0 +1,51 @@
+/* ============================================================================
+   SECTION TWO — the beach
+   ----------------------------------------------------------------------------
+   Same rule as section one: the section is a fixed ratio of its own width and
+   everything inside is a percentage of that box. His artboard is 1938.1 wide
+   and his sand runs x 15.23 for 1920.8 — that sand IS the art column, the same
+   way the ocean was in section one, so the ratio is 931.4 / 1920.8.
+   ========================================================================= */
+
+.sec2{
+  position:relative;
+  width:100%;
+  aspect-ratio:1920.8 / 931.4;          /* 0.4849 */
+  container-type:inline-size;
+  /* his ocean carries on from section one behind the surf */
+  background:linear-gradient(90deg,#004ca2 0%,#045dc3 100%);
+  overflow:hidden;
+  isolation:isolate;
+}
+
+/* his sand: one rect with a vertical gradient, so a CSS gradient and no shapes */
+.sec2 .sand{
+  position:absolute; left:0; right:0; top:43.05%; bottom:0;
+  background:linear-gradient(180deg,#fec35f 0%,#fdf6e4 31%,#fdf6e4 100%);
+  z-index:0;
+}
+
+.sec2 [data-at]{ position:absolute; display:block }
+.sec2 img[data-at]{ height:auto }
+.sec2 .z-ground{ z-index:0 } .sec2 .z-road{ z-index:1 }
+.sec2 .z-copy{ z-index:2 }   .sec2 .z-cloud{ z-index:3 }
+
+/* his type, his sizes, his weights, his squeeze — all read out of the export */
+.sec2 .copy{
+  position:absolute; margin:0; text-align:center; color:#333;
+  font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
+}
+.sec2 [style*="--sx"]{ transform:scaleX(var(--sx)); transform-origin:50% 0 }
+.sec2 h2.copy{
+  margin:0; font-weight:900; line-height:1.06; font-size:2.275cqw;
+  /* his heading is one line, and his box is its ink width — which is exactly
+     the width at which a browser decides to wrap it */
+  white-space:nowrap;
+}
+.sec2 .sub{
+  font-size:1.538cqw; font-weight:400; line-height:1.28;
+  font-family:"Highway Gothic Expanded","Be Vietnam Pro",Arial,sans-serif;
+}
+.sec2 .sub span{ display:block; white-space:nowrap }
+.sec2 .body{ font-size:1.026cqw; font-weight:300; line-height:1.42 }
+.sec2 .body b{ font-weight:800 }
