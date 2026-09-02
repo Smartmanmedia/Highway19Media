@@ -516,7 +516,10 @@ body.road-debug .lane-guide{opacity:.9}
    white copy on a white ground when the scene bands went in. */
 #objection{padding-block:clamp(96px,12vw,168px)}
 #objection .sec__inner{text-align:center}
-#objection .sec__body{max-width:730px;margin:0 auto}
+/* Wide enough for "You've Been Down This Road Before" to hold one line at
+   desktop, as it does in the composed design, and to wrap on its own terms
+   below that rather than being forced to by a 730px cage. */
+#objection .sec__body{max-width:min(1040px,100%);margin:0 auto}
 #objection h2{font-size:clamp(2.1rem,4.2vw,3.1rem)}
 /* Colour comes from the band, not from here. An id would beat the band
    rule and this section would keep a dark grey on a dark sky. */
