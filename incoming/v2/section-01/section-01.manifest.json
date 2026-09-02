@@ -1,0 +1,144 @@
+{
+  "file": "section-01.svg",
+  "artboard": {
+    "w": 2011.33,
+    "h": 1810.6
+  },
+  "column": {
+    "x": 86.99,
+    "w": 1924.34
+  },
+  "bleed": {
+    "left": 86.99,
+    "right": 0
+  },
+  "aspect": 0.9409,
+  "layers": [
+    {
+      "name": "Clouds",
+      "shapes": 4330,
+      "left": -5.19,
+      "top": 0,
+      "width": 105.19,
+      "height": 100,
+      "bleeds": true
+    },
+    {
+      "name": "Stright",
+      "shapes": 10,
+      "left": 64.4,
+      "top": 0.06,
+      "width": 4.94,
+      "height": 17.93,
+      "bleeds": false
+    },
+    {
+      "name": "Hero_Sign",
+      "shapes": 16,
+      "left": 25.8,
+      "top": 9.33,
+      "width": 48.77,
+      "height": 19.31,
+      "bleeds": false
+    },
+    {
+      "name": "Stright-2",
+      "shapes": 10,
+      "left": 64.4,
+      "top": 14.05,
+      "width": 4.94,
+      "height": 17.93,
+      "bleeds": false
+    },
+    {
+      "name": "Cloud3",
+      "shapes": 16,
+      "left": 78.47,
+      "top": 29.58,
+      "width": 11.12,
+      "height": 11.89,
+      "bleeds": false
+    },
+    {
+      "name": "Stright-3",
+      "shapes": 10,
+      "left": 64.4,
+      "top": 30.33,
+      "width": 4.94,
+      "height": 17.93,
+      "bleeds": false
+    },
+    {
+      "name": "Highwaysign",
+      "shapes": 8,
+      "left": 30.14,
+      "top": 34.29,
+      "width": 4.61,
+      "height": 7.47,
+      "bleeds": false
+    },
+    {
+      "name": "Curve",
+      "shapes": 25,
+      "left": 48.56,
+      "top": 48.14,
+      "width": 20.79,
+      "height": 23.43,
+      "bleeds": false
+    },
+    {
+      "name": "Your_road_map",
+      "shapes": 7,
+      "left": 33.92,
+      "top": 56.24,
+      "width": 15.07,
+      "height": 3.3,
+      "bleeds": false
+    },
+    {
+      "name": "Cloud5",
+      "shapes": 30,
+      "left": -5.19,
+      "top": 64.1,
+      "width": 26.86,
+      "height": 15.35,
+      "bleeds": true
+    },
+    {
+      "name": "Curve-2",
+      "shapes": 25,
+      "left": 15.25,
+      "top": 66.3,
+      "width": 20.79,
+      "height": 23.43,
+      "bleeds": false
+    },
+    {
+      "name": "Stright-4",
+      "shapes": 10,
+      "left": 33.4,
+      "top": 66.33,
+      "width": 16.87,
+      "height": 5.25,
+      "bleeds": false
+    },
+    {
+      "name": "Boat",
+      "shapes": 41,
+      "left": 80.56,
+      "top": 67.47,
+      "width": 4.06,
+      "height": 11.12,
+      "bleeds": false
+    },
+    {
+      "name": "Bridge_sign",
+      "shapes": 9,
+      "left": 27.67,
+      "top": 80.91,
+      "width": 7.54,
+      "height": 7.07,
+      "bleeds": false
+    }
+  ]
+}
