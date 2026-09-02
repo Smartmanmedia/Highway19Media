@@ -1,0 +1,169 @@
+{
+  "canvas": {
+    "w": 2472.32,
+    "h": 5119.77
+  },
+  "art": {
+    "x": 288.9,
+    "w": 1924.33
+  },
+  "_note": "Positions are the owner's, read out of Highway_19_Website2.svg. The art column is x 288.9 wide 1924.33; anything outside it (the waves) is deliberate bleed.",
+  "anchors": [
+    {
+      "text": "A Clear Road",
+      "y": 650,
+      "sel": "#hero h1"
+    },
+    {
+      "text": "Great Work",
+      "y": 1537,
+      "sel": "#problem h2"
+    },
+    {
+      "text": "You've Been Down",
+      "y": 2440,
+      "sel": "#objection h2"
+    },
+    {
+      "text": "We Handle the",
+      "y": 3806,
+      "sel": "#promise h2"
+    },
+    {
+      "text": "Explore Our Services",
+      "y": 4345,
+      "sel": "#promise .sec__cta"
+    }
+  ],
+  "bands": [
+    {
+      "name": "sand",
+      "y": 1850,
+      "h": 1550,
+      "css": "linear-gradient(180deg,#fdf6e4 0%,#fec361 100%)",
+      "_note": "Behind everything between the water and the green. Pieces keep their own aspect, so on a page taller than his canvas they fall short of each other; this catches the gap in the right colour instead of the page showing through."
+    },
+    {
+      "name": "ocean",
+      "y": 0,
+      "h": 2065,
+      "css": "linear-gradient(90deg,#004ca2 0%,#045dc3 100%)"
+    },
+    {
+      "name": "grass",
+      "y": 3322,
+      "h": 1399,
+      "css": "linear-gradient(180deg,#006837 0%,#39b54a 100%)"
+    }
+  ],
+  "pieces": [
+    {
+      "name": "Cloud3",
+      "file": "cloud3.svg",
+      "role": "float",
+      "x": 1887.06,
+      "y": 586.03,
+      "w": 213.98,
+      "h": 215.27,
+      "parallax": 0.09
+    },
+    {
+      "name": "Boat",
+      "file": "boat.svg",
+      "role": "float",
+      "x": 1946.24,
+      "y": 1158.54,
+      "w": 78.18,
+      "h": 201.4,
+      "drift": "26,7,22"
+    },
+    {
+      "name": "Cloud4",
+      "file": "cloud4.svg",
+      "role": "float",
+      "x": 1856.95,
+      "y": 1618.26,
+      "w": 516.78,
+      "h": 277.96,
+      "parallax": 0.13
+    },
+    {
+      "name": "Cloud5",
+      "file": "cloud5.svg",
+      "role": "float",
+      "x": 225.1,
+      "y": 1643.06,
+      "w": 516.76,
+      "h": 277.96,
+      "parallax": 0.13
+    },
+    {
+      "name": "Waves",
+      "file": "waves.svg",
+      "role": "back",
+      "x": 35.63,
+      "y": 1922.42,
+      "w": 2436.7,
+      "h": 469.73
+    },
+    {
+      "name": "Deseret and sand",
+      "file": "deseret-and-sand.webp",
+      "role": "back",
+      "x": 226.93,
+      "y": 2234.4,
+      "w": 2015.15,
+      "h": 1410.9,
+      "fit": "stretch"
+    },
+    {
+      "name": "Cloud1",
+      "file": "cloud1.svg",
+      "role": "float",
+      "x": 1634.72,
+      "y": 3099.33,
+      "w": 484.23,
+      "h": 325.67,
+      "parallax": 0.16
+    },
+    {
+      "name": "Forest",
+      "file": "forest.webp",
+      "role": "back",
+      "x": 118.83,
+      "y": 3287.49,
+      "w": 2207.92,
+      "h": 770.84,
+      "fit": "stretch"
+    },
+    {
+      "name": "Cloud2",
+      "file": "cloud2.svg",
+      "role": "float",
+      "x": 404.83,
+      "y": 3330.26,
+      "w": 571.48,
+      "h": 352.12,
+      "parallax": 0.2
+    },
+    {
+      "name": "Trees",
+      "file": "trees.svg",
+      "role": "back",
+      "x": 224.49,
+      "y": 4240.47,
+      "w": 671.16,
+      "h": 362.68
+    },
+    {
+      "name": "End rocks",
+      "file": "end-rocks.svg",
+      "role": "front",
+      "x": 223.69,
+      "y": 4277.08,
+      "w": 2015.15,
+      "h": 842.69
+    }
+  ],
+  "_signs": "Hero Sign and Our sign are deliberately NOT placed here. They are in index.html with real HTML copy over the owner's plate, so the headlines stay selectable and findable rather than being pictures of words."
+}

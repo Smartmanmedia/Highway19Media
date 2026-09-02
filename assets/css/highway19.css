@@ -360,12 +360,15 @@ body.road-debug .lane-guide{opacity:.9}
    the same two colours on the wrong axis and reads as nothing like his.
    One gradient shared by every water section also means no seam where two of
    them meet. */
-.band-water   {background:linear-gradient(90deg,#004ba0 0%,#0561ca 100%);color:#fff}
+/* Transparent: the scenery is one continuous layer over the whole page
+   now, not a background per section. These classes survive only to say
+   what colour the COPY on each stretch has to be. */
+.band-water {background:transparent;color:#fff}
 /* Starts on #fdedd1, the exact bottom row of band-surf.webp, so the slice
    hands off to the flat band with nothing to see. His own stops carry on
    from there. */
-.band-sand  {background:linear-gradient(180deg,#fdedd1 0%,#fde5c1 91%,#fde5c1 100%)}
-.band-dune  {background:#fde5c1}
+.band-sand  {background:transparent}
+.band-dune  {background:transparent}
 /* The owner's green runs #006837 to #39b54a. The bright end will not carry
    light body copy — measured 3.33 against 4.5 — so the band stops short of
    it where text sits. The full range still appears in the artwork itself. */
@@ -374,7 +377,7 @@ body.road-debug .lane-guide{opacity:.9}
    #249843 is 3.6:1, both under the 4.5 body text needs. In his own
    composition the copy sits on the green SIGN PLATE, never on open
    green — this is the compromise until the layout does the same. */
-.band-grass {background:linear-gradient(180deg,#249843 0%,#0f7a3c 12%,#0b6d36 100%);color:#fff}
+.band-grass {background:transparent;color:#fff}
 
 /* Copy sitting on a sky band. The body grey is unreadable on #004ba0, so the
    whole type scale lifts rather than one heading being patched. */
@@ -388,7 +391,29 @@ body.road-debug .lane-guide{opacity:.9}
 /* Grass runs from #006837 to #2a9b45; white holds against both, the soft grey
    does not, so it is not used here. */
 .band-grass h1,.band-grass h2,.band-grass h3,.band-grass p,.band-grass li{color:#fff}
-.band-grass p{color:#e2f3e6}
+/* Pure white, not the tinted one: the copy now sits on his real forest green
+   rather than a flat band, and a tint that read fine on a solid colour
+   measures 3.5:1 on the canopy. */
+.band-grass p{color:#fff}
+
+/* Even pure white is only 4.1:1 on his forest green — the greens in this
+   design cannot carry body copy on their own. In his composition the words sit
+   on the SIGN PLATE, which is why it never shows there. Where a paragraph does
+   have to sit on open green, it gets a soft panel of his own darkest green
+   under it: enough to read, faint enough that it still looks like the forest.
+   Remove this the day the copy moves onto a plate. */
+.band-grass .sec__body > .body-copy,
+.band-grass .sec__cta{
+  position:relative;
+}
+.band-grass .sec__body > .body-copy::before{
+  content:"";
+  position:absolute;
+  inset:-0.7em -1.1em;
+  background:rgba(0,52,26,.42);
+  border-radius:10px;
+  z-index:-1;
+}
 .band-grass .sub,.band-grass .milestone p,.band-grass .milestone h3{color:#e2f3e6}
 /* The form paints its own white ground, so the band's light copy colour must
    not reach inside it. Scoped rather than blanket, because the next card added
@@ -448,6 +473,15 @@ body.road-debug .lane-guide{opacity:.9}
   .signplate__copy h2{font-size:7.6cqi}
   .signplate__copy .sub{font-size:3.4cqi}
 }
+
+/* --- The scene, built from the owner's canvas ---------------------------
+   One layer over the whole page rather than a background per section, because
+   his pieces overlap and flow past each other and a section boundary is a hard
+   edge. Positions come from assets/js/scene-build.js, which maps his canvas
+   onto this page using his own headings as registration.
+   --------------------------------------------------------------------- */
+.scene-band{position:absolute;left:0;right:0;pointer-events:none}
+.scene-piece{position:absolute;display:block;pointer-events:none;max-width:none}
 
 /* --- A slice of the composed artwork ------------------------------------
    Full bleed, aspect locked by the image's own proportions so his waves and
@@ -537,7 +571,7 @@ body.road-debug .lane-guide{opacity:.9}
    ========================================================================= */
 
 #hero{
-  background:linear-gradient(90deg,#004ba0 0%,#0561ca 100%);
+  background:transparent;
   color:#fff;
   padding-top:clamp(64px,7vw,104px);
   padding-bottom:clamp(96px,11vw,168px);

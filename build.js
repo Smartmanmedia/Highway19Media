@@ -15,8 +15,17 @@ fs.mkdirSync(OUT, { recursive: true });   /* dist/ is gitignored, so a fresh
 const read = p => fs.readFileSync(path.join(R, p), 'utf8');
 let html = read('index.html');
 const css = read('assets/css/highway19.css');
-const js = ['assets/js/cars-sprite.js', 'assets/js/road.js', 'assets/js/site.js']
-  .map(f => '/* ==== ' + f + ' ==== */\n' + read(f)).join('\n');
+/* Read the script list OUT of the page, in the order the page loads them,
+   rather than keeping a second copy here. A hardcoded list silently drops any
+   file added to index.html later: assets/js/scene.js was added, worked on the
+   dev server, and was simply absent from every published build until this was
+   found. A bundler that can omit a file without failing is worse than none. */
+const scripts = [...html.matchAll(/<script src="(assets\/js\/[^"]+)"><\/script>/gi)]
+  .map(m => m[1]);
+if (!scripts.length) throw new Error('no local scripts found in index.html');
+scripts.forEach(f => { if (!fs.existsSync(path.join(R, f))) throw new Error('missing script: ' + f); });
+const js = scripts.map(f => '/* ==== ' + f + ' ==== */\n' + read(f)).join('\n');
+console.log('scripts bundled: ' + scripts.length + '  (' + scripts.map(f => f.split('/').pop()).join(', ') + ')');
 
 if (/<\/script>/i.test(js)) throw new Error('script payload contains </script>');
 
