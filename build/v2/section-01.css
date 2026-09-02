@@ -134,10 +134,17 @@
 /* his button: the guide-sign green plate, with the copy laid over it */
 .sec1 .cta{ position:relative; display:inline-block; text-decoration:none }
 .sec1 .cta img{ display:block; width:100% }
+/* Centred in the green plate, which starts where his triangle ends: the
+   triangle runs 0–67.8 of a 290.03-wide button, so the label's space is
+   23.37%–100% and its centre is 61.7%, not the 60% a naive box gave. */
 .sec1 .cta span{
-  position:absolute; left:26%; right:6%; top:50%; transform:translateY(-50%);
-  color:#fff; font-weight:700; font-size:5.6cqi; white-space:nowrap;
+  position:absolute; left:23.37%; right:0; top:50%; transform:translateY(-50%);
+  /* his 20.52 ExtraBold — 1.066% of the column, and the button is 15.07% of
+     it, so 7.07 of the button's own width */
+  color:#fff; font-weight:800; font-size:7.07cqi; white-space:nowrap;
+  text-align:center;
 }
+.sec1 svg.z-sign{ position:absolute; display:block; height:auto }
 
 /* --- HIS HORIZONTAL SCALE ------------------------------------------------
    Every text block in his file carries a scale(k 1): the headlines .97, the
