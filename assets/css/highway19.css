@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Anek+Latin:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;700;800&display=swap');
 
 /* ============================================================================
    Highway 19 Media — home page
@@ -71,11 +71,23 @@
   --concrete:#f2f1ed;
 
   /* ── Type ──────────────────────────────────────────────────────────────── */
-  /* "Anke" isn't a released family; Anek Latin is the closest match and does
-     read as signage. If you have a licensed file under that name, drop the
-     .woff2 in and swap these two lines. */
-  --font-sign:"Anek Latin","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
-  --font-body:"Anek Latin","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  /* HIS fonts, read out of his own file rather than guessed. Every run in the
+     composition is one of two families:
+       Be Vietnam Pro — Black 800 headlines, ExtraBold 700 buttons,
+                        Medium 500 and Light 300 body. On Google Fonts.
+       Highway Gothic Expanded — the road-sign lettering, on the guide-sign
+                        panels and the Our sign plate. NOT a Google font and
+                        not in this project; the panels are his artwork so
+                        they already carry it, but the live copy on the Our
+                        sign plate falls back until he hands over the webfont.
+     This was Anek Latin, picked as a stand-in before his file existed. It is
+     wider per character than Be Vietnam Pro, which is the whole reason his
+     two-line headlines were coming out at four and five lines in the same
+     column at the same size. */
+  --font-sign:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  --font-body:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  /* His road-sign face. Falls back to the body stack until the file lands. */
+  --font-plate:"Highway Gothic Expanded","HighwayGothicExpanded",var(--font-sign);
 
   /* ── Rhythm ────────────────────────────────────────────────────────────── */
   --shell:1200px;
@@ -451,16 +463,26 @@ body.road-debug .lane-guide{opacity:.9}
    off the sign. One variable per gantry, and both derive from it. */
 .gantry__truss{height:calc(var(--plate-w) * var(--truss-ratio, .167))}
 
-/* Hero: his plate at its designed size, truss reaching both edges.
-   179.6 of truss against a 1076-wide plate = .1669 */
-#hero .gantry{--plate-w:min(1076px,62vw); --truss-ratio:.1669}
+/* Both plates are HIS SIZE, read out of the files he exported rather than
+   guessed. hero-plate.svg is 1076 wide on a 1924-wide art column = 55.9% of
+   the page; our-plate.svg is 946 = 49.2%. The px cap is that same drawing at
+   1:1, which it reaches when the page is as wide as his column (1925px) — so
+   the plate grows with the page up to his designed size and then stops, and
+   past that the truss reveals more of itself, which is what he asked for:
+   "make that poll stretchable starting with our size and when u zoom out more
+   poll can be revealed stretched to the end of the screen".
+   The truss ratio is the tile's own 179.6 height against each plate. */
+#hero .gantry{--plate-w:min(1076px,55.9vw); --truss-ratio:.1669}
 #hero .gantry__plate{width:var(--plate-w)}
 
-/* Section seven: plate on the left of its column, truss running off the right
-   edge of the screen, which is how he drew it.
-   179.6 of truss against a 946-wide plate = .1898 */
-#promise .gantry{width:calc(100% + var(--gutter) + 6vw);
-                 --plate-w:min(946px,52vw); --truss-ratio:.1898}
+/* His Our_sign spans 37.9% → 102.9% of the art column: plate to 87.0%, then
+   truss off the right edge of the page. The copy column it lives in is
+   45%–80%, so the sign has to escape that column on both sides. Percentages
+   here resolve against .sec__body, which is 35% of the section — the
+   arithmetic is (37.9 − 45) / 35 and (102.9 − 37.9) / 35, written out so the
+   numbers stay checkable against tools/compare-layout.js. */
+#promise .gantry{margin-left:-20.3%; width:185.7%;
+                 --plate-w:min(946px,49.2vw); --truss-ratio:.1898}
 #promise .gantry__plate{width:var(--plate-w)}
 
 /* --------------------------------------------------------------------------
@@ -479,11 +501,13 @@ body.road-debug .lane-guide{opacity:.9}
   max-width:840px;
   margin:0 0 clamp(20px,2.4vw,34px);
 }
-/* In his composition the plate runs from 38% of the art column to 103% — it
-   bleeds off the right edge, with the truss carrying on past it. Boxing it
+/* In his composition the sign runs from 37.9% of the art column to 102.9% —
+   it bleeds off the right edge, with the truss carrying on past it. Boxing it
    inside the copy column instead put the whole sign on the wrong side of the
-   page and shrank it to 636px. */
-#promise .signplate{margin-left:0}
+   page and shrank it to 636px; the 840px cap above did the same thing a
+   second way, so it is lifted here. The escape itself is on #promise .gantry,
+   with the arithmetic. */
+#promise .signplate{max-width:none}
 #promise .sec__body{ text-align:left }
 /* The CTA container was full width, so it measured 44-89% against his
    57-69%. Shrink it to its button. */
@@ -491,8 +515,14 @@ body.road-debug .lane-guide{opacity:.9}
 .signplate__art{display:block;width:100%;height:auto}
 .signplate__copy{
   position:absolute;
-  left:17.4%;                /* x 217 of 1245 — where his text began       */
-  right:24.5%;               /* clear of the plate's right edge at x 947   */
+  /* Shares of the PLATE (946 wide), not of the whole 1245-wide sign — the
+     element these are measured against is .gantry__plate, and using the sign's
+     width made the copy area 58% of the plate where his is 61%, and put it
+     22px too far left. His copy runs 49%–79% of the art column against a plate
+     spanning 37.9%–87.0%, which is these two numbers. The old, narrower box
+     was cutting his two-line headline into five. */
+  left:22.6%;                /* canvas x 1232 of a plate starting at 1018  */
+  right:16.4%;               /* canvas x 1809 against its right edge, 1964 */
   top:50%;transform:translateY(-50%);
 }
 .signplate__copy h2{
@@ -552,10 +582,10 @@ body.road-debug .lane-guide{opacity:.9}
   }
   /* left edge, then width — his span is left..right, written out so the
      arithmetic against tools/compare-layout.js is visible */
-  #hero      .sec__body{margin-left:25%; width:23%; max-width:none} /* 25–48 */
-  #problem   .sec__body{margin-left:49%; width:24%; max-width:none} /* 49–73 */
-  #objection .sec__body{margin-left:43%; width:40%; max-width:none} /* 43–83 */
-  #promise   .sec__body{margin-left:45%; width:34%; max-width:none} /* 45–79 */
+  #hero      .sec__body{margin-left:25%; width:27%; max-width:none} /* 25–52 */
+  #problem   .sec__body{margin-left:49%; width:27%; max-width:none} /* 49–76 */
+  #objection .sec__body{margin-left:43%; width:45%; max-width:none} /* 43–88 */
+  #promise   .sec__body{margin-left:45%; width:35%; max-width:none} /* 45–80 */
 
   /* And every line is CENTRED in that column. Not a detail: he set all four
      sections ragged-both-sides on the column axis, and left-aligned copy in a
@@ -579,8 +609,8 @@ body.road-debug .lane-guide{opacity:.9}
   #objection .sec__body{position:relative}
   #objection .headline{justify-content:flex-start}
   #objection .headline .sign{
-    position:absolute;top:0;right:100%;margin-right:7.5%;
-    width:32.5%;height:auto;
+    position:absolute;top:0;right:100%;margin-right:6.7%;
+    width:28.9%;height:auto;
   }
 
   /* His promise copy is LEFT-aligned inside the green plate, with the arrow
@@ -1207,4 +1237,67 @@ body.road-debug #road-dev{display:block}
 @media (prefers-reduced-motion:reduce){
   .btn,.card{transition:none}
   .btn:hover,.card:hover{transform:none}
+}
+
+/* ============================================================================
+   16. TYPE, TAKEN FROM HIS COMPOSITION
+   Last in the file on purpose: these have to beat the per-section rules above.
+   Every size and weight is HIS, read out of Website2.svg — not measured by
+   eye, not scaled by ratio, just the number he set.
+
+   Now that the page uses his own family this is a straight copy. His art
+   column is 1924.33 units wide and maps to the page width, so a size of N in
+   his file is N/1924.33 of the page. The px cap is that same size at 1:1,
+   which the page reaches at a 1925px window — so the type grows with the
+   artwork up to what he drew and then stops, exactly as the sign plates do.
+
+   Weights are his too: Black 800 headlines, Regular 400 subheads, Light 300
+   body. Below 901px the mobile rules take over; his canvas is a desktop
+   drawing.
+   ========================================================================= */
+
+@media (min-width:901px){
+  /* His hero headline is a STACK of three sizes in one heading */
+  #hero h1{line-height:1.04;font-weight:800}
+  #hero h1 > span{display:block}
+  #hero h1 > span:nth-child(1){font-size:min(48.68px, 2.530vw)}  /* A Clear Road      */
+  #hero h1 > span:nth-child(2){font-size:min(84.17px, 4.374vw)}  /* Forward           */
+  #hero h1 > span:nth-child(3){font-size:min(34.74px, 1.805vw)}  /* for Your Business */
+
+  #hero      .sub      {font-size:min(26.00px, 1.351vw); font-weight:400}
+  #hero      .body-copy{font-size:min(21.96px, 1.141vw); font-weight:300}
+
+  #problem   h2        {font-size:min(58.90px, 3.061vw); font-weight:800}
+  #problem   .sub      {font-size:min(26.00px, 1.351vw); font-weight:400}
+  #problem   .body-copy{font-size:min(21.96px, 1.141vw); font-weight:300}
+
+  #objection h2        {font-size:min(48.68px, 2.530vw); font-weight:800}
+  #objection .sub      {font-size:min(33.00px, 1.715vw); font-weight:400}
+  #objection .body-copy{font-size:min(21.96px, 1.141vw); font-weight:300}
+
+  /* THE OUR SIGN PLATE — the one place his numbers cannot be used as-is.
+     His plate copy is Highway Gothic Expanded at 66.64/30.49. That face is
+     not a webfont we have (it is not on Google Fonts), so it falls back to
+     Be Vietnam Pro, which is materially wider: his headline needs 681 units
+     where the plate's copy area is 578, so at his size it ran to four lines
+     and pushed the subhead clean off the bottom of the plate.
+
+     Sized in cqi against the PLATE instead, so it holds whatever the plate
+     is doing: 5.85cqi fits "We Handle the Marketing." on
+     one line in the fallback at every width, with a little margin, because the
+     plate and its copy area scale together. Put Highway Gothic Expanded in
+     assets/brand/ and these go back to his min(66.64px, 3.463vw). */
+  #promise   h2        {font-size:5.85cqi; font-weight:400;
+                        font-family:var(--font-plate)}
+  /* His weight here is 400, and that is the one weight of his we do not use:
+     white on his plate green measures 4.15:1, which clears the bar for BOLD
+     text at this size (3.0) but not for regular (4.5). Bold is the smallest
+     departure that keeps the line readable; darkening his plate would change
+     his artwork, which is worse. Revisit if the plate colour ever moves. */
+  #promise   .sub      {font-size:3.22cqi; font-weight:700;
+                        font-family:var(--font-plate)}
+  #promise   .body-copy{font-size:min(26.00px, 1.351vw); font-weight:500}
+
+  /* His two buttons are both 22.86 ExtraBold */
+  #hero .btn, #promise .btn{font-size:min(22.86px, 1.188vw); font-weight:700}
 }

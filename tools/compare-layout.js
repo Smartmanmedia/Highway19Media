@@ -35,9 +35,36 @@ const PAIRS = [
   /* --- his composition --- */
   const design = await (async () => {
     const p = await browser.newPage({ viewport:{ width:1200, height:900 } });
-    await p.setContent('<style>html,body{margin:0}svg{display:block;width:2472px}</style>' +
+    await p.setContent('<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;700;800&display=block"><style>html,body{margin:0}svg{display:block;width:2472px}</style>' +
       fs.readFileSync(ROOT + '/incoming/Website2.svg','utf8'));
+    /* His export names each style as its own family — BeVietnamPro-Black,
+       BeVietnamPro-Light, and so on — and only some runs carry the real
+       "Be Vietnam Pro" as a fallback. The ones that do not silently render in
+       whatever the browser has, which is narrower, and then every width
+       measured off them is wrong. Map his style names onto the real family at
+       the right weight, and leave the road-sign face alone: Highway Gothic
+       Expanded is not a webfont we have, and pretending otherwise would make
+       these numbers look right while being wrong. */
+    await p.evaluate(() => {
+      const W = { Thin:100, ExtraLight:200, Light:300, Regular:400, Medium:500,
+                  SemiBold:600, Bold:700, ExtraBold:800, Black:900 };
+      let mapped = 0, sign = 0;
+      document.querySelectorAll('svg text, svg tspan').forEach(n => {
+        const fam = (n.getAttribute('font-family') ||
+                     getComputedStyle(n).fontFamily || '').replace(/["']/g, '');
+        const m = /BeVietnamPro-(\w+)/.exec(fam);
+        if (m) { n.style.fontFamily = '"Be Vietnam Pro", sans-serif';
+                 if (W[m[1]]) n.style.fontWeight = W[m[1]];
+                 mapped++; }
+        else if (/HighwayGothic/i.test(fam)) sign++;
+      });
+      window.__fontFix = { mapped, sign };
+    });
     await p.waitForTimeout(5000);
+    const fix = await p.evaluate(() => window.__fontFix);
+    console.log('  his type: ' + fix.mapped + ' runs mapped onto Be Vietnam Pro, ' +
+                fix.sign + ' left in Highway Gothic Expanded (no webfont — ' +
+                'those widths are approximate)\n');
     const out = await p.evaluate(() => {
       const svg = document.querySelector('svg'), sr = svg.getBoundingClientRect();
       const k = 2472.32 / sr.width;
