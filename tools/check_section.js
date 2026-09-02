@@ -6,7 +6,11 @@ const { chromium } = require('/home/user/storyboard-app/node_modules/playwright'
 const http = require('http'), fs = require('fs'), path = require('path');
 const ROOT = path.join(__dirname, '..');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const HIS = JSON.parse(fs.readFileSync(ROOT + '/incoming/v2/section-01/section-01.text.json','utf8'));
+/* which section, and how wide: node tools/check_section.js 02 1400 */
+const SEC = (process.argv[2] || '01').padStart(2, '0');
+const W   = parseInt(process.argv[3] || '1400', 10);
+const HIS = JSON.parse(fs.readFileSync(
+  ROOT + '/incoming/v2/section-' + SEC + '/section-' + SEC + '.text.json', 'utf8'));
 const PAIRS = [
   ['A Clear Road',      '.sec1 h1'],
   ["You've done",       '.sec1 .copy.sub'],
@@ -23,13 +27,12 @@ const PAIRS = [
   await new Promise(r => srv.listen(8966, r));
   const b = await chromium.launch({ executablePath:'/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
     args:['--no-proxy-server','--ignore-certificate-errors','--no-sandbox'] });
-  const W = parseInt(process.argv[2] || '1400', 10);
   const p = await b.newPage({ viewport:{ width:W, height:Math.round(W*0.95) } });
-  await p.goto('http://127.0.0.1:8966/build/v2/section-01.html', { waitUntil:'load' });
+  await p.goto('http://127.0.0.1:8966/build/v2/section-' + SEC + '.html', { waitUntil:'load' });
   await p.evaluate(() => document.fonts.ready);
   await sleep(2500);
   const mine = await p.evaluate(() => {
-    const sec = document.querySelector('.sec1').getBoundingClientRect();
+    const sec = document.querySelector('section[class^="sec"]').getBoundingClientRect();
     const ink = el => { const r = document.createRange(); r.selectNodeContents(el);
       const bs = [...r.getClientRects()].filter(x => x.width > 1 && x.height > 4);
       if (!bs.length) return null;
@@ -37,7 +40,7 @@ const PAIRS = [
       return { left:(l-sec.left)/sec.width*100, width:(rt-l)/sec.width*100,
                top:(Math.min(...bs.map(x=>x.top))-sec.top)/sec.height*100, lines:bs.length }; };
     const out = {};
-    document.querySelectorAll('.sec1 .copy').forEach(el => {
+    document.querySelectorAll('[class^="sec"] .copy').forEach(el => {
       const k = (el.textContent || '').trim().replace(/\s+/g,' ').slice(0, 18);
       /* For a block he squeezes, the element's own rect already carries the
          transform, and its box is his measure by construction (his width over
@@ -58,7 +61,7 @@ const PAIRS = [
   });
   await b.close(); srv.close();
 
-  console.log('section one at ' + W + 'px — his copy vs the page\n');
+  console.log('section ' + SEC + ' at ' + W + 'px — his copy vs the page\n');
   console.log('  block                        his                page              drift');
   let bad = 0;
   HIS.filter(h => h.text.length > 3).forEach(h => {
