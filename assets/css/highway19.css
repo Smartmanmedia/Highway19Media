@@ -353,13 +353,15 @@ body.road-debug .lane-guide{opacity:.9}
 /* Each band ends on the exact colour the slice above or below it begins
    with, sampled from the slice itself. That is what makes the joins
    invisible — not a strip of artwork laid over a guessed seam. */
-/* HORIZONTAL. Measured off his own linear-gradient-3: x1 293.7 to x2 2213.7
-   at a constant y — left to right, not top to bottom. Built vertically it is
-   the same two colours and still looks nothing like his sky. Because every
-   sky section shares one horizontal gradient, there is also no seam where two
-   of them meet. */
-.band-sky   {background:linear-gradient(90deg,#004ba0 0%,#0561ca 100%);color:#fff}
-/* Starts on #fdedd1, the exact bottom row of band-ocean.webp, so the slice
+/* Open water, not sky. The page is a top-down aerial of the Gulf coast: deep
+   water, surf, sand, desert, forest — which is why the gradient is HORIZONTAL.
+   Measured off his own linear-gradient-3: x1 293.7 to x2 2213.7 at a constant
+   y, #004ba0 to #0561ca left to right. Built as a vertical sky gradient it is
+   the same two colours on the wrong axis and reads as nothing like his.
+   One gradient shared by every water section also means no seam where two of
+   them meet. */
+.band-water   {background:linear-gradient(90deg,#004ba0 0%,#0561ca 100%);color:#fff}
+/* Starts on #fdedd1, the exact bottom row of band-surf.webp, so the slice
    hands off to the flat band with nothing to see. His own stops carry on
    from there. */
 .band-sand  {background:linear-gradient(180deg,#fdedd1 0%,#fde5c1 91%,#fde5c1 100%)}
@@ -367,13 +369,18 @@ body.road-debug .lane-guide{opacity:.9}
 /* The owner's green runs #006837 to #39b54a. The bright end will not carry
    light body copy — measured 3.33 against 4.5 — so the band stops short of
    it where text sits. The full range still appears in the artwork itself. */
-.band-grass {background:linear-gradient(180deg,#249843 0%,#39b54a 100%);color:#fff}
+/* Meets the land slice on #249843, then darkens rather than running on to
+   his #39b54a. Measured: white body copy on #39b54a is 2.7:1 and on
+   #249843 is 3.6:1, both under the 4.5 body text needs. In his own
+   composition the copy sits on the green SIGN PLATE, never on open
+   green — this is the compromise until the layout does the same. */
+.band-grass {background:linear-gradient(180deg,#249843 0%,#0f7a3c 12%,#0b6d36 100%);color:#fff}
 
 /* Copy sitting on a sky band. The body grey is unreadable on #004ba0, so the
    whole type scale lifts rather than one heading being patched. */
-.band-sky h1,.band-sky h2,.band-sky h3,.band-sky p,.band-sky li{color:#fff}
-.band-sky .sec__lead,.band-sky .sub{color:#dce9f7}
-.band-sky p{color:#c8dcf1}
+.band-water h1,.band-water h2,.band-water h3,.band-water p,.band-water li{color:#fff}
+.band-water .sec__lead,.band-water .sub{color:#dce9f7}
+.band-water p{color:#d9e8f8}
 /* Light bands keep the soft grey; dark ones cannot. Naming both means adding
    a band later is one line, not a hunt for whatever is still dark on dark. */
 .band-white .sub,.band-sand .sub,.band-dune .sub,.band-concrete .sub{color:var(--ink-soft)}
@@ -424,7 +431,9 @@ body.road-debug .lane-guide{opacity:.9}
   line-height:1.2;
   margin:0;
   color:#fff;
-  font-weight:600;
+  /* 700, not 600: white on his plate green is 4.2:1, which clears the bar for
+     bold text at this size but not for regular. */
+  font-weight:700;
 }
 /* Below the point where the plate can hold two lines of headline legibly, the
    sign becomes a band behind the copy rather than a shrinking billboard. */

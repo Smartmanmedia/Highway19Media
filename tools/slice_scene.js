@@ -31,7 +31,7 @@ const SLICES = [
      across its width, or the band butted against it can never match. His
      waves finish at 2393 and his sand rect runs to 2951, so 2460 is safely
      into flat sand; above, 1900 is clear sky. */
-  { name: 'ocean', y0: 1900, y1: 2460 },
+  { name: 'surf', y0: 1900, y1: 2460 },
   { name: 'land',  y0: 2600, y1: 4300 }
 ];
 
