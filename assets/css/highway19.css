@@ -391,7 +391,7 @@ body.road-debug .lane-guide{opacity:.9}
 .sec__art--front{z-index:2}
 /* Sections carrying a scenery strip reserve room for it, so the copy is
    never pushed onto the artwork by a longer line or a narrower window. */
-#whyus{padding-bottom:calc(var(--sec-pad) + clamp(120px,20vw,300px))}
+#promise{padding-top:calc(var(--sec-pad) + clamp(150px,24vw,360px))}
 .sec__art img{display:block;width:100%;height:auto}
 
 .band-blue    {background:var(--blue-700);color:#fff}
