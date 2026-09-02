@@ -85,7 +85,7 @@ const SHAPE_LIMIT = 2000;          /* over this, raster beats vector */
       }, png.toString('base64'));
       out = { ext: 'webp', bytes: Buffer.from(url.split(',')[1], 'base64') };
     } else {
-      const svgText = await page.evaluate(name => {
+      let svgText = await page.evaluate(name => {
         const src = document.querySelector('svg');
         const target = [...src.querySelectorAll('g')].find(g =>
           (g.getAttribute('data-name') || g.getAttribute('id')) === name);
@@ -96,6 +96,28 @@ const SHAPE_LIMIT = 2000;          /* over this, raster beats vector */
           b.height.toFixed(2) + '" viewBox="' + [b.x,b.y,b.width,b.height].map(n=>n.toFixed(2)).join(' ') +
           '">\n' + (defs ? defs.outerHTML : '') + '\n' + target.outerHTML + '\n</svg>\n';
       }, L.name);
+      /* Illustrator writes blend modes as an XML attribute, which every
+         browser ignores — a "multiply" shadow then renders as flat grey and
+         the piece looks like it has no shadow at all. Lifting the markup
+         straight out of the DOM carries that bug through untouched, which is
+         exactly what happened: 30 shadows across the scene, all dead. */
+      var moved = 0;
+      svgText = svgText.replace(/\smix-blend-mode="([a-z-]+)"/g, function (m, mode) {
+        moved++; return ' style="mix-blend-mode:' + mode + '"';
+      });
+      if (moved) console.log('    ' + L.name + ': ' + moved + ' blend mode(s) -> inline CSS');
+
+      /* Every piece carries a copy of his whole <defs>. Inlined side by side —
+         which they must be, or their shadows cannot see the page — they would
+         fight over every gradient id and repaint each other. Prefix per file. */
+      var ids = new Set([...svgText.matchAll(/\bid="([^"]+)"/g)].map(m => m[1]));
+      [...ids].sort((a,b) => b.length - a.length).forEach(function (id) {
+        var q = id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        svgText = svgText
+          .replace(new RegExp('\\bid="' + q + '"', 'g'), 'id="' + file + '-' + id + '"')
+          .replace(new RegExp('url\\(#' + q + '\\)', 'g'), 'url(#' + file + '-' + id + ')')
+          .replace(new RegExp('(\\b(?:xlink:)?href=")#' + q + '"', 'g'), '$1#' + file + '-' + id + '"');
+      });
       out = { ext: 'svg', bytes: Buffer.from(svgText, 'utf8') };
     }
     fs.writeFileSync(OUT + file + '.' + out.ext, out.bytes);

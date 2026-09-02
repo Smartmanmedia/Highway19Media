@@ -438,6 +438,19 @@ body.road-debug .lane-guide{opacity:.9}
   max-width:840px;
   margin:0 0 clamp(20px,2.4vw,34px);
 }
+/* In his composition the plate runs from 38% of the art column to 103% — it
+   bleeds off the right edge, with the truss carrying on past it. Boxing it
+   inside the copy column instead put the whole sign on the wrong side of the
+   page and shrank it to 636px. */
+#promise .signplate{
+  max-width:none;
+  width:calc(100% + var(--gutter) + 4vw);
+  margin-left:0;
+}
+#promise .sec__body{ text-align:left }
+/* The CTA container was full width, so it measured 44-89% against his
+   57-69%. Shrink it to its button. */
+#promise .sec__cta{display:inline-flex}
 .signplate__art{display:block;width:100%;height:auto}
 .signplate__copy{
   position:absolute;
@@ -481,7 +494,9 @@ body.road-debug .lane-guide{opacity:.9}
    onto this page using his own headings as registration.
    --------------------------------------------------------------------- */
 .scene-band{position:absolute;left:0;right:0;pointer-events:none}
-.scene-piece{position:absolute;display:block;pointer-events:none;max-width:none}
+.scene-piece{position:absolute;display:block;pointer-events:none;max-width:none;
+             line-height:0}
+.scene-piece > svg{display:block;width:100%;height:100%}
 
 /* --- A slice of the composed artwork ------------------------------------
    Full bleed, aspect locked by the image's own proportions so his waves and

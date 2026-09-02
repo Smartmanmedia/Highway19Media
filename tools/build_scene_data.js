@@ -14,7 +14,17 @@ scene.pieces.forEach(p => {
   if (!fs.existsSync(f)) throw new Error('missing asset: ' + p.file);
   const buf = fs.readFileSync(f);
   total += buf.length;
-  p.src = 'data:' + MIME[path.extname(f)] + ';base64,' + buf.toString('base64');
+  if (path.extname(f) === '.svg') {
+    /* SVG travels as MARKUP, not a data URI. An <img> renders an SVG in an
+       isolated context, so a multiply shadow inside it blends against nothing
+       and comes out flat grey — measured #666666 as an <img> against #022751
+       inlined, over the same blue. Inlining is the only way his shadows can
+       see the page they sit on, and baking them into a PNG would be worse
+       still: the shadow has to darken whatever it happens to be over. */
+    p.markup = buf.toString('utf8').replace(/<\?xml[^>]*\?>\s*/, '');
+  } else {
+    p.src = 'data:' + MIME[path.extname(f)] + ';base64,' + buf.toString('base64');
+  }
 });
 
 fs.writeFileSync(ROOT + '/assets/js/scene-data.js',

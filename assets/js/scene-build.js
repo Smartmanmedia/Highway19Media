@@ -101,18 +101,28 @@
     });
 
     scene.pieces.forEach(function (p) {
-      var img = document.createElement('img');
-      /* p.src is a data URI baked in at build time — the artifact host
-         blocks external images, and these are created at runtime so the
-         HTML inliner never sees them. */
-      img.src = p.src || ('assets/scene/' + p.file);
-      img.alt = '';
-      img.className = 'scene-piece';
-      img.dataset.name = p.name;
-      if (p.parallax) img.setAttribute('data-parallax', p.parallax);
-      if (p.drift) img.setAttribute('data-drift', p.drift);
-      (p.role === 'front' ? front : back).appendChild(img);
-      nodes.push({ el: img, piece: p });
+      var el;
+      if (p.markup) {
+        /* Inlined, not an <img>. An <img> renders its SVG in an isolated
+           context, so the multiply shadows inside his clouds and boat blend
+           against nothing and come out flat grey. Inlined, they darken the
+           water and the grass they actually sit on. */
+        el = document.createElement('div');
+        el.innerHTML = p.markup;
+        var svg = el.querySelector('svg');
+        if (svg) { svg.setAttribute('width', '100%'); svg.setAttribute('height', '100%');
+                   svg.setAttribute('preserveAspectRatio', 'none'); }
+      } else {
+        el = document.createElement('img');
+        el.src = p.src || ('assets/scene/' + p.file);
+        el.alt = '';
+      }
+      el.className = 'scene-piece';
+      el.dataset.name = p.name;
+      if (p.parallax) el.setAttribute('data-parallax', p.parallax);
+      if (p.drift) el.setAttribute('data-drift', p.drift);
+      (p.role === 'front' ? front : back).appendChild(el);
+      nodes.push({ el: el, piece: p });
     });
   }
 
