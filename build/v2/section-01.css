@@ -1,0 +1,85 @@
+/* ============================================================================
+   SECTION ONE
+   ----------------------------------------------------------------------------
+   One rule holds this together: the section is 0.9409 as tall as it is wide,
+   because that is what Adam drew — a 1924.34-wide art column, 1810.6 tall.
+   Every layer below is a percentage of that box, straight off his export.
+   Nothing measures anything at runtime; there is no JavaScript here at all.
+   ========================================================================= */
+
+.sec1{
+  --col: 1924.34;              /* his art column, the box percentages resolve in */
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1924.34 / 1810.6;
+  /* his ocean is one polygon with a horizontal gradient — a CSS gradient here,
+     no shapes at all, and it stretches to any screen */
+  background: linear-gradient(90deg, #004ca2 0%, #045dc3 100%);
+  overflow: hidden;            /* the bleed leaves by the left edge */
+  isolation: isolate;
+}
+
+/* every piece is placed the same way, so there is one rule rather than nine */
+.sec1 [data-at]{ position:absolute; display:block; }
+.sec1 img[data-at]{ height:auto; }
+
+/* --- z, as he set it: clouds over everything, the sign just under them ---- */
+.sec1 .z-ground { z-index:0 }
+.sec1 .z-road   { z-index:1 }
+.sec1 .z-copy   { z-index:2 }
+.sec1 .z-sign   { z-index:3 }
+.sec1 .z-cloud  { z-index:4 }
+
+/* --- the gantry ----------------------------------------------------------
+   His truss is 4 cells each side of the sign, stepping 129.67 — 6.738% of the
+   column. Repeated as a background it fills whatever the screen is, so the
+   sign stays centred and more truss appears as you zoom out, which is what he
+   asked for. The cell is an image: 514 shapes each as vector would be ~7,700
+   across a screen, heavier than the 32 copies baked into his export.
+   ---------------------------------------------------------------------- */
+.sec1 .truss{
+  /* absolute+block explicitly: the shared placement rule matches [data-at] and
+     this is a bare span, so without these it stays an inline box 0px wide and
+     paints nothing — no error, just an invisible truss. */
+  position:absolute; display:block;
+  left:0; right:0; width:100%;
+  top:17.09%; height:7.07%;
+  background:url("../../assets/v2/section-01/truss-cell.webp") repeat-x center;
+  background-size:auto 100%;
+  z-index:2;
+}
+
+/* --- the copy ------------------------------------------------------------
+   Sizes are his, in canvas units, expressed as a share of the column: a size
+   of N is N/1924.34 of the page width. Capped at what he drew, which the page
+   reaches when it is as wide as his column.
+   ---------------------------------------------------------------------- */
+.sec1 .copy{
+  position:absolute;
+  text-align:center;
+  color:#fff;
+  font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
+}
+.sec1 .copy h1,.sec1 .copy h2{ margin:0; font-weight:800; line-height:1.04 }
+.sec1 .copy h1 span{ display:block }
+.sec1 .copy .l1{ font-size:min(48.68px, 2.530vw) }
+.sec1 .copy .l2{ font-size:min(84.17px, 4.374vw) }
+.sec1 .copy .l3{ font-size:min(34.74px, 1.805vw) }
+.sec1 .copy .sub{ font-size:min(26.00px, 1.351vw); font-weight:400; line-height:1.3;
+                  margin:.85em 0 0 }
+.sec1 .copy .body{ font-size:min(21.96px, 1.141vw); font-weight:300; line-height:1.45;
+                   margin:1.5em 0 0 }
+.sec1 .copy h2{ font-size:min(58.90px, 3.061vw) }
+
+/* the hero headline sits to the right of his motorway shield */
+.sec1 .head{ display:flex; align-items:center; justify-content:center;
+             gap:min(24px,1.2vw) }
+.sec1 .head img{ flex:0 0 auto; width:min(88.65px, 4.61vw); height:auto }
+
+/* his button: the guide-sign green plate, with the copy laid over it */
+.sec1 .cta{ position:relative; display:inline-block; text-decoration:none }
+.sec1 .cta img{ display:block; width:100% }
+.sec1 .cta span{
+  position:absolute; left:26%; right:6%; top:50%; transform:translateY(-50%);
+  color:#fff; font-weight:700; font-size:5.6cqi; white-space:nowrap;
+}
