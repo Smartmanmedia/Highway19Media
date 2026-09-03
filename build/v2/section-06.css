@@ -19,7 +19,21 @@
   aspect-ratio:1923.2 / 1409.10;
   container-type:inline-size;
   margin-top:-2.860%;
-  background:#fff;
+  /* THE WHITE STARTS INSIDE THE ROCKS, NOT AT THE SECTION'S EDGE.
+     A flat #fff here painted white from this section's top edge down, straight
+     across section four's mountains, and the band is nowhere near solid that
+     high: measured on the composite (tools/seam_cover.js) the rocks cover only
+     65% of the columns there, so one column in three showed a dead straight
+     green-to-white line through the gaps. That is the seam he keeps seeing.
+     The band covers EVERY column edge to edge over one narrow strip only -
+     3.29% to 5.77% of this section - so the switch has to happen inside it.
+     3.85% sits in that strip and a whisker above section four's bottom edge
+     (3.903%), so the two overlap and no hairline of page background can open
+     between them. Above the line this section is transparent and section four
+     paints through, mountains, shadow and grass together - which is why there
+     is no colour step either. */
+  background:linear-gradient(180deg,
+    transparent 0, transparent 3.85%, #fff 3.85%, #fff 100%);
   overflow:hidden;
   isolation:isolate;
 }
