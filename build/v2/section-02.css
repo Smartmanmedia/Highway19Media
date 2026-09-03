@@ -53,6 +53,74 @@
   z-index:0;
 }
 
+/* --- THE SURF, MOVING ---------------------------------------------------
+   HIS CLIPPATH, AS A WRAPPER. waves.svg carried a clip rect at x 15.63 w
+   1922.47, trimming the 15pc of bleed he drew past his artboard - and it lands
+   within 2px of the section's own edges. It becomes overflow:hidden here,
+   because the window has to STAY STILL while the bands slide under it. That is
+   what makes this safe: no band can ever bring an edge into view, whatever it
+   does, because there are 302px of his art hidden to the left and 213px to the
+   right at a 1990 screen, and 17px below.
+
+   The wrapper is a hair wider than his clip (0 to 100pc rather than 0.02 to
+   100.11pc) - which reveals 2px MORE of his art on the right, never less.
+   ---------------------------------------------------------------------- */
+.sec2 .waves{
+  position:absolute; left:0; right:0; top:0;
+  height:48.613%;              /* his clip rect, y 0 h 452.8 of a 486.84 box */
+  overflow:hidden; z-index:1; pointer-events:none;
+}
+/* every band keeps the WHOLE of his geometry - same viewBox, same box - so the
+   four of them are registered to each other to the unit. Only the percentages
+   change, because they resolve against the wrapper now and not the section. */
+.sec2 .waves .wave{
+  position:absolute; left:-15.17%; top:-3.970%; width:126%; height:auto;
+  display:block;
+}
+
+/* HIS SWELL. One ellipse per band, traversed at a constant speed, which is
+   what water does - a wave surges sideways and lifts at the same time, and the
+   two are a quarter-cycle apart. --ax and --ay are the amplitude, in cqw, so
+   the motion is a share of the section and scales with everything else.
+
+   NEAREST MOVES MOST, and the four periods share no common multiple, so the
+   bands drift through each other and the picture never repeats. The negative
+   delays start each one part-way round, so they are already out of phase at
+   first paint rather than setting off together.
+
+   The amounts stay small on purpose: 18px of side-to-side and 5px of lift at
+   the shore, 6px and 1.4px at the horizon, on a 1990 screen. Water read at
+   this scale barely moves - push it much past this and his ocean stops being
+   water and turns into a sliding photograph. */
+@keyframes swell{
+  0%   { translate: calc(var(--ax) * var(--swell) * -1) 0 }
+  25%  { translate: 0 calc(var(--ay) * var(--swell)) }
+  50%  { translate: calc(var(--ax) * var(--swell)) 0 }
+  75%  { translate: 0 calc(var(--ay) * var(--swell) * -1) }
+  100% { translate: calc(var(--ax) * var(--swell) * -1) 0 }
+}
+.sec2 .waves .wave{
+  animation: swell var(--dur) linear var(--delay) infinite;
+}
+/* ONE DIAL FOR THE WHOLE OCEAN. --swell scales all four bands together and
+   keeps their relation, so there is one number to turn if it reads too strong
+   or too weak. 0 stops it dead; 2 is twice this. The headroom is enormous -
+   even at 4 the nearest band has 300px of his bleed left on either side - so
+   the only limit is taste. */
+.sec2 .waves{ --swell:1 }
+.sec2 .wave-surf { --ax:0.92cqw; --ay:0.24cqw; --dur:11s; --delay:0s }
+.sec2 .wave-mid  { --ax:0.66cqw; --ay:0.17cqw; --dur:14s; --delay:-3.5s }
+.sec2 .wave-swell{ --ax:0.45cqw; --ay:0.11cqw; --dur:18s; --delay:-7s }
+.sec2 .wave-far  { --ax:0.30cqw; --ay:0.07cqw; --dur:23s; --delay:-11s }
+
+/* off screen it stops - four forever-animations on a page this long is exactly
+   the kind of cost that adds up for nothing. parallax.js sets .still. */
+.sec2 .waves.still .wave{ animation-play-state:paused }
+
+@media (prefers-reduced-motion: reduce){
+  .sec2 .waves .wave{ animation:none }
+}
+
 .sec2 [data-at]{ position:absolute; display:block }
 .sec2 img[data-at], .sec2 svg[data-at]{ height:auto }
 /* the surf sits ON the sand by its own z-index, not by being later in the

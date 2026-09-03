@@ -20,9 +20,31 @@
   /* a size container, so the type below can be a share of THIS box rather than
      of the viewport — the section is full width today and might not always be */
   container-type: inline-size;
-  /* his ocean is one polygon with a horizontal gradient — a CSS gradient here,
-     no shapes at all, and it stretches to any screen */
-  background: linear-gradient(90deg, #004ca2 0%, #045dc3 100%);
+  /* HIS OCEAN IS TWO GRADIENTS AND NO SHAPES.
+     New_darker_ocean.svg is his original horizontal ramp with a second polygon
+     over it: a vertical ramp from #00287d down to transparent, out at y 1281.8
+     of his 1810.6 - deep water at the horizon, his own blue by 70.8pc down.
+
+     THE DARK RUN STARTS AT THE SECTION TOP, not the ocean's. His ocean begins
+     at .page, 6.46pc down, and the band of sky above it is filled with the same
+     water; darkening the ocean and not the band would put a hard line across
+     the join. So the first 6.46pc is flat #00287d and his eight stops are
+     mapped over the 66.222pc below it - his own 70.795pc, measured off .page.
+
+     Everything below 72.7pc is his untouched blue, which is what section two's
+     background was sampled from, so the beach seam is unaffected. */
+  background:
+    linear-gradient(180deg,
+      rgba(0,40,125,1) 0%,          /* flat through the band of sky */
+      rgba(0,40,125,1) 6.460%,
+      rgba(0,41,126,.98) 22.353%,
+      rgba(0,45,131,.9) 34.273%,
+      rgba(0,51,140,.78) 44.207%,
+      rgba(1,61,152,.6) 53.478%,
+      rgba(2,73,168,.37) 62.086%,
+      rgba(3,87,188,.1) 70.033%,
+      rgba(4,93,195,0) 72.682%),
+    linear-gradient(90deg, #004ca2 0%, #045dc3 100%);
   overflow: hidden;            /* the bleed leaves by the left edge */
   isolation: isolate;
 }

@@ -116,3 +116,18 @@
   if (window.ResizeObserver) new ResizeObserver(relayout).observe(document.documentElement);
   ping();
 })();
+
+/* His surf swells on four CSS animations that never end (section-02.css). Left
+ * alone they keep running when the beach is nowhere near the screen, which on a
+ * page this long is most of the time. Six lines of IntersectionObserver park
+ * them instead - no scroll listener, no work per frame, and the CSS decides
+ * what "parked" means. */
+(function () {
+  var w = document.querySelectorAll('.waves');
+  if (!w.length || !window.IntersectionObserver) return;
+  var io = new IntersectionObserver(function (rows) {
+    for (var i = 0; i < rows.length; i++)
+      rows[i].target.classList.toggle('still', !rows[i].isIntersecting);
+  }, { rootMargin: '10%' });
+  for (var i = 0; i < w.length; i++) { w[i].classList.add('still'); io.observe(w[i]); }
+})();

@@ -12,19 +12,18 @@
 
   <span class="sand" aria-hidden="true"></span>
 
-  <!-- THE OCEAN, INLINE rather than an <img>. As an image its raster lives in
-       the browser's image cache, and a browser short of memory drops tiles out
-       of that cache and repaints them lazily - which is why the ocean kept
-       stopping in mid-air on a busy machine while rendering perfectly here.
-       Inline, it is part of the section's own display list and repaints with
-       it. Source: assets/v2/section-02/waves.svg (12 shapes) - edit there and
-       re-run tools/inline_art.js. -->
-  <svg class="z-ground" data-at aria-hidden="true"
-     style="left:-15.17%;top:-1.93%;width:126%"
-     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-     viewBox="-276.17 -17.95 2420.20 486.84"><defs><linearGradient id="waves-g1" x1="-54.68" y1="371.56" x2="1989.45" y2="371.56" gradientUnits="userSpaceOnUse"><stop offset="0.0156" stop-color="#dee5ff"/><stop offset="0.9844" stop-color="#fefeff"/></linearGradient><linearGradient id="waves-g2" x1="-4.50" y1="350.24" x2="1940.04" y2="350.24" gradientUnits="userSpaceOnUse"><stop offset="0.0043" stop-color="#93dbfb"/><stop offset="0.9957" stop-color="#1281cc"/></linearGradient><linearGradient id="waves-g3" x1="-13.56" y1="276.47" x2="1952.98" y2="276.47" gradientUnits="userSpaceOnUse"><stop offset="0.0059" stop-color="#00ccfd"/><stop offset="0.9941" stop-color="#0572e9"/></linearGradient><clipPath id="waves-clippath">
-      <rect x="15.63" width="1922.47" height="452.8" fill="none"></rect>
-    </clipPath><linearGradient id="waves-linear-gradient-2" x1="-84.75" y1="206.2" x2="2049.65" y2="206.2" gradientUnits="userSpaceOnUse">
+  <!-- HIS SURF, IN FOUR BANDS. Split out of assets/v2/section-02/waves.svg by
+       tools/split_waves.js - his own grouping, one <svg> each so each band can
+       swell on its own. Inline rather than <img> for the same reason as before:
+       an image's raster lives in the browser's image cache, and a browser short
+       of memory drops it and repaints lazily, which is what made the ocean stop
+       in mid-air on a busy machine.
+
+       The wrapper is his clipPath: a fixed window at the section's own edges,
+       with 15% of his bleed hidden either side, so the bands slide underneath
+       and no edge can ever come into view. Re-run the tool if he re-exports. -->
+  <div class="waves z-ground" aria-hidden="true">
+    <svg class="wave wave-surf" aria-hidden="true" viewBox="-276.17 -17.95 2420.20 486.84"><defs><linearGradient id="waves-g1" x1="-54.68" y1="371.56" x2="1989.45" y2="371.56" gradientUnits="userSpaceOnUse"><stop offset="0.0156" stop-color="#dee5ff"/><stop offset="0.9844" stop-color="#fefeff"/></linearGradient><linearGradient id="waves-g2" x1="-4.50" y1="350.24" x2="1940.04" y2="350.24" gradientUnits="userSpaceOnUse"><stop offset="0.0043" stop-color="#93dbfb"/><stop offset="0.9957" stop-color="#1281cc"/></linearGradient><linearGradient id="waves-g3" x1="-13.56" y1="276.47" x2="1952.98" y2="276.47" gradientUnits="userSpaceOnUse"><stop offset="0.0059" stop-color="#00ccfd"/><stop offset="0.9941" stop-color="#0572e9"/></linearGradient><linearGradient id="waves-linear-gradient-2" x1="-84.75" y1="206.2" x2="2049.65" y2="206.2" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#0094f6"></stop>
       <stop offset="1" stop-color="#007be8"></stop>
     </linearGradient><linearGradient id="waves-linear-gradient-3" x1="-60.63" y1="122.9" x2="2121.63" y2="122.9" gradientTransform="translate(1985.4939) scale(-1.0275 1)" gradientUnits="userSpaceOnUse">
@@ -33,10 +32,8 @@
     </linearGradient><linearGradient id="waves-linear-gradient-4" x1="-276.18" y1="64.42" x2="2138.98" y2="64.42" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#004ba0"></stop>
       <stop offset="1" stop-color="#0561ca"></stop>
-    </linearGradient></defs><g id="waves-Waves">
-      <g clip-path="url(#waves-clippath)">
-        <g>
-          <g>
+    </linearGradient></defs>
+      <g>
             <g opacity=".43">
               <path d="M2043.8,462.12s-144.76-43.04-284.66-45.77c-95.65-1.87-188.29,41.66-233.78,25.62-112.01-39.5-240.4-6.77-258.91-3.96-50.5,7.66-74.83-6.8-110.7-10.86-60.1-6.8-159.13,9.87-207.2-1.22-115.17-26.57-164.5.72-183.39,6.87-90.8,29.56-148.82,2.43-172.22,6.74-129.47,23.87-145.82-54.74-195.27-29.62-119.46,60.68-147.49,15.43-176.4,22.63-165.18,41.15-222.08-7.1-236.13-4.11-74.9,15.94-177.1,6.17-177.1,6.17v-155.56H2043.8v183.07Z" fill="#002b61"></path>
             </g>
@@ -44,20 +41,25 @@
             <path d="M2028.91,427.4s-143.36-38.73-281.91-41.18c-94.73-1.68-186.47,37.49-231.52,23.05-110.93-35.55-238.08-6.09-256.41-3.56-50.01,6.89-74.11-6.12-109.63-9.77-59.52-6.12-157.6,8.88-205.2-1.1-114.06-23.91-162.91.65-181.62,6.18-89.92,26.6-147.38,2.18-170.56,6.06-128.22,21.48-144.41-49.26-193.38-26.65-118.31,54.6-146.07,13.88-174.69,20.36-163.59,37.03-219.93-6.39-233.85-3.7-74.18,14.35-175.39,5.55-175.39,5.55v-139.98H2028.91v164.74Z" fill="url(#waves-g2)"/>
             <path d="M-188.23,365s142.78-44.44,280.77-47.26c94.35-1.93,185.72,43.01,230.58,26.45,110.48-40.79,237.12-6.99,255.37-4.09,49.81,7.91,73.81-7.02,109.19-11.21,59.28-7.02,156.96,10.19,204.37-1.26,113.6-27.44,162.25.74,180.89,7.09,89.56,30.52,146.78,2.5,169.87,6.96,127.7,24.64,143.82-56.52,192.6-30.58,117.83,62.66,145.48,15.93,173.99,23.36,162.93,42.49,219.04-7.34,232.9-4.25,73.88,16.46,174.68,6.37,174.68,6.37v-160.63H-188.23v189.03Z" fill="url(#waves-g3)"/>
           </g>
-          <g>
+    </svg>
+    <svg class="wave wave-mid" aria-hidden="true" viewBox="-276.17 -17.95 2420.20 486.84">
+      <g>
             <path d="M2028.98,297.31s-138.2-38.73-271.76-41.18c-91.32-1.68-179.76,37.49-223.18,23.05-106.94-35.55-229.5-6.09-247.17-3.56-48.21,6.89-71.44-6.12-105.68-9.77-57.37-6.12-151.92,8.88-197.81-1.1-109.95-23.91-157.04.65-175.08,6.18-86.68,26.6-142.07,2.18-164.41,6.06-123.6,21.48-139.21-49.26-186.42-26.65-114.05,54.6-140.81,13.88-168.4,20.36-157.7,37.03-212.01-6.39-225.42-3.7-71.5,14.35-169.07,5.55-169.07,5.55v-139.98H2028.98v164.74Z" fill="#002b61" opacity=".43"></path>
             <path d="M2034.3,292.5s-138.2-38.73-271.76-41.18c-91.32-1.68-179.76,37.49-223.18,23.05-106.94-35.55-229.5-6.09-247.17-3.56-48.21,6.89-71.44-6.12-105.68-9.77-57.37-6.12-151.92,8.88-197.81-1.1-109.95-23.91-157.04.65-175.08,6.18-86.68,26.6-142.07,2.18-164.41,6.06-123.6,21.48-139.21-49.26-186.42-26.65-114.05,54.6-140.81,13.88-168.4,20.36-157.7,37.03-212.01-6.39-225.42-3.7-71.5,14.35-169.07,5.55-169.07,5.55V127.76H2034.3v164.74Z" fill="#fff"></path>
             <path d="M2049.65,288.57s-138.2-38.73-271.76-41.18c-91.32-1.68-179.76,37.49-223.18,23.05-106.94-35.55-229.5-6.09-247.17-3.56-48.21,6.89-71.44-6.12-105.68-9.77-57.37-6.12-151.92,8.88-197.81-1.1-109.95-23.91-157.04.65-175.08,6.18-86.68,26.6-142.07,2.18-164.41,6.06-123.6,21.48-139.21-49.26-186.42-26.65-114.05,54.6-140.81,13.88-168.4,20.36-157.7,37.03-212.01-6.39-225.42-3.7-71.5,14.35-169.07,5.55-169.07,5.55V123.83h2134.4v164.74Z" fill="url(#waves-linear-gradient-2)"></path>
           </g>
-          <path d="M-194.55,205.27s145.19-38.73,285.5-41.18c95.93-1.68,188.85,37.49,234.47,23.05,112.34-35.55,241.11-6.09,259.67-3.56,50.65,6.89,75.05-6.12,111.03-9.77,60.27-6.12,159.6,8.88,207.81-1.1,115.51-23.91,164.99.65,183.93,6.18,91.07,26.6,149.25,2.18,172.73,6.06,129.85,21.48,146.25-49.26,195.85-26.65,119.82,54.6,147.93,13.88,176.92,20.36,165.67,37.03,222.73-6.39,236.82-3.7,75.12,14.35,177.62,5.55,177.62,5.55V40.54H-194.55v164.74Z" fill="url(#waves-linear-gradient-3)"></path>
-          <g>
+    </svg>
+    <svg class="wave wave-swell" aria-hidden="true" viewBox="-276.17 -17.95 2420.20 486.84">
+      <path d="M-194.55,205.27s145.19-38.73,285.5-41.18c95.93-1.68,188.85,37.49,234.47,23.05,112.34-35.55,241.11-6.09,259.67-3.56,50.65,6.89,75.05-6.12,111.03-9.77,60.27-6.12,159.6,8.88,207.81-1.1,115.51-23.91,164.99.65,183.93,6.18,91.07,26.6,149.25,2.18,172.73,6.06,129.85,21.48,146.25-49.26,195.85-26.65,119.82,54.6,147.93,13.88,176.92,20.36,165.67,37.03,222.73-6.39,236.82-3.7,75.12,14.35,177.62,5.55,177.62,5.55V40.54H-194.55v164.74Z" fill="url(#waves-linear-gradient-3)">
+    </svg>
+    <svg class="wave wave-far" aria-hidden="true" viewBox="-276.17 -17.95 2420.20 486.84">
+      <g>
             <path d="M2142.44,153.54s-155.62-36.33-305.94-38.16c-102.77-1.25-202.21,36.37-251.12,22.8-120.44-33.42-258.31-4.91-278.18-2.44-54.24,6.74-80.42-5.55-118.96-8.89-64.58-5.6-170.95,9.04-222.63-.28-123.8-22.34-176.74,1.22-197.02,6.56-97.49,25.65-159.88,2.62-185.02,6.4-139.05,20.92-156.79-46.35-209.87-24.65-128.22,52.41-158.43,13.75-189.47,20.03-177.39,35.85-238.62-5.27-253.71-2.66-80.44,13.93-190.26,5.94-190.26,5.94l-.34-133.24L2142.04-3.27l.4,156.81Z" fill="#002b61" opacity=".43"></path>
             <path d="M2144.03,146.33s-155.62-36.33-305.94-38.16c-102.77-1.25-202.21,36.37-251.12,22.8-120.44-33.42-258.31-4.91-278.18-2.44-54.24,6.74-80.42-5.55-118.96-8.89-64.58-5.6-170.95,9.04-222.63-.28-123.8-22.34-176.74,1.22-197.02,6.56-97.49,25.65-159.88,2.62-185.02,6.4-139.05,20.92-156.79-46.35-209.87-24.65-128.22,52.41-158.43,13.75-189.47,20.03-177.39,35.85-238.62-5.27-253.71-2.66-80.44,13.93-190.26,5.94-190.26,5.94l-.34-133.24,2402.13-8.2.4,156.81Z" fill="#fff"></path>
             <path d="M2138.98,146.79s-156.37-38.73-307.5-41.18c-103.33-1.68-203.4,37.49-252.54,23.05-121-35.55-259.69-6.09-279.68-3.56-54.56,6.89-80.84-6.12-119.58-9.77-64.92-6.12-171.9,8.88-223.83-1.1-124.41-23.91-177.7.65-198.11,6.18-98.08,26.6-160.76,2.18-186.04,6.06-139.86,21.48-157.52-49.26-210.94-26.65-129.05,54.6-159.33,13.88-190.55,20.36-178.44,37.03-239.9-6.39-255.08-3.7-80.91,14.35-191.31,5.55-191.31,5.55V-17.95h2415.16v164.74Z" fill="url(#waves-linear-gradient-4)"></path>
           </g>
-        </g>
-      </g>
-    </g></svg>
+    </svg>
+  </div>
   <!-- ROAD - shifted 0.14% right of his own numbers. His two artboards are not
        the same width (1924.34 against 1920.8), so a road drawn continuous in
        his master lands a third of a percent apart once each section is

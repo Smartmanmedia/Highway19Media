@@ -220,6 +220,48 @@ A grown card must be raised a layer (`z-index:2`), or it grows *under* its
 neighbours. His card gaps are 1.30% of the section and 1.05 eats 0.34% a side,
 so 1.05 is about as far as it can go before they touch.
 
+## Moving his art without ever showing an edge
+The surf swells; the pattern generalises to anything of his that should drift.
+
+**His own clipPath becomes the window.** waves.svg carried a clip rect that
+lands within 2px of the section's edges - it was there to trim the 15% of bleed
+he drew past the artboard. Turned into `overflow:hidden` on a wrapper div, that
+window STOPS MOVING while the art slides under it, and no amount of motion can
+bring an edge into view. This is the one clipPath of his that was doing real
+work; the other four were cutting art short and got dropped.
+
+**Bleed is the budget.** At a 1990 screen his surf has 320px of hidden art to
+the left, 233px to the right, 23px above and 21px below at the tightest point
+of the cycle. Measure that margin before choosing an amplitude - `tools/` has
+the check (walk the cycle, compare every layer's box to the wrapper's).
+
+**One `<svg>` per band, not one `<g>`.** A transform on an SVG group makes the
+browser re-rasterise that group's paths every frame, and his wave paths run to
+hundreds of segments. A transform on an HTML element gets its own compositor
+layer: raster once, move the layer. Same reason the parallax only ever writes
+`translate` on elements.
+
+**Split it, then prove the still frame did not change.** Screenshot before,
+split, screenshot after with the animation forced off (pausing at 0% parks it
+on a DISPLACED keyframe, not at rest), and diff. His four bands came out at 509
+differing pixels of 1.92M - 453 of them in column 0, the 0.4px of extra water
+the slightly wider window reveals. Anything more than edge pixels means the
+paint order moved.
+
+**An SVG element's `className` is an SVGAnimatedString, not a string.** It has
+no `.split`. Use `getAttribute('class')`. Same family as SVG having no
+`offsetTop`: an inline `<svg>` is not an HTML element, and the DOM says so in
+small ways that only show up at runtime.
+
+**A forever-animation off screen is pure cost.** Six lines of
+IntersectionObserver in parallax.js add `.still` to the wrapper, and the CSS
+pauses the animations. On a page this long the beach is off screen most of the
+time.
+
+**Give it one dial.** `--swell` on the wrapper scales all four bands together
+and keeps their relation, so there is a single number to turn when he says it
+is too much or too little - which is the feedback that always comes.
+
 ## His type — measured, not chosen
 
 Two families, both from his file:
