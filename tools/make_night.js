@@ -89,7 +89,18 @@ const TOKENS = [
      turn over with them or the words simply disappear - everything else on the
      page is already white on his own colours and does not move. */
   ['--sec2-ink', '#dfe7f2'],
-  ['--sec6-ink', '#eef2f7']
+  ['--sec6-ink', '#eef2f7'],
+  /* HIS CARDS TURN OVER. White cards on a dark page read as four holes cut in
+     it; black cards with white type are the same object seen at night. */
+  ['--card-bg', '#0c1018'],
+  ['--card-line', '#7d8ea3'],
+  ['--card-ink', '#f2f6fa'],
+  ['--card-sub', '#c3cedb'],
+  /* HIS SIGNS, MUTED. Not dimmed to nothing - a road sign at night is still the
+     brightest thing out there - but taken off full daylight saturation, which
+     is what he did in his own mock. */
+  ['--sign-lit', '0.86'],
+  ['--sign-sat', '0.80']
 ];
 
 const vars = TOKENS.map(([k, v]) => '    ' + k + ': ' + v + ';').join('\n') + '\n' +
@@ -106,9 +117,11 @@ const block =
   '     pulled toward black and given a night sky\'s blue cast. His day\n' +
   '     gradients stay in their own section files - they are the fallback in\n' +
   '     var(--secN-bg, ...) - so nothing here is kept in step by hand. */\n' +
-  '  @media (prefers-color-scheme: dark){\n  :root:not([data-theme="light"]){\n' +
+  '  @media (prefers-color-scheme: dark){\n' +
+  '  :root:not([data-theme="light"]):not([data-mode="day"]){\n' +
   vars + '\n  }}\n' +
-  '  :root[data-theme="dark"]{\n' + vars + '\n  }';
+  '  :root[data-theme="dark"]:not([data-mode="day"]),\n' +
+  '  :root[data-mode="night"]{\n' + vars + '\n  }';
 
 const out = path.join(DIR, 'night.css');
 let css = fs.readFileSync(out, 'utf8');

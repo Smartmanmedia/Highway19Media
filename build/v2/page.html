@@ -4127,13 +4127,17 @@ section + section{ margin-top:-1px }</style>
 
 </section>
 
-<!-- the fall of dark, driven by --night in night.css. ONE of it, fixed to
-     the window: his sections overlap, so one per section darkened the overlaps
-     twice and drew a step across the page. -->
-<div class="nightfall" aria-hidden="true"></div>
+<!-- HIS TEMPORARY DAY/NIGHT SWITCH. Both icons ship; night.css decides which
+     one shows, by the same selectors that decide the palette, so the button
+     can never disagree with the page. -->
+<button class="mode-switch" type="button" aria-label="Switch to night">
+  <img class="to-night" src="../../assets/v2/ui-moon.svg" alt="" width="38" height="38">
+  <img class="to-day" src="../../assets/v2/ui-sun.svg" alt="" width="38" height="38">
+</button>
 
 <script src="parallax.js" defer></script>
 <script src="sprite.js" defer></script>
 <script src="shades.js" defer></script>
 <script src="paths.js" defer></script>
 <script src="traffic.js" defer></script>
+<script src="mode.js" defer></script>

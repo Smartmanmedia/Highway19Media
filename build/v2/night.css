@@ -39,6 +39,14 @@
   --scene: 1;
   --scene-sat: 1;
   --cloud-sat: 1;
+
+  /* his signs, and his cards, at full daylight */
+  --sign-lit: 1;
+  --sign-sat: 1;
+  --card-bg: #fff;
+  --card-line: #1a1a1a;
+  --card-ink: #1a1a1a;
+  --card-sub: #333;
 }
 
 /* >>> palette */
@@ -47,7 +55,7 @@
      gradients stay in their own section files - they are the fallback in
      var(--secN-bg, ...) - so nothing here is kept in step by hand. */
   @media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
+  :root:not([data-theme="light"]):not([data-mode="day"]){
     --night: 1;
     --tarmac: #0b0c0f;
     --marking: #fff;
@@ -56,6 +64,12 @@
     --cloud-sat: 0.12;
     --sec2-ink: #dfe7f2;
     --sec6-ink: #eef2f7;
+    --card-bg: #0c1018;
+    --card-line: #7d8ea3;
+    --card-ink: #f2f6fa;
+    --card-sub: #c3cedb;
+    --sign-lit: 0.86;
+    --sign-sat: 0.80;
     --sec1-bg:
       linear-gradient(180deg, rgba(4,17,43,1) 0%, rgba(4,17,43,1) 6.460%, rgba(4,18,43,.98) 28.736%, rgba(4,18,44,.9) 45.443%, rgba(4,19,46,.78) 59.366%, rgba(4,21,47,.6) 72.360%, rgba(4,23,50,.37) 84.426%, rgba(4,25,53,.1) 95.564%, rgba(4,26,54,0) 99.277%), linear-gradient(90deg, #041731 0%, #041a36 100%);
     --sec1-fade:
@@ -71,7 +85,8 @@
     --sec6-bg:
       linear-gradient(180deg, transparent 0, transparent 3.85%, #1f2b3d 3.85%, #1f2b3d 100%);
   }}
-  :root[data-theme="dark"]{
+  :root[data-theme="dark"]:not([data-mode="day"]),
+  :root[data-mode="night"]{
     --night: 1;
     --tarmac: #0b0c0f;
     --marking: #fff;
@@ -80,6 +95,12 @@
     --cloud-sat: 0.12;
     --sec2-ink: #dfe7f2;
     --sec6-ink: #eef2f7;
+    --card-bg: #0c1018;
+    --card-line: #7d8ea3;
+    --card-ink: #f2f6fa;
+    --card-sub: #c3cedb;
+    --sign-lit: 0.86;
+    --sign-sat: 0.80;
     --sec1-bg:
       linear-gradient(180deg, rgba(4,17,43,1) 0%, rgba(4,17,43,1) 6.460%, rgba(4,18,43,.98) 28.736%, rgba(4,18,44,.9) 45.443%, rgba(4,19,46,.78) 59.366%, rgba(4,21,47,.6) 72.360%, rgba(4,23,50,.37) 84.426%, rgba(4,25,53,.1) 95.564%, rgba(4,26,54,0) 99.277%), linear-gradient(90deg, #041731 0%, #041a36 100%);
     --sec1-fade:
@@ -105,6 +126,8 @@
   --marking: #fff;
   --scene: 1; --scene-sat: 1; --cloud-sat: 1;
   --sec2-ink: #333; --sec6-ink: #1a1a1a;
+  --sign-lit: 1; --sign-sat: 1;
+  --card-bg: #fff; --card-line: #1a1a1a; --card-ink: #1a1a1a; --card-sub: #333;
   --sec1-bg: initial; --sec1-fade: initial; --sec2-bg: initial;
   --sec2-sand: initial; --sec3-bg: initial; --sec4-ground: initial;
   --sec6-bg: initial;
@@ -137,3 +160,44 @@ section .z-cloud{
   section .z-back, section .z-ground, section .wave, section .sand,
   section .rock-layer, section .rock-cross, section .z-cloud{ transition: none }
 }
+
+
+/* HIS SIGNS, MUTED RATHER THAN DIMMED. Only the sign ART is named - the svg he
+   drew the gantry sign in, and the small sign images - never the copy beside
+   them, which is HTML and would go grey with it. */
+section svg.z-sign,
+section img.z-copy{
+  filter: brightness(var(--sign-lit)) saturate(var(--sign-sat));
+  transition: filter 1s linear;
+}
+@media (prefers-reduced-motion: reduce){
+  section svg.z-sign, section img.z-copy{ transition: none }
+}
+
+/* --- THE TEMPORARY SWITCH ------------------------------------------------
+   His sun and his moon, top right, so the two modes can be put side by side.
+   It writes data-mode on the root, which is the third way into the palette
+   above - alongside the system setting and an explicit theme - and remembers
+   the choice. Temporary by agreement: when he decides what really drives
+   night, this comes out and nothing else changes. */
+.mode-switch{
+  position:fixed; top:14px; right:14px; z-index:10000;
+  width:52px; height:52px; padding:0; border:0; border-radius:50%;
+  background:rgba(0,0,0,.30); backdrop-filter:blur(2px);
+  cursor:pointer; display:grid; place-items:center;
+  box-shadow:0 2px 10px rgba(0,0,0,.35);
+  transition:background .25s ease, transform .25s ease;
+}
+.mode-switch:hover{ transform:scale(1.06) }
+.mode-switch:focus-visible{ outline:3px solid #fcee21; outline-offset:3px }
+.mode-switch img{ width:38px; height:38px; display:block }
+.mode-switch .to-night{ display:block }
+.mode-switch .to-day{ display:none }
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]):not([data-mode="day"]) .mode-switch .to-night{ display:none }
+  :root:not([data-theme="light"]):not([data-mode="day"]) .mode-switch .to-day{ display:block }
+}
+:root[data-theme="dark"]:not([data-mode="day"]) .mode-switch .to-night,
+:root[data-mode="night"] .mode-switch .to-night{ display:none }
+:root[data-theme="dark"]:not([data-mode="day"]) .mode-switch .to-day,
+:root[data-mode="night"] .mode-switch .to-day{ display:block }

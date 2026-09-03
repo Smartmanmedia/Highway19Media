@@ -40,17 +40,21 @@ files.map(f => '<link rel="stylesheet" href="' + f.replace('.html','.css') + '">
 '   margin: a class beats this. */\n' +
 'section + section{ margin-top:-1px }</style>\n\n' +
 parts.join('\n\n') +
-  '\n\n<!-- the fall of dark, driven by --night in night.css. ONE of it, fixed to\n' +
-  '     the window: his sections overlap, so one per section darkened the overlaps\n' +
-  '     twice and drew a step across the page. -->\n' +
-  '<div class="nightfall" aria-hidden="true"></div>'
+  '\n\n<!-- HIS TEMPORARY DAY/NIGHT SWITCH. Both icons ship; night.css decides which\n' +
+  '     one shows, by the same selectors that decide the palette, so the button\n' +
+  '     can never disagree with the page. -->\n' +
+  '<button class="mode-switch" type="button" aria-label="Switch to night">\n' +
+  '  <img class="to-night" src="../../assets/v2/ui-moon.svg" alt="" width="38" height="38">\n' +
+  '  <img class="to-day" src="../../assets/v2/ui-sun.svg" alt="" width="38" height="38">\n' +
+  '</button>'
   + '\n\n<script src="parallax.js" defer></script>\n'
   /* his vehicles and his road, then the traffic that drives on it - in that
      order, because traffic.js reads both at start-up */
   + '<script src="sprite.js" defer></script>\n'
   + '<script src="shades.js" defer></script>\n'
   + '<script src="paths.js" defer></script>\n'
-  + '<script src="traffic.js" defer></script>\n';
+  + '<script src="traffic.js" defer></script>\n'
+  + '<script src="mode.js" defer></script>\n';
 
 fs.writeFileSync(path.join(DIR, 'page.html'), out);
 console.log('page.html <- ' + files.join(' + '));

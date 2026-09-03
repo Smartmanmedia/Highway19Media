@@ -52,8 +52,32 @@ const path = require('path');
            appearing in another. Reading u straight off the simulation catches
            it exactly; a wrap round the end of the road is the one legitimate
            big step and is excluded by size. */
+        /* DO ANY TWO CARS OVERLAP? Measured where they are DRAWN, not where
+           the simulation thinks they are - which is the whole point, because
+           the simulation counts along the centreline and the cars drive half a
+           lane either side of it. On the inside of a bend that lane is shorter,
+           so cars a car's length apart in centreline units were driving into
+           each other, and only there. */
+        const nodes = [...rd.parts[0].carG.children];
+        const pos = t => { const m = /translate\(([-\d.]+) ([-\d.]+)\)/.exec(t || '');
+                           return m ? [+m[1], +m[2]] : null };
+        let worstBite = 0;
+        for (const ln of [0, 1]) {
+          const idx = rd.cars.map((c, i) => [c, i]).filter(([c]) => c.lane === ln)
+                             .sort((a, b) => a[0].u - b[0].u);
+          for (let i = 0; i < idx.length; i++) {
+            const [a, ai] = idx[i], [b, bi] = idx[(i + 1) % idx.length];
+            const pa = pos(nodes[ai] && nodes[ai].getAttribute('transform'));
+            const pb = pos(nodes[bi] && nodes[bi].getAttribute('transform'));
+            if (!pa || !pb) continue;
+            const d = Math.hypot(pb[0] - pa[0], pb[1] - pa[1]);
+            const need = (a.long + b.long) / 2;
+            if (d < need * 3) worstBite = Math.max(worstBite, need - d);
+          }
+        }
         const u = rd.cars.map(c => c.u), L = rd.len;
-        return { v: v, u: u, len: L, name: rd.parts.map(q => q.n).join('+'),
+        return { v: v, u: u, len: L, bite: worstBite,
+                 name: rd.parts.map(q => q.n).join('+'),
                  have: rd.len / lane0.length - meanLong, vmax: meanVmax };
       }, r);
       if (!s) continue;
@@ -65,6 +89,7 @@ const path = require('path');
         }
       }
       acc.u = s.u;
+      acc.bite = Math.max(acc.bite || 0, s.bite);
       acc.name = s.name; acc.have = s.have; acc.want = s.vmax;
       let slowNow = 0;
       for (const f of s.v) {
@@ -85,7 +110,9 @@ const path = require('path');
       '%   queueing ' + slow.toFixed(1) + '%   the queue changes size ' +
       churn.toFixed(0) + '% of ticks   (gap ' + acc.have.toFixed(0) +
       'px, wants ' + (acc.want * 1.7).toFixed(0) + 'px)   teleports ' +
-      (acc.jumps || 0));
+      (acc.jumps || 0) + '   deepest overlap ' + (acc.bite || 0).toFixed(1) + 'px');
+    if ((acc.bite || 0) > 4) { bad++;
+      console.log('    ^ cars are driving into each other'); }
     if (acc.jumps) { bad++; console.log('    ^ ' + acc.jumps + ' cars teleported'); }
     if (stop + slow < 12) { bad++; console.log('    ^ nobody queues here'); }
     else if (churn < 25) { bad++; console.log('    ^ a uniform crawl, not stop and go'); }

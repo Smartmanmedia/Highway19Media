@@ -283,6 +283,30 @@
      than a lane, which is what a saloon is. */
   var maxAcross = Math.max.apply(null, NAMES.map(function (n) { return box[n].height }));
 
+  /* HOW MUCH ROAD A LANE ACTUALLY HAS, HERE.
+   *
+   * The simulation measures everything along the CENTRELINE, but the cars
+   * drive half a lane either side of it, and on a bend the inside lane is
+   * shorter than the middle - a metre of centreline is less than a metre of
+   * inside lane. Two cars a car's length apart in centreline u were therefore
+   * closer than that on the inside of every curve, and once the fleet was
+   * given his real sizes they drove into each other there. It never happened
+   * on a straight, and never on the outside, which is exactly what he saw.
+   *
+   * Rather than reason about signs and curvature, this measures it: step a
+   * little way along the centreline, offset both ends into the lane, and see
+   * how far the lane actually went. Under 1 on the inside of a bend, over 1
+   * on the outside, exactly 1 on a straight.
+   */
+  function laneScale(road, s, dir) {
+    var d = 3, off = road.laneW / 2 * dir;
+    var a = at(road, s), b = at(road, s + d);
+    var ax = a.x - a.uy * off, ay = a.y + a.ux * off;
+    var bx = b.x - b.uy * off, by = b.y + b.ux * off;
+    var m = Math.hypot(bx - ax, by - ay) / d;
+    return m < 0.35 ? 0.35 : m;            /* never divide by nearly nothing */
+  }
+
   function size(road, c) {
     c.k = road.k;
     c.long = box[c.id].width * c.k;                       /* its length on the road */
@@ -350,11 +374,19 @@
         var q = road.cars.filter(function (c) { return c.lane === lane; })
                          .sort(function (a, b) { return a.u - b.u; });
 
+        /* what a car's own length costs it in CENTRELINE units where it is
+           standing: on the inside of a bend its lane is short, so the same
+           car eats more of the centreline than its length suggests */
+        for (var z = 0; z < q.length; z++) {
+          var cz = q[z];
+          cz.uLong = cz.long / laneScale(road, cz.u, cz.lane ? -1 : 1);
+        }
+
         /* 1. decide, and move */
         for (var i = 0; i < q.length; i++) {
           var c = q[i], ahead = q[(i + 1) % q.length];
           var gap = ahead.u - c.u; if (gap <= 0) gap += road.len;
-          gap -= (c.long + ahead.long) / 2;
+          gap -= (c.uLong + ahead.uLong) / 2;
           /* what this driver would like to be doing - but seen late */
           var raw = Math.max(0, Math.min(c.vmax, gap / HEADWAY));
           c.want += (raw - c.want) * Math.min(1, dt / REACT);
@@ -380,7 +412,7 @@
           for (var k = q.length - 1; k >= 0; k--) {
             var c2 = q[k], lead = q[(k + 1) % q.length];
             var ring = lead.u - c2.u; if (ring <= 0) ring += road.len;
-            var least = (c2.long + lead.long) / 2 * 1.06;
+            var least = (c2.uLong + lead.uLong) / 2 * 1.06;
             if (ring < least) {
               c2.u = lead.u - least;
               if (c2.u < 0) c2.u += road.len;
