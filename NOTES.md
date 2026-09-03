@@ -416,6 +416,16 @@ above everything: a thing below you throws its shadow down, it shortens to
 nothing as you draw level, then stretches up behind. Measured on the sign:
 +60px at scroll 0, level at 400, -132px by 1400.
 
+**Everything leans one way.** The scroll-driven direction is symmetrical about
+the middle of the screen, so a thing dead centre would throw its shadow straight
+down and read as lit from directly overhead. `--sun-lean` (-0.35) is a constant
+push to the left added to the x term everywhere, which gives the light a place
+to be. One number, every shadow.
+
+**High things cast faint ones.** Both green signs sit at --lift 8.834cqw and
+--sun-ink .17, against .31 for the clouds - a shadow thrown that far has spread
+out by the time it lands.
+
 **A shadow falls on some things and not others, and DEPTH is what says which.**
 His sign's shadow belongs on the ocean, the road and the traffic but not on the
 gantry it hangs from, so it cannot live inside the sign's own SVG (z-index 3,

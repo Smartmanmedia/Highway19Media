@@ -93,3 +93,9 @@
   font-size:1.184cqw; font-weight:800; text-align:center; color:#000;
   white-space:nowrap;
 }
+
+/* his second sign's shadow - see the markup for why it sits at this depth */
+.sec4 .sign-shadow{
+  position:absolute; z-index:2; background:#000; border-radius:1.368cqw;
+  pointer-events:none;
+}

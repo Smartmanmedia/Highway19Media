@@ -25,10 +25,17 @@
   --sun-len: 1;
   --sun-ink: 0.31;
   /* THE DIRECTION AS A VECTOR, because that is what the reader-is-the-sun mode
-     writes per element. These are the FALLBACK: his fixed -4 degrees, used
-     before the script runs, if it never runs, and under reduced motion. */
-  --sun-x: calc(cos(var(--sun)));
-  --sun-y: calc(sin(var(--sun)));
+     writes per element. These are the FALLBACK, used before the script runs, if
+     it never runs, and under reduced motion: straight down and a little left,
+     which is where the moving version sits for most of a scroll anyway. */
+  --sun-x: 0;
+  --sun-y: 0.30;
+
+  /* AND EVERYTHING LEANS LEFT. The scroll-driven direction is symmetrical about
+     the middle of the screen, so a thing dead centre would throw its shadow
+     straight down and look like it is lit from directly overhead. A constant
+     push to one side gives the light a place to be. One number, every shadow. */
+  --sun-lean: -0.35;
 }
 
 /* The art is in normal flow so it sets the box, and the shadow is absolute on
@@ -44,7 +51,7 @@
 .cast > .shade{
   position:absolute; left:0; top:0; width:100%; height:auto; display:block;
   opacity: var(--sun-ink);
-  translate: calc(var(--sun-x) * var(--lift) * var(--sun-len) * 1cqw)
+  translate: calc((var(--sun-x) + var(--sun-lean)) * var(--lift) * var(--sun-len) * 1cqw)
              calc(var(--sun-y) * var(--lift) * var(--sun-len) * 1cqw);
 }
 
@@ -53,7 +60,7 @@
    two numbers drive it. */
 [style*="--lift"]:not(.cast):not(.cast-svg){
   opacity: var(--sun-ink);
-  translate: calc(var(--sun-x) * var(--lift) * var(--sun-len) * 1cqw)
+  translate: calc((var(--sun-x) + var(--sun-lean)) * var(--lift) * var(--sun-len) * 1cqw)
              calc(var(--sun-y) * var(--lift) * var(--sun-len) * 1cqw);
 }
 
@@ -66,6 +73,6 @@
                                    off at the viewBox edge */
 .cast-svg .shade{
   opacity: var(--sun-ink);
-  translate: calc(var(--sun-x) * var(--lift-u) * 1px)
+  translate: calc((var(--sun-x) + var(--sun-lean)) * var(--lift-u) * 1px)
              calc(var(--sun-y) * var(--lift-u) * 1px);
 }
