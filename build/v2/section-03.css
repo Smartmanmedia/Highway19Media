@@ -1,0 +1,38 @@
+/* ============================================================================
+   SECTION THREE — the desert
+   ----------------------------------------------------------------------------
+   His artboard is 1922.52 x 855.76 with no bleed either side, so the artboard
+   IS the art column here and the ratio is 855.76 / 1922.52. No copy in this
+   section: it is ground, road and one cloud.
+   ========================================================================= */
+
+.sec3{
+  position:relative;
+  width:100%;
+  aspect-ratio:1922.52 / 855.76;        /* 0.4451 */
+  container-type:inline-size;
+  /* The desert's own colours, sampled straight down the art by
+     tools/art_underlay.js, painted underneath it. You never see them - the art
+     covers every stop. They are there for the moment the browser is short of
+     memory and has not finished painting, so a dropped tile shows the right
+     colour at the right height instead of a hole. The flat #fdf6e4 under it
+     all is section two's sand, so the join has no line. */
+  background:
+    linear-gradient(180deg,
+      #fdf6e4 0%,      #fdf3dd 2.74%,   #ffdb95 45.78%,  #ffd486 47.72%,
+      #daa363 47.86%,  #d59c5f 48.00%,  #c19885 48.13%,  #b59080 48.83%,
+      #d9ae9c 50.76%,  #a78676 50.90%,  #97796a 51.87%,  #deb081 52.01%,
+      #ffd486 61.70%,  #d59c5f 61.97%,  #d59c5f 69.72%,  #8f705e 69.86%,
+      #876b5f 72.21%,  #ba9483 72.35%,  #cfa694 78.58%,  #967769 78.72%,
+      #8c6e62 80.66%,  #d8ad9b 80.80%,  #ddb19e 96.43%,  #ecbdaa 96.57%,
+      #c89f8c 96.71%,  #c99e86 97.96%,  #d59c5f 98.09%,  #d59c5f 100%),
+    #fdf6e4;
+  overflow:hidden;
+  isolation:isolate;
+}
+
+.sec3 [data-at]{ position:absolute; display:block }
+.sec3 img[data-at], .sec3 svg[data-at]{ height:auto }
+
+.sec3 .z-ground{ z-index:0 } .sec3 .z-road{ z-index:1 }
+.sec3 .z-cloud { z-index:3 }

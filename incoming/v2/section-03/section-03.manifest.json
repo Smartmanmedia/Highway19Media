@@ -1,0 +1,117 @@
+{
+  "file": "section-03.svg",
+  "artboard": {
+    "w": 1922.52,
+    "h": 855.76
+  },
+  "column": {
+    "x": 0,
+    "w": 1922.52
+  },
+  "bleed": {
+    "left": 0,
+    "right": 0
+  },
+  "aspect": 0.4451,
+  "layers": [
+    {
+      "name": "Deseret_and_sand",
+      "shapes": 977,
+      "left": -14.5,
+      "top": 1.08,
+      "width": 123.07,
+      "height": 131.97,
+      "bleeds": true
+    },
+    {
+      "name": "Roads",
+      "shapes": 66,
+      "left": -0.56,
+      "top": 23.38,
+      "width": 100.52,
+      "height": 11.3,
+      "bleeds": true
+    },
+    {
+      "name": "Curve",
+      "shapes": 6,
+      "left": -0.56,
+      "top": 23.38,
+      "width": 7.86,
+      "height": 11.25,
+      "bleeds": true
+    },
+    {
+      "name": "Stright",
+      "shapes": 10,
+      "left": 7.08,
+      "top": 23.43,
+      "width": 17.11,
+      "height": 11.25,
+      "bleeds": false
+    },
+    {
+      "name": "Stright-2",
+      "shapes": 10,
+      "left": 73.97,
+      "top": 23.43,
+      "width": 17.11,
+      "height": 11.25,
+      "bleeds": false
+    },
+    {
+      "name": "Stright-3",
+      "shapes": 10,
+      "left": 82.85,
+      "top": 23.43,
+      "width": 17.11,
+      "height": 11.25,
+      "bleeds": false
+    },
+    {
+      "name": "Stright-4",
+      "shapes": 10,
+      "left": 57.59,
+      "top": 23.43,
+      "width": 17.11,
+      "height": 11.25,
+      "bleeds": false
+    },
+    {
+      "name": "Stright-5",
+      "shapes": 10,
+      "left": 40.75,
+      "top": 23.43,
+      "width": 17.11,
+      "height": 11.25,
+      "bleeds": false
+    },
+    {
+      "name": "Stright-6",
+      "shapes": 10,
+      "left": 23.89,
+      "top": 23.43,
+      "width": 17.11,
+      "height": 11.25,
+      "bleeds": false
+    },
+    {
+      "name": "Clouds",
+      "shapes": 30,
+      "left": 71.85,
+      "top": 37.43,
+      "width": 25.19,
+      "height": 38.06,
+      "bleeds": false
+    },
+    {
+      "name": "Cloud1",
+      "shapes": 30,
+      "left": 71.85,
+      "top": 37.43,
+      "width": 25.19,
+      "height": 38.06,
+      "bleeds": false
+    }
+  ]
+}
