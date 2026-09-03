@@ -41,9 +41,15 @@ const path = require('path');
   await day.close();
 
   /* ---- night ---- */
-  const p = await br.newPage({ viewport: { width: 1400, height: 900 },
-                               colorScheme: 'dark' });
+  /* NIGHT IS DRIVEN HERE, not left to whatever currently switches it. The page
+     is pinned to daylight while he decides what night should be, and a check
+     that read the trigger instead of the mechanism would report the lights
+     broken every time that decision changes. --night is the mechanism; this
+     sets it and tests what it does. */
+  const p = await br.newPage({ viewport: { width: 1400, height: 900 } });
   await p.goto(file); await p.waitForTimeout(1800);
+  await p.evaluate(() => document.documentElement.style.setProperty('--night', '1'));
+  await p.waitForTimeout(1200);
   /* THE NIGHT PAGE IS NOT FROZEN. Blanking requestAnimationFrame ends the
      traffic loop for good - putting the function back does not restart it,
      because nothing is left to call it - and the check that reads which way
@@ -58,7 +64,7 @@ const path = require('path');
                       .getPropertyValue('--night').trim(),
              trans: cs.transitionProperty + ' ' + cs.transitionDuration };
   });
-  console.log('   night: --night = ' + lit.night + ', beam group opacity ' +
+  console.log('   night (--night driven to 1 by this check): opacity ' +
     lit.op + ', blend ' + lit.blend);
   if (lit.op < 0.9) { bad++; console.log('   ^ the beams are not lit at night') }
   if (lit.blend !== 'screen') { bad++; console.log('   ^ blend is not screen') }

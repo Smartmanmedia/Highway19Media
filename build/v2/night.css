@@ -38,10 +38,20 @@
    front of it.
    ========================================================================= */
 
+/* PINNED TO DAY. The page is daylight and stays daylight: the beams are at
+   zero - not faint, zero - and no darkness falls. He is sending his own idea
+   for what night should be, and the fall of dark below was only ever the
+   provisional thing that let the beams be judged.
+
+   Nothing is torn out for that. The machinery is one number and it is all
+   still here; turning night back on is uncommenting the three lines under
+   this one, or setting --night from wherever his idea says it should come -
+   a toggle, the hour, the scroll. Everything downstream already reads it. */
 :root{ --night: 0 }
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --night: 1 } }
-:root[data-theme="dark"] { --night: 1 }
-:root[data-theme="light"]{ --night: 0 }
+
+/* @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --night: 1 } } */
+/* :root[data-theme="dark"] { --night: 1 } */
+/* :root[data-theme="light"]{ --night: 0 } */
 
 .nightfall{
   position:fixed; inset:0; z-index:9999;
