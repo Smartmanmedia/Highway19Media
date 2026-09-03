@@ -43,6 +43,7 @@ parts.join('\n\n')
   /* his vehicles and his road, then the traffic that drives on it - in that
      order, because traffic.js reads both at start-up */
   + '<script src="sprite.js" defer></script>\n'
+  + '<script src="shades.js" defer></script>\n'
   + '<script src="paths.js" defer></script>\n'
   + '<script src="traffic.js" defer></script>\n';
 

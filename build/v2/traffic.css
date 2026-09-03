@@ -11,3 +11,10 @@ section .traffic{
   overflow:visible; pointer-events:none;
 }
 @media (prefers-reduced-motion: reduce){ section .traffic{ display:none } }
+
+/* HIS CAR SHADOWS. The art carries no fill, so it renders black on its own;
+   the opacity is the same 0.30 the boats and the hero sign use, so one sun
+   lights the whole page. They are their own group inside each section's
+   traffic layer - see traffic.js for why the order of children was not
+   enough. */
+section .traffic .shades{ opacity:.30 }

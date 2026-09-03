@@ -19,7 +19,12 @@ const path = require('path');
      differ wherever a car moved, and a max-darkening test happily reports that
      as a shadow - it passed with the bug deliberately put back. */
   await p.evaluate(() => document.getAnimations().forEach(a => a.pause()));
-  await p.waitForTimeout(200);
+  /* THE TRAFFIC IS NOT A CSS ANIMATION. It drives itself on requestAnimationFrame,
+     so pausing the document's animations leaves every car still moving and a
+     car that moved between the two shots reads as darkening. Blanking rAF stops
+     the loop the next time it asks for a frame. */
+  await p.evaluate(() => { window.requestAnimationFrame = function () { return 0 }; });
+  await p.waitForTimeout(300);
 
   const targets = await p.evaluate(() =>
     [...document.querySelectorAll('.sign-shadow, .cast .shade, .rock-layer[style*="--lift"], svg.z-ground[style*="--lift"]')]

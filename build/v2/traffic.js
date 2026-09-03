@@ -24,6 +24,7 @@
   'use strict';
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   var P = window.H19_PATHS, SPRITE = window.H19_SPRITE, NAMES = window.H19_CARS;
+  var SHADES = window.H19_SHADES;          /* optional - no file, no shadows */
   if (!P || !SPRITE || !NAMES) return;
 
   var SVGNS = 'http://www.w3.org/2000/svg', XLINK = 'http://www.w3.org/1999/xlink';
@@ -59,7 +60,7 @@
   defs.setAttribute('aria-hidden', 'true');
   defs.setAttribute('width', 0); defs.setAttribute('height', 0);
   defs.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden';
-  defs.innerHTML = SPRITE;
+  defs.innerHTML = SPRITE + (SHADES || '');
   document.body.appendChild(defs);
 
   /* measure each one, so a lorry is a lorry and a mini is a mini */
@@ -85,7 +86,16 @@
       svg.setAttribute('class', 'traffic z-road');
       svg.setAttribute('aria-hidden', 'true');
       el.appendChild(svg);
-      return { n: n, el: el, svg: svg, path: P[n] };
+      /* TWO LAYERS, NOT ONE ORDER OF CHILDREN. Cars are appended a vehicle at a
+         time, so a single list would read shadow, car, shadow, car - and the
+         first car would paint UNDER the second car's shadow the moment the two
+         came close on a bend. A group for all the shadows and a group for all
+         the cars settles it once. */
+      var shadeG = document.createElementNS(SVGNS, 'g');
+      shadeG.setAttribute('class', 'shades');
+      var carG = document.createElementNS(SVGNS, 'g');
+      svg.appendChild(shadeG); svg.appendChild(carG);
+      return { n: n, el: el, svg: svg, shadeG: shadeG, carG: carG, path: P[n] };
     }).filter(Boolean);
     if (!parts.length) return null;
     return { parts: parts, thin: cfg.thin, cars: [], live: true, pts: [], len: 0, laneW: 0 };
@@ -108,6 +118,14 @@
         part.ox = r.left + scrollX; part.oy = r.top + scrollY;
         part.w = r.width; part.h = r.height;
         part.svg.setAttribute('viewBox', '0 0 ' + r.width + ' ' + r.height);
+        /* HIS SUN, THROUGH THE SAME THREE NUMBERS AS EVERY OTHER SHADOW.
+           sun.css sets --sun-lean -0.35 and --sun-y 0.30, both per unit of
+           lift, both in cqw. A car sits on the road, so its lift is small: 1.2
+           against the speedboat's 2.0 and the hero sign's 8.8. cqw is a share
+           of the SECTION, which is what r.width is here, so the offset scales
+           with the art like everything else. */
+        part.sunX = -0.35 * 1.2 / 100 * r.width;
+        part.sunY =  0.30 * 1.2 / 100 * r.width;
         road.laneW = part.path.w / 100 * r.width / 2;
         part.path.p.forEach(function (q) {
           var pt = [part.ox + q[0] / 100 * r.width, part.oy + q[1] / 100 * r.height];
@@ -216,7 +234,12 @@
         c.vmax = road.scale * CRUISE * pace[id] * (1 - SPREAD / 2 + Math.random() * SPREAD);
         c.v = c.want = c.vmax;
         road.parts.forEach(function (part) {
-          var u = use(id); part.svg.appendChild(u); c.nodes.push({ u: u, part: part });
+          var u = use(id); part.carG.appendChild(u);
+          var sh = null;
+          if (SHADES && defs.querySelector('#' + CSS.escape(id + '_shade'))) {
+            sh = use(id + '_shade'); part.shadeG.appendChild(sh);
+          }
+          c.nodes.push({ u: u, sh: sh, part: part });
         });
         road.cars.push(c);
       }
@@ -297,10 +320,22 @@
         var x = p.x - p.uy * off, y = p.y + p.ux * off;
         var b = box[c.id], cx = b.x + b.width / 2, cy = b.y + b.height / 2;
         c.nodes.forEach(function (n) {
+          var t = 'rotate(' + ang.toFixed(1) + ') scale(' + c.k.toFixed(4) + ') ' +
+                  'translate(' + (-cx).toFixed(1) + ' ' + (-cy).toFixed(1) + ')';
           n.u.setAttribute('transform',
-            'translate(' + (x - n.part.ox).toFixed(1) + ' ' + (y - n.part.oy).toFixed(1) + ') ' +
-            'rotate(' + ang.toFixed(1) + ') scale(' + c.k.toFixed(4) + ') ' +
-            'translate(' + (-cx).toFixed(1) + ' ' + (-cy).toFixed(1) + ')');
+            'translate(' + (x - n.part.ox).toFixed(1) + ' ' +
+                           (y - n.part.oy).toFixed(1) + ') ' + t);
+          /* THE SUN DOES NOT TURN WITH THE CAR. His shadow art is registered to
+             the car exactly - measured, 0.00 units out on all twenty - so the
+             shadow takes the car's own rotation and scale, and the sun's
+             displacement is added OUTSIDE them, in screen space. Every shadow
+             on the road then points the same way whichever way its car is
+             pointing, which is the whole difference between a sun and a smudge.
+             (The boat's shadow spins with the hull; that is a boat's own wake
+             sitting under it, not the same thing.) */
+          if (n.sh) n.sh.setAttribute('transform',
+            'translate(' + (x - n.part.ox + n.part.sunX).toFixed(1) + ' ' +
+                           (y - n.part.oy + n.part.sunY).toFixed(1) + ') ' + t);
         });
       });
     });
