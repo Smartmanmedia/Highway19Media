@@ -96,6 +96,28 @@ differs by exactly the background showing through. That returns his artwork at
 the opacity he drew it, with edges that butt together invisibly. There is no
 opacity anywhere in his files — any transparency is the rasteriser's.
 
+## WHEN ART VANISHES ON HIS MACHINE AND NOT ON YOURS
+
+The ocean kept stopping in mid-air on his screen — the right third gone, a
+band across the middle gone — while rendering perfectly headless at his exact
+window size and pixel ratio. Missing RECTANGULAR regions are un-rastered
+tiles, not a broken file. Two causes, both worth fixing:
+
+  - **Cost.** 263 sliver shapes under four clip paths, drawn 5,000 device
+    pixels wide, is a lot of rasterising. `tools/degradient.js` took it to 15.
+  - **Where the raster lives.** An `<img>` keeps its raster in the browser's
+    IMAGE cache, and a browser short of memory (he runs 18 tabs) drops tiles
+    out of that cache and repaints them lazily. Inline the art instead and it
+    is part of the section's own display list, which repaints with the section.
+    `tools/inline_art.js` re-inlines an asset into a section page and keeps a
+    `Source:` marker, so the file on disk is still the thing you edit.
+
+And then assume it will happen anyway. `tools/ocean_underlay.js` samples the
+art straight down its own height and writes the colours out as a CSS gradient
+for the section to paint UNDERNEATH. You never see it. When a tile does go
+missing, what shows is the right colour at the right height with only the wavy
+edges lost, instead of a hole. Hide `.z-ground` in devtools to see it.
+
 ## His type — measured, not chosen
 
 Two families, both from his file:
@@ -241,6 +263,8 @@ artwork and gradients flatten.
 
     tools/import_art.py          validates an Illustrator export, fixes blend modes
     tools/degradient.js          sliver stacks back into real gradients — run first
+    tools/inline_art.js          an asset SVG inlined into its section page
+    tools/ocean_underlay.js      the art's own colours as a CSS gradient behind it
     tools/make_page.js           page.html from the section files
     tools/check_join.js          the road across a section seam, at six widths
     tools/check-contrast.js W    39 copy elements vs the pixels behind them

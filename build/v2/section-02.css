@@ -15,11 +15,25 @@
   /* HIS OWN OCEAN COLOUR, taken off the top band of the wave art itself
      rather than section one's. His band runs #004ba0 to #0561ca ACROSS THE
      IMAGE, and the image is 126% of the section, so the part you can actually
-     see is the middle 79% of that ramp: #014ea5 to #055fc6. The section now paints the
-     exact colour the wave art paints over it, so the ocean reads as full width
-     even if the browser is slow to raster the artwork on top of it. Section one
-     fades into this blue at its bottom edge, so the join has no line. */
-  background:linear-gradient(90deg,#014ea5 0%,#055fc6 100%);
+     see is the middle 79% of that ramp: #014ea5 to #055fc6. Section one fades
+     into this blue at its bottom edge, so the join has no line.
+
+     THE BAND STOPS ON TOP OF IT ARE THE OCEAN'S OWN COLOURS, sampled straight
+     down the wave art by tools/ocean_underlay.js. You never see them: the art
+     paints over every one. They are here for the moment the browser is short
+     of memory and has not finished painting - which is what made the ocean
+     look like it stopped in mid-air. Now the wrong thing to see is the right
+     colour at the right height, with only the wave edges missing. */
+  background:
+    linear-gradient(180deg,
+      #0357b6 0.03%, #0256b5 12.41%, #a2c1e4 12.54%, #ffffff 12.67%,
+      #ffffff 12.80%, #92b2d8 12.93%, #014ca4 13.07%, #014ca4 13.59%,
+      #0364d7 13.85%, #0263d6 17.37%, #0087ef 17.63%, #0087ef 26.76%,
+      #2f9ef2 26.89%, #ffffff 27.02%, #ffffff 27.54%, #3a8ec5 27.67%,
+      #016db4 27.80%, #016db4 28.19%, #0195e8 28.32%, #039ff3 28.45%,
+      #029ef3 33.80%, #52ade3 34.06%, #52ade3 42.66%, #acd5f3 42.79%,
+      #eef1ff 42.92%, #eef2ff 45.40%),
+    linear-gradient(90deg,#014ea5 0%,#055fc6 100%);
   overflow:hidden;
   isolation:isolate;
 }
@@ -40,7 +54,7 @@
 }
 
 .sec2 [data-at]{ position:absolute; display:block }
-.sec2 img[data-at]{ height:auto }
+.sec2 img[data-at], .sec2 svg[data-at]{ height:auto }
 /* the surf sits ON the sand by its own z-index, not by being later in the
    markup - painting order is too easy to break by moving one line */
 .sec2 .z-ground{ z-index:1 } .sec2 .z-road{ z-index:2 }
