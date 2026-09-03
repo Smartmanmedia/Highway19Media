@@ -160,3 +160,34 @@
   transform:scaleX(var(--sx));
   transform-origin:50% 0;
 }
+
+/* --- THE HERO SIGN'S SERVICE UNDERLINES ----------------------------------
+   He drew one "Hover line" under Print Design. There is now one under each of
+   the four services, each his exact rect centred on that label. Nothing shows
+   until you hover the panel; then the line grows out from its own centre to
+   full width, which is his "from shorter line to the wider line".
+
+   scaleX on an SVG rect needs transform-box:fill-box, or the origin is the
+   whole SVG's viewBox and the line slides across the sign instead of growing
+   in place.
+
+   The hit area is a transparent rect over the whole panel, so the words, the
+   arrow above them and the space between are all one target. fill:none alone
+   receives no pointer events - hence pointer-events="all" in the markup.
+   ---------------------------------------------------------------------- */
+.sec1 .z-sign .svc{ cursor:pointer }
+.sec1 .z-sign .svc .ul{
+  transform-box:fill-box; transform-origin:50% 50%;
+  transform:scaleX(0.3);
+  opacity:0;
+  transition:transform .28s cubic-bezier(.22,.61,.36,1), opacity .18s linear;
+}
+.sec1 .z-sign .svc:hover .ul,
+.sec1 .z-sign .svc:focus-visible .ul,
+.sec1 .z-sign .svc:focus-within .ul{
+  transform:scaleX(1);
+  opacity:1;
+}
+@media (prefers-reduced-motion: reduce){
+  .sec1 .z-sign .svc .ul{ transition:opacity .18s linear; transform:scaleX(1) }
+}

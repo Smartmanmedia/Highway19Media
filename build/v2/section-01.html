@@ -78,7 +78,29 @@
             <text transform="translate(1179.17 465.6352) scale(.9666 1)" fill="#fff" font-family="BeVietnamPro-Black, 'Be Vietnam Pro'" font-size="24" font-weight="800" text-anchor="middle"><tspan x="0" y="0">Video Production</tspan></text>
             <text transform="translate(700.62 465.64) scale(.97 1)" fill="#fff" font-family="BeVietnamPro-Black, 'Be Vietnam Pro'" font-size="24" font-weight="800" text-anchor="middle"><tspan x="0" y="0">Website Design</tspan></text>
             <text transform="translate(1409.17 462.8026) scale(.9666 1)" fill="#fff" font-family="BeVietnamPro-Black, 'Be Vietnam Pro'" font-size="24" font-weight="800" text-anchor="middle"><tspan x="0" y="0">Social Media</tspan></text>
-            <rect id="hero-sign-Hover_line" data-name="Hover line" x="855.21" y="488.86" width="173.7" height="2.73" rx="1.36" ry="1.36" fill="#fff"></rect>
+            <!-- His "Hover line" was one rect under Print Design. It is now one per
+                 service, each his exact line (w 173.7, h 2.73) centred on that label's
+                 own centre - a nav underline, not a text-hugging one: his line is
+                 1.39x the Print Design text, and that ratio would carry Video
+                 Production's line past its own panel. Hidden until you hover the
+                 panel, then it grows out from its centre - see section-01.css.
+                 Each <g class="svc"> becomes an <a> when the pages exist. -->
+            <g class="svc">
+              <rect class="hit" x="583.47" y="243.00" width="234.32" height="273.00" fill="none" pointer-events="all"><title>Website Design</title></rect>
+              <rect class="ul" x="613.77" y="488.86" width="173.7" height="2.73" rx="1.36" ry="1.36" fill="#fff"></rect>
+            </g>
+            <g class="svc">
+              <rect class="hit" x="820.12" y="243.00" width="241.36" height="273.00" fill="none" pointer-events="all"><title>Print Design</title></rect>
+              <rect class="ul" x="853.92" y="488.86" width="173.7" height="2.73" rx="1.36" ry="1.36" fill="#fff"></rect>
+            </g>
+            <g class="svc">
+              <rect class="hit" x="1063.81" y="243.00" width="230.73" height="273.00" fill="none" pointer-events="all"><title>Video Production</title></rect>
+              <rect class="ul" x="1092.32" y="488.86" width="173.7" height="2.73" rx="1.36" ry="1.36" fill="#fff"></rect>
+            </g>
+            <g class="svc">
+              <rect class="hit" x="1296.87" y="243.00" width="224.62" height="273.00" fill="none" pointer-events="all"><title>Social Media</title></rect>
+              <rect class="ul" x="1322.32" y="488.86" width="173.7" height="2.73" rx="1.36" ry="1.36" fill="#fff"></rect>
+            </g>
           </g>
           <rect x="766.28" y="190.44" width="583.4" height="52.54" rx="9.81" ry="9.81"></rect>
           <rect x="767.49" y="187.6" width="581.71" height="52.54" rx="7.34" ry="7.34" fill="#ffda00" stroke="#fff" stroke-miterlimit="10" stroke-width="2"></rect>

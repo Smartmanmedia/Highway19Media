@@ -67,6 +67,21 @@
   background:#fff; border:0.052cqw solid #1a1a1a; border-radius:1.071cqw;
   z-index:1;
   font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
+  /* `scale` and `box-shadow`, not `transform` - his squeezed copy elsewhere on
+     the page owns transform, and keeping to the standalone property means a
+     card never has to know what else is on it. */
+  scale:1;
+  transition:scale .22s ease-out, box-shadow .22s ease-out;
+}
+/* PICK YOUR LANE: the card lifts and the button arrives. The lifted card is
+   raised a layer so it grows over its neighbours rather than under them.
+   :focus-within covers the click - the <article> carries tabindex="0" until
+   these become links, so a tap or a keyboard tab opens it the same way. */
+.sec6 .page .card:hover,
+.sec6 .page .card:focus-within{
+  scale:1.05;
+  box-shadow:0 0.16cqw 0.85cqw rgba(0,0,0,.16);
+  z-index:2;
 }
 .sec6 .page .card > *{ position:absolute; margin:0; text-align:center }
 
@@ -90,9 +105,28 @@
   left:6%; right:6%; top:55.43%; font-size:0.667cqw; font-weight:500;
   line-height:1.19; color:#333;
 }
+/* It sits on his mark, but it is not there until you ask for it: it fades in
+   while sliding UP INTO that mark, so the arrival reads as the button coming
+   to meet you rather than appearing out of nowhere. `translate` again, so it
+   composes with the card's own `scale` instead of fighting a transform. */
 .sec6 .page .card .btn{
   left:12.22%; width:75.56%; top:81.85%; height:10.80%;
   background:var(--c); border:0.104cqw solid #fff; border-radius:0.582cqw;
   display:flex; align-items:center; justify-content:center;
   color:#fff; font-size:0.994cqw; font-weight:500; white-space:nowrap;
+  opacity:0; translate:0 60%;
+  transition:opacity .18s linear, translate .26s cubic-bezier(.22,.61,.36,1);
+  pointer-events:none;
+}
+.sec6 .page .card:hover .btn,
+.sec6 .page .card:focus-within .btn{
+  opacity:1; translate:0 0;
+  pointer-events:auto;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .sec6 .page .card{ transition:box-shadow .22s ease-out }
+  .sec6 .page .card:hover,
+  .sec6 .page .card:focus-within{ scale:1 }
+  .sec6 .page .card .btn{ translate:0 0; transition:opacity .18s linear }
 }

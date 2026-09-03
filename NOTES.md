@@ -190,6 +190,36 @@ mark, which is worse than no motion at all. One passive scroll listener batched
 into one rAF is verifiable, and measurably works: over 700px of scroll the
 cloud drifts 52px against the truss, the boat 36, the sign 12.
 
+## Hover, and why it never touches `transform`
+Two hover states are live: the hero sign's four service underlines, and the
+"pick your lane" cards.
+
+**Use the standalone `scale` / `translate` properties, never `transform`.** His
+squeezed copy already owns `transform` (`scaleX(var(--sx))`), and so does the
+parallax (which writes `translate` and nothing else, for the same reason). A
+hover rule that reaches for `transform` silently unsqueezes his type or cancels
+the parallax. `scale:1.05` and `translate:0 60%` compose with whatever else is
+on the element, and with each other.
+
+**scaleX on an SVG rect needs `transform-box:fill-box`.** Without it the origin
+is the whole viewBox, so the line slides across the sign instead of growing in
+place. With `transform-origin:50% 50%` it grows out from its own centre.
+
+**`fill="none"` receives no pointer events.** An invisible hit area over a sign
+panel needs `pointer-events="all"` (or a fill with zero opacity). The four
+panels' hit rects run the full panel width, from below his yellow banner to the
+inside of the sign, so the words, the arrow above them and the space between
+are one target.
+
+**`:focus-within` is how "or click" works with no JavaScript.** It matches the
+element itself as well as its children, so `tabindex="0"` on the card is enough
+for a tap or a keyboard tab to open it — no listener, and it keeps working when
+the cards become links and the tabindex comes off.
+
+A grown card must be raised a layer (`z-index:2`), or it grows *under* its
+neighbours. His card gaps are 1.30% of the section and 1.05 eats 0.34% a side,
+so 1.05 is about as far as it can go before they touch.
+
 ## His type — measured, not chosen
 
 Two families, both from his file:
