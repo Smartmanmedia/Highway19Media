@@ -9,9 +9,15 @@
  * per section fixes that outright: everything in a scene moves in lockstep and
  * only the amplitude differs, which is what parallax is anyway.
  *
- * --par is that amplitude, as a share of the section's width. The section
- * enters at the bottom of the screen with its art --par low, crosses his mark
- * as the section passes the middle, and leaves --par high.
+ * --par is that amplitude, as a share of the section's width.
+ *
+ * NOTHING IS DISPLACED AT FIRST PAINT. Each section remembers the progress it
+ * had when the page loaded, and that is the point where its art sits exactly
+ * on his marks. Anchored to the middle of the pass instead, the hero sign
+ * loaded a hundred pixels low and landed on the copy underneath it - his
+ * artboard leaves it 68px of clearance, and no amount of tuning gets round
+ * that. Anchored to the load, the page opens as he drew it and only moves
+ * once you scroll.
  *
  * --par-bias slides that whole travel down the screen without slowing it: at
  * 0.25 the art starts a quarter of the travel lower and never rides as far up,
@@ -25,7 +31,7 @@
  * motion is left stays smooth. */
 (function () {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var i = 0;
+  var i = 0, p0 = new Map();
   var els = [].map.call(document.querySelectorAll('.par'), function (el) {
     var cs = getComputedStyle(el);
     return { el: el, sec: el.closest('section'),
@@ -35,6 +41,21 @@
                   '@' + el.closest('section').className };
   });
   if (!els.length) return;
+
+  function progress(sec) {
+    var r = sec.getBoundingClientRect(), h = innerHeight;
+    var p = (h - r.top) / (h + r.height);
+    return p < 0 ? 0 : p > 1 ? 1 : p;
+  }
+
+  /* Where a section's art sits exactly on his marks. For a section you can see
+   * when the page opens, that is wherever it is at that moment - the hero has
+   * to open as he drew it. For one below the fold nobody is looking, so anchor
+   * it at the middle of its pass and let it use its travel both ways. */
+  function anchor(sec) {
+    var r = sec.getBoundingClientRect();
+    return (r.top < innerHeight && r.bottom > 0) ? progress(sec) : 0.5;
+  }
 
   /* What actually fits. Measured off the untransformed box - so the translate
    * comes off first - and off getBoundingClientRect rather than offsetTop,
@@ -48,12 +69,15 @@
    * --par-lock is capped on its own, so a low cloud that has run out of room
    * does not drag a high one down with it. */
   function fit() {
-    for (var j0 = 0; j0 < els.length; j0++) els[j0].el.style.translate = '';
+    for (var j0 = 0; j0 < els.length; j0++) {
+      els[j0].el.style.translate = '';
+      if (!p0.has(els[j0].sec)) p0.set(els[j0].sec, anchor(els[j0].sec));
+    }
     var caps = {};
     for (var j = 0; j < els.length; j++) {
       var e = els[j], sr = e.sec.getBoundingClientRect(), r = e.el.getBoundingClientRect();
-      var want = sr.width * e.want / 100;
-      var up = (0.5 - e.bias) * 2, down = (0.5 + e.bias) * 2;
+      var want = sr.width * e.want / 100, z = p0.get(e.sec) + e.bias;
+      var up = (1 - z) * 2, down = z * 2;
       if (up   > 0) want = Math.min(want, (r.top - sr.top) / up);
       if (down > 0) want = Math.min(want, (sr.bottom - r.bottom) / down);
       e.amp = Math.max(0, want);
@@ -67,23 +91,16 @@
   var queued = false;
   function frame() {
     queued = false;
-    var h = innerHeight, seen = new Map();
+    var seen = new Map();
     for (var i = 0; i < els.length; i++) {
       var e = els[i], p = seen.get(e.sec);
-      if (p === undefined) {
-        var r = e.sec.getBoundingClientRect();
-        /* 0 the moment the section's top reaches the bottom of the screen,
-           1 the moment its bottom leaves the top */
-        p = (h - r.top) / (h + r.height);
-        p = p < 0 ? 0 : p > 1 ? 1 : p;
-        seen.set(e.sec, p);
-      }
+      if (p === undefined) { p = progress(e.sec); seen.set(e.sec, p); }
       e.el.style.translate = '0 ' +
-        ((0.5 + e.bias - p) * 2 * e.amp).toFixed(2) + 'px';
+        ((p0.get(e.sec) + e.bias - p) * 2 * e.amp).toFixed(2) + 'px';
     }
   }
   function ping() { if (!queued) { queued = true; requestAnimationFrame(frame); } }
   addEventListener('scroll', ping, { passive: true });
-  addEventListener('resize', function () { fit(); ping(); });
+  addEventListener('resize', function () { p0.clear(); fit(); ping(); });
   ping();
 })();

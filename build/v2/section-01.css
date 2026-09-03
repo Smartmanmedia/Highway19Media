@@ -11,7 +11,12 @@
   --col: 1924.34;              /* his art column, the box percentages resolve in */
   position: relative;
   width: 100%;
-  aspect-ratio: 1924.34 / 1810.6;
+  /* his ocean is 1924.34 x 1810.6, plus 125.08 units of sky on top - see .page.
+     A parallaxed sign needs somewhere to go: his artboard leaves the hero
+     barely 123px of clearance above it, which capped how far it could travel
+     before it would slide out of its own section, and anchored to the load it
+     could only ever ride up. This is that room. */
+  aspect-ratio: 1924.34 / 1935.68;
   /* a size container, so the type below can be a share of THIS box rather than
      of the viewport — the section is full width today and might not always be */
   container-type: inline-size;
@@ -23,6 +28,10 @@
 }
 
 /* every piece is placed the same way, so there is one rule rather than nine */
+/* his artboard, sitting under that band of sky. Everything below is a share of
+   THE PAGE, not of the section, so all of his own marks stand where they were. */
+.sec1 .page{ position:absolute; left:0; right:0; top:6.46%; bottom:0 }
+
 .sec1 [data-at]{ position:absolute; display:block; }
 .sec1 img[data-at]{ height:auto; }
 

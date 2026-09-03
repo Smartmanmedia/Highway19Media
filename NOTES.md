@@ -146,6 +146,18 @@ Road signs, buttons and the boat stay put - he tried it with everything
 floating and it read as noise. First clouds 20, signs and gantries 12, other
 clouds 8.
 
+**Nothing is displaced at first paint.** Each section remembers the progress it
+had when the page loaded, and that is where its art sits exactly on his marks -
+so the page opens as he drew it and only moves once you scroll. Anchored to the
+middle of the pass instead, the hero sign loaded a hundred pixels low and landed
+on the copy underneath it. A section BELOW the fold anchors at the middle
+instead, since nobody is looking, and gets to use its travel both ways.
+
+Section one carries 125.08 units of extra sky above his artboard (`.sec1 .page`)
+for the same reason: a sign anchored to the load can only ride UP, and his
+artboard leaves the hero 123px of clearance, which capped its travel. Everything
+inside `.page` is a share of the page, so his marks stand.
+
 **The spread is the point, not the number.** Clouds and signs on near-identical
 amplitudes move together and read as if nothing is moving at all, however large
 the number. `--par-bias` slides a whole travel down the screen without slowing

@@ -6,11 +6,9 @@
    once read as noise.
 
    --par is the amplitude, as a share of the SECTION WIDTH so it scales with
-   everything else. --par-bias shifts the whole travel down the screen without
-   changing its speed: at 0 the art sits on his mark as the section passes the
-   middle; at 0.25 it starts a quarter of the travel lower and never rides as
-   far up, which is how a cloud can drift a long way without sliding out of the
-   top of its own section.
+   everything else. --par-bias is still there to shift a whole travel up or
+   down the screen, but nothing needs it now: the art sits on his marks at
+   first paint and the cap keeps it inside its section by itself.
 
    Progress is per SECTION, not per element, and an amplitude that would carry
    a piece of art off the top or bottom of its own section is capped to what
@@ -25,9 +23,9 @@
    224px of relative travel at a 1400px screen.
    ========================================================================= */
 .par        { will-change:translate }
-.par-first  { --par:20; --par-bias:0.25 }   /* the clouds you meet first, hardest */
-.par-cloud  { --par:8;  --par-bias:0.25 }
-.par-sign   { --par:12; --par-bias:0.20; --par-lock:gantry }                    /* THE GANTRY SHARES THIS. A sign
+.par-first  { --par:20 }                    /* the clouds you meet first, hardest */
+.par-cloud  { --par:8 }
+.par-sign   { --par:12; --par-lock:gantry }                    /* THE GANTRY SHARES THIS. A sign
                                                hangs off a truss: give them
                                                different amplitudes and the sign
                                                floats off its own gantry. */
