@@ -24,6 +24,11 @@
   --sun: -4deg;
   --sun-len: 1;
   --sun-ink: 0.31;
+  /* THE DIRECTION AS A VECTOR, because that is what the reader-is-the-sun mode
+     writes per element. These are the FALLBACK: his fixed -4 degrees, used
+     before the script runs, if it never runs, and under reduced motion. */
+  --sun-x: calc(cos(var(--sun)));
+  --sun-y: calc(sin(var(--sun)));
 }
 
 /* The art is in normal flow so it sets the box, and the shadow is absolute on
@@ -39,8 +44,17 @@
 .cast > .shade{
   position:absolute; left:0; top:0; width:100%; height:auto; display:block;
   opacity: var(--sun-ink);
-  translate: calc(cos(var(--sun)) * var(--lift) * var(--sun-len) * 1cqw)
-             calc(sin(var(--sun)) * var(--lift) * var(--sun-len) * 1cqw);
+  translate: calc(var(--sun-x) * var(--lift) * var(--sun-len) * 1cqw)
+             calc(var(--sun-y) * var(--lift) * var(--sun-len) * 1cqw);
+}
+
+/* A SHADOW ON A LAYER OF ITS OWN - the sign's, which has to fall on the water
+   and the road but not on the gantry, so it cannot live inside the sign. Same
+   two numbers drive it. */
+[style*="--lift"]:not(.cast):not(.cast-svg){
+  opacity: var(--sun-ink);
+  translate: calc(var(--sun-x) * var(--lift) * var(--sun-len) * 1cqw)
+             calc(var(--sun-y) * var(--lift) * var(--sun-len) * 1cqw);
 }
 
 /* A SHADOW THAT LIVES INSIDE AN INLINE SVG moves in USER UNITS, because that is
@@ -52,6 +66,6 @@
                                    off at the viewBox edge */
 .cast-svg .shade{
   opacity: var(--sun-ink);
-  translate: calc(cos(var(--sun)) * var(--lift-u) * 1px)
-             calc(sin(var(--sun)) * var(--lift-u) * 1px);
+  translate: calc(var(--sun-x) * var(--lift-u) * 1px)
+             calc(var(--sun-y) * var(--lift-u) * 1px);
 }

@@ -401,6 +401,28 @@ the new shadow-only one. Cloud4 and cloud5 give the same number independently,
 so his artwork really is consistent. The default therefore reproduces his design
 exactly - the layer split changes nothing until someone turns the dial.
 
+**The reader is the sun** (parallax.js, the block at the end). A light at the
+reader, so a shadow is cast away from it, and every shadow swings as you scroll.
+It writes --sun-x and --sun-y per element - the same pair the fixed sun uses -
+so the CSS neither knows nor cares which is driving, and with the script off or
+under reduced motion everything falls back to the -4 degrees he drew.
+
+**The light is at the TOP EDGE of the screen, not its middle**, and that is his
+call rather than physics. With it at the middle, anything in the upper half of
+the first screen is already past the light before you have scrolled at all, so
+its shadow can only ever go UP - which for the hero sign means into the gantry
+and the sky, the one place he does not want it. At the top edge the sun starts
+above everything: a thing below you throws its shadow down, it shortens to
+nothing as you draw level, then stretches up behind. Measured on the sign:
++60px at scroll 0, level at 400, -132px by 1400.
+
+**A shadow falls on some things and not others, and DEPTH is what says which.**
+His sign's shadow belongs on the ocean, the road and the traffic but not on the
+gantry it hangs from, so it cannot live inside the sign's own SVG (z-index 3,
+above everything). It is its own div at z-index 2, EARLIER in the markup than
+the truss and the copy which share that index - so it is over the water (0),
+the road and the cars (1), and under the two things that must stay clean.
+
 **Distance is about HEIGHT, not size.** Seen from above, something on the ground
 has no offset and a cloud has a large one, so `--lift` is per element, in cqw,
 measured from his own drawing every time.

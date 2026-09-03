@@ -275,3 +275,9 @@
   95.8333% { translate: calc(var(--rx) * 0.03407) calc(var(--ry) * 0.25882); rotate: 345.00deg }
       100% { translate: calc(var(--rx) * 0.00000) calc(var(--ry) * 0.00000); rotate: 360.00deg }
 }
+
+/* the sign's shadow - see the markup for why it sits at this depth */
+.sec1 .sign-shadow{
+  position:absolute; z-index:2; background:#000; border-radius:1.372cqw;
+  pointer-events:none;
+}
