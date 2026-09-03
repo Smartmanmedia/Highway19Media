@@ -88,10 +88,12 @@
    delays start each one part-way round, so they are already out of phase at
    first paint rather than setting off together.
 
-   The amounts stay small on purpose: 18px of side-to-side and 5px of lift at
-   the shore, 6px and 1.4px at the horizon, on a 1990 screen. Water read at
-   this scale barely moves - push it much past this and his ocean stops being
-   water and turns into a sliding photograph. */
+   THE LIFT IS WHAT YOU ACTUALLY SEE, not the drift. Sliding a long horizontal
+   wavy line sideways is close to invisible - the line is quasi-periodic, so a
+   shifted copy looks like the same line. It is the vertical that reads. The
+   first pass had 18px of side-to-side against 5px of lift and the whole thing
+   was imperceptible; the lift now carries most of it. 24px across and 15px up
+   at the shore, 9px and 5px at the horizon, on a 1990 screen. */
 @keyframes swell{
   0%   { translate: calc(var(--ax) * var(--swell) * -1) 0 }
   25%  { translate: 0 calc(var(--ay) * var(--swell)) }
@@ -108,10 +110,10 @@
    even at 4 the nearest band has 300px of his bleed left on either side - so
    the only limit is taste. */
 .sec2 .waves{ --swell:1 }
-.sec2 .wave-surf { --ax:0.92cqw; --ay:0.24cqw; --dur:11s; --delay:0s }
-.sec2 .wave-mid  { --ax:0.66cqw; --ay:0.17cqw; --dur:14s; --delay:-3.5s }
-.sec2 .wave-swell{ --ax:0.45cqw; --ay:0.11cqw; --dur:18s; --delay:-7s }
-.sec2 .wave-far  { --ax:0.30cqw; --ay:0.07cqw; --dur:23s; --delay:-11s }
+.sec2 .wave-surf { --ax:1.20cqw; --ay:0.75cqw; --dur:9s;  --delay:0s }
+.sec2 .wave-mid  { --ax:0.90cqw; --ay:0.55cqw; --dur:12s; --delay:-3.5s }
+.sec2 .wave-swell{ --ax:0.65cqw; --ay:0.38cqw; --dur:15s; --delay:-7s }
+.sec2 .wave-far  { --ax:0.45cqw; --ay:0.25cqw; --dur:19s; --delay:-11s }
 
 /* off screen it stops - four forever-animations on a page this long is exactly
    the kind of cost that adds up for nothing. parallax.js sets .still. */

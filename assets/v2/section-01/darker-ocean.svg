@@ -5,7 +5,7 @@
       <stop offset="0" stop-color="#004ca2"/>
       <stop offset="1" stop-color="#045dc3"/>
     </linearGradient>
-    <linearGradient id="linear-gradient-2" x1="962.17" y1="0" x2="962.17" y2="1281.8" gradientUnits="userSpaceOnUse">
+    <linearGradient id="linear-gradient-2" x1="962.17" y1="0" x2="962.17" y2="1796.6" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#00287d"/>
       <stop offset=".24" stop-color="#00297e" stop-opacity=".98"/>
       <stop offset=".42" stop-color="#002d83" stop-opacity=".9"/>
@@ -19,7 +19,7 @@
   <g id="Clouds">
     <g>
       <polygon id="ocean" points="1924.33 1810.6 496.77 1810.6 0 1810.6 0 0 1924.33 0 1924.33 1810.6" fill="url(#linear-gradient)"/>
-      <polygon id="ocean-2" data-name="ocean" points="1924.33 1281.8 496.77 1281.8 0 1281.8 0 0 1924.33 0 1924.33 1281.8" fill="url(#linear-gradient-2)"/>
+      <polygon id="ocean-2" data-name="ocean" points="1924.33 1796.6 496.77 1796.6 0 1796.6 0 0 1924.33 0 1924.33 1796.6" fill="url(#linear-gradient-2)"/>
     </g>
   </g>
 </svg>

@@ -123,11 +123,14 @@
  * them instead - no scroll listener, no work per frame, and the CSS decides
  * what "parked" means. */
 (function () {
-  var w = document.querySelectorAll('.waves');
+  var w = document.querySelectorAll('.waves, .cruise');
   if (!w.length || !window.IntersectionObserver) return;
   var io = new IntersectionObserver(function (rows) {
     for (var i = 0; i < rows.length; i++)
       rows[i].target.classList.toggle('still', !rows[i].isIntersecting);
   }, { rootMargin: '10%' });
-  for (var i = 0; i < w.length; i++) { w[i].classList.add('still'); io.observe(w[i]); }
+  /* NOT parked up front: observe() reports the current state straight away,
+     so an element that is already on screen never stops. If the observer
+     somehow never fires, the failure is motion rather than no motion. */
+  for (var i = 0; i < w.length; i++) io.observe(w[i]);
 })();

@@ -258,9 +258,57 @@ IntersectionObserver in parallax.js add `.still` to the wrapper, and the CSS
 pauses the animations. On a page this long the beach is off screen most of the
 time.
 
+**Sliding a horizontal wavy line sideways is close to invisible.** The line is
+quasi-periodic, so a shifted copy looks like the same line. It is the VERTICAL
+that reads. The first pass had 18px of drift against 5px of lift and he could
+not see it moving at all; the lift now carries most of it.
+
+**Check the tightest moment, not the largest.** The first edge check took
+`Math.min` over a cycle of NEGATIVE overhangs, so it reported the moment of
+greatest safety and called it the worst case. Margins that looked like 30px
+were really 1.8px. When a measurement is a safety argument, prove the extreme
+is the one you think it is.
+
+**Then check what his PAINT does, not what the box does.** getBBox on the
+band's own content is the real budget. His surf's ink runs 9.7px past the
+window and his far band's 20.2px, which are completely different constraints -
+and the surf's turned out not to be a constraint at all, because its bottom
+edge is a natural foam curve: moving it up just reads as the tide going out.
+The far band's IS a cliff, because that edge is the section one/two seam.
+
 **Give it one dial.** `--swell` on the wrapper scales all four bands together
 and keeps their relation, so there is a single number to turn when he says it
 is too much or too little - which is the feedback that always comes.
+
+## Moving something along a path
+His boat circles an oval and STEERS - turned to face along the path at every
+step, because anything that slides sideways round a bend reads as a sticker
+being dragged.
+
+**Keyframes, not `offset-path`.** `offset-path: ellipse()` is one line and does
+exactly this, but its basic shapes need Chrome 116 / Safari 18. The exact
+position of his art is not somewhere to spend a browser-support argument.
+tools/make_cruise.js generates 24 keyframes (15-degree steps, so the chord sags
+about a pixel), in cqw so the circuit scales with the section.
+
+**Unwrap the heading.** atan2 comes back in -180..180, and handing CSS a
+rotation that goes 170 -> -170 makes it spin the long way back. Add 360 each
+time it decreases so the value climbs 0 -> 360 across the lap.
+
+**Home is a point ON the path, not its centre.** An element can never be at the
+centre of its own orbit, so if his drawn position is to survive, the path has to
+pass through it. His boat's home is the oval's left flank; the oval hangs to the
+right of where he put it.
+
+**A turning thing's bounding box swells, and the widest moment is not the
+furthest moment.** His boat is 81px bow-on and 208px broadside; the tightest
+clearance to the section edge came 15 degrees off the flank, not at it. Walk the
+lap and measure - reasoning about it was out by 30px.
+
+**The drop shadow rotates with it.** His shadow is baked into the art, so the
+light appears to swing round the lap. Splitting it out is the wave treatment
+again: give the shadow its own element that translates but does not rotate.
+Not done - flagged to him.
 
 ## His type — measured, not chosen
 
