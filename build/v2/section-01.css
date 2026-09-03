@@ -324,3 +324,14 @@
   95.8333% { rotate: 345.00deg }
       100% { rotate: 360.00deg }
 }
+
+/* the sign's shadow - see the markup for why it sits at this depth.
+   THIS WENT MISSING ONCE: an edit truncated this file at the @keyframes marker
+   to regenerate them, and took everything after it with them. The shadow
+   element stayed in the markup and its computed style still reported a
+   translate and an opacity, so it looked fine to every check I had - it just
+   had no background left to paint. tools/check_shadows.js now tests the pixels. */
+.sec1 .sign-shadow{
+  position:absolute; z-index:2; background:#000; border-radius:1.372cqw;
+  pointer-events:none;
+}

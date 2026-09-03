@@ -405,6 +405,30 @@ apply once. Check by computing what one pass should give and comparing.
 called end-rocks.svg; copying them into one directory by basename put section
 six's art over section four's.
 
+## A shadow that reports fine and paints nothing
+His hero sign's shadow vanished, and every check I had said it was healthy: the
+element was in the markup, and its computed style reported a translate and an
+opacity quite happily. It simply had no background left to paint - an edit had
+truncated section-01.css at an `@keyframes` marker to regenerate them and taken
+the rule after it with them.
+
+**Truncating a file at a marker takes everything after the marker.** Check what
+is down there first.
+
+**tools/check_shadows.js tests the PIXELS**, because nothing that reads the DOM
+can see this. Hide the shadow, screenshot where it falls, show it, screenshot
+again, and the second must be darker. Three things it needed before it was
+worth anything, each found by deliberately reintroducing the bug and watching
+it pass:
+  - decode the PNG. Averaging the raw screenshot bytes averages deflate output;
+  - compare the WHOLE BOX per pixel and take the largest darkening. A round
+    shadow has no ink 85% of the way down its own box, so a single sample calls
+    a working cloud shadow broken;
+  - PAUSE EVERY ANIMATION FIRST. Two shots of a page with traffic on it differ
+    wherever a car moved, and a max-darkening test reports that as a shadow.
+A check that cannot fail is worse than no check: it tells you the thing you
+broke is fine.
+
 ## Layers that do not share an artboard
 Illustrator crops each export to its own content unless told otherwise, so a
 set of layers meant to stack arrives with different artboards and nothing
