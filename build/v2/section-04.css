@@ -10,12 +10,31 @@
   width:100%;
   aspect-ratio:1930.6 / 1626.4;         /* 0.8424 */
   container-type:inline-size;
-  /* his own ground gradient: #006837 at y 249.95 to #39b54a at y 1540.94 of
-     1626.4, which is 15.37% to 94.75% of the section */
-  background:linear-gradient(180deg,
-    #006837 0%, #006837 15.37%, #39b54a 94.75%, #39b54a 100%);
+  /* THE CANOPY HAS TO LAND ON THE MOUNTAINS ABOVE IT. His artboard leaves the
+     top tenth of this section empty, so stacked flat there was a band of bare
+     green between section three's rocks and the first tree. Rather than move
+     his canopy up inside the section - which would drag the tree line up
+     through his sign with it - the whole section rides up over section three
+     by 19% of its own height, and its top is left transparent so the rocks
+     show through. His composition is untouched; it just starts higher.
+
+     19% of the height is 16.01% of the width, and a percentage margin resolves
+     against width, so that is the number here. The canopy's first leaves then
+     land about 100px above section three's bottom edge at a 1400px screen, and
+     its solid part covers the join outright. */
+  margin-top:-16.01%;
   overflow:hidden;
   isolation:isolate;
+}
+
+/* his ground, as a child rather than the section's own background, so the top
+   of the section can stay transparent for the rocks behind it. His gradient
+   runs #006837 at y 249.95 to #39b54a at y 1540.94 of 1626.4 - 15.37% to
+   94.75% of the section, which is 1.59% to 93.90% of a box that starts at 14% */
+.sec4 .ground{
+  position:absolute; left:0; right:0; top:14%; bottom:0; z-index:0;
+  background:linear-gradient(180deg,
+    #006837 0%, #006837 1.59%, #39b54a 93.90%, #39b54a 100%);
 }
 
 /* THE GANTRY. It is in his render but not in his export, so this is section
@@ -46,17 +65,23 @@
 }
 .sec4 [style*="--sx"]{ transform:scaleX(var(--sx)); transform-origin:50% 0 }
 
-/* the sign copy, both blocks squeezed to .82 the way he drew them */
-.sec4 h2.copy{
-  font-family:"Highway Gothic Expanded","Be Vietnam Pro",Arial,sans-serif;
-  font-weight:400; font-size:3.117cqw; line-height:0.970; text-align:left;
-  white-space:nowrap;
+/* THE SIGN COPY. His own marks put it hard against the right edge of the
+   plate, so this is his instruction, not his file: a size down and centred.
+   The box is the plate's inner area - from the right of his arrow to the
+   plate's right edge - and the copy is centred in it both ways. Both blocks
+   still carry his scale(.82 1). */
+.sec4 .sign-copy{
+  position:absolute; z-index:3;
+  left:49.85%; right:14.03%; top:24.45%; height:18.41%;
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  gap:1.1%;
 }
-.sec4 .sub{
+.sec4 .sign-copy > *{ margin:0; transform:scaleX(0.82); transform-origin:50% 50%;
+  white-space:nowrap; color:#fff; text-align:center;
   font-family:"Highway Gothic Expanded","Be Vietnam Pro",Arial,sans-serif;
-  font-weight:400; font-size:1.426cqw; line-height:1.2; text-align:center;
-  white-space:nowrap;
-}
+  font-weight:400; }
+.sec4 .sign-copy h2{ font-size:2.65cqw; line-height:1.06 }
+.sec4 .sign-copy p { font-size:1.21cqw; line-height:1.2 }
 .sec4 .body{
   font-size:1.347cqw; font-weight:500; line-height:1.076;
   text-align:center; color:#fdf6e4;

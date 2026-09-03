@@ -8,19 +8,13 @@
 
 <section class="sec4">
 
-  <!-- Section three's desert does not stop at section three: his layer runs
-       282.77 units past the bottom of that artboard, and clipped there it cut
-       his rocks off mid-shape. This is that overhang, the same drawing at the
-       same scale, carried across so the rocks finish. Rasterised because it is
-       a thin strip and duplicating 978 paths for it would not be. -->
-  <img class="z-back" data-at src="../../assets/v2/section-04/desert-bleed.webp" alt=""
-       style="left:-14.5%;top:0;width:123.07%">
+  <span class="ground" aria-hidden="true"></span>
 
   <!-- THE CANOPY across the top. This one is a raster in HIS file too - a
        6.5 MB embedded PNG - so it stays a bitmap, re-encoded to WebP at 2400px
        and 301 KB. -->
   <img class="z-back" data-at src="../../assets/v2/section-04/forest.webp" alt=""
-       style="left:0;top:0;width:99.74%">
+       style="left:-0.5%;top:0;width:101%">
 
   <!-- ROAD - it arrives from section three's left edge, turns, and runs off the
        bottom. Each section's road is its own run; his cars drive off the edge
@@ -1723,9 +1717,10 @@
   <!-- Copy read out of his export by tools/read_text.js. Both sign blocks
        carry his scale(.82 1), so the box is widened by 1/.82 and squeezed
        back; the body copy and the button label carry no squeeze. -->
-  <h2 class="copy z-copy" style="left:48.86%;top:28.01%;width:32.98%;--sx:0.82">We Handle the Marketing.<br>You Run the Business.</h2>
-
-  <p class="copy sub z-copy" style="left:49.21%;top:36.50%;width:31.70%;--sx:0.82">One team, one vision, one goal: growing your business.</p>
+  <div class="sign-copy">
+    <h2>We Handle the Marketing.<br>You Run the Business.</h2>
+    <p>One team, one vision, one goal: growing your business.</p>
+  </div>
 
   <p class="copy body z-copy" style="left:47.68%;top:58.73%;width:35.14%"><span>From video production and print design to websites,</span><span>social media, and paid ads, Highway 19 Media</span><span>handles every aspect of your marketing so you don&rsquo;t</span><span>have to. We come to your job site, shoot what you</span><span>actually do, and turn it into what your customers see.</span></p>
 
