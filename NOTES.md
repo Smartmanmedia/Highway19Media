@@ -388,6 +388,41 @@ waited 20ms reported 25 overhangs that a careful max-overhang check could not
 reproduce at all - the traffic script appending its layer triggers a relayout,
 and a frame measured inside that window catches art mid-update.
 
+## Recolouring, and the trap in re-running it
+`tools/darken_art.js` shifts an asset's colours; `tools/darken_inline.js` does
+the same to art that is INLINE in a section, which is what actually shows.
+Both take a gamma on lightness rather than a scale - a flat multiply greys
+everything and makes it MORE washed out, where L^g pulls the mids down and
+leaves the highlights, opening the gap that reads as rock.
+
+**IT IS NOT IDEMPOTENT, AND `git checkout` RESTORES THE LAST COMMIT, NOT THE
+ORIGINAL.** Re-running a pass after committing the previous one applies it
+twice: the dominant grey came out at L=5% where one pass gives 27%. Restore
+from the commit BEFORE the recolouring (`git checkout <that>~1 -- ...`) and
+apply once. Check by computing what one pass should give and comparing.
+
+**Back up under distinct names.** Both section four and section six have a file
+called end-rocks.svg; copying them into one directory by basename put section
+six's art over section four's.
+
+## Layers that do not share an artboard
+Illustrator crops each export to its own content unless told otherwise, so a
+set of layers meant to stack arrives with different artboards and nothing
+recording how they line up. Three ways out, in order of how much they can be
+trusted:
+  1. **A clipPath in the file.** His new sand carries a rect at x 53.82 w
+     1921.6, and 1921.6 IS the art column - so its x 53.82 lands on the
+     section's left edge and everything follows. Exact.
+  2. **The artboard itself**, where a layer is the whole column: his mountains
+     are 1918.34 against a column of 1922.52. Near enough.
+  3. **tools/align_layers.js**, which correlates the ink of one layer against
+     another and slides until they agree. An estimate - a shadow is meant to be
+     offset from what casts it, so the peak lands near his intent rather than on
+     it - but it agreed with simply centring the layer to within one per cent.
+
+100% OF THE SECTION IS 1922.52 USER UNITS in section three. That single number
+converts any of his exports into a placement.
+
 ## The sun
 Every shadow is its own layer sitting exactly on top of the thing that casts it,
 displaced by three numbers on :root - `--sun` (the angle it falls), `--sun-len`
