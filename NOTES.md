@@ -280,6 +280,31 @@ The far band's IS a cliff, because that edge is the section one/two seam.
 and keeps their relation, so there is a single number to turn when he says it
 is too much or too little - which is the feedback that always comes.
 
+## Where a road ENDS is not where his art ends
+Two separate failures, both of which made cars appear or vanish in plain view.
+
+**His dashes stop short of his tarmac.** Section three's last tile reaches
+100.05% of the section; its last dash is at 96.8%. A car wrapping at the end of
+the extracted path therefore vanished three per cent inside the frame. The
+centreline is a faithful record of what he drew and should stay that way, so
+traffic.js extends it at BOTH ends along its own end tangents, 22% of the
+section width, and the wrap happens off-page.
+
+**Concatenating two sections' paths can double the road back.** Section one's
+centreline runs 3.4% of its height PAST its own bottom edge, while section
+two's begins only 1.7% below that boundary - so joining them put a 180-degree
+reversal in the middle of the road, and cars reaching it turned round or
+disappeared. Same rule as inside a tile: a point must lie forward of where the
+road is already going, or it is overlap and gets dropped.
+
+**Check the behaviour, not the data.** A checker that rebuilt the polyline from
+H19_PATHS could not see the fix at all, because the fix lives in traffic.js.
+Following every car for 20 seconds and counting on-screen jumps and heading
+reversals is the test that actually answers the question. And watch the sign of
+your own metric: the first version of that check compared the normalised
+heading delta with `< 60` when a reversal is `> 150`, and cheerfully reported
+1,345 flips in a section that had none.
+
 ## Moving something along a path
 His boat circles an oval and STEERS - turned to face along the path at every
 step, because anything that slides sideways round a bend reads as a sticker

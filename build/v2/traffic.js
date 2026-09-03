@@ -110,9 +110,44 @@
         part.svg.setAttribute('viewBox', '0 0 ' + r.width + ' ' + r.height);
         road.laneW = part.path.w / 100 * r.width / 2;
         part.path.p.forEach(function (q) {
-          pts.push([part.ox + q[0] / 100 * r.width, part.oy + q[1] / 100 * r.height]);
+          var pt = [part.ox + q[0] / 100 * r.width, part.oy + q[1] / 100 * r.height];
+          /* NEVER LET THE JOINED ROAD DOUBLE BACK.
+             Each section's centreline is extracted on its own, and section one's
+             runs 3.4% of its height PAST its own bottom edge while section two's
+             starts only 1.7% below that boundary - so simply concatenating them
+             put a 180-degree reversal in the middle of the road, right where the
+             two meet. A car reaching it turned round and drove back into the
+             oncoming lane, or vanished. Same rule as the extractor uses inside a
+             tile: a point has to lie forward of where the road is already going,
+             or it is an overlap and gets dropped. */
+          if (pts.length > 1) {
+            var a = pts[pts.length - 2], b = pts[pts.length - 1];
+            var hx = b[0] - a[0], hy = b[1] - a[1], hm = Math.hypot(hx, hy) || 1;
+            var nx = pt[0] - b[0], ny = pt[1] - b[1], nm = Math.hypot(nx, ny) || 1;
+            if ((hx / hm) * (nx / nm) + (hy / hm) * (ny / nm) < 0.2) return;
+          }
+          pts.push(pt);
         });
       });
+      /* RUN THE ROAD OFF THE PAGE AT BOTH ENDS.
+         His dashes stop short of his tarmac - the last tile in section three
+         reaches 100.05% of the section while its last dash is at 96.8% - so a
+         car that wrapped at the end of the path vanished and reappeared in
+         plain view, three per cent inside the frame. The centreline is a
+         faithful record of what he drew and should stay that way, so the road
+         is extended HERE instead, straight on along its own end tangents until
+         it is well outside the section. The wrap still happens; it just happens
+         where nobody can see it. */
+      var EXT = 0.22 * road.parts[0].w;
+      var away = function (a, b) {
+        var dx = a[0] - b[0], dy = a[1] - b[1], m = Math.hypot(dx, dy) || 1;
+        return [a[0] + dx / m * EXT, a[1] + dy / m * EXT];
+      };
+      if (pts.length > 1) {
+        pts.unshift(away(pts[0], pts[1]));
+        pts.push(away(pts[pts.length - 1], pts[pts.length - 2]));
+      }
+
       /* cumulative length, so a car can be placed by distance travelled */
       var cum = [0], L = 0;
       for (var i = 1; i < pts.length; i++) {

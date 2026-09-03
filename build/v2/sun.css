@@ -48,6 +48,8 @@
    since the whole SVG does. So the same --sun drives it, with its own --lift-u.
    His hero sign is the case: the shadow was already a separate rect, it just
    had his offset baked into its x and y. */
+.cast-svg{ overflow:visible }   /* or a shadow thrown clear of the art is cut
+                                   off at the viewBox edge */
 .cast-svg .shade{
   opacity: var(--sun-ink);
   translate: calc(cos(var(--sun)) * var(--lift-u) * 1px)
