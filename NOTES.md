@@ -139,10 +139,19 @@ edges lost, instead of a hole. Hide `.z-ground` in devtools to see it.
 Parallax lives in `build/v2/parallax.css` (the amplitudes) and
 `build/v2/parallax.js` (twenty lines that drive it). An element carries
 `class="par par-cloud"` and the class sets `--par`, an amplitude as a share of
-its SECTION'S width, so it scales with everything else. Entering at the bottom
-of the screen it sits `--par` below the mark his artboard gives it, crosses the
-mark at the middle of the screen, and leaves `--par` above. Clouds 3.2, boat
-2.0, signs 1.4 - the spread is what reads as depth.
+its SECTION'S width, so it scales with everything else. The section enters at
+the bottom of the screen with its art `--par` low, crosses his marks as the
+section passes the middle, and leaves `--par` high. First clouds 7.5, other
+clouds 4.5, signs and gantries 4.0, boat 3.0 - the spread is what reads as
+depth.
+
+**Progress is per SECTION, not per element.** Keyed off each element's own
+centre, two things that have to travel together - his sign and the gantry it
+hangs from - drift a couple of pixels apart, because their boxes are different
+heights and cross the screen at different moments. One progress per section
+fixes it outright: everything in a scene moves in lockstep and only the
+amplitude differs, which is what parallax is anyway. Sign against truss now
+measures 0.1px over 700px of scroll.
 
 Only `translate` is touched, never `transform`, so the scaleX his squeezed copy
 carries survives.

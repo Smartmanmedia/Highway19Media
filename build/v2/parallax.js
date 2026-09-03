@@ -1,11 +1,17 @@
-/* Parallax for his clouds, signs and boat. One passive scroll listener, one
- * rAF, and nothing touched but `translate` - so the scaleX his squeezed copy
- * carries survives, and so does anything else with a transform.
+/* Parallax for his clouds, signs, gantries and boat. One passive scroll
+ * listener, one rAF, and nothing touched but `translate` - so the scaleX his
+ * squeezed copy carries survives, and so does anything else with a transform.
  *
- * Amplitude comes from --par on the element, as a share of its section's
- * width. An element entering at the bottom of the screen sits --par below the
- * mark his artboard gives it, crosses the mark at the middle of the screen,
- * and leaves --par above it. */
+ * PROGRESS IS THE SECTION'S, NOT THE ELEMENT'S. Keyed off each element's own
+ * centre, two things that must travel together - his sign and the gantry it
+ * hangs from - end up a couple of pixels apart, because their boxes are
+ * different heights and so cross the screen at different moments. One progress
+ * per section fixes that outright: everything in a scene moves in lockstep and
+ * only the amplitude differs, which is what parallax is anyway.
+ *
+ * --par is that amplitude, as a share of the section's width. The section
+ * enters at the bottom of the screen with its art --par low, crosses his mark
+ * as the section passes the middle, and leaves --par high. */
 (function () {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   var els = [].map.call(document.querySelectorAll('.par'), function (el) {
@@ -17,15 +23,19 @@
   var queued = false;
   function frame() {
     queued = false;
-    var h = innerHeight;
+    var h = innerHeight, seen = new Map();
     for (var i = 0; i < els.length; i++) {
-      var e = els[i], r = e.el.getBoundingClientRect();
-      /* where the element's middle sits on the screen: 1 at the bottom, 0 at
-         the top. Outside that, hold the end value rather than running away. */
-      var t = (r.top + r.height / 2) / h;
-      if (t < 0) t = 0; else if (t > 1) t = 1;
-      var amp = e.sec.clientWidth * e.par / 100;
-      e.el.style.translate = '0 ' + ((t - 0.5) * 2 * amp).toFixed(2) + 'px';
+      var e = els[i], p = seen.get(e.sec);
+      if (p === undefined) {
+        var r = e.sec.getBoundingClientRect();
+        /* 0 the moment the section's top reaches the bottom of the screen,
+           1 the moment its bottom leaves the top */
+        p = (h - r.top) / (h + r.height);
+        p = p < 0 ? 0 : p > 1 ? 1 : p;
+        seen.set(e.sec, p);
+      }
+      e.el.style.translate =
+        '0 ' + ((0.5 - p) * 2 * e.sec.clientWidth * e.par / 100).toFixed(2) + 'px';
     }
   }
   function ping() { if (!queued) { queued = true; requestAnimationFrame(frame); } }

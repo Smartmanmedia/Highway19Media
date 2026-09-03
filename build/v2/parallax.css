@@ -2,9 +2,14 @@
    PARALLAX
    ----------------------------------------------------------------------------
    --par is the amplitude, as a share of the SECTION WIDTH so it scales with
-   everything else: the element sits that far below his mark when it enters at
-   the bottom of the screen, on his mark as it passes the middle, and that far
-   above as it leaves. Clouds get the most - the spread is what reads as depth.
+   everything else: the art sits that far below his mark as the section enters
+   at the bottom of the screen, on his mark as the section passes the middle,
+   and that far above as it leaves. The spread is what reads as depth.
+
+   Progress is per SECTION, not per element - see parallax.js for why. That
+   means the travel is spread over the section's whole pass, so these numbers
+   are larger than they look: at a 1400px screen the first clouds move 105px
+   each way, the signs 56.
 
    parallax.js drives it. The CSS-only way (animation-timeline: view()) is a
    line and a half and runs off the main thread, but it is Chrome-only and it
@@ -14,6 +19,9 @@
    Only `translate` moves, so his squeezed copy keeps its scaleX.
    ========================================================================= */
 .par        { will-change:translate }
-.par-cloud  { --par:3.2 }        /* his clouds run ahead of everything */
-.par-sign   { --par:1.4 }
-.par-boat   { --par:2.0 }
+.par-cloud  { --par:4.5 }        /* his clouds run ahead of everything */
+.par-first  { --par:7.5 }        /* and the first ones you meet run hardest */
+.par-sign   { --par:4.0 }        /* THE GANTRY SHARES THIS. A sign hangs off a
+                                    truss: give them different amplitudes and
+                                    the sign floats off its own gantry. */
+.par-boat   { --par:3.0 }
