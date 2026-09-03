@@ -6,6 +6,7 @@
 <!-- Both families are his own files, self-hosted. No external font requests. -->
 <link rel="stylesheet" href="section-fonts.css">
 <link rel="stylesheet" href="section-01.css">
+<link rel="stylesheet" href="parallax.css">
 <style>body{margin:0;background:#04264f}</style>
 
 <section class="sec1">
@@ -35,7 +36,7 @@
        style="left:15.25%;top:87.11%;width:4.95%">
 
   <!-- BOAT -->
-  <img class="z-road" data-at src="../../assets/v2/section-01/boat.svg" alt=""
+  <img class="z-road par par-boat" data-at src="../../assets/v2/section-01/boat.svg" alt=""
        style="left:80.56%;top:67.47%;width:4.06%">
 
   <!-- THE GANTRY — truss repeats to the screen edges, his sign centred on it -->
@@ -43,7 +44,7 @@
   <!-- INLINE, not an <img>. An SVG inside an <img> is an isolated document:
        it cannot reach the page's @font-face, so his sign labels fell back to a
        system serif. Inline, they use his own Be Vietnam Pro. -->
-<svg class="z-sign" data-at style="left:25.80%;top:9.33%;width:48.77%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="938.50" height="349.56" viewBox="583.47 168.97 938.50 349.56"><g id="hero-sign-Hero_Sign" data-name="Hero Sign">
+<svg class="z-sign par par-sign" data-at style="left:25.80%;top:9.33%;width:48.77%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="938.50" height="349.56" viewBox="583.47 168.97 938.50 349.56"><g id="hero-sign-Hero_Sign" data-name="Hero Sign">
           <g>
             <rect x="583.95" y="227.87" width="938.02" height="290.66" rx="26.4" ry="26.4" stroke="#000" stroke-miterlimit="10" stroke-width="2"></rect>
             <rect x="583.47" y="226.45" width="938.02" height="290.66" rx="26.4" ry="26.4" fill="#1c9022" stroke="#fff" stroke-miterlimit="10" stroke-width="2"></rect>
@@ -79,7 +80,7 @@
           <text transform="translate(1239.62 220.8451) scale(.9666 1)" font-family="BeVietnamPro-Black, 'Be Vietnam Pro'" font-size="24" font-weight="800" text-anchor="middle"><tspan x="0" y="0">To Your Business</tspan></text>
         </g></svg>
 
-  <img class="z-copy" data-at src="../../assets/v2/section-01/highwaysign.svg" alt=""
+  <img class="z-copy par par-sign" data-at src="../../assets/v2/section-01/highwaysign.svg" alt=""
        style="left:30.14%;top:34.29%;width:4.61%">
 
   <!-- COPY -->
@@ -97,14 +98,14 @@
       thin, and your competitors are getting noticed while you're still figuring
       out where to start.</p>
 
-  <a class="cta z-copy" data-at href="#services"
+  <a class="cta z-copy par par-sign" data-at href="#services"
      style="left:33.92%;top:56.24%;width:15.07%;container-type:inline-size">
     <img src="../../assets/v2/section-01/your-road-map.svg" alt="">
     <span>Your Road Map</span>
   </a>
 
   <!-- his warning sign is its own layer, placed from the manifest -->
-  <img class="z-copy" data-at src="../../assets/v2/section-01/bridge-sign.svg" alt=""
+  <img class="z-copy par par-sign" data-at src="../../assets/v2/section-01/bridge-sign.svg" alt=""
        style="left:27.67%;top:80.91%;width:7.54%">
 
   <h2 class="copy z-copy" style="left:37.82%;top:80.98%;width:33.88%;--sx:0.9666">Great Work, No Signage</h2>
@@ -116,9 +117,11 @@
       does worse work with better pictures, and he's the one getting the call.</p>
 
   <!-- CLOUDS — over everything, as he set it -->
-  <img class="z-cloud" data-at src="../../assets/v2/section-01/cloud3.svg" alt=""
+  <img class="z-cloud par par-cloud" data-at src="../../assets/v2/section-01/cloud3.svg" alt=""
        style="left:78.47%;top:29.58%;width:11.12%">
-  <img class="z-cloud" data-at src="../../assets/v2/section-01/cloud5.svg" alt=""
+  <img class="z-cloud par par-cloud" data-at src="../../assets/v2/section-01/cloud5.svg" alt=""
        style="left:-5.19%;top:64.10%;width:26.86%">
 
 </section>
+
+<script src="parallax.js" defer></script>

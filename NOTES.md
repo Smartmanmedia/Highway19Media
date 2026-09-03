@@ -134,6 +134,27 @@ for the section to paint UNDERNEATH. You never see it. When a tile does go
 missing, what shows is the right colour at the right height with only the wavy
 edges lost, instead of a hole. Hide `.z-ground` in devtools to see it.
 
+## Motion
+
+Parallax lives in `build/v2/parallax.css` (the amplitudes) and
+`build/v2/parallax.js` (twenty lines that drive it). An element carries
+`class="par par-cloud"` and the class sets `--par`, an amplitude as a share of
+its SECTION'S width, so it scales with everything else. Entering at the bottom
+of the screen it sits `--par` below the mark his artboard gives it, crosses the
+mark at the middle of the screen, and leaves `--par` above. Clouds 3.2, boat
+2.0, signs 1.4 - the spread is what reads as depth.
+
+Only `translate` is touched, never `transform`, so the scaleX his squeezed copy
+carries survives.
+
+**The CSS-only way does not survive testing.** `animation-timeline: view()` is
+a line and a half and runs off the main thread, but headless Chromium evaluates
+it once at load and never advances it, so there is no way to prove it animates
+before he sees it - and a frozen timeline leaves his art a few pixels off its
+mark, which is worse than no motion at all. One passive scroll listener batched
+into one rAF is verifiable, and measurably works: over 700px of scroll the
+cloud drifts 52px against the truss, the boat 36, the sign 12.
+
 ## His type — measured, not chosen
 
 Two families, both from his file:

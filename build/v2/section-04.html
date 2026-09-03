@@ -4,6 +4,7 @@
 <title>Highway 19 — section four</title>
 <link rel="stylesheet" href="section-fonts.css">
 <link rel="stylesheet" href="section-04.css">
+<link rel="stylesheet" href="parallax.css">
 <style>body{margin:0;background:#04264f}</style>
 
 <section class="sec4">
@@ -31,7 +32,7 @@
        editing. An <img> here drops tiles on a busy machine whether it is a
        bitmap or a vector; inline art repaints with the section. -->
   <svg class="z-ground" data-at aria-hidden="true"
-       style="left:-2.92%;top:63.84%;width:104.16%"
+       style="left:-2.92%;top:64.69%;width:104.16%"
        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
        viewBox="-56.31 1038.28 2010.91 842.69"><defs></defs><g id="end-rocks-End_rocks" data-name="End rocks">
             <g>
@@ -1709,24 +1710,26 @@
   <span class="truss" aria-hidden="true"></span>
 
   <!-- HIS SIGN, and the copy that sits on it -->
-  <img class="z-copy" data-at src="../../assets/v2/section-04/our-sign.svg" alt=""
+  <img class="z-copy par par-sign" data-at src="../../assets/v2/section-04/our-sign.svg" alt=""
        style="left:41.70%;top:24.45%;width:44.27%">
 
   <!-- Copy read out of his export by tools/read_text.js. Both sign blocks
        carry his scale(.82 1), so the box is widened by 1/.82 and squeezed
        back; the body copy and the button label carry no squeeze. -->
-  <div class="sign-copy">
+  <div class="sign-copy par par-sign">
     <h2>We Handle the Marketing.<br>You Run the Business.</h2>
     <p>One team, one vision, one goal: growing your business.</p>
   </div>
 
   <p class="copy body z-copy" style="left:47.68%;top:58.73%;width:35.14%"><span>From video production and print design to websites,</span><span>social media, and paid ads, Highway 19 Media</span><span>handles every aspect of your marketing so you don&rsquo;t</span><span>have to. We come to your job site, shoot what you</span><span>actually do, and turn it into what your customers see.</span></p>
 
-  <img class="z-copy" data-at src="../../assets/v2/section-04/explore-our-services.svg" alt=""
+  <img class="z-copy par par-sign" data-at src="../../assets/v2/section-04/explore-our-services.svg" alt=""
        style="left:54.97%;top:70.26%;width:19.21%">
-  <p class="copy cta z-copy" style="left:56.80%;top:71.36%;width:17.38%">Explore Our Services</p>
+  <p class="copy cta z-copy par par-sign" style="left:56.80%;top:71.36%;width:17.38%">Explore Our Services</p>
 
-  <img class="z-cloud" data-at src="../../assets/v2/section-04/cloud2.svg" alt=""
+  <img class="z-cloud par par-cloud" data-at src="../../assets/v2/section-04/cloud2.svg" alt=""
        style="left:6.25%;top:15.56%;width:29.60%">
 
 </section>
+
+<script src="parallax.js" defer></script>

@@ -15,6 +15,13 @@ let html = fs.readFileSync(path.join(ROOT, SRC), 'utf8');
 const base = path.dirname(path.join(ROOT, SRC));
 let assets = 0, bytes = 0;
 
+/* js — same reason as the css: the artifact host blocks external files */
+html = html.replace(/<script src="(?!https?:)([^"]+)"[^>]*><\/script>/g, (m, src) => {
+  const js = fs.readFileSync(path.resolve(base, src), 'utf8');
+  assets++; bytes += js.length;
+  return '<script>' + js + '</script>';
+});
+
 /* css */
 html = html.replace(/<link rel="stylesheet" href="(?!https?:)([^"]+)">/g, (m, href) => {
   let css = fs.readFileSync(path.resolve(base, href), 'utf8');

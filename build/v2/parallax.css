@@ -1,0 +1,19 @@
+/* ============================================================================
+   PARALLAX
+   ----------------------------------------------------------------------------
+   --par is the amplitude, as a share of the SECTION WIDTH so it scales with
+   everything else: the element sits that far below his mark when it enters at
+   the bottom of the screen, on his mark as it passes the middle, and that far
+   above as it leaves. Clouds get the most - the spread is what reads as depth.
+
+   parallax.js drives it. The CSS-only way (animation-timeline: view()) is a
+   line and a half and runs off the main thread, but it is Chrome-only and it
+   would not advance under test here, so it is not worth the risk of him
+   getting his art frozen a few pixels off its mark.
+
+   Only `translate` moves, so his squeezed copy keeps its scaleX.
+   ========================================================================= */
+.par        { will-change:translate }
+.par-cloud  { --par:3.2 }        /* his clouds run ahead of everything */
+.par-sign   { --par:1.4 }
+.par-boat   { --par:2.0 }
