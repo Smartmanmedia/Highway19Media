@@ -297,6 +297,17 @@ reversal in the middle of the road, and cars reaching it turned round or
 disappeared. Same rule as inside a tile: a point must lie forward of where the
 road is already going, or it is overlap and gets dropped.
 
+**Separate the deciding from the not-colliding.** The no-overlap clamp ran
+inside the same loop that moved the cars, on a sort taken before any of them
+had moved - so the moment one car wrapped from the end of the road back to the
+start, every car still to be processed saw it as their leader at u near zero,
+concluded they were hopelessly overlapping, and got shoved the length of the
+road. That is a car vanishing from one place and appearing in another, in plain
+view, and it is what he saw in the desert. It is a second pass now, on a fresh
+sort, measuring the gap round the ring so it can never be negative, and walking
+the queue from its head BACKWARDS so a car is only pushed behind a leader that
+has already settled.
+
 **Check the behaviour, not the data.** A checker that rebuilt the polyline from
 H19_PATHS could not see the fix at all, because the fix lives in traffic.js.
 Following every car for 20 seconds and counting on-screen jumps and heading

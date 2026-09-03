@@ -234,9 +234,10 @@
       for (var lane = 0; lane < 2; lane++) {
         var q = road.cars.filter(function (c) { return c.lane === lane; })
                          .sort(function (a, b) { return a.u - b.u; });
+
+        /* 1. decide, and move */
         for (var i = 0; i < q.length; i++) {
           var c = q[i], ahead = q[(i + 1) % q.length];
-          /* the ring wraps, so the gap to the leader can come round the end */
           var gap = ahead.u - c.u; if (gap <= 0) gap += road.len;
           gap -= (c.long + ahead.long) / 2;
           /* what this driver would like to be doing - but seen late */
@@ -246,17 +247,31 @@
           c.v += Math.max(-lim, Math.min(lim, d));
           if (c.v < 0) c.v = 0;
           c.u += c.v * dt;
-          /* A REACTION DELAY MAKES DRIVERS OVERSHOOT - that is the point of it,
-             and it is where the jams come from - but a driver who overshoots in
-             the real world stops on the bumper in front rather than passing
-             through it. Without this clamp the queue closes up until the cars
-             are drawn on top of each other, which is what was happening on the
-             desert straight. */
-          var room = ahead.u - c.u; if (room <= -road.len / 2) room += road.len;
-          var least = (c.long + ahead.long) / 2 * 1.06;
-          if (q.length > 1 && room < least) { c.u = ahead.u - least; c.v = Math.min(c.v, ahead.v); }
-          if (c.u < 0) c.u += road.len;
-          if (c.u > road.len) c.u -= road.len;
+          if (c.u >= road.len) c.u -= road.len;
+        }
+
+        /* 2. NOBODY DRIVES THROUGH ANYBODY - as a SEPARATE PASS, on a FRESH
+           SORT. Doing this inside the loop above read an order that step 1 had
+           already invalidated: the moment one car wrapped from the end of the
+           road back to the start, the cars still to be processed saw it as
+           their leader at u near zero, decided they were hopelessly overlapping
+           it, and were shoved the length of the road - which is a car
+           vanishing from one place and appearing in another, in plain view.
+           The gap is measured round the ring so it is never negative, and the
+           queue is walked from its head BACKWARDS so a car is only ever pushed
+           back behind a leader that has already settled. */
+        if (q.length > 1) {
+          q.sort(function (a, b) { return a.u - b.u; });
+          for (var k = q.length - 1; k >= 0; k--) {
+            var c2 = q[k], lead = q[(k + 1) % q.length];
+            var ring = lead.u - c2.u; if (ring <= 0) ring += road.len;
+            var least = (c2.long + lead.long) / 2 * 1.06;
+            if (ring < least) {
+              c2.u = lead.u - least;
+              if (c2.u < 0) c2.u += road.len;
+              c2.v = Math.min(c2.v, lead.v);
+            }
+          }
         }
       }
       /* draw */
