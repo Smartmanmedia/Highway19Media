@@ -34,7 +34,7 @@
   var ROADS = [{ secs: ['01', '02'], thin: 1 },
                { secs: ['03'],       thin: 0.85 },
                { secs: ['04'],       thin: 1 }];
-  var SPACING   = 0.093,  /* road length per car, as a share of section width -
+  var SPACING   = 0.083,  /* road length per car, as a share of section width -
                              the count follows from how long his road is, so a
                              short road does not end up nose to tail */
       CRUISE    = 0.060,  /* share of a section's width per second */
@@ -53,7 +53,10 @@
                              than needed, and the car behind does the same but
                              worse. That is what a stop-and-go wave is, in real
                              traffic and here - nothing about it is scripted. */
-      CAR_ACROSS= 0.72;   /* car height as a share of its lane */
+      CAR_ACROSS= 0.80;   /* how much of a lane THE WIDEST vehicle fills. Every
+                             other vehicle is drawn at the same scale, so this
+                             one number sets the size of the whole fleet and
+                             his own proportions hold between them. */
 
   /* -- his vehicles, once, hidden, referenced by <use> ---------------------- */
   var defs = document.createElementNS(SVGNS, 'svg');
@@ -254,16 +257,35 @@
         var area = Math.abs((b[0]-a[0])*(c2[1]-a[1]) - (c2[0]-a[0])*(b[1]-a[1])) / 2;
         if (area > 1e-6) R = Math.min(R, A*B*C / (4*area));
       }
-      var spare = road.laneW * (1 - CAR_ACROSS) / 2;
-      road.maxLong = R === Infinity ? Infinity : Math.sqrt(8 * R * spare);
+      road.R = R;
+      road.k = road.laneW * CAR_ACROSS / maxAcross;
+      /* SPARE ROOM IS PER VEHICLE now that they are not all the same width. A
+         narrow car has most of its lane free and can be longer through a bend
+         than a wide one; using the widest vehicle's spare room for all of them
+         barred cars that would have gone round perfectly well. */
+      road.maxLong = function (nm) {
+        if (road.R === Infinity) return Infinity;
+        var spare = road.laneW / 2 - box[nm].height * road.k / 2;
+        return spare <= 0 ? 0 : Math.sqrt(8 * road.R * spare);
+      };
       road.cars.forEach(function (c) { size(road, c); });
     });
   }
 
+  /* ONE SCALE FOR THE WHOLE FLEET, NOT ONE PER VEHICLE.
+     Scaling each vehicle to the same width across the road is what threw his
+     size relations away: every car came out exactly as wide as every lorry, and
+     only their own aspect made one longer than the other, so his semitrailer
+     read as barely twice a saloon where he drew it more than three times. His
+     instruction was to measure the biggest and bring the rest down from it, so
+     the road's scale is set by the WIDEST vehicle in the fleet filling its lane
+     and every other vehicle takes that same number. A saloon is then narrower
+     than a lane, which is what a saloon is. */
+  var maxAcross = Math.max.apply(null, NAMES.map(function (n) { return box[n].height }));
+
   function size(road, c) {
-    var b = box[c.id];
-    c.k = road.laneW * CAR_ACROSS / b.height;
-    c.long = b.width * c.k;                               /* its length on the road */
+    c.k = road.k;
+    c.long = box[c.id].width * c.k;                       /* its length on the road */
   }
 
   /* point and heading at a distance along the road */
@@ -284,7 +306,7 @@
     /* the vehicles that fit this road's tightest bend - always at least the
        shortest one, so a hairpin still gets traffic */
     var fits = NAMES.filter(function (nm) {
-      return box[nm].width * (road.laneW * CAR_ACROSS / box[nm].height) <= road.maxLong;
+      return box[nm].width * road.k <= road.maxLong(nm);
     });
     if (!fits.length) fits = [NAMES.slice().sort(function (a, b) {
       return box[a].width / box[a].height - box[b].width / box[b].height; })[0]];

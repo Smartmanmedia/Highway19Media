@@ -106,7 +106,12 @@ const path = require('path');
       for (let i = 0; i < g.length; i++) {
         if (!p0[i] || !p1[i]) continue;
         const dx = +p1[i][1] - +p0[i][1], dy = +p1[i][2] - +p0[i][2];
-        if (Math.hypot(dx, dy) < 3) continue;                 /* barely moved */
+        const step = Math.hypot(dx, dy);
+        /* barely moved, or wrapped round the end of its road - a car starting
+           again at the other end covers the whole page in one sample and reads
+           as pointing anywhere. At cruise a car moves about 14px in this
+           interval, so 40 is well clear of real motion and well under a wrap. */
+        if (step < 3 || step > 40) continue;
         /* the smallest angle between where it points and where it went */
         const diff = Math.atan2(dy, dx) * 180 / Math.PI - r[i];
         const d = Math.abs(((diff % 360) + 540) % 360 - 180);
