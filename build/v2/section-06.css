@@ -32,8 +32,9 @@
      between them. Above the line this section is transparent and section four
      paints through, mountains, shadow and grass together - which is why there
      is no colour step either. */
-  background:linear-gradient(180deg,
-    transparent 0, transparent 3.85%, #fff 3.85%, #fff 100%);
+  background: var(--sec6-bg,
+    linear-gradient(180deg,
+    transparent 0, transparent 3.85%, #fff 3.85%, #fff 100%));
   overflow:hidden;
   isolation:isolate;
 }
@@ -64,7 +65,7 @@
 .sec6 .page [data-at]{ position:absolute; display:block }
 .sec6 .page img[data-at], .sec6 .page svg[data-at]{ height:auto }
 .sec6 .page .z-ground{ z-index:0 }
-.sec6 .page .copy{ position:absolute; margin:0; text-align:center; color:#1a1a1a;
+.sec6 .page .copy{ position:absolute; margin:0; text-align:center; color:var(--sec6-ink, #1a1a1a);
   font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif; z-index:2 }
 
 .sec6 .page h2.copy{ font-size:2.133cqw; font-weight:900; line-height:1.1; white-space:nowrap }

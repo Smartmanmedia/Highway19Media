@@ -33,8 +33,9 @@
    94.75% of the section, which is 1.59% to 93.90% of a box that starts at 14% */
 .sec4 .ground{
   position:absolute; left:0; right:0; top:14%; bottom:0; z-index:0;
-  background:linear-gradient(180deg,
-    #006837 0%, #006837 1.59%, #39b54a 93.90%, #39b54a 100%);
+  background: var(--sec4-ground,
+    linear-gradient(180deg,
+    #006837 0%, #006837 1.59%, #39b54a 93.90%, #39b54a 100%));
 }
 
 /* THE GANTRY. It is in his render but not in his export, so this is section

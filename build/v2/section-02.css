@@ -24,7 +24,7 @@
      of memory and has not finished painting - which is what made the ocean
      look like it stopped in mid-air. Now the wrong thing to see is the right
      colour at the right height, with only the wave edges missing. */
-  background:
+  background: var(--sec2-bg,
     linear-gradient(180deg,
       #0357b6 0.03%, #0256b5 12.41%, #a2c1e4 12.54%, #ffffff 12.67%,
       #ffffff 12.80%, #92b2d8 12.93%, #014ca4 13.07%, #014ca4 13.59%,
@@ -33,7 +33,7 @@
       #016db4 27.80%, #016db4 28.19%, #0195e8 28.32%, #039ff3 28.45%,
       #029ef3 33.80%, #52ade3 34.06%, #52ade3 42.66%, #acd5f3 42.79%,
       #eef1ff 42.92%, #eef2ff 45.40%),
-    linear-gradient(90deg,#014ea5 0%,#055fc6 100%);
+    linear-gradient(90deg,#014ea5 0%,#055fc6 100%));
   overflow:hidden;
   isolation:isolate;
 }
@@ -47,9 +47,9 @@
    the surf is new. */
 .sec2 .sand{
   position:absolute; left:0; right:0; top:36%; bottom:0;
-  background:
+  background: var(--sec2-sand,
     linear-gradient(180deg,#fec35f 0%,#fdf6e4 31%,#fdf6e4 100%) 0 100% / 100% 88.98% no-repeat,
-    #fec35f;
+    #fec35f);
   z-index:0;
 }
 
@@ -137,7 +137,7 @@
 
 /* his type, his sizes, his weights, his squeeze — all read out of the export */
 .sec2 .copy{
-  position:absolute; margin:0; text-align:center; color:#333;
+  position:absolute; margin:0; text-align:center; color:var(--sec2-ink, #333);
   font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
 }
 .sec2 [style*="--sx"]{ transform:scaleX(var(--sx)); transform-origin:50% 0 }

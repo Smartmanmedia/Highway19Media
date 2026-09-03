@@ -1,63 +1,139 @@
 /* ============================================================================
-   NIGHT — one number
+   NIGHT
    ----------------------------------------------------------------------------
-   --night runs 0 to 1 and nothing else switches. The headlight group's opacity
-   is that number, the fall of darkness over each section is that number, and a
-   transition on both makes changing mode a fade rather than a snap.
+   His night is a REPAINT, not a dimming. The thing that makes it read is what
+   does NOT change: the guide signs stay full green, the banner full yellow,
+   the shield, the warning triangles, the copy and the lane markings all stay
+   exactly as bright as they are at noon. What goes dark is the world around
+   them - the sky to almost black, the ocean to deep navy, the tarmac to
+   nearly nothing - so the signage is the only lit thing left.
 
-   IT FOLLOWS THE READER'S OWN THEME, for now. Three states, not two: an
-   explicit choice stamps data-theme on the root, and the default "system"
-   setting stamps nothing at all - so the media query has to carry the
-   unstamped case and the stamps have to win in both directions.
+   That is why there is no filter over the page. A filter cannot tell a lane
+   marking from the tarmac it is painted on; it takes both down together and
+   the road stops reading. The two have to move in opposite directions, so
+   they are two variables and his road tiles are inline to receive them.
 
-   THIS IS THE PROVISIONAL NIGHT. A blanket fall of dark over each section is
-   what lets the beams be seen and judged today; it is not the finished thing.
-   The audit's night is a repaint - the CSS surfaces recoloured, the tarmac
-   dropped while the lane dashes stay bright, the two green signs floodlit -
-   and none of that can be settled before he says how dark and what triggers
-   it. What matters here is that when that arrives it changes what --night
-   DOES, not where it is read.
+   ONE TRIGGER, THREE STATES. An explicit theme choice stamps data-theme on the
+   root, and the default "system" setting stamps nothing at all - so the media
+   query carries the unstamped case and the stamps win in both directions.
 
-   WHY A FALL OF DARK AND NOT A FILTER. A filter over the page promotes the
-   whole document to one composited layer that has to READ its backdrop every
-   frame - 6,053 nodes with 106 vehicles moving in it, which is the Safari
-   problem on this project. A flat colour at an opacity reads nothing: it is
-   one quad, and being fixed it is the size of the window rather than the size
-   of the page, whatever the page grows to.
-
-   ONE, NOT ONE PER SECTION. Per section was the first shape of this and it
-   was wrong: his sections deliberately overlap - section three rides 10% up
-   into section two, section four 16% - and two overlays over the same strip
-   darken it twice, which drew a hard step across the page exactly where the
-   overlap ended.
-
-   THE BEAMS SIT UNDER THIS, and that is correct. Darkening the road and the
-   beams by the same factor leaves the contrast between them untouched, so the
-   beams still read as the brightest thing on the road. Putting them over the
-   top instead would mean a queueing car's beams washing across the car in
-   front of it.
+   WHAT DRIVES IT is the one thing still open. It follows the reader's theme
+   for now because that is the only switch there is; a toggle, the hour, or
+   scroll depth all set the same variables and nothing downstream changes.
    ========================================================================= */
 
-/* PINNED TO DAY. The page is daylight and stays daylight: the beams are at
-   zero - not faint, zero - and no darkness falls. He is sending his own idea
-   for what night should be, and the fall of dark below was only ever the
-   provisional thing that let the beams be judged.
+:root{
+  /* how lit the vehicle beams are: zero through the day, not faint - a beam at
+     noon reads as a mistake - and full at night */
+  --night: 0;
 
-   Nothing is torn out for that. The machinery is one number and it is all
-   still here; turning night back on is uncommenting the three lines under
-   this one, or setting --night from wherever his idea says it should come -
-   a toggle, the hour, the scroll. Everything downstream already reads it. */
-:root{ --night: 0 }
+  /* his road, the one place a filter could never go */
+  --tarmac:  #575757;
+  --marking: #fff;
 
-/* @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --night: 1 } } */
-/* :root[data-theme="dark"] { --night: 1 } */
-/* :root[data-theme="light"]{ --night: 0 } */
-
-.nightfall{
-  position:fixed; inset:0; z-index:9999;
-  background:#04122b;
-  opacity:calc(var(--night) * 0.55);
-  pointer-events:none;
-  transition:opacity 1s linear;
+  /* how far the scenery ART is taken down. His painted layers - waves, rocks,
+     trees, the canopy, the clouds - carry thousands of baked fills between
+     them, so they are darkened as layers rather than stop by stop. They are
+     static, so this is composited once and then left alone; it is the moving
+     traffic a filter must never be put over. */
+  --scene: 1;
+  --scene-sat: 1;
+  --cloud-sat: 1;
 }
-@media (prefers-reduced-motion: reduce){ .nightfall{ transition:none } }
+
+/* >>> palette */
+  /* GENERATED by tools/make_night.js from his own day colours. Each stop
+     pulled toward black and given a night sky's blue cast. His day
+     gradients stay in their own section files - they are the fallback in
+     var(--secN-bg, ...) - so nothing here is kept in step by hand. */
+  @media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --night: 1;
+    --tarmac: #0b0c0f;
+    --marking: #fff;
+    --scene: 0.26;
+    --scene-sat: 0.72;
+    --cloud-sat: 0.12;
+    --sec2-ink: #dfe7f2;
+    --sec6-ink: #eef2f7;
+    --sec1-bg:
+      linear-gradient(180deg, rgba(4,17,43,1) 0%, rgba(4,17,43,1) 6.460%, rgba(4,18,43,.98) 28.736%, rgba(4,18,44,.9) 45.443%, rgba(4,19,46,.78) 59.366%, rgba(4,21,47,.6) 72.360%, rgba(4,23,50,.37) 84.426%, rgba(4,25,53,.1) 95.564%, rgba(4,26,54,0) 99.277%), linear-gradient(90deg, #041731 0%, #041a36 100%);
+    --sec1-fade:
+      linear-gradient(90deg,#041c3a 0%,#051f41 100%);
+    --sec2-bg:
+      linear-gradient(180deg, #062044 0.03%, #062044 12.41%, #26364d 12.54%, #384253 12.67%, #384253 12.80%, #22334b 12.93%, #051e40 13.07%, #051e40 13.59%, #06234b 13.85%, #06234a 17.37%, #052a4f 17.63%, #052a4f 26.76%, #0f2f50 26.89%, #384253 27.02%, #384253 27.54%, #112b47 27.67%, #052544 27.80%, #052544 28.19%, #052d4e 28.32%, #062f50 28.45%, #062f50 33.80%, #16324d 34.06%, #16324d 42.66%, #283a50 42.79%, #353f53 42.92%, #353f53 45.40%), linear-gradient(90deg,#051f41 0%,#062247 100%);
+    --sec2-sand:
+      linear-gradient(180deg,#313132 0%,#313a48 31%,#313a48 100%) 0 100% / 100% 88.98% no-repeat, #313132;
+    --sec3-bg:
+      linear-gradient(180deg, transparent 0%,  transparent 18%, #313947 21%,     #31353b 45.78%,  #313438 47.72%, #2b2c32 47.86%,  #2a2b32 48.00%,  #262a38 48.13%,  #242837 48.83%, #2a2e3c 50.76%,  #222736 50.90%,  #1f2534 51.87%,  #2b2e38 52.01%, #313438 61.70%,  #2a2b32 61.97%,  #2a2b32 69.72%,  #1e2332 69.86%, #1d2232 72.21%,  #252938 72.35%,  #292c3b 78.58%,  #1f2433 78.72%, #1d2332 80.66%,  #2a2d3c 80.80%,  #2b2e3c 96.43%,  #2e303f 96.57%, #282b39 96.71%,  #282b38 97.96%,  #2a2b32 98.09%,  #2a2b32 100%);
+    --sec4-ground:
+      linear-gradient(180deg, #06222b 0%, #06222b 1.59%, #0f2f2e 93.90%, #0f2f2e 100%);
+    --sec6-bg:
+      linear-gradient(180deg, transparent 0, transparent 3.85%, #1f2b3d 3.85%, #1f2b3d 100%);
+  }}
+  :root[data-theme="dark"]{
+    --night: 1;
+    --tarmac: #0b0c0f;
+    --marking: #fff;
+    --scene: 0.26;
+    --scene-sat: 0.72;
+    --cloud-sat: 0.12;
+    --sec2-ink: #dfe7f2;
+    --sec6-ink: #eef2f7;
+    --sec1-bg:
+      linear-gradient(180deg, rgba(4,17,43,1) 0%, rgba(4,17,43,1) 6.460%, rgba(4,18,43,.98) 28.736%, rgba(4,18,44,.9) 45.443%, rgba(4,19,46,.78) 59.366%, rgba(4,21,47,.6) 72.360%, rgba(4,23,50,.37) 84.426%, rgba(4,25,53,.1) 95.564%, rgba(4,26,54,0) 99.277%), linear-gradient(90deg, #041731 0%, #041a36 100%);
+    --sec1-fade:
+      linear-gradient(90deg,#041c3a 0%,#051f41 100%);
+    --sec2-bg:
+      linear-gradient(180deg, #062044 0.03%, #062044 12.41%, #26364d 12.54%, #384253 12.67%, #384253 12.80%, #22334b 12.93%, #051e40 13.07%, #051e40 13.59%, #06234b 13.85%, #06234a 17.37%, #052a4f 17.63%, #052a4f 26.76%, #0f2f50 26.89%, #384253 27.02%, #384253 27.54%, #112b47 27.67%, #052544 27.80%, #052544 28.19%, #052d4e 28.32%, #062f50 28.45%, #062f50 33.80%, #16324d 34.06%, #16324d 42.66%, #283a50 42.79%, #353f53 42.92%, #353f53 45.40%), linear-gradient(90deg,#051f41 0%,#062247 100%);
+    --sec2-sand:
+      linear-gradient(180deg,#313132 0%,#313a48 31%,#313a48 100%) 0 100% / 100% 88.98% no-repeat, #313132;
+    --sec3-bg:
+      linear-gradient(180deg, transparent 0%,  transparent 18%, #313947 21%,     #31353b 45.78%,  #313438 47.72%, #2b2c32 47.86%,  #2a2b32 48.00%,  #262a38 48.13%,  #242837 48.83%, #2a2e3c 50.76%,  #222736 50.90%,  #1f2534 51.87%,  #2b2e38 52.01%, #313438 61.70%,  #2a2b32 61.97%,  #2a2b32 69.72%,  #1e2332 69.86%, #1d2232 72.21%,  #252938 72.35%,  #292c3b 78.58%,  #1f2433 78.72%, #1d2332 80.66%,  #2a2d3c 80.80%,  #2b2e3c 96.43%,  #2e303f 96.57%, #282b39 96.71%,  #282b38 97.96%,  #2a2b32 98.09%,  #2a2b32 100%);
+    --sec4-ground:
+      linear-gradient(180deg, #06222b 0%, #06222b 1.59%, #0f2f2e 93.90%, #0f2f2e 100%);
+    --sec6-bg:
+      linear-gradient(180deg, transparent 0, transparent 3.85%, #1f2b3d 3.85%, #1f2b3d 100%);
+  }
+  /* <<< palette */
+
+/* DAYLIGHT IS THE DEFAULT ABOVE. An explicit light choice has to beat a dark
+   system setting, so it restates the day values rather than relying on order. */
+:root[data-theme="light"]{
+  --night: 0;
+  --tarmac: #575757;
+  --marking: #fff;
+  --scene: 1; --scene-sat: 1; --cloud-sat: 1;
+  --sec2-ink: #333; --sec6-ink: #1a1a1a;
+  --sec1-bg: initial; --sec1-fade: initial; --sec2-bg: initial;
+  --sec2-sand: initial; --sec3-bg: initial; --sec4-ground: initial;
+  --sec6-bg: initial;
+}
+
+/* THE SCENERY, AND ONLY THE SCENERY. Named layer by layer rather than by
+   section, so his signs, his copy, his buttons, the cars and the boats are
+   never in it - they are what the night is for. */
+/* HIS GANTRY STAYS LIT. It is the one built thing in the scene and in his own
+   night it reads pale against the black - a lit steel truss, not a dark one -
+   so it is deliberately NOT in this list. */
+section .z-back,
+section .z-ground,
+section .wave,
+section .sand,
+section .rock-layer,
+section .rock-cross{
+  filter: brightness(var(--scene)) saturate(var(--scene-sat));
+  transition: filter 1s linear;
+}
+
+/* his clouds go grey rather than dark - a cloud at night is lit by the sky,
+   and darkening a white one only makes it look grubby */
+section .z-cloud{
+  filter: saturate(var(--cloud-sat)) brightness(calc(0.34 + var(--scene) * 0.66));
+  transition: filter 1s linear;
+}
+
+@media (prefers-reduced-motion: reduce){
+  section .z-back, section .z-ground, section .wave, section .sand,
+  section .rock-layer, section .rock-cross, section .z-cloud{ transition: none }
+}

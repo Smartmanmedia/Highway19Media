@@ -35,7 +35,7 @@
      carries the deep water almost the whole way down, reaching his own blue
      just as it meets the beach - which is what section two's background was
      sampled from, so the seam is still unaffected. */
-  background:
+  background: var(--sec1-bg,
     linear-gradient(180deg,
       rgba(0,40,125,1) 0%,          /* flat through the band of sky */
       rgba(0,40,125,1) 6.460%,
@@ -46,7 +46,7 @@
       rgba(2,73,168,.37) 84.426%,
       rgba(3,87,188,.1) 95.564%,
       rgba(4,93,195,0) 99.277%),
-    linear-gradient(90deg, #004ca2 0%, #045dc3 100%);
+    linear-gradient(90deg, #004ca2 0%, #045dc3 100%));
   overflow: hidden;            /* the bleed leaves by the left edge */
   isolation: isolate;
 }
@@ -68,7 +68,8 @@
    the copy are untouched. */
 .sec1::after{
   content:""; position:absolute; left:0; right:0; bottom:0; height:14%;
-  background:linear-gradient(90deg,#014ea5 0%,#055fc6 100%);
+  background: var(--sec1-fade,
+    linear-gradient(90deg,#014ea5 0%,#055fc6 100%));
   -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,0) 0%,#000 100%);
           mask-image:linear-gradient(180deg,rgba(0,0,0,0) 0%,#000 100%);
   z-index:0; pointer-events:none;
