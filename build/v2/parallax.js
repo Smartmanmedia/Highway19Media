@@ -11,9 +11,13 @@
  *
  * --par is that amplitude, as a share of the section's width.
  *
- * NOTHING IS DISPLACED AT FIRST PAINT. Each section remembers the progress it
- * had when the page loaded, and that is the point where its art sits exactly
- * on his marks. Anchored to the middle of the pass instead, the hero sign
+ * NOTHING IS DISPLACED AT THE TOP OF THE PAGE. Each section remembers the
+ * progress it had when the page was at scroll zero, and that is the point
+ * where its art sits exactly on his marks. It is re-taken every frame the page
+ * IS at scroll zero, and on any resize, so it cannot go stale: measured once
+ * at load it was wrong inside the artifact frame, which is sized by its host
+ * after the script has run, and the hero sign opened low enough to land on the
+ * copy underneath it. Anchored to the middle of the pass instead, the hero sign
  * loaded a hundred pixels low and landed on the copy underneath it - his
  * artboard leaves it 68px of clearance, and no amount of tuning gets round
  * that. Anchored to the load, the page opens as he drew it and only moves
@@ -91,16 +95,24 @@
   var queued = false;
   function frame() {
     queued = false;
+    /* at the top of the page, the anchor IS the current progress - so any
+       resize the script did not hear about corrects itself */
+    if (!scrollY) p0.clear();
     var seen = new Map();
     for (var i = 0; i < els.length; i++) {
       var e = els[i], p = seen.get(e.sec);
       if (p === undefined) { p = progress(e.sec); seen.set(e.sec, p); }
+      if (!p0.has(e.sec)) p0.set(e.sec, anchor(e.sec));
       e.el.style.translate = '0 ' +
         ((p0.get(e.sec) + e.bias - p) * 2 * e.amp).toFixed(2) + 'px';
     }
   }
   function ping() { if (!queued) { queued = true; requestAnimationFrame(frame); } }
   addEventListener('scroll', ping, { passive: true });
-  addEventListener('resize', function () { p0.clear(); fit(); ping(); });
+  function relayout() { p0.clear(); fit(); ping(); }
+  addEventListener('resize', relayout);
+  addEventListener('load', relayout);
+  /* the artifact frame is sized by its host, sometimes after this has run */
+  if (window.ResizeObserver) new ResizeObserver(relayout).observe(document.documentElement);
   ping();
 })();
