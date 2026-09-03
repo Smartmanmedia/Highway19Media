@@ -247,14 +247,35 @@
 }
 .sec1 .cruise > *{ animation: cruise-turn 75s linear infinite }
 
-/* his speedboat: a tighter oval and 32s a lap against the yacht's 75. Its own
-   two exports were cropped differently too, so the shadow is centred back
-   under the hull the same way. */
+/* --- HIS SPEEDBOAT'S RUN ---------------------------------------------------
+   Not a circuit. It leaves at the first road curve, opens up straight north,
+   goes off the top of the section altogether, turns round out of sight and
+   comes back down a parallel line - then carves a U he can see and does it
+   again. A racetrack stood on its end: two straights and two half-circles.
+
+   WHY IT HAS TO OVERSHOOT. The straight is 64cqw where the section top is only
+   54.9cqw above the boat's mark, and the boat is 6.1cqw long: it is a clear
+   6cqw past the edge before the turn even starts, so the whole U happens where
+   nobody can see it, and it stays gone long enough to be missed. At 58cqw the
+   turn was out of sight but the boat was only hidden for a second.
+
+   THE LANE IS 7.2cqw AND IT RUNS LEFT. Broadside the boat measures 6.1cqw
+   across, so the widest the run ever gets is 13.3cqw - and going left from his
+   own mark rather than right puts the whole of it between 3.0% and 16.4% of
+   the section. He asked for 20% at the outside; this leaves it room to spare
+   and keeps his placement as the starting mark.
+
+   24s a lap is 88px a second on a 1400px screen, against the yacht's 13. It is
+   a speedboat, so it is allowed to be in a hurry.
+
+   --lane and --run are the two numbers to turn. The @keyframes are GENERATED
+   by tools/make_dash.js - regenerate rather than hand-edit.
+   ---------------------------------------------------------------------- */
 .sec1 .cruise-fast{
-  --rx: 3cqw; --ry: 6cqw;
-  animation: cruise-move 32s linear infinite;
+  --lane: 7.2cqw; --run: 64cqw;
+  animation: dash-move 24s linear infinite;
 }
-.sec1 .cruise-fast > *{ animation: cruise-turn 32s linear infinite }
+.sec1 .cruise-fast > *{ animation: dash-turn 24s linear infinite }
 .sec1 .cruise-fast.still, .sec1 .cruise-fast.still > *{ animation-play-state:paused }
 .sec1 .fast-boat > .shade{ left:-3.450%; top:-0.055%; width:106.898% }
 @media (prefers-reduced-motion: reduce){
@@ -335,3 +356,115 @@
   position:absolute; z-index:2; background:#000; border-radius:1.372cqw;
   pointer-events:none;
 }
+@keyframes dash-move{
+         0% { translate: calc(var(--lane) * 0.00000) 0 }
+   21.2479% { translate: calc(var(--lane) * 0.00000) calc(var(--run) * -0.50000) }
+   42.4957% { translate: calc(var(--lane) * 0.00000) calc(var(--run) * -1.00000) }
+   42.8084% { translate: calc(var(--lane) * -0.00428) calc(var(--run) * -1.00000 + var(--lane) * -0.06526) }
+   43.1211% { translate: calc(var(--lane) * -0.01704) calc(var(--run) * -1.00000 + var(--lane) * -0.12941) }
+   43.4338% { translate: calc(var(--lane) * -0.03806) calc(var(--run) * -1.00000 + var(--lane) * -0.19134) }
+   43.7465% { translate: calc(var(--lane) * -0.06699) calc(var(--run) * -1.00000 + var(--lane) * -0.25000) }
+   44.0591% { translate: calc(var(--lane) * -0.10332) calc(var(--run) * -1.00000 + var(--lane) * -0.30438) }
+   44.3718% { translate: calc(var(--lane) * -0.14645) calc(var(--run) * -1.00000 + var(--lane) * -0.35355) }
+   44.6845% { translate: calc(var(--lane) * -0.19562) calc(var(--run) * -1.00000 + var(--lane) * -0.39668) }
+   44.9972% { translate: calc(var(--lane) * -0.25000) calc(var(--run) * -1.00000 + var(--lane) * -0.43301) }
+   45.3098% { translate: calc(var(--lane) * -0.30866) calc(var(--run) * -1.00000 + var(--lane) * -0.46194) }
+   45.6225% { translate: calc(var(--lane) * -0.37059) calc(var(--run) * -1.00000 + var(--lane) * -0.48296) }
+   45.9352% { translate: calc(var(--lane) * -0.43474) calc(var(--run) * -1.00000 + var(--lane) * -0.49572) }
+   46.2479% { translate: calc(var(--lane) * -0.50000) calc(var(--run) * -1.00000 + var(--lane) * -0.50000) }
+   46.5605% { translate: calc(var(--lane) * -0.56526) calc(var(--run) * -1.00000 + var(--lane) * -0.49572) }
+   46.8732% { translate: calc(var(--lane) * -0.62941) calc(var(--run) * -1.00000 + var(--lane) * -0.48296) }
+   47.1859% { translate: calc(var(--lane) * -0.69134) calc(var(--run) * -1.00000 + var(--lane) * -0.46194) }
+   47.4986% { translate: calc(var(--lane) * -0.75000) calc(var(--run) * -1.00000 + var(--lane) * -0.43301) }
+   47.8113% { translate: calc(var(--lane) * -0.80438) calc(var(--run) * -1.00000 + var(--lane) * -0.39668) }
+   48.1239% { translate: calc(var(--lane) * -0.85355) calc(var(--run) * -1.00000 + var(--lane) * -0.35355) }
+   48.4366% { translate: calc(var(--lane) * -0.89668) calc(var(--run) * -1.00000 + var(--lane) * -0.30438) }
+   48.7493% { translate: calc(var(--lane) * -0.93301) calc(var(--run) * -1.00000 + var(--lane) * -0.25000) }
+    49.062% { translate: calc(var(--lane) * -0.96194) calc(var(--run) * -1.00000 + var(--lane) * -0.19134) }
+   49.3746% { translate: calc(var(--lane) * -0.98296) calc(var(--run) * -1.00000 + var(--lane) * -0.12941) }
+   49.6873% { translate: calc(var(--lane) * -0.99572) calc(var(--run) * -1.00000 + var(--lane) * -0.06526) }
+        50% { translate: calc(var(--lane) * -1.00000) calc(var(--run) * -1.00000 + var(--lane) * -0.00000) }
+   71.2479% { translate: calc(var(--lane) * -1.00000) calc(var(--run) * -0.50000) }
+   92.4957% { translate: calc(var(--lane) * -1.00000) 0 }
+   92.8084% { translate: calc(var(--lane) * -0.99572) calc(var(--lane) * 0.06526) }
+   93.1211% { translate: calc(var(--lane) * -0.98296) calc(var(--lane) * 0.12941) }
+   93.4338% { translate: calc(var(--lane) * -0.96194) calc(var(--lane) * 0.19134) }
+   93.7465% { translate: calc(var(--lane) * -0.93301) calc(var(--lane) * 0.25000) }
+   94.0591% { translate: calc(var(--lane) * -0.89668) calc(var(--lane) * 0.30438) }
+   94.3718% { translate: calc(var(--lane) * -0.85355) calc(var(--lane) * 0.35355) }
+   94.6845% { translate: calc(var(--lane) * -0.80438) calc(var(--lane) * 0.39668) }
+   94.9972% { translate: calc(var(--lane) * -0.75000) calc(var(--lane) * 0.43301) }
+   95.3098% { translate: calc(var(--lane) * -0.69134) calc(var(--lane) * 0.46194) }
+   95.6225% { translate: calc(var(--lane) * -0.62941) calc(var(--lane) * 0.48296) }
+   95.9352% { translate: calc(var(--lane) * -0.56526) calc(var(--lane) * 0.49572) }
+   96.2479% { translate: calc(var(--lane) * -0.50000) calc(var(--lane) * 0.50000) }
+   96.5605% { translate: calc(var(--lane) * -0.43474) calc(var(--lane) * 0.49572) }
+   96.8732% { translate: calc(var(--lane) * -0.37059) calc(var(--lane) * 0.48296) }
+   97.1859% { translate: calc(var(--lane) * -0.30866) calc(var(--lane) * 0.46194) }
+   97.4986% { translate: calc(var(--lane) * -0.25000) calc(var(--lane) * 0.43301) }
+   97.8113% { translate: calc(var(--lane) * -0.19562) calc(var(--lane) * 0.39668) }
+   98.1239% { translate: calc(var(--lane) * -0.14645) calc(var(--lane) * 0.35355) }
+   98.4366% { translate: calc(var(--lane) * -0.10332) calc(var(--lane) * 0.30438) }
+   98.7493% { translate: calc(var(--lane) * -0.06699) calc(var(--lane) * 0.25000) }
+    99.062% { translate: calc(var(--lane) * -0.03806) calc(var(--lane) * 0.19134) }
+   99.3746% { translate: calc(var(--lane) * -0.01704) calc(var(--lane) * 0.12941) }
+   99.6873% { translate: calc(var(--lane) * -0.00428) calc(var(--lane) * 0.06526) }
+       100% { translate: calc(var(--lane) * 0.00000) calc(var(--lane) * 0.00000) }
+}
+
+@keyframes dash-turn{
+         0% { rotate: -14.35deg }
+   21.2479% { rotate: -14.35deg }
+   42.4957% { rotate: -14.35deg }
+   42.8084% { rotate: -21.85deg }
+   43.1211% { rotate: -29.35deg }
+   43.4338% { rotate: -36.85deg }
+   43.7465% { rotate: -44.35deg }
+   44.0591% { rotate: -51.85deg }
+   44.3718% { rotate: -59.35deg }
+   44.6845% { rotate: -66.85deg }
+   44.9972% { rotate: -74.35deg }
+   45.3098% { rotate: -81.85deg }
+   45.6225% { rotate: -89.35deg }
+   45.9352% { rotate: -96.85deg }
+   46.2479% { rotate: -104.35deg }
+   46.5605% { rotate: -111.85deg }
+   46.8732% { rotate: -119.35deg }
+   47.1859% { rotate: -126.85deg }
+   47.4986% { rotate: -134.35deg }
+   47.8113% { rotate: -141.85deg }
+   48.1239% { rotate: -149.35deg }
+   48.4366% { rotate: -156.85deg }
+   48.7493% { rotate: -164.35deg }
+    49.062% { rotate: -171.85deg }
+   49.3746% { rotate: -179.35deg }
+   49.6873% { rotate: -186.85deg }
+        50% { rotate: -194.35deg }
+   71.2479% { rotate: -194.35deg }
+   92.4957% { rotate: -194.35deg }
+   92.8084% { rotate: -201.85deg }
+   93.1211% { rotate: -209.35deg }
+   93.4338% { rotate: -216.85deg }
+   93.7465% { rotate: -224.35deg }
+   94.0591% { rotate: -231.85deg }
+   94.3718% { rotate: -239.35deg }
+   94.6845% { rotate: -246.85deg }
+   94.9972% { rotate: -254.35deg }
+   95.3098% { rotate: -261.85deg }
+   95.6225% { rotate: -269.35deg }
+   95.9352% { rotate: -276.85deg }
+   96.2479% { rotate: -284.35deg }
+   96.5605% { rotate: -291.85deg }
+   96.8732% { rotate: -299.35deg }
+   97.1859% { rotate: -306.85deg }
+   97.4986% { rotate: -314.35deg }
+   97.8113% { rotate: -321.85deg }
+   98.1239% { rotate: -329.35deg }
+   98.4366% { rotate: -336.85deg }
+   98.7493% { rotate: -344.35deg }
+    99.062% { rotate: -351.85deg }
+   99.3746% { rotate: -359.35deg }
+   99.6873% { rotate: -366.85deg }
+       100% { rotate: -374.35deg }
+}
+
