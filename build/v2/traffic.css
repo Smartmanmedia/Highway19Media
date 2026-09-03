@@ -18,3 +18,14 @@ section .traffic{
    traffic layer - see traffic.js for why the order of children was not
    enough. */
 section .traffic .shades{ opacity:.30 }
+
+/* HIS HEADLIGHTS. One group, one number: zero through the day - not faint,
+   zero, because a beam at noon reads as a mistake - and full at night, over a
+   second so the change is a fade. The screen blend that makes them read as
+   light on the road rather than yellow paint over it is set inline on the
+   group in traffic.js, because a browser ignores it written as an attribute. */
+section .traffic .beams{
+  opacity:var(--night, 0);
+  transition:opacity 1s linear;
+}
+@media (prefers-reduced-motion: reduce){ section .traffic .beams{ transition:none } }

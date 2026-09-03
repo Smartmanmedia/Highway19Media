@@ -69,6 +69,57 @@
     var g = defs.querySelector('#' + CSS.escape(n));
     box[n] = g ? g.getBBox() : { x: 0, y: 0, width: 100, height: 40 };
   });
+  /* -- HIS HEADLIGHTS AND TAIL LAMPS -------------------------------------- */
+  /* Drawn in code, never baked into a car. One set per VEHICLE TYPE, referenced
+     by <use> like the cars themselves, so 106 vehicles cost ten definitions.
+     Every number is a proportion of that vehicle's own measured box, which is
+     why a semitrailer throws a longer beam than a hatchback with no special
+     case and a new vehicle needs no new numbers.
+     His art faces +x, so a beam points along +x in the car's own coordinates
+     and the car's transform turns it through the bends for free - nothing here
+     computes an angle. */
+  var LAMP = {
+    inset: 0.02,      /* back from the nose, so the cone leaves the bodywork */
+    headSep: 0.55, tailSep: 0.60,      /* lamp separation, across the vehicle */
+    headLen: 0.70, tailLen: 0.12,      /* beam length, along the vehicle */
+    headBase: 0.06, headTip: 0.20,     /* half widths: narrow at the car, wide out */
+    tailBase: 0.09, tailTip: 0.15
+  };
+  function beamDefs() {
+    var d = ['<linearGradient id="h19-beam" x1="0" y1="0" x2="1" y2="0">' +
+             '<stop offset="0" stop-color="#fff6d2" stop-opacity=".95"/>' +
+             '<stop offset=".42" stop-color="#ffeaa6" stop-opacity=".45"/>' +
+             '<stop offset="1" stop-color="#ffe294" stop-opacity="0"/></linearGradient>' +
+             '<linearGradient id="h19-tail" x1="1" y1="0" x2="0" y2="0">' +
+             '<stop offset="0" stop-color="#ff4436" stop-opacity=".95"/>' +
+             '<stop offset="1" stop-color="#ff2a1c" stop-opacity="0"/></linearGradient>'];
+    NAMES.forEach(function (n) {
+      var b = box[n], L = b.width, A = b.height, mid = b.y + A / 2;
+      var ins = LAMP.inset * L;
+      var pts = [];
+      /* headlights: forward from the nose */
+      var hx = b.x + L - ins, hl = LAMP.headLen * L;
+      [-1, 1].forEach(function (side) {
+        var y = mid + side * LAMP.headSep / 2 * A;
+        pts.push('<polygon fill="url(#h19-beam)" points="' +
+          [hx, y - LAMP.headBase * A, hx, y + LAMP.headBase * A,
+           hx + hl, y + LAMP.headTip * A, hx + hl, y - LAMP.headTip * A]
+          .map(function (v) { return v.toFixed(2) }).join(' ') + '"/>');
+      });
+      /* tail lamps: a short glow backwards, wider than it is long */
+      var tx = b.x + ins, tl = LAMP.tailLen * L;
+      [-1, 1].forEach(function (side) {
+        var y = mid + side * LAMP.tailSep / 2 * A;
+        pts.push('<polygon fill="url(#h19-tail)" points="' +
+          [tx, y - LAMP.tailBase * A, tx, y + LAMP.tailBase * A,
+           tx - tl, y + LAMP.tailTip * A, tx - tl, y - LAMP.tailTip * A]
+          .map(function (v) { return v.toFixed(2) }).join(' ') + '"/>');
+      });
+      d.push('<g id="' + n + '_beams">' + pts.join('') + '</g>');
+    });
+    return d.join('');
+  }
+
   /* long vehicle, slow vehicle */
   var lens = NAMES.map(function (n) { return box[n].width / box[n].height; });
   var lo = Math.min.apply(null, lens), hi = Math.max.apply(null, lens);
@@ -76,6 +127,8 @@
   NAMES.forEach(function (n, i) {
     pace[n] = 1 - LORRY * (hi > lo ? (lens[i] - lo) / (hi - lo) : 0);
   });
+
+  defs.insertAdjacentHTML('beforeend', '<svg>' + beamDefs() + '</svg>');
 
   /* -- the roads ------------------------------------------------------------ */
   var roads = ROADS.map(function (cfg) {
@@ -93,9 +146,20 @@
          the cars settles it once. */
       var shadeG = document.createElementNS(SVGNS, 'g');
       shadeG.setAttribute('class', 'shades');
+      /* THE BEAMS ARE ONE GROUP, ABOVE THE ROAD AND UNDER EVERY CAR. Under the
+         cars is what stops a queueing car's beams washing over the car in front
+         of it; one group is what lets the whole fleet's lighting be turned down
+         from a single place, and what stops each beam blending with its
+         neighbour's. Screen is set as inline CSS on purpose - a browser ignores
+         mix-blend-mode written as an XML attribute. */
+      var beamG = document.createElementNS(SVGNS, 'g');
+      beamG.setAttribute('class', 'beams');
+      beamG.style.mixBlendMode = 'screen';
+      beamG.style.isolation = 'isolate';
       var carG = document.createElementNS(SVGNS, 'g');
-      svg.appendChild(shadeG); svg.appendChild(carG);
-      return { n: n, el: el, svg: svg, shadeG: shadeG, carG: carG, path: P[n] };
+      svg.appendChild(shadeG); svg.appendChild(beamG); svg.appendChild(carG);
+      return { n: n, el: el, svg: svg, shadeG: shadeG, beamG: beamG,
+               carG: carG, path: P[n] };
     }).filter(Boolean);
     if (!parts.length) return null;
     return { parts: parts, thin: cfg.thin, cars: [], live: true, pts: [], len: 0, laneW: 0 };
@@ -239,7 +303,8 @@
           if (SHADES && defs.querySelector('#' + CSS.escape(id + '_shade'))) {
             sh = use(id + '_shade'); part.shadeG.appendChild(sh);
           }
-          c.nodes.push({ u: u, sh: sh, part: part });
+          var bm = use(id + '_beams'); part.beamG.appendChild(bm);
+          c.nodes.push({ u: u, sh: sh, bm: bm, part: part });
         });
         road.cars.push(c);
       }
@@ -338,6 +403,11 @@
              pointing, which is the whole difference between a sun and a smudge.
              (The boat's shadow spins with the hull; that is a boat's own wake
              sitting under it, not the same thing.) */
+          /* the same transform, so the beams turn with the car through every
+             bend without a line of code working out which way it is facing */
+          if (n.bm) n.bm.setAttribute('transform',
+            'translate(' + (x - n.part.ox).toFixed(1) + ' ' +
+                           (y - n.part.oy).toFixed(1) + ') ' + t);
           if (n.sh) n.sh.setAttribute('transform',
             'translate(' + (x - n.part.ox + n.part.sunX).toFixed(1) + ' ' +
                            (y - n.part.oy + n.part.sunY).toFixed(1) + ') ' + t);

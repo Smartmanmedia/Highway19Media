@@ -24,7 +24,8 @@ const out =
 '<!-- Both families are his own files, self-hosted. No external font requests. -->\n' +
 '<link rel="stylesheet" href="section-fonts.css">\n' +
 files.map(f => '<link rel="stylesheet" href="' + f.replace('.html','.css') + '">').join('\n') +
-'\n<link rel="stylesheet" href="parallax.css">\n' +
+'\n<link rel="stylesheet" href="parallax.css">\n'
+  + '<link rel="stylesheet" href="night.css">\n' +
 '<link rel="stylesheet" href="traffic.css">\n' +
 '<link rel="stylesheet" href="sun.css">\n' +
 '<style>body{margin:0;background:#04264f}\n' +
@@ -38,7 +39,11 @@ files.map(f => '<link rel="stylesheet" href="' + f.replace('.html','.css') + '">
 '   land badly. Sections that already ride up over the one above keep their own\n' +
 '   margin: a class beats this. */\n' +
 'section + section{ margin-top:-1px }</style>\n\n' +
-parts.join('\n\n')
+parts.join('\n\n') +
+  '\n\n<!-- the fall of dark, driven by --night in night.css. ONE of it, fixed to\n' +
+  '     the window: his sections overlap, so one per section darkened the overlaps\n' +
+  '     twice and drew a step across the page. -->\n' +
+  '<div class="nightfall" aria-hidden="true"></div>'
   + '\n\n<script src="parallax.js" defer></script>\n'
   /* his vehicles and his road, then the traffic that drives on it - in that
      order, because traffic.js reads both at start-up */
