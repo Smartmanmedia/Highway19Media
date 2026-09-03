@@ -310,6 +310,48 @@ light appears to swing round the lap. Splitting it out is the wave treatment
 again: give the shadow its own element that translates but does not rotate.
 Not done - flagged to him.
 
+## Traffic
+His 20 vehicles survive in assets/js/cars-sprite.js from v1, all drawn facing
+right. tools/subset_sprite.js cuts them to the ten in use - 132KB raw, 26KB
+gzipped - and carries only the gradients those ten reference, walking
+xlink:href chains, because a car painted with url(#missing) renders black.
+Emit as a TEMPLATE LITERAL, not JSON: his SVG is nearly all double-quoted
+attributes and JSON.stringify escaping doubled the file to 210KB.
+
+**Where the road is comes from his dashes**, via tools/extract_path.js. See the
+extractor's own header for why a dash is told from an edge line by clearance
+rather than by size or position.
+
+**Stop-and-go needs a simulation, but not v1's 1,800 lines.** build/v2/traffic.js
+is 200. A position along the road, a speed, and a rule about the gap ahead.
+
+**The jams come from a REACTION DELAY, and nothing else works.** A driver who
+responds instantly to the gap ahead finds a stable equilibrium and sits in it -
+measured, that gave 0.6% of readings queueing and a tidy convoy, no matter how
+much the top speeds varied or how dense the road got. A driver who responds
+LATE overshoots, brakes harder than needed, and the car behind does the same but
+worse. That is a stop-and-go wave, and it is emergent: nothing is scripted.
+Long vehicles are also slower, which is where most queues start, same as real
+traffic.
+
+**Density is the other dial.** Too sparse and free flow hides the delay; too
+dense and everything crawls and looks sluggish rather than alive. SPACING is
+road length per car as a share of the section width; 0.11 gives mostly-moving
+traffic with occasional full stops.
+
+**A car crossing the one/two seam is drawn TWICE**, once in each section, because
+both sections clip their own overflow. The two halves are positioned from the
+same page coordinates and meet exactly on the boundary.
+
+**Section four's cars pass under his rocks for free.** His rocks are z-ground
+(2) and the road is z-road (1); the traffic layer takes z-road, so nothing had
+to be written to make it happen.
+
+**Measuring motion needs settling time.** A parallax check that scrolled and
+waited 20ms reported 25 overhangs that a careful max-overhang check could not
+reproduce at all - the traffic script appending its layer triggers a relayout,
+and a frame measured inside that window catches art mid-update.
+
 ## His type — measured, not chosen
 
 Two families, both from his file:

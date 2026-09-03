@@ -1,0 +1,13 @@
+/* The traffic layer: one <svg> per section, filling it, at his road's own
+   depth. In section four that is BELOW the rock band (z-ground, 2) and in
+   section two BELOW nothing that matters - which is how a car drives under
+   his mountains without a line of code asking it to.
+
+   overflow:visible so a car straddling a section's edge is clipped by the
+   SECTION rather than by this box; that clip is what makes the two halves of a
+   car crossing the one/two seam meet exactly. */
+section .traffic{
+  position:absolute; left:0; top:0; width:100%; height:100%;
+  overflow:visible; pointer-events:none;
+}
+@media (prefers-reduced-motion: reduce){ section .traffic{ display:none } }

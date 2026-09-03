@@ -57,6 +57,7 @@ if (!tiles.length) { console.error('no road tiles in section ' + N); process.exi
   await p.setContent('<body style="margin:0">');
 
   const groups = [];
+  let roadW = 1e9;
   for (const t of tiles) {
     const svg = fs.readFileSync(t.file, 'utf8');
     const got = await p.evaluate(s => {
@@ -113,8 +114,10 @@ if (!tiles.length) { console.error('no road tiles in section ' + N); process.exi
       cand.forEach(c => { c.clear = clearance(c); });
       const maxClear = Math.max(...cand.map(c => c.clear));
       const dashes = cand.filter(c => c.clear > maxClear * 0.45);
+      /* the narrow dimension of a straight run IS the road's width */
+      const rw = Math.min(R.r - R.x, R.b - R.y);
       return { vb: { x: vb.x, y: vb.y, w: vb.width, h: vb.height },
-               road: R, dashes };
+               road: R, roadW: rw, dashes };
     }, svg);
     if (!got) { console.error('  no road body in ' + t.name); continue; }
 
@@ -131,6 +134,9 @@ if (!tiles.length) { console.error('no road tiles in section ' + N); process.exi
         tile: t.name });
     }
     groups.push(group);
+    /* his straights are all one width; take the narrowest reading as the road */
+    const wpc = got.roadW / got.vb.w * t.width;
+    if (/stright/.test(t.name)) roadW = Math.min(roadW, wpc);
     console.error('  ' + t.name.padEnd(14) + got.dashes.length + ' dashes');
   }
   await br.close();
@@ -170,7 +176,7 @@ if (!tiles.length) { console.error('no road tiles in section ' + N); process.exi
   }
   console.error('  ' + order.length + ' centreline points');
   process.stdout.write(JSON.stringify({
-    section: N, secHoverW: SEC_H_OVER_W,
+    section: N, secHoverW: SEC_H_OVER_W, roadW: +roadW.toFixed(3),
     points: order.map(p => [ +p.x.toFixed(3), +p.y.toFixed(3) ])
   }, null, 1) + '\n');
 })();

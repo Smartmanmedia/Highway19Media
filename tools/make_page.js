@@ -25,6 +25,7 @@ const out =
 '<link rel="stylesheet" href="section-fonts.css">\n' +
 files.map(f => '<link rel="stylesheet" href="' + f.replace('.html','.css') + '">').join('\n') +
 '\n<link rel="stylesheet" href="parallax.css">\n' +
+'<link rel="stylesheet" href="traffic.css">\n' +
 '<style>body{margin:0;background:#04264f}\n' +
 '/* the sections stack with nothing between them: each is a fixed ratio of the\n' +
 '   same width, so the join is exact at every screen size */\n' +
@@ -36,7 +37,13 @@ files.map(f => '<link rel="stylesheet" href="' + f.replace('.html','.css') + '">
 '   land badly. Sections that already ride up over the one above keep their own\n' +
 '   margin: a class beats this. */\n' +
 'section + section{ margin-top:-1px }</style>\n\n' +
-parts.join('\n\n') + '\n\n<script src="parallax.js" defer></script>\n';
+parts.join('\n\n')
+  + '\n\n<script src="parallax.js" defer></script>\n'
+  /* his vehicles and his road, then the traffic that drives on it - in that
+     order, because traffic.js reads both at start-up */
+  + '<script src="sprite.js" defer></script>\n'
+  + '<script src="paths.js" defer></script>\n'
+  + '<script src="traffic.js" defer></script>\n';
 
 fs.writeFileSync(path.join(DIR, 'page.html'), out);
 console.log('page.html <- ' + files.join(' + '));
