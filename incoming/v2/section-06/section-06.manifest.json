@@ -1,0 +1,72 @@
+{
+  "file": "section-06.svg",
+  "artboard": {
+    "w": 3127.99,
+    "h": 1496.53
+  },
+  "column": {
+    "x": 66.34,
+    "w": 1923.2
+  },
+  "bleed": {
+    "left": 66.34,
+    "right": 1138.45
+  },
+  "aspect": 0.7781,
+  "layers": [
+    {
+      "name": "Text",
+      "shapes": 1340,
+      "left": -3.45,
+      "top": 0,
+      "width": 162.64,
+      "height": 100,
+      "bleeds": true
+    },
+    {
+      "name": "Generative_Object-4",
+      "shapes": 26,
+      "left": 57.17,
+      "top": 16.69,
+      "width": 3.34,
+      "height": 4.17,
+      "bleeds": false
+    },
+    {
+      "name": "Generative_Object-3",
+      "shapes": 8,
+      "left": 71.94,
+      "top": 16.74,
+      "width": 3.37,
+      "height": 4.13,
+      "bleeds": false
+    },
+    {
+      "name": "Generative_Object-2",
+      "shapes": 11,
+      "left": 42.8,
+      "top": 16.8,
+      "width": 2.75,
+      "height": 3.89,
+      "bleeds": false
+    },
+    {
+      "name": "Generative_Object",
+      "shapes": 22,
+      "left": 26.92,
+      "top": 17.02,
+      "width": 3.16,
+      "height": 4.06,
+      "bleeds": false
+    },
+    {
+      "name": "End_rocks",
+      "shapes": 1256,
+      "left": -3.45,
+      "top": 43.69,
+      "width": 162.64,
+      "height": 56.31,
+      "bleeds": true
+    }
+  ]
+}

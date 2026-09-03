@@ -220,6 +220,7 @@ once the text is actually bold-SIZED — under 18.66px it is judged as regular.
     02       1938.1  x  931.4  x 15.23 w 1920.80  0.4849     92
     03       1922.52 x  855.76 x 0     w 1922.52  0.4451   1074 (desert inline)
     04       1930.6  x 1626.4  x 0     w 1930.6   0.8424   1604 (canopy a WebP)
+    06       3127.99 x 1496.53 x 66.34 w 1923.2   0.6186   1300 (cards are CSS)
 
 The art column is whatever his ground is — an ocean polygon in one, a sand rect
 in the next. The ratios stack: a page of both is 1.4258 x its own width at every
@@ -280,6 +281,20 @@ and not the other.
     tools/read_text.js      his copy — bounds, alignment, per-line size/weight
     tools/cut_layers.js     each named layer into its own file, cropped
     tools/check_section.js  the page against his copy, both as a share of the section
+
+**Section six is the case where the artboard is neither.** His artboard is
+3127.99 x 1496.53 but the PAGE inside it is a white rect at x 66.34, width
+1923.2, height 1189.6 - the rest is workspace, and his rock band keeps a second
+copy of itself out there for tiling. Find the white rect, and pass its column
+to the readers. And then watch the vertical numbers: read_section and read_text
+report every TOP and HEIGHT as a share of the ARTBOARD height, so on a section
+like this one they all need scaling by artboard/page - 1496.53/1189.6 = 1.258.
+Lefts and widths are already against the column you passed.
+
+His four service cards are one component in CSS, not the 1,340 shapes his
+export draws them as: a box, a radius, a hairline rule and one colour per card
+off a --c custom property. The tag is his own label.svg, filled from that same
+property - which is what "change the label colour to each card" asks for.
 
 The art column is NOT the artboard. In section one the ocean runs x 87 to
 2011.33 of a 2011.33-wide artboard, so the column is 1924.34 and all 87 units

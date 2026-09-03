@@ -1,0 +1,366 @@
+[
+  {
+    "text": "Pick Your Lane. We Handle the Driv",
+    "left": 23.05,
+    "top": 4.21,
+    "width": 38.85,
+    "align": "centre",
+    "lines": [
+      {
+        "txt": "Pick Your Lane. We Handle the Drive.",
+        "left": 23.05,
+        "top": 4.21,
+        "size": 41.03,
+        "weight": "900"
+      }
+    ]
+  },
+  {
+    "text": "Take one lane to start, or let us ",
+    "left": 23.03,
+    "top": 8.05,
+    "width": 30.43,
+    "align": "centre",
+    "lines": [
+      {
+        "txt": "Take one lane to start, or let us run all four.",
+        "left": 23.03,
+        "top": 8.05,
+        "size": 29,
+        "weight": "500"
+      }
+    ]
+  },
+  {
+    "text": "Social Media",
+    "left": 67.86,
+    "top": 25.04,
+    "width": 11.55,
+    "align": "centre",
+    "lines": [
+      {
+        "txt": "Social Media",
+        "left": 67.86,
+        "top": 25.04,
+        "size": 34.69,
+        "weight": "900"
+      },
+      {
+        "txt": "& Paid Ads",
+        "left": 68.79,
+        "top": 27.36,
+        "size": 34.69,
+        "weight": "900"
+      }
+    ]
+  },
+  {
+    "text": "Print",
+    "left": 53.93,
+    "top": 25.04,
+    "width": 9.86,
+    "align": "centre",
+    "lines": [
+      {
+        "txt": "Print",
+        "left": 56.6,
+        "top": 25.04,
+        "size": 34.69,
+        "weight": "900"
+      },
+      {
+        "txt": "& Branding",
+        "left": 53.93,
+        "top": 27.36,
+        "size": 34.69,
+        "weight": "900"
+      }
+    ]
+  },
+  {
+    "text": "Website",
+    "left": 25.15,
+    "top": 25.05,
+    "width": 7.36,
+    "align": "centre",
+    "lines": [
+      {
+        "txt": "Website",
+        "left": 25.15,
+        "top": 25.05,
+        "size": 34.69,
+        "weight": "900"
+      },
+      {
+        "txt": "Design",
+        "left": 25.76,
+        "top": 27.36,
+        "size": 34.69,
+        "weight": "900"
+      }
+    ]
+  },
+  {
+    "text": "Video",
+    "left": 39.06,
+    "top": 25.05,
+    "width": 9.94,
+    "align": "centre",
+    "lines": [
+      {
+        "txt": "Video",
+        "left": 41.32,
+        "top": 25.05,
+        "size": 34.69,
+        "weight": "900"
+      },
+      {
+        "txt": "Production",
+        "left": 39.06,
+        "top": 27.36,
+        "size": 34.69,
+        "weight": "900"
+      }
+    ]
+  },
+  {
+    "text": "From custom websites and",
+    "left": 23.59,
+    "top": 31.87,
+    "width": 11.23,
+    "align": "centre",
+    "lines": [
+      {
+        "txt": "From custom websites and",
+        "left": 24.7,
+        "top": 31.87,
+        "size": 12.82,
+        "weight": "500"
+      },
+      {
+        "txt": "landing pages to ecommerce and",
+        "left": 23.61,
+        "top": 32.89,
+        "size": 12.82,
+        "weight": "500"
+      },
+      {
+        "txt": "site management — because your",
+        "left": 23.59,
+        "top": 33.92,
+        "size": 12.82,
+        "weight": "500"
+      },
+      {
+        "txt": "website isn't just a page, it's your",
+        "left": 23.68,
+        "top": 34.95,
+        "size": 12.82,
+        "weight": "500"
+      },
+      {
+        "txt": "business working 24/7.",
+        "left": 25.26,
+        "top": 35.98,
+        "size": 12.82,
+        "weight": "500"
+      }
+    ]
+  },
+  {
+    "text": "Logos, flyers, signage, vehicle",
+    "left": 53.34,
+    "top": 32.03,
+    "width": 10.55,
+    "align": "centre",
+    "lines": [
+      {
+        "txt": "Logos, flyers, signage, vehicle",
+        "left": 53.55,
+        "top": 32.03,
+        "size": 12.82,
+        "weight": "500"
+      },
+      {
+        "txt": "wraps, catalogs, branded",
+        "left": 54.26,
+        "top": 33.05,
+        "size": 12.82,
+        "weight": "500"
+      },
+      {
+        "txt": "merchandise and more —",
+        "left": 54.4,
+        "top": 34.08,
+        "size": 12.82,
+        "weight": "500"
+      },
+      {
+        "txt": "everything that represents your",
+        "left": 53.34,
+        "top": 35.11,
+        "size": 12.82,
+        "weight": "500"
+      },
+      {
+        "txt": "business visually.",
+        "left": 55.68,
+        "top": 36.14,
+        "size": 12.82,
+        "weight": "500"
+      }
+    ]
+  },
+  {
+    "text": "Campaign creation, page",
+    "left": 67.8,
+    "top": 32.03,
+    "width": 11.29,
+    "align": "centre",
+    "lines": [
+      {
+        "txt": "Campaign creation, page",
+        "left": 69.14,
+        "top": 32.03,
+        "size": 12.82,
+        "weight": "500"
+      },
+      {
+        "txt": "management, audience",
+        "left": 69.47,
+        "top": 33.05,
+        "size": 12.82,
+        "weight": "500"
+      },
+      {
+        "txt": "engagement, Google Ads, Meta",
+        "left": 68.15,
+        "top": 34.08,
+        "size": 12.82,
+        "weight": "500"
+      },
+      {
+        "txt": "Ads, and full budget management",
+        "left": 67.8,
+        "top": 35.11,
+        "size": 12.82,
+        "weight": "500"
+      },
+      {
+        "txt": "— we run it all.",
+        "left": 71.02,
+        "top": 36.14,
+        "size": 12.82,
+        "weight": "500"
+      }
+    ]
+  },
+  {
+    "text": "Whether it's a brand film, social",
+    "left": 38.4,
+    "top": 32.11,
+    "width": 10.94,
+    "align": "centre",
+    "lines": [
+      {
+        "txt": "Whether it's a brand film, social",
+        "left": 38.59,
+        "top": 32.11,
+        "size": 12.82,
+        "weight": "500"
+      },
+      {
+        "txt": "ad, drone shoot, or animated",
+        "left": 38.99,
+        "top": 33.13,
+        "size": 12.82,
+        "weight": "500"
+      },
+      {
+        "txt": "content — we produce videos",
+        "left": 38.92,
+        "top": 34.16,
+        "size": 12.82,
+        "weight": "500"
+      },
+      {
+        "txt": "that tell your story and drive real",
+        "left": 38.4,
+        "top": 35.19,
+        "size": 12.82,
+        "weight": "500"
+      },
+      {
+        "txt": "engagement.",
+        "left": 41.61,
+        "top": 36.22,
+        "size": 12.82,
+        "weight": "500"
+      }
+    ]
+  },
+  {
+    "text": "Learn More",
+    "left": 56.1,
+    "top": 39.54,
+    "width": 5.32,
+    "align": "centre",
+    "lines": [
+      {
+        "txt": "Learn More",
+        "left": 56.1,
+        "top": 39.54,
+        "size": 19.12,
+        "weight": "500"
+      }
+    ]
+  },
+  {
+    "text": "Learn More",
+    "left": 71.07,
+    "top": 39.54,
+    "width": 5.32,
+    "align": "centre",
+    "lines": [
+      {
+        "txt": "Learn More",
+        "left": 71.07,
+        "top": 39.54,
+        "size": 19.12,
+        "weight": "500"
+      }
+    ]
+  },
+  {
+    "text": "Learn More",
+    "left": 26.44,
+    "top": 39.54,
+    "width": 5.34,
+    "align": "centre",
+    "lines": [
+      {
+        "txt": "Learn More",
+        "left": 26.44,
+        "top": 39.54,
+        "size": 19.12,
+        "weight": "500"
+      }
+    ]
+  },
+  {
+    "text": "Learn More",
+    "left": 41.04,
+    "top": 39.54,
+    "width": 5.34,
+    "align": "centre",
+    "lines": [
+      {
+        "txt": "Learn More",
+        "left": 41.04,
+        "top": 39.54,
+        "size": 19.12,
+        "weight": "500"
+      }
+    ]
+  }
+]

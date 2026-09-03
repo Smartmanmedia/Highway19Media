@@ -1,0 +1,72 @@
+/* ============================================================================
+   SECTION SIX — pick your lane
+   ----------------------------------------------------------------------------
+   His artboard is 3127.99 x 1496.53, but the PAGE inside it is the white rect:
+   x 66.34, width 1923.2, height 1189.6. The rest is workspace, and his rock
+   band carries a second copy of itself out there for tiling. So the column is
+   the white rect and the ratio is 1189.6 / 1923.2.
+
+   Everything read_section and read_text report as a TOP or a HEIGHT is a share
+   of the ARTBOARD height, not the page's - so those numbers are scaled here by
+   1496.53 / 1189.6 = 1.258. Lefts and widths are already against the column.
+   ========================================================================= */
+
+.sec6{
+  position:relative;
+  width:100%;
+  aspect-ratio:1923.2 / 1189.6;         /* 0.6186 */
+  container-type:inline-size;
+  background:#fff;
+  overflow:hidden;
+  isolation:isolate;
+}
+
+.sec6 [data-at]{ position:absolute; display:block }
+.sec6 img[data-at], .sec6 svg[data-at]{ height:auto }
+.sec6 .z-ground{ z-index:0 }
+.sec6 .copy{ position:absolute; margin:0; text-align:center; color:#1a1a1a;
+  font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif; z-index:2 }
+
+.sec6 h2.copy{ font-size:2.133cqw; font-weight:900; line-height:1.1; white-space:nowrap }
+.sec6 .sub    { font-size:1.508cqw; font-weight:500; line-height:1.2; white-space:nowrap }
+
+/* ---- the cards ------------------------------------------------------------
+   Four of the same thing, so they are a component rather than 1,340 shapes.
+   The box, the radius, the rule and the colours are all his: 13.46% x 33.62%
+   of the section, rx 20.6 units, a #1a1a1a hairline, and one colour per card
+   driven off --c. Children are positioned against the CARD, not the section,
+   which is the one place that rule earns its keep.                          */
+.sec6 .card{
+  position:absolute; top:21.45%; width:13.46%; height:33.62%;
+  background:#fff; border:0.052cqw solid #1a1a1a; border-radius:1.071cqw;
+  z-index:1;
+  font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
+}
+.sec6 .card > *{ position:absolute; margin:0; text-align:center }
+
+/* his tag: a flat top with a folded corner, rounded off at the bottom. One
+   shape, filled from the card's own colour - which is what "change the label
+   colour to each card" means. */
+.sec6 .card .label{
+  left:23.48%; top:-3.73%; width:53.03%; height:23.75%;
+  overflow:visible;
+}
+.sec6 .card .label .body{ fill:var(--c) }
+.sec6 .card .label .fold{ fill:#1a1a1a }
+
+.sec6 .card .icon{ height:auto }
+
+.sec6 .card h3{
+  left:0; right:0; top:29.88%; font-size:1.804cqw; font-weight:900;
+  line-height:1.00; color:#1a1a1a;
+}
+.sec6 .card p{
+  left:6%; right:6%; top:55.43%; font-size:0.667cqw; font-weight:500;
+  line-height:1.19; color:#333;
+}
+.sec6 .card .btn{
+  left:12.22%; width:75.56%; top:81.85%; height:10.80%;
+  background:var(--c); border:0.104cqw solid #fff; border-radius:0.582cqw;
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size:0.994cqw; font-weight:500; white-space:nowrap;
+}
