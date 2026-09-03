@@ -143,8 +143,21 @@ its SECTION'S width, so it scales with everything else. The section enters at
 the bottom of the screen with its art `--par` low, crosses his marks as the
 section passes the middle, and leaves `--par` high. ONLY the big green signs, the gantries they hang from, and the clouds move.
 Road signs, buttons and the boat stay put - he tried it with everything
-floating and it read as noise. Signs and gantries 8.0, first clouds 7.5, other
-clouds 4.5.
+floating and it read as noise. First clouds 20, signs and gantries 12, other
+clouds 8.
+
+**The spread is the point, not the number.** Clouds and signs on near-identical
+amplitudes move together and read as if nothing is moving at all, however large
+the number. `--par-bias` slides a whole travel down the screen without slowing
+it, so a cloud can drift a long way without sliding out of the top of its own
+section. And an amplitude that would carry art off an edge is capped to what
+fits, per LOCK GROUP (`--par-lock`): sign, copy and gantry are one object and
+take one cap; clouds are capped one by one, so a low cloud that has run out of
+room does not drag a high one down with it.
+
+**SVG elements have no offsetTop.** Measuring the fit off `offsetTop` gave NaN
+for his inline hero sign and froze it while its own gantry kept moving. Use
+`getBoundingClientRect`, with the translate cleared first.
 
 **Progress is per SECTION, not per element.** Keyed off each element's own
 centre, two things that have to travel together - his sign and the gantry it

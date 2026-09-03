@@ -1,27 +1,33 @@
 /* ============================================================================
    PARALLAX
    ----------------------------------------------------------------------------
+   ONLY the big green signs, the gantries they hang from, and the clouds move.
+   Road signs, buttons and the boat stay on his marks - everything floating at
+   once read as noise.
+
    --par is the amplitude, as a share of the SECTION WIDTH so it scales with
-   everything else: the art sits that far below his mark as the section enters
-   at the bottom of the screen, on his mark as the section passes the middle,
-   and that far above as it leaves. The spread is what reads as depth.
+   everything else. --par-bias shifts the whole travel down the screen without
+   changing its speed: at 0 the art sits on his mark as the section passes the
+   middle; at 0.25 it starts a quarter of the travel lower and never rides as
+   far up, which is how a cloud can drift a long way without sliding out of the
+   top of its own section.
 
-   Progress is per SECTION, not per element - see parallax.js for why. That
-   means the travel is spread over the section's whole pass, so these numbers
-   are larger than they look: at a 1400px screen the first clouds move 105px
-   each way, the signs 56.
+   Progress is per SECTION, not per element, and an amplitude that would carry
+   a piece of art off the top or bottom of its own section is capped to what
+   fits - see parallax.js for both. --par-lock names a group that must take the
+   SAME cap: the sign, its copy and the gantry it hangs from are one object and
+   have to be capped as one. The clouds are capped one by one, so a low cloud
+   running out of room does not slow the high one down with it.
 
-   parallax.js drives it. The CSS-only way (animation-timeline: view()) is a
-   line and a half and runs off the main thread, but it is Chrome-only and it
-   would not advance under test here, so it is not worth the risk of him
-   getting his art frozen a few pixels off its mark.
-
-   Only `translate` moves, so his squeezed copy keeps its scaleX.
+   THE SPREAD IS THE POINT. Clouds and signs on near-identical amplitudes move
+   together and read as if nothing is moving at all, however large the number.
+   The first clouds run at 20 against the signs' 12, so they visibly overtake:
+   224px of relative travel at a 1400px screen.
    ========================================================================= */
 .par        { will-change:translate }
-.par-cloud  { --par:4.5 }        /* his clouds run ahead of everything */
-.par-first  { --par:7.5 }        /* and the first ones you meet run hardest */
-.par-sign   { --par:8.0 }        /* THE GANTRY SHARES THIS. A sign hangs off a
-                                    truss: give them different amplitudes and
-                                    the sign floats off its own gantry. */
-.par-boat   { --par:3.0 }
+.par-first  { --par:20; --par-bias:0.25 }   /* the clouds you meet first, hardest */
+.par-cloud  { --par:8;  --par-bias:0.25 }
+.par-sign   { --par:12; --par-bias:0.20; --par-lock:gantry }                    /* THE GANTRY SHARES THIS. A sign
+                                               hangs off a truss: give them
+                                               different amplitudes and the sign
+                                               floats off its own gantry. */
