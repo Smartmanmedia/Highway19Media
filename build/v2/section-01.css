@@ -246,6 +246,20 @@
   animation: cruise-move 75s linear infinite;
 }
 .sec1 .cruise > *{ animation: cruise-turn 75s linear infinite }
+
+/* his speedboat: a tighter oval and 32s a lap against the yacht's 75. Its own
+   two exports were cropped differently too, so the shadow is centred back
+   under the hull the same way. */
+.sec1 .cruise-fast{
+  --rx: 3cqw; --ry: 6cqw;
+  animation: cruise-move 32s linear infinite;
+}
+.sec1 .cruise-fast > *{ animation: cruise-turn 32s linear infinite }
+.sec1 .cruise-fast.still, .sec1 .cruise-fast.still > *{ animation-play-state:paused }
+.sec1 .fast-boat > .shade{ left:-3.450%; top:-0.055%; width:106.898% }
+@media (prefers-reduced-motion: reduce){
+  .sec1 .cruise-fast, .sec1 .cruise-fast > *{ animation:none }
+}
 .sec1 .cruise.still, .sec1 .cruise.still > *{ animation-play-state:paused }
 /* his two exports were cropped to their own content, so the shadow is put back
    under the hull by matching their centres - see the markup */

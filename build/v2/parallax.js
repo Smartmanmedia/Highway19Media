@@ -123,7 +123,7 @@
  * them instead - no scroll listener, no work per frame, and the CSS decides
  * what "parked" means. */
 (function () {
-  var w = document.querySelectorAll('.waves, .cruise');
+  var w = document.querySelectorAll('.waves, .cruise, .cruise-fast');
   if (!w.length || !window.IntersectionObserver) return;
   var io = new IntersectionObserver(function (rows) {
     for (var i = 0; i < rows.length; i++)
@@ -133,57 +133,4 @@
      so an element that is already on screen never stops. If the observer
      somehow never fires, the failure is motion rather than no motion. */
   for (var i = 0; i < w.length; i++) io.observe(w[i]);
-})();
-
-/* THE READER IS THE SUN.
- *
- * A light at the reader, so a shadow is cast directly away from it, and scroll
- * and every shadow on the page swings because the thing casting it has moved
- * relative to you.
- *
- * THE LIGHT IS AT THE TOP EDGE OF THE SCREEN, NOT ITS MIDDLE, and that is his
- * call rather than mine. With it at the middle, anything in the upper half of
- * the first screen - the hero sign above all - is already past the light before
- * you have scrolled at all, so its shadow can only ever go UP, into the gantry
- * and the sky. At the top edge, the sun starts above everything: a thing below
- * you throws its shadow down, it shortens to nothing as you scroll level with
- * it, and then it stretches up behind. Which is exactly what he described - the
- * sign's shadow starting below it and travelling up past it as you scroll.
- *
- * It writes two numbers per element, --sun-x and --sun-y, which is the same
- * pair the fixed sun uses - so the CSS does not know or care which is driving,
- * and with the script off, or under reduced motion, everything falls back to
- * the -4 degrees he drew.
- *
- * Rides the parallax's own rAF: one listener, one frame, for all of it.
- */
-(function () {
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var lit = document.querySelectorAll('[style*="--lift"]');
-  if (!lit.length) return;
-
-  function place() {
-    var cx = innerWidth / 2, h = innerHeight;
-    for (var i = 0; i < lit.length; i++) {
-      var el = lit[i], r = el.getBoundingClientRect();
-      /* how far from the light, as a share of the screen, capped at 1 so a
-         shadow far off the page does not run away to nothing sensible */
-      var dx = (r.left + r.width / 2 - cx) / cx;
-      var dy = (r.top + r.height / 2) / h;
-      var m = Math.hypot(dx, dy);
-      if (m > 1) { dx /= m; dy /= m; }
-      el.style.setProperty('--sun-x', dx.toFixed(3));
-      el.style.setProperty('--sun-y', dy.toFixed(3));
-    }
-  }
-  var queued = false;
-  function ping() {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(function () { queued = false; place(); });
-  }
-  addEventListener('scroll', ping, { passive: true });
-  addEventListener('resize', ping);
-  addEventListener('load', ping);
-  place();
 })();

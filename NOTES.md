@@ -436,30 +436,16 @@ the new shadow-only one. Cloud4 and cloud5 give the same number independently,
 so his artwork really is consistent. The default therefore reproduces his design
 exactly - the layer split changes nothing until someone turns the dial.
 
-**The reader is the sun** (parallax.js, the block at the end). A light at the
-reader, so a shadow is cast away from it, and every shadow swings as you scroll.
-It writes --sun-x and --sun-y per element - the same pair the fixed sun uses -
-so the CSS neither knows nor cares which is driving, and with the script off or
-under reduced motion everything falls back to the -4 degrees he drew.
-
-**The light is at the TOP EDGE of the screen, not its middle**, and that is his
-call rather than physics. With it at the middle, anything in the upper half of
-the first screen is already past the light before you have scrolled at all, so
-its shadow can only ever go UP - which for the hero sign means into the gantry
-and the sky, the one place he does not want it. At the top edge the sun starts
-above everything: a thing below you throws its shadow down, it shortens to
-nothing as you draw level, then stretches up behind. Measured on the sign:
-+60px at scroll 0, level at 400, -132px by 1400.
-
-**Everything leans one way.** The scroll-driven direction is symmetrical about
-the middle of the screen, so a thing dead centre would throw its shadow straight
-down and read as lit from directly overhead. `--sun-lean` (-0.35) is a constant
-push to the left added to the x term everywhere, which gives the light a place
-to be. One number, every shadow.
-
-**High things cast faint ones.** Both green signs sit at --lift 8.834cqw and
---sun-ink .17, against .31 for the clouds - a shadow thrown that far has spread
-out by the time it lands.
+**THE SUN IS FIXED, NOT SCROLL-DRIVEN.** There was a mode that made the reader
+the light - every shadow taking its direction from where the element sat on
+screen, so the whole page's lighting swung as you scrolled. It is gone at his
+call: it cost a measurement of every lit element on every frame, and a shadow
+that moves as you scroll reads as the art sliding about rather than as light
+moving. One fixed direction now, down and a little left. --sun-x and --sun-y
+still swing every shadow together when turned; it just does not happen by
+itself. The things that genuinely need a moving shadow - the boats, and the
+cars when their art arrives - get it from their own rotation instead, which is
+correct: a shadow is the object's own outline.
 
 **A shadow falls on some things and not others, and DEPTH is what says which.**
 His sign's shadow belongs on the ocean, the road and the traffic but not on the

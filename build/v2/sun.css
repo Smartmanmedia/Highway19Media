@@ -24,10 +24,13 @@
   --sun: -4deg;
   --sun-len: 1;
   --sun-ink: 0.31;
-  /* THE DIRECTION AS A VECTOR, because that is what the reader-is-the-sun mode
-     writes per element. These are the FALLBACK, used before the script runs, if
-     it never runs, and under reduced motion: straight down and a little left,
-     which is where the moving version sits for most of a scroll anyway. */
+  /* THE DIRECTION, AS A VECTOR. It used to be written per element by a
+     scroll-driven mode - the reader as the light - and that is gone: it cost a
+     measurement of every lit element on every frame, and a shadow that swings
+     as you scroll reads as the art sliding about rather than as light moving.
+     One fixed direction, down and a little left. Turning --sun-x and --sun-y
+     still swings every shadow on the page together; it just does not happen by
+     itself any more. */
   --sun-x: 0;
   --sun-y: 0.30;
 
