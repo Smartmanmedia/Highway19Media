@@ -32,20 +32,20 @@
      here. `thin` is a density multiplier - the desert straight is meant to be
      the quiet one. */
   var ROADS = [{ secs: ['01', '02'], thin: 1 },
-               { secs: ['03'],       thin: 0.45 },
+               { secs: ['03'],       thin: 0.85 },
                { secs: ['04'],       thin: 1 }];
-  var SPACING   = 0.110,  /* road length per car, as a share of section width -
+  var SPACING   = 0.093,  /* road length per car, as a share of section width -
                              the count follows from how long his road is, so a
                              short road does not end up nose to tail */
       CRUISE    = 0.060,  /* share of a section's width per second */
       SPREAD    = 0.55,   /* how much top speeds differ - this is what jams */
-      LORRY     = 0.34,   /* how much slower the longest vehicle is than the
+      LORRY     = 0.45,   /* how much slower the longest vehicle is than the
                              shortest. His semitrailer and his bus hold people
                              up, which is where most of the queueing comes
                              from - it is the same reason real traffic jams. */
-      ACCEL     = 0.10, DECEL = 0.34,   /* same units, per second squared */
-      HEADWAY   = 0.85,   /* seconds of gap a driver wants */
-      REACT     = 0.85,   /* SECONDS OF REACTION DELAY, and the whole reason the
+      ACCEL     = 0.055, DECEL = 0.14,  /* same units, per second squared */
+      HEADWAY   = 1.70,   /* seconds of gap a driver wants */
+      REACT     = 1.45,   /* SECONDS OF REACTION DELAY, and the whole reason the
                              traffic queues rather than settling into a convoy.
                              A driver who responds instantly to the gap ahead
                              finds a stable equilibrium and stays there; a
@@ -216,7 +216,7 @@
   /* -- populate ------------------------------------------------------------- */
   layout();
   roads.forEach(function (road) {
-    var n = Math.max(2, Math.min(12, Math.round(road.len * road.thin / (road.scale * SPACING))));
+    var n = Math.max(2, Math.min(30, Math.round(road.len * road.thin / (road.scale * SPACING))));
     /* the vehicles that fit this road's tightest bend - always at least the
        shortest one, so a hairpin still gets traffic */
     var fits = NAMES.filter(function (nm) {
@@ -245,6 +245,11 @@
       }
     }
   });
+
+  /* the simulation, for tools/check_traffic.js to read. Tuning a jam by
+     watching pixels is guesswork; the gap a driver HAS against the gap a driver
+     WANTS is the number that decides whether a road queues at all. */
+  window.H19_TRAFFIC = roads;
 
   /* -- the loop ------------------------------------------------------------- */
   var last = 0;
