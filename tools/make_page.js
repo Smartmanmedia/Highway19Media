@@ -28,7 +28,14 @@ files.map(f => '<link rel="stylesheet" href="' + f.replace('.html','.css') + '">
 '<style>body{margin:0;background:#04264f}\n' +
 '/* the sections stack with nothing between them: each is a fixed ratio of the\n' +
 '   same width, so the join is exact at every screen size */\n' +
-'section{display:block}</style>\n\n' +
+'section{display:block}\n' +
+'/* A HAIRLINE OF OVERLAP. Two boxes that share an edge land on a half device\n' +
+'   pixel at some widths and zooms, and the row where they meet renders lighter\n' +
+'   than either - a bright line straight across his ocean on his screen, though\n' +
+'   not on mine at the same width. A pixel of overlap means no shared edge to\n' +
+'   land badly. Sections that already ride up over the one above keep their own\n' +
+'   margin: a class beats this. */\n' +
+'section + section{ margin-top:-1px }</style>\n\n' +
 parts.join('\n\n') + '\n\n<script src="parallax.js" defer></script>\n';
 
 fs.writeFileSync(path.join(DIR, 'page.html'), out);

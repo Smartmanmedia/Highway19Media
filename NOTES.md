@@ -282,6 +282,19 @@ The art column is whatever his ground is — an ocean polygon in one, a sand rec
 in the next. The ratios stack: a page of both is 1.4258 x its own width at every
 screen size, measured at 1024, 1400, 1920 and 2560.
 
+## A HAIRLINE ON A SECTION JOIN
+
+Two boxes that share an edge land on a half device pixel at some widths and
+zooms, and the row where they meet renders LIGHTER than either side - a bright
+line straight across his ocean on his screen, at the exact boundary, with the
+colour identical either side of it. It did not reproduce here at the same
+width, at 1x or 2x, which is the tell: it is a rasteriser artefact, not a
+colour mismatch, so no amount of matching the two blues fixes it.
+
+`section + section{ margin-top:-1px }` in the generated page. A pixel of
+overlap means there is no shared edge to land badly. Sections that already ride
+up over the one above keep their own margin - a class beats it.
+
 ## Joining a section to the one above
 
 Two things break the road at a join, and both will recur on every section:
