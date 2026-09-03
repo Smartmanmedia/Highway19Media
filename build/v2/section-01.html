@@ -43,8 +43,22 @@
        style="left:15.25%;top:87.11%;width:4.95%">
 
   <!-- BOAT -->
-  <img class="z-road cruise" data-at src="../../assets/v2/section-01/boat.svg" alt=""
-       style="left:80.56%;top:67.47%;width:4.06%">
+  <!-- HIS BOAT AND ITS SHADOW. The two exports were cropped to their own
+       content - 71.11 x 155.14 against 66.53 x 158.25 - so there is no offset
+       recorded between them and they are aligned by their CENTRES instead. His
+       shadow is a redrawn silhouette rather than a copy of the hull, so this is
+       an approximation, good to about two units on a boat that is 4% of the
+       section wide. A shared artboard would make it exact.
+
+       The shadow turns WITH the hull, because a shadow is the hull's own
+       outline, but its offset stays put: `translate` applies before `rotate`,
+       so the sun's displacement is added first and the whole thing then spins
+       about its own centre. -->
+  <span class="cast boat cruise z-road" data-at
+        style="left:80.56%;top:67.47%;width:4.06%;--lift:0.40;--sun-ink:.28">
+    <img class="shade" src="../../assets/v2/section-01/boat-shadow.svg" alt="" aria-hidden="true">
+    <img class="art" src="../../assets/v2/section-01/boat.svg" alt="">
+  </span>
 
   <!-- THE SIGN'S SHADOW, as a layer of its own rather than a shape inside the
        sign, because it has to fall on some things and not others: on the ocean,
@@ -159,8 +173,14 @@
       does worse work with better pictures, and he's the one getting the call.</p>
 
   <!-- CLOUDS — over everything, as he set it -->
-  <img class="z-cloud par par-first" data-at src="../../assets/v2/section-01/cloud3.svg" alt=""
-       style="left:78.47%;top:29.58%;width:11.12%">
+  <!-- his shadow sits 25.108% of this cloud's width away in his drawing - a
+       different angle from cloud four and five, which does not matter now the
+       direction is global - and the cloud is 11.12% of the section. -->
+  <span class="cast z-cloud par par-first" data-at
+        style="left:78.47%;top:29.58%;width:11.12%;--lift:2.792">
+    <img class="shade" src="../../assets/v2/section-01/cloud3-shadow.svg" alt="" aria-hidden="true">
+    <img class="art" src="../../assets/v2/section-01/cloud3.svg" alt="">
+  </span>
   <!-- his cloud and its shadow as two layers. --lift is his own: the shadow
        sits 12.955% of the cloud's width away in his drawing, and the cloud is
        26.86% of the section. See sun.css. -->

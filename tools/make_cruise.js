@@ -39,4 +39,11 @@ for (let i = 0; i <= N; i++) {
     + 'calc(var(--ry) * ' + sy.toFixed(5) + '); '
     + 'rotate: ' + h.toFixed(2) + 'deg }');
 }
-process.stdout.write('@keyframes cruise{\n' + out.join('\n') + '\n}\n');
+/* TWO ANIMATIONS, NOT ONE. The wrapper travels and its children turn, because
+   the boat's shadow has to spin with the hull - a shadow is the hull's own
+   outline - while keeping the offset the sun gives it. Same duration, so they
+   stay in step. */
+const move = out.map(l => l.replace(/; rotate: [-\d.]+deg/, ''));
+const turn = out.map(l => l.replace(/translate: [^;]+; /, ''));
+process.stdout.write('@keyframes cruise-move{\n' + move.join('\n') + '\n}\n\n'
+                   + '@keyframes cruise-turn{\n' + turn.join('\n') + '\n}\n');

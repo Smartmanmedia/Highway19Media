@@ -243,41 +243,70 @@
    ---------------------------------------------------------------------- */
 .sec1 .cruise{
   --rx: 5.2cqw; --ry: 10cqw;
-  animation: cruise 75s linear infinite;
+  animation: cruise-move 75s linear infinite;
 }
-.sec1 .cruise.still{ animation-play-state:paused }
-@media (prefers-reduced-motion: reduce){ .sec1 .cruise{ animation:none } }
-
-@keyframes cruise{
-        0% { translate: calc(var(--rx) * 0.00000) calc(var(--ry) * 0.00000); rotate: -0.00deg }
-   4.1667% { translate: calc(var(--rx) * 0.03407) calc(var(--ry) * -0.25882); rotate: 15.00deg }
-   8.3333% { translate: calc(var(--rx) * 0.13397) calc(var(--ry) * -0.50000); rotate: 30.00deg }
-     12.5% { translate: calc(var(--rx) * 0.29289) calc(var(--ry) * -0.70711); rotate: 45.00deg }
-  16.6667% { translate: calc(var(--rx) * 0.50000) calc(var(--ry) * -0.86603); rotate: 60.00deg }
-  20.8333% { translate: calc(var(--rx) * 0.74118) calc(var(--ry) * -0.96593); rotate: 75.00deg }
-       25% { translate: calc(var(--rx) * 1.00000) calc(var(--ry) * -1.00000); rotate: 90.00deg }
-  29.1667% { translate: calc(var(--rx) * 1.25882) calc(var(--ry) * -0.96593); rotate: 105.00deg }
-  33.3333% { translate: calc(var(--rx) * 1.50000) calc(var(--ry) * -0.86603); rotate: 120.00deg }
-     37.5% { translate: calc(var(--rx) * 1.70711) calc(var(--ry) * -0.70711); rotate: 135.00deg }
-  41.6667% { translate: calc(var(--rx) * 1.86603) calc(var(--ry) * -0.50000); rotate: 150.00deg }
-  45.8333% { translate: calc(var(--rx) * 1.96593) calc(var(--ry) * -0.25882); rotate: 165.00deg }
-       50% { translate: calc(var(--rx) * 2.00000) calc(var(--ry) * -0.00000); rotate: 180.00deg }
-  54.1667% { translate: calc(var(--rx) * 1.96593) calc(var(--ry) * 0.25882); rotate: 195.00deg }
-  58.3333% { translate: calc(var(--rx) * 1.86603) calc(var(--ry) * 0.50000); rotate: 210.00deg }
-     62.5% { translate: calc(var(--rx) * 1.70711) calc(var(--ry) * 0.70711); rotate: 225.00deg }
-  66.6667% { translate: calc(var(--rx) * 1.50000) calc(var(--ry) * 0.86603); rotate: 240.00deg }
-  70.8333% { translate: calc(var(--rx) * 1.25882) calc(var(--ry) * 0.96593); rotate: 255.00deg }
-       75% { translate: calc(var(--rx) * 1.00000) calc(var(--ry) * 1.00000); rotate: 270.00deg }
-  79.1667% { translate: calc(var(--rx) * 0.74118) calc(var(--ry) * 0.96593); rotate: 285.00deg }
-  83.3333% { translate: calc(var(--rx) * 0.50000) calc(var(--ry) * 0.86603); rotate: 300.00deg }
-     87.5% { translate: calc(var(--rx) * 0.29289) calc(var(--ry) * 0.70711); rotate: 315.00deg }
-  91.6667% { translate: calc(var(--rx) * 0.13397) calc(var(--ry) * 0.50000); rotate: 330.00deg }
-  95.8333% { translate: calc(var(--rx) * 0.03407) calc(var(--ry) * 0.25882); rotate: 345.00deg }
-      100% { translate: calc(var(--rx) * 0.00000) calc(var(--ry) * 0.00000); rotate: 360.00deg }
+.sec1 .cruise > *{ animation: cruise-turn 75s linear infinite }
+.sec1 .cruise.still, .sec1 .cruise.still > *{ animation-play-state:paused }
+/* his two exports were cropped to their own content, so the shadow is put back
+   under the hull by matching their centres - see the markup */
+.sec1 .boat > .shade{ left:3.220%; top:-4.513%; width:93.559% }
+@media (prefers-reduced-motion: reduce){
+  .sec1 .cruise, .sec1 .cruise > *{ animation:none }
 }
 
-/* the sign's shadow - see the markup for why it sits at this depth */
-.sec1 .sign-shadow{
-  position:absolute; z-index:2; background:#000; border-radius:1.372cqw;
-  pointer-events:none;
+
+@keyframes cruise-move{
+        0% { translate: calc(var(--rx) * 0.00000) calc(var(--ry) * 0.00000) }
+   4.1667% { translate: calc(var(--rx) * 0.03407) calc(var(--ry) * -0.25882) }
+   8.3333% { translate: calc(var(--rx) * 0.13397) calc(var(--ry) * -0.50000) }
+     12.5% { translate: calc(var(--rx) * 0.29289) calc(var(--ry) * -0.70711) }
+  16.6667% { translate: calc(var(--rx) * 0.50000) calc(var(--ry) * -0.86603) }
+  20.8333% { translate: calc(var(--rx) * 0.74118) calc(var(--ry) * -0.96593) }
+       25% { translate: calc(var(--rx) * 1.00000) calc(var(--ry) * -1.00000) }
+  29.1667% { translate: calc(var(--rx) * 1.25882) calc(var(--ry) * -0.96593) }
+  33.3333% { translate: calc(var(--rx) * 1.50000) calc(var(--ry) * -0.86603) }
+     37.5% { translate: calc(var(--rx) * 1.70711) calc(var(--ry) * -0.70711) }
+  41.6667% { translate: calc(var(--rx) * 1.86603) calc(var(--ry) * -0.50000) }
+  45.8333% { translate: calc(var(--rx) * 1.96593) calc(var(--ry) * -0.25882) }
+       50% { translate: calc(var(--rx) * 2.00000) calc(var(--ry) * -0.00000) }
+  54.1667% { translate: calc(var(--rx) * 1.96593) calc(var(--ry) * 0.25882) }
+  58.3333% { translate: calc(var(--rx) * 1.86603) calc(var(--ry) * 0.50000) }
+     62.5% { translate: calc(var(--rx) * 1.70711) calc(var(--ry) * 0.70711) }
+  66.6667% { translate: calc(var(--rx) * 1.50000) calc(var(--ry) * 0.86603) }
+  70.8333% { translate: calc(var(--rx) * 1.25882) calc(var(--ry) * 0.96593) }
+       75% { translate: calc(var(--rx) * 1.00000) calc(var(--ry) * 1.00000) }
+  79.1667% { translate: calc(var(--rx) * 0.74118) calc(var(--ry) * 0.96593) }
+  83.3333% { translate: calc(var(--rx) * 0.50000) calc(var(--ry) * 0.86603) }
+     87.5% { translate: calc(var(--rx) * 0.29289) calc(var(--ry) * 0.70711) }
+  91.6667% { translate: calc(var(--rx) * 0.13397) calc(var(--ry) * 0.50000) }
+  95.8333% { translate: calc(var(--rx) * 0.03407) calc(var(--ry) * 0.25882) }
+      100% { translate: calc(var(--rx) * 0.00000) calc(var(--ry) * 0.00000) }
+}
+
+@keyframes cruise-turn{
+        0% { rotate: -0.00deg }
+   4.1667% { rotate: 15.00deg }
+   8.3333% { rotate: 30.00deg }
+     12.5% { rotate: 45.00deg }
+  16.6667% { rotate: 60.00deg }
+  20.8333% { rotate: 75.00deg }
+       25% { rotate: 90.00deg }
+  29.1667% { rotate: 105.00deg }
+  33.3333% { rotate: 120.00deg }
+     37.5% { rotate: 135.00deg }
+  41.6667% { rotate: 150.00deg }
+  45.8333% { rotate: 165.00deg }
+       50% { rotate: 180.00deg }
+  54.1667% { rotate: 195.00deg }
+  58.3333% { rotate: 210.00deg }
+     62.5% { rotate: 225.00deg }
+  66.6667% { rotate: 240.00deg }
+  70.8333% { rotate: 255.00deg }
+       75% { rotate: 270.00deg }
+  79.1667% { rotate: 285.00deg }
+  83.3333% { rotate: 300.00deg }
+     87.5% { rotate: 315.00deg }
+  91.6667% { rotate: 330.00deg }
+  95.8333% { rotate: 345.00deg }
+      100% { rotate: 360.00deg }
 }
