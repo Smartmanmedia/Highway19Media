@@ -130,3 +130,6 @@
   .sec6 .page .card:focus-within{ scale:1 }
   .sec6 .page .card .btn{ translate:0 0; transition:opacity .18s linear }
 }
+
+/* the rock band's lower half - the same art section four draws the top of */
+.sec6 .rock-layer{ position:absolute; display:block; height:auto; z-index:1 }
