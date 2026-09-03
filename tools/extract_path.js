@@ -141,39 +141,114 @@ if (!tiles.length) { console.error('no road tiles in section ' + N); process.exi
   }
   await br.close();
 
-  /* CHAIN WITHIN EACH TILE, in tile order. The tiles are already in the order
-     the road runs, so the only question is which way round each tile's own
-     dashes go - and a single tile's dashes are a simple chain, so a local
-     nearest-neighbour seeded from the previous tile's exit is safe. A GLOBAL
-     nearest-neighbour is not: it doubled back up section one's road where the
-     horizontal run passes the vertical one. */
-  const order = [];
-  let exit = null;
-  for (const g of groups) {
+  /* CHAIN WITHIN EACH TILE, in tile order, PREFERRING A POINT THAT CONTINUES
+     THE DIRECTION OF TRAVEL rather than simply the nearest one.
+     Nearest-alone is wrong inside his curve tiles: each of those carries the
+     arc's dashes AND a short straight's dashes, and where the two meet the
+     nearest unused point is sometimes back on the other run. That produced
+     three reversed segments in the middle of every curve - heading jumps of
+     116 and 140 degrees - which is what threw the cars sideways on the bends.
+     Scoring distance against the turn it would take fixes it, because a road
+     does not double back on itself inside one tile. */
+  var order = [];
+  var exit = null, head = null, dropped = 0;
+  var FORWARD = 0.2;   /* cos 78 degrees */
+  for (var gi = 0; gi < groups.length; gi++) {
+    var g = groups[gi];
     if (!g.length) continue;
-    const rest = g.slice();
-    let cur;
-    if (exit === null) cur = rest.reduce((a, b) => (b.y < a.y ? b : a));   // enters at the top
-    else {
-      let bi = 0, bd = 1e9;
-      for (let i = 0; i < rest.length; i++) {
-        const dx = rest[i].x - exit.x, dy = (rest[i].y - exit.y) * SEC_H_OVER_W;
-        if (dx*dx + dy*dy < bd) { bd = dx*dx + dy*dy; bi = i; }
+    var rest = g.slice(), cur;
+    var seed = exit || null;
+    if (!seed) {
+      /* WHERE THE ROAD STARTS. "The topmost dash" is meaningless on a
+         horizontal run - every dash shares a y, so section three began in the
+         MIDDLE of its own road and had to double back to collect the rest.
+         Start at an end instead: the end that faces the tile the road runs on
+         to, or, if this is the only tile, the far end of its own long axis. */
+      var next = groups.slice(gi + 1).find(function (h) { return h.length; });
+      if (next) {
+        var cxn = next.reduce(function (t, q) { return t + q.x; }, 0) / next.length;
+        var cyn = next.reduce(function (t, q) { return t + q.y; }, 0) / next.length;
+        cur = rest.reduce(function (a, b) {
+          return dist(b, { x: cxn, y: cyn }) > dist(a, { x: cxn, y: cyn }) ? b : a; });
+      } else {
+        var cx = rest.reduce(function (t, q) { return t + q.x; }, 0) / rest.length;
+        var cy = rest.reduce(function (t, q) { return t + q.y; }, 0) / rest.length;
+        var far = rest.reduce(function (a, b) {
+          return dist(b, { x: cx, y: cy }) > dist(a, { x: cx, y: cy }) ? b : a; });
+        cur = far;
       }
+    }
+    else {
+      /* CARRY THE HEADING ACROSS THE TILE BOUNDARY. Picking the point NEAREST
+         the previous tile's exit is not enough: his tiles overlap slightly, so
+         the nearest point can be one that sits BEHIND the exit. That first step
+         then points backwards, and because every later step is scored against
+         it, the whole tile gets collected in reverse before jumping forward -
+         which is the 180-degree flip that put cars through each other.
+         The road keeps going the way it was going, so score the entry the same
+         way every other step is scored. */
+      var bi = -1, bd = Infinity;
+      for (var i = 0; i < rest.length; i++) {
+        var e = unit(seed, rest[i]);
+        if (head && head[0] * e[0] + head[1] * e[1] < FORWARD) continue;   /* behind us */
+        var d = dist(seed, rest[i]);
+        if (d < bd) { bd = d; bi = i; }
+      }
+      if (bi < 0) { dropped += rest.length; continue; }
       cur = rest[bi];
+      head = unit(seed, cur);
     }
     rest.splice(rest.indexOf(cur), 1);
     order.push(cur);
+    /* ONLY EVER GO FORWARD. HIS TILES OVERLAP, so a tile's first dashes can be
+       duplicates of ones the road has already driven past - in section three
+       the last tile begins 3.6 units BEHIND the previous tile's exit. Ordering
+       cannot fix that; those points have to be dropped, or the chain collects
+       them at the end and doubles back 180 degrees, which is what put cars
+       through each other on the straight and threw them sideways on the bends.
+       A candidate must lie within about 78 degrees of the way we are already
+       travelling - loose enough for his arcs, which step 15 degrees at a time. */
     while (rest.length) {
-      let bi = 0, bd = 1e9;
-      for (let i = 0; i < rest.length; i++) {
-        const dx = rest[i].x - cur.x, dy = (rest[i].y - cur.y) * SEC_H_OVER_W;
-        if (dx*dx + dy*dy < bd) { bd = dx*dx + dy*dy; bi = i; }
+      var best = -1, bestScore = Infinity;
+      for (var j = 0; j < rest.length; j++) {
+        var u = unit(cur, rest[j]);
+        var cos = head ? head[0] * u[0] + head[1] * u[1] : 1;
+        if (cos < FORWARD) continue;
+        var score = dist(cur, rest[j]) * (1 + 4 * (1 - cos));
+        if (score < bestScore) { bestScore = score; best = j; }
       }
-      cur = rest[bi]; order.push(cur); rest.splice(bi, 1);
+      if (best < 0) { dropped += rest.length; break; }
+      head = unit(cur, rest[best]);
+      cur = rest[best]; order.push(cur); rest.splice(best, 1);
     }
     exit = cur;
   }
+
+  function dist(a, b) {
+    var dx = b.x - a.x, dy = (b.y - a.y) * SEC_H_OVER_W;
+    return Math.hypot(dx, dy);
+  }
+  function unit(a, b) {
+    var dx = b.x - a.x, dy = (b.y - a.y) * SEC_H_OVER_W, m = Math.hypot(dx, dy) || 1;
+    return [dx / m, dy / m];
+  }
+
+  /* PROVE IT. A centreline that turns more than 40 degrees between two
+     consecutive dashes is not a road he drew, it is a chaining mistake. */
+  var worst = 0, at = -1, prev = null;
+  for (var k = 0; k < order.length - 1; k++) {
+    var u2 = unit(order[k], order[k + 1]);
+    if (prev) {
+      var turn = Math.abs(Math.acos(Math.max(-1, Math.min(1,
+        prev[0] * u2[0] + prev[1] * u2[1]))) * 180 / Math.PI);
+      if (turn > worst) { worst = turn; at = k; }
+    }
+    prev = u2;
+  }
+  console.error('  ' + dropped + ' overlapping dashes dropped');
+  console.error('  sharpest turn between dashes: ' + worst.toFixed(1) + ' degrees'
+    + (worst > 40 ? '  <-- STILL WRONG near point ' + at : ''));
+
   console.error('  ' + order.length + ' centreline points');
   process.stdout.write(JSON.stringify({
     section: N, secHoverW: SEC_H_OVER_W, roadW: +roadW.toFixed(3),

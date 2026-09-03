@@ -27,7 +27,12 @@
   if (!P || !SPRITE || !NAMES) return;
 
   var SVGNS = 'http://www.w3.org/2000/svg', XLINK = 'http://www.w3.org/1999/xlink';
-  var ROADS = [['01', '02'], ['03'], ['04']];
+  /* His roads. One and two are a single run in his art, so they are one road
+     here. `thin` is a density multiplier - the desert straight is meant to be
+     the quiet one. */
+  var ROADS = [{ secs: ['01', '02'], thin: 1 },
+               { secs: ['03'],       thin: 0.45 },
+               { secs: ['04'],       thin: 1 }];
   var SPACING   = 0.110,  /* road length per car, as a share of section width -
                              the count follows from how long his road is, so a
                              short road does not end up nose to tail */
@@ -47,7 +52,7 @@
                              than needed, and the car behind does the same but
                              worse. That is what a stop-and-go wave is, in real
                              traffic and here - nothing about it is scripted. */
-      CAR_ACROSS= 0.80;   /* car height as a share of its lane */
+      CAR_ACROSS= 0.72;   /* car height as a share of its lane */
 
   /* -- his vehicles, once, hidden, referenced by <use> ---------------------- */
   var defs = document.createElementNS(SVGNS, 'svg');
@@ -72,8 +77,8 @@
   });
 
   /* -- the roads ------------------------------------------------------------ */
-  var roads = ROADS.map(function (secs) {
-    var parts = secs.map(function (n) {
+  var roads = ROADS.map(function (cfg) {
+    var parts = cfg.secs.map(function (n) {
       var el = document.querySelector('.sec' + (+n));
       if (!el || !P[n]) return null;
       var svg = document.createElementNS(SVGNS, 'svg');
@@ -83,7 +88,7 @@
       return { n: n, el: el, svg: svg, path: P[n] };
     }).filter(Boolean);
     if (!parts.length) return null;
-    return { parts: parts, cars: [], live: true, pts: [], len: 0, laneW: 0 };
+    return { parts: parts, thin: cfg.thin, cars: [], live: true, pts: [], len: 0, laneW: 0 };
   }).filter(Boolean);
   if (!roads.length) return;
 
@@ -116,6 +121,24 @@
       }
       road.pts = pts; road.cum = cum; road.len = L;
       road.scale = road.parts[0].w;                       /* speeds scale with it */
+
+      /* HOW LONG A VEHICLE THIS ROAD CAN ACTUALLY HOLD.
+         A rigid body on a curve bulges away from the arc by about L*L/(8R) at
+         its middle, so on a tight enough bend a long trailer hangs off the
+         tarmac however carefully it is pointed - which is what his semitrailer
+         was doing. Measure the tightest radius he drew, work out the spare
+         room in a lane, and let the road decide which vehicles belong on it. */
+      var R = Infinity;
+      for (var t = 1; t < pts.length - 1; t++) {
+        var a = pts[t-1], b = pts[t], c2 = pts[t+1];
+        var A = Math.hypot(b[0]-a[0], b[1]-a[1]),
+            B = Math.hypot(c2[0]-b[0], c2[1]-b[1]),
+            C = Math.hypot(c2[0]-a[0], c2[1]-a[1]);
+        var area = Math.abs((b[0]-a[0])*(c2[1]-a[1]) - (c2[0]-a[0])*(b[1]-a[1])) / 2;
+        if (area > 1e-6) R = Math.min(R, A*B*C / (4*area));
+      }
+      var spare = road.laneW * (1 - CAR_ACROSS) / 2;
+      road.maxLong = R === Infinity ? Infinity : Math.sqrt(8 * R * spare);
       road.cars.forEach(function (c) { size(road, c); });
     });
   }
@@ -140,10 +163,17 @@
   /* -- populate ------------------------------------------------------------- */
   layout();
   roads.forEach(function (road) {
-    var n = Math.max(3, Math.min(12, Math.round(road.len / (road.scale * SPACING))));
+    var n = Math.max(2, Math.min(12, Math.round(road.len * road.thin / (road.scale * SPACING))));
+    /* the vehicles that fit this road's tightest bend - always at least the
+       shortest one, so a hairpin still gets traffic */
+    var fits = NAMES.filter(function (nm) {
+      return box[nm].width * (road.laneW * CAR_ACROSS / box[nm].height) <= road.maxLong;
+    });
+    if (!fits.length) fits = [NAMES.slice().sort(function (a, b) {
+      return box[a].width / box[a].height - box[b].width / box[b].height; })[0]];
     for (var lane = 0; lane < 2; lane++) {
       for (var i = 0; i < n; i++) {
-        var id = NAMES[(Math.random() * NAMES.length) | 0];
+        var id = fits[(Math.random() * fits.length) | 0];
         var c = { id: id, lane: lane, nodes: [],
                   u: road.len * (i + Math.random() * 0.7) / n,
                   v: 0, vmax: 0, want: 0 };
@@ -181,6 +211,16 @@
           c.v += Math.max(-lim, Math.min(lim, d));
           if (c.v < 0) c.v = 0;
           c.u += c.v * dt;
+          /* A REACTION DELAY MAKES DRIVERS OVERSHOOT - that is the point of it,
+             and it is where the jams come from - but a driver who overshoots in
+             the real world stops on the bumper in front rather than passing
+             through it. Without this clamp the queue closes up until the cars
+             are drawn on top of each other, which is what was happening on the
+             desert straight. */
+          var room = ahead.u - c.u; if (room <= -road.len / 2) room += road.len;
+          var least = (c.long + ahead.long) / 2 * 1.06;
+          if (q.length > 1 && room < least) { c.u = ahead.u - least; c.v = Math.min(c.v, ahead.v); }
+          if (c.u < 0) c.u += road.len;
           if (c.u > road.len) c.u -= road.len;
         }
       }
@@ -188,9 +228,20 @@
       road.cars.forEach(function (c) {
         /* lane one runs the other way down the same centreline */
         var s = c.lane ? road.len - c.u : c.u;
-        var p = at(road, s);
         var dir = c.lane ? -1 : 1;
-        var ang = Math.atan2(p.uy * dir, p.ux * dir) * 180 / Math.PI;
+        /* POINT IT ALONG ITS OWN AXLES, NOT ALONG THE TANGENT AT ITS MIDDLE.
+           A rigid sprite turned to the tangent at its centre throws both ends
+           off the road, and the longer it is the worse it gets - his
+           semitrailer was lying clean across both lanes on every bend. Sampling
+           where the front and the back actually sit and pointing along THAT
+           chord is what a long vehicle really does through a curve: it cuts in.
+           The centre goes at the midpoint of the two, so neither end hangs off. */
+        var half = c.long / 2 * dir;
+        var pf = at(road, s + half), pb = at(road, s - half);
+        var p = { x: (pf.x + pb.x) / 2, y: (pf.y + pb.y) / 2,
+                  ux: at(road, s).ux, uy: at(road, s).uy };
+        var cdx = pf.x - pb.x, cdy = pf.y - pb.y;
+        var ang = Math.atan2(cdy, cdx) * 180 / Math.PI;
         /* sit in your own lane: perpendicular to the road, half a lane over */
         var off = road.laneW / 2 * dir;
         var x = p.x - p.uy * off, y = p.y + p.ux * off;

@@ -67,7 +67,12 @@
    ---------------------------------------------------------------------- */
 .sec2 .waves{
   position:absolute; left:0; right:0; top:0;
-  height:48.613%;              /* his clip rect, y 0 h 452.8 of a 486.84 box */
+  /* HIS CLIP RECT WAS y 0 h 452.8 of a 486.84 box - 48.613% - but that cut
+     into his own foam: the surf band's paint runs on to 50.34%, and the 1.7%
+     he was hiding is exactly the edge that should lie OVER the sand. Taken to
+     the full extent of his ink, so the surf finishes on the beach rather than
+     disappearing behind it. */
+  height:50.34%;
   overflow:hidden; z-index:1; pointer-events:none;
 }
 /* every band keeps the WHOLE of his geometry - same viewBox, same box - so the
