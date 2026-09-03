@@ -1,0 +1,70 @@
+/* ============================================================================
+   SECTION FOUR — the forest
+   ----------------------------------------------------------------------------
+   Artboard 1930.6 x 1626.4, no bleed either side, so the artboard is the art
+   column and the ratio is 1626.4 / 1930.6.
+   ========================================================================= */
+
+.sec4{
+  position:relative;
+  width:100%;
+  aspect-ratio:1930.6 / 1626.4;         /* 0.8424 */
+  container-type:inline-size;
+  /* his own ground gradient: #006837 at y 249.95 to #39b54a at y 1540.94 of
+     1626.4, which is 15.37% to 94.75% of the section */
+  background:linear-gradient(180deg,
+    #006837 0%, #006837 15.37%, #39b54a 94.75%, #39b54a 100%);
+  overflow:hidden;
+  isolation:isolate;
+}
+
+/* THE GANTRY. It is in his render but not in his export, so this is section
+   one's own truss cell repeated - the tile he asked to have "generate as many
+   array as we need". It runs from under the sign's right edge to the screen
+   edge, centred on the sign, so it fills whatever the screen is. */
+.sec4 .truss{
+  position:absolute; display:block;
+  left:84.5%; right:0; top:29.50%; height:8.60%;
+  background:url("../../assets/v2/section-01/truss-cell.webp") repeat-x left center;
+  background-size:auto 100%;
+  z-index:2;
+}
+
+.sec4 [data-at]{ position:absolute; display:block }
+.sec4 img[data-at], .sec4 svg[data-at]{ height:auto }
+
+.sec4 .z-back  { z-index:0 }   /* the canopy across the top */
+.sec4 .z-road  { z-index:1 }
+.sec4 .z-ground{ z-index:2 }   /* rocks and trees close over the road, as he drew them */
+.sec4 .z-copy  { z-index:3 }
+.sec4 .z-cloud { z-index:4 }
+
+/* his type, his sizes, his weights, his squeeze — all read out of the export */
+.sec4 .copy{
+  position:absolute; margin:0; color:#fff;
+  font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
+}
+.sec4 [style*="--sx"]{ transform:scaleX(var(--sx)); transform-origin:50% 0 }
+
+/* the sign copy, both blocks squeezed to .82 the way he drew them */
+.sec4 h2.copy{
+  font-family:"Highway Gothic Expanded","Be Vietnam Pro",Arial,sans-serif;
+  font-weight:400; font-size:3.117cqw; line-height:0.970; text-align:left;
+  white-space:nowrap;
+}
+.sec4 .sub{
+  font-family:"Highway Gothic Expanded","Be Vietnam Pro",Arial,sans-serif;
+  font-weight:400; font-size:1.426cqw; line-height:1.2; text-align:center;
+  white-space:nowrap;
+}
+.sec4 .body{
+  font-size:1.347cqw; font-weight:500; line-height:1.076;
+  text-align:center; color:#fdf6e4;
+}
+.sec4 .body span{ display:block; white-space:nowrap }
+
+/* his button carries no label in the artwork — the label is its own text */
+.sec4 .cta{
+  font-size:1.184cqw; font-weight:800; text-align:center; color:#000;
+  white-space:nowrap;
+}

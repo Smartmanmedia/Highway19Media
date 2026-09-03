@@ -112,6 +112,12 @@ tiles, not a broken file. Two causes, both worth fixing:
     `tools/inline_art.js` re-inlines an asset into a section page and keeps a
     `Source:` marker, so the file on disk is still the thing you edit.
 
+**Rasterising does NOT fix a dropped raster.** The desert went out as a
+4000px WebP and dropped on his screen exactly the way the ocean had. The cache
+that gets emptied is the browser's IMAGE cache, and it makes no difference
+whether the image is a bitmap or a vector: an `<img>` is an `<img>`. Inline is
+the fix, every time. Rasterise for the DRAW cost, inline for the DROP.
+
 **Not every heavy file has something to collapse.** Section three's desert is
 978 low-poly paths and every one is real geometry - rocks, ridges, bushes.
 `degradient` finds nothing, because there is nothing faked. Art like that gets
@@ -212,7 +218,8 @@ once the text is actually bold-SIZED — under 18.66px it is judged as regular.
     section  artboard        art column          ratio    shapes
     01       2011.33 x 1810.6  x 86.99 w 1924.34  0.9409   4362 (95% baked truss)
     02       1938.1  x  931.4  x 15.23 w 1920.80  0.4849     92
-    03       1922.52 x  855.76 x 0     w 1922.52  0.4451     96 (desert rasterised)
+    03       1922.52 x  855.76 x 0     w 1922.52  0.4451   1074 (desert inline)
+    04       1930.6  x 1626.4  x 0     w 1930.6   0.8424   1604 (canopy a WebP)
 
 The art column is whatever his ground is — an ocean polygon in one, a sand rect
 in the next. The ratios stack: a page of both is 1.4258 x its own width at every
@@ -238,6 +245,17 @@ one period is 14.60% of the tile — 2.62% of section one.
 
 `tools/check_join.js` walks the road's own column down through the seam at six
 widths and fails on any background pixel it finds there.
+
+**His sections are separate animations.** His words: the road leaving the
+screen ends one animation, the next section starts its own with the same rules,
+and a car drives off the edge and disappears. So a road that does not meet the
+one below is not a bug - do not bridge them.
+
+**But his ART does carry across.** Section three's desert runs 282.77 units
+past the bottom of its own artboard, and clipped there it cut his rocks off
+mid-shape. That overhang belongs at the top of section four: the same drawing
+at the same scale, `assets/v2/section-04/desert-bleed.webp`, a thin strip
+rasterised because duplicating 978 paths for it would not be thin.
 
 Two more things his exports do at a join, both from section three:
 

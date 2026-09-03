@@ -8,7 +8,10 @@
  * Only for art that is detailed, static and carries no text. Anything with
  * type in it, or anything that has to stay crisp at any zoom, stays vector.
  *
- *   node tools/rasterise_art.js <in.svg> <out.webp> <width> [quality]
+ * Also takes a PNG in - his section four carries a 6.5 MB embedded one, which
+ * is the same problem from the other end.
+ *
+ *   node tools/rasterise_art.js <in.svg|png> <out.webp> <width> [quality]
  */
 const { chromium } = require('/home/user/storyboard-app/node_modules/playwright');
 const fs = require('fs');
@@ -18,7 +21,10 @@ const [IN, OUT, W, Q] = [process.argv[2], process.argv[3],
 (async () => {
   const b = await chromium.launch({ executablePath:'/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
     args:['--no-proxy-server','--no-sandbox'] });
-  const uri = 'data:image/svg+xml;base64,' + Buffer.from(fs.readFileSync(IN)).toString('base64');
+  const MIME = { '.svg':'image/svg+xml', '.png':'image/png', '.jpg':'image/jpeg',
+                 '.jpeg':'image/jpeg', '.webp':'image/webp' };
+  const mime = MIME[IN.slice(IN.lastIndexOf('.')).toLowerCase()] || 'image/svg+xml';
+  const uri = 'data:' + mime + ';base64,' + Buffer.from(fs.readFileSync(IN)).toString('base64');
   const p = await b.newPage({ viewport:{ width: 400, height: 400 } });
   await p.setContent('<body style="margin:0"><img id=i style="width:'+W+'px;display:block" src="'+uri+'">');
   await p.waitForFunction(()=>document.getElementById('i').naturalWidth>0);
