@@ -14,21 +14,45 @@
 .sec6{
   position:relative;
   width:100%;
-  aspect-ratio:1923.2 / 1189.6;         /* 0.6186 */
+  /* his page is 1923.2 x 1189.6, plus 206.06 units on top for the mountains to
+     cross into and 164.5 more to clear them before his heading - see .page */
+  aspect-ratio:1923.2 / 1560.16;
   container-type:inline-size;
+  margin-top:-10.714%;
   background:#fff;
   overflow:hidden;
   isolation:isolate;
 }
 
-.sec6 [data-at]{ position:absolute; display:block }
-.sec6 img[data-at], .sec6 svg[data-at]{ height:auto }
-.sec6 .z-ground{ z-index:0 }
-.sec6 .copy{ position:absolute; margin:0; text-align:center; color:#1a1a1a;
+/* THE MOUNTAINS HAVE TO CROSS THE TRANSITION. His rock band ends at section
+   four's artboard edge - there is no more of it drawn - so the way to get it
+   past the boundary is to start this section 150px early and leave that band
+   transparent. Section four's rocks are already painted there, so they run on
+   through it, and his white page begins underneath them at the old boundary.
+   150px at a 1400px page is 10.714% of the width, and his page then starts a
+   further 164.5 units down so the heading clears the rock line by about 150px
+   rather than 30. Everything below is a share of THE PAGE, not of the section,
+   so all of his own numbers stand. */
+.sec6 .page{
+  position:absolute; left:0; right:0; top:23.75%; bottom:0; z-index:0;
+}
+
+/* the last 150px of section four's rock band, redrawn ON TOP of the white so
+   the mountains carry across the transition instead of stopping dead at it.
+   Same drawing, same scale, same left and width as it has up there. */
+.sec6 .rock-cross{
+  position:absolute; display:block;
+  left:-2.92%; top:0; width:104.16%; height:auto; z-index:1;
+}
+
+.sec6 .page [data-at]{ position:absolute; display:block }
+.sec6 .page img[data-at], .sec6 .page svg[data-at]{ height:auto }
+.sec6 .page .z-ground{ z-index:0 }
+.sec6 .page .copy{ position:absolute; margin:0; text-align:center; color:#1a1a1a;
   font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif; z-index:2 }
 
-.sec6 h2.copy{ font-size:2.133cqw; font-weight:900; line-height:1.1; white-space:nowrap }
-.sec6 .sub    { font-size:1.508cqw; font-weight:500; line-height:1.2; white-space:nowrap }
+.sec6 .page h2.copy{ font-size:2.133cqw; font-weight:900; line-height:1.1; white-space:nowrap }
+.sec6 .page .sub    { font-size:1.508cqw; font-weight:500; line-height:1.2; white-space:nowrap }
 
 /* ---- the cards ------------------------------------------------------------
    Four of the same thing, so they are a component rather than 1,340 shapes.
@@ -36,35 +60,35 @@
    of the section, rx 20.6 units, a #1a1a1a hairline, and one colour per card
    driven off --c. Children are positioned against the CARD, not the section,
    which is the one place that rule earns its keep.                          */
-.sec6 .card{
+.sec6 .page .card{
   position:absolute; top:21.45%; width:13.46%; height:33.62%;
   background:#fff; border:0.052cqw solid #1a1a1a; border-radius:1.071cqw;
   z-index:1;
   font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
 }
-.sec6 .card > *{ position:absolute; margin:0; text-align:center }
+.sec6 .page .card > *{ position:absolute; margin:0; text-align:center }
 
 /* his tag: a flat top with a folded corner, rounded off at the bottom. One
    shape, filled from the card's own colour - which is what "change the label
    colour to each card" means. */
-.sec6 .card .label{
+.sec6 .page .card .label{
   left:23.48%; top:-3.73%; width:53.03%; height:23.75%;
   overflow:visible;
 }
-.sec6 .card .label .body{ fill:var(--c) }
-.sec6 .card .label .fold{ fill:#1a1a1a }
+.sec6 .page .card .label .body{ fill:var(--c) }
+.sec6 .page .card .label .fold{ fill:#1a1a1a }
 
-.sec6 .card .icon{ height:auto }
+.sec6 .page .card .icon{ height:auto }
 
-.sec6 .card h3{
+.sec6 .page .card h3{
   left:0; right:0; top:29.88%; font-size:1.804cqw; font-weight:900;
   line-height:1.00; color:#1a1a1a;
 }
-.sec6 .card p{
+.sec6 .page .card p{
   left:6%; right:6%; top:55.43%; font-size:0.667cqw; font-weight:500;
   line-height:1.19; color:#333;
 }
-.sec6 .card .btn{
+.sec6 .page .card .btn{
   left:12.22%; width:75.56%; top:81.85%; height:10.80%;
   background:var(--c); border:0.104cqw solid #fff; border-radius:0.582cqw;
   display:flex; align-items:center; justify-content:center;
