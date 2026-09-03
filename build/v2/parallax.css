@@ -21,7 +21,7 @@
 .par        { will-change:translate }
 .par-cloud  { --par:4.5 }        /* his clouds run ahead of everything */
 .par-first  { --par:7.5 }        /* and the first ones you meet run hardest */
-.par-sign   { --par:4.0 }        /* THE GANTRY SHARES THIS. A sign hangs off a
+.par-sign   { --par:8.0 }        /* THE GANTRY SHARES THIS. A sign hangs off a
                                     truss: give them different amplitudes and
                                     the sign floats off its own gantry. */
 .par-boat   { --par:3.0 }

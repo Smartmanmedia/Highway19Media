@@ -141,9 +141,10 @@ Parallax lives in `build/v2/parallax.css` (the amplitudes) and
 `class="par par-cloud"` and the class sets `--par`, an amplitude as a share of
 its SECTION'S width, so it scales with everything else. The section enters at
 the bottom of the screen with its art `--par` low, crosses his marks as the
-section passes the middle, and leaves `--par` high. First clouds 7.5, other
-clouds 4.5, signs and gantries 4.0, boat 3.0 - the spread is what reads as
-depth.
+section passes the middle, and leaves `--par` high. ONLY the big green signs, the gantries they hang from, and the clouds move.
+Road signs, buttons and the boat stay put - he tried it with everything
+floating and it read as noise. Signs and gantries 8.0, first clouds 7.5, other
+clouds 4.5.
 
 **Progress is per SECTION, not per element.** Keyed off each element's own
 centre, two things that have to travel together - his sign and the gantry it
