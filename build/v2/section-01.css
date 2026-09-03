@@ -27,6 +27,20 @@
 .sec1 img[data-at]{ height:auto; }
 
 /* --- z, as he set it: clouds over everything, the sign just under them ---- */
+/* HIS TWO OCEANS ARE NOT THE SAME BLUE. Section one's is #004ca2 to #045dc3;
+   the top band of section two's wave art reads #014ea5 to #055fc6. Three steps of
+   255 apart - invisible on their own, a hard line across the full width where
+   the sections meet. This fades section one's last stretch into section two's
+   blue so there is no line to see. It sits under everything, so the road and
+   the copy are untouched. */
+.sec1::after{
+  content:""; position:absolute; left:0; right:0; bottom:0; height:14%;
+  background:linear-gradient(90deg,#014ea5 0%,#055fc6 100%);
+  -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,0) 0%,#000 100%);
+          mask-image:linear-gradient(180deg,rgba(0,0,0,0) 0%,#000 100%);
+  z-index:0; pointer-events:none;
+}
+
 .sec1 .z-ground { z-index:0 }
 .sec1 .z-road   { z-index:1 }
 .sec1 .z-copy   { z-index:2 }

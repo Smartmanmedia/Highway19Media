@@ -12,23 +12,39 @@
   width:100%;
   aspect-ratio:1920.8 / 931.4;          /* 0.4849 */
   container-type:inline-size;
-  /* his ocean carries on from section one behind the surf */
-  background:linear-gradient(90deg,#004ca2 0%,#045dc3 100%);
+  /* HIS OWN OCEAN COLOUR, taken off the top band of the wave art itself
+     rather than section one's. His band runs #004ba0 to #0561ca ACROSS THE
+     IMAGE, and the image is 126% of the section, so the part you can actually
+     see is the middle 79% of that ramp: #014ea5 to #055fc6. The section now paints the
+     exact colour the wave art paints over it, so the ocean reads as full width
+     even if the browser is slow to raster the artwork on top of it. Section one
+     fades into this blue at its bottom edge, so the join has no line. */
+  background:linear-gradient(90deg,#014ea5 0%,#055fc6 100%);
   overflow:hidden;
   isolation:isolate;
 }
 
-/* his sand: one rect with a vertical gradient, so a CSS gradient and no shapes */
+/* his sand: one rect with a vertical gradient, so a CSS gradient and no shapes.
+   The box starts at 36% rather than his 43.05% so the surf overlaps it by 14.3%
+   of the section - 103px at 1920, 79px at 1480, and past 50px down to a 930px
+   screen. The gradient itself is still pinned to his 43.05%-to-100% run
+   (sized to 88.98% of a box that is 64% tall, anchored to the bottom), so the
+   sand you can actually see is the colour he drew; only the part hidden under
+   the surf is new. */
 .sec2 .sand{
-  position:absolute; left:0; right:0; top:43.05%; bottom:0;
-  background:linear-gradient(180deg,#fec35f 0%,#fdf6e4 31%,#fdf6e4 100%);
+  position:absolute; left:0; right:0; top:36%; bottom:0;
+  background:
+    linear-gradient(180deg,#fec35f 0%,#fdf6e4 31%,#fdf6e4 100%) 0 100% / 100% 88.98% no-repeat,
+    #fec35f;
   z-index:0;
 }
 
 .sec2 [data-at]{ position:absolute; display:block }
 .sec2 img[data-at]{ height:auto }
-.sec2 .z-ground{ z-index:0 } .sec2 .z-road{ z-index:1 }
-.sec2 .z-copy{ z-index:2 }   .sec2 .z-cloud{ z-index:3 }
+/* the surf sits ON the sand by its own z-index, not by being later in the
+   markup - painting order is too easy to break by moving one line */
+.sec2 .z-ground{ z-index:1 } .sec2 .z-road{ z-index:2 }
+.sec2 .z-copy{ z-index:3 }   .sec2 .z-cloud{ z-index:4 }
 
 /* his type, his sizes, his weights, his squeeze — all read out of the export */
 .sec2 .copy{
