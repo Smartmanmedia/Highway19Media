@@ -14,11 +14,11 @@
 .sec6{
   position:relative;
   width:100%;
-  /* his page is 1923.2 x 1189.6, plus 206.06 units on top for the mountains to
+  /* his page is 1923.2 x 1189.6, plus 55 units on top for the mountains to
      cross into and 164.5 more to clear them before his heading - see .page */
-  aspect-ratio:1923.2 / 1560.16;
+  aspect-ratio:1923.2 / 1409.10;
   container-type:inline-size;
-  margin-top:-10.714%;
+  margin-top:-2.860%;
   background:#fff;
   overflow:hidden;
   isolation:isolate;
@@ -29,12 +29,14 @@
    past the boundary is to start this section 150px early and leave that band
    transparent. Section four's rocks are already painted there, so they run on
    through it, and his white page begins underneath them at the old boundary.
-   150px at a 1400px page is 10.714% of the width, and his page then starts a
-   further 164.5 units down so the heading clears the rock line by about 150px
-   rather than 30. Everything below is a share of THE PAGE, not of the section,
-   so all of his own numbers stand. */
+   HOW FAR. His artboard has the rocks sitting on green right to its bottom
+   edge, so the crossing is a hairline, not a band: 55 units, about 40px at a
+   1400px page. At 150px the white came up through the middle of the mountains
+   and read as far too much. His page then starts a further 164.5 units down,
+   so the heading still clears the rock line by about 150px. Everything below
+   is a share of THE PAGE, not of the section, so all of his numbers stand. */
 .sec6 .page{
-  position:absolute; left:0; right:0; top:23.75%; bottom:0; z-index:0;
+  position:absolute; left:0; right:0; top:15.58%; bottom:0; z-index:0;
 }
 
 /* the last 150px of section four's rock band, redrawn ON TOP of the white so
