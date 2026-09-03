@@ -26,6 +26,7 @@ const out =
 files.map(f => '<link rel="stylesheet" href="' + f.replace('.html','.css') + '">').join('\n') +
 '\n<link rel="stylesheet" href="parallax.css">\n' +
 '<link rel="stylesheet" href="traffic.css">\n' +
+'<link rel="stylesheet" href="sun.css">\n' +
 '<style>body{margin:0;background:#04264f}\n' +
 '/* the sections stack with nothing between them: each is a fixed ratio of the\n' +
 '   same width, so the join is exact at every screen size */\n' +

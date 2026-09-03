@@ -352,6 +352,42 @@ waited 20ms reported 25 overhangs that a careful max-overhang check could not
 reproduce at all - the traffic script appending its layer triggers a relayout,
 and a frame measured inside that window catches art mid-update.
 
+## The sun
+Every shadow is its own layer sitting exactly on top of the thing that casts it,
+displaced by three numbers on :root - `--sun` (the angle it falls), `--sun-len`
+(1 is the length he drew) and `--sun-ink` (.31, his). Change --sun and every
+shadow on the page swings together.
+
+**HIS SUN IS -4 DEGREES AT 12.955% OF THE OBJECT'S OWN WIDTH**, read out of his
+baked art by tools/read_cast.js, which fingerprints a shape by the first 40
+characters of its curve data and finds the same shape in both the old file and
+the new shadow-only one. Cloud4 and cloud5 give the same number independently,
+so his artwork really is consistent. The default therefore reproduces his design
+exactly - the layer split changes nothing until someone turns the dial.
+
+**Distance is about HEIGHT, not size.** Seen from above, something on the ground
+has no offset and a cloud has a large one, so `--lift` is per element, in cqw,
+measured from his own drawing every time.
+
+**The art must be POSITIONED.** A positioned element paints above a static
+sibling whatever the markup order says, so with the shadow absolute and the art
+static the shadow landed on top and greyed the cloud out. position:relative puts
+them in the same painting group where DOM order decides.
+
+**A shadow inside an inline SVG moves in USER UNITS**, because that is what a
+length means inside a viewBox - and it still scales, since the whole SVG does.
+His hero sign is that case: the shadow was already a separate rect with his
+offset baked into its x and y, so it moved back onto the board and the sun
+displaces it. Note his sign is lit at 71 degrees and his clouds at -4: a board
+bolted to a gantry gets an edge shadow, not a cast one.
+
+**BOTH EXPORTS MUST SHARE ONE ARTBOARD.** Illustrator crops each export to its
+own content unless told otherwise, and then the two layers cannot be registered
+at all: his Boat_New came out 71.11 x 155.14 and Boat_New_shadow 66.53 x 158.25,
+and no amount of maths recovers the offset between them because the shadow is a
+simplified silhouette rather than a copy. The clouds came out 446.3 x 241.9 and
+446.3 x 241.84 and dropped straight in.
+
 ## His type — measured, not chosen
 
 Two families, both from his file:

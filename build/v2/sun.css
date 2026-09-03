@@ -1,0 +1,55 @@
+/* ============================================================================
+   THE SUN
+   ----------------------------------------------------------------------------
+   Every shadow on the page is its own layer, sitting exactly on top of the
+   thing that casts it, and displaced from here. Three numbers move the light:
+
+     --sun      the direction a shadow FALLS. Measured off his own art, not
+                chosen: in his cloud4 the shadow sits +57.67, -4.02 from the
+                cloud, which is -4 degrees. So the default IS his design.
+     --sun-len  1 is the length he drew. Push it out for morning and evening,
+                pull it in for noon.
+     --sun-ink  how dark. His own value is .31.
+
+   HOW FAR A SHADOW FALLS IS ABOUT HEIGHT, NOT SIZE. Seen from above, a thing
+   sitting on the ground has no offset at all and a cloud has a large one, so
+   the distance is per element - `--lift`, a share of the SECTION width, which
+   is why it is in cqw and scales with everything else. It is measured from his
+   own drawing each time, never guessed.
+
+   Changing --sun on :root swings every shadow on the page together, which is
+   the whole point: one number, and it can be a control.
+   ========================================================================= */
+:root{
+  --sun: -4deg;
+  --sun-len: 1;
+  --sun-ink: 0.31;
+}
+
+/* The art is in normal flow so it sets the box, and the shadow is absolute on
+   top of it and EARLIER in the markup so it paints underneath - no negative
+   z-index to fight the section's own layering.
+
+   .art MUST BE POSITIONED. A positioned element paints above a static sibling
+   whatever the markup order says, so with the shadow absolute and the art
+   static the shadow landed ON the cloud and greyed it out. position:relative
+   puts them back in the same painting group, where DOM order decides. */
+.cast{ position:absolute; display:block; line-height:0 }
+.cast > .art{ position:relative; display:block; width:100%; height:auto }
+.cast > .shade{
+  position:absolute; left:0; top:0; width:100%; height:auto; display:block;
+  opacity: var(--sun-ink);
+  translate: calc(cos(var(--sun)) * var(--lift) * var(--sun-len) * 1cqw)
+             calc(sin(var(--sun)) * var(--lift) * var(--sun-len) * 1cqw);
+}
+
+/* A SHADOW THAT LIVES INSIDE AN INLINE SVG moves in USER UNITS, because that is
+   what a length means inside a viewBox - and it still scales with the page,
+   since the whole SVG does. So the same --sun drives it, with its own --lift-u.
+   His hero sign is the case: the shadow was already a separate rect, it just
+   had his offset baked into its x and y. */
+.cast-svg .shade{
+  opacity: var(--sun-ink);
+  translate: calc(cos(var(--sun)) * var(--lift-u) * 1px)
+             calc(sin(var(--sun)) * var(--lift-u) * 1px);
+}

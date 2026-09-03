@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="section-06.css">
 <link rel="stylesheet" href="parallax.css">
 <link rel="stylesheet" href="traffic.css">
+<link rel="stylesheet" href="sun.css">
 <style>body{margin:0;background:#04264f}
 /* the sections stack with nothing between them: each is a fixed ratio of the
    same width, so the join is exact at every screen size */
@@ -66,9 +67,17 @@ section + section{ margin-top:-1px }</style>
   <!-- INLINE, not an <img>. An SVG inside an <img> is an isolated document:
        it cannot reach the page's @font-face, so his sign labels fell back to a
        system serif. Inline, they use his own Be Vietnam Pro. -->
-<svg class="z-sign par par-sign" data-at style="left:25.80%;top:9.33%;width:48.77%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="938.50" height="349.56" viewBox="583.47 168.97 938.50 349.56"><g id="hero-sign-Hero_Sign" data-name="Hero Sign">
+<svg class="z-sign par par-sign cast-svg" data-at style="left:25.80%;top:9.33%;width:48.77%;--lift-u:1.5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="938.50" height="349.56" viewBox="583.47 168.97 938.50 349.56"><g id="hero-sign-Hero_Sign" data-name="Hero Sign">
           <g>
-            <rect x="583.95" y="227.87" width="938.02" height="290.66" rx="26.4" ry="26.4" stroke="#000" stroke-miterlimit="10" stroke-width="2"></rect>
+            <!-- HIS SIGN ALREADY HAD ITS SHADOW AS A SEPARATE SHAPE, drawn 0.48 right
+                 and 1.42 down of the board. Moved back ON to the board so the sun
+                 displaces it instead - --lift-u is in USER UNITS, because a length
+                 inside a viewBox is a user unit, and it still scales with the page.
+                 Note his sign is lit at 71 degrees and his clouds at -4: a board
+                 bolted to a gantry gets an edge shadow, not a cast one. The sun
+                 angle is now shared, so this is the one place his drawing changes -
+                 raise --lift-u when the sign should really throw. -->
+            <rect class="shade" x="583.47" y="226.45" width="938.02" height="290.66" rx="26.4" ry="26.4" stroke="#000" stroke-miterlimit="10" stroke-width="2"></rect>
             <rect x="583.47" y="226.45" width="938.02" height="290.66" rx="26.4" ry="26.4" fill="#1c9022" stroke="#fff" stroke-miterlimit="10" stroke-width="2"></rect>
             <rect x="817.79" y="226.3" width="2.33" height="289.73" transform="translate(1637.8982 742.3288) rotate(-180)" fill="#fff"></rect>
             <rect x="1061.48" y="226.3" width="2.33" height="289.73" transform="translate(2125.2796 742.3288) rotate(-180)" fill="#fff"></rect>
@@ -163,8 +172,14 @@ section + section{ margin-top:-1px }</style>
   <!-- CLOUDS — over everything, as he set it -->
   <img class="z-cloud par par-first" data-at src="../../assets/v2/section-01/cloud3.svg" alt=""
        style="left:78.47%;top:29.58%;width:11.12%">
-  <img class="z-cloud par par-first" data-at src="../../assets/v2/section-01/cloud5.svg" alt=""
-       style="left:-5.19%;top:64.10%;width:26.86%">
+  <!-- his cloud and its shadow as two layers. --lift is his own: the shadow
+       sits 12.955% of the cloud's width away in his drawing, and the cloud is
+       26.86% of the section. See sun.css. -->
+  <span class="cast z-cloud par par-first" data-at
+        style="left:-5.19%;top:64.10%;width:26.86%;--lift:3.480">
+    <img class="shade" src="../../assets/v2/section-01/cloud5-shadow.svg" alt="" aria-hidden="true">
+    <img class="art" src="../../assets/v2/section-01/cloud5.svg" alt="">
+  </span>
   </div>
 
 </section>
@@ -248,8 +263,14 @@ section + section{ margin-top:-1px }</style>
     figured this stuff doesn't work for businesses like yours. <b>It works. It just
     has to be built from your business, not pulled off a shelf.</b></p>
 
-  <img class="z-cloud par par-cloud" data-at src="../../assets/v2/section-02/cloud4.svg" alt=""
-       style="left:71.9%;top:8.22%;width:26.91%">
+  <!-- HIS CLOUD AND ITS SHADOW, as two layers. --lift is his own offset: the
+       shadow sits 12.95% of the cloud's width away in his drawing, and the
+       cloud is 26.91% of the section, so 3.485cqw. See sun.css. -->
+  <span class="cast z-cloud par par-cloud" data-at
+        style="left:71.9%;top:8.22%;width:26.91%;--lift:3.485">
+    <img class="shade" src="../../assets/v2/section-02/cloud4-shadow.svg" alt="" aria-hidden="true">
+    <img class="art" src="../../assets/v2/section-02/cloud4.svg" alt="">
+  </span>
 
 </section>
 
