@@ -448,12 +448,19 @@ function place(drive){
     if(D<-f+60||kN>10){d.el.style.opacity=0;continue}
     const yN=hor+U*(EYE*kN+curve*D*D*2.2e-6*kN);
     const yF=hor+U*(EYE*kF+curve*(D+DASH_LEN)*(D+DASH_LEN)*2.2e-6*kF);
-    const w=Math.max(.6,U*DASH_W*kN);
+    const w=Math.max(.6,U*DASH_W*kN), wF=Math.max(.4,U*DASH_W*kF);
     const up=smooth((dSea-D)/dFade);
     if(up<=0.004){d.el.style.opacity=0;continue}
     d.el.style.opacity=up;
     d.el.style.width=w+'px';
     d.el.style.height=Math.max(.5,yN-yF)+'px';
+    /* A LENGTH OF PAINT IS A TRAPEZIUM, not a rectangle. Its far end is that
+       much further away than its near end, so it is narrower by the ratio of
+       the two scales - and at the bottom of the screen, where a dash is 200px
+       long, that ratio is better than two to one. Drawn square they read as
+       floating tiles. One clip-path off numbers already worked out. */
+    const r=wF/w;
+    d.el.style.clipPath='polygon('+(50-r*50)+'% 0,'+(50+r*50)+'% 0,100% 100%,0 100%)';
     d.el.style.transform='translate('+(W/2-w/2)+'px,'+yF+'px)';
   }
   /* the things standing on it */
