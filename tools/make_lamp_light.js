@@ -42,6 +42,10 @@ const W = 384, H = Math.round(W * BOX_H / BOX_W);
     const foot = hy + REACH * unit;         /* where the light lands       */
     const far = hx - REACH * unit;          /* 45 degrees: run = drop      */
 
+    /* SOFT EDGES. A beam has no cut edge in air, so the cone is drawn through
+     * a blur - baked in, which costs nothing at run time, where a CSS blur on
+     * a sprite that grows all the way past the camera would cost everything. */
+    x.filter = 'blur(' + Math.round(unit * .035) + 'px)';
     /* the cone */
     const g = x.createLinearGradient(0, hy, 0, foot);
     g.addColorStop(0, 'rgba(255,214,140,.34)');
@@ -59,13 +63,19 @@ const W = 384, H = Math.round(W * BOX_H / BOX_W);
     pg.addColorStop(1, 'rgba(255,164,40,0)');
     x.fillStyle = pg; x.beginPath(); x.arc(0, 0, rx, 0, 7); x.fill(); x.restore();
 
-    /* and the bulb's own bloom */
-    const r = unit * .105;
-    const hg = x.createRadialGradient(hx, hy, 0, hx, hy, r);
-    hg.addColorStop(0, 'rgba(255,236,192,.98)');
-    hg.addColorStop(.3, 'rgba(255,196,96,.46)');
+    /* AND THE BULB'S BLOOM ON ITS SIDE. A round bloom around a lamp head says
+     * the light goes everywhere, which is the opposite of what the cone below
+     * it says - and it is what made the cone's straight top edge look cut. Turn
+     * the bloom through 90 degrees so its long axis points DOWN and the two
+     * agree: the source throws downward and the cone is what that looks like. */
+    x.filter = 'blur(' + Math.round(unit * .012) + 'px)';
+    const r = unit * .115;
+    x.save(); x.translate(hx, hy + r * .45); x.scale(.62, 1);
+    const hg = x.createRadialGradient(0, 0, 0, 0, 0, r);
+    hg.addColorStop(0, 'rgba(255,240,204,.98)');
+    hg.addColorStop(.28, 'rgba(255,200,104,.50)');
     hg.addColorStop(1, 'rgba(255,168,44,0)');
-    x.fillStyle = hg; x.beginPath(); x.arc(hx, hy, r, 0, 7); x.fill();
+    x.fillStyle = hg; x.beginPath(); x.arc(0, 0, r, 0, 7); x.fill(); x.restore();
 
     return c.toDataURL('image/webp', 0.86).split(',')[1];
   }, { W, H, HEAD_X, HEAD_Y, REACH, BOX_W });

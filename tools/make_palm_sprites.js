@@ -94,10 +94,20 @@ const SHADOWS = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
     }, { index, vb, W, Hh });
     await p.waitForTimeout(280);
     const png = await p.screenshot({ omitBackground: true });
-    const out = await p.evaluate(async d => {
+    const out = await p.evaluate(async ({ d, tree }) => {
       const i = new Image(); i.src = 'data:image/png;base64,' + d; await i.decode();
       const c = document.createElement('canvas'); c.width = i.width; c.height = i.height;
-      const cx = c.getContext('2d'); cx.drawImage(i, 0, 0);
+      const cx = c.getContext('2d');
+      /* A BITMAP LOSES CONTRAST ON THE WAY DOWN. His trees are drawn at 1024
+       * and the scene puts most of them on screen at a third of that; a
+       * browser's downscale averages every frond edge into the transparent air
+       * behind it, so the greens go pale and the shaded side of the crown goes
+       * grey. His own render, being vector, keeps them. Half a stop of
+       * saturation and contrast, baked in here where it costs nothing at run
+       * time, puts the sprite back to what his file looks like at the size the
+       * scene actually draws it. */
+      cx.filter = tree ? 'saturate(1.16) contrast(1.07)' : 'none';
+      cx.drawImage(i, 0, 0);
       /* WHERE THE TRUNK MEETS THE GROUND, which is not the middle of the
        * sprite. A palm leans, so the box's centre sits out under the crown -
        * on his 'd' it is most of a trunk's width away. Read the bottom 3% of
@@ -113,7 +123,7 @@ const SHADOWS = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
       }
       return { webp: c.toDataURL('image/webp', 0.9).split(',')[1],
                fx: wsum ? (sum / wsum) / c.width : 0.5 };
-    }, png.toString('base64'));
+    }, { d: png.toString('base64'), tree: !scale });
     fs.writeFileSync(path.join(DIR, file), Buffer.from(out.webp, 'base64'));
     await p.close();
     return { size: (fs.statSync(path.join(DIR, file)).size / 1024).toFixed(1) + 'K',
