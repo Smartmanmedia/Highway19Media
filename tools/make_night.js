@@ -205,12 +205,18 @@ const TOKENS = [
   /* THE TWO NEAREST BANDS, TAKEN DOWN. His #1b5791 is the one colour in the
      ocean that steps out of the picture: it sits at a lightness of 79 where
      the band above it is at 28 and the whole section reads #000814. Both near
-     bands are scaled toward black by the same amount, on the same hue, so his
-     ramp keeps its shape and his order - the front band still darker than the
-     one behind it - and the run down the water becomes 15, 28, 28, 38, 51
-     instead of 15, 28, 28, 51, 79. */
-  ['--sea-surf-hi', '#123b63'],
-  ['--sea-surf-lo', '#0a2c50'],
+     bands are scaled toward black on the same hue, so his ramp keeps its shape
+     and his order - the front band still darker than the one behind it.
+
+     TAKEN DOWN TWICE. The first pass put them at 38 and 51 and that was still
+     a highlight: his own far and mid bands sit at 28 and 29, and anything much
+     above that is the brightest thing in a section whose median is #000814.
+     They are now 30 and 36 - a hair above his own water rather than double it
+     - so the run down the whole ocean reads 15, 29, 28, 30, 36 against the
+     15, 28, 28, 51, 79 it started at. The colour he sampled was a highlight in
+     his file, and a highlight is not a surface. */
+  ['--sea-surf-hi', '#0c2843'],
+  ['--sea-surf-lo', '#07223f'],
   ['--sea-mid', '#011f51'],
   ['--sea-swell', '#022152'],
   ['--sea-far-a', '#000619'],
