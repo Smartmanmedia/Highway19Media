@@ -79,9 +79,17 @@ html,body{margin:0;background:#0a1020;color:#fff;
 .shadow-derived{filter:brightness(0) blur(1.5px);opacity:.26}
 .shadow img{display:block;height:100%;width:100%}
 
-.cloud{position:absolute;background:
-  radial-gradient(closest-side,#fff 68%,rgba(255,255,255,0) 100%);
-  filter:blur(.5px);opacity:.95}
+/* HIS CLOUDS, four of his own drawings instead of the four soft blobs that
+   stood in for them. They are small enough to travel as SVG and they scale
+   for nothing, so they can drift at whatever size the sky wants. */
+.cloud{position:absolute;left:0;top:0;will-change:transform}
+.cloud img{display:block;width:100%;height:auto}
+/* HIS WAVE LINES. One strip each, laid flat on the water at its own depth and
+   carried past by the same projection as the road, so they open out and slow
+   down as they come. width:100% because a wave is stretched to the sea's
+   width, not to its own drawn length. */
+.wave{position:absolute;left:0;top:0;will-change:transform}
+.wave img{display:block;width:100%;height:100%}
 
 /* ---- read-outs ----------------------------------------------------------- */
 .hud{position:fixed;left:16px;bottom:16px;z-index:9;font-size:12px;line-height:1.6;
@@ -102,6 +110,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
   <div class="stage" id="stage">
     <div class="sky"></div>
     <div class="sea" id="sea"></div>
+    <div id="swell"></div>
     <div class="land" id="land"></div>
     <div class="road" id="road"></div>
     <div class="edge" id="edgeL"></div>
@@ -123,6 +132,17 @@ html,body{margin:0;background:#0a1020;color:#fff;
   <img class="palm-b-sh" src="../../assets/v2/section-05/palm-b-shadow.webp" alt="">
   <img class="palm-c-sh" src="../../assets/v2/section-05/palm-c-shadow.webp" alt="">
   <img class="palm-d-sh" src="../../assets/v2/section-05/palm-d-shadow.webp" alt="">
+  <img class="lamp-l" src="../../assets/v2/section-05/lamp-l.webp" alt="">
+  <img class="lamp-r" src="../../assets/v2/section-05/lamp-r.webp" alt="">
+  <img class="wave-1" src="../../assets/v2/section-05/wave-1.webp" alt="">
+  <img class="wave-2" src="../../assets/v2/section-05/wave-2.webp" alt="">
+  <img class="wave-3" src="../../assets/v2/section-05/wave-3.webp" alt="">
+  <img class="wave-4" src="../../assets/v2/section-05/wave-4.webp" alt="">
+  <img class="wave-5" src="../../assets/v2/section-05/wave-5.webp" alt="">
+  <img class="cloud-1" src="../../assets/v2/section-05/cloud-1.svg" alt="">
+  <img class="cloud-2" src="../../assets/v2/section-05/cloud-2.svg" alt="">
+  <img class="cloud-3" src="../../assets/v2/section-05/cloud-3.svg" alt="">
+  <img class="cloud-4" src="../../assets/v2/section-05/cloud-4.svg" alt="">
   <img class="hero" src="../../assets/v2/section-01/hero-sign.svg" alt="">
   <img class="trusstile" src="../../assets/v2/section-01/truss-cell.webp" alt="">
 </div>
@@ -137,6 +157,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
 <script>
 const stage=document.getElementById('stage'), props=document.getElementById('props'),
       shadows=document.getElementById('shadows'),
+      swell=document.getElementById('swell'),
       marks=document.getElementById('marks'), hud=document.getElementById('hud'),
       road=document.getElementById('road'), sea=document.getElementById('sea'),
       land=document.getElementById('land'),
@@ -315,6 +336,40 @@ const SH={
    the crown and average: the tip lands SUN_X of the tree's height across and
    SUN_Y of it down. Everything the scene has to invent a shadow for - the
    sign, the truss, the pole - is laid down that same ray. */
+/* >>> props (written by tools/make_scene_props.js - do not hand-edit) */
+/* Per sprite: ar is its aspect (w/h) and fx is where it STANDS across itself -
+   a street lamp is planted by its mast, which is at the very edge of its box. */
+const PROPS={
+ "lamp-r": {
+  "ar": 0.1921,
+  "fx": 0.9373
+ },
+ "lamp-l": {
+  "ar": 0.1921,
+  "fx": 0.057
+ },
+ "wave-1": {
+  "ar": 136.6994,
+  "fx": 0.5
+ },
+ "wave-2": {
+  "ar": 97.2504,
+  "fx": 0.5
+ },
+ "wave-3": {
+  "ar": 330.9379,
+  "fx": 0.5
+ },
+ "wave-4": {
+  "ar": 91.8739,
+  "fx": 0.5
+ },
+ "wave-5": {
+  "ar": 327.3299,
+  "fx": 0.5
+ }
+};
+/* <<< props */
 const SUN=(function(){
   let sx=0,sy=0,n=0;
   for(const k in SH){ const g=SH[k]; sx+=g.dx+g.w; sy+=g.dy+g.h; n++; }
@@ -339,7 +394,7 @@ function plant(o){
      that error lands the trunk out over the water: floating. fx is where the
      trunk actually is across the sprite, read off the ink. */
   const it=Object.assign({el,lift:0,loop:false,
-    fx:(o.art&&SH[o.art.slice(-1)]||{}).fx||0.5},o);
+    fx:(o.art&&(SH[o.art.slice(-1)]||PROPS[o.art])||{}).fx||0.5},o);
   if(o.shadow){
     const sh=document.createElement('div');
     /* one of his four palms gets the shadow he DREW for it; everything else
@@ -412,15 +467,47 @@ for(const s of STOPS){
   plant({cls:'truss',x:528,z,h:96,w:230,lift:600,shadow:true});
   plant({cls:'pole',x:640,z,h:767,w:34,shadow:true});
 }
+/* HIS STREET LAMPS. He drew each one eight times over, once per distance, but
+   the scene only needs the shape twice - mast right with the arm reaching left
+   for the seaward verge, and its mirror - because the projection does the rest.
+   The mast stands at 600: outside the tarmac's 557 and inside the palms' 686,
+   which is where he put them, between the road and the trees. The arm reaches
+   0.94 of the lamp's own width inward, so at this height its tip lands just
+   over his edge line. They are on the same wrap as the trees, at twice the
+   spacing and offset half a gap, so a lamp falls between two palms. */
+const LAMP_H=620;
+for(let i=0;i<20;i++){
+  const side=i%2?1:-1, n=Math.floor(i/2);
+  plant({cls:'lamp',art:side>0?'lamp-r':'lamp-l',shadow:true,
+    x:side*640, h:LAMP_H,
+    z:-420-n*PALM_GAP-(side>0?PALM_GAP/2:0)+PALM_GAP/2, loop:true});
+}
+/* HIS WAVE LINES, five of them, laid on the water and wrapped like the paint.
+   The sea is the same plane as the road here, so a line at depth D lands on
+   the row a tree at D would stand on and the projection spaces them for free:
+   crowded at the horizon, opening out as they come. They are stretched to
+   SEA_W across, well past the frame, and the verge is drawn over the top of
+   them so they only ever show in the water either side of the land. */
+const SEA_W=4200, WAVE_GAP=190, WAVES=[];
+for(let i=0;i<15;i++){
+  const el=document.createElement('div');
+  el.className='wave';
+  const art='wave-'+(1+i%5);
+  el.appendChild(copy(art));
+  swell.appendChild(el);
+  WAVES.push({el,z:-i*WAVE_GAP,ar:PROPS[art].ar});
+}
 /* clouds, drifting on their own clock - his sky is never still */
 const clouds=[];
-for(let i=0;i<5;i++){
+for(let i=0;i<8;i++){
   const c=document.createElement('div');
   c.className='cloud';
-  const w=120+i*70;
-  c.style.cssText+=';width:'+w+'px;height:'+(w*.42)+'px';
+  c.appendChild(copy('cloud-'+(1+i%4)));
   stage.insertBefore(c,sea);
-  clouds.push({el:c,x:Math.random(),y:.06+i*.055,s:.004+i*.0016,w});
+  /* his sky, off his own picture: small, scattered from the top of the frame
+     down to just above the water, and the nearer ones drifting faster */
+  clouds.push({el:c,x:Math.random(),y:.05+(i%4)*.11+(i>3?.055:0),
+    s:.0035+(i%4)*.0014,w:135+(i%4)*52});
 }
 
 /* ---- the lane markings ---------------------------------------------------
@@ -462,6 +549,20 @@ function place(drive){
     const r=wF/w;
     d.el.style.clipPath='polygon('+(50-r*50)+'% 0,'+(50+r*50)+'% 0,100% 100%,0 100%)';
     d.el.style.transform='translate('+(W/2-w/2)+'px,'+yF+'px)';
+  }
+  /* HIS WATER. Same wrap, same projection, one transform each. A line is
+     stretched to the sea's width and keeps its own thickness off its aspect,
+     so a near ripple is fat and a far one is a hair. */
+  for(const wv of WAVES){
+    let D=wrapD(-(wv.z+drive),WAVE_GAP*WAVES.length,near);
+    const k=f/(f+D);
+    if(D<-f+60||k>6){wv.el.style.opacity=0;continue}
+    const y=hor+U*(EYE*k+curve*D*D*2.2e-6*k), w=U*SEA_W*k;
+    if(y<seaY){wv.el.style.opacity=0;continue}
+    wv.el.style.opacity=1;
+    wv.el.style.width=w+'px';
+    wv.el.style.height=Math.max(.6,w/wv.ar)+'px';
+    wv.el.style.transform='translate('+(W/2-w/2)+'px,'+y+'px)';
   }
   /* the things standing on it */
   for(const it of items){
@@ -537,7 +638,7 @@ function tick(now){
     c.x=(c.x+c.s*dt/1000)%1.3;
     /* his sky scales with the frame too, or the clouds shrink to specks on a
        big screen while the road stays the size it was */
-    c.el.style.width=(U*c.w)+'px'; c.el.style.height=(U*c.w*.42)+'px';
+    c.el.style.width=(U*c.w)+'px';
     c.el.style.transform='translate('+((c.x*1.3-.15)*W)+'px,'+(c.y*H)+'px)';
   }
   frames++;
@@ -549,7 +650,7 @@ function tick(now){
     const ms=(costSum/Math.max(1,costN)).toFixed(2); costSum=0; costN=0;
     hud.innerHTML='<b>'+fps+' fps</b>'+(worst<999?' &nbsp;·&nbsp; worst '+worst:'')+
       ' &nbsp;·&nbsp; '+ms+'ms a frame'+
-      '<br>'+(items.length+DASHES.length+clouds.length)+' moving parts &nbsp;·&nbsp; '+
+      '<br>'+(items.length+DASHES.length+WAVES.length+clouds.length)+' moving parts &nbsp;·&nbsp; '+
       '4 static shapes<br>trip '+Math.round(t*100)+'% &nbsp;·&nbsp; '+
       (near>=0?'slowing for sign '+(near+1):'cruising');
   }
