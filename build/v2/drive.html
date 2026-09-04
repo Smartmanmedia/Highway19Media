@@ -1,0 +1,314 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Highway 19 — the drive</title>
+<style>
+/* ============================================================================
+   THE DRIVE — a first-person run down his Highway_PPV view, driven by scroll.
+
+   ONE PROJECTION, WRITTEN OUT, AND NO 3D CONTEXT AT ALL. Everything in the
+   scene - the tarmac, the lane markings, the trees, their shadows, his
+   gantries - is placed by the same three lines: a thing at depth D is drawn at
+   scale f/(f+D), its foot on the road at horizon + eye*scale. That is exactly
+   what `perspective: f` does, done by hand.
+
+   Doing it by hand rather than with CSS 3D buys three things. A 3D floor plane
+   long enough for this road is 30,000px tall, which is past what a browser
+   will rasterise - it silently paints nothing. Second, everything agrees with
+   everything: a tree, its shadow and the dash beside it all come out of one
+   number. Third, the earth curve is one more term in that number rather than a
+   fight with a transform stack.
+
+   WHAT MOVES AND WHAT DOES NOT. The road surface, its shoulders, the grass and
+   the sea never move: four shapes, drawn once, re-cut only on resize. Only the
+   lane markings and the things standing on the road are touched per frame, and
+   each of those is a single transform - no reads, no measuring, no layout.
+   ========================================================================= */
+*{box-sizing:border-box}
+html,body{margin:0;background:#0a1020;color:#fff;
+  font-family:"Be Vietnam Pro",system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.runway{height:700vh;position:relative}
+.stage{position:sticky;top:0;height:100vh;overflow:hidden;isolation:isolate}
+
+/* ---- his sky, his sun, his sea - four gradients, nothing that moves ------ */
+.sky{position:absolute;inset:0;
+  background:
+    radial-gradient(760px 620px at 11% -4%, rgba(255,255,255,.98), rgba(255,255,255,0) 60%),
+    linear-gradient(112deg,#fff 0%,#d4e7ff 15%,#a3ccff 36%,#7cb7ff 55%,#60a8ff 73%,#4f9fff 88%,#4a9cff 100%)}
+.sea{position:absolute;left:0;right:0;
+  background:linear-gradient(180deg,#1e5cb0 0%,#17509f 45%,#103f7d 100%)}
+.land{position:absolute;left:0;right:0;bottom:0;
+  background:linear-gradient(180deg,#3f8a18 0%,#2f6b12 45%,#255a0e 100%)}
+.road,.edge,.dash{position:absolute;left:0;top:0;will-change:transform}
+.road{background:linear-gradient(180deg,#5a5a5a 0%,#4a4a4a 40%,#434343 100%)}
+.edge,.dash{background:#fff}
+
+/* ---- what stands on it --------------------------------------------------
+   Sprites, not vector. His four trees carry 247 shapes and 246 gradients -
+   one per frond - and a palm in this scene is never still: it grows the whole
+   way past the camera, and a gradient-filled group has to be re-rasterised at
+   every new scale. Rasterised once at 1024 tall they are 1.7 to 3.4KB each and
+   the compositor scales them for nothing. */
+.thing{position:absolute;left:0;top:0;will-change:transform;transform-origin:50% 100%}
+.thing img{display:block;height:100%;width:auto}
+.sign img{filter:drop-shadow(0 14px 20px rgba(0,0,0,.22))}
+.pole{background:linear-gradient(90deg,#8a9199,#f4f7fa 38%,#cdd4db 66%,#7d848c);
+  border-radius:99px}
+/* HIS SHADOW, DERIVED. A cast shadow drawn as its own art comes apart from
+   what casts it the moment either moves. This is the tree itself, taken to
+   black and laid down the road away from his sun, so it can only ever be the
+   shape of the thing standing above it. */
+.shadow{filter:brightness(0) blur(2px);opacity:.32;transform-origin:50% 100%}
+
+.cloud{position:absolute;background:
+  radial-gradient(closest-side,#fff 68%,rgba(255,255,255,0) 100%);
+  filter:blur(.5px);opacity:.95}
+
+/* ---- read-outs ----------------------------------------------------------- */
+.hud{position:fixed;left:16px;bottom:16px;z-index:9;font-size:12px;line-height:1.6;
+  background:rgba(8,14,26,.74);border:1px solid rgba(255,255,255,.16);
+  border-radius:10px;padding:10px 12px;backdrop-filter:blur(6px);min-width:230px}
+.hud b{font-weight:600}
+.toggle{position:fixed;right:16px;bottom:16px;z-index:9;display:flex;gap:8px}
+.toggle button{font:inherit;font-size:12px;color:#fff;cursor:pointer;
+  background:rgba(8,14,26,.74);border:1px solid rgba(255,255,255,.18);
+  border-radius:999px;padding:7px 13px}
+.toggle button[aria-pressed=true]{background:#1f6feb;border-color:#1f6feb}
+.hint{position:fixed;left:50%;translate:-50% 0;bottom:64px;z-index:9;font-size:13px;
+  background:rgba(8,14,26,.62);padding:8px 15px;border-radius:999px;transition:opacity .5s}
+.hint.gone{opacity:0}
+</style>
+
+<div class="runway">
+  <div class="stage" id="stage">
+    <div class="sky"></div>
+    <div class="sea" id="sea"></div>
+    <div class="land" id="land"></div>
+    <div class="road" id="road"></div>
+    <div class="edge" id="edgeL"></div>
+    <div class="edge" id="edgeR"></div>
+    <div id="marks"></div>
+    <div id="props"></div>
+  </div>
+</div>
+
+<!-- THE ART, ONCE. Every tree and both gantries are clones of these, so the
+     page carries one copy of each however many are planted. -->
+<div id="art" hidden>
+  <img class="palm-a" src="../../assets/v2/section-05/palm-a.webp" alt="">
+  <img class="palm-b" src="../../assets/v2/section-05/palm-b.webp" alt="">
+  <img class="palm-c" src="../../assets/v2/section-05/palm-c.webp" alt="">
+  <img class="palm-d" src="../../assets/v2/section-05/palm-d.webp" alt="">
+  <img class="hero" src="../../assets/v2/section-01/hero-sign.svg" alt="">
+</div>
+
+<div class="hud" id="hud"></div>
+<div class="toggle">
+  <button id="curveBtn" aria-pressed="false">earth curve</button>
+  <button id="autoBtn" aria-pressed="false">auto-drive</button>
+</div>
+<div class="hint" id="hint">scroll to drive</div>
+
+<script>
+const stage=document.getElementById('stage'), props=document.getElementById('props'),
+      marks=document.getElementById('marks'), hud=document.getElementById('hud'),
+      road=document.getElementById('road'), sea=document.getElementById('sea'),
+      land=document.getElementById('land'),
+      edgeL=document.getElementById('edgeL'), edgeR=document.getElementById('edgeR');
+
+/* ---- the world, in his units --------------------------------------------- */
+/* HIS WORLD, IN HIS UNITS. Everything below is a distance in the same space:
+   the camera floats EYE above the tarmac, the road is ROAD wide either side of
+   the centre line, and a thing at depth D is drawn at f/(f+D) of its size.
+   The road edge is a STRAIGHT LINE on screen - x = ROAD*(y-horizon)/EYE - so
+   the tarmac, its shoulders and its two edge lines are three triangles from
+   the vanishing point, cut once and never touched again. */
+const EYE=250, ROAD=560, LINE=470, LANE=11, F0=0.62;
+const RUN=26000, SPACING=900, LOOP=SPACING*9;
+const STOPS=[0.30,0.68], HOLD=0.06;
+const DASH_LEN=95, DASH_GAP=150, DASH_W=30;
+
+let W=0,H=0,f=900,hor=0,curve=0;
+function measure(){
+  W=stage.clientWidth; H=stage.clientHeight;
+  f=H*F0*2;               /* focal length tied to the stage, so the framing is
+                             the same on a laptop and on a 4K screen */
+  hor=Math.round(H*0.655);
+  const D=H-hor;                       /* screen distance from horizon to foot */
+  const span=x=>x*D/EYE;               /* a world half-width, at the foot      */
+  const pct=(x,y)=>(x/W*100).toFixed(3)+'% '+(y/H*100).toFixed(3)+'%';
+  const wedge=(el,half)=>{
+    el.style.width=W+'px'; el.style.height=H+'px';
+    el.style.clipPath='polygon('+pct(W/2,hor)+','+
+      pct(W/2+span(half),H)+','+pct(W/2-span(half),H)+')';
+  };
+  const strip=(el,side)=>{
+    el.style.width=W+'px'; el.style.height=H+'px';
+    el.style.clipPath='polygon('+pct(W/2,hor)+','+
+      pct(W/2+side*span(LINE+LANE),H)+','+pct(W/2+side*span(LINE-LANE),H)+')';
+  };
+  sea.style.top=(hor-Math.round(H*0.095))+'px'; sea.style.height=Math.round(H*0.095)+'px';
+  land.style.top=(hor-1)+'px';
+  wedge(road,ROAD);
+  strip(edgeL,-1); strip(edgeR,1);
+}
+
+/* ---- his two slow-downs --------------------------------------------------
+   A smoothstep either side of each sign and a flat run in between: the road
+   eases in, sits still while you read it, and eases out. The road given up to
+   the holds is handed back to the cruise, so the trip still covers the same
+   ground. */
+const clamp=(x,a,b)=>x<a?a:x>b?b:x;
+const smooth=x=>{x=clamp(x,0,1);return x*x*(3-2*x)};
+function distance(t){
+  let d=t;
+  for(const s of STOPS){
+    const a=s-HOLD,b=s+HOLD;
+    if(t>a){
+      const u=clamp((t-a)/(2*HOLD),0,1);
+      d+=(smooth((u-.5)*2.4+.5)-u)*(2*HOLD);
+    }
+  }
+  return d*RUN;
+}
+
+/* ---- what is on the road -------------------------------------------------- */
+const art=document.getElementById('art');
+const copy=c=>art.querySelector('.'+c).cloneNode(true);
+const items=[];
+function plant(o){
+  const el=document.createElement('div');
+  el.className='thing '+(o.cls||'');
+  if(o.art) el.appendChild(copy(o.art));
+  props.appendChild(el);
+  const it=Object.assign({el,lift:0,loop:false},o);
+  if(o.shadow){
+    const sh=document.createElement('div');
+    sh.className='thing shadow';
+    sh.appendChild(copy(o.art));
+    props.appendChild(sh);
+    it.sh=sh;
+  }
+  items.push(it); return it;
+}
+/* HIS AVENUE. Four trees cycling, alternating sides, the far row offset by
+   half a gap so the two never line up - which is what stops it reading as
+   wallpaper. */
+const PALMS=['palm-a','palm-b','palm-c','palm-d'];
+for(let i=0;i<20;i++){
+  const side=i%2?1:-1;
+  plant({cls:'palm',art:PALMS[i%4],shadow:true,
+    x:side*(820+(i%3)*190),
+    z:-300-Math.floor(i/2)*SPACING-(side>0?SPACING/2:0),
+    h:760+(i%4)*130, loop:true});
+}
+/* his two gantries: the board over the road and the pole holding it up */
+for(const s of STOPS){
+  const z=-(s*RUN);
+  plant({cls:'sign',art:'hero',x:-120,z,h:660,lift:1000});
+  plant({cls:'pole',x:1180,z,h:1680,w:70});
+}
+/* clouds, drifting on their own clock - his sky is never still */
+const clouds=[];
+for(let i=0;i<5;i++){
+  const c=document.createElement('div');
+  c.className='cloud';
+  const w=120+i*70;
+  c.style.cssText+=';width:'+w+'px;height:'+(w*.42)+'px';
+  stage.insertBefore(c,sea);
+  clouds.push({el:c,x:Math.random(),y:.06+i*.055,s:.004+i*.0016,w});
+}
+
+/* ---- the lane markings ---------------------------------------------------
+   A pool of quads, each one a length of paint at its own depth. They wrap, so
+   twenty-two of them are a road of any length, and because each is placed by
+   the same projection as everything else they stretch and slow with distance
+   on their own - which is the whole of what makes it read as speed. */
+const DASHES=[];
+for(let i=0;i<26;i++){
+  const d=document.createElement('div');
+  d.className='dash';
+  marks.appendChild(d);
+  DASHES.push({el:d,z:-i*(DASH_LEN+DASH_GAP)});
+}
+
+/* ---- the frame ------------------------------------------------------------ */
+function place(drive){
+  const wrapD=(D,span)=>{while(D<-300)D+=span;while(D>span-300)D-=span;return D};
+  /* the road markings */
+  const span=DASHES.length*(DASH_LEN+DASH_GAP);
+  for(const d of DASHES){
+    let D=wrapD(-(d.z+drive),span);
+    const kN=f/(f+D), kF=f/(f+D+DASH_LEN);
+    if(D<-f+60||kN>10){d.el.style.opacity=0;continue}
+    const yN=hor+EYE*kN+curve*D*D*2.2e-6*kN;
+    const yF=hor+EYE*kF+curve*(D+DASH_LEN)*(D+DASH_LEN)*2.2e-6*kF;
+    const w=Math.max(.6,DASH_W*kN);
+    d.el.style.opacity=1;
+    d.el.style.width=w+'px';
+    d.el.style.height=Math.max(.5,yN-yF)+'px';
+    d.el.style.transform='translate('+(W/2-w/2)+'px,'+yF+'px)';
+  }
+  /* the things standing on it */
+  for(const it of items){
+    let D=-(it.z+drive);
+    if(it.loop) D=wrapD(D,LOOP);
+    if(D<-f+80){it.el.style.opacity=0;if(it.sh)it.sh.style.opacity=0;continue}
+    const k=f/(f+D);
+    /* THE EARTH CURVE. Everything sinks with the square of its distance and
+       the road sinks with it, so the far end falls away like the far side of
+       a very big hill. One more term in a number already being written. */
+    const dip=curve*D*D*2.2e-6*k;
+    const baseY=hor+EYE*k+dip, x=W/2+it.x*k, h=it.h*k;
+    it.el.style.opacity=1;
+    it.el.style.zIndex=Math.round(9000-D/4);
+    it.el.style.height=h+'px';
+    if(it.w) it.el.style.width=(it.w*k)+'px';
+    it.el.style.transform='translate('+x+'px,'+(baseY-h-it.lift*k)+'px) translateX(-50%)';
+    if(it.sh){
+      it.sh.style.opacity=.32;
+      it.sh.style.height=h+'px';
+      it.sh.style.zIndex=2;
+      it.sh.style.transform='translate('+x+'px,'+baseY+'px) translateX(-50%)'+
+        ' scaleY(-0.26) skewX(-38deg)';
+    }
+  }
+}
+
+/* ---- scroll --------------------------------------------------------------- */
+let costSum=0,costN=0;
+let auto=false,autoT=0,last=performance.now(),frames=0,fpsT=last,worst=999;
+function tick(now){
+  const dt=now-last; last=now;
+  let t;
+  if(auto){autoT=(autoT+dt/34000)%1;t=autoT}
+  else{const max=document.documentElement.scrollHeight-innerHeight;t=max>0?scrollY/max:0}
+  const t0=performance.now(); place(distance(t)); const cost=performance.now()-t0;
+  costSum+=cost; costN++;
+  for(const c of clouds){
+    c.x=(c.x+c.s*dt/1000)%1.3;
+    c.el.style.transform='translate('+((c.x*1.3-.15)*W)+'px,'+(c.y*H)+'px)';
+  }
+  frames++;
+  if(now-fpsT>500){
+    const fps=Math.round(frames*1000/(now-fpsT));
+    if(fps<worst&&now>3000) worst=fps;
+    frames=0;fpsT=now;
+    const near=STOPS.findIndex(s=>t>s-HOLD&&t<s+HOLD);
+    const ms=(costSum/Math.max(1,costN)).toFixed(2); costSum=0; costN=0;
+    hud.innerHTML='<b>'+fps+' fps</b>'+(worst<999?' &nbsp;·&nbsp; worst '+worst:'')+
+      ' &nbsp;·&nbsp; '+ms+'ms a frame'+
+      '<br>'+(items.length+DASHES.length+clouds.length)+' moving parts &nbsp;·&nbsp; '+
+      '4 static shapes<br>trip '+Math.round(t*100)+'% &nbsp;·&nbsp; '+
+      (near>=0?'slowing for sign '+(near+1):'cruising');
+  }
+  requestAnimationFrame(tick);
+}
+addEventListener('resize',measure);
+measure(); requestAnimationFrame(tick);
+addEventListener('scroll',()=>document.getElementById('hint').classList.add('gone'),{once:true});
+document.getElementById('curveBtn').onclick=e=>{curve=curve?0:1;
+  e.currentTarget.setAttribute('aria-pressed',String(!!curve))};
+document.getElementById('autoBtn').onclick=e=>{auto=!auto;
+  e.currentTarget.setAttribute('aria-pressed',String(auto))};
+</script>
