@@ -59,7 +59,11 @@ html,body{margin:0;background:#0a1020;color:#fff;
 .road{background:
     radial-gradient(150% 240% at 6% -12%, rgba(255,255,255,.34), rgba(255,255,255,0) 60%),
     linear-gradient(180deg,#4b4b4b 0%,#3b3b3b 42%,#2e2e2e 100%)}
-.edge,.dash{background:#fff}
+.edge{background:#fff}
+/* HIS CENTRE LINE IS YELLOW. Two lanes running opposite ways are divided in
+   yellow and the outside edges in white - it is his gold, so the road agrees
+   with the signs. */
+.dash{background:#ffda00}
 
 /* ---- what stands on it --------------------------------------------------
    Sprites, not vector. His four trees carry 247 shapes and 246 gradients -
@@ -216,11 +220,24 @@ const stage=document.getElementById('stage'), props=document.getElementById('pro
    so from lower down its edges simply splay further across the bottom of the
    frame and the ground plane folds up towards the horizon, which is the whole
    difference between looking down at a road and looking along one. */
-const EYE=152, ROAD=557, LINE=481, GRASS=845, LANE=5.5, SHOULDER=625, F0=0.62;
+/* HIS THREE SLOPES, PUT BACK. The road's angle in the picture is ROAD/EYE and
+   nothing else - not the focal length, which cannot change it: a point at
+   (X, D) lands at x = f*X/D and y-hor = f*E/D, so x/(y-hor) = X/E whatever f
+   is. You cannot zoom your way to more ocean. His file gives ROAD/EYE 2.368,
+   LINE/EYE 2.046 and GRASS/EYE 3.597, and those held while EYE was 235.
+   Dropping the eye to 152 for the saloon left the three widths where they were
+   and so opened all three slopes by 235/152 - the road ran off both sides of
+   the frame at the bottom and the verge swallowed the sea. Every width is
+   multiplied by 152/235 here, which restores his angles at the new eye height
+   and hands the corners back to the water. Everything that stands beside the
+   road moves in by the same factor, so nothing changes which surface it is on;
+   the trees and lamps keep their heights, which is what makes them tower the
+   way they do in his picture. */
+const EYE=152, ROAD=360, LINE=311, GRASS=546, LANE=3.6, SHOULDER=404, F0=0.62;
 const VP=0.644, SEA=0.693;    /* his vanishing point, and his water line */
 const RUN=19000;
 const STOPS=[0.30,0.68], HOLD=0.06;
-const DASH_LEN=95, DASH_GAP=150, DASH_W=30;
+const DASH_LEN=61, DASH_GAP=97, DASH_W=19;
 /* HOW FAR OUT A THING FADES UP. The water line is a hard clip - past it a
    thing would stand on the sea - so everything used to switch on at full
    strength the instant its foot cleared it, and a palm popped into existence.
@@ -462,7 +479,7 @@ for(let i=0;i<20;i++){
      a possible 845 - just past the tarmac's 557 and well inside the grass -
      so that is the band they get. */
   plant({cls:'palm',art:PALMS[a],shadow:true,
-    x:side*(686+(i%2)*38),
+    x:side*(444+(i%2)*25),
     z:-420-n*PALM_GAP-(side>0?PALM_GAP/2:0),
     h:590+a*70, loop:true});
 }
@@ -487,12 +504,15 @@ const AHEAD=420;
    is the width his picture sets - so the height follows from each board's own
    aspect rather than being chosen: his hero is 2.685 to one and his third
    board is 3.183, which is 326 tall and 275 tall at that width. */
-const BOARD_W=875, BOARDS=[{art:'hero',ar:938.50/349.56},{art:'sign3',ar:940.5/295.5}];
+const BOARD_W=566, BOARDS=[{art:'hero',ar:938.50/349.56},{art:'sign3',ar:940.5/295.5}];
 STOPS.forEach((s,si)=>{
   const z=-(s*RUN)-AHEAD, b=BOARDS[si%BOARDS.length];
-  plant({cls:'sign',art:b.art,x:-21,z,h:Math.round(BOARD_W/b.ar),lift:508,shadow:true});
-  plant({cls:'truss',x:528,z,h:96,w:230,lift:600,shadow:true});
-  plant({cls:'pole',x:640,z,h:767,w:34,shadow:true});
+  /* the board hangs higher than his old file put it, because in his new views
+     it clears the palms instead of sitting among them - width is his, height
+     off the ground is his picture's */
+  plant({cls:'sign',art:b.art,x:-14,z,h:Math.round(BOARD_W/b.ar),lift:436,shadow:true});
+  plant({cls:'truss',x:342,z,h:62,w:149,lift:496,shadow:true});
+  plant({cls:'pole',x:414,z,h:606,w:22,shadow:true});
 });
 /* HIS STREET LAMPS. He drew each one eight times over, once per distance, but
    the scene only needs the shape twice - mast right with the arm reaching left
@@ -506,7 +526,7 @@ const LAMP_H=620;
 for(let i=0;i<20;i++){
   const side=i%2?1:-1, n=Math.floor(i/2);
   plant({cls:'lamp',art:side>0?'lamp-r':'lamp-l',shadow:true,
-    x:side*640, h:LAMP_H,
+    x:side*414, h:LAMP_H,
     z:-420-n*PALM_GAP-(side>0?PALM_GAP/2:0)+PALM_GAP/2, loop:true});
 }
 /* HIS WAVE LINES, five of them, laid on the water and wrapped like the paint.
