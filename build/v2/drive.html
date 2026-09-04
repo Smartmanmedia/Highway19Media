@@ -141,7 +141,10 @@ html,body{margin:0;background:#0a1020;color:#fff;
 :root[data-mode="night"] .cloud img{
   filter:brightness(.4) sepia(1) saturate(6) hue-rotate(200deg) brightness(.45)}
 :root[data-mode="night"] .palm img{filter:brightness(.30) saturate(.62) hue-rotate(116deg)}
-:root[data-mode="night"] .wave img{filter:brightness(.30) saturate(.90) hue-rotate(0deg)}
+/* HIS SWELL KEEPS ITS WHITE. Everything else in the frame comes down hard,
+   but the crests are the one thing the moon actually catches - taken as far
+   down as the water they read as dirty blue smears rather than moonlight. */
+:root[data-mode="night"] .wave img{filter:brightness(.68) saturate(.55) hue-rotate(0deg)}
 /* the lamp's own body is metal, so it goes blue with everything else - the
    warm is the light it throws, added on top, not the post */
 :root[data-mode="night"] .lamp img{filter:brightness(.34) saturate(.70) hue-rotate(184deg)}
@@ -165,12 +168,27 @@ html,body{margin:0;background:#0a1020;color:#fff;
 .lamp::after{width:185%;aspect-ratio:1;left:33.3%;top:4.4%;transform:translate(-50%,-50%);
   background:radial-gradient(closest-side,rgba(255,222,158,.98),
     rgba(255,182,74,.42) 30%,rgba(255,164,40,0) 70%)}
-/* the pool is deliberately small: a lamp lights the lane under it, not the
-   sea. Big soft washes look like fog, and they turned the water orange. */
-.lamp::before{width:460%;height:80%;left:33.3%;bottom:0;transform:translate(-50%,26%);
-  background:radial-gradient(closest-side,rgba(255,172,62,.30),rgba(255,158,34,0) 72%)}
-.a-lamp-l::after,.a-lamp-l::before{left:66.7%}
-:root[data-mode="night"] .lamp::after,:root[data-mode="night"] .lamp::before{opacity:1}
+/* THE POOL IT LANDS IN. Tight and elliptical, not a big soft wash: a lamp
+   lights the lane under it, not the sea, and the first pass had it wide enough
+   to turn the water orange. */
+.lamp::before{width:540%;height:96%;left:33.3%;bottom:0;transform:translate(-50%,32%);
+  border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,196,104,.42),
+    rgba(255,172,54,.14) 54%,rgba(255,162,38,0) 78%)}
+/* AND THE CONE BETWEEN THEM. One element per lamp, a triangle cut out of a
+   vertical gradient - narrow at the head, full width where it meets the road.
+   It is a child rather than a third pseudo-element because an element only
+   has two, and it is styled entirely in per cent of the lamp so it travels
+   and scales with it and costs nothing per frame. */
+.beam{position:absolute;left:33.3%;top:5%;width:250%;height:95%;
+  transform:translateX(-50%);pointer-events:none;opacity:0;
+  transition:opacity 1.2s linear;
+  background:linear-gradient(180deg,rgba(255,208,128,.22) 0%,
+    rgba(255,188,84,.09) 48%,rgba(255,172,56,.02) 100%);
+  clip-path:polygon(43% 0,57% 0,100% 100%,0 100%)}
+.a-lamp-l::after,.a-lamp-l::before,.a-lamp-l .beam{left:66.7%}
+:root[data-mode="night"] .lamp::after,:root[data-mode="night"] .lamp::before,
+:root[data-mode="night"] .beam{opacity:1}
 .pole{background:linear-gradient(90deg,#8a9199,#f4f7fa 38%,#cdd4db 66%,#7d848c);
   border-radius:99px}
 /* HIS GANTRY ARM, the same tile the page already uses over his hero sign,
@@ -567,6 +585,7 @@ function plant(o){
   el.className='thing '+(o.cls||'')+(o.art?' a-'+o.art:'');
   if(o.art) el.appendChild(copy(o.art));
   if(o.cls==='truss') el.style.backgroundImage='url("'+TRUSS_TILE+'")';
+  if(o.cls==='lamp'){const b=document.createElement('i');b.className='beam';el.appendChild(b)}
   props.appendChild(el);
   /* A PALM IS PLANTED BY ITS TRUNK, not by the middle of its picture. His
      trees lean, so the box's centre sits out under the crown - as much as 15%
