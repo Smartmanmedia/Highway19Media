@@ -96,6 +96,11 @@ const SIGN_AT=[0.16,0.52], TEXT_AT=0.33;
    time the last board has been read, and what is left is the sky. The runway
    comes down with it, 1100vh to 780. */
 const FADE_AT=0.66;
+/* AND THE FIREWORKS GO UP AT THE LAST BOARD, not at the fade. The first shell
+   takes most of a second to climb, so lighting them where the road starts to
+   go would have the sky already half empty before the first one opened. From
+   the last sign the show is already running when the world begins to leave. */
+const FW_AT=SIGN_AT[SIGN_AT.length-1];
 const RANGE=END-START;
 const STOPS=SIGN_AT.map(a=>(a-START)/RANGE);
 const TEXT_U=(TEXT_AT-START)/RANGE;
@@ -233,12 +238,6 @@ function distance(u){
 const art=document.getElementById('art');
 const copy=c=>art.querySelector('.'+c).cloneNode(true);
 const TRUSS_TILE=art.querySelector('.trusstile').src;
-/* HIS SIGN LAMPS COME IN THROUGH SCRIPT, not through the stylesheet: a url()
-   inside an inline <style> is not rewritten when the page is folded into one
-   file, so it 404s in the build. Off the hidden <img> it is already a data
-   URI by then. */
-for(const [v,c] of [['--sign-fixtures','signfix'],['--sign-beams','signbeam']])
-  document.documentElement.style.setProperty(v,'url("'+art.querySelector('.'+c).src+'")');
 /* >>> palms (written by tools/make_palm_sprites.js - do not hand-edit) */
 /* Per tree: fx is where the TRUNK stands across its own sprite, and the
    shadow's size and offset are multiples of the tree's height, measured
@@ -432,9 +431,9 @@ const AHEAD=420;
 plant({cls:'copy',art:'copyline',x:0,h:132,lift:430,z:-distance(TEXT_U)-AHEAD});
 /* TWO BOARDS, NOT THE SAME ONE TWICE. Both hang 875 wide off the gantry - that
    is the width his picture sets - so the height follows from each board's own
-   aspect rather than being chosen: his hero is 2.685 to one and his third
-   board is 3.183, which is 326 tall and 275 tall at that width. */
-const BOARD_W=566, BOARDS=[{art:'hero',ar:938.50/349.56},{art:'sign3',ar:940.5/295.5}];
+   aspect rather than being chosen. Both of his are 940.5 by 295.5 - 3.183 to
+   one - so both come out 178 tall at this width. */
+const BOARD_W=566, BOARDS=[{art:'sign1',ar:940.5/295.5},{art:'sign3',ar:940.5/295.5}];
 STOPS.forEach((s,si)=>{
   const z=-distance(s)-AHEAD, b=BOARDS[si%BOARDS.length];
   /* THE GANTRY DOES NOT MOVE. It towers because the avenue came down, not
@@ -651,8 +650,8 @@ function place(drive){
    alpha of 3 times 0.88 rounds back to 3. So the canvas is cleared every
    frame and each spark strokes the streak it has just travelled.
 
-   AND IT ONLY EXISTS BETWEEN FADE_AT AND THE END OF THE SECTION. Before the
-   fade there is not a single instruction spent on it; the moment the scroll
+   AND IT ONLY EXISTS BETWEEN THE LAST BOARD AND THE END OF THE SECTION. Up
+   to there not a single instruction is spent on it; the moment the scroll
    carries past the runway the sky is wiped and the pools are emptied, so
    scrolling on stops the show rather than leaving it burning off-screen.
    ====================================================================== */
@@ -776,10 +775,10 @@ function tick(now){
      to it rather than have it appear */
   stage.style.setProperty('--out', String(1-smooth((t-FADE_AT)/(1-FADE_AT))));
   /* THE SHOW RUNS EXACTLY WHERE THE WORLD IS GOING. It lights the moment the
-     fade starts, so the first shell is already climbing while the road is
-     still half there, and it is wiped the instant the scroll leaves the
+     last board is read, so the sky is already going by the time the road
+     starts to fade, and it is wiped the instant the scroll leaves the
      section - keep scrolling and the fireworks stop. */
-  const want = t>=FADE_AT && t<0.999;
+  const want = t>=FW_AT && t<0.999;
   if(want){ fwOn=true; fframe(Math.min(0.05,dt/1000)); }
   else if(fwOn) fstop();
   const t0=performance.now(); place(distance(u)); const cost=performance.now()-t0;

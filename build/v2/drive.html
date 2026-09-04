@@ -197,21 +197,12 @@ html,body{margin:0;background:#0a1020;color:#fff;
   opacity:0;transition:opacity 1s linear}
 :root[data-mode="night"] .sign .night-art{opacity:1}
 :root[data-mode="night"] .sign img{filter:drop-shadow(0 0 11px rgba(255,186,74,.28))}
-/* HIS SIGN LAMPS, the same two files the home page hangs over its boards: the
-   fittings are there in daylight with nothing shining, and the beams come up
-   after dark. Both are backgrounds on the board's own pseudo-elements, so they
-   travel with it and cost no elements. */
-/* THE HERO BOARD ONLY. His two overlay files were cut to the hero's own
-   2.685 to one; stretched onto the third board at 3.183 they land between its
-   brackets rather than under them, and their fittings double up with the eight
-   that board already carries. Its light is drawn into its own bitmap instead. */
-.a-hero::before,.a-hero::after{content:'';position:absolute;inset:0;
-  pointer-events:none;background-repeat:no-repeat;
-  background-position:left 1.429% top 0.411%;background-size:97.091% 102.986%}
-.a-hero::before{background-image:var(--sign-fixtures);z-index:2}
-.a-hero::after{background-image:var(--sign-beams);z-index:3;
-  opacity:0;transition:opacity 1.2s linear}
-:root[data-mode="night"] .a-hero::after{opacity:1}
+/* HIS SIGN LAMPS ARE IN THE BOARDS THEMSELVES. His overlay files were cut to
+   the home page hero's 2.685 to one; both boards on this road are 3.183, so
+   stretched over them the beams land between the brackets rather than under
+   them and their fittings double up with the eight each board already carries.
+   tools/make_boards.js draws the light at each board's own brackets instead,
+   which is also two fewer full-board paints a frame. */
 
 /* THE LAMPS LIGHT THE ROAD, and it costs no elements: the head's glow and the
    pool it throws are the lamp element's own ::after and ::before, sized in per
@@ -365,13 +356,11 @@ html,body{margin:0;background:#0a1020;color:#fff;
   <img class="cloud-2" src="../../assets/v2/section-05/cloud-2.svg" alt="">
   <img class="cloud-3" src="../../assets/v2/section-05/cloud-3.svg" alt="">
   <img class="cloud-4" src="../../assets/v2/section-05/cloud-4.svg" alt="">
-  <img class="hero" src="../../assets/v2/section-01/hero-sign.svg" alt="">
+  <img class="sign1" src="../../assets/v2/section-05/sign-1.webp" alt="">
   <img class="sign3" src="../../assets/v2/section-05/sign-3.webp" alt="">
   <span class="copyline">Highway&nbsp;19&nbsp;Media</span>
   <img class="lamplight" src="../../assets/v2/section-05/lamp-light.webp" alt="">
-  <img class="signfix" src="../../assets/v2/section-05/sign-fixtures.svg" alt="">
-  <img class="signbeam" src="../../assets/v2/section-05/sign-beams.svg" alt="">
-  <img class="hero-n" src="../../assets/v2/section-05/hero-sign-night.svg" alt="">
+  <img class="sign1-n" src="../../assets/v2/section-05/sign-1-night.webp" alt="">
   <img class="sign3-n" src="../../assets/v2/section-05/sign-3-night.webp" alt="">
   <img class="trusstile" src="../../assets/v2/section-01/truss-cell.webp" alt="">
 </div>
@@ -486,6 +475,11 @@ const SIGN_AT=[0.16,0.52], TEXT_AT=0.33;
    time the last board has been read, and what is left is the sky. The runway
    comes down with it, 1100vh to 780. */
 const FADE_AT=0.66;
+/* AND THE FIREWORKS GO UP AT THE LAST BOARD, not at the fade. The first shell
+   takes most of a second to climb, so lighting them where the road starts to
+   go would have the sky already half empty before the first one opened. From
+   the last sign the show is already running when the world begins to leave. */
+const FW_AT=SIGN_AT[SIGN_AT.length-1];
 const RANGE=END-START;
 const STOPS=SIGN_AT.map(a=>(a-START)/RANGE);
 const TEXT_U=(TEXT_AT-START)/RANGE;
@@ -623,12 +617,6 @@ function distance(u){
 const art=document.getElementById('art');
 const copy=c=>art.querySelector('.'+c).cloneNode(true);
 const TRUSS_TILE=art.querySelector('.trusstile').src;
-/* HIS SIGN LAMPS COME IN THROUGH SCRIPT, not through the stylesheet: a url()
-   inside an inline <style> is not rewritten when the page is folded into one
-   file, so it 404s in the build. Off the hidden <img> it is already a data
-   URI by then. */
-for(const [v,c] of [['--sign-fixtures','signfix'],['--sign-beams','signbeam']])
-  document.documentElement.style.setProperty(v,'url("'+art.querySelector('.'+c).src+'")');
 /* >>> palms (written by tools/make_palm_sprites.js - do not hand-edit) */
 /* Per tree: fx is where the TRUNK stands across its own sprite, and the
    shadow's size and offset are multiples of the tree's height, measured
@@ -822,9 +810,9 @@ const AHEAD=420;
 plant({cls:'copy',art:'copyline',x:0,h:132,lift:430,z:-distance(TEXT_U)-AHEAD});
 /* TWO BOARDS, NOT THE SAME ONE TWICE. Both hang 875 wide off the gantry - that
    is the width his picture sets - so the height follows from each board's own
-   aspect rather than being chosen: his hero is 2.685 to one and his third
-   board is 3.183, which is 326 tall and 275 tall at that width. */
-const BOARD_W=566, BOARDS=[{art:'hero',ar:938.50/349.56},{art:'sign3',ar:940.5/295.5}];
+   aspect rather than being chosen. Both of his are 940.5 by 295.5 - 3.183 to
+   one - so both come out 178 tall at this width. */
+const BOARD_W=566, BOARDS=[{art:'sign1',ar:940.5/295.5},{art:'sign3',ar:940.5/295.5}];
 STOPS.forEach((s,si)=>{
   const z=-distance(s)-AHEAD, b=BOARDS[si%BOARDS.length];
   /* THE GANTRY DOES NOT MOVE. It towers because the avenue came down, not
@@ -1041,8 +1029,8 @@ function place(drive){
    alpha of 3 times 0.88 rounds back to 3. So the canvas is cleared every
    frame and each spark strokes the streak it has just travelled.
 
-   AND IT ONLY EXISTS BETWEEN FADE_AT AND THE END OF THE SECTION. Before the
-   fade there is not a single instruction spent on it; the moment the scroll
+   AND IT ONLY EXISTS BETWEEN THE LAST BOARD AND THE END OF THE SECTION. Up
+   to there not a single instruction is spent on it; the moment the scroll
    carries past the runway the sky is wiped and the pools are emptied, so
    scrolling on stops the show rather than leaving it burning off-screen.
    ====================================================================== */
@@ -1166,10 +1154,10 @@ function tick(now){
      to it rather than have it appear */
   stage.style.setProperty('--out', String(1-smooth((t-FADE_AT)/(1-FADE_AT))));
   /* THE SHOW RUNS EXACTLY WHERE THE WORLD IS GOING. It lights the moment the
-     fade starts, so the first shell is already climbing while the road is
-     still half there, and it is wiped the instant the scroll leaves the
+     last board is read, so the sky is already going by the time the road
+     starts to fade, and it is wiped the instant the scroll leaves the
      section - keep scrolling and the fireworks stop. */
-  const want = t>=FADE_AT && t<0.999;
+  const want = t>=FW_AT && t<0.999;
   if(want){ fwOn=true; fframe(Math.min(0.05,dt/1000)); }
   else if(fwOn) fstop();
   const t0=performance.now(); place(distance(u)); const cost=performance.now()-t0;
