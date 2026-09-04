@@ -61,11 +61,23 @@ html,body{margin:0;background:#0a1020;color:#fff;
    not something the build can turn into a data URI, and it silently 404s in
    the file it ships - which is exactly what it did. */
 .truss{background-repeat:repeat-x;background-position:center;background-size:auto 100%}
-/* HIS SHADOW, DERIVED. A cast shadow drawn as its own art comes apart from
-   what casts it the moment either moves. This is the tree itself, taken to
-   black and laid down the road away from his sun, so it can only ever be the
-   shape of the thing standing above it. */
-.shadow{filter:brightness(0) blur(1.5px);opacity:.3;transform-origin:50% 100%}
+/* HIS OWN SHADOWS, for the trees. He drew them - one under each palm, at 54%
+   - properly projected onto the road, and nothing derived comes close: a
+   front-view cut-out flipped onto the ground gives a smear, not a palm. The
+   art already carries his opacity, so this class does nothing to it.
+
+   THE ONE RISK with a drawn shadow is that it comes apart from what casts it,
+   so it is never placed on its own: its size and its offset from the tree's
+   FOOT are held as multiples of the tree's own height (palms.json, measured
+   off his file), and the scene multiplies both by whatever height the tree is
+   drawn at. The two are one object at every distance.
+
+   The gantry is the exception - he drew no shadow for it - so the board, the
+   arm and the pole still get the flipped-and-skewed kind, which is right
+   enough for three flat rectangles. */
+.shadow{transform-origin:50% 100%}
+.shadow-derived{filter:brightness(0) blur(1.5px);opacity:.26}
+.shadow img{display:block;height:100%;width:100%}
 
 .cloud{position:absolute;background:
   radial-gradient(closest-side,#fff 68%,rgba(255,255,255,0) 100%);
@@ -94,6 +106,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
     <div class="road" id="road"></div>
     <div class="edge" id="edgeL"></div>
     <div class="edge" id="edgeR"></div>
+    <div id="shadows"></div>
     <div id="marks"></div>
     <div id="props"></div>
   </div>
@@ -106,6 +119,10 @@ html,body{margin:0;background:#0a1020;color:#fff;
   <img class="palm-b" src="../../assets/v2/section-05/palm-b.webp" alt="">
   <img class="palm-c" src="../../assets/v2/section-05/palm-c.webp" alt="">
   <img class="palm-d" src="../../assets/v2/section-05/palm-d.webp" alt="">
+  <img class="palm-a-sh" src="../../assets/v2/section-05/palm-a-shadow.webp" alt="">
+  <img class="palm-b-sh" src="../../assets/v2/section-05/palm-b-shadow.webp" alt="">
+  <img class="palm-c-sh" src="../../assets/v2/section-05/palm-c-shadow.webp" alt="">
+  <img class="palm-d-sh" src="../../assets/v2/section-05/palm-d-shadow.webp" alt="">
   <img class="hero" src="../../assets/v2/section-01/hero-sign.svg" alt="">
   <img class="trusstile" src="../../assets/v2/section-01/truss-cell.webp" alt="">
 </div>
@@ -119,6 +136,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
 
 <script>
 const stage=document.getElementById('stage'), props=document.getElementById('props'),
+      shadows=document.getElementById('shadows'),
       marks=document.getElementById('marks'), hud=document.getElementById('hud'),
       road=document.getElementById('road'), sea=document.getElementById('sea'),
       land=document.getElementById('land'),
@@ -183,6 +201,11 @@ function measure(){
   land.style.top='0'; land.style.height=H+'px'; land.style.bottom='auto';
   wedge(land,GRASS);
   wedge(road,ROAD);
+  /* A SHADOW CAN ONLY FALL ON GROUND. Cut to the same wedge as the verge, so
+     the ones on the seaward side stop at the water instead of lying on it -
+     which is the last thing that gave the trees away as pasted on. The road
+     is inside the verge, so this covers the tarmac too. */
+  wedge(shadows,GRASS);
   strip(edgeL,-1); strip(edgeR,1);
 }
 
@@ -209,6 +232,33 @@ function distance(t){
 const art=document.getElementById('art');
 const copy=c=>art.querySelector('.'+c).cloneNode(true);
 const TRUSS_TILE=art.querySelector('.trusstile').src;
+/* his shadows' size and offset, in multiples of the tree's height */
+const SH={
+  "a": {
+    "w": 0.655,
+    "h": 0.1845,
+    "dx": -0.0654,
+    "dy": -0.0559
+  },
+  "b": {
+    "w": 0.945,
+    "h": 0.3495,
+    "dx": 0.0548,
+    "dy": -0.019
+  },
+  "c": {
+    "w": 0.9829,
+    "h": 0.3635,
+    "dx": -0.1277,
+    "dy": -0.0245
+  },
+  "d": {
+    "w": 0.8428,
+    "h": 0.2535,
+    "dx": 0.0548,
+    "dy": -0.0529
+  }
+};
 const items=[];
 function plant(o){
   const el=document.createElement('div');
@@ -219,13 +269,18 @@ function plant(o){
   const it=Object.assign({el,lift:0,loop:false},o);
   if(o.shadow){
     const sh=document.createElement('div');
-    sh.className='thing shadow';
-    if(o.art) sh.appendChild(copy(o.art)); else sh.style.background='#000';
+    /* one of his four palms gets the shadow he DREW for it; everything else
+       gets the flipped-and-skewed kind, which is all a flat rectangle needs */
+    const drawn=o.art&&SH[o.art.slice(-1)];
+    sh.className='thing shadow'+(drawn?'':' shadow-derived');
+    if(drawn) sh.appendChild(copy(o.art+'-sh'));
+    else if(o.art) sh.appendChild(copy(o.art));
+    else sh.style.background='#000';
     if(o.cls==='truss'){sh.style.background='none';
       sh.style.backgroundImage='url("'+TRUSS_TILE+'")';
       sh.style.backgroundRepeat='repeat-x';sh.style.backgroundSize='auto 100%'}
-    props.appendChild(sh);
-    it.sh=sh;
+    shadows.appendChild(sh);
+    it.sh=sh; it.shGeo=drawn||null;
   }
   items.push(it); return it;
 }
@@ -241,9 +296,9 @@ for(let i=0;i<20;i++){
      a possible 845 - just past the tarmac's 557 and well inside the grass -
      so that is the band they get. */
   plant({cls:'palm',art:PALMS[i%4],shadow:true,
-    x:side*(650+(i%3)*85),
+    x:side*(686+(i%2)*38),
     z:-420-Math.floor(i/2)*SPACING-(side>0?SPACING/2:0),
-    h:560+(i%4)*90, loop:true});
+    h:590+(i%4)*70, loop:true});
 }
 /* HIS TWO GANTRIES, AND WHERE THE ROAD STOPS FOR THEM. The slow-down is
    centred on the sign's own place in the trip, so a sign standing exactly
@@ -330,20 +385,32 @@ function place(drive){
     if(it.w) it.el.style.width=(it.w*k)+'px';
     it.el.style.transform='translate('+x+'px,'+(baseY-h-it.lift*k)+'px) translateX(-50%)';
     if(it.sh){
-      /* HIS SUN IS OVER YOUR LEFT SHOULDER, so everything lies down and to the
-         right. A shadow is the thing itself: flipped onto the road, squashed
-         to the angle of the light and leaned away from it - so it can only
-         ever be the shape of what stands above it, however that thing moves.
-         Anything hanging in the air (his boards, his gantry arm) has its
-         shadow carried further out by its own height, which is the one number
-         that separates a sign from a tree here. */
-      const lean=(it.lift||0)*0.55*k;
-      it.sh.style.opacity=it.lift?.20:.30;
-      it.sh.style.height=h+'px';
-      if(it.w) it.sh.style.width=(it.w*k)+'px';
       it.sh.style.zIndex=2;
-      it.sh.style.transform='translate('+(x+lean)+'px,'+baseY+'px) translateX(-50%)'+
-        ' scaleY(-0.52) skewX(30deg)';
+      if(it.shGeo){
+        /* HIS OWN SHADOW, hung off the tree's foot. Both its size and its
+           offset are multiples of the tree's height, so it grows and travels
+           with the tree and cannot drift from it. Nothing is flipped, skewed
+           or filtered: his drawing already carries the projection and the
+           54% he set. */
+        const g=it.shGeo;
+        /* his groups carry 54% and the rasteriser flattened it into the pixels
+           rather than the alpha, so it goes back on here */
+        it.sh.style.opacity=.54;
+        it.sh.style.width=(h*g.w)+'px';
+        it.sh.style.height=(h*g.h)+'px';
+        it.sh.style.transform='translate('+(x+h*g.dx)+'px,'+(baseY+h*g.dy)+'px)';
+      } else {
+        /* the gantry, which he drew no shadow for: flipped onto the road and
+           leaned away from his sun. Anything hanging in the air has its
+           shadow carried further out by its own height, which is the one
+           number that separates a sign from a tree. */
+        const lean=(it.lift||0)*0.55*k;
+        it.sh.style.opacity=it.lift?.18:.26;
+        it.sh.style.height=h+'px';
+        if(it.w) it.sh.style.width=(it.w*k)+'px';
+        it.sh.style.transform='translate('+(x+lean)+'px,'+baseY+'px) translateX(-50%)'+
+          ' scaleY(-0.34) skewX(52deg)';
+      }
     }
   }
 }
