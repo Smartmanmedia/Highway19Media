@@ -37,7 +37,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
     linear-gradient(112deg,#fff 0%,#d4e7ff 15%,#a3ccff 36%,#7cb7ff 55%,#60a8ff 73%,#4f9fff 88%,#4a9cff 100%)}
 .sea{position:absolute;left:0;right:0;
   background:linear-gradient(180deg,#1e5cb0 0%,#17509f 45%,#103f7d 100%)}
-.land{position:absolute;left:0;right:0;bottom:0;
+.land{position:absolute;left:0;
   background:linear-gradient(180deg,#3f8a18 0%,#2f6b12 45%,#255a0e 100%)}
 .road,.edge,.dash{position:absolute;left:0;top:0;will-change:transform}
 .road{background:linear-gradient(180deg,#5a5a5a 0%,#4a4a4a 40%,#434343 100%)}
@@ -131,32 +131,57 @@ const stage=document.getElementById('stage'), props=document.getElementById('pro
    The road edge is a STRAIGHT LINE on screen - x = ROAD*(y-horizon)/EYE - so
    the tarmac, its shoulders and its two edge lines are three triangles from
    the vanishing point, cut once and never touched again. */
-const EYE=235, ROAD=560, LINE=470, LANE=11, F0=0.62;
+/* HIS NUMBERS, OFF HIS OWN FILE, and two of them are structural.
+
+   HIS ROAD DOES NOT CONVERGE TO THE HORIZON. Its edges run from (1251,850)
+   and (1500,850) down to (473,1180) and (2279,1180), and extended they meet
+   at y 796.8 - fifty units ABOVE the top of his ocean. The road and the grass
+   share that vanishing point and both are CUT OFF at the sea line, so the
+   last of the road disappears behind the water rather than pinching to a
+   point. That is what makes it a coast road.
+
+   AND HIS GRASS IS A WEDGE, not a band. It runs to the same vanishing point
+   at 3.576 across for every one down against the road's 2.355, so near the
+   horizon you see almost all sea and the land only opens out as it comes at
+   you. Mine was a full-width green field from the horizon down, which is what
+   put the camera up in the air looking over it.
+
+   ROAD/EYE = 2.368, LINE/EYE = 2.046 and GRASS/EYE = 3.597 are his three
+   slopes; EYE is the only free number left and it just sets the units. */
+const EYE=235, ROAD=557, LINE=481, GRASS=845, LANE=11, F0=0.62;
+const VP=0.644, SEA=0.693;    /* his vanishing point, and his water line */
 const RUN=19000, SPACING=1150, LOOP=SPACING*9;
 const STOPS=[0.30,0.68], HOLD=0.06;
 const DASH_LEN=95, DASH_GAP=150, DASH_W=30;
 
-let W=0,H=0,f=900,hor=0,curve=0;
+let W=0,H=0,f=900,hor=0,seaY=0,curve=0;
 function measure(){
   W=stage.clientWidth; H=stage.clientHeight;
   f=H*F0*2;               /* focal length tied to the stage, so the framing is
                              the same on a laptop and on a 4K screen */
-  hor=Math.round(H*0.655);
+  hor=Math.round(H*VP);
+  seaY=Math.round(H*SEA);
   const D=H-hor;                       /* screen distance from horizon to foot */
   const span=x=>x*D/EYE;               /* a world half-width, at the foot      */
   const pct=(x,y)=>(x/W*100).toFixed(3)+'% '+(y/H*100).toFixed(3)+'%';
+  /* every wedge runs to his vanishing point and is cut off at his water line,
+     so the far end of the road goes behind the sea instead of to a point */
+  const at=(half,y)=>span(half)*(y-hor)/D;
   const wedge=(el,half)=>{
     el.style.width=W+'px'; el.style.height=H+'px';
-    el.style.clipPath='polygon('+pct(W/2,hor)+','+
+    el.style.clipPath='polygon('+
+      pct(W/2-at(half,seaY),seaY)+','+pct(W/2+at(half,seaY),seaY)+','+
       pct(W/2+span(half),H)+','+pct(W/2-span(half),H)+')';
   };
   const strip=(el,side)=>{
     el.style.width=W+'px'; el.style.height=H+'px';
-    el.style.clipPath='polygon('+pct(W/2,hor)+','+
+    el.style.clipPath='polygon('+
+      pct(W/2+side*at(LINE-LANE,seaY),seaY)+','+pct(W/2+side*at(LINE+LANE,seaY),seaY)+','+
       pct(W/2+side*span(LINE+LANE),H)+','+pct(W/2+side*span(LINE-LANE),H)+')';
   };
-  sea.style.top=(hor-Math.round(H*0.095))+'px'; sea.style.height=Math.round(H*0.095)+'px';
-  land.style.top=(hor-1)+'px';
+  sea.style.top=seaY+'px'; sea.style.height=(H-seaY)+'px';
+  land.style.top='0'; land.style.height=H+'px'; land.style.bottom='auto';
+  wedge(land,GRASS);
   wedge(road,ROAD);
   strip(edgeL,-1); strip(edgeR,1);
 }
@@ -265,6 +290,7 @@ function place(drive){
     const yN=hor+EYE*kN+curve*D*D*2.2e-6*kN;
     const yF=hor+EYE*kF+curve*(D+DASH_LEN)*(D+DASH_LEN)*2.2e-6*kF;
     const w=Math.max(.6,DASH_W*kN);
+    if(yN<seaY){d.el.style.opacity=0;continue}
     d.el.style.opacity=1;
     d.el.style.width=w+'px';
     d.el.style.height=Math.max(.5,yN-yF)+'px';
@@ -281,6 +307,9 @@ function place(drive){
        a very big hill. One more term in a number already being written. */
     const dip=curve*D*D*2.2e-6*k;
     const baseY=hor+EYE*k+dip, x=W/2+it.x*k, h=it.h*k;
+    /* his water line is the far clip: a thing whose foot lands above it is
+       further away than the sea and would float on top of it */
+    if(baseY<seaY-0.5){it.el.style.opacity=0;if(it.sh)it.sh.style.opacity=0;continue}
     it.el.style.opacity=1;
     it.el.style.zIndex=Math.round(9000-D/4);
     it.el.style.height=h+'px';
