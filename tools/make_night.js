@@ -22,11 +22,20 @@ const DIR = path.join(__dirname, '..', 'build', 'v2');
  * neutral and stays warm (#3f3735, S9). One blue tint over the whole page got
  * the sky right and turned his beach into cold slate. So each surface carries
  * its own tint and its own amount of it. */
+/* SAMPLED OFF HIS OWN NIGHT ARTBOARDS, not off a photographic reference.
+ * The correction that matters: his ground is COOL. His beach reads #1c182b and
+ * his desert #2f2831 - purple-greys, not the warm browns a photograph of a
+ * lamplit road suggested. And the whole thing is darker than I had it: his sky
+ * and water sit at 5-7% lightness where mine were at 9-11. */
 const TINTS = {
-  sea:  [0, 8, 28],       /* his water and sky: barely any grey, so his own blue holds */
-  sand: [30, 24, 20],     /* warm, and most of the way to neutral */
-  leaf: [15, 21, 17],
-  page: [10, 14, 24]
+  sea:  [0, 6, 22],        /* his sky and deep water - matched to 4 of 441 */
+  surf: [26, 20, 34],      /* his beach section, which is a shade purpler */
+  sand: [20, 26, 72],      /* HIS DESERT IS COOL. It reads #1a1c3a - a navy, not
+                              the warm brown I had. That was the single biggest
+                              thing wrong: mine was 36 of 441 away and warm
+                              where his is cold. */
+  leaf: [2, 26, 38],       /* and his forest floor is a dark teal, #041d22 */
+  page: [7, 11, 30]        /* his card page */
 };
 function night(r, g, b, keep, tint, hue) {
   var T = TINTS[hue] || TINTS.sea;
@@ -73,13 +82,13 @@ function background(file, sel) {
 
 /* keep, tint amount, and which tint - all read off his own night painting */
 const SURFACES = [
-  ['--sec1-bg',     'section-01.css', '.sec1',         0.17, 0.30, 'sea'],
-  ['--sec1-fade',   'section-01.css', '.sec1::after',  0.20, 0.30, 'sea'],
-  ['--sec2-bg',     'section-02.css', '.sec2',         0.22, 0.30, 'sea'],
-  ['--sec2-sand',   'section-02.css', '.sec2 .sand',   0.24, 0.60, 'sand'],
-  ['--sec3-bg',     'section-03.css', '.sec3',         0.22, 0.60, 'sand'],
-  ['--sec4-ground', 'section-04.css', '.sec4 .ground', 0.20, 0.55, 'leaf'],
-  ['--sec6-bg',     'section-06.css', '.sec6',         0.10, 0.85, 'page']
+  ['--sec1-bg',     'section-01.css', '.sec1',         0.10, 0.24, 'sea'],
+  ['--sec1-fade',   'section-01.css', '.sec1::after',  0.13, 0.24, 'sea'],
+  ['--sec2-bg',     'section-02.css', '.sec2',         0.14, 0.55, 'surf'],
+  ['--sec2-sand',   'section-02.css', '.sec2 .sand',   0.08, 0.60, 'surf'],
+  ['--sec3-bg',     'section-03.css', '.sec3',         0.07, 0.62, 'sand'],
+  ['--sec4-ground', 'section-04.css', '.sec4 .ground', 0.06, 0.80, 'leaf'],
+  ['--sec6-bg',     'section-06.css', '.sec6',         0.015, 0.92, 'page']
 ];
 
 /* THE FLAT TOKENS, alongside the generated gradients. They live here rather
@@ -94,21 +103,29 @@ const TOKENS = [
      dim only because his road is lit by street lamps, and without those the
      markings are the only thing that makes the road a road. Slightly warm,
      as they are under any road lighting. */
-  ['--tarmac', '#26272e'],
+  ['--tarmac', '#1b1d24'],
   ['--marking', '#ece9e0'],
   /* his painted layers keep their COLOUR - his water is still fully saturated
      blue at a tenth of daylight. Desaturating them was mine too. And they are
      not taken as far down as the flat surfaces behind them: his foam lines
      read at #425684, a good deal lighter than his water. */
-  ['--scene', '0.36'],
+  /* HIS ART KEEPS ITS HIGHLIGHTS. Measured over whole sections, the brightest
+     tenth of his night sits at 76, 97, even 255 - his foam, his snow caps -
+     where mine was crushed to 29. The surfaces behind go darker instead. */
+  ['--scene', '0.50'],
   ['--scene-sat', '0.95'],
-  /* his clouds go deep blue, not grey - #001a43, saturation 100. No amount of
-     brightness reaches a hue, so this is a chain: strip the colour, lay a
-     sepia over it, swing the hue round to his blue, pull the saturation back
-     up and then take the whole thing down. Rotating FURTHER round makes them
-     more purple, not less - the red climbs - so this stops at 190. Lands near
-     his #001a43. */
-  ['--cloud-filter', 'brightness(.30) sepia(1) hue-rotate(190deg) saturate(7) brightness(.23)'],
+  /* HIS CLOUDS STAY PALE. The deep blue I had came from a photographic
+     reference; in his own artboards they read #dedfe0 - white, barely touched.
+     He has said he is not happy with them yet and to leave them be, so this
+     does the least it can: takes the daylight white down a little and pulls
+     some colour out of the shading. */
+  ['--cloud-filter', 'brightness(.88) saturate(.45)'],
+  /* HIS DESERT IS THE ONE PLACE BRIGHTNESS CANNOT GO. His sand art is tan and
+     his night desert is navy - #1a1c3a - and darkening tan only gives darker
+     tan, so section three's ground gets the same kind of hue chain his clouds
+     needed. Measured against his artboard it takes that section from 70 of 441
+     away to 22. */
+  ['--scene-sand', 'brightness(.40) sepia(1) hue-rotate(198deg) saturate(3.2) brightness(.55)'],
   /* HIS TWO DARK-ON-LIGHT COPY BLOCKS. Section two's sits on his sand and
      section six's on his white page. Both grounds go dark, so the ink has to
      turn over with them or the words simply disappear - everything else on the
@@ -124,8 +141,10 @@ const TOKENS = [
   /* HIS SIGNS, MUTED. Not dimmed to nothing - a road sign at night is still the
      brightest thing out there - but taken off full daylight saturation, which
      is what he did in his own mock. */
-  ['--sign-lit', '0.86'],
-  ['--sign-sat', '0.80']
+  /* his banner goes to a bronze - #b46824 where daylight is a bright yellow -
+     so the signs come down further than a gentle mute */
+  ['--sign-lit', '0.66'],
+  ['--sign-sat', '0.74']
 ];
 
 const vars = TOKENS.map(([k, v]) => '    ' + k + ': ' + v + ';').join('\n') + '\n' +
