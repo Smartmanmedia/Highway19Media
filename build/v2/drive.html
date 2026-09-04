@@ -35,12 +35,30 @@ html,body{margin:0;background:#0a1020;color:#fff;
   background:
     radial-gradient(760px 620px at 11% -4%, rgba(255,255,255,.98), rgba(255,255,255,0) 60%),
     linear-gradient(112deg,#fff 0%,#d4e7ff 15%,#a3ccff 36%,#7cb7ff 55%,#60a8ff 73%,#4f9fff 88%,#4a9cff 100%)}
+/* HIS LIGHT, NOT FLAT PAINT. Every ground in his file is a RADIAL gradient
+   whose centre sits under the sun - top left, the same place the sky's glow
+   is - so the water, the verge and the tarmac are all brightest there and fall
+   away to the far corner. Mine were three flat vertical ramps, which is why
+   the render came back soft and cartoonish beside his: nothing in it agreed
+   about where the light was coming from. One radial each, laid over the ramp
+   that gives the near-to-far falloff, and the whole scene picks a side. */
 .sea{position:absolute;left:0;right:0;
-  background:linear-gradient(180deg,#1e5cb0 0%,#17509f 45%,#103f7d 100%)}
+  background:
+    radial-gradient(150% 260% at 6% -10%, rgba(120,205,255,.85), rgba(120,205,255,0) 62%),
+    linear-gradient(180deg,#2064bd 0%,#12488f 44%,#08305f 100%)}
 .land{position:absolute;left:0;
-  background:linear-gradient(180deg,#3f8a18 0%,#2f6b12 45%,#255a0e 100%)}
+  background:
+    radial-gradient(140% 220% at 6% -14%, rgba(190,255,120,.72), rgba(190,255,120,0) 58%),
+    linear-gradient(180deg,#37850f 0%,#256409 46%,#164a05 100%)}
+/* his sand shoulder, the band between the tarmac and the grass */
+.shoulder{position:absolute;left:0;top:0;
+  background:
+    radial-gradient(140% 230% at 6% -14%, rgba(255,255,235,.85), rgba(255,255,235,0) 58%),
+    linear-gradient(180deg,#e0c58d 0%,#cdad70 48%,#b9945a 100%)}
 .road,.edge,.dash{position:absolute;left:0;top:0;will-change:transform}
-.road{background:linear-gradient(180deg,#5a5a5a 0%,#4a4a4a 40%,#434343 100%)}
+.road{background:
+    radial-gradient(150% 240% at 6% -12%, rgba(255,255,255,.34), rgba(255,255,255,0) 60%),
+    linear-gradient(180deg,#4b4b4b 0%,#3b3b3b 42%,#2e2e2e 100%)}
 .edge,.dash{background:#fff}
 
 /* ---- what stands on it --------------------------------------------------
@@ -112,6 +130,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
     <div class="sea" id="sea"></div>
     <div id="swell"></div>
     <div class="land" id="land"></div>
+    <div class="shoulder" id="shoulder"></div>
     <div class="road" id="road"></div>
     <div class="edge" id="edgeL"></div>
     <div class="edge" id="edgeR"></div>
@@ -144,6 +163,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
   <img class="cloud-3" src="../../assets/v2/section-05/cloud-3.svg" alt="">
   <img class="cloud-4" src="../../assets/v2/section-05/cloud-4.svg" alt="">
   <img class="hero" src="../../assets/v2/section-01/hero-sign.svg" alt="">
+  <img class="sign3" src="../../assets/v2/section-05/sign-3.webp" alt="">
   <img class="trusstile" src="../../assets/v2/section-01/truss-cell.webp" alt="">
 </div>
 
@@ -160,6 +180,7 @@ const stage=document.getElementById('stage'), props=document.getElementById('pro
       swell=document.getElementById('swell'),
       marks=document.getElementById('marks'), hud=document.getElementById('hud'),
       road=document.getElementById('road'), sea=document.getElementById('sea'),
+      shoulder=document.getElementById('shoulder'),
       land=document.getElementById('land'),
       edgeL=document.getElementById('edgeL'), edgeR=document.getElementById('edgeR');
 
@@ -195,7 +216,7 @@ const stage=document.getElementById('stage'), props=document.getElementById('pro
    so from lower down its edges simply splay further across the bottom of the
    frame and the ground plane folds up towards the horizon, which is the whole
    difference between looking down at a road and looking along one. */
-const EYE=152, ROAD=557, LINE=481, GRASS=845, LANE=11, F0=0.62;
+const EYE=152, ROAD=557, LINE=481, GRASS=845, LANE=5.5, SHOULDER=625, F0=0.62;
 const VP=0.644, SEA=0.693;    /* his vanishing point, and his water line */
 const RUN=19000;
 const STOPS=[0.30,0.68], HOLD=0.06;
@@ -263,6 +284,7 @@ function measure(){
   sea.style.top=seaY+'px'; sea.style.height=(H-seaY)+'px';
   land.style.top='0'; land.style.height=H+'px'; land.style.bottom='auto';
   wedge(land,GRASS);
+  wedge(shoulder,SHOULDER);
   wedge(road,ROAD);
   /* A SHADOW CAN ONLY FALL ON GROUND. Cut to the same wedge as the verge, so
      the ones on the seaward side stop at the water instead of lying on it -
@@ -461,12 +483,17 @@ for(let i=0;i<20;i++){
    The board's bottom rides 508 above the pole's foot, and the arm runs from
    the board's right edge at 417 out to the pole. */
 const AHEAD=420;
-for(const s of STOPS){
-  const z=-(s*RUN)-AHEAD;
-  plant({cls:'sign',art:'hero',x:-21,z,h:326,lift:508,shadow:true});
+/* TWO BOARDS, NOT THE SAME ONE TWICE. Both hang 875 wide off the gantry - that
+   is the width his picture sets - so the height follows from each board's own
+   aspect rather than being chosen: his hero is 2.685 to one and his third
+   board is 3.183, which is 326 tall and 275 tall at that width. */
+const BOARD_W=875, BOARDS=[{art:'hero',ar:938.50/349.56},{art:'sign3',ar:940.5/295.5}];
+STOPS.forEach((s,si)=>{
+  const z=-(s*RUN)-AHEAD, b=BOARDS[si%BOARDS.length];
+  plant({cls:'sign',art:b.art,x:-21,z,h:Math.round(BOARD_W/b.ar),lift:508,shadow:true});
   plant({cls:'truss',x:528,z,h:96,w:230,lift:600,shadow:true});
   plant({cls:'pole',x:640,z,h:767,w:34,shadow:true});
-}
+});
 /* HIS STREET LAMPS. He drew each one eight times over, once per distance, but
    the scene only needs the shape twice - mast right with the arm reaching left
    for the seaward verge, and its mirror - because the projection does the rest.
@@ -557,12 +584,17 @@ function place(drive){
     let D=wrapD(-(wv.z+drive),WAVE_GAP*WAVES.length,near);
     const k=f/(f+D);
     if(D<-f+60||k>6){wv.el.style.opacity=0;continue}
-    const y=hor+U*(EYE*k+curve*D*D*2.2e-6*k), w=U*SEA_W*k;
+    const y=hor+U*(EYE*k+curve*D*D*2.2e-6*k);
     if(y<seaY){wv.el.style.opacity=0;continue}
+    /* THE OCEAN HAS NO EDGES. A line of swell runs to the ends of the water,
+       so it is drawn the full width of the frame at every depth - only its
+       THICKNESS is perspective, off the width the sea would have had. Scaling
+       the width as well made each line a short dash floating in the middle of
+       the sea, which is what it looked like. */
     wv.el.style.opacity=1;
-    wv.el.style.width=w+'px';
-    wv.el.style.height=Math.max(.6,w/wv.ar)+'px';
-    wv.el.style.transform='translate('+(W/2-w/2)+'px,'+y+'px)';
+    wv.el.style.width=W+'px';
+    wv.el.style.height=Math.max(.6,U*SEA_W*k/wv.ar)+'px';
+    wv.el.style.transform='translate(0px,'+y+'px)';
   }
   /* the things standing on it */
   for(const it of items){

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" width="940.5" height="295.5" viewBox="0 0 940.5 295.5">
+  <g id="Layer_1-2" data-name="Layer 1">
+    <g>
+      <g id="Hero_Sign" data-name="Hero Sign">
+        <g>
+          <rect x="1.47" y="3.47" width="938.02" height="290.66" rx="26.4" ry="26.4" stroke="#000" stroke-miterlimit="10" stroke-width="2"/>
+          <rect x="1" y="2.05" width="938.02" height="290.66" rx="26.4" ry="26.4" fill="#1c9022" stroke="#fff" stroke-miterlimit="10" stroke-width="2"/>
+          <rect x="712.06" y="1.9" width="2.33" height="289.73" transform="translate(1426.4539 293.5288) rotate(-180)" fill="#fff"/>
+        </g>
+      </g>
+      <g>
+        <g>
+          <rect x="96.28" y="278.4" width="34.66" height="10.03" rx="3" ry="3"/>
+          <rect x="106.31" y="285.8" width="15.05" height="4.36" transform="translate(401.81 174.14) rotate(90)"/>
+        </g>
+        <g>
+          <rect x="336.68" y="278.4" width="34.66" height="10.03" rx="3" ry="3"/>
+          <rect x="346.71" y="285.8" width="15.05" height="4.36" transform="translate(642.21 -66.26) rotate(90)"/>
+        </g>
+        <g>
+          <rect x="588.08" y="278.4" width="34.66" height="10.03" rx="3" ry="3"/>
+          <rect x="598.11" y="285.8" width="15.05" height="4.36" transform="translate(893.61 -317.66) rotate(90)"/>
+        </g>
+        <g>
+          <rect x="813.19" y="278.4" width="34.66" height="10.03" rx="3" ry="3"/>
+          <rect x="823.23" y="285.8" width="15.05" height="4.36" transform="translate(1118.7265 -542.7745) rotate(90)"/>
+        </g>
+        <g>
+          <rect x="813.19" y="7.07" width="34.66" height="10.03" rx="3" ry="3" transform="translate(1661.045 24.168) rotate(-180)"/>
+          <rect x="822.77" y="5.35" width="15.05" height="4.36" transform="translate(822.77 837.82) rotate(-90)"/>
+        </g>
+        <g>
+          <rect x="99.48" y="7.07" width="34.66" height="10.03" rx="3" ry="3" transform="translate(233.61 24.17) rotate(-180)"/>
+          <rect x="109.05" y="5.35" width="15.05" height="4.36" transform="translate(109.05 124.1) rotate(-90)"/>
+        </g>
+        <g>
+          <rect x="336.68" y="7.07" width="34.66" height="10.03" rx="3" ry="3" transform="translate(708.01 24.17) rotate(-180)"/>
+          <rect x="346.25" y="5.35" width="15.05" height="4.36" transform="translate(346.25 361.3) rotate(-90)"/>
+        </g>
+        <g>
+          <rect x="588.08" y="7.07" width="34.66" height="10.03" rx="3" ry="3" transform="translate(1210.8065 24.168) rotate(-180)"/>
+          <rect x="597.65" y="5.35" width="15.05" height="4.36" transform="translate(597.65 612.7) rotate(-90)"/>
+        </g>
+      </g>
+      <g>
+        <rect x="812.31" y="114.24" width="36.43" height="100.24" fill="#fff"/>
+        <path d="M829.96,66.28l-34.29,55.28h69.71l-35.42-55.28Z" fill="#fff" fill-rule="evenodd"/>
+      </g>
+    </g>
+  </g>
+</svg>
