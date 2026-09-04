@@ -81,6 +81,10 @@
      His art faces +x, so a beam points along +x in the car's own coordinates
      and the car's transform turns it through the bends for free - nothing here
      computes an angle. */
+  /* his lamps: how far apart, and how far the pool spreads - in lane widths, so
+     they scale with his road on any screen */
+  var LAMP_EVERY = 7.4, LAMP_LONG = 1.75, LAMP_WIDE = 1.25;
+
   var LAMP = {
     inset: 0.02,      /* back from the nose, so the cone leaves the bodywork */
     headSep: 0.55, tailSep: 0.60,      /* lamp separation, across the vehicle */
@@ -89,7 +93,12 @@
     tailBase: 0.09, tailTip: 0.15
   };
   function beamDefs() {
-    var d = ['<linearGradient id="h19-beam" x1="0" y1="0" x2="1" y2="0">' +
+    var d = ['<radialGradient id="h19-lamp" cx=".5" cy=".5" r=".5">' +
+             '<stop offset="0" stop-color="#ffd9a0" stop-opacity=".62"/>' +
+             '<stop offset=".38" stop-color="#ffc477" stop-opacity=".34"/>' +
+             '<stop offset=".72" stop-color="#f0a95c" stop-opacity=".10"/>' +
+             '<stop offset="1" stop-color="#e89a4a" stop-opacity="0"/></radialGradient>' +
+             '<linearGradient id="h19-beam" x1="0" y1="0" x2="1" y2="0">' +
              '<stop offset="0" stop-color="#fff6d2" stop-opacity=".95"/>' +
              '<stop offset=".42" stop-color="#ffeaa6" stop-opacity=".45"/>' +
              '<stop offset="1" stop-color="#ffe294" stop-opacity="0"/></linearGradient>' +
@@ -147,6 +156,16 @@
          first car would paint UNDER the second car's shadow the moment the two
          came close on a bend. A group for all the shadows and a group for all
          the cars settles it once. */
+      /* HIS STREET LIGHTING. In his own night painting the road is lit by lamps
+         at intervals, and that is what makes his tarmac read as a road rather
+         than a black ribbon - his lane markings can be dim because the lamps
+         are doing the work. Drawn here rather than in the art because only
+         this file knows where his road actually goes. Under everything else,
+         because it is light falling ON the tarmac. */
+      var lampG = document.createElementNS(SVGNS, 'g');
+      lampG.setAttribute('class', 'lamps');
+      lampG.style.mixBlendMode = 'screen';
+      lampG.style.isolation = 'isolate';
       var shadeG = document.createElementNS(SVGNS, 'g');
       shadeG.setAttribute('class', 'shades');
       /* THE BEAMS ARE ONE GROUP, ABOVE THE ROAD AND UNDER EVERY CAR. Under the
@@ -169,10 +188,10 @@
          group is at opacity zero and never composites. */
       var tintG = document.createElementNS(SVGNS, 'g');
       tintG.setAttribute('class', 'tints');
-      svg.appendChild(shadeG); svg.appendChild(beamG);
+      svg.appendChild(lampG); svg.appendChild(shadeG); svg.appendChild(beamG);
       svg.appendChild(carG); svg.appendChild(tintG);
-      return { n: n, el: el, svg: svg, shadeG: shadeG, beamG: beamG,
-               carG: carG, tintG: tintG, path: P[n] };
+      return { n: n, el: el, svg: svg, lampG: lampG, shadeG: shadeG,
+               beamG: beamG, carG: carG, tintG: tintG, path: P[n] };
     }).filter(Boolean);
     if (!parts.length) return null;
     return { parts: parts, thin: cfg.thin, cars: [], live: true, pts: [], len: 0, laneW: 0 };
@@ -279,6 +298,28 @@
         return spare <= 0 ? 0 : Math.sqrt(8 * road.R * spare);
       };
       road.cars.forEach(function (c) { size(road, c); });
+
+      /* ONE POOL EVERY SO MANY LANE WIDTHS, walked along his own centreline so
+         they follow every bend without a single hand-placed number. Static -
+         written once here, never touched by the frame loop. */
+      road.parts.forEach(function (part) {
+        while (part.lampG.firstChild) part.lampG.removeChild(part.lampG.firstChild);
+      });
+      var step = road.laneW * LAMP_EVERY;
+      for (var s2 = step / 2; s2 < road.len; s2 += step) {
+        var q = at(road, s2);
+        var ang = Math.atan2(q.uy, q.ux) * 180 / Math.PI;
+        road.parts.forEach(function (part) {
+          var e = document.createElementNS(SVGNS, 'ellipse');
+          e.setAttribute('rx', (road.laneW * LAMP_LONG).toFixed(1));
+          e.setAttribute('ry', (road.laneW * LAMP_WIDE).toFixed(1));
+          e.setAttribute('fill', 'url(#h19-lamp)');
+          e.setAttribute('transform',
+            'translate(' + (q.x - part.ox).toFixed(1) + ' ' +
+                           (q.y - part.oy).toFixed(1) + ') rotate(' + ang.toFixed(1) + ')');
+          part.lampG.appendChild(e);
+        });
+      }
     });
   }
 

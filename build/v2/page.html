@@ -59,6 +59,19 @@ section + section{ margin-top:-1px }</style>
   <!-- road tile, inline so its two fills can be variables. Source: assets/v2/section-01/stright.svg -->
   <svg class="z-road" data-at aria-hidden="true" style="left:15.25%;top:87.11%;width:4.95%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="1326.29 1.04 95.06 324.70"><g><rect x="1326.29" y="1.04" width="95.06" height="324.7" fill="var(--tarmac)"></rect><rect x="1412.19" y="1.04" width="3.29" height="324.7" fill="var(--marking)"></rect><rect x="1331.94" y="1.04" width="3.3" height="324.7" fill="var(--marking)"></rect><g><rect x="1372.6" y="284.89" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="1372.6" y="237.58" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="1372.6" y="190.27" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="1372.6" y="142.96" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="1372.6" y="95.66" width="3.53" height="28.27" fill="var(--marking)"></rect><rect x="1372.6" y="48.35" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="1372.6" y="1.04" width="3.53" height="28.26" fill="var(--marking)"></rect></g></g></svg>
 
+  <!-- the lamps that light the gantry sign, night only. Same box as the sign
+       itself so they move with it; see .signlamps in night.css. -->
+  <span class="signlamps" data-at aria-hidden="true"
+        style="left:25.80%;top:9.33%;width:48.77%"></span>
+
+  <!-- HIS MOON, and the light it puts on the water. Both are night only -
+       night.css fades them in with everything else - and both are his own
+       moon file, the second one stretched into the shimmer of a reflection
+       rather than a second drawing. -->
+  <span class="moonpath" aria-hidden="true"></span>
+  <img class="moon" data-at src="../../assets/v2/ui-moon.svg" alt="" aria-hidden="true"
+       style="left:83.5%;top:2.6%;width:5.4%">
+
   <!-- BOAT -->
   <!-- HIS BOAT AND ITS SHADOW. The two exports were cropped to their own
        content - 71.11 x 155.14 against 66.53 x 158.25 - so there is no offset
@@ -3227,6 +3240,9 @@ section + section{ margin-top:-1px }</style>
   <span class="truss par par-sign" aria-hidden="true"></span>
 
   <!-- HIS SIGN, and the copy that sits on it -->
+  <!-- and the same for his second sign -->
+  <span class="signlamps par par-sign" data-at aria-hidden="true" style="left:41.70%;top:24.45%;width:44.27%"></span>
+
   <img class="z-copy par par-sign" data-at src="../../assets/v2/section-04/our-sign.svg" alt=""
        style="left:41.70%;top:24.45%;width:44.27%">
 

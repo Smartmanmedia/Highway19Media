@@ -202,3 +202,57 @@ section img.z-copy{
 :root[data-mode="night"] .mode-switch .to-night{ display:none }
 :root[data-theme="dark"]:not([data-mode="day"]) .mode-switch .to-day,
 :root[data-mode="night"] .mode-switch .to-day{ display:block }
+
+
+/* HIS CARDS TAKE THEIR OWN COLOUR AT NIGHT. In daylight the outline is his
+   near-black; against a black card that outline is invisible, so the lane's
+   own colour draws it instead - the same colour as its pill and its button,
+   which is what makes the four read as four lanes rather than four boxes. */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]):not([data-mode="day"]) .sec6 .card{
+    border-color:var(--c);
+  }
+}
+:root[data-theme="dark"]:not([data-mode="day"]) .sec6 .card,
+:root[data-mode="night"] .sec6 .card{ border-color:var(--c) }
+
+
+/* --- THE LAMPS ON HIS SIGN GANTRIES --------------------------------------
+   In his own night the green signs are lit from fittings above and below
+   them, and that is what keeps them the brightest thing on the page while
+   everything else falls away. Four small warm sources per sign, drawn as
+   gradients on one element rather than four - a lamp is a glow, and a glow is
+   a gradient. The element takes the sign's own box, so it follows it through
+   the parallax without being told to. */
+.signlamps{
+  position:absolute; display:block; pointer-events:none; z-index:3;
+  aspect-ratio:938.5 / 349.56;
+  opacity:calc(var(--night, 0) * 0.9);
+  transition:opacity 1s linear;
+  background:
+    radial-gradient(ellipse 9% 22% at 27% 3%,  rgba(255,224,170,.85), rgba(255,205,130,.28) 45%, transparent 72%),
+    radial-gradient(ellipse 9% 22% at 73% 3%,  rgba(255,224,170,.85), rgba(255,205,130,.28) 45%, transparent 72%),
+    radial-gradient(ellipse 9% 20% at 27% 97%, rgba(255,224,170,.75), rgba(255,205,130,.24) 45%, transparent 72%),
+    radial-gradient(ellipse 9% 20% at 73% 97%, rgba(255,224,170,.75), rgba(255,205,130,.24) 45%, transparent 72%),
+    /* and the wash those four throw down the face of the board */
+    linear-gradient(180deg, rgba(255,214,150,.20) 0%, rgba(255,214,150,.04) 26%,
+                    transparent 55%, rgba(255,214,150,.05) 88%, rgba(255,214,150,.16) 100%);
+}
+@media (prefers-reduced-motion: reduce){ .signlamps{ transition:none } }
+
+
+/* THE BLENDS GO ON ONLY AT NIGHT. An element carrying mix-blend-mode changes
+   how its whole section composites even at opacity zero: text in that section
+   loses subpixel antialiasing, and the daylight page shifted by 8,000 pixels
+   of body copy for a moon nobody could see. They are switched on with the
+   night they belong to. */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]):not([data-mode="day"]) .moonpath,
+  :root:not([data-theme="light"]):not([data-mode="day"]) .signlamps{
+    mix-blend-mode:screen;
+  }
+}
+:root[data-theme="dark"]:not([data-mode="day"]) .moonpath,
+:root[data-theme="dark"]:not([data-mode="day"]) .signlamps,
+:root[data-mode="night"] .moonpath,
+:root[data-mode="night"] .signlamps{ mix-blend-mode:screen }

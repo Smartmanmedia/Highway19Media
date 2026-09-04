@@ -469,3 +469,45 @@
        100% { rotate: -374.35deg }
 }
 
+
+
+/* --- HIS MOON, AND ITS PATH ON THE WATER ---------------------------------
+   Night only, and the pair of them are what his own painting leans on: the
+   moon top right and a column of broken light straight down from it. The
+   column is a masked gradient rather than a drawing - a reflection has no
+   edges, and one drawn with edges is the thing that always looks pasted on.
+   Both sit at cloud depth so his sign and his road stay over them. */
+.sec1 .moon{
+  position:absolute; display:block; height:auto; z-index:4;
+  opacity:var(--night, 0);
+  transition:opacity 1s linear;
+  pointer-events:none;
+}
+.sec1 .moonpath{
+  position:absolute; z-index:0; pointer-events:none;
+  left:83.2%; width:6.2%; top:7%; bottom:0;
+  opacity:calc(var(--night, 0) * 0.30);
+  transition:opacity 1s linear;
+  background:linear-gradient(180deg,
+    rgba(205,225,255,.60) 0%, rgba(175,205,250,.28) 16%,
+    rgba(155,190,245,.13) 40%, rgba(145,180,240,.05) 68%,
+    rgba(145,180,240,0) 100%);
+  /* BROKEN, NOT STRIPED. Hard-edged bands read as a barcode laid on the water;
+     the stops are feathered and the two periods are different and coprime, so
+     they drift in and out of step down the column instead of repeating. */
+  -webkit-mask-image:
+    repeating-linear-gradient(180deg, #000 0 2px, transparent 5px 9px),
+    repeating-linear-gradient(180deg, #000 0 3px, transparent 7px 16px),
+    linear-gradient(90deg, transparent, #000 34%, #000 66%, transparent);
+          mask-image:
+    repeating-linear-gradient(180deg, #000 0 2px, transparent 5px 9px),
+    repeating-linear-gradient(180deg, #000 0 3px, transparent 7px 16px),
+    linear-gradient(90deg, transparent, #000 34%, #000 66%, transparent);
+  -webkit-mask-composite:source-in; mask-composite:intersect;
+  /* the blend is night-only, see night.css - a blend mode present by day
+     changes how the section composites and text in it loses its subpixel
+     antialiasing, which moved 8,000 pixels of his copy for nothing */
+}
+@media (prefers-reduced-motion: reduce){
+  .sec1 .moon, .sec1 .moonpath{ transition:none }
+}
