@@ -160,9 +160,19 @@
       beamG.style.mixBlendMode = 'screen';
       beamG.style.isolation = 'isolate';
       var carG = document.createElementNS(SVGNS, 'g');
-      svg.appendChild(shadeG); svg.appendChild(beamG); svg.appendChild(carG);
+      carG.setAttribute('class', 'cars');
+      /* AND ONE MORE ABOVE THEM, TO MUTE THEM AT NIGHT. His own shadow
+         silhouettes again, sitting exactly ON each car rather than offset by
+         the sun, in a night colour. That is what takes the paint down without
+         a filter - and a filter is the one thing to avoid here, because this
+         is the group that moves every single frame. Costs nothing by day: the
+         group is at opacity zero and never composites. */
+      var tintG = document.createElementNS(SVGNS, 'g');
+      tintG.setAttribute('class', 'tints');
+      svg.appendChild(shadeG); svg.appendChild(beamG);
+      svg.appendChild(carG); svg.appendChild(tintG);
       return { n: n, el: el, svg: svg, shadeG: shadeG, beamG: beamG,
-               carG: carG, path: P[n] };
+               carG: carG, tintG: tintG, path: P[n] };
     }).filter(Boolean);
     if (!parts.length) return null;
     return { parts: parts, thin: cfg.thin, cars: [], live: true, pts: [], len: 0, laneW: 0 };
@@ -350,7 +360,9 @@
             sh = use(id + '_shade'); part.shadeG.appendChild(sh);
           }
           var bm = use(id + '_beams'); part.beamG.appendChild(bm);
-          c.nodes.push({ u: u, sh: sh, bm: bm, part: part });
+          var tn = sh ? use(id + '_shade') : null;
+          if (tn) part.tintG.appendChild(tn);
+          c.nodes.push({ u: u, sh: sh, bm: bm, tn: tn, part: part });
         });
         road.cars.push(c);
       }
@@ -460,6 +472,10 @@
           /* the same transform, so the beams turn with the car through every
              bend without a line of code working out which way it is facing */
           if (n.bm) n.bm.setAttribute('transform',
+            'translate(' + (x - n.part.ox).toFixed(1) + ' ' +
+                           (y - n.part.oy).toFixed(1) + ') ' + t);
+          /* the mute sits exactly on the car - the car's own transform, no sun */
+          if (n.tn) n.tn.setAttribute('transform',
             'translate(' + (x - n.part.ox).toFixed(1) + ' ' +
                            (y - n.part.oy).toFixed(1) + ') ' + t);
           if (n.sh) n.sh.setAttribute('transform',

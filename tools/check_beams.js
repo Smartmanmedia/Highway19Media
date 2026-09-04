@@ -49,7 +49,9 @@ const path = require('path');
   const p = await br.newPage({ viewport: { width: 1400, height: 900 } });
   await p.goto(file); await p.waitForTimeout(1800);
   await p.evaluate(() => document.documentElement.style.setProperty('--night', '1'));
-  await p.waitForTimeout(1200);
+  /* the fade is a second long by design, so wait past it - reading at 1200ms
+     caught it at 0.88 and reported the beams unlit */
+  await p.waitForTimeout(2000);
   /* THE NIGHT PAGE IS NOT FROZEN. Blanking requestAnimationFrame ends the
      traffic loop for good - putting the function back does not restart it,
      because nothing is left to call it - and the check that reads which way
@@ -74,7 +76,7 @@ const path = require('path');
     const worst = { d: 0 }, seen = [];
     document.querySelectorAll('section').forEach(sec => {
       const beams = [...sec.querySelectorAll('.traffic .beams > use')];
-      const cars  = [...sec.querySelectorAll('.traffic g:not(.shades):not(.beams) > use')];
+      const cars  = [...sec.querySelectorAll('.traffic .cars > use')];
       if (beams.length !== cars.length) { worst.count = true; return }
       const rot = t => { const m = /rotate\(([-\d.]+)\)/.exec(t || ''); return m ? +m[1] : null };
       const pos = t => { const m = /translate\(([-\d.]+) ([-\d.]+)\)/.exec(t || '');
@@ -103,7 +105,7 @@ const path = require('path');
   const travel = await p.evaluate(() => new Promise(res => {
     const rd = window.H19_TRAFFIC[0];
     const a = rd.cars.map(c => c.u);
-    const g = [...document.querySelectorAll('.sec1 .traffic g:not(.shades):not(.beams) > use')];
+    const g = [...document.querySelectorAll('.sec1 .traffic .cars > use')];
     const p0 = g.map(u => /translate\(([-\d.]+) ([-\d.]+)\)/.exec(u.getAttribute('transform')));
     setTimeout(() => {
       const p1 = g.map(u => /translate\(([-\d.]+) ([-\d.]+)\)/.exec(u.getAttribute('transform')));
@@ -143,8 +145,7 @@ const path = require('path');
     document.querySelectorAll('.traffic').forEach(svg => {
       const kids = [...svg.children];
       const b = kids.findIndex(e => e.classList.contains('beams'));
-      const c = kids.findIndex(e => !e.classList.contains('beams') &&
-                                    !e.classList.contains('shades'));
+      const c = kids.findIndex(e => e.classList.contains('cars'));
       if (b < 0 || c < 0) return;
       checked++;
       if (b > c) ok = false;

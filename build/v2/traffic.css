@@ -29,3 +29,17 @@ section .traffic .beams{
   transition:opacity 1s linear;
 }
 @media (prefers-reduced-motion: reduce){ section .traffic .beams{ transition:none } }
+
+/* HIS CARS, MUTED AT NIGHT. Not a filter: this is the layer that moves every
+   frame, and a filter over it would be re-rendered on all 100-odd vehicles
+   sixty times a second. It is his own silhouettes laid exactly over the cars
+   in a night colour, which takes the paint down and pulls every hue toward the
+   same blue - which is what colour does at night. Zero by day, so it never
+   composites at all. */
+section .traffic .shades{ fill:#000 }
+section .traffic .tints{
+  fill:#0c1727;
+  opacity:calc(var(--night, 0) * 0.55);
+  transition:opacity 1s linear;
+}
+@media (prefers-reduced-motion: reduce){ section .traffic .tints{ transition:none } }

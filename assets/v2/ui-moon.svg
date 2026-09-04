@@ -56,7 +56,12 @@
             <path d="M19.85,36.06c-1.28,2.1,5.81,1.79,5.21-.51,1.85.34.45,3.97-1.52,2.65-1.56-.61-6.53.83-3.69-2.14Z" fill="#e6e4e5" mix-blend-mode="multiply" opacity=".3"/>
             <path d="M22.45,37.54c1.27.49,3.35.53,3.23-1.38.54,2.89-2.08,2-3.8,1.59-1.26.36-3.64.83-2.52-1.33-.19,2.06,2.29.52,3.08,1.11Z" fill="#e6e4e5" mix-blend-mode="multiply" opacity=".3"/>
             <path d="M6.53,27.89c-.17,2.02,1.31,3.21,2.84,3.99-1.99,1.52-4.52-3.37-2.84-3.99Z" fill="#e6e4e5" mix-blend-mode="multiply" opacity=".3"/>
-            <path d="M44.62,24.09c.39,26.78-41.39,26.78-40.99,0-.39-26.78,41.39-26.78,40.99,0Z" fill="#131313" mix-blend-mode="overlay"/>
+            <!-- HIS FINAL OVERLAY DISC IS REMOVED HERE, and only here - the file he
+                 sent is untouched. It is a full-disc #131313 set to mix-blend-mode
+                 overlay. In Illustrator that blends against the artboard; in a
+                 browser the group isolates itself, so it blended against nothing
+                 and painted the whole moon a flat dark disc - every crater he drew
+                 underneath it lost. Without it his moon renders exactly as drawn. -->
           </g>
         </g>
       </g>

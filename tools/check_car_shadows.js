@@ -48,7 +48,7 @@ const W = 1500, H = 1000;
       const sw = sec.getBoundingClientRect().width;
       const sun = { x: -0.35 * 1.2 / 100 * sw, y: 0.30 * 1.2 / 100 * sw };
       const out = [];
-      for (const u of sec.querySelectorAll('.traffic g:not(.shades) > use')) {
+      for (const u of sec.querySelectorAll('.traffic .cars > use')) {
         /* translate(a b) rotate(ang) scale(k) translate(-cx -cy) - written by
            traffic.js, so it is read back rather than guessed at */
         const t = /translate\(([-\d.]+) ([-\d.]+)\) rotate\(([-\d.]+)\) scale\(([\d.]+)\)/
