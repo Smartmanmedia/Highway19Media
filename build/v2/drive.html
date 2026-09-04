@@ -235,7 +235,7 @@ const stage=document.getElementById('stage'), props=document.getElementById('pro
 const EYE=152, ROAD=360, LINE=311, GOLD=325, GRASS=546, LANE=3.6, F0=0.62;
 const VP=0.644, SEA=0.693;    /* his vanishing point, and his water line */
 const RUN=19000;
-const STOPS=[0.30,0.68], HOLD=0.06;
+const STOPS=[0.20,0.56], HOLD=0.06;   /* the boards come sooner in the trip */
 const DASH_LEN=61, DASH_GAP=97, DASH_W=19;
 /* HOW FAR OUT A THING FADES UP. The water line is a hard clip - past it a
    thing would stand on the sea - so everything used to switch on at full
@@ -460,6 +460,11 @@ function plant(o){
    bare. Closing the trees to 820 puts the same number back in frame; they
    still pass at the speed the road sets, since that is depth, not spacing. */
 const PALM_GAP=820, LOOP=PALM_GAP*10;   /* ten trees a side, so ten gaps */
+/* HOW TALL EVERYTHING ROOTED IN THE GROUND STANDS. One number, because the
+   trees and the lamps have to come down together or the avenue stops agreeing
+   with itself. Only heights: nothing lateral moves, so every trunk and mast is
+   still on the same patch of verge it was. */
+const STANDING=0.75;
 const PALMS=['palm-a','palm-b','palm-c','palm-d'];
 for(let i=0;i<20;i++){
   const side=i%2?1:-1, n=Math.floor(i/2);
@@ -481,7 +486,7 @@ for(let i=0;i<20;i++){
   plant({cls:'palm',art:PALMS[a],shadow:true,
     x:side*(444+(i%2)*25),
     z:-420-n*PALM_GAP-(side>0?PALM_GAP/2:0),
-    h:590+a*70, loop:true});
+    h:Math.round((590+a*70)*STANDING), loop:true});
 }
 /* HIS TWO GANTRIES, AND WHERE THE ROAD STOPS FOR THEM. The slow-down is
    centred on the sign's own place in the trip, so a sign standing exactly
@@ -507,12 +512,13 @@ const AHEAD=420;
 const BOARD_W=566, BOARDS=[{art:'hero',ar:938.50/349.56},{art:'sign3',ar:940.5/295.5}];
 STOPS.forEach((s,si)=>{
   const z=-(s*RUN)-AHEAD, b=BOARDS[si%BOARDS.length];
-  /* the board hangs higher than his old file put it, because in his new views
-     it clears the palms instead of sitting among them - width is his, height
-     off the ground is his picture's */
-  plant({cls:'sign',art:b.art,x:-14,z,h:Math.round(BOARD_W/b.ar),lift:436,shadow:true});
-  plant({cls:'truss',x:342,z,h:62,w:149,lift:496,shadow:true});
-  plant({cls:'pole',x:414,z,h:606,w:22,shadow:true});
+  /* THE BOARD TOWERS OVER EVERYTHING ROOTED IN THE GROUND. Its underside is
+     hung clear of the tallest palm - 800*STANDING - so no crown ever crosses
+     it, and the pole runs past the arm rather than stopping at it. Width is
+     still his; only the height off the ground is chosen. */
+  plant({cls:'sign',art:b.art,x:-14,z,h:Math.round(BOARD_W/b.ar),lift:620,shadow:true});
+  plant({cls:'truss',x:342,z,h:62,w:149,lift:690,shadow:true});
+  plant({cls:'pole',x:414,z,h:780,w:22,shadow:true});
 });
 /* HIS STREET LAMPS. He drew each one eight times over, once per distance, but
    the scene only needs the shape twice - mast right with the arm reaching left
@@ -522,7 +528,7 @@ STOPS.forEach((s,si)=>{
    0.94 of the lamp's own width inward, so at this height its tip lands just
    over his edge line. They are on the same wrap as the trees, at twice the
    spacing and offset half a gap, so a lamp falls between two palms. */
-const LAMP_H=620;
+const LAMP_H=Math.round(620*STANDING);
 for(let i=0;i<20;i++){
   const side=i%2?1:-1, n=Math.floor(i/2);
   plant({cls:'lamp',art:side>0?'lamp-r':'lamp-l',shadow:true,
