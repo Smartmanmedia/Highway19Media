@@ -31,58 +31,23 @@
   <!-- road tile, inline so its two fills can be variables. Source: assets/v2/section-04/stright-2.svg -->
   <svg class="z-road" data-at aria-hidden="true" style="left:36.04%;top:83.10%;width:5.21%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="697.18 1364.60 100.52 343.37"><g data-name="Stright"><rect x="697.18" y="1364.61" width="100.52" height="343.37" fill="var(--tarmac)"></rect><rect x="703.38" y="1364.61" width="3.48" height="343.37" fill="var(--marking)"></rect><rect x="788.24" y="1364.61" width="3.48" height="343.37" fill="var(--marking)"></rect><g><rect x="744.99" y="1377.92" width="3.74" height="29.89" fill="var(--marking)"></rect><rect x="744.99" y="1427.95" width="3.74" height="29.89" fill="var(--marking)"></rect><rect x="744.99" y="1477.98" width="3.74" height="29.89" fill="var(--marking)"></rect><rect x="744.99" y="1528.01" width="3.74" height="29.88" fill="var(--marking)"></rect><rect x="744.99" y="1578.03" width="3.74" height="29.89" fill="var(--marking)"></rect></g></g></svg>
 
-  <!-- HIS ROCK BAND, REDRAWN AND SPLIT. The shadow is its own layer and falls
-       on the grass (he drew it in #002d16), so it can sit under the band and
-       over the road. Placed by correlating the new art against the band it
-       replaces - tools/align_layers.js - which is reliable here because the two
-       are redraws of the same shapes.
+  <!-- HIS ROCK BAND'S SHADOW, DRAWN FROM THE BAND ITSELF.
+       The file that used to be here - Mountains_2_shadows - is not this band's
+       shadow at all. Overlaid, the two silhouettes have nothing in common: his
+       shadow file is a smooth mountain range with tall peaks and the band is
+       chunky rock. It belongs to the art this band REPLACED, and it had been
+       sitting behind the rocks ever since looking like a second, wrong range.
 
-       IT STRADDLES THE SEAM. His band is meant to lie half on the green and
-       half on the white below, so its centre sits on section four's bottom
-       edge and this section shows the top half; section six draws the rest.
-       And it runs edge to edge, so 1918.34 of his units is 100% of the
-       section - the shadow is scaled by the same factor, or the two would
-       come apart. -->
-  <svg class="z-ground" data-at aria-hidden="true"
-       style="left:-7.864%;top:76.002%;width:117.064%;--lift:0.9;--sun-ink:1"
+       A shadow that is derived cannot come apart from what casts it, so this
+       is the band's own drawing, taken to black by a filter and laid under it
+       at the offset his sun gives everything else. It matches by construction
+       and needs no alignment, no correlation and no second file. One <use>,
+       so it costs an element rather than another copy of 1,254 shapes. -->
+  <svg class="z-ground rock-shadow" data-at aria-hidden="true"
+       style="left:0%;top:78.146%;width:100.000%;--lift:4.2;--sun-ink:.20"
        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-       viewBox="0 0 2245.68 523.69">
-  <defs>
-    <clipPath id="m2sh-clippath">
-      <polygon points="2085.74 388.64 162.54 385.04 162.54 34.64 2085.74 38.24 2085.74 388.64" fill="none"/>
-    </clipPath>
-  </defs>
-  <g id="m2sh-Layer_1-2" data-name="Layer 1">
-    <g id="m2sh-Mountains_2_shadows" data-name="Mountains 2 shadows">
-      <g clip-path="url(#m2sh-clippath)">
-        <g opacity=".4">
-          <path d="M1668.24,205.26l-113.77-94.98-28.9-6.66-44.96,9.1-16.84,25.95c-18.09-18.34-56.97-50.7-78.79-64.35,0,0-84.43,41.41-84.43,41.41l-74.56-48.96s-81.34,106.29-81.34,106.29c0,0-53.76,32.2-53.76,32.2-30.28,2.29-89.72-2.95-119.27-9.99,0,0-57.26,30.63-57.26,30.63-22.52,39.49-25.87,34.11-64.27,53.15-32.64,15.06-103.06,52.72-135.04,70.3-11.35,7.58-29.42,38.25-36.97,49.29,636.05,217.76,459.19,142.64,1015.98-159.15l-25.84-34.22Z" fill="#002d16" opacity=".46"/>
-          <polygon points="1777.69 232.17 1766.1 217.27 1768.96 204.24 1794.58 192.84 1816.56 189.33 1830.7 192.84 1834.26 217.27 1777.69 232.17" fill="#002d16" opacity=".46"/>
-          <path d="M1677.72,123l-14.59-18.55c4.99-16.35-1.58-16.7,14.59-16.12,24.38,12.61,12.2,12.13,0,34.67Z" fill="#002d16" opacity=".46"/>
-          <path d="M1715.93,137.81c-4.36-12.91-8.53-10.04,3.01-19.95,3.27,1.98,11.99,7.15,15.65,8l-18.66,11.95Z" fill="#002d16" opacity=".46"/>
-          <path d="M1773.95,190.67c-3.47-7.44-11.72-19.06-9.76-28.06,6.1-6.38,10.19-3.26,17.72-3.32,2.79,3.88,10.06,14.86,15.03,16.18l-22.99,15.2Z" fill="#002d16" opacity=".46"/>
-          <path d="M1642.81,213.4c-17.91-37.52-22.11-28.75-14.58-71.85,0,0,52.33-8.11,52.33-8.11l39.52,19.04,8.66,14.09-85.93,46.82Z" fill="#002d16" opacity=".46"/>
-          <path d="M2229.16,262.11l-72.73-60.72-18.47-4.26-28.74,5.82-10.77,16.59c-11.56-11.72-36.42-32.41-50.37-41.13,0,0-53.97,26.47-53.97,26.47,0,0-47.66-31.3-47.66-31.3l-52,67.95s-34.37,20.59-34.37,20.59c-19.36,1.47-57.36-1.89-76.24-6.39,0,0-36.61,19.58-36.61,19.58l-13.29,20.51c-33.37,15.64-81.71,40.33-114.13,58.4-7.25,4.85-18.8,24.45-23.63,31.51,406.6,139.2,293.54,91.18,649.48-101.74l-16.52-21.88Z" fill="#002d16" opacity=".46"/>
-          <polygon points="181.49 232.17 169.9 217.27 172.75 204.24 198.37 192.84 220.36 189.33 234.49 192.84 238.06 217.27 181.49 232.17" fill="#002d16" opacity=".46"/>
-          <path d="M81.51,123l-14.59-18.55c4.99-16.35-1.58-16.7,14.59-16.12,24.38,12.61,12.2,12.13,0,34.67Z" fill="#002d16" opacity=".46"/>
-          <path d="M119.72,137.81c-4.36-12.91-8.53-10.04,3.01-19.95,3.27,1.98,11.99,7.15,15.65,8l-18.66,11.95Z" fill="#002d16" opacity=".46"/>
-          <path d="M177.75,190.67c-3.47-7.44-11.72-19.06-9.76-28.06,6.1-6.38,10.19-3.26,17.72-3.32,2.79,3.88,10.06,14.86,15.03,16.18l-22.99,15.2Z" fill="#002d16" opacity=".46"/>
-          <path d="M46.61,213.4c-17.91-37.52-22.11-28.75-14.58-71.85,0,0,52.33-8.11,52.33-8.11l39.52,19.04s8.66,14.09,8.66,14.09l-85.93,46.82Z" fill="#002d16" opacity=".46"/>
-          <path d="M632.96,262.11l-72.73-60.72-18.47-4.26-28.74,5.82-10.77,16.59c-11.56-11.72-36.42-32.41-50.37-41.13,0,0-53.97,26.47-53.97,26.47,0,0-47.66-31.3-47.66-31.3l-52,67.95s-34.37,20.59-34.37,20.59c-19.36,1.47-57.36-1.89-76.24-6.39,0,0-36.61,19.58-36.61,19.58,0,0-13.29,20.51-13.29,20.51-33.37,15.64-81.71,40.33-114.13,58.4-7.25,4.85-18.8,24.45-23.63,31.51,406.6,139.2,293.54,91.18,649.48-101.74l-16.52-21.88Z" fill="#002d16" opacity=".46"/>
-          <polygon points="693.8 262.37 682.22 247.47 685.07 234.43 710.69 223.03 732.68 219.53 746.81 223.03 750.37 247.47 693.8 262.37" fill="#002d16" opacity=".46"/>
-          <path d="M593.83,153.2l-14.59-18.55c4.99-16.35-1.58-16.7,14.59-16.12,24.38,12.61,12.2,12.13,0,34.67Z" fill="#002d16" opacity=".46"/>
-          <path d="M632.04,168.01c-4.36-12.91-8.53-10.04,3.01-19.95,3.27,1.98,11.99,7.15,15.65,8l-18.66,11.95Z" fill="#002d16" opacity=".46"/>
-          <path d="M690.07,220.87c-3.47-7.44-11.72-19.06-9.76-28.06,6.1-6.38,10.19-3.26,17.72-3.32,2.79,3.88,10.06,14.86,15.03,16.18l-22.99,15.2Z" fill="#002d16" opacity=".46"/>
-          <path d="M558.92,243.6c-17.91-37.52-22.11-28.75-14.58-71.85,0,0,52.33-8.11,52.33-8.11l39.52,19.04s8.66,14.09,8.66,14.09l-85.93,46.82Z" fill="#002d16" opacity=".46"/>
-          <path d="M1192.08,232.31l-72.73-60.72-18.47-4.26-28.74,5.82-10.77,16.59c-11.56-11.72-36.42-32.41-50.37-41.13,0,0-53.97,26.47-53.97,26.47,0,0-47.66-31.3-47.66-31.3,0,0-52,67.95-52,67.95,0,0-34.37,20.59-34.37,20.59-19.36,1.47-57.36-1.89-76.24-6.39,0,0-36.61,19.58-36.61,19.58,0,0-13.29,20.51-13.29,20.51-33.37,15.64-81.71,40.33-114.13,58.4-7.25,4.85-18.8,24.45-23.63,31.51,406.6,139.2,293.54,91.18,649.48-101.74l-16.52-21.88Z" fill="#002d16" opacity=".46"/>
-          <polygon points="964.14 159.65 946.02 136.34 950.48 115.94 990.56 98.11 1024.95 92.62 1047.06 98.11 1052.63 136.34 964.14 159.65" fill="#002d16" opacity=".46"/>
-          <path d="M1045.24,54.42l-22.82-29.02c8.04-27.27-2.18-25.67,22.82-25.21,6.62,4.3,20.36,9.73,23.21,18.24,0,0-23.2,35.99-23.2,35.99Z" fill="#002d16" opacity=".46"/>
-          <path d="M1105.02,77.58c-7.27-21.96-13.47-14.8,4.71-31.2,5.12,3.1,18.75,11.18,24.49,12.51l-29.19,18.69Z" fill="#002d16" opacity=".46"/>
-        </g>
-      </g>
-    </g>
-  </g>
-</svg>
+       viewBox="0 0 1918.34 497.43"><use href="#m2-Mountains_2" xlink:href="#m2-Mountains_2"/></svg>
+
   <svg class="z-ground" data-at aria-hidden="true"
        style="left:0%;top:78.146%;width:100.000%"
        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"

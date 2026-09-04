@@ -63,6 +63,7 @@
     --scene-sat: 0.95;
     --cloud-filter: brightness(.88) saturate(.45);
     --scene-sand: brightness(.40) sepia(1) hue-rotate(198deg) saturate(3.2) brightness(.55);
+    --scene-tree: brightness(.30) saturate(.95) hue-rotate(70deg);
     --sec2-ink: #dfe7f2;
     --sec6-ink: #eef2f7;
     --card-bg: #0c1018;
@@ -95,6 +96,7 @@
     --scene-sat: 0.95;
     --cloud-filter: brightness(.88) saturate(.45);
     --scene-sand: brightness(.40) sepia(1) hue-rotate(198deg) saturate(3.2) brightness(.55);
+    --scene-tree: brightness(.30) saturate(.95) hue-rotate(70deg);
     --sec2-ink: #dfe7f2;
     --sec6-ink: #eef2f7;
     --card-bg: #0c1018;
@@ -159,6 +161,17 @@ section .rock-cross{
    filter, so daylight is untouched. */
 .sec3 .z-ground{
   filter: var(--scene-sand, brightness(var(--scene)) saturate(var(--scene-sat)));
+}
+
+/* HIS FOREST CANOPY, AND WHY IT NEEDED NO FILE. It is the one raster on the
+   page, so there is no fill to recolour - but his night canopy is already in
+   his artboard four, and reading it there gives the target directly: his night
+   trees are #042422, a dark TEAL, where mine were #1f3811, a green with no
+   blue in it at all. Sweeping the hue against his own number found 70 degrees,
+   which lands 8 of 441 away. Rotating the other way - which is what I tried
+   first - takes green toward yellow and made it worse. */
+.sec4 .z-back{
+  filter: var(--scene-tree, brightness(var(--scene)) saturate(var(--scene-sat)));
 }
 
 /* HIS CLOUDS GO DEEP BLUE, not grey. Sampled off his painting they are

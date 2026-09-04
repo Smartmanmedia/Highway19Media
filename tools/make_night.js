@@ -126,6 +126,8 @@ const TOKENS = [
      needed. Measured against his artboard it takes that section from 70 of 441
      away to 22. */
   ['--scene-sand', 'brightness(.40) sepia(1) hue-rotate(198deg) saturate(3.2) brightness(.55)'],
+  /* and his canopy, matched to the trees inside his own artboard four */
+  ['--scene-tree', 'brightness(.30) saturate(.95) hue-rotate(70deg)'],
   /* HIS TWO DARK-ON-LIGHT COPY BLOCKS. Section two's sits on his sand and
      section six's on his white page. Both grounds go dark, so the ink has to
      turn over with them or the words simply disappear - everything else on the

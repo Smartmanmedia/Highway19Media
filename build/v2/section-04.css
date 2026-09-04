@@ -100,3 +100,8 @@
   position:absolute; z-index:2; background:#000; border-radius:1.368cqw;
   pointer-events:none;
 }
+
+/* the rock band's shadow is the band's own drawing taken to black - see the
+   markup for why it is derived rather than a file of its own. A static layer,
+   so the filter is computed once. */
+.sec4 .rock-shadow{ filter:brightness(0) }
