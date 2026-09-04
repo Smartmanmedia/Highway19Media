@@ -259,6 +259,22 @@ const SH={
     "dy": -0.0529
   }
 };
+/* HIS SUN, read off his own drawing rather than chosen. Every one of his four
+   shadows leaves the tree's foot heading down and to the RIGHT, so the light
+   is at the top LEFT. Take the far corner of each shadow box as the shadow of
+   the crown and average: the tip lands SUN_X of the tree's height across and
+   SUN_Y of it down. Everything the scene has to invent a shadow for - the
+   sign, the truss, the pole - is laid down that same ray. */
+const SUN=(function(){
+  let sx=0,sy=0,n=0;
+  for(const k in SH){ const g=SH[k]; sx+=g.dx+g.w; sy+=g.dy+g.h; n++; }
+  return {x:sx/n, y:sy/n};
+})();
+const SUN_X=+SUN.x.toFixed(3), SUN_Y=+SUN.y.toFixed(3);
+/* The skew that lays a flipped upright onto that ray. The skew shifts x by
+   the point's height BEFORE the squash, so its tangent is SUN_X on its own -
+   the squash to SUN_Y comes after and must not be counted twice. */
+const SUN_A=+(Math.atan(SUN_X)*180/Math.PI).toFixed(1);
 const items=[];
 function plant(o){
   const el=document.createElement('div');
@@ -400,16 +416,21 @@ function place(drive){
         it.sh.style.height=(h*g.h)+'px';
         it.sh.style.transform='translate('+(x+h*g.dx)+'px,'+(baseY+h*g.dy)+'px)';
       } else {
-        /* the gantry, which he drew no shadow for: flipped onto the road and
-           leaned away from his sun. Anything hanging in the air has its
-           shadow carried further out by its own height, which is the one
-           number that separates a sign from a tree. */
-        const lean=(it.lift||0)*0.55*k;
+        /* the gantry, which he drew no shadow for. His sun is at the top
+           LEFT: measure his own four shadows and every one of them runs
+           down and to the RIGHT, the tip landing SUN_X of the tree's height
+           across and SUN_Y of it down. So the derived shadow uses his
+           numbers, not a guess - flip it about its own foot (scaleY -SUN_Y),
+           lay it over with a skew whose tangent is SUN_X/SUN_Y, and the top
+           of the object lands exactly where his palms put theirs.
+           Anything hanging in the air rides the same ray: its shadow is
+           carried out by its lift, across AND down. */
+        const lx=(it.lift||0)*SUN_X*k, ly=(it.lift||0)*SUN_Y*k;
         it.sh.style.opacity=it.lift?.18:.26;
         it.sh.style.height=h+'px';
         if(it.w) it.sh.style.width=(it.w*k)+'px';
-        it.sh.style.transform='translate('+(x+lean)+'px,'+baseY+'px) translateX(-50%)'+
-          ' scaleY(-0.34) skewX(52deg)';
+        it.sh.style.transform='translate('+(x+lx)+'px,'+(baseY+ly)+'px)'+
+          ' translate(-50%,-100%) scaleY(-'+SUN_Y+') skewX('+(-SUN_A)+'deg)';
       }
     }
   }

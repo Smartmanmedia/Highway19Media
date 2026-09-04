@@ -64,9 +64,16 @@ const SHADOWS = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
   }, { TREES, SHADOWS });
   await page.close();
 
-  const shot = async (index, file, vb) => {
+  /* A tree is drawn up to ~930 px tall on a 4K screen, so it is rasterised at
+   * H. Its shadow is never drawn taller than a quarter of that - his own
+   * numbers put it at 0.25 of the tree's height - so rasterising it at the
+   * same H is paying for pixels nobody ever sees. WebP keeps alpha lossless,
+   * which is where a cut-out's weight actually lives, so resolution is the
+   * only lever that moves it: half-size shadows cost half the section. */
+  const shot = async (index, file, vb, scale) => {
     const [, , w, h] = vb;
-    const W = Math.max(2, Math.round(H * w / h)), Hh = H;
+    const Hh = Math.round(H * (scale || 1));
+    const W = Math.max(2, Math.round(Hh * w / h));
     const p = await br.newPage({ viewport: { width: W, height: Hh } });
     await p.setContent('<body style="margin:0">' + src + '</body>');
     await p.evaluate(({ index, vb, W, Hh }) => {
@@ -101,7 +108,7 @@ const SHADOWS = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
   const rows = [], geo = {};
   for (const [name, p] of Object.entries(plan)) {
     const t = await shot(p.ti, 'palm-' + name + '.webp', [p.tree.x, p.tree.y, p.tree.w, p.tree.h]);
-    const s = await shot(p.si, 'palm-' + name + '-shadow.webp', [p.sh.x, p.sh.y, p.sh.w, p.sh.h]);
+    const s = await shot(p.si, 'palm-' + name + '-shadow.webp', [p.sh.x, p.sh.y, p.sh.w, p.sh.h], 0.5);
     geo[name] = { w: +p.ratio.w.toFixed(4), h: +p.ratio.h.toFixed(4),
                   dx: +p.ratio.dx.toFixed(4), dy: +p.ratio.dy.toFixed(4) };
     rows.push(name + ': tree[' + p.ti + '] ' + t + ' + shadow[' + p.si + '] ' + s +
