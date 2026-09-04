@@ -50,7 +50,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
   background:
     radial-gradient(140% 220% at 6% -14%, rgba(190,255,120,.72), rgba(190,255,120,0) 58%),
     linear-gradient(180deg,#37850f 0%,#256409 46%,#164a05 100%)}
-.road,.edge,.dash{position:absolute;left:0;top:0;will-change:transform}
+.road,.edge,.dash{position:absolute;left:0;top:0}
 .road{background:
     radial-gradient(150% 240% at 6% -12%, rgba(255,255,255,.34), rgba(255,255,255,0) 60%),
     linear-gradient(180deg,#4b4b4b 0%,#3b3b3b 42%,#2e2e2e 100%)}
@@ -75,9 +75,15 @@ html,body{margin:0;background:#0a1020;color:#fff;
    is retro-reflective and a lamp is the source, so they stay warm and they are
    the only warm things in the frame - which is what makes a night scene read
    as lit rather than as a photograph with the exposure pulled down. */
+/* These five never move and never change except when the switch is thrown, so
+   each is worth its own cached layer: will-change on a handful of STATIC
+   full-screen paints is the opposite of putting it on 144 moving sprites. The
+   starfield is six repeating radial gradients across the whole frame - painted
+   once into a layer it is free, repainted every frame it was the single
+   biggest cost in the night scene. */
 .sky::after,.sea::after,.land::after,.road::after{
   content:'';position:absolute;inset:0;opacity:0;transition:opacity 1s linear;
-  pointer-events:none}
+  pointer-events:none;will-change:opacity}
 :root[data-mode="night"] .sky::after,:root[data-mode="night"] .sea::after,
 :root[data-mode="night"] .land::after,:root[data-mode="night"] .road::after{opacity:1}
 .sky::after{background:linear-gradient(180deg,#02060f 0%,#050d1e 34%,#081833 62%,#0d2447 84%,#12305a 100%)}
@@ -96,7 +102,8 @@ html,body{margin:0;background:#0a1020;color:#fff;
 
 /* his sky at night: a moon where his sun was, and a tiled starfield. Two
    background layers of dots repeated is a whole sky for nothing. */
-.stars,.moon{position:absolute;opacity:0;transition:opacity 1.2s linear;pointer-events:none}
+.stars,.moon{position:absolute;opacity:0;transition:opacity 1.2s linear;
+  pointer-events:none;will-change:opacity}
 .stars{inset:0;background-image:
   radial-gradient(1.5px 1.5px at 18% 22%,rgba(255,255,255,.95),transparent),
   radial-gradient(1.1px 1.1px at 62% 9%,rgba(255,255,255,.75),transparent),
@@ -127,20 +134,30 @@ html,body{margin:0;background:#0a1020;color:#fff;
    way past the camera, and a gradient-filled group has to be re-rasterised at
    every new scale. Rasterised once at 1024 tall they are 1.7 to 3.4KB each and
    the compositor scales them for nothing. */
-.thing{position:absolute;left:0;top:0;will-change:transform;transform-origin:50% 100%}
+/* NO will-change ANYWHERE. It was on .thing, .cloud, .wave, .road, .edge and
+   .dash - a hint on 144 elements, which is not a hint, it is an instruction to
+   promote 144 compositor layers. Past a browser's layer budget the extra ones
+   are handed back and things start dropping in and out of the frame, which is
+   what the night scene was doing. Everything here moves by transform alone;
+   the compositor promotes what it needs on its own. */
+.thing{position:absolute;left:0;top:0;transform-origin:50% 100%}
 .thing img{display:block;height:100%;width:auto}
 /* THE SPRITES AT NIGHT. Both states are the same three functions in the same
    order, which is what lets the browser interpolate between them - a different
    list, or one function more, and the change snaps instead of fading. */
-.palm img,.lamp img,.wave img,.pole,.truss{
-  filter:brightness(1) saturate(1) hue-rotate(0deg);transition:filter 1s linear}
+/* NO IDENTITY FILTER IN DAYLIGHT. Writing brightness(1) saturate(1)
+   hue-rotate(0deg) to give night something to interpolate from costs a filter
+   pass on every sprite in every frame of the day scene, for nothing. Leaving
+   it off is free AND still fades: a filter list interpolating from none is
+   treated as the same list at its identity values, which is exactly what that
+   line was. */
+.palm img,.lamp img:not(.light),.wave img,.pole,.truss,.cloud img,.sign img{
+  transition:filter 1s linear}
 /* HIS CLOUDS ARE WHITE, AND WHITE HAS NO HUE - rotating it does nothing, which
    is why they came out as grey smudges rather than blue. sepia() gives the
    white a hue to rotate, so the four functions together are a duotone: tint,
    strengthen, turn it to the blue the rest of the scene is in, then darken.
    Day is the same four with sepia at zero, so it still interpolates. */
-.cloud img{filter:brightness(1) sepia(0) saturate(1) hue-rotate(0deg) brightness(1);
-  transition:filter 1s linear}
 :root[data-mode="night"] .cloud img{
   filter:brightness(.4) sepia(1) saturate(6) hue-rotate(200deg) brightness(.45)}
 :root[data-mode="night"] .palm img{filter:brightness(.30) saturate(.62) hue-rotate(116deg)}
@@ -150,7 +167,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
 :root[data-mode="night"] .wave img{filter:brightness(.68) saturate(.55) hue-rotate(0deg)}
 /* the lamp's own body is metal, so it goes blue with everything else - the
    warm is the light it throws, added on top, not the post */
-:root[data-mode="night"] .lamp img{filter:brightness(.34) saturate(.70) hue-rotate(184deg)}
+:root[data-mode="night"] .lamp img:not(.light){filter:brightness(.34) saturate(.70) hue-rotate(184deg)}
 :root[data-mode="night"] .pole,:root[data-mode="night"] .truss{
   filter:brightness(.40) saturate(.80) hue-rotate(184deg)}
 /* HIS BOARDS AT NIGHT: his darker green, and lit from his own fixtures.
@@ -159,7 +176,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
    a filter that darkened the green would darken the gold and the white type
    with it, which is exactly what he said not to do. */
 .sign{isolation:isolate}
-.sign img{filter:drop-shadow(0 14px 20px rgba(0,0,0,.22));transition:filter 1s linear}
+.sign img{filter:drop-shadow(0 14px 20px rgba(0,0,0,.22))}
 .sign .night-art{position:absolute;inset:0;height:100%;width:100%;
   opacity:0;transition:opacity 1s linear}
 :root[data-mode="night"] .sign .night-art{opacity:1}
@@ -186,36 +203,28 @@ html,body{margin:0;background:#0a1020;color:#fff;
 .lamp::after{width:185%;aspect-ratio:1;left:33.3%;top:4.4%;transform:translate(-50%,-50%);
   background:radial-gradient(closest-side,rgba(255,222,158,.98),
     rgba(255,182,74,.42) 30%,rgba(255,164,40,0) 70%)}
-/* THE POOL IT LANDS IN. Tight and elliptical, not a big soft wash: a lamp
-   lights the lane under it, not the sea, and the first pass had it wide enough
-   to turn the water orange. */
-.lamp::before{width:330%;height:62%;left:33.3%;bottom:0;transform:translate(-50%,30%);
-  border-radius:50%;
-  background:radial-gradient(closest-side,rgba(255,196,104,.30),
-    rgba(255,172,54,.09) 54%,rgba(255,162,38,0) 78%)}
-/* AND THE CONE BETWEEN THEM. One element per lamp, a triangle cut out of a
-   vertical gradient - narrow at the head, full width where it meets the road.
-   It is a child rather than a third pseudo-element because an element only
-   has two, and it is styled entirely in per cent of the lamp so it travels
-   and scales with it and costs nothing per frame. */
-/* A STREET LAMP AIMS ACROSS THE ROAD, not at its own foot. The cone is skewed
-   45 degrees about the HEAD, so the head stays put and the far end swings in
-   over the tarmac. Its vertical run is 95% of the lamp's height, so at 45 the
-   light lands 95% of a lamp-height inboard - which in per cent of the lamp's
-   own WIDTH is 95/19.21 = 494%, and that is where the pool has to be moved to
-   as well or the cone lands in one place and the light in another. */
-.beam{position:absolute;left:33.3%;top:5%;width:250%;height:95%;
-  transform-origin:50% 0;transform:translateX(-50%) skewX(-45deg);
-  pointer-events:none;opacity:0;transition:opacity 1.2s linear;
-  background:linear-gradient(180deg,rgba(255,208,128,.22) 0%,
-    rgba(255,188,84,.09) 48%,rgba(255,172,56,.02) 100%);
-  clip-path:polygon(43% 0,57% 0,100% 100%,0 100%)}
-.lamp::before{left:calc(33.3% - 494%)}
-.a-lamp-l::after{left:66.7%}
-.a-lamp-l .beam{left:66.7%;transform:translateX(-50%) skewX(45deg)}
-.a-lamp-l::before{left:calc(66.7% + 494%)}
-:root[data-mode="night"] .lamp::after,:root[data-mode="night"] .lamp::before,
-:root[data-mode="night"] .beam{opacity:1}
+/* THE LIGHT A STREET LAMP THROWS, as ONE BITMAP. It was three live layers - a
+   radial for the head, a clip-path triangle for the cone, a second radial for
+   the pool - and every one had to be re-rasterised at a new size on every
+   frame, because a lamp in this scene never stops growing. Measured over a
+   scripted scroll they were a third of all the long frames after dark, and the
+   whole of why the scrolling stuttered. It is the lesson his palms already
+   taught: a gradient that moves is expensive, a bitmap that moves is free.
+
+   THE CONE IS A RIGHT TRIANGLE, 0 to 45 degrees. A street lamp does not shine
+   straight down and it does not shine symmetrically either - the near edge
+   drops vertically past its own mast and the far edge rakes out at 45 across
+   the road. A symmetric cone tilted over, which is what it was, reads as a
+   spotlight on a stage.
+
+   The numbers are the sprite's own, in multiples of the LAMP'S height: 1.10 by
+   1.25 with the bulb at 0.955, 0.112 of it. In per cent of the lamp's WIDTH -
+   which is 0.1921 of its height - that is 572.6% across, and the left edge
+   sits 0.955 of that to the left of the head at 33.3%. */
+.lamp .light{position:absolute;width:572.6%;height:125%;left:-513.5%;top:-9.6%;
+  max-width:none;pointer-events:none;opacity:0;transition:opacity 1.2s linear}
+.a-lamp-l .light{left:40.9%;transform:scaleX(-1)}
+:root[data-mode="night"] .lamp .light{opacity:1}
 .pole{background:linear-gradient(90deg,#8a9199,#f4f7fa 38%,#cdd4db 66%,#7d848c);
   border-radius:99px}
 /* HIS GANTRY ARM, the same tile the page already uses over his hero sign,
@@ -248,7 +257,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
 /* HIS CLOUDS, four of his own drawings instead of the four soft blobs that
    stood in for them. They are small enough to travel as SVG and they scale
    for nothing, so they can drift at whatever size the sky wants. */
-.cloud{position:absolute;left:0;top:0;will-change:transform;
+.cloud{position:absolute;left:0;top:0;
   transition:opacity 1s linear}
 /* fewer of them after dark - five of the eight go out */
 :root[data-mode="night"] .cloud.thin{opacity:0}
@@ -257,7 +266,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
    carried past by the same projection as the road, so they open out and slow
    down as they come. width:100% because a wave is stretched to the sea's
    width, not to its own drawn length. */
-.wave{position:absolute;left:0;top:0;will-change:transform}
+.wave{position:absolute;left:0;top:0}
 .wave img{display:block;width:100%;height:100%}
 
 /* ---- read-outs ----------------------------------------------------------- */
@@ -331,6 +340,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
   <img class="cloud-4" src="../../assets/v2/section-05/cloud-4.svg" alt="">
   <img class="hero" src="../../assets/v2/section-01/hero-sign.svg" alt="">
   <img class="sign3" src="../../assets/v2/section-05/sign-3.webp" alt="">
+  <img class="lamplight" src="../../assets/v2/section-05/lamp-light.webp" alt="">
   <img class="signfix" src="../../assets/v2/section-05/sign-fixtures.svg" alt="">
   <img class="signbeam" src="../../assets/v2/section-05/sign-beams.svg" alt="">
   <img class="hero-n" src="../../assets/v2/section-05/hero-sign-night.svg" alt="">
@@ -627,7 +637,7 @@ function plant(o){
      snapping. */
   if(o.cls==='sign'){const n=copy(o.art+'-n');n.className+=' night-art';el.appendChild(n)}
   if(o.cls==='truss') el.style.backgroundImage='url("'+TRUSS_TILE+'")';
-  if(o.cls==='lamp'){const b=document.createElement('i');b.className='beam';el.appendChild(b)}
+  if(o.cls==='lamp'){const b=copy('lamplight');b.className='light';el.appendChild(b)}
   props.appendChild(el);
   /* A PALM IS PLANTED BY ITS TRUNK, not by the middle of its picture. His
      trees lean, so the box's centre sits out under the crown - as much as 15%
@@ -733,12 +743,16 @@ STOPS.forEach((s,si)=>{
    0.94 of the lamp's own width inward, so at this height its tip lands just
    over his edge line. They are on the same wrap as the trees, at twice the
    spacing and offset half a gap, so a lamp falls between two palms. */
-const LAMP_H=Math.round(620*STANDING);
-for(let i=0;i<20;i++){
+/* SEVEN A SIDE, NOT TEN. Each lamp carries a lit cone the size of itself after
+   dark, and a handful of those blending over each other is the one thing left
+   that the night scene pays for. Seven still reads as an avenue and the gap
+   divides the same loop, so the wrap stays seamless. */
+const LAMP_H=Math.round(620*STANDING), LAMP_N=7, LAMP_GAP=LOOP/LAMP_N;
+for(let i=0;i<LAMP_N*2;i++){
   const side=i%2?1:-1, n=Math.floor(i/2);
   plant({cls:'lamp',art:side>0?'lamp-r':'lamp-l',shadow:true,
     x:side*414, h:LAMP_H,
-    z:-420-n*PALM_GAP-(side>0?PALM_GAP/2:0)+PALM_GAP/2, loop:true});
+    z:-420-n*LAMP_GAP-(side>0?LAMP_GAP/2:0)+LAMP_GAP/2, loop:true});
 }
 /* HIS WAVE LINES, five of them, laid on the water and wrapped like the paint.
    The sea is the same plane as the road here, so a line at depth D lands on
