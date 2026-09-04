@@ -22,6 +22,10 @@
    lane markings and the things standing on the road are touched per frame, and
    each of those is a single transform - no reads, no measuring, no layout.
    ========================================================================= */.sec7 *{box-sizing:border-box}.sec7{height:780vh;position:relative}.sec7 .stage{position:sticky;top:0;height:100vh;overflow:hidden;isolation:isolate}
+/* THE FIREWORKS SIT IN THE SKY, BEHIND THE WORLD. One canvas, under the sea
+   and the road and above the stars, so a shell climbs out from behind the
+   horizon; and deliberately NOT in the fade group, because the whole point is
+   that it is what is left once the ground has gone. */.sec7 .fw{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 /* EVERYTHING THAT STANDS ON THE EARTH fades out together at the end of the
    road. One property on the stage, read by eight layers - no per-element
    writes, and the sky, the moon and the starfield simply do not read it. */

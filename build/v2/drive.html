@@ -29,6 +29,11 @@ html,body{margin:0;background:#0a1020;color:#fff;
   font-family:"Be Vietnam Pro",system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
 .runway{height:780vh;position:relative}
 .stage{position:sticky;top:0;height:100vh;overflow:hidden;isolation:isolate}
+/* THE FIREWORKS SIT IN THE SKY, BEHIND THE WORLD. One canvas, under the sea
+   and the road and above the stars, so a shell climbs out from behind the
+   horizon; and deliberately NOT in the fade group, because the whole point is
+   that it is what is left once the ground has gone. */
+.fw{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 /* EVERYTHING THAT STANDS ON THE EARTH fades out together at the end of the
    road. One property on the stage, read by eight layers - no per-element
    writes, and the sky, the moon and the starfield simply do not read it. */
@@ -323,6 +328,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
     <div class="sky"></div>
     <div class="stars"></div>
     <div class="moon"><img src="../../assets/v2/section-05/moon.svg" alt=""></div>
+    <canvas class="fw" id="fw"></canvas>
     <div class="sea" id="sea"></div>
     <div id="swell"></div>
     <div class="land" id="land"></div>
@@ -512,6 +518,11 @@ let W=0,H=0,U=1,f=REF*F0*2,hor=0,seaY=0,curve=0,near=-300,kSea=0,dSea=0,dFade=0,
     secTop=0,secSpan=1;
 function measure(){
   W=stage.clientWidth; H=stage.clientHeight;
+  /* the spark canvas rides the same measurement. Device ratio capped at two:
+     a 3x screen is nine times the pixels for a spark two across. */
+  FDPR=Math.min(2,devicePixelRatio||1);
+  fw.width=Math.round(W*FDPR); fw.height=Math.round(H*FDPR);
+  fctx.setTransform(FDPR,0,0,FDPR,0,0);
   secTop=runway.getBoundingClientRect().top+scrollY;
   secSpan=Math.max(1,runway.offsetHeight-H);
   U=H/REF;                /* one world unit, in this stage's pixels */
@@ -1012,6 +1023,135 @@ function place(drive){
 }
 
 /* ---- scroll --------------------------------------------------------------- */
+/* ==========================================================================
+   THE FIREWORKS, AT THE END OF THE ROAD.
+
+   CANVAS, NOT ELEMENTS, AND THAT IS THE WHOLE DECISION. Everything else here
+   is DOM: a palm is one <img> and one transform, because there are ninety of
+   them and they last the whole section. A firework is the opposite shape of
+   problem - two thousand sparks that live a second and a half and are never
+   touched again. Two thousand elements would be two thousand style
+   recalculations and the layer budget blown twice over; two thousand entries
+   in a typed array drawn to one canvas is one element on the page.
+
+   NOTHING ACCUMULATES. The usual trick is to never clear and thin what is
+   there with a translucent wipe - which looked right until the ghost of a
+   burst was still on the sky two seconds later. That is arithmetic, not
+   tuning: a wipe MULTIPLIES the alpha that is already down, and an 8-bit
+   alpha of 3 times 0.88 rounds back to 3. So the canvas is cleared every
+   frame and each spark strokes the streak it has just travelled.
+
+   AND IT ONLY EXISTS BETWEEN FADE_AT AND THE END OF THE SECTION. Before the
+   fade there is not a single instruction spent on it; the moment the scroll
+   carries past the runway the sky is wiped and the pools are emptied, so
+   scrolling on stops the show rather than leaving it burning off-screen.
+   ====================================================================== */
+const fw=document.getElementById('fw'), fctx=fw.getContext('2d');
+let FDPR=1;
+/* HIS OWN COLOURS - the four lanes off his cards, his gold and his red, so a
+   burst is the brand going off rather than a stock firework. One shell is one
+   colour: a real shell is one chemistry, and mixed sparks read as confetti. */
+const INK=[[0,146,69],[102,45,145],[237,30,121],[247,148,30],[255,218,0],[234,33,39]];
+const FMAX=2600;
+const fpx=new Float32Array(FMAX), fpy=new Float32Array(FMAX),
+      fvx=new Float32Array(FMAX), fvy=new Float32Array(FMAX),
+      flife=new Float32Array(FMAX), ffull=new Float32Array(FMAX),
+      fcr=new Uint8Array(FMAX), fcg=new Uint8Array(FMAX), fcb=new Uint8Array(FMAX),
+      fsz=new Float32Array(FMAX);
+let flive=0;
+/* THE TWO NUMBERS THAT DECIDE FIREWORK OR WEEPING WILLOW. A burst is a fast
+   expansion and then a slow fall; get the ratio wrong and the sparks spend
+   their whole life falling. Air is what stops a star, not gravity - so the
+   drag is heavy and the gravity is light. */
+const TRAIL=0.055, GRAV=240, DRAG=0.25;
+function fspark(x,y,dx,dy,rgb,ttl,r){
+  if(flive>=FMAX) return;
+  const i=flive++;
+  fpx[i]=x; fpy[i]=y; fvx[i]=dx; fvy[i]=dy;
+  flife[i]=ffull[i]=ttl; fsz[i]=r;
+  fcr[i]=rgb[0]; fcg[i]=rgb[1]; fcb[i]=rgb[2];
+}
+const shells=[];
+function launch(){
+  const rgb=INK[(Math.random()*INK.length)|0];
+  const top=H*(0.10+Math.random()*0.24);
+  /* SOLVED, NOT GUESSED. The shell has to arrive where it is aimed with
+     nothing left in it, so the launch speed comes out of the drop:
+     v = sqrt(2*g*rise), and the fuse is how long that takes. */
+  const rise=H-top, up=Math.sqrt(2*GRAV*rise*(H/900));
+  shells.push({x:W*(0.12+Math.random()*0.76), y:H+8,
+               vx:(Math.random()-.5)*40, vy:-up,
+               fuse:up/(GRAV*(H/900)), rgb:rgb});
+}
+function fburst(s){
+  const n=190+((Math.random()*90)|0), rgb=s.rgb;
+  const power=(430+Math.random()*190)*(H/900);
+  /* A RING PLUS A FILL. All at one speed is a hoop, all at random speeds is a
+     fuzzy ball; this wants the sharp edge AND the glow inside it. */
+  for(let i=0;i<n;i++){
+    const a=Math.random()*Math.PI*2, edge=i%2!==0;
+    const sp=power*(edge?0.80+Math.random()*0.20:0.15+Math.random()*0.70);
+    fspark(s.x,s.y,Math.cos(a)*sp,Math.sin(a)*sp,rgb,1.3+Math.random()*0.9,edge?1.7:1.2);
+  }
+  /* and the white heart, which is what the flash of the burst actually is */
+  for(let i=0;i<26;i++){
+    const a=Math.random()*Math.PI*2, sp=power*0.35*Math.random();
+    fspark(s.x,s.y,Math.cos(a)*sp,Math.sin(a)*sp,[255,246,214],0.30,2.4);
+  }
+}
+let fwOn=false, fnext=0;
+function fstop(){
+  fwOn=false; flive=0; shells.length=0; fnext=0;
+  fctx.clearRect(0,0,W,H);
+}
+function fframe(dt){
+  fctx.clearRect(0,0,W,H);
+  /* ADDITIVE AT NIGHT, PLAIN PAINT BY DAY. `lighter` ADDS to what is under it,
+     which is what makes the middle of a burst read as heat against a black
+     sky. Over his bright blue it does the opposite: every colour is already
+     near the top of the range, so a red shell adds its way to white and the
+     brand colour is gone. In daylight the sparks are simply drawn on. */
+  fctx.globalCompositeOperation=
+    document.documentElement.dataset.mode==='night'?'lighter':'source-over';
+  fctx.lineCap='round';
+  const g=GRAV*(H/900), drag=Math.pow(DRAG,dt);
+  for(let i=shells.length-1;i>=0;i--){
+    const s=shells[i];
+    s.vy+=g*dt; s.x+=s.vx*dt; s.y+=s.vy*dt; s.fuse-=dt;
+    /* its own tail, thrown backwards so it reads as thrust */
+    fspark(s.x,s.y,-s.vx*0.2+(Math.random()-.5)*26,-s.vy*0.05+Math.random()*30,
+           [255,214,140],0.34,0.9);
+    if(s.fuse<=0||s.vy>=0){ fburst(s); shells.splice(i,1); }
+  }
+  for(let i=0;i<flive;i++){
+    flife[i]-=dt;
+    if(flife[i]<=0){
+      /* a dead spark is swapped with the last rather than spliced out, so
+         nothing ever shifts down the array */
+      const j=--flive;
+      fpx[i]=fpx[j];fpy[i]=fpy[j];fvx[i]=fvx[j];fvy[i]=fvy[j];
+      flife[i]=flife[j];ffull[i]=ffull[j];fsz[i]=fsz[j];
+      fcr[i]=fcr[j];fcg[i]=fcg[j];fcb[i]=fcb[j];
+      i--; continue;
+    }
+    fvy[i]+=g*dt; fvx[i]*=drag; fvy[i]*=drag;
+    fpx[i]+=fvx[i]*dt; fpy[i]+=fvy[i]*dt;
+    /* FADE ON THE SQUARE, not straight: burning out is fast at the end. */
+    const k=flife[i]/ffull[i];
+    fctx.globalAlpha=k*k;
+    fctx.strokeStyle='rgb('+fcr[i]+','+fcg[i]+','+fcb[i]+')';
+    fctx.lineWidth=fsz[i]*(0.5+k*0.5)*2;
+    fctx.beginPath();
+    fctx.moveTo(fpx[i]-fvx[i]*TRAIL,fpy[i]-fvy[i]*TRAIL);
+    fctx.lineTo(fpx[i],fpy[i]);
+    fctx.stroke();
+  }
+  fctx.globalAlpha=1;
+  /* three or four in the air, one going up every three quarters of a second */
+  fnext-=dt;
+  if(fnext<=0&&shells.length<4){ launch(); fnext=0.55+Math.random()*0.7; }
+}
+
 let costSum=0,costN=0;
 let auto=false,autoT=0,last=performance.now(),frames=0,fpsT=last,worst=999;
 function tick(now){
@@ -1025,6 +1165,13 @@ function tick(now){
      at full strength from the first pixel of the section, because you scroll
      to it rather than have it appear */
   stage.style.setProperty('--out', String(1-smooth((t-FADE_AT)/(1-FADE_AT))));
+  /* THE SHOW RUNS EXACTLY WHERE THE WORLD IS GOING. It lights the moment the
+     fade starts, so the first shell is already climbing while the road is
+     still half there, and it is wiped the instant the scroll leaves the
+     section - keep scrolling and the fireworks stop. */
+  const want = t>=FADE_AT && t<0.999;
+  if(want){ fwOn=true; fframe(Math.min(0.05,dt/1000)); }
+  else if(fwOn) fstop();
   const t0=performance.now(); place(distance(u)); const cost=performance.now()-t0;
   costSum+=cost; costN++;
   for(const c of clouds){
