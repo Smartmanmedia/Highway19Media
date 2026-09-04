@@ -81,8 +81,11 @@ html,body{margin:0;background:#0a1020;color:#fff;
 :root[data-mode="night"] .sky::after,:root[data-mode="night"] .sea::after,
 :root[data-mode="night"] .land::after,:root[data-mode="night"] .road::after{opacity:1}
 .sky::after{background:linear-gradient(180deg,#02060f 0%,#050d1e 34%,#081833 62%,#0d2447 84%,#12305a 100%)}
+/* the moon's wash on the water is tighter than the sun's was - a moon lights a
+   patch of sea, not the whole of it, and at 150% by 260% there was no dark
+   water left on the near side at all */
 .sea::after{background:
-  radial-gradient(150% 260% at 9% -10%, rgba(150,190,255,.30), rgba(150,190,255,0) 55%),
+  radial-gradient(78% 150% at 8% -12%, rgba(150,190,255,.34), rgba(150,190,255,0) 46%),
   linear-gradient(180deg,#08182f 0%,#061225 46%,#040c1a 100%)}
 .land::after{background:
   radial-gradient(140% 220% at 9% -14%, rgba(150,195,255,.20), rgba(150,195,255,0) 52%),
@@ -150,13 +153,28 @@ html,body{margin:0;background:#0a1020;color:#fff;
 :root[data-mode="night"] .lamp img{filter:brightness(.34) saturate(.70) hue-rotate(184deg)}
 :root[data-mode="night"] .pole,:root[data-mode="night"] .truss{
   filter:brightness(.40) saturate(.80) hue-rotate(184deg)}
-/* HIS BOARDS STAY BRIGHT. A highway sign is retro-reflective - at night it is
-   the brightest thing on the road, not the dimmest - so it keeps its colour
-   and gains a warm bloom instead of losing one. Same function list again. */
-.sign img{filter:drop-shadow(0 14px 20px rgba(0,0,0,.22)) brightness(1) saturate(1);
-  transition:filter 1s linear}
-:root[data-mode="night"] .sign img{
-  filter:drop-shadow(0 0 14px rgba(255,186,74,.55)) brightness(1.04) saturate(1.06)}
+/* HIS BOARDS AT NIGHT: his darker green, and lit from his own fixtures.
+   The day board and the night board are two bitmaps stacked, and the night one
+   fades up over the other - a board cannot be recoloured through an <img>, and
+   a filter that darkened the green would darken the gold and the white type
+   with it, which is exactly what he said not to do. */
+.sign{isolation:isolate}
+.sign img{filter:drop-shadow(0 14px 20px rgba(0,0,0,.22));transition:filter 1s linear}
+.sign .night-art{position:absolute;inset:0;height:100%;width:100%;
+  opacity:0;transition:opacity 1s linear}
+:root[data-mode="night"] .sign .night-art{opacity:1}
+:root[data-mode="night"] .sign img{filter:drop-shadow(0 0 16px rgba(255,186,74,.40))}
+/* HIS SIGN LAMPS, the same two files the home page hangs over its boards: the
+   fittings are there in daylight with nothing shining, and the beams come up
+   after dark. Both are backgrounds on the board's own pseudo-elements, so they
+   travel with it and cost no elements. */
+.sign::before,.sign::after{content:'';position:absolute;inset:0;
+  pointer-events:none;background-repeat:no-repeat;
+  background-position:left 1.429% top 0.411%;background-size:97.091% 102.986%}
+.sign::before{background-image:var(--sign-fixtures);z-index:2}
+.sign::after{background-image:var(--sign-beams);z-index:3;
+  opacity:0;transition:opacity 1.2s linear}
+:root[data-mode="night"] .sign::after{opacity:1}
 
 /* THE LAMPS LIGHT THE ROAD, and it costs no elements: the head's glow and the
    pool it throws are the lamp element's own ::after and ::before, sized in per
@@ -171,22 +189,31 @@ html,body{margin:0;background:#0a1020;color:#fff;
 /* THE POOL IT LANDS IN. Tight and elliptical, not a big soft wash: a lamp
    lights the lane under it, not the sea, and the first pass had it wide enough
    to turn the water orange. */
-.lamp::before{width:540%;height:96%;left:33.3%;bottom:0;transform:translate(-50%,32%);
+.lamp::before{width:330%;height:62%;left:33.3%;bottom:0;transform:translate(-50%,30%);
   border-radius:50%;
-  background:radial-gradient(closest-side,rgba(255,196,104,.42),
-    rgba(255,172,54,.14) 54%,rgba(255,162,38,0) 78%)}
+  background:radial-gradient(closest-side,rgba(255,196,104,.30),
+    rgba(255,172,54,.09) 54%,rgba(255,162,38,0) 78%)}
 /* AND THE CONE BETWEEN THEM. One element per lamp, a triangle cut out of a
    vertical gradient - narrow at the head, full width where it meets the road.
    It is a child rather than a third pseudo-element because an element only
    has two, and it is styled entirely in per cent of the lamp so it travels
    and scales with it and costs nothing per frame. */
+/* A STREET LAMP AIMS ACROSS THE ROAD, not at its own foot. The cone is skewed
+   45 degrees about the HEAD, so the head stays put and the far end swings in
+   over the tarmac. Its vertical run is 95% of the lamp's height, so at 45 the
+   light lands 95% of a lamp-height inboard - which in per cent of the lamp's
+   own WIDTH is 95/19.21 = 494%, and that is where the pool has to be moved to
+   as well or the cone lands in one place and the light in another. */
 .beam{position:absolute;left:33.3%;top:5%;width:250%;height:95%;
-  transform:translateX(-50%);pointer-events:none;opacity:0;
-  transition:opacity 1.2s linear;
+  transform-origin:50% 0;transform:translateX(-50%) skewX(-45deg);
+  pointer-events:none;opacity:0;transition:opacity 1.2s linear;
   background:linear-gradient(180deg,rgba(255,208,128,.22) 0%,
     rgba(255,188,84,.09) 48%,rgba(255,172,56,.02) 100%);
   clip-path:polygon(43% 0,57% 0,100% 100%,0 100%)}
-.a-lamp-l::after,.a-lamp-l::before,.a-lamp-l .beam{left:66.7%}
+.lamp::before{left:calc(33.3% - 494%)}
+.a-lamp-l::after{left:66.7%}
+.a-lamp-l .beam{left:66.7%;transform:translateX(-50%) skewX(45deg)}
+.a-lamp-l::before{left:calc(66.7% + 494%)}
 :root[data-mode="night"] .lamp::after,:root[data-mode="night"] .lamp::before,
 :root[data-mode="night"] .beam{opacity:1}
 .pole{background:linear-gradient(90deg,#8a9199,#f4f7fa 38%,#cdd4db 66%,#7d848c);
@@ -304,6 +331,10 @@ html,body{margin:0;background:#0a1020;color:#fff;
   <img class="cloud-4" src="../../assets/v2/section-05/cloud-4.svg" alt="">
   <img class="hero" src="../../assets/v2/section-01/hero-sign.svg" alt="">
   <img class="sign3" src="../../assets/v2/section-05/sign-3.webp" alt="">
+  <img class="signfix" src="../../assets/v2/section-05/sign-fixtures.svg" alt="">
+  <img class="signbeam" src="../../assets/v2/section-05/sign-beams.svg" alt="">
+  <img class="hero-n" src="../../assets/v2/section-05/hero-sign-night.svg" alt="">
+  <img class="sign3-n" src="../../assets/v2/section-05/sign-3-night.webp" alt="">
   <img class="trusstile" src="../../assets/v2/section-01/truss-cell.webp" alt="">
 </div>
 
@@ -494,6 +525,12 @@ function distance(t){
 const art=document.getElementById('art');
 const copy=c=>art.querySelector('.'+c).cloneNode(true);
 const TRUSS_TILE=art.querySelector('.trusstile').src;
+/* HIS SIGN LAMPS COME IN THROUGH SCRIPT, not through the stylesheet: a url()
+   inside an inline <style> is not rewritten when the page is folded into one
+   file, so it 404s in the build. Off the hidden <img> it is already a data
+   URI by then. */
+for(const [v,c] of [['--sign-fixtures','signfix'],['--sign-beams','signbeam']])
+  document.documentElement.style.setProperty(v,'url("'+art.querySelector('.'+c).src+'")');
 /* >>> palms (written by tools/make_palm_sprites.js - do not hand-edit) */
 /* Per tree: fx is where the TRUNK stands across its own sprite, and the
    shadow's size and offset are multiples of the tree's height, measured
@@ -584,6 +621,11 @@ function plant(o){
   const el=document.createElement('div');
   el.className='thing '+(o.cls||'')+(o.art?' a-'+o.art:'');
   if(o.art) el.appendChild(copy(o.art));
+  /* A BOARD IS A BITMAP, so its night colours are a second bitmap: nothing
+     inside an <img> can be recoloured by CSS. Both are stacked and the night
+     one fades up, which is also the only way this crossfades rather than
+     snapping. */
+  if(o.cls==='sign'){const n=copy(o.art+'-n');n.className+=' night-art';el.appendChild(n)}
   if(o.cls==='truss') el.style.backgroundImage='url("'+TRUSS_TILE+'")';
   if(o.cls==='lamp'){const b=document.createElement('i');b.className='beam';el.appendChild(b)}
   props.appendChild(el);

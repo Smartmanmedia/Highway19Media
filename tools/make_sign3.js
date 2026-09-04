@@ -11,6 +11,10 @@ const fs = require('fs'), path = require('path');
 const { chromium } = require('/home/user/storyboard-app/node_modules/playwright');
 const ROOT = path.join(__dirname, '..'), DIR = path.join(ROOT, 'assets', 'v2', 'section-05');
 const W = 940.5, H = 295.5, OUT_W = 1800;
+/* HIS NIGHT GREEN AND HIS NIGHT GOLD, the same two the site's night palette
+ * uses. A board is one bitmap, so the night board is a second bitmap: nothing
+ * inside an <img> can be recoloured by CSS. */
+const NIGHT = { '#1c9022': '#0a3d1f', '#ffda00': '#e7aa28' };
 
 const b64 = f => fs.readFileSync(path.join(ROOT, f)).toString('base64');
 const face = (name, weight, file) =>
@@ -41,24 +45,31 @@ ${body}
 </svg>`;
 
 fs.writeFileSync(path.join(DIR, 'sign-3.svg'), svg);
+let night = svg;
+for (const [d, n] of Object.entries(NIGHT)) night = night.split(d).join(n);
+fs.writeFileSync(path.join(DIR, 'sign-3-night.svg'), night);
 
 (async () => {
   const br = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
-  const p = await br.newPage({ viewport: { width: OUT_W, height: Math.round(OUT_W * H / W) } });
-  await p.setContent('<body style="margin:0">' + svg.replace(`width="${W}" height="${H}"`,
-    `width="${OUT_W}" height="${Math.round(OUT_W * H / W)}"`) + '</body>');
-  await p.evaluate(() => document.fonts.ready);
-  await p.waitForTimeout(400);
-  const png = await p.screenshot({ omitBackground: true });
-  const webp = await p.evaluate(async d => {
-    const i = new Image(); i.src = 'data:image/png;base64,' + d; await i.decode();
-    const c = document.createElement('canvas'); c.width = i.width; c.height = i.height;
-    c.getContext('2d').drawImage(i, 0, 0);
-    return c.toDataURL('image/webp', 0.92).split(',')[1];
-  }, png.toString('base64'));
-  fs.writeFileSync(path.join(DIR, 'sign-3.webp'), Buffer.from(webp, 'base64'));
+  const OUT_H = Math.round(OUT_W * H / W);
+  for (const [file, art] of [['sign-3.webp', svg], ['sign-3-night.webp', night]]) {
+    const p = await br.newPage({ viewport: { width: OUT_W, height: OUT_H } });
+    await p.setContent('<body style="margin:0">' + art.replace(`width="${W}" height="${H}"`,
+      `width="${OUT_W}" height="${OUT_H}"`) + '</body>');
+    await p.evaluate(() => document.fonts.ready);
+    await p.waitForTimeout(400);
+    const png = await p.screenshot({ omitBackground: true });
+    const webp = await p.evaluate(async d => {
+      const i = new Image(); i.src = 'data:image/png;base64,' + d; await i.decode();
+      const c = document.createElement('canvas'); c.width = i.width; c.height = i.height;
+      c.getContext('2d').drawImage(i, 0, 0);
+      return c.toDataURL('image/webp', 0.92).split(',')[1];
+    }, png.toString('base64'));
+    fs.writeFileSync(path.join(DIR, file), Buffer.from(webp, 'base64'));
+    await p.close();
+    console.log(file.padEnd(18) + OUT_W + 'x' + OUT_H + '  ' +
+      (fs.statSync(path.join(DIR, file)).size / 1024).toFixed(1) + 'K');
+  }
   await br.close();
-  console.log('sign-3.webp  ' + OUT_W + 'x' + Math.round(OUT_W * H / W) + '  ' +
-    (fs.statSync(path.join(DIR, 'sign-3.webp')).size / 1024).toFixed(1) + 'K' +
-    '   aspect ' + (W / H).toFixed(3));
+  console.log('aspect ' + (W / H).toFixed(3));
 })();
