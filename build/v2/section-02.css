@@ -188,8 +188,13 @@
    daylight, untouched, and the whole night lives in one number. */
 .sec2 .sand::after{
   content:''; position:absolute; inset:0;
+  /* OFF THE PURPLE. His artboard sand reads #1e192b through the middle -
+     more red than green, which is what makes it violet next to a blue
+     desert. The same lightnesses with green brought up past red and the
+     blue lifted a little: a blue-grey sand rather than a mauve one, so the
+     two sections sit in the same family with the desert below. */
   background: linear-gradient(180deg,
-    #0e1029 0%, #111229 22%, #1e192b 53%, #1b1829 88%, #191a33 100%);
+    #0d1029 0%, #101328 22%, #191c2e 53%, #171a2c 88%, #171c35 100%);
   opacity: var(--night, 0);
   transition: opacity 1s linear;
 }

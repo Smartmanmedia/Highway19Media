@@ -32,15 +32,19 @@ const DIR = path.join(__dirname, '..', 'build', 'v2');
 
 /* --- his night desert, off artboard three ------------------------------- */
 const HIS = {
-  /* his dunes, biggest area first */
-  dune: ['#1b1f44', '#1b1a37', '#1c1d3c', '#181c41', '#322d4a'],
+  /* HIS DUNES, BIGGEST AREA FIRST, AND OFF THE PURPLE. Three of his five
+     have more red in them than green - #1b1a37 and #322d4a most of all -
+     which is what put a violet cast across the whole desert next to the
+     beach above it. Same lightnesses, green brought up past red: his blues
+     stay his, and the two sands now sit in one family. */
+  dune: ['#1a1f44', '#181d39', '#1a1f3e', '#181c41', '#2c324e'],
   /* his rock, darkest to lightest */
   rockLo: '#110f13', rockHi: '#593d38',
   /* nothing green survives in his artboard, so the scrub is taken to the
      same darkness as his trees in artboard four and left green */
   plantLo: '#0b1410', plantHi: '#26401f',
   /* section two's sand at its foot, so the two sections meet with no line */
-  beachFoot: '#181727'
+  beachFoot: '#171c35'
 };
 
 const hex = h => { const c = h.replace('#', '');

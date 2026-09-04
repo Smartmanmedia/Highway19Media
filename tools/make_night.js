@@ -106,10 +106,11 @@ const TOKENS = [
   ['--marking', '#ffffff'],
   /* HIS TRUSS. The one thing on the page still lit like daylight, and he
      said so. His night gantry is one gradient, #b3b3b3 down to #1a1a1a; the
-     day tile is a raster and pure greyscale, running 127 to 255. So this is
-     the straight line that takes one range onto the other - his two ends,
-     his own light-to-dark direction kept - and not a taste. */
-  ['--truss-night', 'brightness(.602) contrast(1.987)'],
+     day tile is a raster and pure greyscale, running 127 to 255. His own
+     night gantry is a straight grey and he wants blue in it, so the line that
+     takes one range onto the other is drawn per channel: the tile's 127 lands
+     on #10141d and its 255 on #8895ab. The filter is in section-01.html. */
+  ['--truss-night', 'url(#truss-night)'],
   /* HIS GREEN AND HIS GOLD, off artboard one. Both are a repeating sheen in
      his file rather than a flat colour - the board cycles #06301a / #0c4221 /
      #0f4924 across its width and the banner runs a highlight through

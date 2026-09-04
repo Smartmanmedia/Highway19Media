@@ -23,6 +23,22 @@
      element does nothing at all. -->
 <svg width="0" height="0" aria-hidden="true" focusable="false"
      style="position:absolute;left:-9999px">
+  <!-- HIS TRUSSES, DARK BLUE-GREY. His night gantry is a straight grey,
+       #b3b3b3 down to #1a1a1a, and grey is what a brightness and a contrast
+       can give - but he wants blue in it, and a blue tint needs the three
+       channels moved by different amounts. A linear transfer per channel does
+       that in one pass: slope and intercept solved so the tile's own 127 lands
+       on #10141d and its 255 on #8895ab. Type is linear rather than table
+       because the intercepts are negative - the tile has no values below 127,
+       so the line starts off the bottom of the range. -->
+  <filter id="truss-night" color-interpolation-filters="sRGB">
+    <feColorMatrix type="saturate" values="0"/>
+    <feComponentTransfer>
+      <feFuncR type="linear" slope="0.938" intercept="-0.404"/>
+      <feFuncG type="linear" slope="1.008" intercept="-0.424"/>
+      <feFuncB type="linear" slope="1.109" intercept="-0.439"/>
+    </feComponentTransfer>
+  </filter>
   <filter id="cloud-night" color-interpolation-filters="sRGB">
     <feColorMatrix type="saturate" values="0"/>
     <feComponentTransfer>

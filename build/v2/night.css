@@ -57,7 +57,7 @@
     --night: 1;
     --tarmac: #111623;
     --marking: #ffffff;
-    --truss-night: brightness(.602) contrast(1.987);
+    --truss-night: url(#truss-night);
     --boat-night: brightness(.68) saturate(.85);
     --cta-plate: #530000;
     --cta-glow: drop-shadow(0 0 0.35cqw rgba(255,60,60,.95)) drop-shadow(0 0 1.4cqw rgba(230,20,30,.65));
@@ -107,7 +107,7 @@
     --night: 1;
     --tarmac: #111623;
     --marking: #ffffff;
-    --truss-night: brightness(.602) contrast(1.987);
+    --truss-night: url(#truss-night);
     --boat-night: brightness(.68) saturate(.85);
     --cta-plate: #530000;
     --cta-glow: drop-shadow(0 0 0.35cqw rgba(255,60,60,.95)) drop-shadow(0 0 1.4cqw rgba(230,20,30,.65));
@@ -294,9 +294,15 @@ section .z-cloud{
    is one gradient, #b3b3b3 down to #1a1a1a. The tile is a raster so there is
    no fill to set, but it is pure greyscale running 127 to 255, and a
    greyscale range maps onto another with two numbers: brightness then
-   contrast, solved for his two ends. His own light-to-dark direction is
-   whatever his day tile has, and it is kept. */
-.sec1 .truss{
+   contrast, solved for his two ends - except that he wants BLUE in it, and a
+   tint needs the three channels moved by different amounts, which brightness
+   and contrast cannot do: they move all three by one shared offset. A linear
+   transfer per channel does it in one pass. Both gantries take it; section
+   four's was still lit like daylight because this rule only named section
+   one's. His own light-to-dark direction is whatever his day tile has, and
+   it is kept. */
+.sec1 .truss,
+.sec4 .truss{
   filter: var(--truss-night, none);
   transition: filter 1s linear;
 }
@@ -420,9 +426,9 @@ section svg.z-copy [fill^="#"],
 /* >>> desert */
   @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]):not([data-mode="day"]){
-    --dffdb96: #1b1f44;
-    --dffd486: #1b1a37;
-    --dfac67e: #1c1d3c;
+    --dffdb96: #1a1f44;
+    --dffd486: #181d39;
+    --dfac67e: #1a1f3e;
     --d754c24: #110f13;
     --dc89a70: #4e3633;
     --dbb9067: #46312e;
@@ -453,9 +459,9 @@ section svg.z-copy [fill^="#"],
   }}
   :root[data-theme="dark"]:not([data-mode="day"]),
   :root[data-mode="night"]{
-    --dffdb96: #1b1f44;
-    --dffd486: #1b1a37;
-    --dfac67e: #1c1d3c;
+    --dffdb96: #1a1f44;
+    --dffd486: #181d39;
+    --dfac67e: #1a1f3e;
     --d754c24: #110f13;
     --dc89a70: #4e3633;
     --dbb9067: #46312e;
