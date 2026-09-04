@@ -47,6 +47,23 @@ ${body}
 fs.writeFileSync(path.join(DIR, 'sign-3.svg'), svg);
 let night = svg;
 for (const [d, n] of Object.entries(NIGHT)) night = night.split(d).join(n);
+/* HIS SIGN LAMPS, DRAWN ON THIS BOARD'S OWN BRACKETS. The page hangs his
+ * ui-sign-lights.svg over the hero board and it lands right, because that file
+ * was cut to the hero's proportions. Stretched onto this board - which is
+ * 3.183 to one against the hero's 2.685 - the beams land between the brackets
+ * instead of under them, and its fittings double up with the eight this board
+ * already has drawn on it. So the light is drawn here instead, at the x of
+ * each of HIS brackets, and the CSS overlay is left to the hero alone. */
+const BRACKETS = [116.8, 354.0, 605.4, 830.5];   /* his four, centred */
+const beams = BRACKETS.map(cx =>
+  `<path d="M${cx - 17} 7 H${cx + 17} L${cx + 93} ${H / 2} L${cx + 17} ${H - 7} ` +
+  `H${cx - 17} L${cx - 93} ${H / 2} Z" fill="url(#beam)"/>`).join('');
+night = night.replace('</svg>',
+  `<defs><linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">` +
+  `<stop offset="0" stop-color="#fff" stop-opacity=".16"/>` +
+  `<stop offset=".5" stop-color="#fff" stop-opacity=".09"/>` +
+  `<stop offset="1" stop-color="#fff" stop-opacity=".04"/>` +
+  `</linearGradient></defs>${beams}</svg>`);
 fs.writeFileSync(path.join(DIR, 'sign-3-night.svg'), night);
 
 (async () => {

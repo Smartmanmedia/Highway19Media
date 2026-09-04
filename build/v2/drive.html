@@ -184,18 +184,22 @@ html,body{margin:0;background:#0a1020;color:#fff;
 .sign .night-art{position:absolute;inset:0;height:100%;width:100%;
   opacity:0;transition:opacity 1s linear}
 :root[data-mode="night"] .sign .night-art{opacity:1}
-:root[data-mode="night"] .sign img{filter:drop-shadow(0 0 16px rgba(255,186,74,.40))}
+:root[data-mode="night"] .sign img{filter:drop-shadow(0 0 11px rgba(255,186,74,.28))}
 /* HIS SIGN LAMPS, the same two files the home page hangs over its boards: the
    fittings are there in daylight with nothing shining, and the beams come up
    after dark. Both are backgrounds on the board's own pseudo-elements, so they
    travel with it and cost no elements. */
-.sign::before,.sign::after{content:'';position:absolute;inset:0;
+/* THE HERO BOARD ONLY. His two overlay files were cut to the hero's own
+   2.685 to one; stretched onto the third board at 3.183 they land between its
+   brackets rather than under them, and their fittings double up with the eight
+   that board already carries. Its light is drawn into its own bitmap instead. */
+.a-hero::before,.a-hero::after{content:'';position:absolute;inset:0;
   pointer-events:none;background-repeat:no-repeat;
   background-position:left 1.429% top 0.411%;background-size:97.091% 102.986%}
-.sign::before{background-image:var(--sign-fixtures);z-index:2}
-.sign::after{background-image:var(--sign-beams);z-index:3;
+.a-hero::before{background-image:var(--sign-fixtures);z-index:2}
+.a-hero::after{background-image:var(--sign-beams);z-index:3;
   opacity:0;transition:opacity 1.2s linear}
-:root[data-mode="night"] .sign::after{opacity:1}
+:root[data-mode="night"] .a-hero::after{opacity:1}
 
 /* THE LAMPS LIGHT THE ROAD, and it costs no elements: the head's glow and the
    pool it throws are the lamp element's own ::after and ::before, sized in per
