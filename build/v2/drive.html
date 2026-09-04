@@ -180,13 +180,24 @@ const RUN=19000;
 const STOPS=[0.30,0.68], HOLD=0.06;
 const DASH_LEN=95, DASH_GAP=150, DASH_W=30;
 
-let W=0,H=0,f=900,hor=0,seaY=0,curve=0;
+let W=0,H=0,f=900,hor=0,seaY=0,curve=0,near=-300;
 function measure(){
   W=stage.clientWidth; H=stage.clientHeight;
   f=H*F0*2;               /* focal length tied to the stage, so the framing is
                              the same on a laptop and on a 4K screen */
   hor=Math.round(H*VP);
   seaY=Math.round(H*SEA);
+  /* HOW CLOSE THE PAINT COMES. The markings wrap through a fixed pool, so the
+     nearest one is wherever the wrap puts it - and that was a flat -300, which
+     from a saloon lands the last dash three quarters of the way down the
+     screen with bare tarmac below it. The road has to run off the BOTTOM EDGE,
+     so the bound is worked out instead of picked. The scale that lands a dash
+     on the foot of the frame is (H-hor)/EYE; back off one whole dash-and-gap
+     beyond that and the NEAREST dash is below the bottom edge whatever phase
+     the wrap happens to be in, which is the part a single margin missed - the
+     pool holds one dash per period, so the last one on screen was free to sit
+     anywhere in that period and sometimes stopped short. */
+  near=f/((H-hor)/EYE)-f-(DASH_LEN+DASH_GAP)*1.15;
   const D=H-hor;                       /* screen distance from horizon to foot */
   const span=x=>x*D/EYE;               /* a world half-width, at the foot      */
   const pct=(x,y)=>(x/W*100).toFixed(3)+'% '+(y/H*100).toFixed(3)+'%';
@@ -240,33 +251,41 @@ function distance(t){
 const art=document.getElementById('art');
 const copy=c=>art.querySelector('.'+c).cloneNode(true);
 const TRUSS_TILE=art.querySelector('.trusstile').src;
-/* his shadows' size and offset, in multiples of the tree's height */
+/* >>> palms (written by tools/make_palm_sprites.js - do not hand-edit) */
+/* Per tree: fx is where the TRUNK stands across its own sprite, and the
+   shadow's size and offset are multiples of the tree's height, measured
+   from that trunk. */
 const SH={
-  "a": {
-    "w": 0.655,
-    "h": 0.1845,
-    "dx": -0.0654,
-    "dy": -0.0559
-  },
-  "b": {
-    "w": 0.945,
-    "h": 0.3495,
-    "dx": 0.0548,
-    "dy": -0.019
-  },
-  "c": {
-    "w": 0.9829,
-    "h": 0.3635,
-    "dx": -0.1277,
-    "dy": -0.0245
-  },
-  "d": {
-    "w": 0.8428,
-    "h": 0.2535,
-    "dx": 0.0548,
-    "dy": -0.0529
-  }
+ "a": {
+  "fx": 0.4207,
+  "w": 0.655,
+  "h": 0.1845,
+  "dx": -0.0151,
+  "dy": -0.0559
+ },
+ "b": {
+  "fx": 0.6105,
+  "w": 0.945,
+  "h": 0.3495,
+  "dx": -0.0223,
+  "dy": -0.019
+ },
+ "c": {
+  "fx": 0.346,
+  "w": 0.9829,
+  "h": 0.3635,
+  "dx": -0.034,
+  "dy": -0.0245
+ },
+ "d": {
+  "fx": 0.6012,
+  "w": 0.8428,
+  "h": 0.2535,
+  "dx": -0.0162,
+  "dy": -0.0529
+ }
 };
+/* <<< palms */
 /* HIS SUN, read off his own drawing rather than chosen. Every one of his four
    shadows leaves the tree's foot heading down and to the RIGHT, so the light
    is at the top LEFT. Take the far corner of each shadow box as the shadow of
@@ -290,7 +309,14 @@ function plant(o){
   if(o.art) el.appendChild(copy(o.art));
   if(o.cls==='truss') el.style.backgroundImage='url("'+TRUSS_TILE+'")';
   props.appendChild(el);
-  const it=Object.assign({el,lift:0,loop:false},o);
+  /* A PALM IS PLANTED BY ITS TRUNK, not by the middle of its picture. His
+     trees lean, so the box's centre sits out under the crown - as much as 15%
+     of the sprite's width away on 'd' - and centring the sprite on the world
+     x hung the trunk to one side of where it was standing. On the seaward row
+     that error lands the trunk out over the water: floating. fx is where the
+     trunk actually is across the sprite, read off the ink. */
+  const it=Object.assign({el,lift:0,loop:false,
+    fx:(o.art&&SH[o.art.slice(-1)]||{}).fx||0.5},o);
   if(o.shadow){
     const sh=document.createElement('div');
     /* one of his four palms gets the shadow he DREW for it; everything else
@@ -379,11 +405,12 @@ for(let i=0;i<26;i++){
 
 /* ---- the frame ------------------------------------------------------------ */
 function place(drive){
-  const wrapD=(D,span)=>{while(D<-300)D+=span;while(D>span-300)D-=span;return D};
+  const wrapD=(D,span,n)=>{n=n===undefined?-300:n;
+    while(D<n)D+=span;while(D>span+n)D-=span;return D};
   /* the road markings */
   const span=DASHES.length*(DASH_LEN+DASH_GAP);
   for(const d of DASHES){
-    let D=wrapD(-(d.z+drive),span);
+    let D=wrapD(-(d.z+drive),span,near);
     const kN=f/(f+D), kF=f/(f+D+DASH_LEN);
     if(D<-f+60||kN>10){d.el.style.opacity=0;continue}
     const yN=hor+EYE*kN+curve*D*D*2.2e-6*kN;
@@ -413,7 +440,8 @@ function place(drive){
     it.el.style.zIndex=Math.round(9000-D/4);
     it.el.style.height=h+'px';
     if(it.w) it.el.style.width=(it.w*k)+'px';
-    it.el.style.transform='translate('+x+'px,'+(baseY-h-it.lift*k)+'px) translateX(-50%)';
+    it.el.style.transform='translate('+x+'px,'+(baseY-h-it.lift*k)+'px)'+
+      ' translateX(-'+(it.fx*100)+'%)';
     if(it.sh){
       it.sh.style.zIndex=2;
       if(it.shGeo){

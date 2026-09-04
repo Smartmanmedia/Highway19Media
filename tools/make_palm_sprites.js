@@ -94,27 +94,56 @@ const SHADOWS = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
     }, { index, vb, W, Hh });
     await p.waitForTimeout(280);
     const png = await p.screenshot({ omitBackground: true });
-    const webp = await p.evaluate(async d => {
+    const out = await p.evaluate(async d => {
       const i = new Image(); i.src = 'data:image/png;base64,' + d; await i.decode();
       const c = document.createElement('canvas'); c.width = i.width; c.height = i.height;
-      c.getContext('2d').drawImage(i, 0, 0);
-      return c.toDataURL('image/webp', 0.9).split(',')[1];
+      const cx = c.getContext('2d'); cx.drawImage(i, 0, 0);
+      /* WHERE THE TRUNK MEETS THE GROUND, which is not the middle of the
+       * sprite. A palm leans, so the box's centre sits out under the crown -
+       * on his 'd' it is most of a trunk's width away. Read the bottom 3% of
+       * rows and take the centre of what is actually inked there: that is the
+       * base of the trunk, and it is the point the scene has to plant and the
+       * point his shadow is measured from. */
+      const rows = Math.max(2, Math.round(c.height * 0.03));
+      const px = cx.getImageData(0, c.height - rows, c.width, rows).data;
+      let sum = 0, wsum = 0;
+      for (let y = 0; y < rows; y++) for (let x = 0; x < c.width; x++) {
+        const a = px[(y * c.width + x) * 4 + 3]; if (a < 40) continue;
+        sum += x * a; wsum += a;
+      }
+      return { webp: c.toDataURL('image/webp', 0.9).split(',')[1],
+               fx: wsum ? (sum / wsum) / c.width : 0.5 };
     }, png.toString('base64'));
-    fs.writeFileSync(path.join(DIR, file), Buffer.from(webp, 'base64'));
+    fs.writeFileSync(path.join(DIR, file), Buffer.from(out.webp, 'base64'));
     await p.close();
-    return (fs.statSync(path.join(DIR, file)).size / 1024).toFixed(1) + 'K';
+    return { size: (fs.statSync(path.join(DIR, file)).size / 1024).toFixed(1) + 'K',
+             fx: out.fx };
   };
 
   const rows = [], geo = {};
   for (const [name, p] of Object.entries(plan)) {
     const t = await shot(p.ti, 'palm-' + name + '.webp', [p.tree.x, p.tree.y, p.tree.w, p.tree.h]);
     const s = await shot(p.si, 'palm-' + name + '-shadow.webp', [p.sh.x, p.sh.y, p.sh.w, p.sh.h], 0.5);
-    geo[name] = { w: +p.ratio.w.toFixed(4), h: +p.ratio.h.toFixed(4),
-                  dx: +p.ratio.dx.toFixed(4), dy: +p.ratio.dy.toFixed(4) };
-    rows.push(name + ': tree[' + p.ti + '] ' + t + ' + shadow[' + p.si + '] ' + s +
-      ' (' + p.d + ' from its foot)');
+    /* re-hang the shadow off the TRUNK, not off the middle of the tree's box */
+    const footX = p.tree.x + t.fx * p.tree.w;
+    geo[name] = { fx: +t.fx.toFixed(4),
+                  w: +p.ratio.w.toFixed(4), h: +p.ratio.h.toFixed(4),
+                  dx: +((p.sh.x - footX) / p.tree.h).toFixed(4),
+                  dy: +p.ratio.dy.toFixed(4) };
+    rows.push(name + ': tree[' + p.ti + '] ' + t.size + ' + shadow[' + p.si + '] ' + s.size +
+      ' (' + p.d + ' from its foot, trunk at ' + (t.fx * 100).toFixed(1) + '% across)');
   }
   fs.writeFileSync(path.join(DIR, 'palms.json'), JSON.stringify(geo, null, 2) + '\n');
+  /* and into the scene, between its markers, so the two can never drift */
+  const page5 = path.join(__dirname, '..', 'build', 'v2', 'drive.html');
+  if (fs.existsSync(page5)) {
+    const a = '/* >>> palms', b = '/* <<< palms */';
+    let html = fs.readFileSync(page5, 'utf8');
+    const i = html.indexOf(a), j = html.indexOf(b);
+    if (i > -1 && j > i) html = html.slice(0, html.indexOf('const SH=', i)) +
+      'const SH=' + JSON.stringify(geo, null, 1) + ';\n' + html.slice(j);
+    fs.writeFileSync(page5, html);
+  }
   await br.close();
   console.log(rows.join('\n'));
   console.log('palms.json  ' + JSON.stringify(geo));
