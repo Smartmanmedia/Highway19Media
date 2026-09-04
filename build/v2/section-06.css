@@ -15,8 +15,15 @@
   position:relative;
   width:100%;
   /* his page is 1923.2 x 1189.6, plus 55 units on top for the mountains to
-     cross into and 164.5 more to clear them before his heading - see .page */
-  aspect-ratio:1923.2 / 1409.10;
+     cross into and 164.5 more to clear them before his heading - see .page.
+     THE FOOT IS HALVED. The room under the cards was where his snow range
+     stood; with the range gone it is 400px of empty white at 1440 before the
+     road. Half of it comes out - but ONLY by shortening the section, never by
+     rescaling it: .page below keeps its own height off the WIDTH now instead
+     of filling to this section's bottom, so the cards stay exactly the size
+     and place they were and it is only the empty foot that goes.
+     Cards end at 0.4549 of the width; half the old gap is 0.1389 more. */
+  aspect-ratio:1923.2 / 1142;
   container-type:inline-size;
   margin-top:-2.860%;
   /* THE WHITE STARTS INSIDE THE ROCKS, NOT AT THE SECTION'S EDGE.
@@ -27,8 +34,12 @@
      green-to-white line through the gaps. That is the seam he keeps seeing.
      The band covers EVERY column edge to edge over one narrow strip only -
      3.29% to 5.77% of this section - so the switch has to happen inside it.
-     3.85% sits in that strip and a whisker above section four's bottom edge
-     (3.903%), so the two overlap and no hairline of page background can open
+     THOSE FIGURES ARE SHARES OF THIS SECTION'S HEIGHT, and the height changed
+     when its foot was trimmed - so they moved with it. Section four's bottom
+     edge is a fixed 2.86% of the WIDTH below this section's top (margin-top is
+     width-based), which used to be 3.903% of the height and is 4.82% of it now;
+     the strip itself is 4.06% to 7.12%. 4.75% sits in it and a whisker above
+     that edge, so the two overlap and no hairline of page background can open
      between them. Above the line this section is transparent and section four
      paints through, mountains, shadow and grass together - which is why there
      is no colour step either. */
@@ -43,18 +54,27 @@
      opaque over the last viewport, so the two are one continuous sky with no
      seam to see and nothing to fade.
 
+     AND IT STARTS BELOW THE CARDS, not behind them. The white holds solid to
+     100px past the cards' bottom edge - which is 76.61% of this section - and
+     only then opens into the sky. Run over the whole viewport as it was, the
+     blue was already climbing up behind the cards and pulling the eye off them.
+
      The first 3.85% stays transparent for the reason it always did: section
      four paints through there, so the two overlap and no hairline can open. */
   background: var(--sec6-bg,
-    linear-gradient(180deg, transparent 0, transparent 3.85%,
-      #fff 3.85%, #fff calc(100% - 100vh), rgba(255,255,255,0) 100%)),
+    linear-gradient(180deg, transparent 0, transparent 4.75%,
+      #fff 4.75%, #fff calc(76.61% + 100px), rgba(255,255,255,0) 100%)),
     var(--sec6-sky-glow,
       radial-gradient(760px 620px at 11% 104%,
         rgba(255,255,255,.98), rgba(255,255,255,0) 60%)) left bottom / 100% 100vh no-repeat,
     var(--sec6-sky,
       linear-gradient(68deg,#fff 0%,#d4e7ff 15%,#a3ccff 36%,#7cb7ff 55%,
-        #60a8ff 73%,#4f9fff 88%,#4a9cff 100%)) left bottom / 100% 100vh no-repeat,
-    var(--sec6-under, #fff);
+        #60a8ff 73%,#4f9fff 88%,#4a9cff 100%)) left bottom / 100% 100vh no-repeat;
+  /* AND NO BACKGROUND-COLOUR UNDER ANY OF IT. A flat #fff behind the layers
+     fills the transparent strip at the top as well, which is the one place
+     this section must NOT paint - section four's rocks and green show through
+     there, and a white row opened straight across them. The white layer above
+     already covers everything from 4.75% down; nothing needs a colour. */
   overflow:hidden;
   isolation:isolate;
 }
@@ -70,8 +90,17 @@
    and read as far too much. His page then starts a further 164.5 units down,
    so the heading still clears the rock line by about 150px. Everything below
    is a share of THE PAGE, not of the section, so all of his numbers stand. */
+/* HIS PAGE KEEPS ITS OWN PROPORTIONS. It used to run from 15.58% of this
+   section down to its bottom edge, which meant every card was a share of the
+   SECTION'S height - shorten the section and the cards shrink with it, which
+   is not cutting a gap, it is zooming out. Its height is his artboard's now,
+   1923.2 by 1189.6 off the width, so the cards are nailed to the width and the
+   section's foot can be trimmed to whatever is wanted underneath them. Its own
+   empty bottom hangs past the section and is clipped, which costs nothing: the
+   only thing that was ever drawn down there was the snow range. */
 .sec6 .page{
-  position:absolute; left:0; right:0; top:15.58%; bottom:0; z-index:0;
+  position:absolute; left:0; right:0; top:19.23%; z-index:0;
+  aspect-ratio:1923.2 / 1189.6;
 }
 
 /* the last 150px of section four's rock band, redrawn ON TOP of the white so

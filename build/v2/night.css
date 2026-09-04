@@ -101,7 +101,7 @@
     --sec4-ground:
       linear-gradient(180deg, #021b22 0%, #021b22 1.59%, #052023 93.90%, #052023 100%);
     --sec6-bg:
-      linear-gradient(180deg, transparent 0, transparent 3.85%, #0a0e1f 3.85%, #0a0e1f 100%);
+      linear-gradient(180deg, transparent 0, transparent 4.75%, #0a0e1f 3.85%, #0a0e1f 100%);
   }}
   :root[data-theme="dark"]:not([data-mode="day"]),
   :root[data-mode="night"]{
@@ -152,7 +152,7 @@
     --sec4-ground:
       linear-gradient(180deg, #021b22 0%, #021b22 1.59%, #052023 93.90%, #052023 100%);
     --sec6-bg:
-      linear-gradient(180deg, transparent 0, transparent 3.85%, #0a0e1f 3.85%, #0a0e1f 100%);
+      linear-gradient(180deg, transparent 0, transparent 4.75%, #0a0e1f 3.85%, #0a0e1f 100%);
   }
   /* <<< palette */
 
@@ -175,16 +175,16 @@
 :root[data-theme="dark"]:not([data-mode="day"]),
 :root[data-mode="night"]{
   --sec6-bg:
-    linear-gradient(180deg, transparent 0, transparent 3.85%,
-      #101b33 3.85%, #0b1226 44%, #070c18 78%, #02060f 100%);
-  --sec6-sky-glow: none; --sec6-sky: none; --sec6-under: #02060f;
+    linear-gradient(180deg, transparent 0, transparent 4.75%,
+      #101b33 4.75%, #0b1226 44%, #0b1226 calc(76.61% + 100px), #02060f 100%);
+  --sec6-sky-glow: none; --sec6-sky: none;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]):not([data-mode="day"]){
     --sec6-bg:
-      linear-gradient(180deg, transparent 0, transparent 3.85%,
-        #101b33 3.85%, #0b1226 44%, #070c18 78%, #02060f 100%);
-    --sec6-sky-glow: none; --sec6-sky: none; --sec6-under: #02060f;
+      linear-gradient(180deg, transparent 0, transparent 4.75%,
+        #101b33 4.75%, #0b1226 44%, #0b1226 calc(76.61% + 100px), #02060f 100%);
+    --sec6-sky-glow: none; --sec6-sky: none;
   }}
 
 /* DAYLIGHT IS THE DEFAULT ABOVE. An explicit light choice has to beat a dark
