@@ -85,7 +85,6 @@ const SURFACES = [
   ['--sec1-bg',     'section-01.css', '.sec1',         0.10, 0.24, 'sea'],
   ['--sec1-fade',   'section-01.css', '.sec1::after',  0.13, 0.24, 'sea'],
   ['--sec2-bg',     'section-02.css', '.sec2',         0.14, 0.55, 'surf'],
-  ['--sec2-sand',   'section-02.css', '.sec2 .sand',   0.08, 0.60, 'surf'],
   ['--sec3-bg',     'section-03.css', '.sec3',         0.07, 0.62, 'sand'],
   ['--sec4-ground', 'section-04.css', '.sec4 .ground', 0.06, 0.80, 'leaf'],
   ['--sec6-bg',     'section-06.css', '.sec6',         0.015, 0.92, 'page']
@@ -145,6 +144,26 @@ const TOKENS = [
      is what he did in his own mock. */
   /* his banner goes to a bronze - #b46824 where daylight is a bright yellow -
      so the signs come down further than a gentle mute */
+  /* HIS OWN NIGHT OCEAN. waves_Night.svg is the same eleven shapes he drew for
+     the day, recoloured in Illustrator and nothing else - so these are his
+     numbers off that file, in his own paint order, and section-02.css hangs
+     them on the stops of his day gradients. The surf keeps its white foam and
+     its #002b61 shade; only the water under them turns.
+
+     THE FAR BAND IS THE ONE THAT IS NOT A STRAIGHT SWAP. His night horizon is
+     a vertical ramp, #000619 at the skyline down to #001136, where his day
+     gradient there runs across the picture - so the ramp is kept and laid the
+     other way. Eleven levels of blue between the two ends, at that darkness,
+     is not something an eye can find. He also drops the white crest from that
+     band at night, which is what --sea-far-foam does. */
+  ['--sea-surf-hi', '#1b5791'],
+  ['--sea-surf-lo', '#0d3d70'],
+  ['--sea-mid', '#011f51'],
+  ['--sea-swell', '#022152'],
+  ['--sea-far-a', '#000619'],
+  ['--sea-far-b', '#001136'],
+  ['--sea-far-shade', '#233e77'],
+  ['--sea-far-foam', '0'],
   ['--sign-lit', '0.66'],
   ['--sign-sat', '0.74']
 ];

@@ -70,6 +70,14 @@
     --card-line: #7d8ea3;
     --card-ink: #f2f6fa;
     --card-sub: #c3cedb;
+    --sea-surf-hi: #1b5791;
+    --sea-surf-lo: #0d3d70;
+    --sea-mid: #011f51;
+    --sea-swell: #022152;
+    --sea-far-a: #000619;
+    --sea-far-b: #001136;
+    --sea-far-shade: #233e77;
+    --sea-far-foam: 0;
     --sign-lit: 0.66;
     --sign-sat: 0.74;
     --sec1-bg:
@@ -78,8 +86,6 @@
       linear-gradient(90deg,#000c1b 0%,#010e1f 100%);
     --sec2-bg:
       linear-gradient(180deg, #0f172c 0.03%, #0f172c 12.41%, #252633 12.54%, #322f36 12.67%, #322f36 12.80%, #232431 12.93%, #0e162a 13.07%, #0e162a 13.59%, #0f1931 13.85%, #0f1931 17.37%, #0e1e34 17.63%, #0e1e34 26.76%, #152135 26.89%, #322f36 27.02%, #322f36 27.54%, #161f2e 27.67%, #0e1a2c 27.80%, #0e1a2c 28.19%, #0e2033 28.32%, #0f2135 28.45%, #0f2135 33.80%, #1a2332 34.06%, #1a2332 42.66%, #262935 42.79%, #302d36 42.92%, #302d36 45.40%), linear-gradient(90deg,#0e162a 0%,#0f182e 100%);
-    --sec2-sand:
-      linear-gradient(180deg,#241c1c 0%,#242027 31%,#242027 100%) 0 100% / 100% 88.98% no-repeat, #241c1c;
     --sec3-bg:
       linear-gradient(180deg, transparent 0%,  transparent 18%, #1e213c 21%,     #1e1f37 45.78%,  #1e1f36 47.72%, #1c1c34 47.86%,  #1b1b33 48.00%,  #1a1b36 48.13%,  #191a36 48.83%, #1c1c38 50.76%,  #181a35 50.90%,  #171934 51.87%,  #1c1c36 52.01%, #1e1f36 61.70%,  #1b1b33 61.97%,  #1b1b33 69.72%,  #161833 69.86%, #161833 72.21%,  #191a36 72.35%,  #1b1c37 78.58%,  #171834 78.72%, #161834 80.66%,  #1c1c37 80.80%,  #1c1d38 96.43%,  #1d1d39 96.57%, #1a1b36 96.71%,  #1a1b36 97.96%,  #1b1b33 98.09%,  #1b1b33 100%);
     --sec4-ground:
@@ -103,6 +109,14 @@
     --card-line: #7d8ea3;
     --card-ink: #f2f6fa;
     --card-sub: #c3cedb;
+    --sea-surf-hi: #1b5791;
+    --sea-surf-lo: #0d3d70;
+    --sea-mid: #011f51;
+    --sea-swell: #022152;
+    --sea-far-a: #000619;
+    --sea-far-b: #001136;
+    --sea-far-shade: #233e77;
+    --sea-far-foam: 0;
     --sign-lit: 0.66;
     --sign-sat: 0.74;
     --sec1-bg:
@@ -111,8 +125,6 @@
       linear-gradient(90deg,#000c1b 0%,#010e1f 100%);
     --sec2-bg:
       linear-gradient(180deg, #0f172c 0.03%, #0f172c 12.41%, #252633 12.54%, #322f36 12.67%, #322f36 12.80%, #232431 12.93%, #0e162a 13.07%, #0e162a 13.59%, #0f1931 13.85%, #0f1931 17.37%, #0e1e34 17.63%, #0e1e34 26.76%, #152135 26.89%, #322f36 27.02%, #322f36 27.54%, #161f2e 27.67%, #0e1a2c 27.80%, #0e1a2c 28.19%, #0e2033 28.32%, #0f2135 28.45%, #0f2135 33.80%, #1a2332 34.06%, #1a2332 42.66%, #262935 42.79%, #302d36 42.92%, #302d36 45.40%), linear-gradient(90deg,#0e162a 0%,#0f182e 100%);
-    --sec2-sand:
-      linear-gradient(180deg,#241c1c 0%,#242027 31%,#242027 100%) 0 100% / 100% 88.98% no-repeat, #241c1c;
     --sec3-bg:
       linear-gradient(180deg, transparent 0%,  transparent 18%, #1e213c 21%,     #1e1f37 45.78%,  #1e1f36 47.72%, #1c1c34 47.86%,  #1b1b33 48.00%,  #1a1b36 48.13%,  #191a36 48.83%, #1c1c38 50.76%,  #181a35 50.90%,  #171934 51.87%,  #1c1c36 52.01%, #1e1f36 61.70%,  #1b1b33 61.97%,  #1b1b33 69.72%,  #161833 69.86%, #161833 72.21%,  #191a36 72.35%,  #1b1c37 78.58%,  #171834 78.72%, #161834 80.66%,  #1c1c37 80.80%,  #1c1d38 96.43%,  #1d1d39 96.57%, #1a1b36 96.71%,  #1a1b36 97.96%,  #1b1b33 98.09%,  #1b1b33 100%);
     --sec4-ground:
@@ -145,13 +157,26 @@
    so it is deliberately NOT in this list. */
 section .z-back,
 section .z-ground,
-section .wave,
-section .sand,
 section .rock-layer,
 section .rock-cross{
   filter: brightness(var(--scene)) saturate(var(--scene-sat));
   transition: filter 1s linear;
 }
+
+/* HIS SURF IS NOT IN IT EITHER, AND FOR THE OPPOSITE REASON TO THE GANTRY.
+   He sent waves_Night.svg - the same eleven shapes, recoloured by hand - so
+   the ocean has his own night values on his own gradient stops, written in
+   section-02.css. A brightness on top of those would be a second opinion
+   over his. The wrapper carries .z-ground and each band carries .wave, so
+   both are taken out of the filter here rather than left off the list, and
+   in daylight this rule changes nothing: there is no filter to remove. */
+.sec2 .waves,
+.sec2 .waves .wave{ filter:none }
+
+/* AND HIS BEACH IS OUT OF IT TOO. Same reason again: --sec2-sand is now his
+   own night violet rather than his day tan taken down, so there is nothing
+   left for a brightness to do to it but make it wrong. */
+.sec2 .sand{ filter:none }
 
 /* HIS DESERT IS THE ONE PLACE BRIGHTNESS CANNOT GO. His sand art is tan and
    his night desert is navy - #1a1c3a - and no amount of darkening turns one

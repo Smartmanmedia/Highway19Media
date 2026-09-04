@@ -128,6 +128,74 @@
   .sec2 .waves .wave{ animation:none }
 }
 
+/* --- HIS NIGHT OCEAN ----------------------------------------------------
+   waves_Night.svg is his day surf recoloured - same eleven shapes, same
+   order, same geometry - so night is a set of colours on HIS OWN GRADIENT
+   STOPS and not a second copy of the art in the page. Two reasons that is
+   the right shape for it. A stop-color animates, so the sea turns over the
+   same second as the sky rather than snapping the moment the mode changes;
+   and there is one set of paths to move, so the four bands cannot drift out
+   of register with each other.
+
+   THE DAY VALUE IS THE FALLBACK IN EVERY ONE OF THESE, taken off his own
+   day file, so with no night variables set this whole block resolves back to
+   the picture he drew and daylight cannot be changed from here by accident.
+   One variable serves both ends of a gradient wherever his night colour is
+   flat - the two ends only differ in daylight, and that difference lives in
+   the fallback.
+
+   His foam and his #002b61 shade stay as they are in three bands of the
+   four: what turns is the water under them. The exception is the horizon,
+   where he lifts the shade to #233e77 and drops the crest altogether - no
+   white water that far out at night.
+
+   Addressed by position rather than by class because these paths are his,
+   pasted whole by tools/split_waves.js; giving them classes would mean
+   hand-editing his art back in every time he re-exports. The order is his
+   paint order: shade, crest, water. */
+.sec2 #waves-g2 stop:first-child{ stop-color: var(--sea-surf-hi, #93dbfb) }
+.sec2 #waves-g2 stop:last-child { stop-color: var(--sea-surf-hi, #1281cc) }
+.sec2 #waves-g3 stop:first-child{ stop-color: var(--sea-surf-lo, #00ccfd) }
+.sec2 #waves-g3 stop:last-child { stop-color: var(--sea-surf-lo, #0572e9) }
+.sec2 #waves-linear-gradient-2 stop:first-child{ stop-color: var(--sea-mid, #0094f6) }
+.sec2 #waves-linear-gradient-2 stop:last-child { stop-color: var(--sea-mid, #007be8) }
+.sec2 #waves-linear-gradient-3 stop:first-child{ stop-color: var(--sea-swell, #0066e2) }
+.sec2 #waves-linear-gradient-3 stop:last-child { stop-color: var(--sea-swell, #0561ca) }
+.sec2 #waves-linear-gradient-4 stop:first-child{ stop-color: var(--sea-far-a, #004ba0) }
+.sec2 #waves-linear-gradient-4 stop:last-child { stop-color: var(--sea-far-b, #0561ca) }
+.sec2 .waves stop{ transition: stop-color 1s linear }
+
+/* --- HIS NIGHT BEACH ----------------------------------------------------
+   The second place a brightness cannot go. His day sand is a warm tan and his
+   night sand is a dark violet, so taking the tan down only ever gave darker
+   tan - a black hole under his water, where his own artboard has the one warm
+   surface in the section.
+
+   These are his colours off artboard two, read across it at every 4pc of its
+   height: bluest where the water leaves it, warmest a third of the way down,
+   easing back at the foot. It is laid over his day sand rather than replacing
+   it because a background-image cannot be transitioned and a fade cannot be
+   faked - the sea beside it turns over a second, and a beach that snapped
+   would be the one thing in the section that did. At opacity 0 this is his
+   daylight, untouched, and the whole night lives in one number. */
+.sec2 .sand::after{
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(180deg,
+    #0e1029 0%, #111229 22%, #1e192b 53%, #181727 100%);
+  opacity: var(--night, 0);
+  transition: opacity 1s linear;
+}
+
+/* the horizon band: his shade lifts, his crest goes */
+.sec2 .wave-far > g > path:nth-child(1){
+  fill: var(--sea-far-shade, #002b61);
+  transition: fill 1s linear;
+}
+.sec2 .wave-far > g > path:nth-child(2){
+  opacity: var(--sea-far-foam, 1);
+  transition: opacity 1s linear;
+}
+
 .sec2 [data-at]{ position:absolute; display:block }
 .sec2 img[data-at], .sec2 svg[data-at]{ height:auto }
 /* the surf sits ON the sand by its own z-index, not by being later in the
