@@ -39,18 +39,30 @@
                   whatever the road's length works out to. */
                { secs: ['03'],       thin: 0.85, cap: 10 },
                { secs: ['04'],       thin: 1 }];
-  var DENSITY   = 0.70,   /* how much of the traffic he wants on the road */
+  /* HOW MUCH TRAFFIC, AND WHY IT IS NOT 0.70. Thirty per cent fewer cars took
+     the queueing with them: measured over 900 frames, a car's own speed swung
+     63% of its cruise at full density and 24% at 0.70 - a road that never has
+     to brake. Tuning could not bring it back. Even at an eight-second desired
+     gap and a three-to-one spread of top speeds, 40 cars only reached 47%: a
+     jam is a density effect, and there is a number of cars below which one
+     cannot form however the drivers behave. 0.85 with the coupling below is
+     60% - his stop-start, at fifty cars instead of fifty-eight. */
+  var DENSITY   = 0.85,
       SPACING   = 0.083,  /* road length per car, as a share of section width -
                              the count follows from how long his road is, so a
                              short road does not end up nose to tail */
       CRUISE    = 0.060,  /* share of a section's width per second */
-      SPREAD    = 0.55,   /* how much top speeds differ - this is what jams */
-      LORRY     = 0.45,   /* how much slower the longest vehicle is than the
+      /* AND THE COUPLING RAISED WITH IT. Fewer cars means more road each, so a
+         driver has to want a bigger gap and the slow ones have to be slower
+         before anyone catches anyone: 1.70 seconds to 4, a 0.55 spread to
+         0.80, and his lorries from 0.45 slower than a car to 0.62. */
+      SPREAD    = 0.80,   /* how much top speeds differ - this is what jams */
+      LORRY     = 0.62,   /* how much slower the longest vehicle is than the
                              shortest. His semitrailer and his bus hold people
                              up, which is where most of the queueing comes
                              from - it is the same reason real traffic jams. */
       ACCEL     = 0.055, DECEL = 0.14,  /* same units, per second squared */
-      HEADWAY   = 1.70,   /* seconds of gap a driver wants */
+      HEADWAY   = 4.00,   /* seconds of gap a driver wants */
       REACT     = 1.45,   /* SECONDS OF REACTION DELAY, and the whole reason the
                              traffic queues rather than settling into a convoy.
                              A driver who responds instantly to the gap ahead
