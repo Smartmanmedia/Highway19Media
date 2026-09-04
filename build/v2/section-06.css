@@ -86,10 +86,10 @@
      the page owns transform, and keeping to the standalone property means a
      card never has to know what else is on it. */
   scale:1;
-  /* AT NIGHT THIS IS A GLOW, NOT A SHADOW, and it is on at rest - his ask.
-     Unset in daylight, so the card sits flat on his white page exactly as
-     it did. */
-  box-shadow:var(--card-glow, none);
+  /* AT NIGHT THIS BECOMES A GLOW in the lane's own colour, on at rest - see
+     night.css, where it is written against the card because that is the only
+     place --c exists. Flat on his white page by day, as it was. */
+  box-shadow:none;
   transition:scale .22s ease-out, box-shadow .22s ease-out,
              background-color .22s ease-out;
 }
@@ -103,7 +103,7 @@
   /* daylight keeps his drop shadow; at night the card fills in black and the
      glow comes up instead, because a black shadow on a black page is a
      smudge and nothing else. */
-  box-shadow:var(--card-glow-hover, 0 0.16cqw 0.85cqw rgba(0,0,0,.16));
+  box-shadow:0 0.16cqw 0.85cqw rgba(0,0,0,.16);
   background:var(--card-hover-bg, var(--card-bg, #fff));
   z-index:2;
 }

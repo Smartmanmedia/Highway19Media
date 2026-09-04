@@ -71,8 +71,6 @@
     --sec6-ink: #eef2f7;
     --card-bg: transparent;
     --card-hover-bg: #05070c;
-    --card-glow: 0 0 1.0cqw color-mix(in srgb, var(--c) 38%, transparent);
-    --card-glow-hover: 0 0 2.4cqw color-mix(in srgb, var(--c) 72%, transparent), 0 0 0.7cqw color-mix(in srgb, var(--c) 55%, transparent);
     --card-line: #7d8ea3;
     --card-ink: #f2f6fa;
     --card-sub: #c3cedb;
@@ -121,8 +119,6 @@
     --sec6-ink: #eef2f7;
     --card-bg: transparent;
     --card-hover-bg: #05070c;
-    --card-glow: 0 0 1.0cqw color-mix(in srgb, var(--c) 38%, transparent);
-    --card-glow-hover: 0 0 2.4cqw color-mix(in srgb, var(--c) 72%, transparent), 0 0 0.7cqw color-mix(in srgb, var(--c) 55%, transparent);
     --card-line: #7d8ea3;
     --card-ink: #f2f6fa;
     --card-sub: #c3cedb;
@@ -286,6 +282,40 @@ section .z-cloud{
 }
 :root[data-theme="dark"]:not([data-mode="day"]) .sec6 .card,
 :root[data-mode="night"] .sec6 .card{ border-color:var(--c) }
+
+
+/* --- AND THE LANE'S OWN GLOW ---------------------------------------------
+   Written against the CARD and not against :root, which is the whole of why
+   the first attempt showed nothing: a var() inside a custom property is
+   substituted where the property is declared, so a --card-glow set on :root
+   went looking for a --c that only ever exists on a card, came out invalid,
+   and the four of them inherited an empty value. Here --c is in scope and
+   one rule gives four different glows.
+
+   Soft at rest, twice as far and twice as strong under the pointer, with a
+   tight second shadow inside it - which is what makes a glow read as light
+   coming off an edge rather than as a blur. */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]):not([data-mode="day"]) .sec6 .page .card{
+    box-shadow: 0 0 1.1cqw color-mix(in srgb, var(--c) 42%, transparent);
+  }
+  :root:not([data-theme="light"]):not([data-mode="day"]) .sec6 .page .card:hover,
+  :root:not([data-theme="light"]):not([data-mode="day"]) .sec6 .page .card:focus-within{
+    box-shadow: 0 0 2.6cqw color-mix(in srgb, var(--c) 78%, transparent),
+                0 0 0.7cqw color-mix(in srgb, var(--c) 60%, transparent);
+  }
+}
+:root[data-theme="dark"]:not([data-mode="day"]) .sec6 .page .card,
+:root[data-mode="night"] .sec6 .page .card{
+  box-shadow: 0 0 1.1cqw color-mix(in srgb, var(--c) 42%, transparent);
+}
+:root[data-theme="dark"]:not([data-mode="day"]) .sec6 .page .card:hover,
+:root[data-theme="dark"]:not([data-mode="day"]) .sec6 .page .card:focus-within,
+:root[data-mode="night"] .sec6 .page .card:hover,
+:root[data-mode="night"] .sec6 .page .card:focus-within{
+  box-shadow: 0 0 2.6cqw color-mix(in srgb, var(--c) 78%, transparent),
+              0 0 0.7cqw color-mix(in srgb, var(--c) 60%, transparent);
+}
 
 
 /* --- HIS GANTRY, IN HIS OWN NIGHT ----------------------------------------

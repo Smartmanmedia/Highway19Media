@@ -174,14 +174,14 @@ const TOKENS = [
      smudge - and the fill only arrives on hover, which is what makes the
      card you are pointing at the one solid object in the row.
 
-     var(--c) inside these resolves against the CARD, not the root: a custom
-     property is substituted where it is used, so one line here gives four
-     different glows. */
+     THE GLOW ITSELF CANNOT LIVE HERE, and that was a real bug rather than a
+     preference. A var() inside a custom property is substituted where the
+     property is DECLARED, not where it is used - so --card-glow written here,
+     on :root, tried to read a --c that only exists on a card, came out
+     invalid, and the four cards inherited nothing at all. The glow is written
+     against the card in night.css instead, where --c is in scope. */
   ['--card-bg', 'transparent'],
   ['--card-hover-bg', '#05070c'],
-  ['--card-glow', '0 0 1.0cqw color-mix(in srgb, var(--c) 38%, transparent)'],
-  ['--card-glow-hover',
-   '0 0 2.4cqw color-mix(in srgb, var(--c) 72%, transparent), 0 0 0.7cqw color-mix(in srgb, var(--c) 55%, transparent)'],
   ['--card-line', '#7d8ea3'],
   ['--card-ink', '#f2f6fa'],
   ['--card-sub', '#c3cedb'],
