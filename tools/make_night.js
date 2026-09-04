@@ -202,8 +202,15 @@ const TOKENS = [
      other way. Eleven levels of blue between the two ends, at that darkness,
      is not something an eye can find. He also drops the white crest from that
      band at night, which is what --sea-far-foam does. */
-  ['--sea-surf-hi', '#1b5791'],
-  ['--sea-surf-lo', '#0d3d70'],
+  /* THE TWO NEAREST BANDS, TAKEN DOWN. His #1b5791 is the one colour in the
+     ocean that steps out of the picture: it sits at a lightness of 79 where
+     the band above it is at 28 and the whole section reads #000814. Both near
+     bands are scaled toward black by the same amount, on the same hue, so his
+     ramp keeps its shape and his order - the front band still darker than the
+     one behind it - and the run down the water becomes 15, 28, 28, 38, 51
+     instead of 15, 28, 28, 51, 79. */
+  ['--sea-surf-hi', '#123b63'],
+  ['--sea-surf-lo', '#0a2c50'],
   ['--sea-mid', '#011f51'],
   ['--sea-swell', '#022152'],
   ['--sea-far-a', '#000619'],

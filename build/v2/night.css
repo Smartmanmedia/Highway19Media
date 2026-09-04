@@ -76,8 +76,8 @@
     --card-line: #7d8ea3;
     --card-ink: #f2f6fa;
     --card-sub: #c3cedb;
-    --sea-surf-hi: #1b5791;
-    --sea-surf-lo: #0d3d70;
+    --sea-surf-hi: #123b63;
+    --sea-surf-lo: #0a2c50;
     --sea-mid: #011f51;
     --sea-swell: #022152;
     --sea-far-a: #000619;
@@ -126,8 +126,8 @@
     --card-line: #7d8ea3;
     --card-ink: #f2f6fa;
     --card-sub: #c3cedb;
-    --sea-surf-hi: #1b5791;
-    --sea-surf-lo: #0d3d70;
+    --sea-surf-hi: #123b63;
+    --sea-surf-lo: #0a2c50;
     --sea-mid: #011f51;
     --sea-swell: #022152;
     --sea-far-a: #000619;
@@ -370,6 +370,11 @@ section svg.z-copy [fill^="#"],
    element in the markup at the same z-index, so it paints over the board and
    under his clouds without a stacking rule of its own.
 
+   THE BOX IS TALLER THAN HIS ART NOW. His fittings are moved out past the
+   board's edges - see tools/make_sign_lights.js - so both files carry a
+   viewBox eight units above his and twenty-one below, and these numbers place
+   that larger box instead. The board's own edges have not moved.
+
    ALIGNED TO THE BOTTOM EDGE, as he asked. His fittings land on the four
    panel centres - their spacings are his sign's, the short last gap included
    - so the art is the panel's width less its rounded corners, CENTRED on the
@@ -385,7 +390,7 @@ section svg.z-copy [fill^="#"],
   position:absolute; display:block; pointer-events:none; z-index:3;
   aspect-ratio:938.5 / 349.56;
   background: url("../../assets/v2/ui-sign-fixtures.svg")
-              left 1.429% top 2.700% / 97.091% 96.893% no-repeat;
+              left 1.429% top 0.411% / 97.091% 102.986% no-repeat;
 }
 /* THE FITTINGS ARE BOLTED ON, so they stay in daylight; the light they throw
    is the night only part. Two backgrounds on one box rather than two elements,
@@ -394,7 +399,7 @@ section svg.z-copy [fill^="#"],
 .signlamps::after{
   content:''; position:absolute; inset:0;
   background: url("../../assets/v2/ui-sign-lights.svg")
-              left 1.429% top 2.700% / 97.091% 96.893% no-repeat;
+              left 1.429% top 0.411% / 97.091% 102.986% no-repeat;
   opacity:var(--night, 0);
   transition:opacity 1s linear;
 }
@@ -412,12 +417,14 @@ section svg.z-copy [fill^="#"],
   aspect-ratio:858.12 / 371.25;
   background-image: url("../../assets/v2/section-04/our-sign-fixtures.svg");
   background-position: 0 0;
-  background-size: 100% 100%;
+  /* his fittings are moved out past the board's edges, so both files carry a
+     box six units taller than the sign's; the width is untouched. */
+  background-size: 100% 101.549%;
 }
 .sec4 .signlamps::after{
   background-image: url("../../assets/v2/section-04/our-sign-beams.svg");
   background-position: 0 0;
-  background-size: 100% 100%;
+  background-size: 100% 101.549%;
 }
 @media (prefers-reduced-motion: reduce){ .signlamps::after{ transition:none } }
 
