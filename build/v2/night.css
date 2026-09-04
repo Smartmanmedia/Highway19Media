@@ -156,6 +156,30 @@
   }
   /* <<< palette */
 
+/* --- THE CARD PAGE AT NIGHT, REWRITTEN OVER THE GENERATED ONE --------------
+   Sampled off his night artboard this section came back one flat near-black,
+   which was fine while a snow range carried the eye off the bottom of it. The
+   drive is what carries it now, and the drive opens on a night sky - so this
+   page has to arrive there rather than cut to it. Dark blue at the top of the
+   cards going to the same #05080f the drive's sky washes in from at the
+   bottom, which puts the two on one colour at the seam and gives the section's
+   own lower half something for the starfield to sit against.
+
+   The first 3.85% stays transparent for the same reason it always did: section
+   four paints through there, so the two overlap and no hairline can open. */
+:root[data-theme="dark"]:not([data-mode="day"]),
+:root[data-mode="night"]{
+  --sec6-bg:
+    linear-gradient(180deg, transparent 0, transparent 3.85%,
+      #101b33 3.85%, #0b1226 44%, #070c18 76%, #05080f 100%);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]):not([data-mode="day"]){
+    --sec6-bg:
+      linear-gradient(180deg, transparent 0, transparent 3.85%,
+        #101b33 3.85%, #0b1226 44%, #070c18 76%, #05080f 100%);
+  }}
+
 /* DAYLIGHT IS THE DEFAULT ABOVE. An explicit light choice has to beat a dark
    system setting, so it restates the day values rather than relying on order. */
 :root[data-theme="light"]{

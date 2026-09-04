@@ -54,7 +54,10 @@ parts.join('\n\n') +
   + '<script src="shades.js" defer></script>\n'
   + '<script src="paths.js" defer></script>\n'
   + '<script src="traffic.js" defer></script>\n'
-  + '<script src="mode.js" defer></script>\n';
+  + '<script src="mode.js" defer></script>\n'
+  /* the drive, last: it measures the section it lives in, so everything above
+     it has to have laid out first */
+  + '<script src="drive.js" defer></script>\n';
 
 fs.writeFileSync(path.join(DIR, 'page.html'), out);
 console.log('page.html <- ' + files.join(' + '));
