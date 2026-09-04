@@ -235,8 +235,13 @@ function plant(o){
 const PALMS=['palm-a','palm-b','palm-c','palm-d'];
 for(let i=0;i<20;i++){
   const side=i%2?1:-1;
+  /* ON THE GREEN, WHICH IS NARROWER THAN IT LOOKS. The verge only reaches
+     GRASS across; anything planted beyond that has its foot on the water,
+     which is exactly where mine were. His own nearest palm stands at 721 of
+     a possible 845 - just past the tarmac's 557 and well inside the grass -
+     so that is the band they get. */
   plant({cls:'palm',art:PALMS[i%4],shadow:true,
-    x:side*(940+(i%3)*230),
+    x:side*(650+(i%3)*85),
     z:-420-Math.floor(i/2)*SPACING-(side>0?SPACING/2:0),
     h:560+(i%4)*90, loop:true});
 }
@@ -246,13 +251,22 @@ for(let i=0;i<20;i++){
    pass read as "close but far": you halted beside it rather than in front of
    it. Each board is set AHEAD of its stop by a reading distance, so the road
    comes to rest with the sign filling the frame in front of you. */
-const AHEAD=1500;
+/* HIS GANTRY, WORKED OUT OF HIS OWN PICTURE rather than guessed. At the
+   depth where his pole meets the ground the road is 596 across on screen and
+   his board is 469 - so the board is 0.787 of the road's half-width, which is
+   438 in these units, a board 876 wide and therefore 326 tall. His pole sits
+   at 1.149 of that half-width, which is 640: inside the verge, not out over
+   the water. Mine was 900 tall - nearly three times his - and the pole had to
+   be shoved to 1450 to clear it, which is what put it in the sea.
+
+   The board's bottom rides 508 above the pole's foot, and the arm runs from
+   the board's right edge at 417 out to the pole. */
+const AHEAD=420;
 for(const s of STOPS){
   const z=-(s*RUN)-AHEAD;
-  /* the board, the arm that carries it out to the shoulder, and the pole */
-  plant({cls:'sign',art:'hero',x:-140,z,h:900,lift:560,shadow:true});
-  plant({cls:'truss',x:1250,z,h:250,w:420,lift:900,shadow:true});
-  plant({cls:'pole',x:1450,z,h:1510,w:78,shadow:true});
+  plant({cls:'sign',art:'hero',x:-21,z,h:326,lift:508,shadow:true});
+  plant({cls:'truss',x:528,z,h:96,w:230,lift:600,shadow:true});
+  plant({cls:'pole',x:640,z,h:767,w:34,shadow:true});
 }
 /* clouds, drifting on their own clock - his sky is never still */
 const clouds=[];
