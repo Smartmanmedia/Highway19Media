@@ -54,12 +54,3 @@ section .traffic .tints{
 }
 @media (prefers-reduced-motion: reduce){ section .traffic .tints{ transition:none } }
 
-/* HIS STREET LAMPS. Screen, like the headlights, so they read as light falling
-   on the tarmac rather than orange paint laid over it. Static shapes - placed
-   once when the road is measured and never touched again - so they cost a
-   layer and nothing else. */
-section .traffic .lamps{
-  opacity:calc(var(--night, 0) * 0.85);
-  transition:opacity 1s linear;
-}
-@media (prefers-reduced-motion: reduce){ section .traffic .lamps{ transition:none } }
