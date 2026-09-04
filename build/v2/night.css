@@ -267,26 +267,46 @@ section img.z-copy{
 :root[data-mode="night"] .sec6 .card{ border-color:var(--c) }
 
 
-/* --- THE LAMPS ON HIS SIGN GANTRIES --------------------------------------
-   In his own night the green signs are lit from fittings above and below
-   them, and that is what keeps them the brightest thing on the page while
-   everything else falls away. Four small warm sources per sign, drawn as
-   gradients on one element rather than four - a lamp is a glow, and a glow is
-   a gradient. The element takes the sign's own box, so it follows it through
-   the parallax without being told to. */
+/* --- HIS LIGHT ON THE SIGN GANTRIES --------------------------------------
+   His own file, GreenSIgn_Lights.svg: the beams themselves - the light that
+   lands on the board - and not a glow around a bulb. Four fittings under the
+   four panels throwing up, two over the outside panels throwing down, two
+   small ones on the banner. What was here before was mine: soft warm blobs
+   sitting where a lamp would be, which is the light SOURCE, and he asked for
+   the opposite.
+
+   IT SITS ON TOP OF THE SIGN, not behind it. The span follows the sign
+   element in the markup at the same z-index, so it paints over the board and
+   under his clouds without a stacking rule of its own.
+
+   ALIGNED TO THE BOTTOM EDGE, as he asked. His fittings land on the four
+   panel centres - their spacings are his sign's, the short last gap included
+   - so the art is the panel's width less its rounded corners, CENTRED on the
+   board and PINNED to its bottom: 97.09% wide, and the top offset is
+   whatever falls out of that. Every number below is those two facts and
+   nothing else.
+
+   NO BLEND MODE. His beams are already a quarter-opacity gradient painted to
+   sit over green, so ordinary compositing gives back his own render exactly -
+   and it keeps a blend off the daylight page, which is where the last one
+   cost 8,000 pixels of body copy. */
 .signlamps{
   position:absolute; display:block; pointer-events:none; z-index:3;
   aspect-ratio:938.5 / 349.56;
-  opacity:calc(var(--night, 0) * 0.9);
+  opacity:var(--night, 0);
   transition:opacity 1s linear;
-  background:
-    radial-gradient(ellipse 9% 22% at 27% 3%,  rgba(255,224,170,.85), rgba(255,205,130,.28) 45%, transparent 72%),
-    radial-gradient(ellipse 9% 22% at 73% 3%,  rgba(255,224,170,.85), rgba(255,205,130,.28) 45%, transparent 72%),
-    radial-gradient(ellipse 9% 20% at 27% 97%, rgba(255,224,170,.75), rgba(255,205,130,.24) 45%, transparent 72%),
-    radial-gradient(ellipse 9% 20% at 73% 97%, rgba(255,224,170,.75), rgba(255,205,130,.24) 45%, transparent 72%),
-    /* and the wash those four throw down the face of the board */
-    linear-gradient(180deg, rgba(255,214,150,.20) 0%, rgba(255,214,150,.04) 26%,
-                    transparent 55%, rgba(255,214,150,.05) 88%, rgba(255,214,150,.16) 100%);
+  background: url("../../assets/v2/ui-sign-lights.svg")
+              left 1.429% top 2.700% / 97.091% 96.893% no-repeat;
+}
+/* SECTION FOUR'S BOARD HAS NO BANNER over it, so it takes the variant with
+   the two banner fittings dropped (tools/make_sign_lights.js) - and that
+   board is a little taller for its width than the hero's, so his beams are
+   stretched to reach the same two edges rather than stopping short. */
+.sec4 .signlamps{
+  aspect-ratio:854.59 / 299.40;
+  background-image: url("../../assets/v2/ui-sign-lights-board.svg");
+  background-position: left 1.428% top -1.657%;
+  background-size: 97.092% 101.172%;
 }
 @media (prefers-reduced-motion: reduce){ .signlamps{ transition:none } }
 
@@ -297,12 +317,9 @@ section img.z-copy{
    of body copy for a moon nobody could see. They are switched on with the
    night they belong to. */
 @media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]):not([data-mode="day"]) .moonpath,
-  :root:not([data-theme="light"]):not([data-mode="day"]) .signlamps{
+  :root:not([data-theme="light"]):not([data-mode="day"]) .moonpath{
     mix-blend-mode:screen;
   }
 }
 :root[data-theme="dark"]:not([data-mode="day"]) .moonpath,
-:root[data-theme="dark"]:not([data-mode="day"]) .signlamps,
-:root[data-mode="night"] .moonpath,
-:root[data-mode="night"] .signlamps{ mix-blend-mode:screen }
+:root[data-mode="night"] .moonpath{ mix-blend-mode:screen }

@@ -59,10 +59,6 @@ section + section{ margin-top:-1px }</style>
   <!-- road tile, inline so its two fills can be variables. Source: assets/v2/section-01/stright.svg -->
   <svg class="z-road" data-at aria-hidden="true" style="left:15.25%;top:87.11%;width:4.95%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="1326.29 1.04 95.06 324.70"><g><rect x="1326.29" y="1.04" width="95.06" height="324.7" fill="var(--tarmac)"></rect><rect x="1412.19" y="1.04" width="3.29" height="324.7" fill="var(--marking)"></rect><rect x="1331.94" y="1.04" width="3.3" height="324.7" fill="var(--marking)"></rect><g><rect x="1372.6" y="284.89" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="1372.6" y="237.58" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="1372.6" y="190.27" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="1372.6" y="142.96" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="1372.6" y="95.66" width="3.53" height="28.27" fill="var(--marking)"></rect><rect x="1372.6" y="48.35" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="1372.6" y="1.04" width="3.53" height="28.26" fill="var(--marking)"></rect></g></g></svg>
 
-  <!-- the lamps that light the gantry sign, night only. Same box as the sign
-       itself so they move with it; see .signlamps in night.css. -->
-  <span class="signlamps" data-at aria-hidden="true"
-        style="left:25.80%;top:9.33%;width:48.77%"></span>
 
   <!-- HIS MOON, and the light it puts on the water. Both are night only -
        night.css fades them in with everything else - and both are his own
@@ -177,6 +173,11 @@ section + section{ margin-top:-1px }</style>
           <text transform="translate(881.27 221.35) scale(.97 1)" font-family="BeVietnamPro-Black, 'Be Vietnam Pro'" font-size="24" font-weight="800" text-anchor="middle"><tspan x="0" y="0">All Roads Lead </tspan></text>
           <text transform="translate(1239.62 220.8451) scale(.9666 1)" font-family="BeVietnamPro-Black, 'Be Vietnam Pro'" font-size="24" font-weight="800" text-anchor="middle"><tspan x="0" y="0">To Your Business</tspan></text>
         </g></svg>
+
+  <!-- HIS LIGHT ON THE SIGN, after it in the markup so it paints ON the board
+       rather than behind it. Night only; see .signlamps in night.css. -->
+  <span class="signlamps par par-sign" data-at aria-hidden="true"
+        style="left:25.80%;top:9.33%;width:48.77%"></span>
 
   <img class="z-copy" data-at src="../../assets/v2/section-01/highwaysign.svg" alt=""
        style="left:30.14%;top:34.29%;width:4.61%">
@@ -3206,10 +3207,12 @@ section + section{ margin-top:-1px }</style>
 
   <!-- HIS SIGN, and the copy that sits on it -->
   <!-- and the same for his second sign -->
-  <span class="signlamps par par-sign" data-at aria-hidden="true" style="left:41.70%;top:24.45%;width:44.27%"></span>
 
   <img class="z-copy par par-sign" data-at src="../../assets/v2/section-04/our-sign.svg" alt=""
        style="left:41.70%;top:24.45%;width:44.27%">
+  <!-- HIS LIGHT ON THE BOARD, after the sign so it paints ON it. Night only;
+       see .signlamps in night.css. -->
+  <span class="signlamps par par-sign" data-at aria-hidden="true" style="left:41.70%;top:24.45%;width:44.27%"></span>
 
   <!-- Copy read out of his export by tools/read_text.js. Both sign blocks
        carry his scale(.82 1), so the box is widened by 1/.82 and squeezed
