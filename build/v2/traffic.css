@@ -33,19 +33,23 @@ section .traffic .beams{
 /* HIS CARS AT NIGHT. Zero by day, so the layer never composites at all. */
 section .traffic .shades{ fill:#000 }
 section .traffic .tints{
-  /* HIS CARS GO NEARLY OUT. This was set from his night painting, where the
-     green car still measures saturation 91 and the red 75 - so the tint sat at
-     0.44 and halved the brightness while leaving every hue where he put it.
-     Against the finished page that is too much car: a road of coloured paint
-     under a night sky reads as daylight with the lamps on. At 0.78 they keep
-     22% of their brightness - shapes and headlights, with the colour only just
-     there if you look for it.
+  /* HIS CARS GO NEARLY OUT: a tenth of their brightness and a fifth of their
+     colour with it.
+
+     THE TINT IS NOT QUITE BLACK, AND THAT IS WHAT DESATURATES. Over pure black
+     the brightness and the chroma fall by exactly the same factor, so the hues
+     stay as saturated as they ever were however dark the car gets - which is
+     why 0.44 and 0.78 both still read as coloured paint, just less of it. A
+     tint with a little grey in it adds to the lightness without adding to the
+     chroma, and saturation is the ratio between those two. Solving both at
+     once for a mid-tone car: 0.92 opacity puts the brightness at a tenth, and
+     the rgb(2,2,5) of grey inside the tint takes a fifth of the saturation.
 
      Still not a filter. This is the layer that moves every frame, and a filter
      over it would be re-rendered on all hundred-odd vehicles sixty times a
      second; his own silhouettes laid exactly over the cars cost nothing. */
-  fill:#05070c;
-  opacity:calc(var(--night, 0) * 0.78);
+  fill:#020205;
+  opacity:calc(var(--night, 0) * 0.92);
   transition:opacity 1s linear;
 }
 @media (prefers-reduced-motion: reduce){ section .traffic .tints{ transition:none } }

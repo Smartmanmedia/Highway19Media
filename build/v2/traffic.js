@@ -32,7 +32,12 @@
      here. `thin` is a density multiplier - the desert straight is meant to be
      the quiet one. */
   var ROADS = [{ secs: ['01', '02'], thin: 1 },
-               { secs: ['03'],       thin: 0.85 },
+               /* HIS DESERT STRAIGHT IS THE EMPTY ONE. `thin` alone could not
+                  hold it there: it is the longest road on the page, so a share
+                  of a long road is still a lot of cars. A ceiling of its own
+                  is the only thing that says "quiet" and keeps saying it
+                  whatever the road's length works out to. */
+               { secs: ['03'],       thin: 0.85, cap: 10 },
                { secs: ['04'],       thin: 1 }];
   var DENSITY   = 0.70,   /* how much of the traffic he wants on the road */
       SPACING   = 0.083,  /* road length per car, as a share of section width -
@@ -195,7 +200,8 @@
                beamG: beamG, carG: carG, tintG: tintG, path: P[n] };
     }).filter(Boolean);
     if (!parts.length) return null;
-    return { parts: parts, thin: cfg.thin, cars: [], live: true, pts: [], len: 0, laneW: 0 };
+    return { parts: parts, thin: cfg.thin, cap: cfg.cap,
+             cars: [], live: true, pts: [], len: 0, laneW: 0 };
   }).filter(Boolean);
   if (!roads.length) return;
 
@@ -382,9 +388,13 @@
        ceiling, so widening SPACING would not have thinned them at all - the
        count would have come down to the cap and stopped. Taking the share off
        the number that actually gets used is the only place a 30% cut is a 30%
-       cut. */
-    var n = Math.max(2, Math.round(DENSITY *
-      Math.min(30, Math.round(road.len * road.thin / (road.scale * SPACING)))));
+       cut.
+
+       AND `cap` IS A ROAD'S WHOLE TRAFFIC, not its n. n is cars PER LANE and
+       the loop below runs it twice, which is how a ceiling of 10 first came
+       out as twenty cars on his desert. */
+    var n = Math.max(2, Math.min(road.cap ? road.cap / 2 : 30, Math.round(DENSITY *
+      Math.min(30, Math.round(road.len * road.thin / (road.scale * SPACING))))));
     /* the vehicles that fit this road's tightest bend - always at least the
        shortest one, so a hairpin still gets traffic */
     var fits = NAMES.filter(function (nm) {
