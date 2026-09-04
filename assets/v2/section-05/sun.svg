@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" width="47.8" height="47.8" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 47.8 47.8">
+  <defs>
+    <radialGradient id="radial-gradient" cx="23.9" cy="23.9" fx="23.9" fy="23.9" r="23.9" gradientUnits="userSpaceOnUse">
+      <stop offset=".76" stop-color="#fcee21"/>
+      <stop offset=".79" stop-color="#fcf01b" stop-opacity=".84"/>
+      <stop offset=".85" stop-color="#fdf512" stop-opacity=".55"/>
+      <stop offset=".9" stop-color="#fef90a" stop-opacity=".31"/>
+      <stop offset=".95" stop-color="#fefc04" stop-opacity=".14"/>
+      <stop offset=".98" stop-color="#fefe01" stop-opacity=".04"/>
+      <stop offset="1" stop-color="#ff0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-2" cx="23.9" cy="24.1" fx="23.9" fy="24.1" r="20.5" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fbb03b"/>
+      <stop offset=".45" stop-color="#fbc930"/>
+      <stop offset="1" stop-color="#fcee21"/>
+    </radialGradient>
+  </defs>
+  <g id="Clouds">
+    <g>
+      <path d="M47.8,23.9c0,13.2-10.7,23.9-23.9,23.9C10.7,47.8,0,37.1,0,23.9,0,10.7,10.7,0,23.9,0s23.9,10.7,23.9,23.9Z" fill="url(#radial-gradient)"/>
+      <circle cx="23.9" cy="24.1" r="20.5" fill="url(#radial-gradient-2)"/>
+    </g>
+  </g>
+</svg>

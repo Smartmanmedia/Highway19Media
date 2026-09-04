@@ -228,6 +228,19 @@ html,body{margin:0;background:#0a1020;color:#fff;
 .hint{position:fixed;left:50%;translate:-50% 0;bottom:64px;z-index:9;font-size:13px;
   background:rgba(8,14,26,.62);padding:8px 15px;border-radius:999px;transition:opacity .5s}
 .hint.gone{opacity:0}
+/* the site's own switch, same size and place as the home page's */
+.mode-switch{position:fixed;top:14px;right:14px;z-index:10000;
+  width:52px;height:52px;padding:0;border:0;border-radius:50%;
+  background:rgba(0,0,0,.30);backdrop-filter:blur(2px);
+  cursor:pointer;display:grid;place-items:center;
+  box-shadow:0 2px 10px rgba(0,0,0,.35);
+  transition:background .25s ease,transform .25s ease}
+.mode-switch:hover{transform:scale(1.06)}
+.mode-switch:focus-visible{outline:3px solid #fcee21;outline-offset:3px}
+.mode-switch img{width:38px;height:38px;display:block}
+.mode-switch .to-day{display:none}
+:root[data-mode="night"] .mode-switch .to-night{display:none}
+:root[data-mode="night"] .mode-switch .to-day{display:block}
 </style>
 
 <div class="runway">
@@ -278,11 +291,19 @@ html,body{margin:0;background:#0a1020;color:#fff;
 
 <div class="hud" id="hud"></div>
 <div class="toggle">
-  <button id="nightBtn" aria-pressed="false">night</button>
   <button id="curveBtn" aria-pressed="false">earth curve</button>
   <button id="autoBtn" aria-pressed="false">auto-drive</button>
 </div>
 <div class="hint" id="hint">scroll to drive</div>
+
+<!-- HIS OWN DAY/NIGHT CONTROL, the one on the home page: his moon when it is
+     day, his sun when it is night, top right at 52px. The text pill I had put
+     down among the two debug buttons in the bottom corner was invisible next
+     to them - it did not read as the switch he already has. -->
+<button class="mode-switch" id="nightBtn" type="button" aria-label="Switch to night">
+  <img class="to-night" src="../../assets/v2/section-05/moon.svg" alt="" width="38" height="38">
+  <img class="to-day" src="../../assets/v2/section-05/sun.svg" alt="" width="38" height="38">
+</button>
 
 <script>
 const stage=document.getElementById('stage'), props=document.getElementById('props'),
@@ -664,7 +685,9 @@ for(let i=0;i<20;i++){
    crowded at the horizon, opening out as they come. They are stretched to
    SEA_W across, well past the frame, and the verge is drawn over the top of
    them so they only ever show in the water either side of the land. */
-const SEA_W=4200, WAVE_GAP=190, WAVES=[];
+/* SEA_W only sets how THICK a wave line is drawn - its length is the frame -
+   so halving it halves the lines and nothing else. */
+const SEA_W=2100, WAVE_GAP=190, WAVES=[];
 for(let i=0;i<15;i++){
   const el=document.createElement('div');
   el.className='wave';
@@ -855,8 +878,7 @@ addEventListener('scroll',()=>document.getElementById('hint').classList.add('gon
 document.getElementById('nightBtn').onclick=e=>{
   const on=document.documentElement.dataset.mode!=='night';
   document.documentElement.dataset.mode=on?'night':'day';
-  e.currentTarget.setAttribute('aria-pressed',String(on));
-  e.currentTarget.textContent=on?'day':'night'};
+  e.currentTarget.setAttribute('aria-label',on?'Switch to day':'Switch to night')};
 document.getElementById('curveBtn').onclick=e=>{curve=curve?0:1;
   e.currentTarget.setAttribute('aria-pressed',String(!!curve))};
 document.getElementById('autoBtn').onclick=e=>{auto=!auto;
