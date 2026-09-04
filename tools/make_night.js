@@ -132,7 +132,7 @@ const TOKENS = [
      glow is drop-shadow, not box-shadow: it has to follow the plate's
      rounded ends and the triangle hanging off its left, and box-shadow only
      knows rectangles. */
-  ['--cta-plate', '#e01b24'],
+  ['--cta-plate', '#530000'],
   ['--cta-glow',
    'drop-shadow(0 0 0.35cqw rgba(255,60,60,.95)) drop-shadow(0 0 1.4cqw rgba(230,20,30,.65))'],
   ['--sign-green', '#0a3d1f'],
@@ -209,8 +209,19 @@ const TOKENS = [
   ['--sea-far-b', '#001136'],
   ['--sea-far-shade', '#233e77'],
   ['--sea-far-foam', '0'],
-  ['--sign-lit', '0.66'],
-  ['--sign-sat', '0.74']
+  /* THE FIVE SMALLER SIGNS, off the five night files he sent. Nothing here is
+     derived: his green board, his red triangle, his banner gold, and the two
+     strokes that only exist at night - his banner picks up a #fcee21 edge and
+     his button a red one. The brightness that used to stand in for all of
+     this is gone, along with the white type it was dimming. */
+  ['--sign-red', '#b5000d'],
+  ['--sign-gold-2', '#dda517'],
+  ['--sign-gold-line', '#fcee21'],
+  /* HIS BUTTON IS NOT A BRIGHT RED PLATE. It is a nearly black one - #530000 -
+     inside a pure red edge, which is what makes it read as a lit tube and not
+     as red paint. The glow on .cta only carries that edge off the plate. */
+  ['--cta-line', 'red'],
+  ['--cta-tri', '#b5000d']
 ];
 
 const vars = TOKENS.map(([k, v]) => '    ' + k + ': ' + v + ';').join('\n') + '\n' +

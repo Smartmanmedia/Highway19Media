@@ -57,7 +57,7 @@
 .sec1 .page{ position:absolute; left:0; right:0; top:6.46%; bottom:0 }
 
 .sec1 [data-at]{ position:absolute; display:block; }
-.sec1 img[data-at]{ height:auto; }
+.sec1 img[data-at], .sec1 svg[data-at]{ height:auto; }
 
 /* --- z, as he set it: clouds over everything, the sign just under them ---- */
 /* HIS TWO OCEANS ARE NOT THE SAME BLUE. Section one's is #004ca2 to #045dc3;
@@ -170,7 +170,9 @@
    drew, unlit. */
 .sec1 .cta svg.plate [fill="#059236"]{
   fill: var(--cta-plate, #059236);
-  transition: fill 1s linear;
+  stroke: var(--cta-line, none);
+  stroke-miterlimit:10;
+  transition: fill 1s linear, stroke 1s linear;
 }
 .sec1 .cta{
   filter: var(--cta-glow, none);

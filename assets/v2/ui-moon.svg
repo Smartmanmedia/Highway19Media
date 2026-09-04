@@ -10,7 +10,7 @@
       <stop offset=".98" stop-color="#fefefe" stop-opacity=".04"/>
       <stop offset="1" stop-color="#fff" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="_ÂÁ_Ï_ÌÌ_È_ËÂÌÚ_3" data-name="¡ÂÁ˚ÏˇÌÌ˚È „‡‰ËÂÌÚ 3" cx="24.12" cy="24.4" fx="24.12" fy="24.4" r="26.37" gradientTransform="translate(-.11 -.61) scale(1)" gradientUnits="userSpaceOnUse">
+    <radialGradient id="_ÂÁ_Ï_ÌÌ_È_ËÂÌÚ_3" data-name="¡ÂÁ˚ÏˇÌÌ˚È „‡‰ËÂÌÚ 3" cx="23.32" cy="24.24" fx="23.32" fy="24.24" r="26.37" gradientTransform="translate(.69 -.45) scale(1)" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#e1e0e2"/>
       <stop offset=".6" stop-color="#ededed"/>
       <stop offset="1" stop-color="#edeced"/>
@@ -21,7 +21,7 @@
       <g id="Clouds">
         <g>
           <path d="M47.8,23.9c0,13.2-10.7,23.9-23.9,23.9C10.7,47.8,0,37.1,0,23.9,0,10.7,10.7,0,23.9,0s23.9,10.7,23.9,23.9Z" fill="url(#radial-gradient)"/>
-          <g id="moon" opacity=".71">
+          <g id="moon">
             <path d="M44.62,24.09c.39,26.78-41.39,26.78-40.99,0-.39-26.78,41.39-26.78,40.99,0Z" fill="url(#_ÂÁ_Ï_ÌÌ_È_ËÂÌÚ_3)"/>
             <path d="M19.55,36.89c1.43-.31,2.13,1.1,3.24,1.54,1.75-1.19,4.11-.83,5.9-1.72,1.95-3.33,4.74-4.65,7.53-6.84,2.06-4.34-1.14-2.33,1.99-6.9-.26-4.99-1.61-11.44-6.9-13.07-4.89-.55-11.3-4.25-14.62,1.89-1.31,2.24-3.59,3.08-5.36,4.83.13,4.13-7.13,11.83-.47,13.32,4.69,1.1-1.07,4.97,3.69,7.34,1.38.93,5.27-1.66,4.98-.4Z" fill="#e6e4e5" mix-blend-mode="multiply" opacity=".3"/>
             <path d="M8.09,13.26c5.59-12.77,25-10.51,32.34-.27,5.5,7.04,2.22,19.02-3.22,24.99-1.67.34-3.07,1.95-4.05,3.15-5.93,1.42-14.62,4.09-19.21-1.85-11.06-3.22-10.35-17.64-5.86-26.03Z" fill="#e6e4e5" mix-blend-mode="multiply" opacity=".6"/>
@@ -56,12 +56,14 @@
             <path d="M19.85,36.06c-1.28,2.1,5.81,1.79,5.21-.51,1.85.34.45,3.97-1.52,2.65-1.56-.61-6.53.83-3.69-2.14Z" fill="#e6e4e5" mix-blend-mode="multiply" opacity=".3"/>
             <path d="M22.45,37.54c1.27.49,3.35.53,3.23-1.38.54,2.89-2.08,2-3.8,1.59-1.26.36-3.64.83-2.52-1.33-.19,2.06,2.29.52,3.08,1.11Z" fill="#e6e4e5" mix-blend-mode="multiply" opacity=".3"/>
             <path d="M6.53,27.89c-.17,2.02,1.31,3.21,2.84,3.99-1.99,1.52-4.52-3.37-2.84-3.99Z" fill="#e6e4e5" mix-blend-mode="multiply" opacity=".3"/>
-            <!-- HIS FINAL OVERLAY DISC IS REMOVED HERE, and only here - the file he
-                 sent is untouched. It is a full-disc #131313 set to mix-blend-mode
-                 overlay. In Illustrator that blends against the artboard; in a
-                 browser the group isolates itself, so it blended against nothing
-                 and painted the whole moon a flat dark disc - every crater he drew
-                 underneath it lost. Without it his moon renders exactly as drawn. -->
+            <!-- HIS FINAL OVERLAY DISC IS REMOVED HERE, and only here - the file
+                 he sent is untouched. It is a full-disc #131313 on
+                 mix-blend-mode="overlay". In Illustrator that blends against the
+                 artboard behind it; in a browser this group isolates itself, so it
+                 blends against its own contents and paints the whole moon a flat
+                 dark disc - every crater he drew underneath it lost. Checked again
+                 against Moon_2.svg: same result, so it is removed again. Without it
+                 his moon renders exactly as he drew it. -->
           </g>
         </g>
       </g>

@@ -41,8 +41,6 @@
   --cloud-filter: none;
 
   /* his signs, and his cards, at full daylight */
-  --sign-lit: 1;
-  --sign-sat: 1;
   --card-bg: #fff;
   --card-line: #1a1a1a;
   --card-ink: #1a1a1a;
@@ -61,7 +59,7 @@
     --marking: #ffffff;
     --truss-night: brightness(.602) contrast(1.987);
     --boat-night: brightness(.68) saturate(.85);
-    --cta-plate: #e01b24;
+    --cta-plate: #530000;
     --cta-glow: drop-shadow(0 0 0.35cqw rgba(255,60,60,.95)) drop-shadow(0 0 1.4cqw rgba(230,20,30,.65));
     --sign-green: #0a3d1f;
     --sign-gold: #e7aa28;
@@ -86,8 +84,11 @@
     --sea-far-b: #001136;
     --sea-far-shade: #233e77;
     --sea-far-foam: 0;
-    --sign-lit: 0.66;
-    --sign-sat: 0.74;
+    --sign-red: #b5000d;
+    --sign-gold-2: #dda517;
+    --sign-gold-line: #fcee21;
+    --cta-line: red;
+    --cta-tri: #b5000d;
     --sec1-bg:
       linear-gradient(180deg, rgba(0,5,18,1) 0%, rgba(0,5,18,1) 6.460%, rgba(0,6,18,.98) 28.736%, rgba(0,6,18,.9) 45.443%, rgba(0,7,19,.78) 59.366%, rgba(0,8,20,.6) 72.360%, rgba(0,9,22,.37) 84.426%, rgba(0,10,24,.1) 95.564%, rgba(0,11,25,0) 99.277%), linear-gradient(90deg, #000915 0%, #000b19 100%);
     --sec1-fade:
@@ -108,7 +109,7 @@
     --marking: #ffffff;
     --truss-night: brightness(.602) contrast(1.987);
     --boat-night: brightness(.68) saturate(.85);
-    --cta-plate: #e01b24;
+    --cta-plate: #530000;
     --cta-glow: drop-shadow(0 0 0.35cqw rgba(255,60,60,.95)) drop-shadow(0 0 1.4cqw rgba(230,20,30,.65));
     --sign-green: #0a3d1f;
     --sign-gold: #e7aa28;
@@ -133,8 +134,11 @@
     --sea-far-b: #001136;
     --sea-far-shade: #233e77;
     --sea-far-foam: 0;
-    --sign-lit: 0.66;
-    --sign-sat: 0.74;
+    --sign-red: #b5000d;
+    --sign-gold-2: #dda517;
+    --sign-gold-line: #fcee21;
+    --cta-line: red;
+    --cta-tri: #b5000d;
     --sec1-bg:
       linear-gradient(180deg, rgba(0,5,18,1) 0%, rgba(0,5,18,1) 6.460%, rgba(0,6,18,.98) 28.736%, rgba(0,6,18,.9) 45.443%, rgba(0,7,19,.78) 59.366%, rgba(0,8,20,.6) 72.360%, rgba(0,9,22,.37) 84.426%, rgba(0,10,24,.1) 95.564%, rgba(0,11,25,0) 99.277%), linear-gradient(90deg, #000915 0%, #000b19 100%);
     --sec1-fade:
@@ -158,7 +162,6 @@
   --marking: #fff;
   --scene: 1; --scene-sat: 1; --cloud-filter: none;
   --sec2-ink: #333; --sec6-ink: #1a1a1a;
-  --sign-lit: 1; --sign-sat: 1;
   --card-bg: #fff; --card-line: #1a1a1a; --card-ink: #1a1a1a; --card-sub: #333;
   --sec1-bg: initial; --sec1-fade: initial; --sec2-bg: initial;
   --sec2-sand: initial; --sec3-bg: initial; --sec4-ground: initial;
@@ -236,10 +239,9 @@ section .z-cloud{
 /* HIS SIGNS, MUTED RATHER THAN DIMMED. Only the sign ART is named - the svg he
    drew the gantry sign in, and the small sign images - never the copy beside
    them, which is HTML and would go grey with it. */
-section img.z-copy{
-  filter: brightness(var(--sign-lit)) saturate(var(--sign-sat));
-  transition: filter 1s linear;
-}
+/* NOTHING IS FILTERED ANY MORE. Every sign on the page is inline and takes
+   his own colours a fill at a time; the brightness that used to stand in for
+   this is what was dimming his white type. */
 @media (prefers-reduced-motion: reduce){
   section img.z-copy{ transition: none }
 }
@@ -319,8 +321,31 @@ section img.z-copy{
    with no night set this resolves to the sign he drew. */
 .sec1 .z-sign [fill="#1c9022"]{ fill: var(--sign-green, #1c9022) }
 .sec1 .z-sign [fill="#ffda00"]{ fill: var(--sign-gold,  #ffda00) }
+
+/* AND THE FIVE SMALLER SIGNS, from the five files he sent. All inline now,
+   for the same reason the hero sign is: an image can only be filtered, and a
+   filter takes his white type down with his paint. His whites stay 255 in
+   every one of these; what turns is the board behind them.
+
+   Two of them gain a stroke at night that they do not have by day - his
+   banner picks up a #fcee21 edge and his button a red one - so the stroke
+   is a variable too, and `none` in daylight. */
+section svg.z-copy [fill="#059236"]{ fill: var(--sign-green, #059236) }
+section svg.z-copy [fill="#1c9022"]{ fill: var(--sign-green, #1c9022) }
+section svg.z-copy [fill="#ea2127"]{ fill: var(--sign-red,   #ea2127) }
+section svg.z-copy [fill="#ffda00"]{
+  fill: var(--sign-gold-2, #ffda00);
+  stroke: var(--sign-gold-line, none);
+  stroke-miterlimit:10;
+}
+/* his button: a dark red plate inside a bright red edge, which is where the
+   neon comes from - the glow on .cta only carries it off the plate */
+.sec1 .cta svg.plate [fill="#ea2127"]{ fill: var(--cta-tri, #ea2127) }
+
 .sec1 .z-sign [fill="#1c9022"],
-.sec1 .z-sign [fill="#ffda00"]{ transition: fill 1s linear }
+.sec1 .z-sign [fill="#ffda00"],
+section svg.z-copy [fill^="#"],
+.sec1 .cta svg.plate [fill^="#"]{ transition: fill 1s linear, stroke 1s linear }
 
 /* --- HIS LIGHT ON THE SIGN GANTRIES --------------------------------------
    His own file, GreenSIgn_Lights.svg: the beams themselves - the light that
