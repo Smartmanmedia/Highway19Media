@@ -30,21 +30,22 @@ section .traffic .beams{
 }
 @media (prefers-reduced-motion: reduce){ section .traffic .beams{ transition:none } }
 
-/* HIS CARS, MUTED AT NIGHT. Not a filter: this is the layer that moves every
-   frame, and a filter over it would be re-rendered on all 100-odd vehicles
-   sixty times a second. It is his own silhouettes laid exactly over the cars
-   in a night colour, which takes the paint down and pulls every hue toward the
-   same blue - which is what colour does at night. Zero by day, so it never
-   composites at all. */
+/* HIS CARS AT NIGHT. Zero by day, so the layer never composites at all. */
 section .traffic .shades{ fill:#000 }
 section .traffic .tints{
-  /* HIS CARS KEEP THEIR PAINT. Sampled off his night painting the green car is
-     still saturation 91, the yellow 89, the red 75 - they are darkened by about
-     half and not drained at all. A heavy blue tint took them to nearly grey,
-     which was mine, not his. Near-black at just under half strength halves the
-     brightness and leaves the hue where he put it. */
+  /* HIS CARS GO NEARLY OUT. This was set from his night painting, where the
+     green car still measures saturation 91 and the red 75 - so the tint sat at
+     0.44 and halved the brightness while leaving every hue where he put it.
+     Against the finished page that is too much car: a road of coloured paint
+     under a night sky reads as daylight with the lamps on. At 0.78 they keep
+     22% of their brightness - shapes and headlights, with the colour only just
+     there if you look for it.
+
+     Still not a filter. This is the layer that moves every frame, and a filter
+     over it would be re-rendered on all hundred-odd vehicles sixty times a
+     second; his own silhouettes laid exactly over the cars cost nothing. */
   fill:#05070c;
-  opacity:calc(var(--night, 0) * 0.44);
+  opacity:calc(var(--night, 0) * 0.78);
   transition:opacity 1s linear;
 }
 @media (prefers-reduced-motion: reduce){ section .traffic .tints{ transition:none } }
