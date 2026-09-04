@@ -21,7 +21,7 @@
    the sea never move: four shapes, drawn once, re-cut only on resize. Only the
    lane markings and the things standing on the road are touched per frame, and
    each of those is a single transform - no reads, no measuring, no layout.
-   ========================================================================= */.sec7 *{box-sizing:border-box}.sec7{height:1100vh;position:relative}.sec7 .stage{position:sticky;top:0;height:100vh;overflow:hidden;isolation:isolate}
+   ========================================================================= */.sec7 *{box-sizing:border-box}.sec7{height:780vh;position:relative}.sec7 .stage{position:sticky;top:0;height:100vh;overflow:hidden;isolation:isolate}
 /* EVERYTHING THAT STANDS ON THE EARTH fades out together at the end of the
    road. One property on the stage, read by eight layers - no per-element
    writes, and the sky, the moon and the starfield simply do not read it. */

@@ -83,12 +83,19 @@ const RUN=19000;
    ending the drive first and then dissolving a still frame is what read as
    parking up and getting out. */
 const START=0.06, END=1.0;
-const SIGN_AT=[0.16,0.70], TEXT_AT=0.30;
+const SIGN_AT=[0.16,0.52], TEXT_AT=0.33;
 /* AND WHERE IT HANDS OVER. From FADE_AT to the bottom of the scroll everything
    that stands on the earth goes out and only the sky is left - the sun and the
    blue in daylight, the moon and the stars after dark - so the next section
-   can start on a sky that is already there rather than cutting to it. */
-const FADE_AT=0.90;
+   can start on a sky that is already there rather than cutting to it.
+
+   THE TRIP IS SHORTER AND THE BOARDS ARE CLOSER TOGETHER. The second board
+   came at 70% of the section and then a fifth of the scroll went by with
+   nothing left to see. It lands at 52% now and the hand-over starts at 66% -
+   just as the road finishes easing away from it - so the drive is over by the
+   time the last board has been read, and what is left is the sky. The runway
+   comes down with it, 1100vh to 780. */
+const FADE_AT=0.66;
 const RANGE=END-START;
 const STOPS=SIGN_AT.map(a=>(a-START)/RANGE);
 const TEXT_U=(TEXT_AT-START)/RANGE;
