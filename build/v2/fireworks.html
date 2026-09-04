@@ -1,0 +1,245 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Highway 19 — fireworks</title>
+<link rel="stylesheet" href="section-fonts.css">
+<style>
+/* ============================================================================
+   FIREWORKS — what would go up after the road fades out.
+
+   CANVAS, NOT ELEMENTS, AND THAT IS THE WHOLE DESIGN DECISION. Everything else
+   in this build is DOM: a palm is one <img> and one transform, because there
+   are ninety of them and they last the whole section. A firework is the
+   opposite shape of problem - two thousand sparks that live a second and a half
+   and are never touched again. Two thousand elements would be two thousand
+   style recalculations and a layer budget blown twice over; two thousand
+   entries in a typed array drawn to one canvas is one element on the page.
+
+   THE CANVAS IS CLEARED EVERY FRAME AND EACH SPARK DRAWS ITS OWN TRAIL. The
+   usual way is the opposite - never clear, and thin what is already there with
+   a translucent wipe - and it looked right until the ghost of a burst was
+   still faintly on the sky a full two seconds later. That is not a tuning
+   problem, it is arithmetic: a wipe MULTIPLIES the alpha that is there, and an
+   8-bit alpha of 3 times 0.88 rounds back to 3. Anything that dim is stuck
+   there for good.
+
+   So nothing accumulates. A spark is stroked from where it was a frame and a
+   half ago to where it is now, which draws the same streak the buffer used to
+   leave - long while it is fast, a dot once it slows - and leaves nothing
+   behind when it dies.
+
+   AND THE SPARKS ADD RATHER THAN COVER. `lighter` is additive: where two
+   sparks of the same shell overlap they go towards white, which is what makes
+   the centre of a burst read as heat rather than as a crowd of dots.
+   ========================================================================= */
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#02060f;overflow:hidden;
+  font-family:"Be Vietnam Pro",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#fff}
+
+/* his night sky, the same one the drive hands over on */
+.sky{position:fixed;inset:0;
+  background:
+    radial-gradient(150% 260% at 9% -10%, rgba(150,190,255,.16), rgba(150,190,255,0) 55%),
+    linear-gradient(180deg,#02060f 0%,#050d1e 34%,#081833 62%,#0d2447 84%,#12305a 100%)}
+.stars{position:fixed;inset:0;background-image:
+  radial-gradient(1.5px 1.5px at 18% 22%,rgba(255,255,255,.95),transparent),
+  radial-gradient(1.1px 1.1px at 62% 9%,rgba(255,255,255,.75),transparent),
+  radial-gradient(1.3px 1.3px at 84% 41%,rgba(255,255,255,.85),transparent),
+  radial-gradient(1px 1px at 37% 58%,rgba(210,230,255,.7),transparent),
+  radial-gradient(1.6px 1.6px at 8% 74%,rgba(255,255,255,.6),transparent),
+  radial-gradient(1.1px 1.1px at 71% 66%,rgba(220,235,255,.65),transparent);
+  background-size:340px 240px,340px 240px,470px 330px,470px 330px,610px 410px,610px 410px}
+.moon{position:fixed;left:6.5%;top:7%;width:clamp(120px,17vh,260px);aspect-ratio:1;
+  display:grid;place-items:center;
+  background:radial-gradient(closest-side,rgba(178,208,255,.18),rgba(140,180,255,0) 76%)}
+.moon img{display:block;width:54%;height:auto}
+
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+
+.hud{position:fixed;left:16px;bottom:16px;z-index:9;font-size:12px;line-height:1.6;
+  background:rgba(8,14,26,.74);border:1px solid rgba(255,255,255,.16);
+  border-radius:10px;padding:10px 12px;backdrop-filter:blur(6px);min-width:230px}
+.hud b{font-weight:600}
+.hint{position:fixed;left:50%;translate:-50% 0;bottom:26px;z-index:9;font-size:13px;
+  background:rgba(8,14,26,.62);padding:8px 15px;border-radius:999px;
+  transition:opacity .6s;opacity:.85}
+.hint.gone{opacity:0}
+</style>
+
+<div class="sky"></div>
+<div class="stars"></div>
+<div class="moon"><img src="../../assets/v2/section-05/moon.svg" alt=""></div>
+<canvas id="sky"></canvas>
+<div class="hud" id="hud"></div>
+<div class="hint" id="hint">click anywhere to send one up</div>
+
+<script>
+const cv=document.getElementById('sky'), ctx=cv.getContext('2d'), hud=document.getElementById('hud');
+let W=0,H=0,DPR=1;
+function measure(){
+  /* CAP THE DEVICE RATIO AT 2. A 3x phone would be nine times the pixels for a
+     spark two pixels across - all of the cost and none of the difference. */
+  DPR=Math.min(2,devicePixelRatio||1);
+  W=innerWidth; H=innerHeight;
+  cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+addEventListener('resize',measure); measure();
+
+/* HIS OWN COLOURS. The four lanes off his cards, his gold and his red - so a
+   burst is the brand going off rather than a stock firework. Each shell picks
+   one and every spark in it is that colour, because a real shell is one
+   chemistry: mixed sparks read as confetti. */
+const INK=[
+  [0,146,69],     /* his green   */
+  [102,45,145],   /* his purple  */
+  [237,30,121],   /* his pink    */
+  [247,148,30],   /* his orange  */
+  [255,218,0],    /* his gold    */
+  [234,33,39]     /* his red     */
+];
+
+/* ---- the world ------------------------------------------------------------
+   Two flat arrays and nothing else. A particle is six numbers and a life; no
+   objects are made or thrown away in the frame loop, so there is nothing for
+   the collector to come back for in the middle of a burst. */
+const MAX=2600;
+const px=new Float32Array(MAX), py=new Float32Array(MAX),
+      vx=new Float32Array(MAX), vy=new Float32Array(MAX),
+      life=new Float32Array(MAX), full=new Float32Array(MAX),
+      cr=new Uint8Array(MAX), cg=new Uint8Array(MAX), cb=new Uint8Array(MAX),
+      size=new Float32Array(MAX);
+let live=0;
+
+/* THE TWO NUMBERS THAT DECIDE WHETHER IT IS A FIREWORK OR A WILLOW TREE. A
+   burst is a fast expansion and then a slow fall; get the ratio wrong and the
+   sparks spend their whole life falling, which is a weeping willow. Air is
+   what stops a star, not gravity - so the drag is heavy (a quarter of the
+   speed left after a second) and the gravity is light. The sphere reaches its
+   full radius in about four tenths of a second and then droops. */
+const TRAIL=0.055;   /* seconds of travel drawn behind each spark        */
+const GRAV=240;      /* px per second per second, at a 900px-tall window */
+const DRAG=0.25;     /* speed left after one second of air                */
+
+function spark(x,y,dx,dy,rgb,ttl,r){
+  if(live>=MAX) return;
+  const i=live++;
+  px[i]=x; py[i]=y; vx[i]=dx; vy[i]=dy;
+  life[i]=full[i]=ttl; size[i]=r;
+  cr[i]=rgb[0]; cg[i]=rgb[1]; cb[i]=rgb[2];
+}
+
+/* ---- a shell --------------------------------------------------------------
+   It is drawn as a spark like everything else and carries its own fuse; when
+   the fuse runs out it is removed and the burst is written in its place. */
+const shells=[];
+function launch(tx,ty){
+  const rgb=INK[(Math.random()*INK.length)|0];
+  const x=tx!==undefined?tx:W*(0.15+Math.random()*0.7);
+  const top=ty!==undefined?ty:H*(0.14+Math.random()*0.26);
+  /* SOLVED, NOT GUESSED. The shell has to arrive at the height it is aimed at
+     with nothing left in it, so its launch speed comes out of the drop:
+     v = sqrt(2*g*rise), and the fuse is how long that takes. */
+  const rise=H-top, up=Math.sqrt(2*GRAV*rise*(H/900));
+  shells.push({x:x, y:H+8, vx:(Math.random()-.5)*40, vy:-up,
+               fuse:up/(GRAV*(H/900)), rgb:rgb});
+}
+
+function burst(s){
+  const n=190+((Math.random()*90)|0), rgb=s.rgb;
+  const power=(430+Math.random()*190)*(H/900);
+  /* A RING PLUS A FILL. Every spark at the same speed is a hoop and every one
+     at a random speed is a fuzzy ball; his fireworks want the sharp edge AND
+     the glow inside it, so two thirds go out at nearly full speed and the rest
+     are scattered behind them. */
+  for(let i=0;i<n;i++){
+    const a=Math.random()*Math.PI*2;
+    const edge=i%2!==0;
+    const sp=power*(edge?0.80+Math.random()*0.20:0.15+Math.random()*0.70);
+    spark(s.x,s.y,Math.cos(a)*sp,Math.sin(a)*sp,rgb,
+          1.3+Math.random()*0.9, edge?1.7:1.2);
+  }
+  /* and a white heart, which is what the flash of the burst actually is */
+  for(let i=0;i<26;i++){
+    const a=Math.random()*Math.PI*2, sp=power*0.35*Math.random();
+    spark(s.x,s.y,Math.cos(a)*sp,Math.sin(a)*sp,[255,246,214],0.30,2.4);
+  }
+}
+
+/* ---- the frame ------------------------------------------------------------ */
+let last=performance.now(), next=0, frames=0, fpsT=last, worst=999, costSum=0, costN=0;
+function tick(now){
+  const dt=Math.min(0.05,(now-last)/1000); last=now;
+  const t0=performance.now();
+
+  ctx.clearRect(0,0,W,H);
+  ctx.globalCompositeOperation='lighter';
+  ctx.lineCap='round';
+
+  const g=GRAV*(H/900), drag=Math.pow(DRAG,dt);
+
+  /* shells */
+  for(let i=shells.length-1;i>=0;i--){
+    const s=shells[i];
+    s.vy+=g*dt; s.x+=s.vx*dt; s.y+=s.vy*dt; s.fuse-=dt;
+    /* its own tail, thrown backwards so it reads as thrust */
+    spark(s.x,s.y,-s.vx*0.2+(Math.random()-.5)*26,-s.vy*0.05+Math.random()*30,
+          [255,214,140],0.34,0.9);
+    if(s.fuse<=0||s.vy>=0){ burst(s); shells.splice(i,1); }
+  }
+
+  /* sparks - one pass, and a dead one is swapped with the last rather than
+     spliced out, so nothing ever shifts down the array */
+  for(let i=0;i<live;i++){
+    life[i]-=dt;
+    if(life[i]<=0){
+      const j=--live;
+      px[i]=px[j];py[i]=py[j];vx[i]=vx[j];vy[i]=vy[j];
+      life[i]=life[j];full[i]=full[j];size[i]=size[j];
+      cr[i]=cr[j];cg[i]=cg[j];cb[i]=cb[j];
+      i--; continue;
+    }
+    vy[i]+=g*dt; vx[i]*=drag; vy[i]*=drag;
+    px[i]+=vx[i]*dt; py[i]+=vy[i]*dt;
+    /* FADE ON THE SQUARE, not straight. A spark that dims evenly reads as a
+       light being turned down; burning out is fast at the end. */
+    const k=life[i]/full[i];
+    ctx.globalAlpha=k*k;
+    const c='rgb('+cr[i]+','+cg[i]+','+cb[i]+')';
+    /* the streak it has just travelled - its own speed decides how long it is,
+       so a spark leaving the burst is a dash and the same spark drifting down
+       a second later is a dot */
+    ctx.strokeStyle=c; ctx.lineWidth=size[i]*(0.5+k*0.5)*2;
+    ctx.beginPath();
+    ctx.moveTo(px[i]-vx[i]*TRAIL,py[i]-vy[i]*TRAIL);
+    ctx.lineTo(px[i],py[i]);
+    ctx.stroke();
+  }
+  ctx.globalAlpha=1;
+
+  /* THREE OR FOUR IN THE AIR, which is the show he asked for: one every
+     three quarters of a second or so, never more than four unopened. */
+  next-=dt;
+  if(next<=0&&shells.length<4){ launch(); next=0.55+Math.random()*0.7; }
+
+  costSum+=performance.now()-t0; costN++;
+  frames++;
+  if(now-fpsT>500){
+    const fps=Math.round(frames*1000/(now-fpsT));
+    if(fps<worst&&now>2500) worst=fps;
+    frames=0; fpsT=now;
+    const ms=(costSum/Math.max(1,costN)).toFixed(2); costSum=0; costN=0;
+    hud.innerHTML='<b>'+fps+' fps</b>'+(worst<999?' &nbsp;·&nbsp; worst '+worst:'')+
+      ' &nbsp;·&nbsp; '+ms+'ms a frame'+
+      '<br>'+live+' sparks &nbsp;·&nbsp; '+shells.length+' in the air'+
+      '<br>one canvas &nbsp;·&nbsp; no DOM per spark';
+  }
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+addEventListener('pointerdown',e=>{
+  launch(e.clientX,Math.min(e.clientY,H*0.62));
+  document.getElementById('hint').classList.add('gone');
+});
+</script>
