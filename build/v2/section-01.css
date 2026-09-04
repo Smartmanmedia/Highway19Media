@@ -471,43 +471,23 @@
 
 
 
-/* --- HIS MOON, AND ITS PATH ON THE WATER ---------------------------------
-   Night only, and the pair of them are what his own painting leans on: the
-   moon top right and a column of broken light straight down from it. The
-   column is a masked gradient rather than a drawing - a reflection has no
-   edges, and one drawn with edges is the thing that always looks pasted on.
-   Both sit at cloud depth so his sign and his road stay over them. */
+/* --- HIS MOON -----------------------------------------------------------
+   Night only, at HIS position and HIS size, read straight out of artboard
+   one: his halo circle is r 23.9 centred on 1452.23, 42.75 of his 1920 x
+   1808 board, and ui-moon.svg is that circle exactly - 47.8 square, halo
+   included. So the three numbers in the markup are his, not a placement.
+
+   THE COLUMN OF LIGHT ON THE WATER IS GONE. It was mine, not his - there is
+   no reflection in any of his five artboards - and it read as pasted on.
+   Its blend went with it, which leaves the page with no mix-blend-mode at
+   all: the one thing that could reach back into daylight and cost his body
+   copy its subpixel antialiasing. */
 .sec1 .moon{
   position:absolute; display:block; height:auto; z-index:4;
   opacity:var(--night, 0);
   transition:opacity 1s linear;
   pointer-events:none;
 }
-.sec1 .moonpath{
-  position:absolute; z-index:0; pointer-events:none;
-  left:83.2%; width:6.2%; top:7%; bottom:0;
-  opacity:calc(var(--night, 0) * 0.30);
-  transition:opacity 1s linear;
-  background:linear-gradient(180deg,
-    rgba(205,225,255,.60) 0%, rgba(175,205,250,.28) 16%,
-    rgba(155,190,245,.13) 40%, rgba(145,180,240,.05) 68%,
-    rgba(145,180,240,0) 100%);
-  /* BROKEN, NOT STRIPED. Hard-edged bands read as a barcode laid on the water;
-     the stops are feathered and the two periods are different and coprime, so
-     they drift in and out of step down the column instead of repeating. */
-  -webkit-mask-image:
-    repeating-linear-gradient(180deg, #000 0 2px, transparent 5px 9px),
-    repeating-linear-gradient(180deg, #000 0 3px, transparent 7px 16px),
-    linear-gradient(90deg, transparent, #000 34%, #000 66%, transparent);
-          mask-image:
-    repeating-linear-gradient(180deg, #000 0 2px, transparent 5px 9px),
-    repeating-linear-gradient(180deg, #000 0 3px, transparent 7px 16px),
-    linear-gradient(90deg, transparent, #000 34%, #000 66%, transparent);
-  -webkit-mask-composite:source-in; mask-composite:intersect;
-  /* the blend is night-only, see night.css - a blend mode present by day
-     changes how the section composites and text in it loses its subpixel
-     antialiasing, which moved 8,000 pixels of his copy for nothing */
-}
 @media (prefers-reduced-motion: reduce){
-  .sec1 .moon, .sec1 .moonpath{ transition:none }
+  .sec1 .moon{ transition:none }
 }

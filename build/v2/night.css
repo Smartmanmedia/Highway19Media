@@ -57,8 +57,12 @@
   @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]):not([data-mode="day"]){
     --night: 1;
-    --tarmac: #1b1d24;
-    --marking: #ece9e0;
+    --tarmac: #111623;
+    --marking: #ffffff;
+    --truss-night: brightness(.602) contrast(1.987);
+    --boat-night: brightness(.68) saturate(.85);
+    --sign-green: #0a3d1f;
+    --sign-gold: #e7aa28;
     --scene: 0.50;
     --scene-sat: 0.95;
     --cloud-filter: brightness(.88) saturate(.45);
@@ -96,8 +100,12 @@
   :root[data-theme="dark"]:not([data-mode="day"]),
   :root[data-mode="night"]{
     --night: 1;
-    --tarmac: #1b1d24;
-    --marking: #ece9e0;
+    --tarmac: #111623;
+    --marking: #ffffff;
+    --truss-night: brightness(.602) contrast(1.987);
+    --boat-night: brightness(.68) saturate(.85);
+    --sign-green: #0a3d1f;
+    --sign-gold: #e7aa28;
     --scene: 0.50;
     --scene-sat: 0.95;
     --cloud-filter: brightness(.88) saturate(.45);
@@ -216,13 +224,12 @@ section .z-cloud{
 /* HIS SIGNS, MUTED RATHER THAN DIMMED. Only the sign ART is named - the svg he
    drew the gantry sign in, and the small sign images - never the copy beside
    them, which is HTML and would go grey with it. */
-section svg.z-sign,
 section img.z-copy{
   filter: brightness(var(--sign-lit)) saturate(var(--sign-sat));
   transition: filter 1s linear;
 }
 @media (prefers-reduced-motion: reduce){
-  section svg.z-sign, section img.z-copy{ transition: none }
+  section img.z-copy{ transition: none }
 }
 
 /* --- THE TEMPORARY SWITCH ------------------------------------------------
@@ -266,6 +273,42 @@ section img.z-copy{
 :root[data-theme="dark"]:not([data-mode="day"]) .sec6 .card,
 :root[data-mode="night"] .sec6 .card{ border-color:var(--c) }
 
+
+/* --- HIS GANTRY, IN HIS OWN NIGHT ----------------------------------------
+   It used to be left out of the night on purpose - a lit steel truss reads
+   pale against the black - and that was my call, not his. His night gantry
+   is one gradient, #b3b3b3 down to #1a1a1a. The tile is a raster so there is
+   no fill to set, but it is pure greyscale running 127 to 255, and a
+   greyscale range maps onto another with two numbers: brightness then
+   contrast, solved for his two ends. His own light-to-dark direction is
+   whatever his day tile has, and it is kept. */
+.sec1 .truss{
+  filter: var(--truss-night, none);
+  transition: filter 1s linear;
+}
+
+/* his boats, taken down to the greys and the dark red he painted them */
+.sec1 .boat .art,
+.sec1 .fast-boat .art{
+  filter: var(--boat-night, none);
+  transition: filter 1s linear;
+}
+
+/* --- HIS SIGN, COLOUR BY COLOUR ------------------------------------------
+   The hero sign is inline, so its fills can be set rather than filtered -
+   which is the whole point. A brightness over the sign took his white
+   arrows and white type down with the board; in his own artboard they are a
+   pure 255 and only the paint behind them goes dark. That is the contrast
+   he was missing, and no filter can give it: a filter cannot tell his paint
+   from his letters.
+
+   Matched by the day colour itself, so his art needs no classes added to
+   it and re-exports keep working. The day value is the fallback in both, so
+   with no night set this resolves to the sign he drew. */
+.sec1 .z-sign [fill="#1c9022"]{ fill: var(--sign-green, #1c9022) }
+.sec1 .z-sign [fill="#ffda00"]{ fill: var(--sign-gold,  #ffda00) }
+.sec1 .z-sign [fill="#1c9022"],
+.sec1 .z-sign [fill="#ffda00"]{ transition: fill 1s linear }
 
 /* --- HIS LIGHT ON THE SIGN GANTRIES --------------------------------------
    His own file, GreenSIgn_Lights.svg: the beams themselves - the light that
@@ -311,15 +354,11 @@ section img.z-copy{
 @media (prefers-reduced-motion: reduce){ .signlamps{ transition:none } }
 
 
-/* THE BLENDS GO ON ONLY AT NIGHT. An element carrying mix-blend-mode changes
-   how its whole section composites even at opacity zero: text in that section
-   loses subpixel antialiasing, and the daylight page shifted by 8,000 pixels
-   of body copy for a moon nobody could see. They are switched on with the
-   night they belong to. */
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]):not([data-mode="day"]) .moonpath{
-    mix-blend-mode:screen;
-  }
-}
-:root[data-theme="dark"]:not([data-mode="day"]) .moonpath,
-:root[data-mode="night"] .moonpath{ mix-blend-mode:screen }
+/* NO BLEND MODES ANYWHERE ON THIS PAGE, AND THAT IS DELIBERATE. An element
+   carrying mix-blend-mode changes how its whole section composites even at
+   opacity zero - text in that section loses its subpixel antialiasing, and
+   the daylight page once shifted by 8,000 pixels of body copy for a moon
+   reflection nobody could see. The reflection is gone and his sign lights
+   need no blend, so the last one has gone with it. Anything added here
+   later should be checked the same way: switch it off in daylight and
+   diff the page. */

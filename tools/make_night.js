@@ -102,8 +102,33 @@ const TOKENS = [
      dim only because his road is lit by street lamps, and without those the
      markings are the only thing that makes the road a road. Slightly warm,
      as they are under any road lighting. */
-  ['--tarmac', '#1b1d24'],
-  ['--marking', '#ece9e0'],
+  ['--tarmac', '#111623'],
+  ['--marking', '#ffffff'],
+  /* HIS TRUSS. The one thing on the page still lit like daylight, and he
+     said so. His night gantry is one gradient, #b3b3b3 down to #1a1a1a; the
+     day tile is a raster and pure greyscale, running 127 to 255. So this is
+     the straight line that takes one range onto the other - his two ends,
+     his own light-to-dark direction kept - and not a taste. */
+  ['--truss-night', 'brightness(.602) contrast(1.987)'],
+  /* HIS GREEN AND HIS GOLD, off artboard one. Both are a repeating sheen in
+     his file rather than a flat colour - the board cycles #06301a / #0c4221 /
+     #0f4924 across its width and the banner runs a highlight through
+     #cc9300 / #fbc93b / #fbb03b - so these are the means of his own stops.
+     Flat, because a flat colour can be transitioned and a gradient cannot,
+     and because his ramps span six levels of green: nothing an eye finds.
+
+     WHAT THIS REPLACES IS THE REASON HE ASKED. A brightness over the whole
+     sign took his white arrows and white type down to #a8a8a8 with the
+     board, and that is the lack of contrast: his own night keeps them at a
+     pure 255 and darkens only the paint behind them. */
+  /* HIS TWO BOATS. Both are rasterised SVGs in an <img>, so no fill to set -
+     but neither has any white to protect, so a filter is honest here. Solved
+     against his own numbers: his cruiser's hull goes #d1d4d8 to #949494 and
+     his speedboat's red goes #a92121 to #791715, and one brightness and one
+     saturate land on both to within a couple of levels. */
+  ['--boat-night', 'brightness(.68) saturate(.85)'],
+  ['--sign-green', '#0a3d1f'],
+  ['--sign-gold', '#e7aa28'],
   /* his painted layers keep their COLOUR - his water is still fully saturated
      blue at a tenth of daylight. Desaturating them was mine too. And they are
      not taken as far down as the flat surfaces behind them: his foam lines
