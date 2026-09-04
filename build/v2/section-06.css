@@ -85,6 +85,53 @@
   isolation:isolate;
 }
 
+/* ============================================================================
+   THE SKY BEGINS ON THIS PAGE, NOT AT THE SEAM.
+   The gradient already arrives at the drive's first row exactly, but the
+   drive's sky brings its stars and its clouds with it and they used to start
+   dead on the section boundary - a line of nothing, then a sky full of things.
+   So both start up here and fade in, and the two sections read as one sky
+   deepening rather than one page handing over to another.
+
+   Anchored to the BOTTOM, both of them, because that is the edge the two
+   sections share: whatever height this section is given, the last row of these
+   is the row the drive continues from.
+   ========================================================================= */
+
+/* HIS STARFIELD, the same six tiles the drive uses so the two are one sky. The
+   mask is what makes it a fade rather than an edge - a background cannot be
+   given an alpha ramp any other way. */
+.sec6::after{
+  content:''; position:absolute; inset:0; z-index:0; pointer-events:none;
+  opacity:var(--night, 0); transition:opacity 1s linear;
+  background-image:
+    radial-gradient(1.5px 1.5px at 18% 22%,rgba(255,255,255,.95),transparent),
+    radial-gradient(1.1px 1.1px at 62% 9%,rgba(255,255,255,.75),transparent),
+    radial-gradient(1.3px 1.3px at 84% 41%,rgba(255,255,255,.85),transparent),
+    radial-gradient(1px 1px at 37% 58%,rgba(210,230,255,.7),transparent),
+    radial-gradient(1.6px 1.6px at 8% 74%,rgba(255,255,255,.6),transparent),
+    radial-gradient(1.1px 1.1px at 71% 66%,rgba(220,235,255,.65),transparent);
+  background-size:340px 240px,340px 240px,470px 330px,470px 330px,610px 410px,610px 410px;
+  background-position:left bottom;
+  -webkit-mask-image:linear-gradient(180deg,transparent 44%,#000 96%);
+          mask-image:linear-gradient(180deg,transparent 44%,#000 96%);
+}
+
+/* AND HIS CLOUDS, THREE OF THEM, in daylight only - the first of the sky the
+   drive is full of, drifting in before the road arrives. Static: they are the
+   far ones, and the far ones barely move even in the drive. */
+.sec6::before{
+  content:''; position:absolute; inset:0; z-index:0; pointer-events:none;
+  opacity:calc(1 - var(--night, 0)); transition:opacity 1s linear;
+  background-image:
+    url("../../assets/v2/section-05/cloud-3.svg"),
+    url("../../assets/v2/section-05/cloud-1.svg"),
+    url("../../assets/v2/section-05/cloud-4.svg");
+  background-repeat:no-repeat, no-repeat, no-repeat;
+  background-size:7.2% auto, 13.5% auto, 10.4% auto;
+  background-position:19% calc(100% - 7.2cqw), 63% calc(100% - 3.1cqw), 84% calc(100% - 9.6cqw);
+}
+
 /* THE MOUNTAINS HAVE TO CROSS THE TRANSITION. His rock band ends at section
    four's artboard edge - there is no more of it drawn - so the way to get it
    past the boundary is to start this section 150px early and leave that band
