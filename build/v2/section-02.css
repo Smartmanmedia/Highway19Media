@@ -161,6 +161,15 @@
    pasted whole by tools/split_waves.js; giving them classes would mean
    hand-editing his art back in every time he re-exports. The order is his
    paint order: shade, crest, water. */
+/* HIS FOAM, MOONLIT. It was the one thing left at daylight value - a flat
+   #fff on the two crest lines and a ramp to #fefeff across the broad wedge at
+   the shore - and against water taken down to a lightness of 36 it was the
+   only bright thing in the section by a factor of seven. Muted to 121 at the
+   wedge's dark end and 157 at its light one, which still puts it four times
+   above the water it breaks on: foam under a moon rather than under a sun. */
+.sec2 #waves-g1 stop:first-child{ stop-color: var(--sea-foam-a, #dee5ff) }
+.sec2 #waves-g1 stop:last-child { stop-color: var(--sea-foam-b, #fefeff) }
+.sec2 .waves [fill="#fff"]{ fill: var(--sea-foam, #fff); transition: fill 1s linear }
 .sec2 #waves-g2 stop:first-child{ stop-color: var(--sea-surf-hi, #93dbfb) }
 .sec2 #waves-g2 stop:last-child { stop-color: var(--sea-surf-hi, #1281cc) }
 .sec2 #waves-g3 stop:first-child{ stop-color: var(--sea-surf-lo, #00ccfd) }

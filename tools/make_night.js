@@ -221,6 +221,14 @@ const TOKENS = [
   ['--sea-swell', '#022152'],
   ['--sea-far-a', '#000619'],
   ['--sea-far-b', '#001136'],
+  /* AND HIS FOAM WITH THEM. It was the last thing at daylight value: flat
+     white on the crest lines, ramping to #fefeff across the broad wedge at
+     the shore, against water now sitting at 36. These are the same colour
+     seen by moonlight - 121 at the wedge's dark end, 157 at its light one -
+     which still leaves it four times brighter than the water it breaks on. */
+  ['--sea-foam', '#8ea0bd'],
+  ['--sea-foam-a', '#6c7b99'],
+  ['--sea-foam-b', '#8ea0bd'],
   ['--sea-far-shade', '#233e77'],
   ['--sea-far-foam', '0'],
   /* THE FIVE SMALLER SIGNS, off the five night files he sent. Nothing here is
