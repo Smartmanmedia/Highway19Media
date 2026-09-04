@@ -61,6 +61,58 @@ html,body{margin:0;background:#0a1020;color:#fff;
 .edge.gold{background:#ffda00}
 .dash{background:#fff}
 
+/* ===== NIGHT ==============================================================
+   ONE SWITCH, data-mode on the root, and everything crossfades over a second.
+   The grounds fade because each carries its night colour as an ::after that
+   goes from 0 to 1 opacity - no second element, and the day paint underneath
+   is untouched. The sprites fade because their day and night filters are the
+   SAME function list in the same order, which is the only way a filter
+   interpolates: change the list and it snaps.
+
+   EVERYTHING GOES BLUE EXCEPT WHAT MAKES LIGHT. The palms, the water, the
+   verge, the tarmac, the clouds and the metal all rotate into the blues and
+   come down hard in brightness. The boards and the lamp heads do not: a sign
+   is retro-reflective and a lamp is the source, so they stay warm and they are
+   the only warm things in the frame - which is what makes a night scene read
+   as lit rather than as a photograph with the exposure pulled down. */
+.sky::after,.sea::after,.land::after,.road::after{
+  content:'';position:absolute;inset:0;opacity:0;transition:opacity 1s linear;
+  pointer-events:none}
+:root[data-mode="night"] .sky::after,:root[data-mode="night"] .sea::after,
+:root[data-mode="night"] .land::after,:root[data-mode="night"] .road::after{opacity:1}
+.sky::after{background:linear-gradient(180deg,#02060f 0%,#050d1e 34%,#081833 62%,#0d2447 84%,#12305a 100%)}
+.sea::after{background:
+  radial-gradient(150% 260% at 9% -10%, rgba(150,190,255,.30), rgba(150,190,255,0) 55%),
+  linear-gradient(180deg,#08182f 0%,#061225 46%,#040c1a 100%)}
+.land::after{background:
+  radial-gradient(140% 220% at 9% -14%, rgba(150,195,255,.20), rgba(150,195,255,0) 52%),
+  linear-gradient(180deg,#0d1e34 0%,#0a1728 46%,#071120 100%)}
+.road::after{background:
+  radial-gradient(150% 240% at 9% -12%, rgba(160,200,255,.14), rgba(160,200,255,0) 55%),
+  linear-gradient(180deg,#0b1220 0%,#070c17 46%,#05080f 100%)}
+
+/* his sky at night: a moon where his sun was, and a tiled starfield. Two
+   background layers of dots repeated is a whole sky for nothing. */
+.stars,.moon{position:absolute;opacity:0;transition:opacity 1.2s linear;pointer-events:none}
+.stars{inset:0;background-image:
+  radial-gradient(1.5px 1.5px at 18% 22%,rgba(255,255,255,.95),transparent),
+  radial-gradient(1.1px 1.1px at 62% 9%,rgba(255,255,255,.75),transparent),
+  radial-gradient(1.3px 1.3px at 84% 41%,rgba(255,255,255,.85),transparent),
+  radial-gradient(1px 1px at 37% 58%,rgba(210,230,255,.7),transparent),
+  radial-gradient(1.6px 1.6px at 8% 74%,rgba(255,255,255,.6),transparent),
+  radial-gradient(1.1px 1.1px at 71% 66%,rgba(220,235,255,.65),transparent);
+  background-size:340px 240px,340px 240px,470px 330px,470px 330px,610px 410px,610px 410px}
+.moon{left:8%;top:7%;width:clamp(58px,8.6vh,132px);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 38% 34%,#fffef4,#eef3ff 52%,#cdd9f2 76%,#b3c4e4);
+  box-shadow:0 0 54px 16px rgba(185,212,255,.34),0 0 170px 62px rgba(135,180,255,.16)}
+:root[data-mode="night"] .stars,:root[data-mode="night"] .moon{opacity:1}
+
+/* the paint dims - it is only as bright as what falls on it */
+.edge,.dash{transition:background-color 1s linear}
+:root[data-mode="night"] .edge{background:#8195b4}
+:root[data-mode="night"] .dash{background:#8195b4}
+:root[data-mode="night"] .edge.gold{background:#8a6a26}
+
 /* ---- what stands on it --------------------------------------------------
    Sprites, not vector. His four trees carry 247 shapes and 246 gradients -
    one per frond - and a palm in this scene is never still: it grows the whole
@@ -69,7 +121,51 @@ html,body{margin:0;background:#0a1020;color:#fff;
    the compositor scales them for nothing. */
 .thing{position:absolute;left:0;top:0;will-change:transform;transform-origin:50% 100%}
 .thing img{display:block;height:100%;width:auto}
-.sign img{filter:drop-shadow(0 14px 20px rgba(0,0,0,.22))}
+/* THE SPRITES AT NIGHT. Both states are the same three functions in the same
+   order, which is what lets the browser interpolate between them - a different
+   list, or one function more, and the change snaps instead of fading. */
+.palm img,.lamp img,.wave img,.pole,.truss{
+  filter:brightness(1) saturate(1) hue-rotate(0deg);transition:filter 1s linear}
+/* HIS CLOUDS ARE WHITE, AND WHITE HAS NO HUE - rotating it does nothing, which
+   is why they came out as grey smudges rather than blue. sepia() gives the
+   white a hue to rotate, so the four functions together are a duotone: tint,
+   strengthen, turn it to the blue the rest of the scene is in, then darken.
+   Day is the same four with sepia at zero, so it still interpolates. */
+.cloud img{filter:brightness(1) sepia(0) saturate(1) hue-rotate(0deg) brightness(1);
+  transition:filter 1s linear}
+:root[data-mode="night"] .cloud img{
+  filter:brightness(.4) sepia(1) saturate(6) hue-rotate(200deg) brightness(.45)}
+:root[data-mode="night"] .palm img{filter:brightness(.30) saturate(.62) hue-rotate(116deg)}
+:root[data-mode="night"] .wave img{filter:brightness(.30) saturate(.90) hue-rotate(0deg)}
+/* the lamp's own body is metal, so it goes blue with everything else - the
+   warm is the light it throws, added on top, not the post */
+:root[data-mode="night"] .lamp img{filter:brightness(.34) saturate(.70) hue-rotate(184deg)}
+:root[data-mode="night"] .pole,:root[data-mode="night"] .truss{
+  filter:brightness(.40) saturate(.80) hue-rotate(184deg)}
+/* HIS BOARDS STAY BRIGHT. A highway sign is retro-reflective - at night it is
+   the brightest thing on the road, not the dimmest - so it keeps its colour
+   and gains a warm bloom instead of losing one. Same function list again. */
+.sign img{filter:drop-shadow(0 14px 20px rgba(0,0,0,.22)) brightness(1) saturate(1);
+  transition:filter 1s linear}
+:root[data-mode="night"] .sign img{
+  filter:drop-shadow(0 0 14px rgba(255,186,74,.55)) brightness(1.04) saturate(1.06)}
+
+/* THE LAMPS LIGHT THE ROAD, and it costs no elements: the head's glow and the
+   pool it throws are the lamp element's own ::after and ::before, sized in per
+   cent of the lamp, so they travel and scale with it for free. The head sits a
+   third of the way across his sprite from the arm end - his own geometry - and
+   mirrors for the other side. */
+.lamp::after,.lamp::before{content:'';position:absolute;pointer-events:none;
+  opacity:0;transition:opacity 1.2s linear}
+.lamp::after{width:185%;aspect-ratio:1;left:33.3%;top:4.4%;transform:translate(-50%,-50%);
+  background:radial-gradient(closest-side,rgba(255,222,158,.98),
+    rgba(255,182,74,.42) 30%,rgba(255,164,40,0) 70%)}
+/* the pool is deliberately small: a lamp lights the lane under it, not the
+   sea. Big soft washes look like fog, and they turned the water orange. */
+.lamp::before{width:460%;height:80%;left:33.3%;bottom:0;transform:translate(-50%,26%);
+  background:radial-gradient(closest-side,rgba(255,172,62,.30),rgba(255,158,34,0) 72%)}
+.a-lamp-l::after,.a-lamp-l::before{left:66.7%}
+:root[data-mode="night"] .lamp::after,:root[data-mode="night"] .lamp::before{opacity:1}
 .pole{background:linear-gradient(90deg,#8a9199,#f4f7fa 38%,#cdd4db 66%,#7d848c);
   border-radius:99px}
 /* HIS GANTRY ARM, the same tile the page already uses over his hero sign,
@@ -95,12 +191,17 @@ html,body{margin:0;background:#0a1020;color:#fff;
    enough for three flat rectangles. */
 .shadow{transform-origin:50% 100%}
 .shadow-derived{filter:brightness(0) blur(1.5px);opacity:.26}
+#shadows{transition:opacity 1s linear}
+:root[data-mode="night"] #shadows{opacity:.34}
 .shadow img{display:block;height:100%;width:100%}
 
 /* HIS CLOUDS, four of his own drawings instead of the four soft blobs that
    stood in for them. They are small enough to travel as SVG and they scale
    for nothing, so they can drift at whatever size the sky wants. */
-.cloud{position:absolute;left:0;top:0;will-change:transform}
+.cloud{position:absolute;left:0;top:0;will-change:transform;
+  transition:opacity 1s linear}
+/* fewer of them after dark - five of the eight go out */
+:root[data-mode="night"] .cloud.thin{opacity:0}
 .cloud img{display:block;width:100%;height:auto}
 /* HIS WAVE LINES. One strip each, laid flat on the water at its own depth and
    carried past by the same projection as the road, so they open out and slow
@@ -127,6 +228,8 @@ html,body{margin:0;background:#0a1020;color:#fff;
 <div class="runway">
   <div class="stage" id="stage">
     <div class="sky"></div>
+    <div class="stars"></div>
+    <div class="moon"></div>
     <div class="sea" id="sea"></div>
     <div id="swell"></div>
     <div class="land" id="land"></div>
@@ -170,6 +273,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
 
 <div class="hud" id="hud"></div>
 <div class="toggle">
+  <button id="nightBtn" aria-pressed="false">night</button>
   <button id="curveBtn" aria-pressed="false">earth curve</button>
   <button id="autoBtn" aria-pressed="false">auto-drive</button>
 </div>
@@ -424,7 +528,7 @@ const SUN_A=+(Math.atan(SUN_X)*180/Math.PI).toFixed(1);
 const items=[];
 function plant(o){
   const el=document.createElement('div');
-  el.className='thing '+(o.cls||'');
+  el.className='thing '+(o.cls||'')+(o.art?' a-'+o.art:'');
   if(o.art) el.appendChild(copy(o.art));
   if(o.cls==='truss') el.style.backgroundImage='url("'+TRUSS_TILE+'")';
   props.appendChild(el);
@@ -560,6 +664,7 @@ for(let i=0;i<8;i++){
   const c=document.createElement('div');
   c.className='cloud';
   c.appendChild(copy('cloud-'+(1+i%4)));
+  if(i>2) c.classList.add('thin');
   stage.insertBefore(c,sea);
   /* his sky, off his own picture: small, scattered from the top of the frame
      down to just above the water, and the nearer ones drifting faster */
@@ -727,6 +832,14 @@ function tick(now){
 addEventListener('resize',measure);
 measure(); requestAnimationFrame(tick);
 addEventListener('scroll',()=>document.getElementById('hint').classList.add('gone'),{once:true});
+/* THE ONE SWITCH. Everything after dark hangs off data-mode on the root, the
+   same handle the site's own day/night control uses, so what is proved here
+   drops straight into the page. */
+document.getElementById('nightBtn').onclick=e=>{
+  const on=document.documentElement.dataset.mode!=='night';
+  document.documentElement.dataset.mode=on?'night':'day';
+  e.currentTarget.setAttribute('aria-pressed',String(on));
+  e.currentTarget.textContent=on?'day':'night'};
 document.getElementById('curveBtn').onclick=e=>{curve=curve?0:1;
   e.currentTarget.setAttribute('aria-pressed',String(!!curve))};
 document.getElementById('autoBtn').onclick=e=>{auto=!auto;
