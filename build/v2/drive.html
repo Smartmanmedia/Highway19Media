@@ -50,20 +50,16 @@ html,body{margin:0;background:#0a1020;color:#fff;
   background:
     radial-gradient(140% 220% at 6% -14%, rgba(190,255,120,.72), rgba(190,255,120,0) 58%),
     linear-gradient(180deg,#37850f 0%,#256409 46%,#164a05 100%)}
-/* his sand shoulder, the band between the tarmac and the grass */
-.shoulder{position:absolute;left:0;top:0;
-  background:
-    radial-gradient(140% 230% at 6% -14%, rgba(255,255,235,.85), rgba(255,255,235,0) 58%),
-    linear-gradient(180deg,#e0c58d 0%,#cdad70 48%,#b9945a 100%)}
 .road,.edge,.dash{position:absolute;left:0;top:0;will-change:transform}
 .road{background:
     radial-gradient(150% 240% at 6% -12%, rgba(255,255,255,.34), rgba(255,255,255,0) 60%),
     linear-gradient(180deg,#4b4b4b 0%,#3b3b3b 42%,#2e2e2e 100%)}
+/* HIS EDGES: a white line, then a yellow one just outside it, both sides. The
+   centre dashes stay white. That is his gold on the shoulder line, so the road
+   agrees with the signs without shouting down the middle of it. */
 .edge{background:#fff}
-/* HIS CENTRE LINE IS YELLOW. Two lanes running opposite ways are divided in
-   yellow and the outside edges in white - it is his gold, so the road agrees
-   with the signs. */
-.dash{background:#ffda00}
+.edge.gold{background:#ffda00}
+.dash{background:#fff}
 
 /* ---- what stands on it --------------------------------------------------
    Sprites, not vector. His four trees carry 247 shapes and 246 gradients -
@@ -134,8 +130,9 @@ html,body{margin:0;background:#0a1020;color:#fff;
     <div class="sea" id="sea"></div>
     <div id="swell"></div>
     <div class="land" id="land"></div>
-    <div class="shoulder" id="shoulder"></div>
     <div class="road" id="road"></div>
+    <div class="edge gold" id="goldL"></div>
+    <div class="edge gold" id="goldR"></div>
     <div class="edge" id="edgeL"></div>
     <div class="edge" id="edgeR"></div>
     <div id="shadows"></div>
@@ -184,7 +181,7 @@ const stage=document.getElementById('stage'), props=document.getElementById('pro
       swell=document.getElementById('swell'),
       marks=document.getElementById('marks'), hud=document.getElementById('hud'),
       road=document.getElementById('road'), sea=document.getElementById('sea'),
-      shoulder=document.getElementById('shoulder'),
+      goldL=document.getElementById('goldL'), goldR=document.getElementById('goldR'),
       land=document.getElementById('land'),
       edgeL=document.getElementById('edgeL'), edgeR=document.getElementById('edgeR');
 
@@ -233,7 +230,9 @@ const stage=document.getElementById('stage'), props=document.getElementById('pro
    road moves in by the same factor, so nothing changes which surface it is on;
    the trees and lamps keep their heights, which is what makes them tower the
    way they do in his picture. */
-const EYE=152, ROAD=360, LINE=311, GRASS=546, LANE=3.6, SHOULDER=404, F0=0.62;
+/* LINE is the white edge line, GOLD the yellow one just outside it, LANE the
+   half-width they share, and the gap between them is one line's width. */
+const EYE=152, ROAD=360, LINE=311, GOLD=325, GRASS=546, LANE=3.6, F0=0.62;
 const VP=0.644, SEA=0.693;    /* his vanishing point, and his water line */
 const RUN=19000;
 const STOPS=[0.30,0.68], HOLD=0.06;
@@ -292,23 +291,23 @@ function measure(){
       pct(W/2-at(half,seaY),seaY)+','+pct(W/2+at(half,seaY),seaY)+','+
       pct(W/2+span(half),H)+','+pct(W/2-span(half),H)+')';
   };
-  const strip=(el,side)=>{
+  const strip=(el,side,c,half)=>{
     el.style.width=W+'px'; el.style.height=H+'px';
     el.style.clipPath='polygon('+
-      pct(W/2+side*at(LINE-LANE,seaY),seaY)+','+pct(W/2+side*at(LINE+LANE,seaY),seaY)+','+
-      pct(W/2+side*span(LINE+LANE),H)+','+pct(W/2+side*span(LINE-LANE),H)+')';
+      pct(W/2+side*at(c-half,seaY),seaY)+','+pct(W/2+side*at(c+half,seaY),seaY)+','+
+      pct(W/2+side*span(c+half),H)+','+pct(W/2+side*span(c-half),H)+')';
   };
   sea.style.top=seaY+'px'; sea.style.height=(H-seaY)+'px';
   land.style.top='0'; land.style.height=H+'px'; land.style.bottom='auto';
   wedge(land,GRASS);
-  wedge(shoulder,SHOULDER);
   wedge(road,ROAD);
   /* A SHADOW CAN ONLY FALL ON GROUND. Cut to the same wedge as the verge, so
      the ones on the seaward side stop at the water instead of lying on it -
      which is the last thing that gave the trees away as pasted on. The road
      is inside the verge, so this covers the tarmac too. */
   wedge(shadows,GRASS);
-  strip(edgeL,-1); strip(edgeR,1);
+  strip(edgeL,-1,LINE,LANE); strip(edgeR,1,LINE,LANE);
+  strip(goldL,-1,GOLD,LANE);  strip(goldR,1,GOLD,LANE);
 }
 
 /* ---- his two slow-downs --------------------------------------------------
