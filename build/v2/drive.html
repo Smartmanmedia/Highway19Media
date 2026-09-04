@@ -230,9 +230,12 @@ const stage=document.getElementById('stage'), props=document.getElementById('pro
    road moves in by the same factor, so nothing changes which surface it is on;
    the trees and lamps keep their heights, which is what makes them tower the
    way they do in his picture. */
-/* LINE is the white edge line, GOLD the yellow one just outside it, LANE the
-   half-width they share, and the gap between them is one line's width. */
-const EYE=152, ROAD=360, LINE=311, GOLD=325, GRASS=546, LANE=3.6, F0=0.62;
+/* LINE is the white edge line at LANE half-width; the yellow one is heavier -
+   GOLD_LANE - and sits hard against the EDGE OF THE TARMAC, so its outer side
+   and the road's outer side are the same line and there is no sliver of grey
+   showing past it. */
+const EYE=152, ROAD=360, LINE=311, GRASS=546, LANE=3.6, F0=0.62;
+const GOLD_LANE=8, GOLD=ROAD-GOLD_LANE;
 const VP=0.644, SEA=0.693;    /* his vanishing point, and his water line */
 const RUN=19000;
 const STOPS=[0.20,0.56], HOLD=0.06;   /* the boards come sooner in the trip */
@@ -307,7 +310,7 @@ function measure(){
      is inside the verge, so this covers the tarmac too. */
   wedge(shadows,GRASS);
   strip(edgeL,-1,LINE,LANE); strip(edgeR,1,LINE,LANE);
-  strip(goldL,-1,GOLD,LANE);  strip(goldR,1,GOLD,LANE);
+  strip(goldL,-1,GOLD,GOLD_LANE);  strip(goldR,1,GOLD,GOLD_LANE);
 }
 
 /* ---- his two slow-downs --------------------------------------------------
@@ -512,13 +515,14 @@ const AHEAD=420;
 const BOARD_W=566, BOARDS=[{art:'hero',ar:938.50/349.56},{art:'sign3',ar:940.5/295.5}];
 STOPS.forEach((s,si)=>{
   const z=-(s*RUN)-AHEAD, b=BOARDS[si%BOARDS.length];
-  /* THE BOARD TOWERS OVER EVERYTHING ROOTED IN THE GROUND. Its underside is
-     hung clear of the tallest palm - 800*STANDING - so no crown ever crosses
-     it, and the pole runs past the arm rather than stopping at it. Width is
-     still his; only the height off the ground is chosen. */
-  plant({cls:'sign',art:b.art,x:-14,z,h:Math.round(BOARD_W/b.ar),lift:620,shadow:true});
-  plant({cls:'truss',x:342,z,h:62,w:149,lift:690,shadow:true});
-  plant({cls:'pole',x:414,z,h:780,w:22,shadow:true});
+  /* THE GANTRY DOES NOT MOVE. It towers because the avenue came down, not
+     because the board went up - raising it pushed the board into the top edge
+     of the frame and left the sign reading as an afterthought above the
+     picture rather than part of it. Width and height off the ground are both
+     his; STANDING does the rest. */
+  plant({cls:'sign',art:b.art,x:-14,z,h:Math.round(BOARD_W/b.ar),lift:436,shadow:true});
+  plant({cls:'truss',x:342,z,h:62,w:149,lift:496,shadow:true});
+  plant({cls:'pole',x:414,z,h:606,w:22,shadow:true});
 });
 /* HIS STREET LAMPS. He drew each one eight times over, once per distance, but
    the scene only needs the shape twice - mast right with the arm reaching left
