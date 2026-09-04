@@ -156,7 +156,26 @@
 
 /* his button: the guide-sign green plate, with the copy laid over it */
 .sec1 .cta{ position:relative; display:inline-block; text-decoration:none }
-.sec1 .cta img{ display:block; width:100% }
+.sec1 .cta img,
+.sec1 .cta svg.plate{ display:block; width:100%; height:auto }
+
+/* --- THE BUTTON AT NIGHT: RED, AND LIT -----------------------------------
+   His ask. The plate turns from his green to a red, and the glow is the
+   plate's own shape rather than a box behind it - drop-shadow follows alpha,
+   box-shadow follows the rectangle, and this plate has rounded ends and a
+   triangle hanging off its left. Two shadows, a tight one and a wide one,
+   which is what makes a neon tube read as a tube and not as a blur.
+
+   Day is the fallback in both, so with no night set this is the button he
+   drew, unlit. */
+.sec1 .cta svg.plate [fill="#059236"]{
+  fill: var(--cta-plate, #059236);
+  transition: fill 1s linear;
+}
+.sec1 .cta{
+  filter: var(--cta-glow, none);
+  transition: filter 1s linear;
+}
 /* Centred in the green plate, which starts where his triangle ends: the
    triangle runs 0–67.8 of a 290.03-wide button, so the label's space is
    23.37%–100% and its centre is 61.7%, not the 60% a naive box gave. */

@@ -61,16 +61,20 @@
     --marking: #ffffff;
     --truss-night: brightness(.602) contrast(1.987);
     --boat-night: brightness(.68) saturate(.85);
+    --cta-plate: #e01b24;
+    --cta-glow: drop-shadow(0 0 0.35cqw rgba(255,60,60,.95)) drop-shadow(0 0 1.4cqw rgba(230,20,30,.65));
     --sign-green: #0a3d1f;
     --sign-gold: #e7aa28;
     --scene: 0.50;
     --scene-sat: 0.95;
-    --cloud-filter: brightness(.88) saturate(.45);
-    --scene-sand: brightness(.40) sepia(1) hue-rotate(198deg) saturate(3.2) brightness(.55);
+    --cloud-filter: url(#cloud-night);
     --scene-tree: brightness(.30) saturate(.95) hue-rotate(70deg);
     --sec2-ink: #dfe7f2;
     --sec6-ink: #eef2f7;
-    --card-bg: #0c1018;
+    --card-bg: transparent;
+    --card-hover-bg: #05070c;
+    --card-glow: 0 0 1.0cqw color-mix(in srgb, var(--c) 38%, transparent);
+    --card-glow-hover: 0 0 2.4cqw color-mix(in srgb, var(--c) 72%, transparent), 0 0 0.7cqw color-mix(in srgb, var(--c) 55%, transparent);
     --card-line: #7d8ea3;
     --card-ink: #f2f6fa;
     --card-sub: #c3cedb;
@@ -104,16 +108,20 @@
     --marking: #ffffff;
     --truss-night: brightness(.602) contrast(1.987);
     --boat-night: brightness(.68) saturate(.85);
+    --cta-plate: #e01b24;
+    --cta-glow: drop-shadow(0 0 0.35cqw rgba(255,60,60,.95)) drop-shadow(0 0 1.4cqw rgba(230,20,30,.65));
     --sign-green: #0a3d1f;
     --sign-gold: #e7aa28;
     --scene: 0.50;
     --scene-sat: 0.95;
-    --cloud-filter: brightness(.88) saturate(.45);
-    --scene-sand: brightness(.40) sepia(1) hue-rotate(198deg) saturate(3.2) brightness(.55);
+    --cloud-filter: url(#cloud-night);
     --scene-tree: brightness(.30) saturate(.95) hue-rotate(70deg);
     --sec2-ink: #dfe7f2;
     --sec6-ink: #eef2f7;
-    --card-bg: #0c1018;
+    --card-bg: transparent;
+    --card-hover-bg: #05070c;
+    --card-glow: 0 0 1.0cqw color-mix(in srgb, var(--c) 38%, transparent);
+    --card-glow-hover: 0 0 2.4cqw color-mix(in srgb, var(--c) 72%, transparent), 0 0 0.7cqw color-mix(in srgb, var(--c) 55%, transparent);
     --card-line: #7d8ea3;
     --card-ink: #f2f6fa;
     --card-sub: #c3cedb;
@@ -186,15 +194,19 @@ section .rock-cross{
    left for a brightness to do to it but make it wrong. */
 .sec2 .sand{ filter:none }
 
-/* HIS DESERT IS THE ONE PLACE BRIGHTNESS CANNOT GO. His sand art is tan and
-   his night desert is navy - #1a1c3a - and no amount of darkening turns one
-   into the other, only into darker tan. Section three's ground gets the same
-   kind of hue chain his clouds needed. Measured against his artboard it takes
-   the section from 70 of 441 away to 22. The fallback is the ordinary scenery
-   filter, so daylight is untouched. */
-.sec3 .z-ground{
-  filter: var(--scene-sand, brightness(var(--scene)) saturate(var(--scene-sat)));
-}
+/* HIS DESERT IS OUT OF THE FILTER ALTOGETHER NOW. It had a hue chain, and a
+   hue chain still could not do it: in his day art the sand is the bright
+   thing and the rocks are dark, and in his night artboard it is the other
+   way round - his dunes go to a deep navy and his rocks stay a warm brown,
+   catching the moon. Nothing that maps one lightness onto another can swap
+   two families over. Each of his paints has its own switch instead, written
+   into section-03.css by tools/make_desert_night.js, and this takes the
+   blanket off so those colours are what you see.
+
+   It is also what closed the join with the beach: the chain lifted the whole
+   desert to #26294b while section two's sand sat at #1a1829, and a step like
+   that between two sections reads as a seam. */
+.sec3 .z-ground{ filter:none }
 
 /* HIS FOREST CANOPY, AND WHY IT NEEDED NO FILE. It is the one raster on the
    page, so there is no fill to recolour - but his night canopy is already in
@@ -336,10 +348,19 @@ section img.z-copy{
 .signlamps{
   position:absolute; display:block; pointer-events:none; z-index:3;
   aspect-ratio:938.5 / 349.56;
-  opacity:var(--night, 0);
-  transition:opacity 1s linear;
+  background: url("../../assets/v2/ui-sign-fixtures.svg")
+              left 1.429% top 2.700% / 97.091% 96.893% no-repeat;
+}
+/* THE FITTINGS ARE BOLTED ON, so they stay in daylight; the light they throw
+   is the night only part. Two backgrounds on one box rather than two elements,
+   so the metal and its beam cannot drift apart - they are the same offsets,
+   split out of the same file by tools/make_sign_lights.js. */
+.signlamps::after{
+  content:''; position:absolute; inset:0;
   background: url("../../assets/v2/ui-sign-lights.svg")
               left 1.429% top 2.700% / 97.091% 96.893% no-repeat;
+  opacity:var(--night, 0);
+  transition:opacity 1s linear;
 }
 /* SECTION FOUR'S BOARD HAS NO BANNER over it, so it takes the variant with
    the two banner fittings dropped (tools/make_sign_lights.js) - and that
@@ -347,11 +368,16 @@ section img.z-copy{
    stretched to reach the same two edges rather than stopping short. */
 .sec4 .signlamps{
   aspect-ratio:854.59 / 299.40;
+  background-image: url("../../assets/v2/ui-sign-fixtures-board.svg");
+  background-position: left 1.428% top -1.657%;
+  background-size: 97.092% 101.172%;
+}
+.sec4 .signlamps::after{
   background-image: url("../../assets/v2/ui-sign-lights-board.svg");
   background-position: left 1.428% top -1.657%;
   background-size: 97.092% 101.172%;
 }
-@media (prefers-reduced-motion: reduce){ .signlamps{ transition:none } }
+@media (prefers-reduced-motion: reduce){ .signlamps::after{ transition:none } }
 
 
 /* NO BLEND MODES ANYWHERE ON THIS PAGE, AND THAT IS DELIBERATE. An element
@@ -362,3 +388,75 @@ section img.z-copy{
    need no blend, so the last one has gone with it. Anything added here
    later should be checked the same way: switch it off in daylight and
    diff the page. */
+
+
+/* the desert's night paints, one per colour he used.
+   GENERATED by tools/make_desert_night.js. */
+/* >>> desert */
+  @media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]):not([data-mode="day"]){
+    --dffdb96: #1b1f44;
+    --dffd486: #1b1a37;
+    --dfac67e: #1c1d3c;
+    --d754c24: #110f13;
+    --dc89a70: #4e3633;
+    --dbb9067: #46312e;
+    --d83643d: #21191b;
+    --daf845b: #3d2b29;
+    --dc3976b: #4b3431;
+    --dbb9066: #46312e;
+    --dd8a77c: #593d38;
+    --d735632: #161216;
+    --da67f56: #382827;
+    --db48a5f: #412e2c;
+    --db4895f: #402d2b;
+    --dc7996e: #4d3632;
+    --daf865c: #3e2c2a;
+    --d9a754e: #302323;
+    --da17b53: #352625;
+    --db68c61: #422f2c;
+    --d80623c: #20181b;
+    --d93704a: #2c2021;
+    --d9b6b22: #281e1f;
+    --d376e00: #0b1410;
+    --d4f9705: #162616;
+    --d458500: #111e13;
+    --d51ab00: #1a2c18;
+    --d67ba14: #20361c;
+    --d83c438: #26401f;
+    --d3f7a00: #0e1912;
+  }}
+  :root[data-theme="dark"]:not([data-mode="day"]),
+  :root[data-mode="night"]{
+    --dffdb96: #1b1f44;
+    --dffd486: #1b1a37;
+    --dfac67e: #1c1d3c;
+    --d754c24: #110f13;
+    --dc89a70: #4e3633;
+    --dbb9067: #46312e;
+    --d83643d: #21191b;
+    --daf845b: #3d2b29;
+    --dc3976b: #4b3431;
+    --dbb9066: #46312e;
+    --dd8a77c: #593d38;
+    --d735632: #161216;
+    --da67f56: #382827;
+    --db48a5f: #412e2c;
+    --db4895f: #402d2b;
+    --dc7996e: #4d3632;
+    --daf865c: #3e2c2a;
+    --d9a754e: #302323;
+    --da17b53: #352625;
+    --db68c61: #422f2c;
+    --d80623c: #20181b;
+    --d93704a: #2c2021;
+    --d9b6b22: #281e1f;
+    --d376e00: #0b1410;
+    --d4f9705: #162616;
+    --d458500: #111e13;
+    --d51ab00: #1a2c18;
+    --d67ba14: #20361c;
+    --d83c438: #26401f;
+    --d3f7a00: #0e1912;
+  }
+/* <<< desert */

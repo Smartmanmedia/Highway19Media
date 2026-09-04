@@ -35,9 +35,14 @@
       <rect x="53.82" y="1.88" width="1921.6" height="699.2" fill="none"/>
     </clipPath>
     <linearGradient id="sand-linear-gradient" x1="1004.97" y1="0" x2="1004.97" y2="214.96" gradientUnits="userSpaceOnUse">
-      <stop offset=".12" stop-color="#fdf6e4"/>
-      <stop offset=".61" stop-color="#fde5c1"/>
-      <stop offset="1" stop-color="#fde5c1" stop-opacity="0"/>
+      <!-- HIS TOP-OF-DESERT FADE, MADE INTO THE ACTUAL JOIN. It used to run
+           his beach cream to #fde5c1 and then fade to nothing, which left a
+           step across the road: #fdf3df above it, #fedca3 below. It now runs
+           the whole way to his own desert sand and stays opaque, so the two
+           sands are one continuous ramp and the road is the only thing
+           between them. Both ends are his; only the run between them is new. -->
+      <stop offset="0" stop-color="#ffd486"/>
+      <stop offset="1" stop-color="#ffd486"/>
     </linearGradient>
   </defs>
   <g id="sand-Layer_1-2" data-name="Layer 1">

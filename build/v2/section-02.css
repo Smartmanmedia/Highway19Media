@@ -48,7 +48,15 @@
 .sec2 .sand{
   position:absolute; left:0; right:0; top:36%; bottom:0;
   background: var(--sec2-sand,
-    linear-gradient(180deg,#fec35f 0%,#fdf6e4 31%,#fdf6e4 100%) 0 100% / 100% 88.98% no-repeat,
+    /* HIS BEACH NOW WALKS INTO HIS DESERT. It used to hold #fdf6e4 flat all
+       the way to its foot and then meet the desert's #fedca3 across the road
+       - two thirds of a step in green and blue, in one line, which is the
+       edge he could see. The last quarter warms into the top of his desert
+       art instead, so the two sands are the same colour where they meet and
+       the road is the only thing between them. His own colours either end;
+       only the run between them is new. */
+    linear-gradient(180deg,#fec35f 0%,#fdf6e4 31%,#fdf6e4 50%,
+                    #fef1d8 72%,#ffd486 92%,#ffd486 100%) 0 100% / 100% 88.98% no-repeat,
     #fec35f);
   z-index:0;
 }
@@ -181,7 +189,7 @@
 .sec2 .sand::after{
   content:''; position:absolute; inset:0;
   background: linear-gradient(180deg,
-    #0e1029 0%, #111229 22%, #1e192b 53%, #181727 100%);
+    #0e1029 0%, #111229 22%, #1e192b 53%, #1b1829 88%, #191a33 100%);
   opacity: var(--night, 0);
   transition: opacity 1s linear;
 }

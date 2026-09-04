@@ -86,7 +86,12 @@
      the page owns transform, and keeping to the standalone property means a
      card never has to know what else is on it. */
   scale:1;
-  transition:scale .22s ease-out, box-shadow .22s ease-out;
+  /* AT NIGHT THIS IS A GLOW, NOT A SHADOW, and it is on at rest - his ask.
+     Unset in daylight, so the card sits flat on his white page exactly as
+     it did. */
+  box-shadow:var(--card-glow, none);
+  transition:scale .22s ease-out, box-shadow .22s ease-out,
+             background-color .22s ease-out;
 }
 /* PICK YOUR LANE: the card lifts and the button arrives. The lifted card is
    raised a layer so it grows over its neighbours rather than under them.
@@ -95,7 +100,11 @@
 .sec6 .page .card:hover,
 .sec6 .page .card:focus-within{
   scale:1.05;
-  box-shadow:0 0.16cqw 0.85cqw rgba(0,0,0,.16);
+  /* daylight keeps his drop shadow; at night the card fills in black and the
+     glow comes up instead, because a black shadow on a black page is a
+     smudge and nothing else. */
+  box-shadow:var(--card-glow-hover, 0 0.16cqw 0.85cqw rgba(0,0,0,.16));
+  background:var(--card-hover-bg, var(--card-bg, #fff));
   z-index:2;
 }
 .sec6 .page .card > *{ position:absolute; margin:0; text-align:center }

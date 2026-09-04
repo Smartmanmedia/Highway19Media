@@ -127,6 +127,14 @@ const TOKENS = [
      his speedboat's red goes #a92121 to #791715, and one brightness and one
      saturate land on both to within a couple of levels. */
   ['--boat-night', 'brightness(.68) saturate(.85)'],
+  /* HIS ROAD MAP BUTTON, RED AND LIT. The one thing on the page that is
+     meant to be the brightest, so it is not muted with everything else. The
+     glow is drop-shadow, not box-shadow: it has to follow the plate's
+     rounded ends and the triangle hanging off its left, and box-shadow only
+     knows rectangles. */
+  ['--cta-plate', '#e01b24'],
+  ['--cta-glow',
+   'drop-shadow(0 0 0.35cqw rgba(255,60,60,.95)) drop-shadow(0 0 1.4cqw rgba(230,20,30,.65))'],
   ['--sign-green', '#0a3d1f'],
   ['--sign-gold', '#e7aa28'],
   /* his painted layers keep their COLOUR - his water is still fully saturated
@@ -138,18 +146,16 @@ const TOKENS = [
      where mine was crushed to 29. The surfaces behind go darker instead. */
   ['--scene', '0.50'],
   ['--scene-sat', '0.95'],
-  /* HIS CLOUDS STAY PALE. The deep blue I had came from a photographic
-     reference; in his own artboards they read #dedfe0 - white, barely touched.
-     He has said he is not happy with them yet and to leave them be, so this
-     does the least it can: takes the daylight white down a little and pulls
-     some colour out of the shading. */
-  ['--cloud-filter', 'brightness(.88) saturate(.45)'],
-  /* HIS DESERT IS THE ONE PLACE BRIGHTNESS CANNOT GO. His sand art is tan and
-     his night desert is navy - #1a1c3a - and darkening tan only gives darker
-     tan, so section three's ground gets the same kind of hue chain his clouds
-     needed. Measured against his artboard it takes that section from 70 of 441
-     away to 22. */
-  ['--scene-sand', 'brightness(.40) sepia(1) hue-rotate(198deg) saturate(3.2) brightness(.55)'],
+  /* HIS CLOUDS, DARK BLUE TO LIGHT MUTED - his words, and not what his
+     artboards have, where they are still near-white. A duotone, because that
+     is what "this colour to that colour" means: his greys are flattened and
+     the two ends are set per channel, #0e1330 to #aab3c6. The filter itself
+     is in section-01.html; brightness and saturate cannot do it, they move
+     every channel by one shared offset and his two ends need different ones.
+
+     A url() filter cannot be interpolated, so the clouds are the one thing
+     on the page that changes on the instant rather than over the second. */
+  ['--cloud-filter', 'url(#cloud-night)'],
   /* and his canopy, matched to the trees inside his own artboard four */
   ['--scene-tree', 'brightness(.30) saturate(.95) hue-rotate(70deg)'],
   /* HIS TWO DARK-ON-LIGHT COPY BLOCKS. Section two's sits on his sand and
@@ -160,7 +166,21 @@ const TOKENS = [
   ['--sec6-ink', '#eef2f7'],
   /* HIS CARDS TURN OVER. White cards on a dark page read as four holes cut in
      it; black cards with white type are the same object seen at night. */
-  ['--card-bg', '#0c1018'],
+  /* HIS CARDS AT NIGHT ARE GLASS, NOT PAPER. Transparent, so his page shows
+     through, with the lane's own colour doing the work the black hairline
+     did by day: a soft glow at rest and a stronger one under the pointer.
+     The drop shadow goes - a black shadow on a black page is nothing but a
+     smudge - and the fill only arrives on hover, which is what makes the
+     card you are pointing at the one solid object in the row.
+
+     var(--c) inside these resolves against the CARD, not the root: a custom
+     property is substituted where it is used, so one line here gives four
+     different glows. */
+  ['--card-bg', 'transparent'],
+  ['--card-hover-bg', '#05070c'],
+  ['--card-glow', '0 0 1.0cqw color-mix(in srgb, var(--c) 38%, transparent)'],
+  ['--card-glow-hover',
+   '0 0 2.4cqw color-mix(in srgb, var(--c) 72%, transparent), 0 0 0.7cqw color-mix(in srgb, var(--c) 55%, transparent)'],
   ['--card-line', '#7d8ea3'],
   ['--card-ink', '#f2f6fa'],
   ['--card-sub', '#c3cedb'],
