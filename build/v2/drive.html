@@ -179,14 +179,35 @@ const VP=0.644, SEA=0.693;    /* his vanishing point, and his water line */
 const RUN=19000;
 const STOPS=[0.30,0.68], HOLD=0.06;
 const DASH_LEN=95, DASH_GAP=150, DASH_W=30;
+/* HOW FAR OUT A THING FADES UP. The water line is a hard clip - past it a
+   thing would stand on the sea - so everything used to switch on at full
+   strength the instant its foot cleared it, and a palm popped into existence.
+   The fade is measured in DEPTH, not in screen pixels: a band of pixels above
+   the horizon is a colossal distance out there, and the same band is a blink
+   up close. FADE is the fraction of the visible run given over to coming up. */
+const FADE=0.20;
 
-let W=0,H=0,f=900,hor=0,seaY=0,curve=0,near=-300;
+/* ONE FRAME HEIGHT THE WORLD IS WRITTEN AT, and a scale to every other.
+   The numbers above are lengths in a picture 810 tall, so on a taller stage
+   every one of them has to be multiplied by U - and the focal length must NOT
+   be, or the two grow at different rates and the framing changes with the
+   window. That is what was happening: f was tied to H while EYE and ROAD were
+   not, so the sea line cut the road off at 2800 on a laptop and 1160 on a 4K
+   screen. Same scene, a third of the road. With f fixed in these units the
+   depth at which the water cuts in is the same everywhere and the whole scene
+   simply scales. */
+const REF=810;
+let W=0,H=0,U=1,f=REF*F0*2,hor=0,seaY=0,curve=0,near=-300,kSea=0,dSea=0,dFade=0;
 function measure(){
   W=stage.clientWidth; H=stage.clientHeight;
-  f=H*F0*2;               /* focal length tied to the stage, so the framing is
-                             the same on a laptop and on a 4K screen */
+  U=H/REF;                /* one world unit, in this stage's pixels */
   hor=Math.round(H*VP);
   seaY=Math.round(H*SEA);
+  /* the scale at which a foot lands exactly on the water, and the depth that
+     is - the far edge of the world, and the far end of the fade */
+  kSea=(seaY-hor)/U/EYE;
+  dSea=f/kSea-f;
+  dFade=dSea*FADE;
   /* HOW CLOSE THE PAINT COMES. The markings wrap through a fixed pool, so the
      nearest one is wherever the wrap puts it - and that was a flat -300, which
      from a saloon lands the last dash three quarters of the way down the
@@ -197,9 +218,11 @@ function measure(){
      the wrap happens to be in, which is the part a single margin missed - the
      pool holds one dash per period, so the last one on screen was free to sit
      anywhere in that period and sometimes stopped short. */
-  near=f/((H-hor)/EYE)-f-(DASH_LEN+DASH_GAP)*1.15;
+  near=f/((H-hor)/U/EYE)-f-(DASH_LEN+DASH_GAP)*1.15;
   const D=H-hor;                       /* screen distance from horizon to foot */
   const span=x=>x*D/EYE;               /* a world half-width, at the foot      */
+  /* which is U*x*k at the depth whose foot is the bottom of the frame - the
+     wedges and the props are the same projection written two ways */
   const pct=(x,y)=>(x/W*100).toFixed(3)+'% '+(y/H*100).toFixed(3)+'%';
   /* every wedge runs to his vanishing point and is cut off at his water line,
      so the far end of the road goes behind the sea instead of to a point */
@@ -345,16 +368,26 @@ function plant(o){
 const PALM_GAP=820, LOOP=PALM_GAP*10;   /* ten trees a side, so ten gaps */
 const PALMS=['palm-a','palm-b','palm-c','palm-d'];
 for(let i=0;i<20;i++){
-  const side=i%2?1:-1;
+  const side=i%2?1:-1, n=Math.floor(i/2);
+  /* EACH ROW GETS ALL FOUR TREES. Picking the sprite with i%4 while the side
+     came off i%2 meant the two cycles were locked: 'a' and 'c' fell on every
+     even i and 'b' and 'd' on every odd one, so the shore row was always his
+     two deeply shaded palms and the seaward row always his two flat ones. One
+     side looked modelled and the other looked washed out, and it was never the
+     light - it was the same two drawings over and over. Walking the sprite
+     with n instead, offset two between the rows, gives each side all four and
+     still keeps the rows from lining up. The height rides the sprite so a tree
+     is the same size wherever it stands. */
+  const a=(n+(i%2)*2)%4;
   /* ON THE GREEN, WHICH IS NARROWER THAN IT LOOKS. The verge only reaches
      GRASS across; anything planted beyond that has its foot on the water,
      which is exactly where mine were. His own nearest palm stands at 721 of
      a possible 845 - just past the tarmac's 557 and well inside the grass -
      so that is the band they get. */
-  plant({cls:'palm',art:PALMS[i%4],shadow:true,
+  plant({cls:'palm',art:PALMS[a],shadow:true,
     x:side*(686+(i%2)*38),
-    z:-420-Math.floor(i/2)*PALM_GAP-(side>0?PALM_GAP/2:0),
-    h:590+(i%4)*70, loop:true});
+    z:-420-n*PALM_GAP-(side>0?PALM_GAP/2:0),
+    h:590+a*70, loop:true});
 }
 /* HIS TWO GANTRIES, AND WHERE THE ROAD STOPS FOR THEM. The slow-down is
    centred on the sign's own place in the trip, so a sign standing exactly
@@ -413,11 +446,12 @@ function place(drive){
     let D=wrapD(-(d.z+drive),span,near);
     const kN=f/(f+D), kF=f/(f+D+DASH_LEN);
     if(D<-f+60||kN>10){d.el.style.opacity=0;continue}
-    const yN=hor+EYE*kN+curve*D*D*2.2e-6*kN;
-    const yF=hor+EYE*kF+curve*(D+DASH_LEN)*(D+DASH_LEN)*2.2e-6*kF;
-    const w=Math.max(.6,DASH_W*kN);
-    if(yN<seaY){d.el.style.opacity=0;continue}
-    d.el.style.opacity=1;
+    const yN=hor+U*(EYE*kN+curve*D*D*2.2e-6*kN);
+    const yF=hor+U*(EYE*kF+curve*(D+DASH_LEN)*(D+DASH_LEN)*2.2e-6*kF);
+    const w=Math.max(.6,U*DASH_W*kN);
+    const up=smooth((dSea-D)/dFade);
+    if(up<=0.004){d.el.style.opacity=0;continue}
+    d.el.style.opacity=up;
     d.el.style.width=w+'px';
     d.el.style.height=Math.max(.5,yN-yF)+'px';
     d.el.style.transform='translate('+(W/2-w/2)+'px,'+yF+'px)';
@@ -432,15 +466,19 @@ function place(drive){
        the road sinks with it, so the far end falls away like the far side of
        a very big hill. One more term in a number already being written. */
     const dip=curve*D*D*2.2e-6*k;
-    const baseY=hor+EYE*k+dip, x=W/2+it.x*k, h=it.h*k;
-    /* his water line is the far clip: a thing whose foot lands above it is
-       further away than the sea and would float on top of it */
-    if(baseY<seaY-0.5){it.el.style.opacity=0;if(it.sh)it.sh.style.opacity=0;continue}
-    it.el.style.opacity=1;
+    const baseY=hor+U*(EYE*k+dip), x=W/2+U*it.x*k, h=U*it.h*k;
+    /* HIS WATER LINE IS THE FAR CLIP - a thing whose foot lands above it is
+       further away than the sea and would float on top of it - but it does not
+       have to be a switch. Over the last dFade of the run a thing comes up
+       from nothing, so it arrives out of the haze at the horizon instead of
+       appearing. Smoothed at both ends, or the ramp itself shows as a corner. */
+    const up=smooth((dSea-D)/dFade);
+    if(up<=0.004){it.el.style.opacity=0;if(it.sh)it.sh.style.opacity=0;continue}
+    it.el.style.opacity=up;
     it.el.style.zIndex=Math.round(9000-D/4);
     it.el.style.height=h+'px';
-    if(it.w) it.el.style.width=(it.w*k)+'px';
-    it.el.style.transform='translate('+x+'px,'+(baseY-h-it.lift*k)+'px)'+
+    if(it.w) it.el.style.width=(U*it.w*k)+'px';
+    it.el.style.transform='translate('+x+'px,'+(baseY-h-U*it.lift*k)+'px)'+
       ' translateX(-'+(it.fx*100)+'%)';
     if(it.sh){
       it.sh.style.zIndex=2;
@@ -453,7 +491,7 @@ function place(drive){
         const g=it.shGeo;
         /* his groups carry 54% and the rasteriser flattened it into the pixels
            rather than the alpha, so it goes back on here */
-        it.sh.style.opacity=.54;
+        it.sh.style.opacity=.54*up;
         it.sh.style.width=(h*g.w)+'px';
         it.sh.style.height=(h*g.h)+'px';
         it.sh.style.transform='translate('+(x+h*g.dx)+'px,'+(baseY+h*g.dy)+'px)';
@@ -467,10 +505,10 @@ function place(drive){
            of the object lands exactly where his palms put theirs.
            Anything hanging in the air rides the same ray: its shadow is
            carried out by its lift, across AND down. */
-        const lx=(it.lift||0)*SUN_X*k, ly=(it.lift||0)*SUN_Y*k;
-        it.sh.style.opacity=it.lift?.18:.26;
+        const lx=U*(it.lift||0)*SUN_X*k, ly=U*(it.lift||0)*SUN_Y*k;
+        it.sh.style.opacity=(it.lift?.18:.26)*up;
         it.sh.style.height=h+'px';
-        if(it.w) it.sh.style.width=(it.w*k)+'px';
+        if(it.w) it.sh.style.width=(U*it.w*k)+'px';
         it.sh.style.transform='translate('+(x+lx)+'px,'+(baseY+ly)+'px)'+
           ' translate(-50%,-100%) scaleY(-'+SUN_Y+') skewX('+(-SUN_A)+'deg)';
       }
@@ -490,6 +528,9 @@ function tick(now){
   costSum+=cost; costN++;
   for(const c of clouds){
     c.x=(c.x+c.s*dt/1000)%1.3;
+    /* his sky scales with the frame too, or the clouds shrink to specks on a
+       big screen while the road stays the size it was */
+    c.el.style.width=(U*c.w)+'px'; c.el.style.height=(U*c.w*.42)+'px';
     c.el.style.transform='translate('+((c.x*1.3-.15)*W)+'px,'+(c.y*H)+'px)';
   }
   frames++;
