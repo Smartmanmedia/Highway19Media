@@ -166,9 +166,17 @@ const stage=document.getElementById('stage'), props=document.getElementById('pro
 
    ROAD/EYE = 2.368, LINE/EYE = 2.046 and GRASS/EYE = 3.597 are his three
    slopes; EYE is the only free number left and it just sets the units. */
-const EYE=235, ROAD=557, LINE=481, GRASS=845, LANE=11, F0=0.62;
+/* EYE IS THE CAMERA'S HEIGHT ABOVE THE TARMAC and it is the only number here
+   that is a choice rather than a measurement. His edge lines sit at 481, so a
+   lane is 481 wide and one metre is about 131 of these units. 235 put the eye
+   1.79 m up - a truck cab, looking down at the road. A saloon driver sits at
+   about 1.16 m, which is 152. Nothing else moves: the road keeps its width,
+   so from lower down its edges simply splay further across the bottom of the
+   frame and the ground plane folds up towards the horizon, which is the whole
+   difference between looking down at a road and looking along one. */
+const EYE=152, ROAD=557, LINE=481, GRASS=845, LANE=11, F0=0.62;
 const VP=0.644, SEA=0.693;    /* his vanishing point, and his water line */
-const RUN=19000, SPACING=1150, LOOP=SPACING*9;
+const RUN=19000;
 const STOPS=[0.30,0.68], HOLD=0.06;
 const DASH_LEN=95, DASH_GAP=150, DASH_W=30;
 
@@ -303,6 +311,12 @@ function plant(o){
 /* HIS AVENUE. Four trees cycling, alternating sides, the far row offset by
    half a gap so the two never line up - which is what stops it reading as
    wallpaper. */
+/* THE AVENUE HAS ITS OWN SPACING NOW, and it has to. From a saloon the sea
+   line cuts the road off at about 2800 rather than 4900, so at the gantries'
+   1150 the far half of the avenue fell behind the water and the horizon went
+   bare. Closing the trees to 820 puts the same number back in frame; they
+   still pass at the speed the road sets, since that is depth, not spacing. */
+const PALM_GAP=820, LOOP=PALM_GAP*10;   /* ten trees a side, so ten gaps */
 const PALMS=['palm-a','palm-b','palm-c','palm-d'];
 for(let i=0;i<20;i++){
   const side=i%2?1:-1;
@@ -313,7 +327,7 @@ for(let i=0;i<20;i++){
      so that is the band they get. */
   plant({cls:'palm',art:PALMS[i%4],shadow:true,
     x:side*(686+(i%2)*38),
-    z:-420-Math.floor(i/2)*SPACING-(side>0?SPACING/2:0),
+    z:-420-Math.floor(i/2)*PALM_GAP-(side>0?PALM_GAP/2:0),
     h:590+(i%4)*70, loop:true});
 }
 /* HIS TWO GANTRIES, AND WHERE THE ROAD STOPS FOR THEM. The slow-down is
