@@ -41,6 +41,16 @@ html = html.replace(/src="(?!data:|https?:)([^"]+)"/g, (m, src) => {
   return 'src="data:' + MIME[path.extname(f)] + ';base64,' + b.toString('base64') + '"';
 });
 
+/* an <image> inside an inline SVG, which is how his shield reaches the two
+   signs that carry it. Anchored to a file extension we know, so `href="#id"`
+   on a <use> and `href="#services"` on his button are both left alone. */
+html = html.replace(/(xlink:href|href)="(?!data:|https?:|#)([^"]+\.(?:svg|webp|png|jpg))"/g,
+  (m, attr, src) => {
+    const f = path.resolve(base, src);
+    const b = fs.readFileSync(f); assets++; bytes += b.length;
+    return attr + '="data:' + MIME[path.extname(f)] + ';base64,' + b.toString('base64') + '"';
+  });
+
 fs.mkdirSync(path.join(ROOT, 'dist'), { recursive: true });
 fs.writeFileSync(path.join(ROOT, OUT), html);
 console.log(assets + ' assets inlined, ' + Math.round(bytes/1024) + ' KB raw');

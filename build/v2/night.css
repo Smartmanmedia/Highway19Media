@@ -344,6 +344,11 @@ section svg.z-copy [fill="#ffda00"]{
   stroke: var(--sign-gold-line, none);
   stroke-miterlimit:10;
 }
+/* his second sign's banner is the HERO's gold ramp, not the button's - same
+   #cc9300 / #fbc93b / #fbb03b he drew on the gantry. It has to come after the
+   general rule above, which is written for the button. */
+.sec4 svg.our-sign [fill="#ffda00"]{ fill: var(--sign-gold, #ffda00) }
+
 /* his button: a dark red plate inside a bright red edge, which is where the
    neon comes from - the glow on .cta only carries it off the plate */
 .sec1 .cta svg.plate [fill="#ea2127"]{ fill: var(--cta-tri, #ea2127) }
@@ -397,16 +402,22 @@ section svg.z-copy [fill^="#"],
    the two banner fittings dropped (tools/make_sign_lights.js) - and that
    board is a little taller for its width than the hero's, so his beams are
    stretched to reach the same two edges rather than stopping short. */
+/* SECTION FOUR HAS ITS OWN RIG, and no offsets at all. The gantry's pattern
+   does not fit this sign - he puts two of the six board fittings at its
+   right-hand end rather than at its corners, and hangs two more on the REST
+   AREA banner - so the fittings and beams come out of HIS OWN file for this
+   sign, in his own coordinates. Same box as the sign, 100% by 100%: there is
+   nothing to align, because the two were drawn together. */
 .sec4 .signlamps{
-  aspect-ratio:854.59 / 299.40;
-  background-image: url("../../assets/v2/ui-sign-fixtures-board.svg");
-  background-position: left 1.428% top -1.657%;
-  background-size: 97.092% 101.172%;
+  aspect-ratio:858.12 / 371.25;
+  background-image: url("../../assets/v2/section-04/our-sign-fixtures.svg");
+  background-position: 0 0;
+  background-size: 100% 100%;
 }
 .sec4 .signlamps::after{
-  background-image: url("../../assets/v2/ui-sign-lights-board.svg");
-  background-position: left 1.428% top -1.657%;
-  background-size: 97.092% 101.172%;
+  background-image: url("../../assets/v2/section-04/our-sign-beams.svg");
+  background-position: 0 0;
+  background-size: 100% 100%;
 }
 @media (prefers-reduced-motion: reduce){ .signlamps::after{ transition:none } }
 

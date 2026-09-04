@@ -73,7 +73,10 @@
    still carry his scale(.82 1). */
 .sec4 .sign-copy{
   position:absolute; z-index:3;
-  left:49.85%; right:14.03%; top:24.45%; height:18.41%;
+  /* his new board is the hero's height, 290.66 against 297.95, and his new
+     arrow is bigger and further in - it ends at 191.82 of his units where the
+     old one ended at 157. Both numbers come straight off his file. */
+  left:51.60%; right:14.03%; top:24.45%; height:17.83%;
   display:flex; flex-direction:column; justify-content:center; align-items:center;
   gap:1.1%;
 }

@@ -42,27 +42,11 @@ const fixtures = src.replace(/\s*<polygon[^>]*\/>/g, '')
 fs.writeFileSync(path.join(DIR, 'ui-sign-lights.svg'), beams);
 fs.writeFileSync(path.join(DIR, 'ui-sign-fixtures.svg'), fixtures);
 
-/* the banner pieces. His four panel fittings are 10.03 tall and the two on the
-   banner are 7.98 - that is the only thing that separates them in the file, so
-   it is what picks them out. Their beams are the two white gradients. */
-let board = beams
-  .replace(/\s*<polygon[^>]*fill="url\(#linear-gradient-[78]\)"[^>]*\/>/g, '')
-  .replace(/\s*<linearGradient id="linear-gradient-[78]"[\s\S]*?<\/linearGradient>/g, '')
-  .replace(/\s*<linearGradient id="linear-gradient-8"[^>]*\/>/g, '');
+/* SECTION FOUR NO LONGER TAKES A VARIANT OF THIS. Its board was redesigned
+   and he drew it its own rig - two of its six board fittings sit at the
+   right-hand end rather than at the corners, and two more hang on its REST
+   AREA banner - so those come out of his own file for that sign, in
+   tools/make_our_sign.js. This tool is the gantry's, and only the gantry's. */
 
-/* CROPPED TO WHAT IS LEFT. 43.2 is the top of the upper fittings' mounts; above
-   it the file held nothing but the banner. */
-const TOP = 43.2, H = 338.7 - TOP;
-board = board
-  .replace(/viewBox="0 0 911\.2 338\.7"/, `viewBox="0 ${TOP} 911.2 ${H.toFixed(1)}"`)
-  .replace(/height="338\.7"/, `height="${H.toFixed(1)}"`);
-
-fs.writeFileSync(path.join(DIR, 'ui-sign-lights-board.svg'), board);
-
-let boardFix = fixtures
-  .replace(/\s*<g>(?:\s*<rect[^>]*>)+\s*<\/g>/g, m => /height="7\.98"/.test(m) ? '' : m)
-  .replace(/viewBox="0 0 911\.2 338\.7"/, `viewBox="0 ${TOP} 911.2 ${H.toFixed(1)}"`)
-  .replace(/height="338\.7"/, `height="${H.toFixed(1)}"`);
-fs.writeFileSync(path.join(DIR, 'ui-sign-fixtures-board.svg'), boardFix);
-console.log(['ui-sign-lights', 'ui-sign-fixtures', 'ui-sign-lights-board', 'ui-sign-fixtures-board']
-  .map((n, i) => n + ' ' + ([beams, fixtures, board, boardFix][i].length / 1024).toFixed(1) + 'K').join(', '));
+console.log('ui-sign-lights ' + (beams.length/1024).toFixed(1) + 'K, ' +
+            'ui-sign-fixtures ' + (fixtures.length/1024).toFixed(1) + 'K');
