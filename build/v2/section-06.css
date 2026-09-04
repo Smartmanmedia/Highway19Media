@@ -32,9 +32,29 @@
      between them. Above the line this section is transparent and section four
      paints through, mountains, shadow and grass together - which is why there
      is no colour step either. */
+  /* THIS PAGE ENDS ON THE SKY THE DRIVE BEGINS WITH, exactly - not near it.
+     Section seven's first frame is his sky, which is a 112deg ramp plus a sun
+     glow at 11% -4% over a box one viewport tall, so its top ROW is white on
+     the left running to blue on the right and not one flat colour. To land on
+     that row the same two gradients are laid at the foot of this section,
+     mirrored: a 112deg ramp turned upside down is a 68deg ramp, and over a box
+     of the same 100% by 100vh its BOTTOM row is the other's TOP row. The glow
+     mirrors with it, -4% becoming 104%. The white above simply stops being
+     opaque over the last viewport, so the two are one continuous sky with no
+     seam to see and nothing to fade.
+
+     The first 3.85% stays transparent for the reason it always did: section
+     four paints through there, so the two overlap and no hairline can open. */
   background: var(--sec6-bg,
-    linear-gradient(180deg,
-    transparent 0, transparent 3.85%, #fff 3.85%, #fff 100%));
+    linear-gradient(180deg, transparent 0, transparent 3.85%,
+      #fff 3.85%, #fff calc(100% - 100vh), rgba(255,255,255,0) 100%)),
+    var(--sec6-sky-glow,
+      radial-gradient(760px 620px at 11% 104%,
+        rgba(255,255,255,.98), rgba(255,255,255,0) 60%)) left bottom / 100% 100vh no-repeat,
+    var(--sec6-sky,
+      linear-gradient(68deg,#fff 0%,#d4e7ff 15%,#a3ccff 36%,#7cb7ff 55%,
+        #60a8ff 73%,#4f9fff 88%,#4a9cff 100%)) left bottom / 100% 100vh no-repeat,
+    var(--sec6-under, #fff);
   overflow:hidden;
   isolation:isolate;
 }

@@ -25,17 +25,15 @@
 /* EVERYTHING THAT STANDS ON THE EARTH fades out together at the end of the
    road. One property on the stage, read by eight layers - no per-element
    writes, and the sky, the moon and the starfield simply do not read it. */
-/* TWO GROUPS, NOT ONE. What stands on the earth rises out of the sky over the
-   lead-in; the clouds are already in that sky, so they only read the fade at
-   the far end. Bringing them up with the road is what made the top of the
-   section a blank white wall - his own note was clouds first, then the road. */.sec7 .sea,
+/* ONE GROUP AND ONE FADE, at the far end only. */.sec7 .sea,
 .sec7 #swell,
 .sec7 .land,
 .sec7 .road,
 .sec7 .edge,
 .sec7 #shadows,
 .sec7 #marks,
-.sec7 #props{opacity:var(--out,1)}.sec7 .cloud{opacity:var(--sky-out,1)}
+.sec7 #props,
+.sec7 .cloud{opacity:var(--out,1)}
 
 /* ---- his sky, his sun, his sea - four gradients, nothing that moves ------ */.sec7 .sky{position:absolute;inset:0;
   background:
@@ -82,10 +80,12 @@
    starfield is six repeating radial gradients across the whole frame - painted
    once into a layer it is free, repainted every frame it was the single
    biggest cost in the night scene. */
-/* THE JOIN TO THE SECTION ABOVE. His sky is stretched over the top of this
-   section and washed to the colour of whatever sits above it, so the scroll
-   arrives on a sky that is already there and the road comes up out of it. */.sec7 .sky::before{content:'';position:absolute;inset:0;pointer-events:none;
-  background:var(--lead,#fff);opacity:var(--lead-in,0);will-change:opacity;z-index:1}:root[data-mode="night"] .sec7 .sky::before{--lead:#05080f}.sec7 .sky::after,
+/* NOTHING FADES IN. The section is SCROLLED to, not dissolved to: the stage
+   rides up from the bottom of the window with the road already on it and only
+   pins once it fills the frame. What joins it to the cards above is colour -
+   that page ends on the exact gradient this sky begins with - not a wash of
+   white over the top of the scene, which is what it was doing and what made
+   the arrival feel like a cut rather than a drive. */.sec7 .sky::after,
 .sec7 .sea::after,
 .sec7 .land::after,
 .sec7 .road::after{

@@ -32,12 +32,8 @@ html,body{margin:0;background:#0a1020;color:#fff;
 /* EVERYTHING THAT STANDS ON THE EARTH fades out together at the end of the
    road. One property on the stage, read by eight layers - no per-element
    writes, and the sky, the moon and the starfield simply do not read it. */
-/* TWO GROUPS, NOT ONE. What stands on the earth rises out of the sky over the
-   lead-in; the clouds are already in that sky, so they only read the fade at
-   the far end. Bringing them up with the road is what made the top of the
-   section a blank white wall - his own note was clouds first, then the road. */
-.sea,#swell,.land,.road,.edge,#shadows,#marks,#props{opacity:var(--out,1)}
-.cloud{opacity:var(--sky-out,1)}
+/* ONE GROUP AND ONE FADE, at the far end only. */
+.sea,#swell,.land,.road,.edge,#shadows,#marks,#props,.cloud{opacity:var(--out,1)}
 
 /* ---- his sky, his sun, his sea - four gradients, nothing that moves ------ */
 .sky{position:absolute;inset:0;
@@ -90,12 +86,12 @@ html,body{margin:0;background:#0a1020;color:#fff;
    starfield is six repeating radial gradients across the whole frame - painted
    once into a layer it is free, repainted every frame it was the single
    biggest cost in the night scene. */
-/* THE JOIN TO THE SECTION ABOVE. His sky is stretched over the top of this
-   section and washed to the colour of whatever sits above it, so the scroll
-   arrives on a sky that is already there and the road comes up out of it. */
-.sky::before{content:'';position:absolute;inset:0;pointer-events:none;
-  background:var(--lead,#fff);opacity:var(--lead-in,0);will-change:opacity;z-index:1}
-:root[data-mode="night"] .sky::before{--lead:#05080f}
+/* NOTHING FADES IN. The section is SCROLLED to, not dissolved to: the stage
+   rides up from the bottom of the window with the road already on it and only
+   pins once it fills the frame. What joins it to the cards above is colour -
+   that page ends on the exact gradient this sky begins with - not a wash of
+   white over the top of the scene, which is what it was doing and what made
+   the arrival feel like a cut rather than a drive. */
 .sky::after,.sea::after,.land::after,.road::after{
   content:'';position:absolute;inset:0;opacity:0;transition:opacity 1s linear;
   pointer-events:none;will-change:opacity}
@@ -1018,17 +1014,10 @@ function tick(now){
   else t=clamp((scrollY-secTop)/secSpan,0,1);
   /* the page fraction folded into the drive's own 0..1 */
   const u=clamp((t-START)/RANGE,0,1);
-  /* ONE PROPERTY DOES BOTH ENDS. The scene rises out of the sky over the lead-in
-     and sinks back into it over the hand-over, so --out is the reveal times the
-     fade: 0 at the top of the section, 1 by the time the road starts, 0 again
-     at the bottom. The sky, the moon and the starfield never read it, which is
-     why they are what is there before the road and what is left after it. */
-  stage.style.setProperty('--out',
-    String(smooth(t/START)*(1-smooth((t-FADE_AT)/(1-FADE_AT)))));
-  /* and the wash that ties the top of this section to the bottom of the one
-     above - white under the cards by day, his near-black by night */
-  stage.style.setProperty('--sky-out', String(1-smooth((t-FADE_AT)/(1-FADE_AT))));
-  stage.style.setProperty('--lead-in', String(1-smooth(t/(START*1.35))));
+  /* the hand-over to the next section, and nothing at this end: the scene is
+     at full strength from the first pixel of the section, because you scroll
+     to it rather than have it appear */
+  stage.style.setProperty('--out', String(1-smooth((t-FADE_AT)/(1-FADE_AT))));
   const t0=performance.now(); place(distance(u)); const cost=performance.now()-t0;
   costSum+=cost; costN++;
   for(const c of clouds){

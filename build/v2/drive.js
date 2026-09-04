@@ -630,17 +630,10 @@ function tick(now){
   else t=clamp((scrollY-secTop)/secSpan,0,1);
   /* the page fraction folded into the drive's own 0..1 */
   const u=clamp((t-START)/RANGE,0,1);
-  /* ONE PROPERTY DOES BOTH ENDS. The scene rises out of the sky over the lead-in
-     and sinks back into it over the hand-over, so --out is the reveal times the
-     fade: 0 at the top of the section, 1 by the time the road starts, 0 again
-     at the bottom. The sky, the moon and the starfield never read it, which is
-     why they are what is there before the road and what is left after it. */
-  stage.style.setProperty('--out',
-    String(smooth(t/START)*(1-smooth((t-FADE_AT)/(1-FADE_AT)))));
-  /* and the wash that ties the top of this section to the bottom of the one
-     above - white under the cards by day, his near-black by night */
-  stage.style.setProperty('--sky-out', String(1-smooth((t-FADE_AT)/(1-FADE_AT))));
-  stage.style.setProperty('--lead-in', String(1-smooth(t/(START*1.35))));
+  /* the hand-over to the next section, and nothing at this end: the scene is
+     at full strength from the first pixel of the section, because you scroll
+     to it rather than have it appear */
+  stage.style.setProperty('--out', String(1-smooth((t-FADE_AT)/(1-FADE_AT))));
   const t0=performance.now(); place(distance(u)); const cost=performance.now()-t0;
   costSum+=cost; costN++;
   for(const c of clouds){

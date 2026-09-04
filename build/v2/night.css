@@ -165,19 +165,26 @@
    bottom, which puts the two on one colour at the seam and gives the section's
    own lower half something for the starfield to sit against.
 
-   The first 3.85% stays transparent for the same reason it always did: section
-   four paints through there, so the two overlap and no hairline can open. */
+   AT NIGHT THE JOIN IS EASIER, because his night sky is a straight 180deg ramp
+   - so its top row IS one flat colour, #02060f, and this page only has to
+   arrive at that. No mirrored ramp is needed; the two sky layers are turned
+   off and the page's own gradient ends on the drive's first row.
+
+   The first 3.85% stays transparent for the reason it always did: section four
+   paints through there, so the two overlap and no hairline can open. */
 :root[data-theme="dark"]:not([data-mode="day"]),
 :root[data-mode="night"]{
   --sec6-bg:
     linear-gradient(180deg, transparent 0, transparent 3.85%,
-      #101b33 3.85%, #0b1226 44%, #070c18 76%, #05080f 100%);
+      #101b33 3.85%, #0b1226 44%, #070c18 78%, #02060f 100%);
+  --sec6-sky-glow: none; --sec6-sky: none; --sec6-under: #02060f;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]):not([data-mode="day"]){
     --sec6-bg:
       linear-gradient(180deg, transparent 0, transparent 3.85%,
-        #101b33 3.85%, #0b1226 44%, #070c18 76%, #05080f 100%);
+        #101b33 3.85%, #0b1226 44%, #070c18 78%, #02060f 100%);
+    --sec6-sky-glow: none; --sec6-sky: none; --sec6-under: #02060f;
   }}
 
 /* DAYLIGHT IS THE DEFAULT ABOVE. An explicit light choice has to beat a dark
