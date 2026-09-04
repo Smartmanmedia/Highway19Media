@@ -27,7 +27,7 @@
 *{box-sizing:border-box}
 html,body{margin:0;background:#0a1020;color:#fff;
   font-family:"Be Vietnam Pro",system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-.runway{height:700vh;position:relative}
+.runway{height:1100vh;position:relative}
 .stage{position:sticky;top:0;height:100vh;overflow:hidden;isolation:isolate}
 
 /* ---- his sky, his sun, his sea - four gradients, nothing that moves ------ */
@@ -54,11 +54,18 @@ html,body{margin:0;background:#0a1020;color:#fff;
 .sign img{filter:drop-shadow(0 14px 20px rgba(0,0,0,.22))}
 .pole{background:linear-gradient(90deg,#8a9199,#f4f7fa 38%,#cdd4db 66%,#7d848c);
   border-radius:99px}
+/* HIS GANTRY ARM, the same tile the page already uses over his hero sign,
+   repeated along the arm so the cell keeps its shape whatever length the arm
+   works out to at this distance. The tile is set from script off the hidden
+   <img> above rather than written here: a url() inside an inline <style> is
+   not something the build can turn into a data URI, and it silently 404s in
+   the file it ships - which is exactly what it did. */
+.truss{background-repeat:repeat-x;background-position:center;background-size:auto 100%}
 /* HIS SHADOW, DERIVED. A cast shadow drawn as its own art comes apart from
    what casts it the moment either moves. This is the tree itself, taken to
    black and laid down the road away from his sun, so it can only ever be the
    shape of the thing standing above it. */
-.shadow{filter:brightness(0) blur(2px);opacity:.32;transform-origin:50% 100%}
+.shadow{filter:brightness(0) blur(1.5px);opacity:.3;transform-origin:50% 100%}
 
 .cloud{position:absolute;background:
   radial-gradient(closest-side,#fff 68%,rgba(255,255,255,0) 100%);
@@ -100,6 +107,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
   <img class="palm-c" src="../../assets/v2/section-05/palm-c.webp" alt="">
   <img class="palm-d" src="../../assets/v2/section-05/palm-d.webp" alt="">
   <img class="hero" src="../../assets/v2/section-01/hero-sign.svg" alt="">
+  <img class="trusstile" src="../../assets/v2/section-01/truss-cell.webp" alt="">
 </div>
 
 <div class="hud" id="hud"></div>
@@ -123,8 +131,8 @@ const stage=document.getElementById('stage'), props=document.getElementById('pro
    The road edge is a STRAIGHT LINE on screen - x = ROAD*(y-horizon)/EYE - so
    the tarmac, its shoulders and its two edge lines are three triangles from
    the vanishing point, cut once and never touched again. */
-const EYE=250, ROAD=560, LINE=470, LANE=11, F0=0.62;
-const RUN=26000, SPACING=900, LOOP=SPACING*9;
+const EYE=235, ROAD=560, LINE=470, LANE=11, F0=0.62;
+const RUN=19000, SPACING=1150, LOOP=SPACING*9;
 const STOPS=[0.30,0.68], HOLD=0.06;
 const DASH_LEN=95, DASH_GAP=150, DASH_W=30;
 
@@ -175,17 +183,22 @@ function distance(t){
 /* ---- what is on the road -------------------------------------------------- */
 const art=document.getElementById('art');
 const copy=c=>art.querySelector('.'+c).cloneNode(true);
+const TRUSS_TILE=art.querySelector('.trusstile').src;
 const items=[];
 function plant(o){
   const el=document.createElement('div');
   el.className='thing '+(o.cls||'');
   if(o.art) el.appendChild(copy(o.art));
+  if(o.cls==='truss') el.style.backgroundImage='url("'+TRUSS_TILE+'")';
   props.appendChild(el);
   const it=Object.assign({el,lift:0,loop:false},o);
   if(o.shadow){
     const sh=document.createElement('div');
     sh.className='thing shadow';
-    sh.appendChild(copy(o.art));
+    if(o.art) sh.appendChild(copy(o.art)); else sh.style.background='#000';
+    if(o.cls==='truss'){sh.style.background='none';
+      sh.style.backgroundImage='url("'+TRUSS_TILE+'")';
+      sh.style.backgroundRepeat='repeat-x';sh.style.backgroundSize='auto 100%'}
     props.appendChild(sh);
     it.sh=sh;
   }
@@ -198,15 +211,23 @@ const PALMS=['palm-a','palm-b','palm-c','palm-d'];
 for(let i=0;i<20;i++){
   const side=i%2?1:-1;
   plant({cls:'palm',art:PALMS[i%4],shadow:true,
-    x:side*(820+(i%3)*190),
-    z:-300-Math.floor(i/2)*SPACING-(side>0?SPACING/2:0),
-    h:760+(i%4)*130, loop:true});
+    x:side*(940+(i%3)*230),
+    z:-420-Math.floor(i/2)*SPACING-(side>0?SPACING/2:0),
+    h:560+(i%4)*90, loop:true});
 }
-/* his two gantries: the board over the road and the pole holding it up */
+/* HIS TWO GANTRIES, AND WHERE THE ROAD STOPS FOR THEM. The slow-down is
+   centred on the sign's own place in the trip, so a sign standing exactly
+   there is level with the camera when the road stops - which is why the first
+   pass read as "close but far": you halted beside it rather than in front of
+   it. Each board is set AHEAD of its stop by a reading distance, so the road
+   comes to rest with the sign filling the frame in front of you. */
+const AHEAD=1500;
 for(const s of STOPS){
-  const z=-(s*RUN);
-  plant({cls:'sign',art:'hero',x:-120,z,h:660,lift:1000});
-  plant({cls:'pole',x:1180,z,h:1680,w:70});
+  const z=-(s*RUN)-AHEAD;
+  /* the board, the arm that carries it out to the shoulder, and the pole */
+  plant({cls:'sign',art:'hero',x:-140,z,h:900,lift:560,shadow:true});
+  plant({cls:'truss',x:1250,z,h:250,w:420,lift:900,shadow:true});
+  plant({cls:'pole',x:1450,z,h:1510,w:78,shadow:true});
 }
 /* clouds, drifting on their own clock - his sky is never still */
 const clouds=[];
@@ -266,11 +287,20 @@ function place(drive){
     if(it.w) it.el.style.width=(it.w*k)+'px';
     it.el.style.transform='translate('+x+'px,'+(baseY-h-it.lift*k)+'px) translateX(-50%)';
     if(it.sh){
-      it.sh.style.opacity=.32;
+      /* HIS SUN IS OVER YOUR LEFT SHOULDER, so everything lies down and to the
+         right. A shadow is the thing itself: flipped onto the road, squashed
+         to the angle of the light and leaned away from it - so it can only
+         ever be the shape of what stands above it, however that thing moves.
+         Anything hanging in the air (his boards, his gantry arm) has its
+         shadow carried further out by its own height, which is the one number
+         that separates a sign from a tree here. */
+      const lean=(it.lift||0)*0.55*k;
+      it.sh.style.opacity=it.lift?.20:.30;
       it.sh.style.height=h+'px';
+      if(it.w) it.sh.style.width=(it.w*k)+'px';
       it.sh.style.zIndex=2;
-      it.sh.style.transform='translate('+x+'px,'+baseY+'px) translateX(-50%)'+
-        ' scaleY(-0.26) skewX(-38deg)';
+      it.sh.style.transform='translate('+(x+lean)+'px,'+baseY+'px) translateX(-50%)'+
+        ' scaleY(-0.52) skewX(30deg)';
     }
   }
 }
