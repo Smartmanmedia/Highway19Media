@@ -16,25 +16,36 @@
 const fs = require('fs'), path = require('path');
 const DIR = path.join(__dirname, '..', 'build', 'v2');
 
-/* toward black, with the blue a night sky actually has */
-const TINT = [7, 20, 42];
-function night(r, g, b, keep, tint) {
-  return [r, g, b].map((c, i) => Math.round(c * keep + TINT[i] * tint));
+/* TOWARD BLACK, AND TOWARD A COLOUR - AND THE COLOUR IS NOT THE SAME EVERYWHERE.
+ * Sampled off his own night painting: his sky and his water hold FULL
+ * saturation at about 10% lightness (#001236, S100) while his sand goes almost
+ * neutral and stays warm (#3f3735, S9). One blue tint over the whole page got
+ * the sky right and turned his beach into cold slate. So each surface carries
+ * its own tint and its own amount of it. */
+const TINTS = {
+  sea:  [0, 8, 28],       /* his water and sky: barely any grey, so his own blue holds */
+  sand: [30, 24, 20],     /* warm, and most of the way to neutral */
+  leaf: [15, 21, 17],
+  page: [10, 14, 24]
+};
+function night(r, g, b, keep, tint, hue) {
+  var T = TINTS[hue] || TINTS.sea;
+  return [r, g, b].map((c, i) => Math.round(c * keep + T[i] * tint));
 }
 const hex = n => '#' + n.map(v => Math.max(0, Math.min(255, v))
   .toString(16).padStart(2, '0')).join('');
 
 /* every colour inside one CSS value, day -> night, alpha untouched */
-function darken(css, keep, tint) {
+function darken(css, keep, tint, hue) {
   return css
     .replace(/#([0-9a-f]{6}|[0-9a-f]{3})\b/gi, (m, h) => {
       if (h.length === 3) h = h.split('').map(c => c + c).join('');
       const n = [0, 2, 4].map(i => parseInt(h.substr(i, 2), 16));
-      return hex(night(n[0], n[1], n[2], keep, tint));
+      return hex(night(n[0], n[1], n[2], keep, tint, hue));
     })
     .replace(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*(,\s*[\d.]+\s*)?\)/gi,
       (m, r, g, b, a) => {
-        const n = night(+r, +g, +b, keep, tint);
+        const n = night(+r, +g, +b, keep, tint, hue);
         return 'rgba(' + n.join(',') + ',' + (a ? a.replace(/[,\s]/g, '') : '1') + ')';
       });
 }
@@ -60,14 +71,15 @@ function background(file, sel) {
   return v;
 }
 
+/* keep, tint amount, and which tint - all read off his own night painting */
 const SURFACES = [
-  ['--sec1-bg', 'section-01.css', '.sec1',       0.16, 0.55],
-  ['--sec1-fade', 'section-01.css', '.sec1::after', 0.20, 0.60],
-  ['--sec2-bg', 'section-02.css', '.sec2',       0.20, 0.75],
-  ['--sec2-sand', 'section-02.css', '.sec2 .sand', 0.17, 0.80],
-  ['--sec3-bg', 'section-03.css', '.sec3',       0.17, 0.80],
-  ['--sec4-ground', 'section-04.css', '.sec4 .ground', 0.17, 0.80],
-  ['--sec6-bg', 'section-06.css', '.sec6',       0.10, 0.85]
+  ['--sec1-bg',     'section-01.css', '.sec1',         0.17, 0.30, 'sea'],
+  ['--sec1-fade',   'section-01.css', '.sec1::after',  0.20, 0.30, 'sea'],
+  ['--sec2-bg',     'section-02.css', '.sec2',         0.22, 0.30, 'sea'],
+  ['--sec2-sand',   'section-02.css', '.sec2 .sand',   0.24, 0.60, 'sand'],
+  ['--sec3-bg',     'section-03.css', '.sec3',         0.22, 0.60, 'sand'],
+  ['--sec4-ground', 'section-04.css', '.sec4 .ground', 0.20, 0.55, 'leaf'],
+  ['--sec6-bg',     'section-06.css', '.sec6',         0.10, 0.85, 'page']
 ];
 
 /* THE FLAT TOKENS, alongside the generated gradients. They live here rather
@@ -77,13 +89,26 @@ const SURFACES = [
    Generated, they cannot drift. */
 const TOKENS = [
   ['--night', '1'],
-  /* his road: the two fills that move in opposite directions */
-  ['--tarmac', '#0b0c0f'],
-  ['--marking', '#fff'],
-  /* how far his painted scenery layers are taken down, as one filter each */
-  ['--scene', '0.26'],
-  ['--scene-sat', '0.72'],
-  ['--cloud-sat', '0.12'],
+  /* HIS ROAD. The tarmac in his painting is #36373f - dark, but nowhere near
+     black; black tarmac was mine, not his. The markings stay bright: his read
+     dim only because his road is lit by street lamps, and without those the
+     markings are the only thing that makes the road a road. Slightly warm,
+     as they are under any road lighting. */
+  ['--tarmac', '#26272e'],
+  ['--marking', '#ece9e0'],
+  /* his painted layers keep their COLOUR - his water is still fully saturated
+     blue at a tenth of daylight. Desaturating them was mine too. And they are
+     not taken as far down as the flat surfaces behind them: his foam lines
+     read at #425684, a good deal lighter than his water. */
+  ['--scene', '0.36'],
+  ['--scene-sat', '0.95'],
+  /* his clouds go deep blue, not grey - #001a43, saturation 100. No amount of
+     brightness reaches a hue, so this is a chain: strip the colour, lay a
+     sepia over it, swing the hue round to his blue, pull the saturation back
+     up and then take the whole thing down. Rotating FURTHER round makes them
+     more purple, not less - the red climbs - so this stops at 190. Lands near
+     his #001a43. */
+  ['--cloud-filter', 'brightness(.30) sepia(1) hue-rotate(190deg) saturate(7) brightness(.23)'],
   /* HIS TWO DARK-ON-LIGHT COPY BLOCKS. Section two's sits on his sand and
      section six's on his white page. Both grounds go dark, so the ink has to
      turn over with them or the words simply disappear - everything else on the
@@ -104,8 +129,8 @@ const TOKENS = [
 ];
 
 const vars = TOKENS.map(([k, v]) => '    ' + k + ': ' + v + ';').join('\n') + '\n' +
-  SURFACES.map(([name, file, sel, keep, tint]) =>
-  '    ' + name + ':\n      ' + darken(background(file, sel), keep, tint) + ';').join('\n');
+  SURFACES.map(([name, file, sel, keep, tint, hue]) =>
+  '    ' + name + ':\n      ' + darken(background(file, sel), keep, tint, hue) + ';').join('\n');
 
 /* WRITTEN TWICE ON PURPOSE. The three theme states need the same night values
    under two different selectors, and CSS has no way to say that without either

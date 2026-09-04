@@ -38,7 +38,7 @@
      traffic a filter must never be put over. */
   --scene: 1;
   --scene-sat: 1;
-  --cloud-sat: 1;
+  --cloud-filter: none;
 
   /* his signs, and his cards, at full daylight */
   --sign-lit: 1;
@@ -57,11 +57,11 @@
   @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]):not([data-mode="day"]){
     --night: 1;
-    --tarmac: #0b0c0f;
-    --marking: #fff;
-    --scene: 0.26;
-    --scene-sat: 0.72;
-    --cloud-sat: 0.12;
+    --tarmac: #26272e;
+    --marking: #ece9e0;
+    --scene: 0.36;
+    --scene-sat: 0.95;
+    --cloud-filter: brightness(.30) sepia(1) hue-rotate(190deg) saturate(7) brightness(.23);
     --sec2-ink: #dfe7f2;
     --sec6-ink: #eef2f7;
     --card-bg: #0c1018;
@@ -71,28 +71,28 @@
     --sign-lit: 0.86;
     --sign-sat: 0.80;
     --sec1-bg:
-      linear-gradient(180deg, rgba(4,17,43,1) 0%, rgba(4,17,43,1) 6.460%, rgba(4,18,43,.98) 28.736%, rgba(4,18,44,.9) 45.443%, rgba(4,19,46,.78) 59.366%, rgba(4,21,47,.6) 72.360%, rgba(4,23,50,.37) 84.426%, rgba(4,25,53,.1) 95.564%, rgba(4,26,54,0) 99.277%), linear-gradient(90deg, #041731 0%, #041a36 100%);
+      linear-gradient(180deg, rgba(0,9,30,1) 0%, rgba(0,9,30,1) 6.460%, rgba(0,9,30,.98) 28.736%, rgba(0,10,31,.9) 45.443%, rgba(0,11,32,.78) 59.366%, rgba(0,13,34,.6) 72.360%, rgba(0,15,37,.37) 84.426%, rgba(1,17,40,.1) 95.564%, rgba(1,18,42,0) 99.277%), linear-gradient(90deg, #000f24 0%, #01122a 100%);
     --sec1-fade:
-      linear-gradient(90deg,#041c3a 0%,#051f41 100%);
+      linear-gradient(90deg,#001229 0%,#011530 100%);
     --sec2-bg:
-      linear-gradient(180deg, #062044 0.03%, #062044 12.41%, #26364d 12.54%, #384253 12.67%, #384253 12.80%, #22334b 12.93%, #051e40 13.07%, #051e40 13.59%, #06234b 13.85%, #06234a 17.37%, #052a4f 17.63%, #052a4f 26.76%, #0f2f50 26.89%, #384253 27.02%, #384253 27.54%, #112b47 27.67%, #052544 27.80%, #052544 28.19%, #052d4e 28.32%, #062f50 28.45%, #062f50 33.80%, #16324d 34.06%, #16324d 42.66%, #283a50 42.79%, #353f53 42.92%, #353f53 45.40%), linear-gradient(90deg,#051f41 0%,#062247 100%);
+      linear-gradient(180deg, #011630 0.03%, #001530 12.41%, #242d3b 12.54%, #383b41 12.67%, #383b41 12.80%, #202a38 12.93%, #00132c 13.07%, #00132c 13.59%, #011838 13.85%, #001837 17.37%, #00203d 17.63%, #00203d 26.76%, #0a253e 26.89%, #383b41 27.02%, #383b41 27.54%, #0d2234 27.67%, #001a30 27.80%, #001a30 28.19%, #00233b 28.32%, #01253e 28.45%, #00253e 33.80%, #12283a 34.06%, #12283a 42.66%, #26313e 42.79%, #343741 42.92%, #343841 45.40%), linear-gradient(90deg,#00142d 0%,#011734 100%);
     --sec2-sand:
-      linear-gradient(180deg,#313132 0%,#313a48 31%,#313a48 100%) 0 100% / 100% 88.98% no-repeat, #313132;
+      linear-gradient(180deg,#4f3d23 0%,#4f4943 31%,#4f4943 100%) 0 100% / 100% 88.98% no-repeat, #4f3d23;
     --sec3-bg:
-      linear-gradient(180deg, transparent 0%,  transparent 18%, #313947 21%,     #31353b 45.78%,  #313438 47.72%, #2b2c32 47.86%,  #2a2b32 48.00%,  #262a38 48.13%,  #242837 48.83%, #2a2e3c 50.76%,  #222736 50.90%,  #1f2534 51.87%,  #2b2e38 52.01%, #313438 61.70%,  #2a2b32 61.97%,  #2a2b32 69.72%,  #1e2332 69.86%, #1d2232 72.21%,  #252938 72.35%,  #292c3b 78.58%,  #1f2433 78.72%, #1d2332 80.66%,  #2a2d3c 80.80%,  #2b2e3c 96.43%,  #2e303f 96.57%, #282b39 96.71%,  #282b38 97.96%,  #2a2b32 98.09%,  #2a2b32 100%);
+      linear-gradient(180deg, transparent 0%,  transparent 18%, #4a443d 21%,     #4a3f2d 45.78%,  #4a3d29 47.72%, #423222 47.86%,  #413121 48.00%,  #3c3029 48.13%,  #3a2e28 48.83%, #42352e 50.76%,  #372c26 50.90%,  #332923 51.87%,  #433528 52.01%, #4a3d29 61.70%,  #413121 61.97%,  #413121 69.72%,  #312721 69.86%, #302621 72.21%,  #3b2f29 72.35%,  #40332d 78.58%,  #332923 78.72%, #312722 80.66%,  #42342e 80.80%,  #43352f 96.43%,  #463831 96.57%, #3e312b 96.71%,  #3e3129 97.96%,  #413121 98.09%,  #413121 100%);
     --sec4-ground:
-      linear-gradient(180deg, #06222b 0%, #06222b 1.59%, #0f2f2e 93.90%, #0f2f2e 100%);
+      linear-gradient(180deg, #082014 0%, #082014 1.59%, #143018 93.90%, #143018 100%);
     --sec6-bg:
-      linear-gradient(180deg, transparent 0, transparent 3.85%, #1f2b3d 3.85%, #1f2b3d 100%);
+      linear-gradient(180deg, transparent 0, transparent 3.85%, #22252e 3.85%, #22252e 100%);
   }}
   :root[data-theme="dark"]:not([data-mode="day"]),
   :root[data-mode="night"]{
     --night: 1;
-    --tarmac: #0b0c0f;
-    --marking: #fff;
-    --scene: 0.26;
-    --scene-sat: 0.72;
-    --cloud-sat: 0.12;
+    --tarmac: #26272e;
+    --marking: #ece9e0;
+    --scene: 0.36;
+    --scene-sat: 0.95;
+    --cloud-filter: brightness(.30) sepia(1) hue-rotate(190deg) saturate(7) brightness(.23);
     --sec2-ink: #dfe7f2;
     --sec6-ink: #eef2f7;
     --card-bg: #0c1018;
@@ -102,19 +102,19 @@
     --sign-lit: 0.86;
     --sign-sat: 0.80;
     --sec1-bg:
-      linear-gradient(180deg, rgba(4,17,43,1) 0%, rgba(4,17,43,1) 6.460%, rgba(4,18,43,.98) 28.736%, rgba(4,18,44,.9) 45.443%, rgba(4,19,46,.78) 59.366%, rgba(4,21,47,.6) 72.360%, rgba(4,23,50,.37) 84.426%, rgba(4,25,53,.1) 95.564%, rgba(4,26,54,0) 99.277%), linear-gradient(90deg, #041731 0%, #041a36 100%);
+      linear-gradient(180deg, rgba(0,9,30,1) 0%, rgba(0,9,30,1) 6.460%, rgba(0,9,30,.98) 28.736%, rgba(0,10,31,.9) 45.443%, rgba(0,11,32,.78) 59.366%, rgba(0,13,34,.6) 72.360%, rgba(0,15,37,.37) 84.426%, rgba(1,17,40,.1) 95.564%, rgba(1,18,42,0) 99.277%), linear-gradient(90deg, #000f24 0%, #01122a 100%);
     --sec1-fade:
-      linear-gradient(90deg,#041c3a 0%,#051f41 100%);
+      linear-gradient(90deg,#001229 0%,#011530 100%);
     --sec2-bg:
-      linear-gradient(180deg, #062044 0.03%, #062044 12.41%, #26364d 12.54%, #384253 12.67%, #384253 12.80%, #22334b 12.93%, #051e40 13.07%, #051e40 13.59%, #06234b 13.85%, #06234a 17.37%, #052a4f 17.63%, #052a4f 26.76%, #0f2f50 26.89%, #384253 27.02%, #384253 27.54%, #112b47 27.67%, #052544 27.80%, #052544 28.19%, #052d4e 28.32%, #062f50 28.45%, #062f50 33.80%, #16324d 34.06%, #16324d 42.66%, #283a50 42.79%, #353f53 42.92%, #353f53 45.40%), linear-gradient(90deg,#051f41 0%,#062247 100%);
+      linear-gradient(180deg, #011630 0.03%, #001530 12.41%, #242d3b 12.54%, #383b41 12.67%, #383b41 12.80%, #202a38 12.93%, #00132c 13.07%, #00132c 13.59%, #011838 13.85%, #001837 17.37%, #00203d 17.63%, #00203d 26.76%, #0a253e 26.89%, #383b41 27.02%, #383b41 27.54%, #0d2234 27.67%, #001a30 27.80%, #001a30 28.19%, #00233b 28.32%, #01253e 28.45%, #00253e 33.80%, #12283a 34.06%, #12283a 42.66%, #26313e 42.79%, #343741 42.92%, #343841 45.40%), linear-gradient(90deg,#00142d 0%,#011734 100%);
     --sec2-sand:
-      linear-gradient(180deg,#313132 0%,#313a48 31%,#313a48 100%) 0 100% / 100% 88.98% no-repeat, #313132;
+      linear-gradient(180deg,#4f3d23 0%,#4f4943 31%,#4f4943 100%) 0 100% / 100% 88.98% no-repeat, #4f3d23;
     --sec3-bg:
-      linear-gradient(180deg, transparent 0%,  transparent 18%, #313947 21%,     #31353b 45.78%,  #313438 47.72%, #2b2c32 47.86%,  #2a2b32 48.00%,  #262a38 48.13%,  #242837 48.83%, #2a2e3c 50.76%,  #222736 50.90%,  #1f2534 51.87%,  #2b2e38 52.01%, #313438 61.70%,  #2a2b32 61.97%,  #2a2b32 69.72%,  #1e2332 69.86%, #1d2232 72.21%,  #252938 72.35%,  #292c3b 78.58%,  #1f2433 78.72%, #1d2332 80.66%,  #2a2d3c 80.80%,  #2b2e3c 96.43%,  #2e303f 96.57%, #282b39 96.71%,  #282b38 97.96%,  #2a2b32 98.09%,  #2a2b32 100%);
+      linear-gradient(180deg, transparent 0%,  transparent 18%, #4a443d 21%,     #4a3f2d 45.78%,  #4a3d29 47.72%, #423222 47.86%,  #413121 48.00%,  #3c3029 48.13%,  #3a2e28 48.83%, #42352e 50.76%,  #372c26 50.90%,  #332923 51.87%,  #433528 52.01%, #4a3d29 61.70%,  #413121 61.97%,  #413121 69.72%,  #312721 69.86%, #302621 72.21%,  #3b2f29 72.35%,  #40332d 78.58%,  #332923 78.72%, #312722 80.66%,  #42342e 80.80%,  #43352f 96.43%,  #463831 96.57%, #3e312b 96.71%,  #3e3129 97.96%,  #413121 98.09%,  #413121 100%);
     --sec4-ground:
-      linear-gradient(180deg, #06222b 0%, #06222b 1.59%, #0f2f2e 93.90%, #0f2f2e 100%);
+      linear-gradient(180deg, #082014 0%, #082014 1.59%, #143018 93.90%, #143018 100%);
     --sec6-bg:
-      linear-gradient(180deg, transparent 0, transparent 3.85%, #1f2b3d 3.85%, #1f2b3d 100%);
+      linear-gradient(180deg, transparent 0, transparent 3.85%, #22252e 3.85%, #22252e 100%);
   }
   /* <<< palette */
 
@@ -124,7 +124,7 @@
   --night: 0;
   --tarmac: #575757;
   --marking: #fff;
-  --scene: 1; --scene-sat: 1; --cloud-sat: 1;
+  --scene: 1; --scene-sat: 1; --cloud-filter: none;
   --sec2-ink: #333; --sec6-ink: #1a1a1a;
   --sign-lit: 1; --sign-sat: 1;
   --card-bg: #fff; --card-line: #1a1a1a; --card-ink: #1a1a1a; --card-sub: #333;
@@ -149,10 +149,11 @@ section .rock-cross{
   transition: filter 1s linear;
 }
 
-/* his clouds go grey rather than dark - a cloud at night is lit by the sky,
-   and darkening a white one only makes it look grubby */
+/* HIS CLOUDS GO DEEP BLUE, not grey. Sampled off his painting they are
+   #001a43 at full saturation, and no amount of brightness reaches a hue - see
+   the chain in tools/make_night.js. */
 section .z-cloud{
-  filter: saturate(var(--cloud-sat)) brightness(calc(0.34 + var(--scene) * 0.66));
+  filter: var(--cloud-filter, none);
   transition: filter 1s linear;
 }
 

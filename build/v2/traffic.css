@@ -38,8 +38,13 @@ section .traffic .beams{
    composites at all. */
 section .traffic .shades{ fill:#000 }
 section .traffic .tints{
-  fill:#0c1727;
-  opacity:calc(var(--night, 0) * 0.55);
+  /* HIS CARS KEEP THEIR PAINT. Sampled off his night painting the green car is
+     still saturation 91, the yellow 89, the red 75 - they are darkened by about
+     half and not drained at all. A heavy blue tint took them to nearly grey,
+     which was mine, not his. Near-black at just under half strength halves the
+     brightness and leaves the hue where he put it. */
+  fill:#05070c;
+  opacity:calc(var(--night, 0) * 0.44);
   transition:opacity 1s linear;
 }
 @media (prefers-reduced-motion: reduce){ section .traffic .tints{ transition:none } }
