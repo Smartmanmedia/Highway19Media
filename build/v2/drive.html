@@ -446,6 +446,7 @@ function plant(o){
       sh.style.backgroundImage='url("'+TRUSS_TILE+'")';
       sh.style.backgroundRepeat='repeat-x';sh.style.backgroundSize='auto 100%'}
     shadows.appendChild(sh);
+    if(!drawn) sh.style.transformOrigin=(it.fx*100)+'% 100%';
     it.sh=sh; it.shGeo=drawn||null;
   }
   items.push(it); return it;
@@ -668,8 +669,14 @@ function place(drive){
         it.sh.style.opacity=(it.lift?.18:.26)*up;
         it.sh.style.height=h+'px';
         if(it.w) it.sh.style.width=(U*it.w*k)+'px';
+        /* A LAMP IS NOT SYMMETRICAL. It stands on its mast, which is at 94% of
+           the way across its own sprite, so the flip and the skew have to turn
+           about THAT point - pivoting the shadow at the middle of the box put
+           it most of an arm's length away from the mast it belongs to. Same
+           fx the lamp itself is planted by; a sign or a pole is 0.5 and
+           nothing changes for them. */
         it.sh.style.transform='translate('+(x+lx)+'px,'+(baseY+ly)+'px)'+
-          ' translate(-50%,-100%) scaleY(-'+SUN_Y+') skewX('+(-SUN_A)+'deg)';
+          ' translate(-'+(it.fx*100)+'%,-100%) scaleY(-'+SUN_Y+') skewX('+(-SUN_A)+'deg)';
       }
     }
   }
