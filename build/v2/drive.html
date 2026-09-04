@@ -447,17 +447,20 @@ const RUN=19000;
    70% - so they are written that way and converted once. Everything downstream
    works in u, the fraction of the DRIVE, not of the page: u = 0 before START
    and 1 after END, so the road simply sits still at either end.
-   HOLD is a page fraction too, or the pauses would stretch and shrink with the
-   window the drive is given. */
-const START=0.06, END=0.90;
-const SIGN_AT=[0.16,0.70], TEXT_AT=0.30, HOLD_PAGE=0.055;
+   How long the road eases at a board is EASE, down with the speed curve. */
+/* THE ROAD DOES NOT STOP TO BE FADED OUT. It runs to the bottom of the scroll
+   and the hand-over happens over the last tenth WHILE it is still moving -
+   ending the drive first and then dissolving a still frame is what read as
+   parking up and getting out. */
+const START=0.06, END=1.0;
+const SIGN_AT=[0.16,0.70], TEXT_AT=0.30;
 /* AND WHERE IT HANDS OVER. From FADE_AT to the bottom of the scroll everything
    that stands on the earth goes out and only the sky is left - the sun and the
    blue in daylight, the moon and the stars after dark - so the next section
    can start on a sky that is already there rather than cutting to it. */
 const FADE_AT=0.90;
 const RANGE=END-START;
-const STOPS=SIGN_AT.map(a=>(a-START)/RANGE), HOLD=HOLD_PAGE/RANGE;
+const STOPS=SIGN_AT.map(a=>(a-START)/RANGE);
 const TEXT_U=(TEXT_AT-START)/RANGE;
 const DASH_LEN=61, DASH_GAP=97, DASH_W=19;
 /* HOW FAR OUT A THING FADES UP. The water line is a hard clip - past it a
@@ -533,23 +536,46 @@ function measure(){
   strip(goldL,-1,GOLD,GOLD_LANE);  strip(goldR,1,GOLD,GOLD_LANE);
 }
 
-/* ---- his two slow-downs --------------------------------------------------
-   A smoothstep either side of each sign and a flat run in between: the road
-   eases in, sits still while you read it, and eases out. The road given up to
-   the holds is handed back to the cruise, so the trip still covers the same
-   ground. */
+/* ---- SPEED, WRITTEN AS SPEED -----------------------------------------------
+   The old version worked the other way round: it took the distance and bent it
+   near each sign. That gives you a hold but it cannot give you a cruise - the
+   road between the boards ran at exactly the average, because nothing ever
+   said how fast anything should go.
+
+   So the speed is written first and the distance is what comes out of it. v(u)
+   is 1 on the open road and falls to 1-DIP at each board, through a curve with
+   zero slope at both ends - which is the ease-in-out he is asking for, and it
+   is the same shape a cubic-bezier(.4,0,.2,1) draws, just written as a number
+   instead of a keyword. EASE is how far either side of a board the slowing
+   reaches.
+
+   Then it is integrated once, at load, into a table of 1024 entries and
+   normalised so the whole trip still covers RUN. That normalisation is what
+   makes the open road FASTER: every metre given up at the boards is handed
+   back to the cruise. Reading it is one lerp a frame.
+
+   AND THE BOARDS ARE PLANTED OFF THE TABLE, not off u*RUN. With a flat speed
+   those two are the same number; the moment the speed varies they are not, and
+   a board placed at u*RUN would sit somewhere the camera never stops. */
 const clamp=(x,a,b)=>x<a?a:x>b?b:x;
 const smooth=x=>{x=clamp(x,0,1);return x*x*(3-2*x)};
-function distance(t){
-  let d=t;
-  for(const s of STOPS){
-    const a=s-HOLD,b=s+HOLD;
-    if(t>a){
-      const u=clamp((t-a)/(2*HOLD),0,1);
-      d+=(smooth((u-.5)*2.4+.5)-u)*(2*HOLD);
-    }
+const DIP=0.93, EASE=0.115, STEPS=1024;
+const TABLE=(function(){
+  const t=new Float64Array(STEPS+1);
+  let sum=0;
+  for(let i=0;i<=STEPS;i++){
+    const u=i/STEPS;
+    let slow=0;
+    for(const s of STOPS) slow=Math.max(slow,1-smooth(Math.abs(u-s)/EASE));
+    t[i]=sum; sum+=1-DIP*slow;
   }
-  return d*RUN;
+  for(let i=0;i<=STEPS;i++) t[i]=t[i]/sum*RUN;   /* the trip is still RUN long */
+  return t;
+})();
+/* how far down the road we are at u */
+function distance(u){
+  const x=clamp(u,0,1)*STEPS, i=Math.min(STEPS-1,x|0), f=x-i;
+  return TABLE[i]+(TABLE[i+1]-TABLE[i])*f;
 }
 
 /* ---- what is on the road -------------------------------------------------- */
@@ -752,14 +778,14 @@ for(let i=0;i<20;i++){
 const COPY_H=200;   /* the box it is laid out in, before any scaling */
 
 const AHEAD=420;
-plant({cls:'copy',art:'copyline',x:0,h:132,lift:430,z:-(TEXT_U*RUN)-AHEAD});
+plant({cls:'copy',art:'copyline',x:0,h:132,lift:430,z:-distance(TEXT_U)-AHEAD});
 /* TWO BOARDS, NOT THE SAME ONE TWICE. Both hang 875 wide off the gantry - that
    is the width his picture sets - so the height follows from each board's own
    aspect rather than being chosen: his hero is 2.685 to one and his third
    board is 3.183, which is 326 tall and 275 tall at that width. */
 const BOARD_W=566, BOARDS=[{art:'hero',ar:938.50/349.56},{art:'sign3',ar:940.5/295.5}];
 STOPS.forEach((s,si)=>{
-  const z=-(s*RUN)-AHEAD, b=BOARDS[si%BOARDS.length];
+  const z=-distance(s)-AHEAD, b=BOARDS[si%BOARDS.length];
   /* THE GANTRY DOES NOT MOVE. It towers because the avenue came down, not
      because the board went up - raising it pushed the board into the top edge
      of the frame and left the sign reading as an afterthought above the
@@ -984,7 +1010,7 @@ function tick(now){
     const fps=Math.round(frames*1000/(now-fpsT));
     if(fps<worst&&now>3000) worst=fps;
     frames=0;fpsT=now;
-    const near=STOPS.findIndex(s=>u>s-HOLD&&u<s+HOLD);
+    const near=STOPS.findIndex(s=>Math.abs(u-s)<EASE*.6);
     const ms=(costSum/Math.max(1,costN)).toFixed(2); costSum=0; costN=0;
     hud.innerHTML='<b>'+fps+' fps</b>'+(worst<999?' &nbsp;·&nbsp; worst '+worst:'')+
       ' &nbsp;·&nbsp; '+ms+'ms a frame'+
