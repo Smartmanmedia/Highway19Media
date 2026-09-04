@@ -193,8 +193,14 @@
      desert. The same lightnesses with green brought up past red and the
      blue lifted a little: a blue-grey sand rather than a mauve one, so the
      two sections sit in the same family with the desert below. */
+  /* OFF THE PURPLE, TWICE. Bringing green past red was not enough: these
+     still sat at a hue of 230 to 234, and 234 is violet - blue is 240 with
+     red climbing back in beyond it. Every stop is turned to a hue of 218,
+     the side of blue with no red in it, then scaled back to the luminance
+     it had, because a hue turn on its own lifts a colour and this scene is
+     going down, not up. His dunes below take the identical turn. */
   background: linear-gradient(180deg,
-    #0d1029 0%, #101328 22%, #191c2e 53%, #171a2c 88%, #171c35 100%);
+    #0b1321 0%, #0e1522 22%, #171e2a 53%, #151c28 88%, #151e2f 100%);
   opacity: var(--night, 0);
   transition: opacity 1s linear;
 }

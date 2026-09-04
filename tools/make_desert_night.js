@@ -32,19 +32,28 @@ const DIR = path.join(__dirname, '..', 'build', 'v2');
 
 /* --- his night desert, off artboard three ------------------------------- */
 const HIS = {
-  /* HIS DUNES, BIGGEST AREA FIRST, AND OFF THE PURPLE. Three of his five
-     have more red in them than green - #1b1a37 and #322d4a most of all -
-     which is what put a violet cast across the whole desert next to the
-     beach above it. Same lightnesses, green brought up past red: his blues
-     stay his, and the two sands now sit in one family. */
-  dune: ['#1a1f44', '#181d39', '#1a1f3e', '#181c41', '#2c324e'],
+  /* HIS DUNES, BIGGEST AREA FIRST, AND OFF THE PURPLE - TWICE.
+     Three of his five have more red in them than green, which is what put a
+     violet cast across the whole desert next to the beach above it. Bringing
+     green past red was not enough: they still sat at a hue of 231 to 234,
+     and 234 IS violet - blue is 240 with red climbing back in beyond it, and
+     the eye reads anything that side of about 225 as purple.
+
+     Every one is now turned to a hue of 218 - between blue and cyan, the
+     side of blue with no red in it at all - and then scaled back to the
+     luminance he drew it at, because a hue turn on its own lifts a colour
+     (green carries three times the weight of blue in perceived brightness)
+     and he has been taking this scene down, not up. Same lightness, his own
+     order, no purple. The beach above uses the identical turn; its stops are
+     in section-02.css. */
+  dune: ['#16233a', '#152032', '#172236', '#142036', '#293549'],
   /* his rock, darkest to lightest */
   rockLo: '#110f13', rockHi: '#593d38',
   /* nothing green survives in his artboard, so the scrub is taken to the
      same darkness as his trees in artboard four and left green */
   plantLo: '#0b1410', plantHi: '#26401f',
   /* section two's sand at its foot, so the two sections meet with no line */
-  beachFoot: '#171c35'
+  beachFoot: '#151e2f'
 };
 
 const hex = h => { const c = h.replace('#', '');

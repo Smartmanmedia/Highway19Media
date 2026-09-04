@@ -474,9 +474,9 @@ section svg.z-copy [fill^="#"],
 /* >>> desert */
   @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]):not([data-mode="day"]){
-    --dffdb96: #1a1f44;
-    --dffd486: #181d39;
-    --dfac67e: #1a1f3e;
+    --dffdb96: #16233a;
+    --dffd486: #152032;
+    --dfac67e: #172236;
     --d754c24: #110f13;
     --dc89a70: #4e3633;
     --dbb9067: #46312e;
@@ -507,9 +507,9 @@ section svg.z-copy [fill^="#"],
   }}
   :root[data-theme="dark"]:not([data-mode="day"]),
   :root[data-mode="night"]{
-    --dffdb96: #1a1f44;
-    --dffd486: #181d39;
-    --dfac67e: #1a1f3e;
+    --dffdb96: #16233a;
+    --dffd486: #152032;
+    --dfac67e: #172236;
     --d754c24: #110f13;
     --dc89a70: #4e3633;
     --dbb9067: #46312e;
