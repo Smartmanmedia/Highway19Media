@@ -24,6 +24,22 @@
    ========================================================================= */
 :root{ --mob-w:900px }
 
+/* ============================================================================
+   NO FONT BOOSTING. Chrome on Android inflates text it decides is too small to
+   read, and it does it AFTER layout: only the small ranks move, the headlines
+   do not, and every block set to a height his composition cleared grows into
+   whatever is under it. On his phone that put the hero headline through its own
+   subhead, the body copy through the Your Road Map button, and every card's
+   copy out through its Learn More.
+
+   It is not a size problem and it cannot be tuned away - the page is already
+   sized for the screen, which is exactly what this rule tells the browser.
+   Outside the media query on purpose: the desktop page can be opened on a
+   phone in landscape too, and boosting does not check a breakpoint.
+   ========================================================================= */
+html{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
+body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
+
 @media (max-width:900px){
 
   /* THE SECTIONS ARE WIDER THAN THE PHONE ON PURPOSE, so the page must not
@@ -162,20 +178,64 @@
   }
   .sec6 .page h2.copy{ font-size:min(6.4vw,30px); line-height:1.12; white-space:normal }
   .sec6 .page .sub{ font-size:min(3.9vw,18px); margin-top:1.6vw; margin-bottom:2vw }
+  /* AND THE CARD ITSELF STOPS BEING A DRAWING. On the desktop artboard every
+     part of it is pinned to a per cent of a card whose height is fixed, which
+     is exact and completely unforgiving: one line more of copy than he set and
+     it runs out through the button. His four blurbs are not the same length,
+     the phone's column is half his width, and a browser is free to lay type
+     out a pixel differently - so on a phone the card is a column that grows,
+     and the copy can be any length it likes.
+
+     His tag and his icon stay pinned, because they ARE the drawing - they hang
+     off the top edge and overlap it. Their sizes move from per-cent-of-height,
+     which means nothing once the height is the content's, to cqw of the card,
+     which is the same number expressed against the one dimension it still
+     has. */
+  /* AND THE CARD ITSELF STOPS BEING A DRAWING. On his artboard every part of a
+     card is pinned to a per cent of a card whose height is fixed, which is
+     exact and completely unforgiving: one line of copy more than he set and it
+     runs out through the button. His four blurbs are not the same length, the
+     phone's column is half his width, and a browser is free to lay type out a
+     pixel differently - so on a phone the card is a column that GROWS and the
+     copy can be any length it likes.
+
+     NOT WITH cqw, though, and this is the trap. Making the card a size
+     container and then giving IT padding in cqw is circular: a container
+     cannot use its own unit, so the padding resolved against the section - 900
+     - which ate the card, and the children's cqw then resolved against what
+     was left of it. 37cqw of padding came out 333px and the headings came out
+     at six. The card's own box is in per cent of its width; the type is in vw
+     with a cap, so it stops growing before the query does.
+
+     His tag and his icon stay pinned, because they ARE the drawing - they hang
+     off the top edge and overlap it. Their offsets move from `top`, which is a
+     share of a height that no longer exists, to a negative margin, which is a
+     share of the width - the one dimension the card still fixes. */
   .sec6 .page .card{
     position:relative; top:auto; left:auto !important; right:auto;
-    width:auto; height:auto; aspect-ratio:258.9 / 432;
-    container-type:inline-size;
-    border-width:1px; border-radius:8cqw;
+    width:auto; height:auto; aspect-ratio:auto;
+    border-width:1px; border-radius:14px;
+    display:flex; flex-direction:column; align-items:center;
+    padding:34% 8% 8%; gap:3%;
   }
-  .sec6 .page .card h3{ font-size:11cqw; top:27% }
-  .sec6 .page .card p{ font-size:5.4cqw; line-height:1.26; top:48%; left:8%; right:8% }
-  /* HIS HAND BREAKS ARE KEPT. Dropping them was the obvious move - his lines
-     are broken to a desktop column and each one wraps again at half the width
-     - but they are written with no space around them, so hiding them ran the
-     words together: "andlanding", "videosthat". At this size his own lines
-     fit the card, which is the better answer anyway: they are his. */
-  .sec6 .page .card .btn{ font-size:7.4cqw; border-width:0.8cqw; border-radius:4.3cqw }
+  .sec6 .page .card > h3,
+  .sec6 .page .card > p,
+  .sec6 .page .card > .btn{
+    position:static; left:auto; right:auto; top:auto; width:100%; height:auto;
+  }
+  .sec6 .page .card h3{ font-size:min(4.8vw,23px) }
+  .sec6 .page .card p { font-size:min(2.75vw,13px); line-height:1.3 }
+  .sec6 .page .card .btn{
+    font-size:min(3.3vw,15px); border-width:2px; border-radius:8px;
+    padding:4% 0; margin-top:auto;
+  }
+  /* his own line breaks are kept - they are written with no space around them,
+     so dropping them ran the words together: "andlanding", "videosthat" */
+  .sec6 .page .card .label{
+    top:0; margin-top:-5.76%; height:auto; aspect-ratio:137.3 / 95;
+  }
+  .sec6 .page .card .icon{ top:0 !important; margin-top:0.85% }
+
   /* A TAP IS NOT A HOVER. There is nothing to hover with, so the button that
      arrives on hover is simply there, and the card does not grow. */
   .sec6 .page .card{ scale:1 }
