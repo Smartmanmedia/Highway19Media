@@ -138,7 +138,7 @@ function atDistance(target){
   }
   return 1;
 }
-let fwAt=1;
+let fwAt=1, fwEndY=Infinity;
 function measure(){
   W=stage.clientWidth; H=stage.clientHeight;
   /* the spark canvas rides the same measurement. Device ratio capped at two:
@@ -164,6 +164,18 @@ function measure(){
      shell takes most of a second to climb, so by the time one opens the sign
      is properly on the horizon underneath it. */
   fwAt=START+atDistance(distance(STOPS[STOPS.length-1])+AHEAD-dSea)*RANGE;
+  /* AND WHERE IT ENDS: when his contact band has closed over the sky. That
+     section rides up a whole viewport into the last screen of road, and the
+     top 180px of it are transparent - so the fireworks are still going behind
+     his headline and the top of his form as they climb into frame, and the
+     last spark you see is the one the blue closes over. Measured off the
+     section itself rather than off the trip, because it is the section's
+     own arrival that ends it. Its FULL height cannot be on screen at the same
+     time as any road - form and headline together are taller than the frame -
+     so this is the honest version of "when the form has arrived". */
+  const close=document.querySelector('.sec8');
+  fwEndY = close ? close.getBoundingClientRect().top+scrollY+180
+                 : secTop+secSpan;
   /* HOW CLOSE THE PAINT COMES. The markings wrap through a fixed pool, so the
      nearest one is wherever the wrap puts it - and that was a flat -300, which
      from a saloon lands the last dash three quarters of the way down the
@@ -671,6 +683,7 @@ function place(drive){
    carries past the runway the sky is wiped and the pools are emptied, so
    scrolling on stops the show rather than leaving it burning off-screen.
    ====================================================================== */
+const ROOT=document.documentElement;
 const fw=document.getElementById('fw'), fctx=fw.getContext('2d');
 let FDPR=1;
 /* HIS OWN COLOURS - the four lanes off his cards, his gold and his red, so a
@@ -794,9 +807,21 @@ function tick(now){
      last board comes over the horizon, so the sky is already going long
      before the road starts to fade, and it is wiped the instant the scroll leaves the
      section - keep scrolling and the fireworks stop. */
-  const want = t>=fwAt && t<0.999;
+  const want = t>=fwAt && scrollY<fwEndY;
   if(want){ fwOn=true; fframe(Math.min(0.05,dt/1000)); }
   else if(fwOn) fstop();
+  /* AND NIGHT FALLS HERE. He has decided what drives it, and it is scroll
+     depth - so the switch is no longer the whole story, it is an override.
+     The change hangs on the SAME instant the fireworks do, the last board
+     coming over the horizon about half way down the road, so the light going
+     and the first shell climbing are one event rather than two and every
+     burst after it is against a dark sky. Everything downstream reads
+     data-mode, so this is one attribute and a one-second crossfade that was
+     already there. modeLock is the button saying it has been overruled. */
+  if(!ROOT.dataset.modeLock){
+    const m = t>=fwAt ? 'night' : 'day';
+    if(ROOT.dataset.mode!==m) ROOT.dataset.mode=m;
+  }
   const t0=performance.now(); place(distance(u)); const cost=performance.now()-t0;
   costSum+=cost; costN++;
   for(const c of clouds){
@@ -834,6 +859,7 @@ if(byId('hint')) addEventListener('scroll',
    drops straight into the page. */
 if(byId('nightBtn')) byId('nightBtn').onclick=e=>{
   const on=document.documentElement.dataset.mode!=='night';
+  document.documentElement.dataset.modeLock='1';
   document.documentElement.dataset.mode=on?'night':'day';
   e.currentTarget.setAttribute('aria-label',on?'Switch to day':'Switch to night')};
 if(byId('curveBtn')) byId('curveBtn').onclick=e=>{curve=curve?0:1;

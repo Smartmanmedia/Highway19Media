@@ -9,19 +9,20 @@
    changed is only what had to, to sit under a drive that did not exist when
    he wrote it.
 
-   AND THAT IS THE JOIN. Section seven ends on nothing but sky - the road, the
-   trees and the boards have faded and the sticky stage scrolls away with a
-   full-frame gradient still in it - so this page's FIRST ROW has to be that
-   gradient's LAST ROW or there is a step across the seam.
+   IT RIDES UP OVER THE END OF THE DRIVE. A whole viewport of negative margin,
+   so the band climbs into frame across the last screen of road with the
+   fireworks still going above it, instead of waiting for the road to run out
+   first. That, and the padding taken out from over the headline, is what puts
+   his form on screen about a thousand pixels of scroll earlier than it was.
 
-   His drive sky is a 112deg ramp over the stage, so its bottom edge is not one
-   colour: it runs left to right through most of the ramp, and no angle painted
-   on a box of a different height reproduces it, because the angle's geometry
-   depends on the box. So the row was SAMPLED off the running page at nine
-   points and is laid down here as a flat 90deg ramp through those nine
-   colours, which then deepens over the first 150px into his interstate blue.
-   The two rows are the same by construction at any width.
-   ========================================================================= */
+   AND THE FIRST 180px OF IT ARE TRANSPARENT. That is what makes the join work
+   at ANY scroll position rather than one. The old top strip was the drive's
+   last row, sampled and repainted - which is exact only while the two edges
+   actually meet. Once the section rides up over the road it meets a different
+   row every frame, and a repainted one would be wrong in all of them. A ramp
+   from nothing to his interstate blue is right in all of them: whatever is
+   behind shows through the top of it and there is no edge to match.
+      ========================================================================= */
 .sec8{
   --blue-900:#062f5e; --blue-700:#12569f; --blue-100:#e6effa;
   --sign-green:#1c9022; --green-800:#0d5c12; --green-500:#059236;
@@ -35,26 +36,16 @@
   font-family:var(--font-sign);
   font-size:clamp(16px,1.05vw,17.5px);
   line-height:1.62; font-weight:450;
-  padding:clamp(72px,9vw,132px) 0 clamp(88px,10vw,140px);
-  background:var(--sec8-band,var(--blue-700));
+  margin-top:-100vh;
+  padding:clamp(26px,2.4vw,36px) 0 clamp(88px,10vw,140px);
+  /* the ramp's last stop holds to the foot of the section, so one gradient is
+     both the join and the ground */
+  background:var(--sec8-band,
+    linear-gradient(180deg, rgba(18,86,159,0) 0, #12569f 180px, #12569f 100%));
 }
 .sec8 *,.sec8 *::before,.sec8 *::after{ box-sizing:border-box }
 .sec8 img{ max-width:100%; display:block }
 .sec8 a{ color:inherit }
-
-/* THE SKY RUNNING OUT. One strip over the band, painted from the row the
-   drive hands over on down to the band's own colour. It is a child rather
-   than a background layer on the section because the section's own padding
-   would otherwise decide where it started. */
-.sec8::before{
-  content:''; position:absolute; left:0; right:0; top:0; height:150px;
-  pointer-events:none;
-  background:var(--sec8-join,
-    linear-gradient(180deg, rgba(18,86,159,0) 0%, #12569f 100%)),
-    var(--sec8-sky,
-    linear-gradient(90deg,#cbe2ff 0%,#b4d5ff 12.5%,#9dc9ff 25%,#88bdff 37.5%,
-      #75b3ff 50%,#65abff 62.5%,#58a4ff 75%,#4e9eff 87.5%,#4a9cff 100%));
-}
 
 .sec8 .inner{
   position:relative; z-index:3;
@@ -71,7 +62,7 @@
   padding:.5em .95em; border-radius:5px;
   border:1.5px solid rgba(255,255,255,.85);
   box-shadow:0 0 0 1.5px var(--yellow-600);
-  margin:0 0 1.35em;
+  margin:0 0 .8em;
 }
 .sec8 .eyebrow::before{
   content:""; width:.62em; height:.62em; flex:none;
@@ -101,13 +92,13 @@
   color:rgba(255,255,255,.94); text-wrap:balance;
 }
 .sec8 .body-copy{
-  margin:1.5em auto 0; max-width:56ch; text-align:center;
+  margin:.95em auto 0; max-width:56ch; text-align:center;
   font-size:1.055rem; line-height:1.72; color:rgba(255,255,255,.9);
 }
 
 /* ---- his form card ------------------------------------------------------ */
 .sec8 .form{
-  max-width:640px; margin:clamp(40px,5vw,60px) auto 0;
+  max-width:640px; margin:clamp(18px,2vw,26px) auto 0;
   background:var(--sec8-paper,var(--paper)); color:var(--sec8-ink,var(--ink));
   border-radius:12px; padding:clamp(26px,3.4vw,38px);
   border-bottom:6px solid var(--yellow-500);

@@ -10,17 +10,20 @@
  * two icons is showing is decided in CSS by the same selectors that decide the
  * palette, so the button can never disagree with the page.
  *
- * TEMPORARY BY AGREEMENT. When he decides what really drives night - a toggle
- * he keeps, the hour, scroll depth - this file comes out and nothing else
- * changes, because everything downstream reads the variables, not this.
+ * SCROLL DEPTH DRIVES IT NOW. He has decided: the light goes half way down
+ * the road, where the last board comes over the horizon and the fireworks
+ * start, and the page ends at night. That lives in the drive, which is the
+ * only thing that knows how far through the road you are.
+ *
+ * So this is an OVERRIDE, not the driver. A click writes data-modeLock and
+ * the drive stops touching the mode for the rest of the page load - otherwise
+ * the next scroll frame would undo the click before he saw it. Nothing is
+ * remembered between visits any more: a saved choice would fight the road on
+ * every reload, and the road is the story.
  */
 (function () {
   'use strict';
   var root = document.documentElement;
-  var KEY = 'h19-mode';
-
-  try { var saved = localStorage.getItem(KEY);
-        if (saved === 'day' || saved === 'night') root.dataset.mode = saved; } catch (e) {}
 
   var b = document.querySelector('.mode-switch');
   if (!b) return;
@@ -37,8 +40,8 @@
 
   b.addEventListener('click', function () {
     var next = isNight() ? 'day' : 'night';
+    root.dataset.modeLock = '1';
     root.dataset.mode = next;
-    try { localStorage.setItem(KEY, next); } catch (e) {}
     b.setAttribute('aria-label', next === 'night' ? 'Switch to day' : 'Switch to night');
   });
 })();

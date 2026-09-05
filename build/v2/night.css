@@ -196,26 +196,21 @@
    the yellow column heads, the guide sign's green and the white shield stay
    exactly as bright as they are at noon.
 
-   And the seam. At night the drive's sky is a straight 180deg ramp, so the row
-   it hands over on is one flat colour - #12305a, sampled off the running page -
-   and the left-to-right ramp daylight needs is turned off. */
+   The join needs nothing here: the top of the band is transparent in both
+   modes, so whatever the road leaves behind shows through it. */
 :root[data-theme="dark"]:not([data-mode="day"]),
 :root[data-mode="night"]{
-  --sec8-band:#0a2144;
-  --sec8-join:linear-gradient(180deg, rgba(10,33,68,0) 0%, #0a2144 100%);
-  --sec8-sky:linear-gradient(#12305a,#12305a);
-  --sec8-paper:#0e1830; --sec8-ink:#eef3fb; --sec8-label:#9fb0cc;
-  --sec8-field:#131e39; --sec8-rule:#33415e; --sec8-ring:rgba(24,98,180,.35);
+  --sec8-band:linear-gradient(180deg, rgba(10,33,68,0) 0, #0a2144 180px, #0a2144 100%);
+  --sec8-paper:#1a2e52; --sec8-ink:#eef3fb; --sec8-label:#b6c4dc;
+  --sec8-field:#2a3d66; --sec8-rule:#55688f; --sec8-ring:rgba(24,98,180,.35);
   --sec8-link:#63a6ff;
   --sec9-bg:#050c1a; --sec9-sign:#0c5f26;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]):not([data-mode="day"]){
-    --sec8-band:#0a2144;
-    --sec8-join:linear-gradient(180deg, rgba(10,33,68,0) 0%, #0a2144 100%);
-    --sec8-sky:linear-gradient(#12305a,#12305a);
-    --sec8-paper:#0e1830; --sec8-ink:#eef3fb; --sec8-label:#9fb0cc;
-    --sec8-field:#131e39; --sec8-rule:#33415e; --sec8-ring:rgba(24,98,180,.35);
+    --sec8-band:linear-gradient(180deg, rgba(10,33,68,0) 0, #0a2144 180px, #0a2144 100%);
+    --sec8-paper:#1a2e52; --sec8-ink:#eef3fb; --sec8-label:#b6c4dc;
+    --sec8-field:#2a3d66; --sec8-rule:#55688f; --sec8-ring:rgba(24,98,180,.35);
     --sec8-link:#63a6ff;
     --sec9-bg:#050c1a; --sec9-sign:#0c5f26;
   }}
@@ -232,7 +227,7 @@
   --sec1-bg: initial; --sec1-fade: initial; --sec2-bg: initial;
   --sec2-sand: initial; --sec3-bg: initial; --sec4-ground: initial;
   --sec6-bg: initial;
-  --sec8-band: initial; --sec8-join: initial; --sec8-sky: initial;
+  --sec8-band: initial;
   --sec8-paper: initial; --sec8-ink: initial; --sec8-label: initial;
   --sec8-field: initial; --sec8-rule: initial; --sec8-ring: initial;
   --sec8-link: initial; --sec9-bg: initial; --sec9-sign: initial;
