@@ -1,60 +1,95 @@
 /* ============================================================================
    SECTION NINE - THE FOOTER
 
-   THE ONE PLACE ON THE PAGE THAT IS ALREADY DARK IN DAYLIGHT. #04264f is the
-   colour the page's own body has carried since section one - it is what shows
-   in the gutter behind the artwork - so the foot of the site is not a new
-   colour, it is the page's ground finally showing through. That is also why it
-   barely moves at night: it only has to go the rest of the way down.
-
-   Same width-relative type as every other section, and the same 22.39% lane
-   the cards and the form stand in.
+   HIS OWN, CARRIED OVER FROM THE FIRST SITE. The guide-sign banner with the
+   shield breaking out of the panel top and bottom, the four columns, his
+   social marks and the legal rule are all lifted out of index.html and
+   assets/css/highway19.css and scoped under .sec9. Nothing was redrawn.
    ========================================================================= */
 .sec9{
-  position:relative;
-  container-type:inline-size;
-  background:var(--sec9-bg,#04264f);
-  color:#fff;
-  font-family:"Be Vietnam Pro",system-ui,sans-serif;
-  padding:4.4cqw 22.39% 0;
-}
-.sec9 .cols{
-  display:grid; grid-template-columns:1.5fr 1fr 1fr 1.3fr; gap:2.6cqw;
-  align-items:start;
-}
-.sec9 .mark{ display:flex; align-items:flex-start; gap:0.9cqw }
-.sec9 .mark img{ width:3.6cqw; height:auto; flex:none }
-.sec9 .mark b{ display:block; font-size:1.35cqw; font-weight:900; line-height:1.15 }
-.sec9 .mark p{ margin:0.7cqw 0 0; font-size:0.88cqw; font-weight:500;
-  line-height:1.45; color:rgba(255,255,255,.72) }
-.sec9 h3{
-  margin:0 0 1.05cqw; font-size:0.82cqw; font-weight:900; letter-spacing:.18em;
-  text-transform:uppercase; color:var(--sec9-head,#ffda00);
-}
-.sec9 ul{ margin:0; padding:0; list-style:none }
-.sec9 li{ margin:0 0 0.72cqw }
-.sec9 a{
-  color:rgba(255,255,255,.86); text-decoration:none;
-  font-size:0.95cqw; font-weight:500;
-  border-bottom:0.05cqw solid transparent; transition:color .14s linear, border-color .14s linear;
-}
-.sec9 a:hover,.sec9 a:focus-visible{ color:#fff; border-bottom-color:#ffda00 }
-.sec9 .dets{ font-style:normal; font-size:0.95cqw; font-weight:500;
-  line-height:1.9; color:rgba(255,255,255,.86) }
+  --blue-900:#062f5e;
+  --green-500:#059236;
+  --yellow-500:#ffc72c;
+  --font-sign:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  --shell:1200px; --gutter:clamp(20px,4vw,48px);
 
-/* HIS FOUR LANE COLOURS AS A RULE, not as decoration. The four cards are the
-   four services, and the same four in the same order draw the line across the
-   foot of the page - one gradient, four hard stops, no elements. */
-.sec9 .rule{
-  margin-top:3.2cqw; height:0.28cqw; border-radius:0.14cqw;
-  background:linear-gradient(90deg,
-    #009245 0 25%, #662d91 25% 50%, #d4145a 50% 75%, #f7931e 75% 100%);
+  position:relative; z-index:2;
+  background:var(--sec9-bg,var(--blue-900)); color:#fff;
+  font-family:var(--font-sign);
+  font-size:clamp(16px,1.05vw,17.5px); line-height:1.62; font-weight:450;
 }
-.sec9 .base{
-  display:flex; justify-content:space-between; gap:2cqw; flex-wrap:wrap;
-  padding:1.5cqw 0 2.2cqw;
-  font-size:0.82cqw; font-weight:500; color:rgba(255,255,255,.62);
+.sec9 *,.sec9 *::before,.sec9 *::after{ box-sizing:border-box }
+.sec9 img{ max-width:100%; display:block }
+.sec9 a{ color:inherit }
+.sec9 .inner{
+  max-width:var(--shell); margin:0 auto;
+  padding:clamp(56px,6.5vw,88px) var(--gutter);
 }
-.sec9 .base p{ margin:0 }
-.sec9 .base a{ font-size:0.82cqw; color:rgba(255,255,255,.62) }
-.sec9 .base nav{ display:flex; gap:1.4cqw }
+
+/* THE BANNER'S OWN DEVICE: green guide sign, white rule, lane arrows, and the
+   shield breaking out of the panel top and bottom. */
+.sec9 .guide-sign{
+  display:flex; align-items:center; justify-content:center;
+  gap:clamp(10px,1.8vw,26px);
+  background:var(--sec9-sign,var(--green-500));
+  border:3px solid #fff; border-radius:11px;
+  padding:clamp(15px,2vw,24px) clamp(16px,3vw,36px);
+  margin:0 0 clamp(46px,5vw,68px);
+}
+.sec9 .guide-sign span{
+  font-weight:800; color:#fff;
+  font-size:clamp(1.05rem,2.5vw,2.05rem); letter-spacing:-.012em;
+  line-height:1.1; white-space:nowrap;
+}
+.sec9 .guide-sign__shield{
+  height:clamp(66px,8.4vw,118px); width:auto; flex:none;
+  margin:calc(-1 * clamp(22px,3vw,40px)) 0;
+  filter:drop-shadow(0 3px 5px rgba(0,0,0,.3));
+}
+.sec9 .guide-sign__arrows{ width:clamp(56px,7vw,92px); height:auto; flex:none; opacity:.95 }
+
+.sec9 .foot-cols{ display:grid; grid-template-columns:1.7fr 1fr 1fr 1.35fr; gap:var(--gutter) }
+.sec9 .foot-cols h4{
+  font-size:.78rem; font-weight:800; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--sec9-head,var(--yellow-500)); margin:0 0 1.15em;
+}
+.sec9 .foot-cols ul{ list-style:none; margin:0; padding:0 }
+.sec9 .foot-cols li{ margin-bottom:.62em }
+.sec9 .foot-cols a{ color:rgba(255,255,255,.85); text-decoration:none; font-size:.945rem }
+.sec9 .foot-cols a:hover{ color:#fff; text-decoration:underline }
+.sec9 .foot-brand h4{
+  font-size:1.15rem; letter-spacing:-.012em; text-transform:none; color:#fff;
+  margin:0; line-height:1.15;
+}
+.sec9 .foot-brand p{ margin:.9em 0 0; font-size:.94rem; color:rgba(255,255,255,.72); max-width:34ch }
+.sec9 .socials{ display:flex; gap:.65rem; margin-top:1.15rem }
+.sec9 .socials a{
+  display:block; width:40px; height:40px;
+  transition:transform .16s ease,filter .16s ease;
+}
+.sec9 .socials a:hover{ transform:translateY(-2px); filter:brightness(1.1) }
+.sec9 .socials img{ width:100%; height:100%; display:block }
+
+.sec9 .foot-rule{
+  border-top:1px solid rgba(255,255,255,.17);
+  margin-top:clamp(44px,5vw,64px); padding-top:1.6rem;
+  display:flex; flex-wrap:wrap; gap:.7rem var(--gutter);
+  align-items:center; justify-content:space-between;
+  font-size:.855rem; color:rgba(255,255,255,.62);
+}
+.sec9 .foot-rule a{ color:rgba(255,255,255,.75); text-decoration:none }
+.sec9 .foot-rule a:hover{ color:#fff; text-decoration:underline }
+.sec9 .foot-legal{ display:flex; gap:1.4rem; flex-wrap:wrap }
+
+@media (prefers-reduced-motion:reduce){
+  .sec9 .socials a{ transition:filter .16s ease }
+  .sec9 .socials a:hover{ transform:none }
+}
+@media (max-width:900px){
+  .sec9 .guide-sign{ flex-wrap:wrap; gap:8px 14px; padding:16px 18px }
+  .sec9 .guide-sign__arrows{ display:none }
+  .sec9 .guide-sign span{ font-size:1.18rem; white-space:normal }
+  .sec9 .guide-sign__shield{ height:52px; margin:0 }
+  .sec9 .foot-cols{ grid-template-columns:1fr; gap:2.1rem }
+  .sec9 .foot-rule{ flex-direction:column; align-items:flex-start }
+}

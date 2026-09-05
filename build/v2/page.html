@@ -4323,98 +4323,179 @@ section + section{ margin-top:-1px }</style>
 </section>
 
 <section class="sec8">
-  <div class="wrap">
-    <p class="eyebrow">Exit 19 &mdash; Contact</p>
-    <h2>Tell Us Where You&rsquo;re Headed.</h2>
-    <p class="sub">One short form. We come back with a route, a timeline and a price.</p>
 
-    <!-- THE FORM POSTS NOWHERE YET. There is no back end on this build, so the
-         action is left off deliberately rather than pointed at a placeholder
-         that would silently swallow a real enquiry. Everything else - the
-         types, the required fields, the labels tied to their inputs - is
-         finished, so wiring it up later is one attribute. -->
-    <form novalidate>
-      <label class="fld">Name
-        <input type="text" name="name" autocomplete="name" placeholder="Your name" required>
-      </label>
-      <label class="fld">Email
-        <input type="email" name="email" autocomplete="email" placeholder="you@company.com" required>
-      </label>
-      <label class="fld">Phone
-        <input type="tel" name="phone" autocomplete="tel" placeholder="Optional">
-      </label>
-      <label class="fld">Which lane?
-        <select name="lane">
-          <option>Website Design</option>
-          <option>Video Production</option>
-          <option>Print &amp; Branding</option>
-          <option>Social Media &amp; Paid Ads</option>
-          <option>All four</option>
-          <option>Not sure yet</option>
-        </select>
-      </label>
-      <label class="fld full">What are you trying to get done?
-        <textarea name="message" rows="4"
-          placeholder="A sentence or two is plenty &mdash; where you are now and where you want to be."></textarea>
-      </label>
-      <button class="go" type="submit">Start the Drive</button>
-      <p class="note">No sales calls you didn&rsquo;t ask for. We reply to every enquiry.</p>
+  <!-- HIS TWO SIGNS, INLINE. A <use> can only reach a symbol that is in the
+       same document, and the page is folded into one file at build time - so
+       the defs travel with the section that uses them rather than sitting in
+       a head that make_page.js never copies. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+    <symbol id="sg-motorway" viewBox="0 0 285.08 435.17">
+      <g>
+        <rect x="-74.55" y="75.55" width="434.17" height="284.08" rx="5.42" ry="5.42" transform="translate(-75.05 360.13) rotate(-90)" fill="#fff"/>
+        <path d="M279.16,435.17H5.92c-3.26,0-5.92-2.65-5.92-5.92V5.92C0,2.65,2.65,0,5.92,0h273.25c3.26,0,5.92,2.65,5.92,5.92v423.34c0,3.26-2.65,5.92-5.92,5.92ZM5.92,1C3.21,1,1,3.21,1,5.92v423.34c0,2.71,2.21,4.92,4.92,4.92h273.25c2.71,0,4.92-2.21,4.92-4.92V5.92c0-2.71-2.21-4.92-4.92-4.92H5.92Z"/>
+      </g>
+      <rect x="4.66" y="4.66" width="275.76" height="425.86" rx="4" ry="4" transform="translate(285.08 435.17) rotate(-180)" fill="#059236"/>
+      <g>
+        <polygon points="26.87 176.06 26.87 192.52 48.97 192.52 48.97 204.85 66.34 204.85 66.34 192.52 220.8 192.52 220.8 204.85 238.16 204.85 238.16 192.52 258.21 192.52 258.21 176.06 26.87 176.06" fill="#fff"/>
+        <polygon points="135.86 58.85 113.24 58.85 98.69 162.7 129.77 162.7 135.86 58.85" fill="#fff"/>
+        <polygon points="69.02 374.51 117.35 374.51 127.3 204.85 92.79 204.85 69.02 374.51" fill="#fff"/>
+        <polygon points="186.39 162.7 171.84 58.85 149.22 58.85 155.31 162.7 186.39 162.7" fill="#fff"/>
+        <polygon points="157.78 204.85 167.73 374.51 216.06 374.51 192.29 204.85 157.78 204.85" fill="#fff"/>
+      </g>
+    </symbol>
+    <symbol id="sg-warning" viewBox="0 0 64 60">
+      <path d="M32 3.6 61.4 55.4H2.6z" fill="#fff" stroke="#e01b24" stroke-width="6.4" stroke-linejoin="round"/>
+      <path d="M29.9 20h4.2l-.8 18h-2.6z" fill="#161616"/>
+      <circle cx="32" cy="44.6" r="2.9" fill="#161616"/>
+    </symbol>
+  </defs></svg>
+
+  <div class="inner">
+    <div class="head">
+      <span class="eyebrow">Start Here</span>
+      <div class="headline">
+        <svg class="sign" viewBox="0 0 285.08 435.17" aria-hidden="true" focusable="false"><use href="#sg-motorway"/></svg>
+        <div>
+          <h2>Ready to Take the Wheel?</h2>
+          <p class="sub">The Road to Success Starts Here.</p>
+        </div>
+      </div>
+    </div>
+    <p class="body-copy">
+      Send us what you&rsquo;ve got right now. Your site, your page, your logo, whatever exists.
+      We&rsquo;ll come back within 24 hours with an honest read and what we&rsquo;d do about it.
+    </p>
+
+    <!-- NOT WIRED YET. Booking tool and business email are still open.
+         Set data-endpoint to the form handler once chosen; until then it
+         fails loudly rather than silently swallowing a lead. -->
+    <form class="form" id="contact-form" data-endpoint="" novalidate>
+      <div class="field">
+        <label for="f-name">Your name</label>
+        <input id="f-name" name="name" type="text" autocomplete="name" required>
+      </div>
+      <div class="field">
+        <label for="f-business">Business name</label>
+        <input id="f-business" name="business" type="text" autocomplete="organization">
+      </div>
+      <div class="field">
+        <label for="f-email">Email</label>
+        <input id="f-email" name="email" type="email" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="f-have">What have you got right now?</label>
+        <input id="f-have" name="existing" type="text"
+               placeholder="Website, Facebook page, logo &mdash; paste a link or just tell us">
+      </div>
+      <div class="field">
+        <label for="f-msg">What do you want it to do?</label>
+        <textarea id="f-msg" name="message"></textarea>
+      </div>
+
+      <p class="form__promise">
+        <i class="btn__tri" aria-hidden="true" style="width:1.1em;height:1.1em;color:#e9a800"></i>
+        <span><b>We reply within 24 hours.</b> An honest read, not a sales call.</span>
+      </p>
+
+      <button class="btn" type="submit">
+        <svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Send It Over
+      </button>
+
+      <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
+
+      <p class="form__alt">
+        Prefer to talk it through? <a href="#" data-booking>Book a free consult</a>.
+      </p>
     </form>
   </div>
 </section>
 
 <section class="sec9">
-  <div class="cols">
-    <div class="mark">
-      <img src="../../assets/v2/ui-shield.webp" alt="" aria-hidden="true">
-      <div>
-        <b>Highway 19<br>Media</b>
-        <p>Your success is our destination. Four lanes, one crew, and a road that
-           keeps going after the launch.</p>
+  <div class="inner">
+    <!-- The banner's own device: green guide sign, lane arrows, shield
+         breaking out of the panel top and bottom. -->
+    <div class="guide-sign">
+      <svg class="guide-sign__arrows" viewBox="0 0 78 26" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 24v-9c0-3.3 2.7-6 6-6h1"/><path d="M26 24v-9c0-3.3 2.7-6 6-6h1"/>
+          <path d="M50 24V9"/><path d="M68 24V9"/>
+        </g>
+        <g fill="#fff">
+          <path d="M15 4l6 5-6 5z"/><path d="M33 4l6 5-6 5z"/>
+          <path d="M50 2l5.5 7h-11z"/><path d="M68 2l5.5 7h-11z"/>
+        </g>
+      </svg>
+      <span>All Roads Lead To</span>
+      <img class="guide-sign__shield" src="../../assets/brand/shield.png" alt="">
+      <span>Your Business</span>
+      <svg class="guide-sign__arrows guide-sign__arrows--r" viewBox="0 0 78 26" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 24V9"/><path d="M28 24V9"/>
+          <path d="M52 24v-9c0-3.3-2.7-6-6-6h-1"/><path d="M70 24v-9c0-3.3-2.7-6-6-6h-1"/>
+        </g>
+        <g fill="#fff">
+          <path d="M10 2l5.5 7h-11z"/><path d="M28 2l5.5 7h-11z"/>
+          <path d="M45 4l-6 5 6 5z"/><path d="M63 4l-6 5 6 5z"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="foot-cols">
+
+      <div class="foot-brand">
+        <h4>Highway 19 Media</h4>
+        <p>Marketing built from your business, for the trades and local operators
+           along the US 19 corridor and around Tampa Bay.</p>
+        <div class="socials">
+          <a href="#" aria-label="YouTube"><img src="../../assets/brand/social-youtube.png" alt=""></a>
+          <a href="#" aria-label="Facebook"><img src="../../assets/brand/social-facebook.png" alt=""></a>
+          <a href="#" aria-label="Instagram"><img src="../../assets/brand/social-instagram.png" alt=""></a>
+        </div>
       </div>
+
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="/services/website-design/">Website Design</a></li>
+          <li><a href="/services/video-production/">Video Production</a></li>
+          <li><a href="/services/print-branding/">Print &amp; Branding</a></li>
+          <li><a href="/services/social-paid-ads/">Social Media &amp; Paid Ads</a></li>
+          <li><a href="/services/landing-pages/">Starter Landing Pages</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#promise">How We Work</a></li>
+          <li><a href="#services">Our Services</a></li>
+          <li><a href="#payoff">What to Expect</a></li>
+          <li><a href="#close">Get a Road Map</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <!-- Business email still to be chosen. -->
+          <li><a href="mailto:hello@highway19media.com">hello@highway19media.com</a></li>
+          <li><a href="#close">Send us your site</a></li>
+          <li><a href="#" data-booking>Book a free consult</a></li>
+        </ul>
+        <p style="margin:1em 0 0;font-size:.9rem;color:rgba(255,255,255,.65)">
+          On location up and down the coast. Replies within 24 hours.
+        </p>
+      </div>
+
     </div>
 
-    <div>
-      <h3>Services</h3>
-      <ul>
-        <li><a href="#">Website Design</a></li>
-        <li><a href="#">Video Production</a></li>
-        <li><a href="#">Print &amp; Branding</a></li>
-        <li><a href="#">Social Media &amp; Paid Ads</a></li>
-      </ul>
+    <div class="foot-rule">
+      <span>&copy; 2026 Highway 19 Media. Powered by Smart Man Media.</span>
+      <span class="foot-legal">
+        <a href="/privacy-policy/">Privacy Policy</a>
+        <a href="/terms/">Terms</a>
+      </span>
     </div>
-
-    <div>
-      <h3>Company</h3>
-      <ul>
-        <li><a href="#">Our Work</a></li>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">The Process</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <h3>Get in Touch</h3>
-      <!-- PLACEHOLDERS, to be replaced with his own. Left as readable lines
-           rather than blanks so the layout is proved at its real length. -->
-      <address class="dets">
-        hello@highway19media.com<br>
-        (000) 000&#8209;0000<br>
-        Mon&ndash;Fri, 9&ndash;5
-      </address>
-    </div>
-  </div>
-
-  <div class="rule"></div>
-
-  <div class="base">
-    <p>&copy; 2026 Highway 19 Media. All rights reserved.</p>
-    <nav>
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
-      <a href="#">Accessibility</a>
-    </nav>
   </div>
 </section>
 

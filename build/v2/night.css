@@ -187,40 +187,37 @@
     --sec6-sky-glow: none; --sec6-sky: none;
   }}
 
-/* --- THE CONTACT PAGE AND THE FOOTER AFTER DARK ---------------------------
-   Section eight has the same job in reverse that section six had: its first
-   row must be the drive's LAST row. At night the drive's sky is a straight
-   180deg ramp, so that row is one flat colour - #12305a, sampled off the
-   running page - and no left-to-right ramp is needed at all.
+/* --- HIS CLOSE AND HIS FOOTER AFTER DARK ----------------------------------
+   His first site had no night, so this is the only part of these two sections
+   that is not his: the same layout with the ground taken down. His interstate
+   blue band deepens, his form card turns to the dark blue the cards page uses
+   and his footer goes the rest of the way to black. What does NOT change is
+   what makes his night read everywhere else on this page - the yellow button,
+   the yellow column heads, the guide sign's green and the white shield stay
+   exactly as bright as they are at noon.
 
-   AND IT HAS TO KEEP GOING THE WAY THE SKY WAS GOING. Matching the colour at
-   the seam is not enough: his night sky gets LIGHTER as it falls, and turning
-   straight round and darkening from that row drew a visible line across the
-   join even though the two rows measured the same to a value of 255. That is
-   a slope break, not a step, and the eye finds it. So the page carries on
-   lightening for another six per cent - the last of the horizon - before it
-   falls away to the blue the cards page uses and the footer's black. */
+   And the seam. At night the drive's sky is a straight 180deg ramp, so the row
+   it hands over on is one flat colour - #12305a, sampled off the running page -
+   and the left-to-right ramp daylight needs is turned off. */
 :root[data-theme="dark"]:not([data-mode="day"]),
 :root[data-mode="night"]{
-  --sec8-bg:
-    linear-gradient(180deg, #12305a 0%, #143560 9%, #0f1e3a 30%,
-    #0b1226 48%, #0b1226 100%);
-  --sec8-sky: none;
-  --sec8-ink:#fff; --sec8-sub:#9fb0cc; --sec8-label:#dbe5f5;
-  --sec8-eyebrow:#25c06a; --sec8-holder:#6b7c99;
-  --sec8-field:#131c33; --sec8-rule:#33415e;
-  --sec9-bg:#050a16; --sec9-head:#e7aa28;
+  --sec8-band:#0a2144;
+  --sec8-join:linear-gradient(180deg, rgba(10,33,68,0) 0%, #0a2144 100%);
+  --sec8-sky:linear-gradient(#12305a,#12305a);
+  --sec8-paper:#0e1830; --sec8-ink:#eef3fb; --sec8-label:#9fb0cc;
+  --sec8-field:#131e39; --sec8-rule:#33415e; --sec8-ring:rgba(24,98,180,.35);
+  --sec8-link:#63a6ff;
+  --sec9-bg:#050c1a; --sec9-sign:#0c5f26;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]):not([data-mode="day"]){
-    --sec8-bg:
-      linear-gradient(180deg, #12305a 0%, #143560 9%, #0f1e3a 30%,
-        #0b1226 52%, #0b1226 100%);
-    --sec8-sky: none;
-    --sec8-ink:#fff; --sec8-sub:#9fb0cc; --sec8-label:#dbe5f5;
-    --sec8-eyebrow:#25c06a; --sec8-holder:#6b7c99;
-    --sec8-field:#131c33; --sec8-rule:#33415e;
-    --sec9-bg:#050a16; --sec9-head:#e7aa28;
+    --sec8-band:#0a2144;
+    --sec8-join:linear-gradient(180deg, rgba(10,33,68,0) 0%, #0a2144 100%);
+    --sec8-sky:linear-gradient(#12305a,#12305a);
+    --sec8-paper:#0e1830; --sec8-ink:#eef3fb; --sec8-label:#9fb0cc;
+    --sec8-field:#131e39; --sec8-rule:#33415e; --sec8-ring:rgba(24,98,180,.35);
+    --sec8-link:#63a6ff;
+    --sec9-bg:#050c1a; --sec9-sign:#0c5f26;
   }}
 
 /* DAYLIGHT IS THE DEFAULT ABOVE. An explicit light choice has to beat a dark
@@ -235,10 +232,10 @@
   --sec1-bg: initial; --sec1-fade: initial; --sec2-bg: initial;
   --sec2-sand: initial; --sec3-bg: initial; --sec4-ground: initial;
   --sec6-bg: initial;
-  --sec8-bg: initial; --sec8-sky: initial; --sec8-ink: initial;
-  --sec8-sub: initial; --sec8-label: initial; --sec8-eyebrow: initial;
-  --sec8-holder: initial; --sec8-field: initial; --sec8-rule: initial;
-  --sec9-bg: initial; --sec9-head: initial;
+  --sec8-band: initial; --sec8-join: initial; --sec8-sky: initial;
+  --sec8-paper: initial; --sec8-ink: initial; --sec8-label: initial;
+  --sec8-field: initial; --sec8-rule: initial; --sec8-ring: initial;
+  --sec8-link: initial; --sec9-bg: initial; --sec9-sign: initial;
 }
 
 /* THE SCENERY, AND ONLY THE SCENERY. Named layer by layer rather than by
