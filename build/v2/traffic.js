@@ -37,7 +37,7 @@
                   of a long road is still a lot of cars. A ceiling of its own
                   is the only thing that says "quiet" and keeps saying it
                   whatever the road's length works out to. */
-               { secs: ['03'],       thin: 0.85, cap: 10 },
+               { secs: ['03'],       thin: 0.85, cap: 16 },
                /* HIS FOREST RUN IS THE OPEN ONE. Thirty per cent fewer cars
                   and a fifth more speed - a road that is moving, against the
                   desert's quiet and the coast's queue. `quick` is a multiplier
@@ -53,7 +53,7 @@
      jam is a density effect, and there is a number of cars below which one
      cannot form however the drivers behave. 0.85 with the coupling below is
      60% - his stop-start, at fifty cars instead of fifty-eight. */
-  var DENSITY   = 0.85,
+  var DENSITY   = 1.36,
       SPACING   = 0.083,  /* road length per car, as a share of section width -
                              the count follows from how long his road is, so a
                              short road does not end up nose to tail */
@@ -276,6 +276,48 @@
         pts.push(away(pts[pts.length - 1], pts[pts.length - 2]));
       }
 
+      /* SMOOTH THE CENTRELINE BEFORE ANYTHING DRIVES ON IT.
+         What comes out of his art is a POLYLINE - 90 points over 3,500px, so a
+         segment every 36px with up to 13 degrees of turn between one and the
+         next. A car reading its heading off the segment it happens to be on
+         therefore snaps 13 degrees at a stroke, and because it sits half a lane
+         OFF the centreline - along the normal, which snaps with it - that
+         heading change throws it four pixels sideways in one frame. Every time.
+         That is the stutter on the inside of his bends: not the speed, not the
+         frame rate, a car being teleported across its own lane at every vertex.
+
+         So the polyline is resampled to a curve through his own points at
+         roughly seven pixels a step, and the tangent is continuous because the
+         curve is. CENTRIPETAL Catmull-Rom, not uniform: his points are anything
+         from 5px to 300px apart, and the uniform version loops out into the
+         verge wherever the spacing changes that hard. */
+      var lerp = function (a, b, t) {
+        return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+      };
+      var knot = function (a, b) { return Math.pow(Math.hypot(b[0]-a[0], b[1]-a[1]), 0.5) || 1e-4; };
+      function curve(src, step) {
+        if (src.length < 3) return src;
+        var out = [], N = src.length;
+        for (var i = 0; i < N - 1; i++) {
+          var p0 = src[i > 0 ? i - 1 : 0], p1 = src[i], p2 = src[i + 1],
+              p3 = src[i < N - 2 ? i + 2 : N - 1];
+          var t0 = 0, t1 = t0 + knot(p0, p1), t2 = t1 + knot(p1, p2), t3 = t2 + knot(p2, p3);
+          var m = Math.max(1, Math.round(Math.hypot(p2[0]-p1[0], p2[1]-p1[1]) / step));
+          for (var j = 0; j < m; j++) {
+            var tt = t1 + (t2 - t1) * (j / m);
+            var A1 = lerp(p0, p1, (tt - t0) / (t1 - t0)),
+                A2 = lerp(p1, p2, (tt - t1) / (t2 - t1)),
+                A3 = lerp(p2, p3, (tt - t2) / (t3 - t2));
+            var B1 = lerp(A1, A2, (tt - t0) / (t2 - t0)),
+                B2 = lerp(A2, A3, (tt - t1) / (t3 - t1));
+            out.push(lerp(B1, B2, (tt - t1) / (t2 - t1)));
+          }
+        }
+        out.push(src[N - 1]);
+        return out;
+      }
+      pts = curve(pts, road.parts[0].w * 0.005);
+
       /* cumulative length, so a car can be placed by distance travelled */
       var cum = [0], L = 0;
       for (var i = 1; i < pts.length; i++) {
@@ -457,7 +499,8 @@
    * frame: getComputedStyle is the one expensive call in this file.
    */
   /* the two numbers the tuner can move that are not a road's own */
-  var TUNE = window.H19_TUNE = { nightKeep: 0.4, headway: HEADWAY };
+  var TUNE = window.H19_TUNE = { nightKeep: 0.7, headway: HEADWAY,
+                                 stareAt: 5, stareTo: 0.4 };
   var NIGHT = 0, nightRead = -1e9;
   function nightShare(now, roads) {
     if (now - nightRead > 500) {
@@ -525,6 +568,81 @@
     for (var j = 0; j < road.cars.length; j++) road.cars[j].wrapped = false;
   }
 
+  /* -- A FINGER ON THE ROAD ---------------------------------------------------
+   * Press and hold anywhere on a road and the nearest car stops. Everything
+   * behind it queues up on its own - no code for the queue, because the
+   * following model already knows what to do about a car that is not moving.
+   * Let go and it pulls away and the queue unwinds itself, at the same
+   * acceleration every other car uses. The whole feature is one flag.
+   *
+   * IT MUST NOT COST HIM A SCROLL. Nothing is grabbed until the finger has been
+   * still for a moment, and any real movement lets go again - so a swipe
+   * through the page is a swipe, and only a deliberate press is a press. The
+   * listeners are passive and nothing is ever prevented.
+   */
+  var held = null, pressAt = 0, pressX = 0, pressY = 0, pressPt = null;
+  function carAt(cx, cy) {
+    for (var r = 0; r < roads.length; r++) {
+      var road = roads[r];
+      if (!road.live) continue;
+      for (var q = 0; q < road.parts.length; q++) {
+        var part = road.parts[q], svg = part.svg;
+        var box2 = svg.getBoundingClientRect();
+        if (cx < box2.left || cx > box2.right || cy < box2.top || cy > box2.bottom) continue;
+        var m = svg.getScreenCTM(); if (!m) continue;
+        var pt = svg.createSVGPoint(); pt.x = cx; pt.y = cy;
+        pt = pt.matrixTransform(m.inverse());
+        var best = null, bd = road.laneW * 1.6;
+        for (var i = 0; i < road.cars.length; i++) {
+          var c = road.cars[i];
+          if (c.wx === undefined) continue;
+          var d = Math.hypot(c.wx - part.ox - pt.x, c.wy - part.oy - pt.y);
+          if (d < bd) { bd = d; best = c; }
+        }
+        if (best) return best;
+      }
+    }
+    return null;
+  }
+  function grab() {
+    if (held || !pressPt) return;
+    held = carAt(pressPt[0], pressPt[1]);
+    if (held) held.held = true;
+  }
+  function letGo() {
+    if (held) { held.held = false; held = null; }
+    pressPt = null; pressAt = 0;
+  }
+  addEventListener('pointerdown', function (e) {
+    pressAt = performance.now(); pressX = e.clientX; pressY = e.clientY;
+    pressPt = [e.clientX, e.clientY];
+  }, { passive: true });
+  addEventListener('pointermove', function (e) {
+    if (!pressPt) return;
+    if (Math.hypot(e.clientX - pressX, e.clientY - pressY) > 12) letGo();
+  }, { passive: true });
+  addEventListener('pointerup', letGo, { passive: true });
+  addEventListener('pointercancel', letGo, { passive: true });
+  addEventListener('scroll', function () { if (!held) letGo(); }, { passive: true });
+
+  /* -- THE RUBBERNECK ---------------------------------------------------------
+   * Stand still on a section for five seconds and the traffic starts taking an
+   * interest in you: everyone eases off to two fifths of what they wanted, over
+   * a couple of seconds, and the road bunches up behind the ones who slowed
+   * first. Move again and it lets go over about a second and the queue eats
+   * itself. It is one multiplier on the speed every driver DESIRES, not on the
+   * speed they have - so it goes through the same following model as everything
+   * else and comes out as a jam rather than as everything crawling in step.
+   */
+  var stareY = -1, stareSince = 0, gawk = 1;
+  function rubberneck(now, dt) {
+    if (scrollY !== stareY) { stareY = scrollY; stareSince = now; }
+    var want = (now - stareSince > TUNE.stareAt * 1000) ? TUNE.stareTo : 1;
+    var rate = want < gawk ? dt / 2.2 : dt / 1.0;   /* slow to notice, quick to forgive */
+    gawk += Math.max(-rate, Math.min(rate, want - gawk));
+    return gawk;
+  }
+
   /* -- the loop ------------------------------------------------------------- */
   var last = 0;
   function frame(now) {
@@ -532,6 +650,8 @@
     last = now;
 
     var share = nightShare(now, roads);
+    if (pressPt && !held && now - pressAt > 180) grab();
+    var stare = rubberneck(now, dt);
     roads.forEach(function (road) {
       /* THE CENSUS RUNS EVEN ON A ROAD THAT IS ASLEEP, and it has to. A road
          whose section is off screen is paused - none of its cars move, so none
@@ -559,7 +679,9 @@
           var gap = ahead.u - c.u; if (gap <= 0) gap += road.len;
           gap -= (c.uLong + ahead.uLong) / 2;
           /* what this driver would like to be doing - but seen late */
-          var raw = Math.max(0, Math.min(c.vbase * road.quick, gap / TUNE.headway));
+          var raw = c.held ? 0
+                   : Math.max(0, Math.min(c.vbase * road.quick * stare,
+                                          gap / TUNE.headway));
           c.want += (raw - c.want) * Math.min(1, dt / REACT);
           var d = c.want - c.v, lim = (d > 0 ? ACCEL : DECEL) * road.scale * dt;
           c.v += Math.max(-lim, Math.min(lim, d));
@@ -608,13 +730,19 @@
            The centre goes at the midpoint of the two, so neither end hangs off. */
         var half = c.long / 2 * dir;
         var pf = at(road, s + half), pb = at(road, s - half);
-        var p = { x: (pf.x + pb.x) / 2, y: (pf.y + pb.y) / 2,
-                  ux: at(road, s).ux, uy: at(road, s).uy };
+        var p = { x: (pf.x + pb.x) / 2, y: (pf.y + pb.y) / 2 };
         var cdx = pf.x - pb.x, cdy = pf.y - pb.y;
+        var cm = Math.hypot(cdx, cdy) || 1;
         var ang = Math.atan2(cdy, cdx) * 180 / Math.PI;
-        /* sit in your own lane: perpendicular to the road, half a lane over */
+        /* SIT IN YOUR OWN LANE, OFF YOUR OWN AXLES. Half a lane along the
+           normal - and the normal is taken from the car's own chord, the same
+           one it is pointed along, not from whichever segment its centre
+           happens to be sitting on. A car cannot then be facing one way and
+           offset another, which is what used to jerk it sideways at a vertex,
+           and it is one binary search per car per frame cheaper as well. */
         var off = road.laneW / 2 * dir;
-        var x = p.x - p.uy * off, y = p.y + p.ux * off;
+        var x = p.x - (cdy / cm) * off, y = p.y + (cdx / cm) * off;
+        c.wx = x; c.wy = y;                 /* where a finger would find it */
         var b = box[c.id], cx = b.x + b.width / 2, cy = b.y + b.height / 2;
         c.nodes.forEach(function (n) {
           var t = 'rotate(' + ang.toFixed(1) + ') scale(' + c.k.toFixed(4) + ') ' +

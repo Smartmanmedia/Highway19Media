@@ -70,7 +70,8 @@
 
   /* the defaults are whatever traffic.js shipped with, read off it rather than
      written down here - so this panel can never disagree with the file */
-  var DEF = { night: TUNE.nightKeep, headway: TUNE.headway, road: [] };
+  var DEF = { night: TUNE.nightKeep, headway: TUNE.headway,
+              stareAt: TUNE.stareAt, stareTo: TUNE.stareTo, road: [] };
   ROWS.forEach(function (r) {
     DEF.road.push({ share: T[r.road].share, quick: T[r.road].quick });
   });
@@ -114,6 +115,16 @@
     function () { return Math.round(TUNE.headway * 10); },
     function (v) { TUNE.headway = v / 10; },
     function (v) { return (v / 10).toFixed(1) + 's'; }));
+  var h3 = document.createElement('h4'); h3.textContent = 'Rubbernecking';
+  box.appendChild(h3);
+  ctl.push(row('Starts after', 0, 200, 5,
+    function () { return Math.round(TUNE.stareAt * 10); },
+    function (v) { TUNE.stareAt = v / 10; },
+    function (v) { return (v / 10).toFixed(1) + 's'; }));
+  ctl.push(row('Slows to', 10, 100, 5,
+    function () { return Math.round(TUNE.stareTo * 100); },
+    function (v) { TUNE.stareTo = v / 100; },
+    function (v) { return v + '%'; }));
 
   var cap = document.createElement('p'); cap.className = 'cap';
   cap.textContent = '100% is what the site ships with today. Send me this line.';
@@ -128,6 +139,8 @@
     });
     ctl[ROWS.length * 2].reset(Math.round(DEF.night * 100));
     ctl[ROWS.length * 2 + 1].reset(Math.round(DEF.headway * 10));
+    ctl[ROWS.length * 2 + 2].reset(Math.round(DEF.stareAt * 10));
+    ctl[ROWS.length * 2 + 3].reset(Math.round(DEF.stareTo * 100));
     report();
   });
   box.appendChild(rst);
@@ -141,6 +154,8 @@
     });
     bits.push('night ' + Math.round(TUNE.nightKeep * 100) + '%');
     bits.push('headway ' + TUNE.headway.toFixed(1) + 's');
+    bits.push('stare ' + TUNE.stareAt.toFixed(1) + 's/' +
+              Math.round(TUNE.stareTo * 100) + '%');
     out.textContent = bits.join(' · ');
   }
   report();
