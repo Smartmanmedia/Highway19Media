@@ -54,3 +54,7 @@ section .traffic .tints{
 }
 @media (prefers-reduced-motion: reduce){ section .traffic .tints{ transition:none } }
 
+/* A LONG PRESS ON THE ROAD IS NOT A DRAG AND NOT A SELECTION. Stopping a car
+   is a tap, but a finger that rests on his tarmac would otherwise get the
+   browser's own "save image" callout over the top of the scene. */
+section .traffic{ -webkit-touch-callout:none; -webkit-user-select:none; user-select:none }

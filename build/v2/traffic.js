@@ -520,6 +520,7 @@
     return NIGHT ? TUNE.nightKeep : 1;
   }
   function vis(c, on) {
+    if (!on && c.held) { c.held = false; flag(c); }   /* it left; it is not holding anyone up */
     c.nodes.forEach(function (n) {
       var d = on ? '' : 'none';
       n.u.style.display = d;
@@ -583,19 +584,25 @@
     for (var m = 0; m < road.cars.length; m++) road.cars[m].wrapped = false;
   }
 
-  /* -- A FINGER ON THE ROAD ---------------------------------------------------
-   * Press and hold anywhere on a road and the nearest car stops. Everything
-   * behind it queues up on its own - no code for the queue, because the
-   * following model already knows what to do about a car that is not moving.
-   * Let go and it pulls away and the queue unwinds itself, at the same
-   * acceleration every other car uses. The whole feature is one flag.
+  /* -- TAP A CAR AND IT STOPS ------------------------------------------------
+   * Tap it again and it drives on. Everything behind it queues up on its own -
+   * there is no code for the queue, because the following model already knows
+   * what to do about a car that is not moving - and when it goes the queue
+   * unwinds at the same acceleration every other car uses. The whole feature is
+   * one flag on one car.
    *
-   * IT MUST NOT COST HIM A SCROLL. Nothing is grabbed until the finger has been
-   * still for a moment, and any real movement lets go again - so a swipe
-   * through the page is a swipe, and only a deliberate press is a press. The
-   * listeners are passive and nothing is ever prevented.
+   * A TAP, NOT A PRESS, and that is not a style choice. Press-and-hold on a
+   * touch screen is the operating system's gesture: it opens the context menu
+   * over the top of whatever you were holding. So the interaction is a tap -
+   * down and up in the same place, inside half a second - which is a gesture
+   * nothing else wants. Anything longer, or that moves, is a scroll or a
+   * long-press and is left alone.
+   *
+   * Nothing is prevented and nothing is captured: the listeners are passive, so
+   * a swipe that starts on a car is still a swipe.
    */
-  var held = null, pressAt = 0, pressX = 0, pressY = 0, pressPt = null;
+  var TAP_MS = 500, TAP_PX = 10;
+  var tapAt = 0, tapX = 0, tapY = 0, tapOk = false;
   function carAt(cx, cy) {
     for (var r = 0; r < roads.length; r++) {
       var road = roads[r];
@@ -607,7 +614,7 @@
         var m = svg.getScreenCTM(); if (!m) continue;
         var pt = svg.createSVGPoint(); pt.x = cx; pt.y = cy;
         pt = pt.matrixTransform(m.inverse());
-        var best = null, bd = road.laneW * 1.6;
+        var best = null, bd = road.laneW * 1.4;
         for (var i = 0; i < road.cars.length; i++) {
           var c = road.cars[i];
           if (c.wx === undefined) continue;
@@ -619,26 +626,33 @@
     }
     return null;
   }
-  function grab() {
-    if (held || !pressPt) return;
-    held = carAt(pressPt[0], pressPt[1]);
-    if (held) held.held = true;
-  }
-  function letGo() {
-    if (held) { held.held = false; held = null; }
-    pressPt = null; pressAt = 0;
+  function flag(c) {
+    /* the one bit of feedback: a stopped car glows, so it is obvious which one
+       you tapped and which one to tap again. Only ever on the handful that are
+       actually held, so the filter this file warns about everywhere else costs
+       nothing here. */
+    c.nodes.forEach(function (n) {
+      n.u.style.filter = c.held ? 'drop-shadow(0 0 5px rgba(255,60,40,.95))' : '';
+    });
   }
   addEventListener('pointerdown', function (e) {
-    pressAt = performance.now(); pressX = e.clientX; pressY = e.clientY;
-    pressPt = [e.clientX, e.clientY];
+    tapAt = performance.now(); tapX = e.clientX; tapY = e.clientY;
+    tapOk = !(e.target.closest && e.target.closest('.mode-switch,.tune-btn,.tune,a,button,input,textarea,select'));
   }, { passive: true });
   addEventListener('pointermove', function (e) {
-    if (!pressPt) return;
-    if (Math.hypot(e.clientX - pressX, e.clientY - pressY) > 12) letGo();
+    if (tapOk && Math.hypot(e.clientX - tapX, e.clientY - tapY) > TAP_PX) tapOk = false;
   }, { passive: true });
-  addEventListener('pointerup', letGo, { passive: true });
-  addEventListener('pointercancel', letGo, { passive: true });
-  addEventListener('scroll', function () { if (!held) letGo(); }, { passive: true });
+  addEventListener('pointercancel', function () { tapOk = false; }, { passive: true });
+  addEventListener('pointerup', function (e) {
+    if (!tapOk) return;
+    tapOk = false;
+    if (performance.now() - tapAt > TAP_MS) return;
+    if (Math.hypot(e.clientX - tapX, e.clientY - tapY) > TAP_PX) return;
+    var c = carAt(e.clientX, e.clientY);
+    if (!c) return;
+    c.held = !c.held;
+    flag(c);
+  }, { passive: true });
 
   /* -- THE RUBBERNECK ---------------------------------------------------------
    * Stand still on a section for five seconds and the traffic starts taking an
@@ -665,7 +679,6 @@
     last = now;
 
     var share = nightShare(now, roads);
-    if (pressPt && !held && now - pressAt > 180) grab();
     var stare = rubberneck(now, dt);
     roads.forEach(function (road) {
       /* THE CENSUS RUNS EVEN ON A ROAD THAT IS ASLEEP, and it has to. A road
@@ -694,10 +707,14 @@
           var gap = ahead.u - c.u; if (gap <= 0) gap += road.len;
           gap -= (c.uLong + ahead.uLong) / 2;
           /* what this driver would like to be doing - but seen late */
-          var raw = c.held ? 0
-                   : Math.max(0, Math.min(c.vbase * road.quick * stare,
-                                          gap / TUNE.headway));
-          c.want += (raw - c.want) * Math.min(1, dt / REACT);
+          var raw = Math.max(0, Math.min(c.vbase * road.quick * stare,
+                                         gap / TUNE.headway));
+          /* A DRIVER WHO HAS BEEN TAPPED DOES NOT HAVE TO THINK ABOUT IT. Every
+             other desire is seen late, through REACT, which is what makes the
+             waves; this one is immediate, so the car brakes at DECEL like a car
+             and is stopped in half a second rather than easing asymptotically
+             towards nought for the next ten. */
+          c.want = c.held ? 0 : c.want + (raw - c.want) * Math.min(1, dt / REACT);
           var d = c.want - c.v, lim = (d > 0 ? ACCEL : DECEL) * road.scale * dt;
           c.v += Math.max(-lim, Math.min(lim, d));
           if (c.v < 0) c.v = 0;
