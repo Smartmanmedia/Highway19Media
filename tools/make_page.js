@@ -65,6 +65,9 @@ parts.join('\n\n') +
   + '<script src="paths.js" defer></script>\n'
   + '<script src="traffic.js" defer></script>\n'
   + '<script src="mode.js" defer></script>\n'
+  /* his traffic tuner, beside the switch - a dev panel that reads and writes
+     the live simulation; it comes out with the numbers he settles on */
+  + '<script src="tuner.js" defer></script>\n'
   /* the drive, last: it measures the section it lives in, so everything above
      it has to have laid out first */
   + '<script src="drive.js" defer></script>\n';

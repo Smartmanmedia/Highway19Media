@@ -31,7 +31,7 @@
   /* His roads. One and two are a single run in his art, so they are one road
      here. `thin` is a density multiplier - the desert straight is meant to be
      the quiet one. */
-  var ROADS = [{ secs: ['01', '02'], thin: 1 },
+  var ROADS = [{ secs: ['01', '02'], thin: 0.7, quick: 1.2 },
                /* HIS DESERT STRAIGHT IS THE EMPTY ONE. `thin` alone could not
                   hold it there: it is the longest road on the page, so a share
                   of a long road is still a lot of cars. A ceiling of its own
@@ -207,7 +207,8 @@
     if (!parts.length) return null;
     return { parts: parts, thin: cfg.thin, cap: cfg.cap,
              quick: cfg.quick || 1,
-             cars: [], live: true, pts: [], len: 0, laneW: 0 };
+             cars: [], parked: [], n0: 0, share: 1,
+             live: true, pts: [], len: 0, laneW: 0 };
   }).filter(Boolean);
   if (!roads.length) return;
 
@@ -387,16 +388,24 @@
     });
     if (!fits.length) fits = [NAMES.slice().sort(function (a, b) {
       return box[a].width / box[a].height - box[b].width / box[b].height; })[0]];
+    /* A BENCH, NOT JUST A ROAD. Forty per cent more cars are built than the
+       road shows, parked out of sight from the first frame - so the tuner can
+       ask for MORE traffic than the design count as well as less, and night
+       and day are both a share of the same fixed pool. A parked car is out of
+       road.cars, so it costs one hidden <use> and not a single transform. */
+    var nPool = Math.round(n * 1.4);
     for (var lane = 0; lane < 2; lane++) {
-      for (var i = 0; i < n; i++) {
+      for (var i = 0; i < nPool; i++) {
         var id = fits[(Math.random() * fits.length) | 0];
         var c = { id: id, lane: lane, nodes: [],
-                  u: road.len * (i + Math.random() * 0.7) / n,
+                  u: road.len * (i + Math.random() * 0.7) / nPool,
                   v: 0, vmax: 0, want: 0 };
         size(road, c);
-        c.vmax = road.scale * CRUISE * road.quick * pace[id] *
-                 (1 - SPREAD / 2 + Math.random() * SPREAD);
-        c.v = c.want = c.vmax;
+        /* the car's OWN top speed, before the road's pace multiplier - kept
+           apart so `quick` can be turned live without re-drawing the spread */
+        c.vbase = road.scale * CRUISE * pace[id] *
+                  (1 - SPREAD / 2 + Math.random() * SPREAD);
+        c.v = c.want = c.vbase * road.quick;
         road.parts.forEach(function (part) {
           var u = use(id); part.carG.appendChild(u);
           var sh = null;
@@ -411,12 +420,110 @@
         road.cars.push(c);
       }
     }
+    road.n0 = n * 2;                 /* the daylight complement he designed */
   });
 
   /* the simulation, for tools/check_traffic.js to read. Tuning a jam by
      watching pixels is guesswork; the gap a driver HAS against the gap a driver
      WANTS is the number that decides whether a road queues at all. */
   window.H19_TRAFFIC = roads;
+  /* the bench goes to the bench before anything is drawn, so the road opens at
+     the count he designed rather than filling up and thinning out in view */
+  roads.forEach(function (road) {
+    for (var i = road.cars.length - 1; i >= 0 && road.cars.length > road.n0; i--) {
+      vis(road.cars[i], false);
+      road.parked.push(road.cars.splice(i, 1)[0]);
+    }
+  });
+
+  /* -- NIGHT THINS THE ROAD BY ATTRITION -------------------------------------
+   * Sixty per cent of the traffic goes home after dark, and none of it
+   * vanishes. A car is only ever taken off at the moment it WRAPS - the end of
+   * its lap, off the end of his art, where it was going to reappear at the
+   * start anyway - so what the reader sees is cars leaving and not being
+   * replaced. That is the same thing "stop spawning" means on a road that is a
+   * loop rather than a queue of arrivals.
+   *
+   * Coming back is the same rule read the other way. One car per road per
+   * frame at most, and only into the biggest gap in its lane and only if that
+   * gap is more than three times its own length - so it appears on empty road
+   * rather than materialising in front of somebody, and the road fills the way
+   * it emptied. It also takes the speed of the car it is following in, which
+   * is what stops a returning car standing still while the traffic goes past.
+   *
+   * WHAT NIGHT IS is read off --night, the same variable the palette and the
+   * headlamps use, so a system setting, an explicit theme, the storyline and
+   * his button all say the same thing here. Polled twice a second, not per
+   * frame: getComputedStyle is the one expensive call in this file.
+   */
+  /* the two numbers the tuner can move that are not a road's own */
+  var TUNE = window.H19_TUNE = { nightKeep: 0.4, headway: HEADWAY };
+  var NIGHT = 0, nightRead = -1e9;
+  function nightShare(now, roads) {
+    if (now - nightRead > 500) {
+      nightRead = now;
+      NIGHT = (parseFloat(getComputedStyle(document.documentElement)
+                 .getPropertyValue('--night')) || 0) > 0.5 ? 1 : 0;
+      /* AND WHETHER ANYONE IS LOOKING. A road nobody can see does not have to
+         be polite about it: it can take cars off and put them back where they
+         belong immediately, because "natural" only means anything inside the
+         frame. On screen it is one car at a time, at the end of a lap, into a
+         gap. Off screen it is done by the time he scrolls to it - which is
+         what makes toggling the hour feel instant everywhere except the piece
+         of road he happens to be watching, where it is a road emptying. */
+      for (var i = 0; i < roads.length; i++) {
+        var el = roads[i].parts[0] && roads[i].parts[0].el, r;
+        roads[i].seen = roads[i].live &&
+          (!el || ((r = el.getBoundingClientRect()),
+                   r.bottom > -200 && r.top < innerHeight + 200));
+      }
+    }
+    return NIGHT ? TUNE.nightKeep : 1;
+  }
+  function vis(c, on) {
+    c.nodes.forEach(function (n) {
+      var d = on ? '' : 'none';
+      n.u.style.display = d;
+      if (n.sh) n.sh.style.display = d;
+      if (n.bm) n.bm.style.display = d;
+      if (n.tn) n.tn.style.display = d;
+    });
+  }
+  /* into the biggest gap its lane has, or not at all this frame */
+  function admit(road, c) {
+    var lane = road.cars.filter(function (x) { return x.lane === c.lane; })
+                        .sort(function (a, b) { return a.u - b.u; });
+    if (!lane.length) { c.u = 0; c.v = c.want = c.vbase * road.quick; return true; }
+    var best = 0, bestGap = -1;
+    for (var i = 0; i < lane.length; i++) {
+      var g = lane[(i + 1) % lane.length].u - lane[i].u;
+      if (g <= 0) g += road.len;
+      if (g > bestGap) { bestGap = g; best = i; }
+    }
+    if (road.seen && bestGap < c.long * 3.2) return false;
+    var u = lane[best].u + bestGap / 2;
+    c.u = u >= road.len ? u - road.len : u;
+    c.v = c.want = Math.min(c.vbase * road.quick, lane[best].v);
+    return true;
+  }
+  function census(road, share) {
+    var target = Math.max(2, Math.min(road.cars.length + road.parked.length,
+                          Math.round(road.n0 * share * road.share)));
+    if (road.cars.length > target) {
+      for (var i = road.cars.length - 1; i >= 0 && road.cars.length > target; i--) {
+        if (road.cars[i].wrapped || !road.seen) {
+          vis(road.cars[i], false);
+          road.parked.push(road.cars.splice(i, 1)[0]);
+        }
+      }
+    } else while (road.cars.length < target && road.parked.length) {
+      var c = road.parked[road.parked.length - 1];
+      if (!admit(road, c)) break;
+      road.parked.pop(); vis(c, true); road.cars.push(c);
+      if (road.seen) break;                 /* one at a time, in plain view */
+    }
+    for (var j = 0; j < road.cars.length; j++) road.cars[j].wrapped = false;
+  }
 
   /* -- the loop ------------------------------------------------------------- */
   var last = 0;
@@ -424,7 +531,15 @@
     var dt = last ? Math.min((now - last) / 1000, 0.05) : 0.016;
     last = now;
 
+    var share = nightShare(now, roads);
     roads.forEach(function (road) {
+      /* THE CENSUS RUNS EVEN ON A ROAD THAT IS ASLEEP, and it has to. A road
+         whose section is off screen is paused - none of its cars move, so none
+         of them ever reaches the end of a lap, so a road that is asleep when
+         the hour changes would still be at its daylight count when he scrolls
+         to it. Paused is also exactly when it is free to change all at once,
+         because there is nobody to see it happen. */
+      census(road, share);
       if (!road.live) return;
       for (var lane = 0; lane < 2; lane++) {
         var q = road.cars.filter(function (c) { return c.lane === lane; })
@@ -444,13 +559,15 @@
           var gap = ahead.u - c.u; if (gap <= 0) gap += road.len;
           gap -= (c.uLong + ahead.uLong) / 2;
           /* what this driver would like to be doing - but seen late */
-          var raw = Math.max(0, Math.min(c.vmax, gap / HEADWAY));
+          var raw = Math.max(0, Math.min(c.vbase * road.quick, gap / TUNE.headway));
           c.want += (raw - c.want) * Math.min(1, dt / REACT);
           var d = c.want - c.v, lim = (d > 0 ? ACCEL : DECEL) * road.scale * dt;
           c.v += Math.max(-lim, Math.min(lim, d));
           if (c.v < 0) c.v = 0;
           c.u += c.v * dt;
-          if (c.u >= road.len) c.u -= road.len;
+          /* the end of a lap - the one moment a car can leave without anyone
+             seeing it go */
+          if (c.u >= road.len) { c.u -= road.len; c.wrapped = true; }
         }
 
         /* 2. NOBODY DRIVES THROUGH ANYBODY - as a SEPARATE PASS, on a FRESH
