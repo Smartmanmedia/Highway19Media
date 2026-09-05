@@ -38,7 +38,13 @@
                   is the only thing that says "quiet" and keeps saying it
                   whatever the road's length works out to. */
                { secs: ['03'],       thin: 0.85, cap: 10 },
-               { secs: ['04'],       thin: 1 }];
+               /* HIS FOREST RUN IS THE OPEN ONE. Thirty per cent fewer cars
+                  and a fifth more speed - a road that is moving, against the
+                  desert's quiet and the coast's queue. `quick` is a multiplier
+                  on every car's top speed, so the spread of speeds that makes
+                  the queueing survives it: they all go faster, they do not all
+                  go the SAME faster. */
+               { secs: ['04'],       thin: 0.7, quick: 1.2 }];
   /* HOW MUCH TRAFFIC, AND WHY IT IS NOT 0.70. Thirty per cent fewer cars took
      the queueing with them: measured over 900 frames, a car's own speed swung
      63% of its cruise at full density and 24% at 0.70 - a road that never has
@@ -200,6 +206,7 @@
     }).filter(Boolean);
     if (!parts.length) return null;
     return { parts: parts, thin: cfg.thin, cap: cfg.cap,
+             quick: cfg.quick || 1,
              cars: [], live: true, pts: [], len: 0, laneW: 0 };
   }).filter(Boolean);
   if (!roads.length) return;
@@ -387,7 +394,8 @@
                   u: road.len * (i + Math.random() * 0.7) / n,
                   v: 0, vmax: 0, want: 0 };
         size(road, c);
-        c.vmax = road.scale * CRUISE * pace[id] * (1 - SPREAD / 2 + Math.random() * SPREAD);
+        c.vmax = road.scale * CRUISE * road.quick * pace[id] *
+                 (1 - SPREAD / 2 + Math.random() * SPREAD);
         c.v = c.want = c.vmax;
         road.parts.forEach(function (part) {
           var u = use(id); part.carG.appendChild(u);
