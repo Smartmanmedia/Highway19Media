@@ -470,13 +470,9 @@
      WANTS is the number that decides whether a road queues at all. */
   window.H19_TRAFFIC = roads;
   /* the bench goes to the bench before anything is drawn, so the road opens at
-     the count he designed rather than filling up and thinning out in view */
-  roads.forEach(function (road) {
-    for (var i = road.cars.length - 1; i >= 0 && road.cars.length > road.n0; i--) {
-      vis(road.cars[i], false);
-      road.parked.push(road.cars.splice(i, 1)[0]);
-    }
-  });
+     the count he designed rather than filling up and thinning out in view -
+     through the same census the hour uses, so it comes off both lanes */
+  roads.forEach(function (road) { road.seen = false; census(road, 1); });
 
   /* -- NIGHT THINS THE ROAD BY ATTRITION -------------------------------------
    * Sixty per cent of the traffic goes home after dark, and none of it
@@ -549,23 +545,42 @@
     c.v = c.want = Math.min(c.vbase * road.quick, lane[best].v);
     return true;
   }
+  /* LANE BY LANE, NOT ROAD BY ROAD, and that is not a detail. The pool is
+     built as every car of lane nought and then every car of lane one, so a
+     census that simply took cars off the end of the list emptied the oncoming
+     lane first and left both carriageways' worth of traffic going one way.
+     Each lane gets half the road's target and is filled and emptied against
+     its own count. */
+  function laneCount(road, lane) {
+    var k = 0;
+    for (var i = 0; i < road.cars.length; i++) if (road.cars[i].lane === lane) k++;
+    return k;
+  }
   function census(road, share) {
-    var target = Math.max(2, Math.min(road.cars.length + road.parked.length,
-                          Math.round(road.n0 * share * road.share)));
-    if (road.cars.length > target) {
-      for (var i = road.cars.length - 1; i >= 0 && road.cars.length > target; i--) {
-        if (road.cars[i].wrapped || !road.seen) {
-          vis(road.cars[i], false);
-          road.parked.push(road.cars.splice(i, 1)[0]);
+    var total = Math.max(2, Math.min(road.cars.length + road.parked.length,
+                         Math.round(road.n0 * share * road.share)));
+    for (var lane = 0; lane < 2; lane++) {
+      var want = lane ? Math.floor(total / 2) : Math.ceil(total / 2);
+      var have = laneCount(road, lane);
+      if (have > want) {
+        for (var i = road.cars.length - 1; i >= 0 && have > want; i--) {
+          var c = road.cars[i];
+          if (c.lane !== lane || !(c.wrapped || !road.seen)) continue;
+          vis(c, false); road.parked.push(road.cars.splice(i, 1)[0]); have--;
         }
+      } else while (have < want) {
+        var k = -1;
+        for (var j = road.parked.length - 1; j >= 0; j--) {
+          if (road.parked[j].lane === lane) { k = j; break; }
+        }
+        if (k < 0) break;
+        var b = road.parked[k];
+        if (!admit(road, b)) break;
+        road.parked.splice(k, 1); vis(b, true); road.cars.push(b); have++;
+        if (road.seen) break;               /* one at a time, in plain view */
       }
-    } else while (road.cars.length < target && road.parked.length) {
-      var c = road.parked[road.parked.length - 1];
-      if (!admit(road, c)) break;
-      road.parked.pop(); vis(c, true); road.cars.push(c);
-      if (road.seen) break;                 /* one at a time, in plain view */
     }
-    for (var j = 0; j < road.cars.length; j++) road.cars[j].wrapped = false;
+    for (var m = 0; m < road.cars.length; m++) road.cars[m].wrapped = false;
   }
 
   /* -- A FINGER ON THE ROAD ---------------------------------------------------
@@ -738,10 +753,18 @@
            normal - and the normal is taken from the car's own chord, the same
            one it is pointed along, not from whichever segment its centre
            happens to be sitting on. A car cannot then be facing one way and
-           offset another, which is what used to jerk it sideways at a vertex,
-           and it is one binary search per car per frame cheaper as well. */
+           offset another, which is what used to jerk it sideways at a vertex.
+
+           TIMES dir, AND THAT IS THE WHOLE POINT OF THIS LINE. The chord runs
+           from the car's back axle to its front, so on the oncoming lane it
+           already points the opposite way down the road. Using it raw as the
+           tangent cancelled the dir in the offset - dir squared is one - and
+           put both lanes on the same side of the centreline, driving through
+           each other. Turning it back into the road's own forward direction
+           first is what keeps the two lanes apart. */
+        var tx = (cdx / cm) * dir, ty = (cdy / cm) * dir;
         var off = road.laneW / 2 * dir;
-        var x = p.x - (cdy / cm) * off, y = p.y + (cdx / cm) * off;
+        var x = p.x - ty * off, y = p.y + tx * off;
         c.wx = x; c.wy = y;                 /* where a finger would find it */
         var b = box[c.id], cx = b.x + b.width / 2, cy = b.y + b.height / 2;
         c.nodes.forEach(function (n) {
