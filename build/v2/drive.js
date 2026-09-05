@@ -831,8 +831,10 @@ function tick(now){
      and the first shell climbing are one event rather than two and every
      burst after it is against a dark sky. Everything downstream reads
      data-mode, so this is one attribute and a one-second crossfade that was
-     already there. modeLock is the button saying it has been overruled. */
-  if(!ROOT.dataset.modeLock){
+     already there. modeLock is the button saying it has been overruled, and
+     dawn is the page still coming up - without that check the first frame
+     would write `day` over the black before it had a chance to lift. */
+  if(!ROOT.dataset.modeLock && !ROOT.dataset.dawn){
     const m = t>=fwAt ? 'night' : 'day';
     if(ROOT.dataset.mode!==m) ROOT.dataset.mode=m;
   }

@@ -215,6 +215,31 @@
     --sec9-bg:#050c1a; --sec9-sign:#0c5f26;
   }}
 
+/* --- FIRST LIGHT ----------------------------------------------------------
+   The page opens black and comes up into daylight, and it does it in CSS
+   rather than in script so it happens whether or not anything else has
+   loaded: one fixed sheet of black over everything, held for a fifth of a
+   half-second so the arrival registers, then a second and a half of ease out.
+
+   IT IS A VEIL, NOT A PALETTE CHANGE, and it has to be. The night palette
+   lives in custom properties inside `background`, and a gradient behind a
+   changed variable does not transition - it snaps. So the swap from night to
+   day is made UNDER the black, at four tenths of a second, while the sheet is
+   still three quarters opaque. What the eye sees is a room being lit; what
+   actually happened is a cut, hidden.
+
+   forwards, so it stays clear afterwards; pointer-events off, so it is never
+   in the way even for the second and a half it is visible. */
+.dawn{
+  position:fixed; inset:0; z-index:9998;
+  background:#000; pointer-events:none;
+  animation:h19-dawn 1.9s ease-out forwards;
+}
+@keyframes h19-dawn{ 0%,26%{ opacity:1 } 100%{ opacity:0 } }
+@media (prefers-reduced-motion:reduce){
+  .dawn{ animation:none; opacity:0 }
+}
+
 /* DAYLIGHT IS THE DEFAULT ABOVE. An explicit light choice has to beat a dark
    system setting, so it restates the day values rather than relying on order. */
 :root[data-theme="light"]{

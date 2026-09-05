@@ -41,6 +41,14 @@ files.map(f => '<link rel="stylesheet" href="' + f.replace('.html','.css') + '">
 '   land badly. Sections that already ride up over the one above keep their own\n' +
 '   margin: a class beats this. */\n' +
 'section + section{ margin-top:-1px }</style>\n\n' +
+
+  /* THE STORY STARTS AT NIGHT. Inline and first, because a deferred script
+     runs after the first paint and the page would flash daylight before it
+     got dark. data-dawn is the drive's cue to keep its hands off the mode
+     until the sun is up. */
+  '<!-- The page opens black and comes up into day - .dawn in night.css, the storyline in mode.js. -->\n' +
+  '<script>var r=document.documentElement;r.dataset.mode=\'night\';r.dataset.dawn=\'1\'</script>\n' +
+  '<div class="dawn" aria-hidden="true"></div>\n\n' +
 parts.join('\n\n') +
   '\n\n<!-- HIS TEMPORARY DAY/NIGHT SWITCH. Both icons ship; night.css decides which\n' +
   '     one shows, by the same selectors that decide the palette, so the button\n' +
