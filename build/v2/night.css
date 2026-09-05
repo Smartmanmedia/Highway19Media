@@ -200,7 +200,7 @@
    modes, so whatever the road leaves behind shows through it. */
 :root[data-theme="dark"]:not([data-mode="day"]),
 :root[data-mode="night"]{
-  --sec8-band:linear-gradient(180deg, rgba(7,20,38,0) 0, #071426 var(--sec8-fade,180px), #071426 100%);
+  --sec8-band:linear-gradient(180deg, rgba(7,20,38,0) 0, rgba(7,20,38,0) calc(var(--sec8-fade,180px) - 150px), #071426 var(--sec8-fade,180px), #071426 100%);
   --sec8-paper:#0d1a2f; --sec8-ink:#eef3fb; --sec8-label:#9fb2cf;
   --sec8-field:#1c2b46; --sec8-rule:#3c4d6e; --sec8-ring:rgba(24,98,180,.35);
   --sec8-link:#63a6ff; --sec8-edge:rgba(255,255,255,.09);
@@ -208,7 +208,7 @@
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]):not([data-mode="day"]){
-    --sec8-band:linear-gradient(180deg, rgba(7,20,38,0) 0, #071426 var(--sec8-fade,180px), #071426 100%);
+    --sec8-band:linear-gradient(180deg, rgba(7,20,38,0) 0, rgba(7,20,38,0) calc(var(--sec8-fade,180px) - 150px), #071426 var(--sec8-fade,180px), #071426 100%);
     --sec8-paper:#0d1a2f; --sec8-ink:#eef3fb; --sec8-label:#9fb2cf;
     --sec8-field:#1c2b46; --sec8-rule:#3c4d6e; --sec8-ring:rgba(24,98,180,.35);
     --sec8-link:#63a6ff; --sec8-edge:rgba(255,255,255,.09);

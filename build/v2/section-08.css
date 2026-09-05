@@ -24,11 +24,23 @@
    from nothing to his interstate blue is right in all of them: whatever is
    behind shows through the top of it and there is no edge to match.
 
+   AND IT STAYS CLEAR, it does not fade the whole way. A ramp that starts
+   closing at the seam has the blue at half strength by the headline, which is
+   most of the fireworks gone before you have read a word. So it holds at
+   nothing until 150px short of the card and closes there: the sign, the
+   headline, the subhead and the copy are all read against the live sky with
+   the show still going behind them, and the blue arrives just in time to be
+   the ground the form stands on.
+
    HOW FAR DOWN IS MEASURED, NOT PICKED. --sec8-fade is written on the section
    by the drive, which measures where his form card actually starts - so the
    sky runs out exactly where the reading starts, at any width, and the same
    number ends the fireworks. One measurement, so the paint and the show can
    never disagree. 180px is the fallback if the script never runs.
+
+   NOTHING SHOWS THROUGH THAT SHOULD NOT. The section rides a whole viewport up
+   into the road, so the drive's stage is behind every pixel of the clear part
+   - the page's own ground can never appear there.
       ========================================================================= */
 .sec8{
   --blue-900:#062f5e; --blue-700:#12569f; --blue-100:#e6effa;
@@ -48,7 +60,9 @@
   /* the ramp's last stop holds to the foot of the section, so one gradient is
      both the join and the ground */
   background:var(--sec8-band,
-    linear-gradient(180deg, rgba(18,86,159,0) 0,
+    linear-gradient(180deg,
+      rgba(18,86,159,0) 0,
+      rgba(18,86,159,0) calc(var(--sec8-fade,180px) - 150px),
       #12569f var(--sec8-fade,180px), #12569f 100%));
 }
 .sec8 *,.sec8 *::before,.sec8 *::after{ box-sizing:border-box }
@@ -89,6 +103,13 @@
 .sec8 .sign{
   height:clamp(52px,5vw,78px); width:auto; flex:none;
   filter:drop-shadow(0 3px 8px rgba(0,0,0,.4));
+}
+/* HIS WHITE COPY NOW STANDS ON THE SKY, not on his band - so it carries the
+   weight it used to get from the band. At night the shadow is invisible; by
+   day, if a reader has taken the wheel and kept the light on, it is the only
+   thing between white type and a pale blue morning. */
+.sec8 h2,.sec8 .sub,.sec8 .body-copy{
+  text-shadow:0 0.09em 0.5em rgba(2,14,32,.55), 0 0.02em 0.12em rgba(2,14,32,.4);
 }
 .sec8 h2{
   margin:0; font-weight:800; line-height:1.04; letter-spacing:-.022em;
