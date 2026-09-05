@@ -1,0 +1,60 @@
+/* ============================================================================
+   SECTION NINE - THE FOOTER
+
+   THE ONE PLACE ON THE PAGE THAT IS ALREADY DARK IN DAYLIGHT. #04264f is the
+   colour the page's own body has carried since section one - it is what shows
+   in the gutter behind the artwork - so the foot of the site is not a new
+   colour, it is the page's ground finally showing through. That is also why it
+   barely moves at night: it only has to go the rest of the way down.
+
+   Same width-relative type as every other section, and the same 22.39% lane
+   the cards and the form stand in.
+   ========================================================================= */
+.sec9{
+  position:relative;
+  container-type:inline-size;
+  background:var(--sec9-bg,#04264f);
+  color:#fff;
+  font-family:"Be Vietnam Pro",system-ui,sans-serif;
+  padding:4.4cqw 22.39% 0;
+}
+.sec9 .cols{
+  display:grid; grid-template-columns:1.5fr 1fr 1fr 1.3fr; gap:2.6cqw;
+  align-items:start;
+}
+.sec9 .mark{ display:flex; align-items:flex-start; gap:0.9cqw }
+.sec9 .mark img{ width:3.6cqw; height:auto; flex:none }
+.sec9 .mark b{ display:block; font-size:1.35cqw; font-weight:900; line-height:1.15 }
+.sec9 .mark p{ margin:0.7cqw 0 0; font-size:0.88cqw; font-weight:500;
+  line-height:1.45; color:rgba(255,255,255,.72) }
+.sec9 h3{
+  margin:0 0 1.05cqw; font-size:0.82cqw; font-weight:900; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--sec9-head,#ffda00);
+}
+.sec9 ul{ margin:0; padding:0; list-style:none }
+.sec9 li{ margin:0 0 0.72cqw }
+.sec9 a{
+  color:rgba(255,255,255,.86); text-decoration:none;
+  font-size:0.95cqw; font-weight:500;
+  border-bottom:0.05cqw solid transparent; transition:color .14s linear, border-color .14s linear;
+}
+.sec9 a:hover,.sec9 a:focus-visible{ color:#fff; border-bottom-color:#ffda00 }
+.sec9 .dets{ font-style:normal; font-size:0.95cqw; font-weight:500;
+  line-height:1.9; color:rgba(255,255,255,.86) }
+
+/* HIS FOUR LANE COLOURS AS A RULE, not as decoration. The four cards are the
+   four services, and the same four in the same order draw the line across the
+   foot of the page - one gradient, four hard stops, no elements. */
+.sec9 .rule{
+  margin-top:3.2cqw; height:0.28cqw; border-radius:0.14cqw;
+  background:linear-gradient(90deg,
+    #009245 0 25%, #662d91 25% 50%, #d4145a 50% 75%, #f7931e 75% 100%);
+}
+.sec9 .base{
+  display:flex; justify-content:space-between; gap:2cqw; flex-wrap:wrap;
+  padding:1.5cqw 0 2.2cqw;
+  font-size:0.82cqw; font-weight:500; color:rgba(255,255,255,.62);
+}
+.sec9 .base p{ margin:0 }
+.sec9 .base a{ font-size:0.82cqw; color:rgba(255,255,255,.62) }
+.sec9 .base nav{ display:flex; gap:1.4cqw }

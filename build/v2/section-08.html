@@ -1,0 +1,48 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Highway 19 &mdash; section eight</title>
+<link rel="stylesheet" href="section-fonts.css">
+<link rel="stylesheet" href="section-08.css">
+<style>body{margin:0;background:#04264f}</style>
+
+<section class="sec8">
+  <div class="wrap">
+    <p class="eyebrow">Exit 19 &mdash; Contact</p>
+    <h2>Tell Us Where You&rsquo;re Headed.</h2>
+    <p class="sub">One short form. We come back with a route, a timeline and a price.</p>
+
+    <!-- THE FORM POSTS NOWHERE YET. There is no back end on this build, so the
+         action is left off deliberately rather than pointed at a placeholder
+         that would silently swallow a real enquiry. Everything else - the
+         types, the required fields, the labels tied to their inputs - is
+         finished, so wiring it up later is one attribute. -->
+    <form novalidate>
+      <label class="fld">Name
+        <input type="text" name="name" autocomplete="name" placeholder="Your name" required>
+      </label>
+      <label class="fld">Email
+        <input type="email" name="email" autocomplete="email" placeholder="you@company.com" required>
+      </label>
+      <label class="fld">Phone
+        <input type="tel" name="phone" autocomplete="tel" placeholder="Optional">
+      </label>
+      <label class="fld">Which lane?
+        <select name="lane">
+          <option>Website Design</option>
+          <option>Video Production</option>
+          <option>Print &amp; Branding</option>
+          <option>Social Media &amp; Paid Ads</option>
+          <option>All four</option>
+          <option>Not sure yet</option>
+        </select>
+      </label>
+      <label class="fld full">What are you trying to get done?
+        <textarea name="message" rows="4"
+          placeholder="A sentence or two is plenty &mdash; where you are now and where you want to be."></textarea>
+      </label>
+      <button class="go" type="submit">Start the Drive</button>
+      <p class="note">No sales calls you didn&rsquo;t ask for. We reply to every enquiry.</p>
+    </form>
+  </div>
+</section>
