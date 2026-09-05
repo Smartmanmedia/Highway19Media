@@ -148,9 +148,23 @@ function measure(){
   fctx.setTransform(FDPR,0,0,FDPR,0,0);
   secTop=runway.getBoundingClientRect().top+scrollY;
   secSpan=Math.max(1,runway.offsetHeight-H);
-  U=H/REF;                /* one world unit, in this stage's pixels */
-  hor=Math.round(H*VP);
-  seaY=Math.round(H*SEA);
+  /* THE SCENE IS SIZED OFF THE FRAME IT WAS DRAWN FOR, NOT OFF THIS ONE.
+     Every world unit was a share of the HEIGHT, which is right on any screen
+     shaped like a screen and wrong on a phone: the road's half-width at the
+     bottom is ROAD*(H-hor)/EYE and owes nothing to U, so on 390 by 844 it came
+     out 840 wide against a 195 half-frame and his gantry filled the picture
+     twice over.
+
+     So the scene keeps the PROPORTIONS it was drawn at - 1440 by 810 - and a
+     taller frame gets the extra as SKY rather than as more road. Hs is the
+     height this width would have had on that screen; everything below the
+     horizon is measured against it, and the horizon is set UP FROM THE BOTTOM
+     so the road always runs off the foot of the frame however tall it is.
+     On a desktop Hs is H and every number below is exactly what it was. */
+  const Hs=Math.min(H, W*REF/1440);
+  U=Hs/REF;               /* one world unit, in this stage's pixels */
+  hor=Math.round(H-(1-VP)*Hs);
+  seaY=Math.round(hor+(SEA-VP)*Hs);
   /* the scale at which a foot lands exactly on the water, and the depth that
      is - the far edge of the world, and the far end of the fade */
   kSea=(seaY-hor)/U/EYE;

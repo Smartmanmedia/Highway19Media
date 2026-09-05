@@ -1,0 +1,192 @@
+/* ============================================================================
+   MOBILE
+   ----------------------------------------------------------------------------
+   FIRST PASS. The point of this file is to see the page we already have on a
+   phone with as little redrawn as possible, so what needs designing is obvious
+   rather than guessed at.
+
+   THE ONE IDEA. His top-down sections are DRAWN, at 1923 units across, and
+   everything in them - the road's sweep, the copy, the signs - is a share of
+   that width. Squeezed into 390 they become postage stamps: a section 200px
+   tall with six-pixel type. They cannot reflow, because a road that curves
+   from one edge to the other is not a column of boxes.
+
+   So they are not squeezed. Each one is drawn at a fixed 900 units across and
+   the phone looks at the middle of it. His road then does on a phone exactly
+   what it does on a desktop, which is what he asked for: it comes in at one
+   edge, curves across the screen and leaves at the other, and the crop is what
+   makes the separation between sections read. The type comes back with it -
+   his 2.1% of the width is 19px at 900 and 8px at 390.
+
+   WHAT THIS FILE MUST NOT DO is fork the design. Every number here is either
+   his own number re-expressed against 900 instead of the viewport, or a
+   layout that only exists below 900px. Nothing above the query changes.
+   ========================================================================= */
+:root{ --mob-w:900px }
+
+@media (max-width:900px){
+
+  /* THE SECTIONS ARE WIDER THAN THE PHONE ON PURPOSE, so the page must not
+     scroll sideways - but it has to be CLIP and not HIDDEN. `hidden` makes the
+     element a scroll container even on the axis that is not hidden, and a
+     scroll container between the page and a sticky element is the one thing
+     that turns sticky off: the drive's whole stage came unstuck and the road
+     scrolled away leaving a flat navy screen. `clip` hides the overflow
+     without ever becoming a scroller, which is exactly and only what is
+     wanted here. */
+  html,body{ overflow-x:clip }
+
+  /* HIS FOUR DRAWN SECTIONS, AT FULL SIZE, CENTRE-CROPPED. */
+  .sec1,.sec2,.sec3,.sec4,.sec6{
+    width:var(--mob-w);
+    margin-left:calc(50% - var(--mob-w) / 2);
+  }
+  /* THEIR OVERLAPS ARE HIS, RE-BASED. A percentage margin resolves against the
+     CONTAINING BLOCK's width - the body, 390 - not against the section's own
+     900, so every join he tuned would land at 43% of the overlap he set. Each
+     one is the same fraction of the artwork it always was. */
+  .sec3{ margin-top:calc(var(--mob-w) * -0.10) }
+  .sec4{ margin-top:calc(var(--mob-w) * -0.1601) }
+  .sec6{ margin-top:calc(var(--mob-w) * -0.0286) }
+
+  /* ---- HIS COPY, MOVED SIDEWAYS AND NOTHING ELSE -------------------------
+     His copy blocks sit in a column at 27% to 38% across the artboard, which
+     the centre crop cuts in half. But they do NOT need to be re-set: at 900
+     units his widest is 314px, and the phone is 390. They only need to be over
+     the middle of it.
+
+     So they are centred and left alone - same width, same sizes, same line
+     breaks, same height. Widening them to the screen was the first thing I
+     tried and it is worse: every block grows taller, and the moment it does it
+     lands on the sign or the button underneath that his layout had cleared.
+     Moving a thing sideways cannot break a composition; resizing it can.
+
+     left is inline on every one of them, from his own file, so this has to be
+     !important to reach it. 50% is the middle of the ARTBOARD, which is also
+     the middle of the phone, because the crop is centred. */
+  .sec1 .copy,.sec2 .copy,.sec3 .copy,.sec4 .copy{
+    left:calc(50% + 6vw) !important; right:auto !important;
+    max-width:88vw !important;
+    translate:-50% 0;
+  }
+
+  /* HIS LITTLE SIGN PLATES KEEP THEIR PLACE BESIDE THE WORDS. Each block of
+     copy has one - the motorway plate, the warning triangle, the roadworks
+     sign - standing to its left, and the copy moving to the middle of the
+     phone walked straight over them. They are brought to the left margin and
+     brought down to a size that leaves the column its width, which is the
+     same relationship at a phone's scale: a sign, then the sentence it is
+     about. Section four's is not one of these - its badge has the words ON
+     it, so those two move together. */
+  .sec1 .z-copy[data-at],
+  .sec2 .z-copy[data-at],
+  .sec3 .z-copy[data-at]{
+    left:calc(50% - 47vw) !important; width:min(12vw,58px) !important; margin-left:0;
+  }
+  /* ONE HEADLINE IS WIDER THAN THE PHONE. His "You've Been Down This Road
+     Before" is set in a box that is its own ink width - 361px at 900 - which
+     is the one line on the page that a 390 screen cannot hold. It comes down
+     by six per cent, which is all it needs, and nothing else is touched. */
+  .sec2 h2.copy{ font-size:min(2.06cqw, 4.85vw) }
+  /* and one subhead, same story - his line is set to run to the edge of its
+     box and the box is his ink width */
+  .sec1 .sub{ font-size:1.12cqw }
+
+  /* HIS HEADLINES STAY ON ONE LINE. Letting them wrap was wrong twice over:
+     his box IS the headline's ink width - he set it that way - so at 900 the
+     longest of them is 305px against a 390 screen and fits with room, and the
+     second line it did take landed on the subhead underneath. Nothing to do
+     here at all; this note is so it is not "fixed" again. */
+
+  /* ---- AND THE TWO SIGNS THAT ARE WIDER THAN A PHONE ----------------------
+     His gantry is 48.8% of the artboard and his rest-area sign 44.4%, which at
+     900 are 439 and 399 across against a 390 screen. Everything else in the
+     scene can run off the edges - that is the crop doing its job - but a sign
+     with words on it cannot: it came out as "ebsite Design" and "We Handle
+     the". These two are brought back to the screen's width and centred.
+
+     Centred with margin, NOT with translate: parallax.js lifts both of them on
+     scroll by writing style.translate, and an inline style beats a rule. The
+     lamps ride the sign exactly, so they get the same box. */
+  /* HIS GANTRY IS CENTRED ALREADY AND ONLY TOO WIDE - 439 against 390 - so it
+     is brought down to the screen. Everything on it is inside the one file, so
+     shrinking it takes the four labels with it and nothing comes apart. */
+  .sec1 .z-sign{ left:50% !important; width:94vw !important; margin-left:-47vw }
+
+  /* HIS REST-AREA SIGN IS THE OPPOSITE CASE: it is 399 wide against 390, which
+     is nine pixels, but it sits at 64% across the artboard so the crop takes a
+     third of it. And its wording is NOT in the file - .sign-copy is a separate
+     block laid over it - so shrinking the picture would leave the words their
+     old size and hanging off the end. It is moved instead, sign, lamps and
+     words together, by the one offset that centres it: half its own width
+     minus where his composition put it.
+
+     With transform, not margin or translate. margin-left on a box that has
+     both left and right set takes the width off instead of moving it, and
+     parallax.js owns translate on all three of these - it lifts them on
+     scroll by writing style.translate, and an inline style beats a rule. */
+  .sec4 .our-sign,.sec4 .signlamps,.sec4 .sign-copy{
+    transform:translateX(calc(var(--mob-w) * -0.1385));
+  }
+  /* his Explore Our Services plate, which is a pair - the badge is artwork and
+     the words are copy, and centring only the words drove one through the
+     other */
+  .sec4 .z-copy[data-at]:not(.our-sign):not(.signlamps){
+    left:50% !important; translate:-50% 0;
+  }
+
+  /* ---- HIS CARDS, TWO IN A ROW -------------------------------------------
+     The only part of the page that genuinely re-flows. The section itself
+     stays 900 wide, because its rock band has to go on meeting section four's
+     across the seam - but the page inside it comes back to the phone's own
+     width and stops being a drawing.
+
+     THE CARD BECOMES ITS OWN CONTAINER. Everything inside it is already a
+     share of the CARD (his rule, and this is where it earns its keep) except
+     the type, which was a share of the section. At 390 that is six pixels. So
+     the card is made a size container and each size is his own, converted:
+     1.804% of 1923 on a card 258.9 wide is 13.4% of the card, and 13.4% of the
+     card is the same size at any width the card is given. */
+  .sec6{ aspect-ratio:auto; height:auto; padding-bottom:38cqw }
+  .sec6 .page{
+    position:relative; top:auto; aspect-ratio:auto;
+    /* CAPPED, or a 768 tablet gets two cards 360px across with his body copy
+       at twenty pixels. The query has to reach up to 900 - that is where his
+       own phone rules start - so the sizes have to stop before it does. */
+    width:min(100vw, 470px); margin:0 auto; padding:min(21vw,86px) 4.5vw 0;
+    display:grid; grid-template-columns:1fr 1fr; gap:min(4.5vw,20px);
+  }
+  .sec6 .page .copy{
+    position:static; grid-column:1 / -1; width:auto !important;
+    white-space:normal; text-align:left;
+  }
+  .sec6 .page h2.copy{ font-size:min(6.4vw,30px); line-height:1.12; white-space:normal }
+  .sec6 .page .sub{ font-size:min(3.9vw,18px); margin-top:1.6vw; margin-bottom:2vw }
+  .sec6 .page .card{
+    position:relative; top:auto; left:auto !important; right:auto;
+    width:auto; height:auto; aspect-ratio:258.9 / 432;
+    container-type:inline-size;
+    border-width:1px; border-radius:8cqw;
+  }
+  .sec6 .page .card h3{ font-size:11cqw; top:27% }
+  .sec6 .page .card p{ font-size:5.4cqw; line-height:1.26; top:48%; left:8%; right:8% }
+  /* HIS HAND BREAKS ARE KEPT. Dropping them was the obvious move - his lines
+     are broken to a desktop column and each one wraps again at half the width
+     - but they are written with no space around them, so hiding them ran the
+     words together: "andlanding", "videosthat". At this size his own lines
+     fit the card, which is the better answer anyway: they are his. */
+  .sec6 .page .card .btn{ font-size:7.4cqw; border-width:0.8cqw; border-radius:4.3cqw }
+  /* A TAP IS NOT A HOVER. There is nothing to hover with, so the button that
+     arrives on hover is simply there, and the card does not grow. */
+  .sec6 .page .card{ scale:1 }
+  .sec6 .page .card .btn{ opacity:1; translate:0 0; pointer-events:auto }
+
+  /* ---- HIS CLOSE ---------------------------------------------------------
+     His own phone rules left-align the head; the destination plate above it
+     was still centred, which left it floating over the middle of a left-set
+     headline. It goes to the same edge as the words. */
+  .sec8 .headline{ align-items:flex-start }
+
+  /* ---- the switch, out of the way of a thumb ----------------------------- */
+  .mode-switch{ top:10px; right:10px }
+}

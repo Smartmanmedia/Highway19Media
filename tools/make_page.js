@@ -28,6 +28,8 @@ files.map(f => '<link rel="stylesheet" href="' + f.replace('.html','.css') + '">
   + '<link rel="stylesheet" href="night.css">\n' +
 '<link rel="stylesheet" href="traffic.css">\n' +
 '<link rel="stylesheet" href="sun.css">\n' +
+/* last, so a phone rule beats every desktop one it has to */
+'<link rel="stylesheet" href="mobile.css">\n' +
 '<style>body{margin:0;background:#04264f}\n' +
 '/* the sections stack with nothing between them: each is a fixed ratio of the\n' +
 '   same width, so the join is exact at every screen size */\n' +
