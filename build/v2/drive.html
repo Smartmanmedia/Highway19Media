@@ -567,8 +567,20 @@ function measure(){
      time as any road - form and headline together are taller than the frame -
      so this is the honest version of "when the form has arrived". */
   const close=document.querySelector('.sec8');
-  fwEndY = close ? close.getBoundingClientRect().top+scrollY+180
-                 : secTop+secSpan;
+  if(close){
+    /* HOW FAR THE SKY REACHES INTO HIS CLOSE. Down to the top of his form
+       card, so the road is still showing behind the headline and the copy and
+       runs out exactly where the reading starts. Measured off the card rather
+       than picked, so it is right at any width and on a phone, and written
+       back as the section's own --sec8-fade: the gradient that paints the
+       join and the moment the show ends are then the SAME number and cannot
+       drift apart. */
+    const box=close.getBoundingClientRect();
+    const card=close.querySelector('.form');
+    const ramp=card ? Math.max(120, Math.round(card.getBoundingClientRect().top-box.top)) : 180;
+    close.style.setProperty('--sec8-fade', ramp+'px');
+    fwEndY = box.top+scrollY+ramp;
+  } else fwEndY = secTop+secSpan;
   /* HOW CLOSE THE PAINT COMES. The markings wrap through a fixed pool, so the
      nearest one is wherever the wrap puts it - and that was a flat -300, which
      from a saloon lands the last dash three quarters of the way down the

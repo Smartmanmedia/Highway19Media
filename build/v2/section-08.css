@@ -15,13 +15,20 @@
    first. That, and the padding taken out from over the headline, is what puts
    his form on screen about a thousand pixels of scroll earlier than it was.
 
-   AND THE FIRST 180px OF IT ARE TRANSPARENT. That is what makes the join work
+   AND IT IS TRANSPARENT ALL THE WAY DOWN TO HIS FORM. That is what makes the
+   join work
    at ANY scroll position rather than one. The old top strip was the drive's
    last row, sampled and repainted - which is exact only while the two edges
    actually meet. Once the section rides up over the road it meets a different
    row every frame, and a repainted one would be wrong in all of them. A ramp
    from nothing to his interstate blue is right in all of them: whatever is
    behind shows through the top of it and there is no edge to match.
+
+   HOW FAR DOWN IS MEASURED, NOT PICKED. --sec8-fade is written on the section
+   by the drive, which measures where his form card actually starts - so the
+   sky runs out exactly where the reading starts, at any width, and the same
+   number ends the fireworks. One measurement, so the paint and the show can
+   never disagree. 180px is the fallback if the script never runs.
       ========================================================================= */
 .sec8{
   --blue-900:#062f5e; --blue-700:#12569f; --blue-100:#e6effa;
@@ -41,7 +48,8 @@
   /* the ramp's last stop holds to the foot of the section, so one gradient is
      both the join and the ground */
   background:var(--sec8-band,
-    linear-gradient(180deg, rgba(18,86,159,0) 0, #12569f 180px, #12569f 100%));
+    linear-gradient(180deg, rgba(18,86,159,0) 0,
+      #12569f var(--sec8-fade,180px), #12569f 100%));
 }
 .sec8 *,.sec8 *::before,.sec8 *::after{ box-sizing:border-box }
 .sec8 img{ max-width:100%; display:block }
