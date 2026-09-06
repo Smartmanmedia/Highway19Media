@@ -47,7 +47,9 @@
     '.tune label span{flex:1;color:rgba(255,255,255,.8)}' +
     '.tune label b{width:44px;text-align:right;font-weight:800;font-variant-numeric:tabular-nums}' +
     '.tune input[type=range]{flex:0 0 118px;accent-color:#ffc72c;height:18px}' +
-    '.tune .cap{margin:14px 0 5px;color:rgba(255,255,255,.5);font-size:10.5px}' +
+    '.tune .flow{margin:14px 0 0;padding:8px 10px;border-radius:8px;' +
+      'background:rgba(255,199,44,.14);color:#ffd76b;font:700 11px/1.5 inherit}' +
+    '.tune .cap{margin:9px 0 5px;color:rgba(255,255,255,.5);font-size:10.5px}' +
     '.tune .out{margin:0;padding:8px 10px;border-radius:8px;' +
       'background:rgba(255,255,255,.07);color:#cfe0ff;font:600 11px/1.5 ui-monospace,' +
       'SFMono-Regular,Menlo,monospace;word-break:break-word;user-select:all}' +
@@ -85,7 +87,12 @@
     i.type = 'range'; i.min = min; i.max = max; i.step = step; i.value = get();
     var b = document.createElement('b');
     function show() { b.textContent = fmt(+i.value); }
-    i.addEventListener('input', function () { set(+i.value); show(); report(); });
+    i.addEventListener('input', function () {
+      set(+i.value); show(); report();
+      /* the census normally waits for a car to finish its lap; while he is
+         asking questions with a slider it does not */
+      T.forEach(function (rd) { rd.force = true; });
+    });
     l.appendChild(s); l.appendChild(i); l.appendChild(b);
     box.appendChild(l); show();
     return { i: i, show: show, reset: function (v) { i.value = v; set(v); show(); } };
@@ -95,11 +102,11 @@
   ROWS.forEach(function (r, n) {
     var h = document.createElement('h4'); h.textContent = r.label; box.appendChild(h);
     var road = T[r.road];
-    ctl.push(row('Cars', 0, 150, 5,
+    ctl.push(row('Cars', 0, 140, 5,
       function () { return Math.round(road.share * 100); },
       function (v) { road.share = v / 100; },
       function (v) { return v + '%'; }));
-    ctl.push(row('Speed', 40, 200, 5,
+    ctl.push(row('Speed', 40, 400, 10,
       function () { return Math.round(road.quick * 100); },
       function (v) { road.quick = v / 100; },
       function (v) { return v + '%'; }));
@@ -111,7 +118,14 @@
     function () { return Math.round(TUNE.nightKeep * 100); },
     function (v) { TUNE.nightKeep = v / 100; },
     function (v) { return v + '%'; }));
-  ctl.push(row('Headway', 15, 80, 1,
+  /* HEADWAY IS THE SPEED CONTROL AT HIS DENSITY, and Speed is not. A car takes
+     the SMALLER of its own top speed and the gap ahead divided by this - and
+     at 29 cars a lane the median gap is 64px, so four seconds allows 16px/s
+     against a 93px/s top speed. Every car on the road is held at a sixth of
+     its limit and the speed slider multiplies a number nobody reaches. Down at
+     half a second the gap allows more than the cars want and Speed takes over.
+     That is the trade, and it is real: more cars OR more speed. */
+  ctl.push(row('Headway', 4, 80, 1,
     function () { return Math.round(TUNE.headway * 10); },
     function (v) { TUNE.headway = v / 10; },
     function (v) { return (v / 10).toFixed(1) + 's'; }));
@@ -125,6 +139,23 @@
     function () { return Math.round(TUNE.stareTo * 100); },
     function (v) { TUNE.stareTo = v / 100; },
     function (v) { return v + '%'; }));
+
+  var flow = document.createElement('p'); flow.className = 'flow';
+  box.appendChild(flow);
+  /* THE HONEST NUMBERS, because a slider that moves something nobody can see is
+     a slider that does not work as far as anyone using it is concerned. The
+     first is whether the traffic actually got faster than the road he was
+     given. The second is whether it is free or queueing - and it FALLS when
+     you raise Speed, because the top speed went up and the gap did not, which
+     is precisely the thing that made Speed look broken. Read them together:
+     Speed only bites while the second number is high. */
+  setInterval(function () {
+    if (box.hidden || !window.H19_FLOW) return;
+    var f = window.H19_FLOW();
+    flow.textContent = f.pace.toFixed(2) + '\u00d7 the shipped pace  ·  ' +
+      Math.round(f.flow * 100) + '% of what drivers want  ·  ' +
+      f.cars + ' cars, ' + f.stopped + ' crawling';
+  }, 250);
 
   var cap = document.createElement('p'); cap.className = 'cap';
   cap.textContent = '100% is what the site ships with today. Send me this line.';
@@ -163,6 +194,10 @@
   btn.addEventListener('click', function () {
     box.hidden = !box.hidden;
     btn.setAttribute('aria-expanded', String(!box.hidden));
+    /* sitting still with this open is exactly what the rubberneck watches for,
+       so it stands down while he is tuning - otherwise every reading is taken
+       against a road already crawling at two fifths */
+    TUNE.tuning = !box.hidden;
   });
   document.body.appendChild(btn);
   document.body.appendChild(box);

@@ -496,7 +496,32 @@
    */
   /* the two numbers the tuner can move that are not a road's own */
   var TUNE = window.H19_TUNE = { nightKeep: 0.7, headway: HEADWAY,
-                                 stareAt: 5, stareTo: 0.4 };
+                                 stareAt: 5, stareTo: 0.4, tuning: false };
+  /* WHAT THE ROAD IS ACTUALLY DOING, as a share of what its drivers WANT to be
+     doing. This is the number that makes the panel honest: at his density the
+     median gap is 64px and a four-second headway lets a car have 16px/s of it
+     against a 93px/s top speed, so every car on the road is held at a sixth of
+     its own limit and the speed slider multiplies a number nobody reaches. */
+  var paceBase = 0;
+  window.H19_FLOW = function (now) {
+    var v = 0, top = 0, n = 0, stopped = 0, pace = 0;
+    roads.forEach(function (road) {
+      road.cars.forEach(function (c) {
+        v += c.v; top += c.vbase * road.quick; n++;
+        pace += c.v / road.scale;
+        if (c.v < c.vbase * road.quick * 0.15) stopped++;
+      });
+    });
+    pace = n ? pace / n : 0;
+    /* THE BASELINE IS THE SHIPPED ROAD, taken once it has settled and never
+       again. Two numbers are needed and neither says it alone: the share of
+       what drivers WANT tells you whether the road is free or queueing, and it
+       FALLS when you raise the top speed because the gap has not changed. What
+       it does not tell you is whether the traffic actually got faster. This
+       does. */
+    return { cars: n, flow: n ? v / top : 1, stopped: stopped,
+             pace: paceBase ? pace / paceBase : 1, raw: pace };
+  };
   var NIGHT = 0, nightRead = -1e9;
   function nightShare(now, roads) {
     if (now - nightRead > 500) {
@@ -510,6 +535,12 @@
          gap. Off screen it is done by the time he scrolls to it - which is
          what makes toggling the hour feel instant everywhere except the piece
          of road he happens to be watching, where it is a road emptying. */
+      /* THE BASELINE IS TAKEN ON THE CLOCK, not the first time the panel asks.
+         Read it lazily and it lands on whatever the road was doing the moment
+         he first opened the tuner - which, if he had already moved a slider,
+         is the very thing it is supposed to be measured against. Eight seconds
+         in, once, and never again. */
+      if (!paceBase && now > 8000) paceBase = window.H19_FLOW().raw || 1e-6;
       for (var i = 0; i < roads.length; i++) {
         var el = roads[i].parts[0] && roads[i].parts[0].el, r;
         roads[i].seen = roads[i].live &&
@@ -540,7 +571,7 @@
       if (g <= 0) g += road.len;
       if (g > bestGap) { bestGap = g; best = i; }
     }
-    if (road.seen && bestGap < c.long * 3.2) return false;
+    if (road.seen && !road.force && bestGap < c.long * 3.2) return false;
     var u = lane[best].u + bestGap / 2;
     c.u = u >= road.len ? u - road.len : u;
     c.v = c.want = Math.min(c.vbase * road.quick, lane[best].v);
@@ -566,7 +597,10 @@
       if (have > want) {
         for (var i = road.cars.length - 1; i >= 0 && have > want; i--) {
           var c = road.cars[i];
-          if (c.lane !== lane || !(c.wrapped || !road.seen)) continue;
+          /* `force` is the tuner saying "now, not next lap". Attrition is the
+             right behaviour for nightfall, which is a mood; it is the wrong
+             behaviour for a slider, which is a question. */
+          if (c.lane !== lane || !(c.wrapped || !road.seen || road.force)) continue;
           vis(c, false); road.parked.push(road.cars.splice(i, 1)[0]); have--;
         }
       } else while (have < want) {
@@ -578,10 +612,11 @@
         var b = road.parked[k];
         if (!admit(road, b)) break;
         road.parked.splice(k, 1); vis(b, true); road.cars.push(b); have++;
-        if (road.seen) break;               /* one at a time, in plain view */
+        if (road.seen && !road.force) break;   /* one at a time, in plain view */
       }
     }
     for (var m = 0; m < road.cars.length; m++) road.cars[m].wrapped = false;
+    road.force = false;
   }
 
   /* -- TAP A CAR AND IT STOPS ------------------------------------------------
@@ -666,7 +701,12 @@
   var stareY = -1, stareSince = 0, gawk = 1;
   function rubberneck(now, dt) {
     if (scrollY !== stareY) { stareY = scrollY; stareSince = now; }
-    var want = (now - stareSince > TUNE.stareAt * 1000) ? TUNE.stareTo : 1;
+    /* AND NOT WHILE HE IS TUNING. Sitting still with the panel open is exactly
+       the condition this looks for, so every slider was being read against a
+       road already crawling at two fifths - which is most of why none of them
+       appeared to do anything. */
+    var want = (!TUNE.tuning && now - stareSince > TUNE.stareAt * 1000)
+             ? TUNE.stareTo : 1;
     var rate = want < gawk ? dt / 2.2 : dt / 1.0;   /* slow to notice, quick to forgive */
     gawk += Math.max(-rate, Math.min(rate, want - gawk));
     return gawk;
