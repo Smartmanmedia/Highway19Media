@@ -70,7 +70,7 @@
    now with paint either side of it. .stage clips, so none of it escapes. */.sec7 .sun{position:absolute;left:0;right:0;top:-100%;height:200%;
   pointer-events:none;will-change:transform;
   background:radial-gradient(760px 620px at 11% 48%, rgba(255,255,255,.98), rgba(255,255,255,0) 60%);
-  transition:transform 2.4s cubic-bezier(.42,0,.72,1), opacity 1.5s ease-in 1.05s}:root[data-mode="night"] .sec7 .sun{transform:translateY(var(--sun-set,70vh));opacity:0}
+  transition:transform 2s cubic-bezier(.42,0,.72,1), opacity .8s ease-in 1.15s}:root[data-mode="night"] .sec7 .sun{transform:translateY(var(--sun-set,70vh));opacity:0}
 @media (prefers-reduced-motion: reduce){.sec7 .sun{transition:opacity .35s linear}:root[data-mode="night"] .sec7 .sun{transform:none}
 }
 /* HIS LIGHT, NOT FLAT PAINT. Every ground in his file is a RADIAL gradient
@@ -120,9 +120,13 @@
    that page ends on the exact gradient this sky begins with - not a wash of
    white over the top of the scene, which is what it was doing and what made
    the arrival feel like a cut rather than a drive. */
-/* AND THE GROUND TAKES AS LONG AS THE SUN DOES. A one-second crossfade under
-   a two-and-a-half second sunset is the land going dark while the sun is
-   still up, which reads as a cloud rather than an evening. */.sec7 .sky::after,
+/* THE FADE IS THE CLOCK, AND EVERYTHING IS SET AGAINST IT. This is the black
+   coming down - 2.2 seconds - and the sun's drop is 2.0 against it, off the
+   same start. They run together the whole way and the sun is under the water
+   two tenths of a second BEFORE the sky finishes closing, which is the right
+   order: the light goes, and then the last of the blue does. Its own fade to
+   nothing lands at 1.95, inside the drop. Change one of these three numbers
+   and change the other two. */.sec7 .sky::after,
 .sec7 .sea::after,
 .sec7 .land::after,
 .sec7 .road::after{
@@ -143,8 +147,7 @@
 
 /* his sky at night: a moon where his sun was, and a tiled starfield. Two
    background layers of dots repeated is a whole sky for nothing. */
-/* the stars and the moon come out AFTER the sun is down, not with it */.sec7 .stars,
-.sec7 .moon{position:absolute;opacity:0;transition:opacity 1.6s linear 1.2s;
+/* the stars come out AFTER the sun is down, not with it */.sec7 .stars{position:absolute;opacity:0;transition:opacity 1.6s linear 1.2s;
   pointer-events:none;will-change:opacity}.sec7 .stars{inset:0;background-image:
   radial-gradient(1.5px 1.5px at 18% 22%,rgba(255,255,255,.95),transparent),
   radial-gradient(1.1px 1.1px at 62% 9%,rgba(255,255,255,.75),transparent),
@@ -156,10 +159,41 @@
 /* HIS MOON, the one already in the site's night palette - it carries its own
    halo in the artwork, so the wrapper only adds the wider wash of moonlight
    the sky takes from it. A box-shadow would have painted the box, not the
-   disc, which is why this is a gradient. */.sec7 .moon{left:6.5%;top:5%;width:clamp(130px,19vh,290px);aspect-ratio:1;
-  display:grid;place-items:center;
-  background:radial-gradient(closest-side,rgba(178,208,255,.20),rgba(140,180,255,0) 76%)}.sec7 .moon img{display:block;width:54%;height:auto}:root[data-mode="night"] .sec7 .stars,
-:root[data-mode="night"] .sec7 .moon{opacity:1}
+   disc, which is why this is a gradient. */
+/* AND IT COMES IN ON AN ARC, which is why there are two elements. A single
+   translate interpolates in a straight line however it is eased - the two ends
+   of the move are joined by a ruler and no timing function bends it. So the
+   across and the down are put on SEPARATE elements with DIFFERENT easings, and
+   the path between them bows: the wrapper brings it in from off the left and
+   is most of the way home by the time it is half over, while the disc inside
+   is still only a sixth of the way down. What that draws is a moon entering
+   at the top left corner and settling down onto its mark on a curve, rather
+   than running up a diagonal.
+
+   AND IT HAS TO BE ON SCREEN WHILE IT DOES IT. The first go started it nearly
+   two of its own heights above the frame with a hard ease-in underneath, so it
+   spent five sixths of the move off the top edge and what was left was a drop.
+   Just over one height up, and a gentler curve on the way down, is the whole
+   difference between an arc and an entrance.
+
+   THE DISTANCES ARE ITS OWN SIZE, not the viewport's. A percentage on
+   `translate` is a share of the element, so 200% of its width and 180% of its
+   height put it off the left edge and off the top on a phone and on a desktop
+   alike - where 26vw is comfortably clear at 1440 and not nearly enough at
+   390.
+
+   IT LEAVES THE SAME WAY. Nothing here is an animation; both halves are
+   transitions on data-mode, so taking the switch back to day walks the moon
+   out along the same arc it came in on. */.sec7 .moon{position:absolute;left:6.5%;top:5%;width:clamp(130px,19vh,290px);
+  aspect-ratio:1;opacity:0;pointer-events:none;
+  will-change:transform,opacity;transform:translateX(-200%);
+  transition:opacity .9s linear .55s,
+             transform 2s cubic-bezier(.1,.75,.25,1) .55s}.sec7 .moon .orb{position:absolute;inset:0;display:grid;place-items:center;
+  transform:translateY(-110%);
+  transition:transform 2s cubic-bezier(.5,.08,.72,.6) .55s;
+  background:radial-gradient(closest-side,rgba(178,208,255,.20),rgba(140,180,255,0) 76%)}.sec7 .moon img{display:block;width:54%;height:auto}:root[data-mode="night"] .sec7 .stars{opacity:1}:root[data-mode="night"] .sec7 .moon{opacity:1;transform:none}:root[data-mode="night"] .sec7 .moon .orb{transform:none}
+@media (prefers-reduced-motion: reduce){.sec7 .moon{transform:none;transition:opacity .35s linear}.sec7 .moon .orb{transform:none;transition:none}
+}
 
 /* the paint dims - it is only as bright as what falls on it */.sec7 .edge,
 .sec7 .dash{transition:background-color 1s linear}:root[data-mode="night"] .sec7 .edge{background:#8195b4}:root[data-mode="night"] .sec7 .dash{background:#8195b4}:root[data-mode="night"] .sec7 .edge.gold{background:#8a6a26}
