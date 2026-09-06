@@ -30,6 +30,14 @@
   /* his road, the one place a filter could never go */
   --tarmac:  #575757;
   --marking: #fff;
+  /* AND HIS SHOULDER LINES, WHICH ARE NOW THEIR OWN COLOUR. The drive already
+     reads this way - a solid gold line down each shoulder, a broken white one
+     down the middle - and the top-down sections did not: every marking in them
+     was one white. tools/gold_edges.js tells the two apart by length and gives
+     the edges this variable, so the two roads are the same road and each kind
+     of line can be taken down after dark on its own terms. Same gold as the
+     drive, to the digit. */
+  --edge: #ffda00;
 
   /* how far the scenery ART is taken down. His painted layers - waves, rocks,
      trees, the canopy, the clouds - carry thousands of baked fills between
@@ -56,7 +64,11 @@
   :root:not([data-theme="light"]):not([data-mode="day"]){
     --night: 1;
     --tarmac: #111623;
-    --marking: #ffffff;
+    /* MUTED, NOT WHITE. Fresh paint at midnight is what a headlamp sees, not
+       what the sky does: away from the beams his lines go the colour of the
+       night they are lying in, a blue-grey rather than a glare. */
+    --marking: #8ea3c4;
+    --edge: #8a6a26;
     --truss-night: url(#truss-night);
     --boat-night: brightness(.68) saturate(.85);
     --cta-plate: #530000;
@@ -107,7 +119,11 @@
   :root[data-mode="night"]{
     --night: 1;
     --tarmac: #111623;
-    --marking: #ffffff;
+    /* MUTED, NOT WHITE. Fresh paint at midnight is what a headlamp sees, not
+       what the sky does: away from the beams his lines go the colour of the
+       night they are lying in, a blue-grey rather than a glare. */
+    --marking: #8ea3c4;
+    --edge: #8a6a26;
     --truss-night: url(#truss-night);
     --boat-night: brightness(.68) saturate(.85);
     --cta-plate: #530000;
@@ -246,6 +262,7 @@
   --night: 0;
   --tarmac: #575757;
   --marking: #fff;
+  --edge: #ffda00;
   --scene: 1; --scene-sat: 1; --cloud-filter: none;
   --sec2-ink: #333; --sec6-ink: #1a1a1a;
   --card-bg: #fff; --card-line: #1a1a1a; --card-ink: #1a1a1a; --card-sub: #333;
