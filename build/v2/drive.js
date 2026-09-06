@@ -234,6 +234,12 @@ function measure(){
       pct(W/2+side*span(c+half),H)+','+pct(W/2+side*span(c-half),H)+')';
   };
   sea.style.top=seaY+'px'; sea.style.height=(H-seaY)+'px';
+  /* HOW FAR THE SUN HAS TO FALL. Its glow is centred 4% of the stage ABOVE the
+     top of the frame, and the waterline is at seaY - so seaY + 0.04H puts the
+     centre exactly on the horizon, and a further third of the frame carries it
+     properly under, leaving only the top of the falloff showing as the last of
+     the light on the water. */
+  stage.style.setProperty('--sun-set', Math.round(seaY + H*0.04 + H*0.33) + 'px');
   land.style.top='0'; land.style.height=H+'px'; land.style.bottom='auto';
   wedge(land,GRASS);
   wedge(road,ROAD);

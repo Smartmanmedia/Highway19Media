@@ -43,8 +43,42 @@ html,body{margin:0;background:#0a1020;color:#fff;
 /* ---- his sky, his sun, his sea - four gradients, nothing that moves ------ */
 .sky{position:absolute;inset:0;
   background:
-    radial-gradient(760px 620px at 11% -4%, rgba(255,255,255,.98), rgba(255,255,255,0) 60%),
     linear-gradient(112deg,#fff 0%,#d4e7ff 15%,#a3ccff 36%,#7cb7ff 55%,#60a8ff 73%,#4f9fff 88%,#4a9cff 100%)}
+/* HIS SUN, LIFTED OUT OF THE SKY INTO A LAYER OF ITS OWN - the same radial he
+   drew, in the same place, painting the same daylight. It is a separate
+   element for one reason: night was a black sheet drawn over the top of it,
+   which is a light being switched off, and what he asked for is a sun going
+   down. Moving a layer is a transform, and a transform is the one thing that
+   interpolates for free on the compositor.
+
+   IT SETS BEHIND THE WATER. This sits AFTER .sky - so it is over the night
+   gradient that .sky::after fades in, and the sun stays lit while the sky
+   goes dark around it - and BEFORE .sea, so the moment it passes the horizon
+   the water covers it. Nothing clips it and nothing masks it: it goes down
+   behind the sea because the sea is painted on top of it, which is also how
+   it works outside. What is left above the waterline for the last second is
+   the rim of its own glow, and then that goes too.
+
+   --sun-set IS MEASURED, NOT GUESSED, because the horizon is not at a fixed
+   place on the page: on a phone the sky is taller and the water starts lower
+   down. measure() works out the drop that carries the centre of the glow from
+   its mark to well under the waterline, in that frame's own pixels. */
+/* TALLER THAN THE FRAME, ON PURPOSE. A background is clipped to its own box,
+   and the top of this glow sits ABOVE the frame - so the moment the layer
+   slid down, the part that was hanging over the top edge stopped being
+   painted and the sun grew a straight horizontal edge across the sky. The
+   element is given a frame's worth of room above and below and the gradient
+   is placed at 48% of THAT - the same 4% above the stage top he drew it at,
+   now with paint either side of it. .stage clips, so none of it escapes. */
+.sun{position:absolute;left:0;right:0;top:-100%;height:200%;
+  pointer-events:none;will-change:transform;
+  background:radial-gradient(760px 620px at 11% 48%, rgba(255,255,255,.98), rgba(255,255,255,0) 60%);
+  transition:transform 2.4s cubic-bezier(.42,0,.72,1), opacity 1.5s ease-in 1.05s}
+:root[data-mode="night"] .sun{transform:translateY(var(--sun-set,70vh));opacity:0}
+@media (prefers-reduced-motion: reduce){
+  .sun{transition:opacity .35s linear}
+  :root[data-mode="night"] .sun{transform:none}
+}
 /* HIS LIGHT, NOT FLAT PAINT. Every ground in his file is a RADIAL gradient
    whose centre sits under the sun - top left, the same place the sky's glow
    is - so the water, the verge and the tarmac are all brightest there and fall
@@ -97,8 +131,11 @@ html,body{margin:0;background:#0a1020;color:#fff;
    that page ends on the exact gradient this sky begins with - not a wash of
    white over the top of the scene, which is what it was doing and what made
    the arrival feel like a cut rather than a drive. */
+/* AND THE GROUND TAKES AS LONG AS THE SUN DOES. A one-second crossfade under
+   a two-and-a-half second sunset is the land going dark while the sun is
+   still up, which reads as a cloud rather than an evening. */
 .sky::after,.sea::after,.land::after,.road::after{
-  content:'';position:absolute;inset:0;opacity:0;transition:opacity 1s linear;
+  content:'';position:absolute;inset:0;opacity:0;transition:opacity 2.2s linear;
   pointer-events:none;will-change:opacity}
 :root[data-mode="night"] .sky::after,:root[data-mode="night"] .sea::after,
 :root[data-mode="night"] .land::after,:root[data-mode="night"] .road::after{opacity:1}
@@ -118,7 +155,8 @@ html,body{margin:0;background:#0a1020;color:#fff;
 
 /* his sky at night: a moon where his sun was, and a tiled starfield. Two
    background layers of dots repeated is a whole sky for nothing. */
-.stars,.moon{position:absolute;opacity:0;transition:opacity 1.2s linear;
+/* the stars and the moon come out AFTER the sun is down, not with it */
+.stars,.moon{position:absolute;opacity:0;transition:opacity 1.6s linear 1.2s;
   pointer-events:none;will-change:opacity}
 .stars{inset:0;background-image:
   radial-gradient(1.5px 1.5px at 18% 22%,rgba(255,255,255,.95),transparent),
@@ -317,6 +355,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
 <div class="runway">
   <div class="stage" id="stage">
     <div class="sky"></div>
+    <div class="sun"></div>
     <div class="stars"></div>
     <div class="moon"><img src="../../assets/v2/section-05/moon.svg" alt=""></div>
     <canvas class="fw" id="fw"></canvas>
@@ -613,6 +652,12 @@ function measure(){
       pct(W/2+side*span(c+half),H)+','+pct(W/2+side*span(c-half),H)+')';
   };
   sea.style.top=seaY+'px'; sea.style.height=(H-seaY)+'px';
+  /* HOW FAR THE SUN HAS TO FALL. Its glow is centred 4% of the stage ABOVE the
+     top of the frame, and the waterline is at seaY - so seaY + 0.04H puts the
+     centre exactly on the horizon, and a further third of the frame carries it
+     properly under, leaving only the top of the falloff showing as the last of
+     the light on the water. */
+  stage.style.setProperty('--sun-set', Math.round(seaY + H*0.04 + H*0.33) + 'px');
   land.style.top='0'; land.style.height=H+'px'; land.style.bottom='auto';
   wedge(land,GRASS);
   wedge(road,ROAD);
