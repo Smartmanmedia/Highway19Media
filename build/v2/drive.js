@@ -71,7 +71,7 @@ const stage=document.getElementById('stage'), props=document.getElementById('pro
 const EYE=129, ROAD=360, LINE=311, GRASS=546, LANE=3.6, F0=0.62;
 const GOLD_LANE=8, GOLD=ROAD-GOLD_LANE;
 const VP=0.644, SEA=0.693;    /* his vanishing point, and his water line */
-const RUN=10530;
+const RUN=14875;
 /* WHERE THE DRIVE LIVES IN THE SCROLL. He gives these in page terms - the road
    starts moving at 6%, the second board is up at 33%, and it is all over by
    70% - so they are written that way and converted once. Everything downstream
@@ -82,8 +82,8 @@ const RUN=10530;
    and the hand-over happens over the last tenth WHILE it is still moving -
    ending the drive first and then dissolving a still frame is what read as
    parking up and getting out. */
-const START=0.079, END=1.0;
-const SIGN_AT=[0.211,0.684], TEXT_AT=0.434;
+const START=0.0632, END=1.0;
+const SIGN_AT=[0.1688,0.7472], TEXT_AT=0.3472;
 /* AND WHERE IT HANDS OVER. From FADE_AT to the bottom of the scroll everything
    that stands on the earth goes out and only the sky is left - the sun and the
    blue in daylight, the moon and the stars after dark - so the next section
@@ -97,22 +97,31 @@ const SIGN_AT=[0.211,0.684], TEXT_AT=0.434;
 
    AND THEN HALF OF WHAT WAS LEFT WENT TOO. There was still too much road after
    the last board, so everything past it - the run out, the hand-over, the sky -
-   is halved: 374vh of scrolling became 187, and the runway 780vh became 593.
-   Everything BEFORE the board is untouched, and these percentages look
-   different only because they are shares of a shorter page. In scroll they are
-   the same marks they were: the first board at 125vh against 124.8, the
-   floating line at 257.3 against 257.4, the last board at 405.5 against 405.6.
-   RUN comes down to 12,600 to keep the last board at the same distance out -
-   7,955 against 7,952 - so the whole drive up to it is the drive he approved,
-   and only the tail is shorter. */
-const FADE_AT=0.776;
+   is halved: 374vh of scrolling became 187.
+
+   AND THE MIDDLE GOT WHAT THE TAIL GAVE UP. The evening needs somewhere to
+   happen: four seconds of dusk between the floating line and the last board,
+   and 148vh of scrolling is not enough road to see it in. That stretch is
+   DOUBLED, to 296vh, and the runway with it - 593vh to 741, which is still
+   less than the 780 it started at because the dead run-out is gone.
+
+   EVERY PERCENTAGE HERE HAS BEEN REWRITTEN THREE TIMES AND NONE OF THE MARKS
+   BEFORE THE LINE HAVE MOVED. They are shares of the page, and the page keeps
+   changing length underneath them; in SCROLL they are what they always were -
+   the first board at 125.1vh, the line at 257.3, the hand-over 54.5vh past the
+   board. RUN follows the same rule: it is whatever keeps the OPEN ROAD at the
+   speed it was, 29.3 units of world per vh, so a longer page means more road
+   and never a faster one. 10,530 to 14,875 buys the whole of the new stretch
+   and leaves the first board and the line planted exactly where they were,
+   1,449 and 3,778 out. */
+const FADE_AT=0.8208;
 /* AND WHERE THE SUN STARTS DOWN. Not at the last board any more - it is his
    floating line in the middle of the road that starts the evening, so the
    whole sunset plays out over the stretch between the line and the board and
    the sky is properly dark by the time the board is up and the first shell
    climbs. Three and a bit seconds of dusk want more than a board's width of
    road to happen in. */
-const DUSK_AT=0.47;
+const DUSK_AT=0.3761;
 const RANGE=END-START;
 const STOPS=SIGN_AT.map(a=>(a-START)/RANGE);
 const TEXT_U=(TEXT_AT-START)/RANGE;
@@ -300,9 +309,13 @@ const smooth=x=>{x=clamp(x,0,1);return x*x*(3-2*x)};
    much of the speed goes, `ease` is how far either side in u it takes to go.
    0.97 is a road nearly stopped; 0.82 at the line is a car easing off to read
    something, not pulling over for it. */
-const SLOWS=[{u:STOPS[0], dip:0.93, ease:0.115},
-             {u:TEXT_U,   dip:0.82, ease:0.105},
-             {u:STOPS[1], dip:0.97, ease:0.155}];
+/* `ease` IS IN u, AND u IS A SHARE OF A PAGE THAT KEEPS GETTING LONGER. The
+   three widths are the ones he settled on, scaled by 0.787 so each still runs
+   the same number of SCROLL PIXELS as it did on the 593vh page - otherwise
+   lengthening the drive would have quietly stretched every slowdown with it. */
+const SLOWS=[{u:STOPS[0], dip:0.93, ease:0.0905},
+             {u:TEXT_U,   dip:0.82, ease:0.0826},
+             {u:STOPS[1], dip:0.97, ease:0.1219}];
 const STEPS=1024;
 const TABLE=(function(){
   const t=new Float64Array(STEPS+1);
@@ -316,14 +329,15 @@ const TABLE=(function(){
   for(let i=0;i<=STEPS;i++) t[i]=t[i]/sum*RUN;   /* the trip is still RUN long */
   return t;
 })();
-/* AND RUN CAME DOWN TO PAY FOR THEM. The table is normalised to RUN, so adding
-   two more slowdowns to a fixed total would have made the open road faster to
-   make up the difference - the opposite of what was asked. 12,600 to 10,530 is
-   the number that leaves the unslowed stretches at exactly the speed they were
-   and lets the trip simply cover less ground: the first board still plants at
-   1,446 out, the line at 3,776 where it was 4,458, the last board at 6,230
-   where it was 7,955. Every one of them still arrives at the same scroll mark,
-   because a board is planted off THIS table and not off u*RUN. */
+/* AND RUN IS SET BY THE OPEN ROAD, not by the length of the trip. The table is
+   normalised to RUN, so anything that adds slowdown to a fixed total makes the
+   unslowed stretches FASTER to make up the difference - which is the opposite
+   of every note on this. RUN is therefore always solved backwards from one
+   number: 29.3 world units per vh where nothing is easing. It has been 12,600,
+   then 10,530 when the line and the last board got slowdowns of their own, and
+   14,875 now the middle stretch is twice as long. Every board still arrives at
+   its own scroll mark whatever it works out to, because a board is planted off
+   THIS table and not off u*RUN. */
 /* how far down the road we are at u */
 function distance(u){
   const x=clamp(u,0,1)*STEPS, i=Math.min(STEPS-1,x|0), f=x-i;

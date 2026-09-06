@@ -21,7 +21,7 @@
    the sea never move: four shapes, drawn once, re-cut only on resize. Only the
    lane markings and the things standing on the road are touched per frame, and
    each of those is a single transform - no reads, no measuring, no layout.
-   ========================================================================= */.sec7 *{box-sizing:border-box}.sec7{height:593vh;position:relative}.sec7 .stage{position:sticky;top:0;height:100vh;overflow:hidden;isolation:isolate}
+   ========================================================================= */.sec7 *{box-sizing:border-box}.sec7{height:741vh;position:relative}.sec7 .stage{position:sticky;top:0;height:100vh;overflow:hidden;isolation:isolate}
 /* THE FIREWORKS SIT IN THE SKY, BEHIND THE WORLD. One canvas, under the sea
    and the road and above the stars, so a shell climbs out from behind the
    horizon; and deliberately NOT in the fade group, because the whole point is
@@ -155,11 +155,20 @@
 .sec7 .land::after,
 .sec7 .road::after{
   content:'';position:absolute;inset:0;opacity:0;transition:opacity .9s linear;
-  pointer-events:none;will-change:opacity}:root[data-mode="night"] .sec7 .sky::after,
-:root[data-mode="night"] .sec7 .sea::after,
-:root[data-mode="night"] .sec7 .land::after,
-:root[data-mode="night"] .sec7 .road::after{
-  opacity:1;transition:opacity 1.8s linear 1.5s}.sec7 .sky::after{background:linear-gradient(180deg,#02060f 0%,#050d1e 34%,#081833 62%,#0d2447 84%,#12305a 100%)}
+  pointer-events:none;will-change:opacity}
+/* AND THEY DO NOT ALL GO AT ONCE. They did - one delay, one duration, four
+   grounds - and the tarmac still read as going FIRST, because his road is a
+   mid grey and his water is a saturated blue: the same veil of black over both
+   takes half the light out of the grey while the blue is still plainly blue.
+   Matching the numbers was never going to match the eye.
+
+   So they are staggered, in the order it happens outside. The water goes
+   first, because the sea is the far distance and the far distance is the first
+   thing to lose a low sun. Then the sky behind it. Then the verge. The tarmac
+   is last - it is the nearest thing in the frame, it is under the lamps, and
+   it is the surface a driver is still looking at when everything else has
+   gone. Eight tenths of a second between the water and the road is enough to
+   read as an order rather than a mistake. */:root[data-mode="night"] .sec7 .sea::after{opacity:1;transition:opacity 1.8s linear 1.4s}:root[data-mode="night"] .sec7 .sky::after{opacity:1;transition:opacity 1.8s linear 1.5s}:root[data-mode="night"] .sec7 .land::after{opacity:1;transition:opacity 1.7s linear 1.9s}:root[data-mode="night"] .sec7 .road::after{opacity:1;transition:opacity 1.8s linear 2.3s}.sec7 .sky::after{background:linear-gradient(180deg,#02060f 0%,#050d1e 34%,#081833 62%,#0d2447 84%,#12305a 100%)}
 /* the moon's wash on the water is tighter than the sun's was - a moon lights a
    patch of sea, not the whole of it, and at 150% by 260% there was no dark
    water left on the near side at all */.sec7 .sea::after{background:
@@ -240,7 +249,7 @@
 /* the paint dims - it is only as bright as what falls on it */.sec7 .edge,
 .sec7 .dash{transition:background-color .9s linear}:root[data-mode="night"] .sec7 .edge,
 :root[data-mode="night"] .sec7 .dash{
-  background:#8195b4;transition:background-color 1.8s linear 1.5s}:root[data-mode="night"] .sec7 .edge.gold{background:#8a6a26}
+  background:#8195b4;transition:background-color 1.8s linear 2.3s}:root[data-mode="night"] .sec7 .edge.gold{background:#8a6a26}
 
 /* ---- what stands on it --------------------------------------------------
    Sprites, not vector. His four trees carry 247 shapes and 246 gradients -
@@ -377,8 +386,11 @@
    properties are named here now, and both start at 2.2 - after the ground,
    after the lamps, after the moon is nearly down - because a cloud is the last
    thing in the sky to lose the sun, which is the whole reason it is worth
-   watching one at dusk. */.sec7 .cloud img{transition:filter .9s linear, opacity .9s linear}:root[data-mode="night"] .sec7 .cloud img{
-  transition:filter 1.6s linear 2.2s, opacity 1.4s linear 2.2s}:root[data-mode="night"] .sec7 .cloud.thin img{opacity:0}.sec7 .cloud img{display:block;width:100%;height:auto}
+   watching one at dusk. */.sec7 .cloud img{transition:filter .9s linear, opacity .9s linear}
+/* the COLOUR change is quicker than the rest of it on purpose. The duotone
+   rotates a hue by 200 degrees and the halfway house between sepia and blue is
+   green - which nobody notices at a second and is a green cloud at two. */:root[data-mode="night"] .sec7 .cloud img{
+  transition:filter 1.1s linear 2.6s, opacity 1.4s linear 2.6s}:root[data-mode="night"] .sec7 .cloud.thin img{opacity:0}.sec7 .cloud img{display:block;width:100%;height:auto}
 /* HIS WAVE LINES. One strip each, laid flat on the water at its own depth and
    carried past by the same projection as the road, so they open out and slow
    down as they come. width:100% because a wave is stretched to the sea's
