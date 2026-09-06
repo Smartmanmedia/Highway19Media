@@ -21,7 +21,7 @@
    the sea never move: four shapes, drawn once, re-cut only on resize. Only the
    lane markings and the things standing on the road are touched per frame, and
    each of those is a single transform - no reads, no measuring, no layout.
-   ========================================================================= */.sec7 *{box-sizing:border-box}.sec7{height:780vh;position:relative}.sec7 .stage{position:sticky;top:0;height:100vh;overflow:hidden;isolation:isolate}
+   ========================================================================= */.sec7 *{box-sizing:border-box}.sec7{height:593vh;position:relative}.sec7 .stage{position:sticky;top:0;height:100vh;overflow:hidden;isolation:isolate}
 /* THE FIREWORKS SIT IN THE SKY, BEHIND THE WORLD. One canvas, under the sea
    and the road and above the stars, so a shell climbs out from behind the
    horizon; and deliberately NOT in the fade group, because the whole point is
@@ -223,7 +223,7 @@
 }
 
 /* the paint dims - it is only as bright as what falls on it */.sec7 .edge,
-.sec7 .dash{transition:background-color 1s linear}:root[data-mode="night"] .sec7 .edge{background:#8195b4}:root[data-mode="night"] .sec7 .dash{background:#8195b4}:root[data-mode="night"] .sec7 .edge.gold{background:#8a6a26}
+.sec7 .dash{transition:background-color 1.8s linear 1.5s}:root[data-mode="night"] .sec7 .edge{background:#8195b4}:root[data-mode="night"] .sec7 .dash{background:#8195b4}:root[data-mode="night"] .sec7 .edge.gold{background:#8a6a26}
 
 /* ---- what stands on it --------------------------------------------------
    Sprites, not vector. His four trees carry 247 shapes and 246 gradients -
@@ -245,14 +245,18 @@
    pass on every sprite in every frame of the day scene, for nothing. Leaving
    it off is free AND still fades: a filter list interpolating from none is
    treated as the same list at its identity values, which is exactly what that
-   line was. */.sec7 .palm img,
+   line was. */
+/* AND THEY GO WHEN THE GROUND GOES, on the same 1.5s-to-3.3s as the sky and
+   the sea. A one-second fade off the top of the clock had everything on the
+   earth dark before the sun was half way down, which is a light being switched
+   off in a room with the curtains open. .cloud img is NOT in this list - it
+   has its own line, later, because it goes last. */.sec7 .palm img,
 .sec7 .lamp img:not(.light),
 .sec7 .wave img,
 .sec7 .pole,
 .sec7 .truss,
-.sec7 .cloud img,
 .sec7 .sign img{
-  transition:filter 1s linear}
+  transition:filter 1.8s linear 1.5s}
 /* HIS CLOUDS ARE WHITE, AND WHITE HAS NO HUE - rotating it does nothing, which
    is why they came out as grey smudges rather than blue. sepia() gives the
    white a hue to rotate, so the four functions together are a duotone: tint,
@@ -271,7 +275,7 @@
    fades up over the other - a board cannot be recoloured through an <img>, and
    a filter that darkened the green would darken the gold and the white type
    with it, which is exactly what he said not to do. */.sec7 .sign{isolation:isolate}.sec7 .sign img{filter:drop-shadow(0 14px 20px rgba(0,0,0,.22))}.sec7 .sign .night-art{position:absolute;inset:0;height:100%;width:100%;
-  opacity:0;transition:opacity 1s linear}:root[data-mode="night"] .sec7 .sign .night-art{opacity:1}:root[data-mode="night"] .sec7 .sign img{filter:drop-shadow(0 0 11px rgba(255,186,74,.28))}
+  opacity:0;transition:opacity 1.8s linear 1.5s}:root[data-mode="night"] .sec7 .sign .night-art{opacity:1}:root[data-mode="night"] .sec7 .sign img{filter:drop-shadow(0 0 11px rgba(255,186,74,.28))}
 /* HIS SIGN LAMPS ARE IN THE BOARDS THEMSELVES. His overlay files were cut to
    the home page hero's 2.685 to one; both boards on this road are 3.183, so
    stretched over them the beams land between the brackets rather than under
@@ -283,9 +287,11 @@
    pool it throws are the lamp element's own ::after and ::before, sized in per
    cent of the lamp, so they travel and scale with it for free. The head sits a
    third of the way across his sprite from the arm end - his own geometry - and
-   mirrors for the other side. */.sec7 .lamp::after,
+   mirrors for the other side. */
+/* the lamps come on a little after the land starts going, which is the order
+   it happens in: the light leaves, and then the lights answer it */.sec7 .lamp::after,
 .sec7 .lamp::before{content:'';position:absolute;pointer-events:none;
-  opacity:0;transition:opacity 1.2s linear}.sec7 .lamp::after{width:185%;aspect-ratio:1;left:33.3%;top:4.4%;transform:translate(-50%,-50%);
+  opacity:0;transition:opacity 1.4s linear 1.9s}.sec7 .lamp::after{width:185%;aspect-ratio:1;left:33.3%;top:4.4%;transform:translate(-50%,-50%);
   background:radial-gradient(closest-side,rgba(255,222,158,.98),
     rgba(255,182,74,.42) 30%,rgba(255,164,40,0) 70%)}
 /* THE LIGHT A STREET LAMP THROWS, as ONE BITMAP. It was three live layers - a
@@ -306,7 +312,7 @@
    1.25 with the bulb at 0.955, 0.112 of it. In per cent of the lamp's WIDTH -
    which is 0.1921 of its height - that is 572.6% across, and the left edge
    sits 0.955 of that to the left of the head at 33.3%. */.sec7 .lamp .light{position:absolute;width:572.6%;height:125%;left:-513.5%;top:-9.6%;
-  max-width:none;pointer-events:none;opacity:0;transition:opacity 1.2s linear}.sec7 .a-lamp-l .light{left:40.9%;transform:scaleX(-1)}:root[data-mode="night"] .sec7 .lamp .light{opacity:1}
+  max-width:none;pointer-events:none;opacity:0;transition:opacity 1.4s linear 1.9s}.sec7 .a-lamp-l .light{left:40.9%;transform:scaleX(-1)}:root[data-mode="night"] .sec7 .lamp .light{opacity:1}
 /* the floating line, laid out once at this size and scaled from here */.sec7 .copy{display:grid;place-items:center;height:200px;white-space:nowrap}.sec7 .copy .copyline{font-weight:800;font-size:150px;line-height:1;letter-spacing:-.02em;
   color:#fff;text-shadow:0 6px 26px rgba(0,40,90,.45)}.sec7 .pole{background:linear-gradient(90deg,#8a9199,#f4f7fa 38%,#cdd4db 66%,#7d848c);
   border-radius:99px}
@@ -337,7 +343,15 @@
 /* fewer of them after dark - five of the eight go out. The fade is put on the
    IMAGE, not on the cloud: the cloud's own opacity is the scroll's hand-over
    at the end of the road, and one element cannot hold two fades on the same
-   property - the switch's one-second transition was dragging the scroll's. */.sec7 .cloud img{transition:opacity 1s linear}:root[data-mode="night"] .sec7 .cloud.thin img{opacity:0}.sec7 .cloud img{display:block;width:100%;height:auto}
+   property - the switch's one-second transition was dragging the scroll's. */
+/* THE CLOUDS ARE LAST, AND THEY WERE FIRST. This line sets the `transition`
+   shorthand, and a shorthand REPLACES - so it was wiping the filter transition
+   the sprites' rule above had given them and their colour was changing in a
+   single frame, before anything else in the scene had begun to move. Both
+   properties are named here now, and both start at 2.2 - after the ground,
+   after the lamps, after the moon is nearly down - because a cloud is the last
+   thing in the sky to lose the sun, which is the whole reason it is worth
+   watching one at dusk. */.sec7 .cloud img{transition:filter 1.6s linear 2.2s, opacity 1.4s linear 2.2s}:root[data-mode="night"] .sec7 .cloud.thin img{opacity:0}.sec7 .cloud img{display:block;width:100%;height:auto}
 /* HIS WAVE LINES. One strip each, laid flat on the water at its own depth and
    carried past by the same projection as the road, so they open out and slow
    down as they come. width:100% because a wave is stretched to the sea's

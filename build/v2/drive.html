@@ -27,7 +27,7 @@
 *{box-sizing:border-box}
 html,body{margin:0;background:#0a1020;color:#fff;
   font-family:"Be Vietnam Pro",system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-.runway{height:780vh;position:relative}
+.runway{height:593vh;position:relative}
 .stage{position:sticky;top:0;height:100vh;overflow:hidden;isolation:isolate}
 /* THE FIREWORKS SIT IN THE SKY, BEHIND THE WORLD. One canvas, under the sea
    and the road and above the stars, so a shell climbs out from behind the
@@ -247,7 +247,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
 }
 
 /* the paint dims - it is only as bright as what falls on it */
-.edge,.dash{transition:background-color 1s linear}
+.edge,.dash{transition:background-color 1.8s linear 1.5s}
 :root[data-mode="night"] .edge{background:#8195b4}
 :root[data-mode="night"] .dash{background:#8195b4}
 :root[data-mode="night"] .edge.gold{background:#8a6a26}
@@ -275,8 +275,13 @@ html,body{margin:0;background:#0a1020;color:#fff;
    it off is free AND still fades: a filter list interpolating from none is
    treated as the same list at its identity values, which is exactly what that
    line was. */
-.palm img,.lamp img:not(.light),.wave img,.pole,.truss,.cloud img,.sign img{
-  transition:filter 1s linear}
+/* AND THEY GO WHEN THE GROUND GOES, on the same 1.5s-to-3.3s as the sky and
+   the sea. A one-second fade off the top of the clock had everything on the
+   earth dark before the sun was half way down, which is a light being switched
+   off in a room with the curtains open. .cloud img is NOT in this list - it
+   has its own line, later, because it goes last. */
+.palm img,.lamp img:not(.light),.wave img,.pole,.truss,.sign img{
+  transition:filter 1.8s linear 1.5s}
 /* HIS CLOUDS ARE WHITE, AND WHITE HAS NO HUE - rotating it does nothing, which
    is why they came out as grey smudges rather than blue. sepia() gives the
    white a hue to rotate, so the four functions together are a duotone: tint,
@@ -302,7 +307,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
 .sign{isolation:isolate}
 .sign img{filter:drop-shadow(0 14px 20px rgba(0,0,0,.22))}
 .sign .night-art{position:absolute;inset:0;height:100%;width:100%;
-  opacity:0;transition:opacity 1s linear}
+  opacity:0;transition:opacity 1.8s linear 1.5s}
 :root[data-mode="night"] .sign .night-art{opacity:1}
 :root[data-mode="night"] .sign img{filter:drop-shadow(0 0 11px rgba(255,186,74,.28))}
 /* HIS SIGN LAMPS ARE IN THE BOARDS THEMSELVES. His overlay files were cut to
@@ -317,8 +322,10 @@ html,body{margin:0;background:#0a1020;color:#fff;
    cent of the lamp, so they travel and scale with it for free. The head sits a
    third of the way across his sprite from the arm end - his own geometry - and
    mirrors for the other side. */
+/* the lamps come on a little after the land starts going, which is the order
+   it happens in: the light leaves, and then the lights answer it */
 .lamp::after,.lamp::before{content:'';position:absolute;pointer-events:none;
-  opacity:0;transition:opacity 1.2s linear}
+  opacity:0;transition:opacity 1.4s linear 1.9s}
 .lamp::after{width:185%;aspect-ratio:1;left:33.3%;top:4.4%;transform:translate(-50%,-50%);
   background:radial-gradient(closest-side,rgba(255,222,158,.98),
     rgba(255,182,74,.42) 30%,rgba(255,164,40,0) 70%)}
@@ -341,7 +348,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
    which is 0.1921 of its height - that is 572.6% across, and the left edge
    sits 0.955 of that to the left of the head at 33.3%. */
 .lamp .light{position:absolute;width:572.6%;height:125%;left:-513.5%;top:-9.6%;
-  max-width:none;pointer-events:none;opacity:0;transition:opacity 1.2s linear}
+  max-width:none;pointer-events:none;opacity:0;transition:opacity 1.4s linear 1.9s}
 .a-lamp-l .light{left:40.9%;transform:scaleX(-1)}
 :root[data-mode="night"] .lamp .light{opacity:1}
 /* the floating line, laid out once at this size and scaled from here */
@@ -384,7 +391,15 @@ html,body{margin:0;background:#0a1020;color:#fff;
    IMAGE, not on the cloud: the cloud's own opacity is the scroll's hand-over
    at the end of the road, and one element cannot hold two fades on the same
    property - the switch's one-second transition was dragging the scroll's. */
-.cloud img{transition:opacity 1s linear}
+/* THE CLOUDS ARE LAST, AND THEY WERE FIRST. This line sets the `transition`
+   shorthand, and a shorthand REPLACES - so it was wiping the filter transition
+   the sprites' rule above had given them and their colour was changing in a
+   single frame, before anything else in the scene had begun to move. Both
+   properties are named here now, and both start at 2.2 - after the ground,
+   after the lamps, after the moon is nearly down - because a cloud is the last
+   thing in the sky to lose the sun, which is the whole reason it is worth
+   watching one at dusk. */
+.cloud img{transition:filter 1.6s linear 2.2s, opacity 1.4s linear 2.2s}
 :root[data-mode="night"] .cloud.thin img{opacity:0}
 .cloud img{display:block;width:100%;height:auto}
 /* HIS WAVE LINES. One strip each, laid flat on the water at its own depth and
@@ -559,7 +574,7 @@ const stage=document.getElementById('stage'), props=document.getElementById('pro
 const EYE=129, ROAD=360, LINE=311, GRASS=546, LANE=3.6, F0=0.62;
 const GOLD_LANE=8, GOLD=ROAD-GOLD_LANE;
 const VP=0.644, SEA=0.693;    /* his vanishing point, and his water line */
-const RUN=19000;
+const RUN=12600;
 /* WHERE THE DRIVE LIVES IN THE SCROLL. He gives these in page terms - the road
    starts moving at 6%, the second board is up at 33%, and it is all over by
    70% - so they are written that way and converted once. Everything downstream
@@ -570,8 +585,8 @@ const RUN=19000;
    and the hand-over happens over the last tenth WHILE it is still moving -
    ending the drive first and then dissolving a still frame is what read as
    parking up and getting out. */
-const START=0.06, END=1.0;
-const SIGN_AT=[0.16,0.52], TEXT_AT=0.33;
+const START=0.079, END=1.0;
+const SIGN_AT=[0.211,0.684], TEXT_AT=0.434;
 /* AND WHERE IT HANDS OVER. From FADE_AT to the bottom of the scroll everything
    that stands on the earth goes out and only the sky is left - the sun and the
    blue in daylight, the moon and the stars after dark - so the next section
@@ -579,11 +594,28 @@ const SIGN_AT=[0.16,0.52], TEXT_AT=0.33;
 
    THE TRIP IS SHORTER AND THE BOARDS ARE CLOSER TOGETHER. The second board
    came at 70% of the section and then a fifth of the scroll went by with
-   nothing left to see. It lands at 52% now and the hand-over starts at 66% -
-   just as the road finishes easing away from it - so the drive is over by the
-   time the last board has been read, and what is left is the sky. The runway
-   comes down with it, 1100vh to 780. */
-const FADE_AT=0.66;
+   nothing left to see. The hand-over starts as the road finishes easing away
+   from it - so the drive is over by the time the last board has been read, and
+   what is left is the sky. The runway came down with it, 1100vh to 780.
+
+   AND THEN HALF OF WHAT WAS LEFT WENT TOO. There was still too much road after
+   the last board, so everything past it - the run out, the hand-over, the sky -
+   is halved: 374vh of scrolling became 187, and the runway 780vh became 593.
+   Everything BEFORE the board is untouched, and these percentages look
+   different only because they are shares of a shorter page. In scroll they are
+   the same marks they were: the first board at 125vh against 124.8, the
+   floating line at 257.3 against 257.4, the last board at 405.5 against 405.6.
+   RUN comes down to 12,600 to keep the last board at the same distance out -
+   7,955 against 7,952 - so the whole drive up to it is the drive he approved,
+   and only the tail is shorter. */
+const FADE_AT=0.776;
+/* AND WHERE THE SUN STARTS DOWN. Not at the last board any more - it is his
+   floating line in the middle of the road that starts the evening, so the
+   whole sunset plays out over the stretch between the line and the board and
+   the sky is properly dark by the time the board is up and the first shell
+   climbs. Three and a bit seconds of dusk want more than a board's width of
+   road to happen in. */
+const DUSK_AT=0.47;
 const RANGE=END-START;
 const STOPS=SIGN_AT.map(a=>(a-START)/RANGE);
 const TEXT_U=(TEXT_AT-START)/RANGE;
@@ -1332,16 +1364,17 @@ function tick(now){
   else if(fwOn) fstop();
   /* AND NIGHT FALLS HERE. He has decided what drives it, and it is scroll
      depth - so the switch is no longer the whole story, it is an override.
-     The change hangs on the SAME instant the fireworks do, the last board
-     coming over the horizon about half way down the road, so the light going
-     and the first shell climbing are one event rather than two and every
-     burst after it is against a dark sky. Everything downstream reads
-     data-mode, so this is one attribute and a one-second crossfade that was
-     already there. modeLock is the button saying it has been overruled, and
-     dawn is the page still coming up - without that check the first frame
+     It hung on the same instant the fireworks do, the last board coming over
+     the horizon; it hangs on DUSK_AT now, just past his floating line, which
+     is a good deal earlier. The sunset is three and a bit seconds long and it
+     needs road to happen over - started at the board it was still going while
+     the shells were, and what he asked for is a sky that is already dark when
+     the first one opens. Everything downstream reads data-mode, so this is
+     still one attribute. modeLock is the button saying it has been overruled,
+     and dawn is the page still coming up - without that check the first frame
      would write `day` over the black before it had a chance to lift. */
   if(!ROOT.dataset.modeLock && !ROOT.dataset.dawn){
-    const m = t>=fwAt ? 'night' : 'day';
+    const m = t>=DUSK_AT ? 'night' : 'day';
     if(ROOT.dataset.mode!==m) ROOT.dataset.mode=m;
   }
   const t0=performance.now(); place(distance(u)); const cost=performance.now()-t0;

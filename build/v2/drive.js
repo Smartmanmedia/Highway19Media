@@ -71,7 +71,7 @@ const stage=document.getElementById('stage'), props=document.getElementById('pro
 const EYE=129, ROAD=360, LINE=311, GRASS=546, LANE=3.6, F0=0.62;
 const GOLD_LANE=8, GOLD=ROAD-GOLD_LANE;
 const VP=0.644, SEA=0.693;    /* his vanishing point, and his water line */
-const RUN=19000;
+const RUN=12600;
 /* WHERE THE DRIVE LIVES IN THE SCROLL. He gives these in page terms - the road
    starts moving at 6%, the second board is up at 33%, and it is all over by
    70% - so they are written that way and converted once. Everything downstream
@@ -82,8 +82,8 @@ const RUN=19000;
    and the hand-over happens over the last tenth WHILE it is still moving -
    ending the drive first and then dissolving a still frame is what read as
    parking up and getting out. */
-const START=0.06, END=1.0;
-const SIGN_AT=[0.16,0.52], TEXT_AT=0.33;
+const START=0.079, END=1.0;
+const SIGN_AT=[0.211,0.684], TEXT_AT=0.434;
 /* AND WHERE IT HANDS OVER. From FADE_AT to the bottom of the scroll everything
    that stands on the earth goes out and only the sky is left - the sun and the
    blue in daylight, the moon and the stars after dark - so the next section
@@ -91,11 +91,28 @@ const SIGN_AT=[0.16,0.52], TEXT_AT=0.33;
 
    THE TRIP IS SHORTER AND THE BOARDS ARE CLOSER TOGETHER. The second board
    came at 70% of the section and then a fifth of the scroll went by with
-   nothing left to see. It lands at 52% now and the hand-over starts at 66% -
-   just as the road finishes easing away from it - so the drive is over by the
-   time the last board has been read, and what is left is the sky. The runway
-   comes down with it, 1100vh to 780. */
-const FADE_AT=0.66;
+   nothing left to see. The hand-over starts as the road finishes easing away
+   from it - so the drive is over by the time the last board has been read, and
+   what is left is the sky. The runway came down with it, 1100vh to 780.
+
+   AND THEN HALF OF WHAT WAS LEFT WENT TOO. There was still too much road after
+   the last board, so everything past it - the run out, the hand-over, the sky -
+   is halved: 374vh of scrolling became 187, and the runway 780vh became 593.
+   Everything BEFORE the board is untouched, and these percentages look
+   different only because they are shares of a shorter page. In scroll they are
+   the same marks they were: the first board at 125vh against 124.8, the
+   floating line at 257.3 against 257.4, the last board at 405.5 against 405.6.
+   RUN comes down to 12,600 to keep the last board at the same distance out -
+   7,955 against 7,952 - so the whole drive up to it is the drive he approved,
+   and only the tail is shorter. */
+const FADE_AT=0.776;
+/* AND WHERE THE SUN STARTS DOWN. Not at the last board any more - it is his
+   floating line in the middle of the road that starts the evening, so the
+   whole sunset plays out over the stretch between the line and the board and
+   the sky is properly dark by the time the board is up and the first shell
+   climbs. Three and a bit seconds of dusk want more than a board's width of
+   road to happen in. */
+const DUSK_AT=0.47;
 const RANGE=END-START;
 const STOPS=SIGN_AT.map(a=>(a-START)/RANGE);
 const TEXT_U=(TEXT_AT-START)/RANGE;
@@ -844,16 +861,17 @@ function tick(now){
   else if(fwOn) fstop();
   /* AND NIGHT FALLS HERE. He has decided what drives it, and it is scroll
      depth - so the switch is no longer the whole story, it is an override.
-     The change hangs on the SAME instant the fireworks do, the last board
-     coming over the horizon about half way down the road, so the light going
-     and the first shell climbing are one event rather than two and every
-     burst after it is against a dark sky. Everything downstream reads
-     data-mode, so this is one attribute and a one-second crossfade that was
-     already there. modeLock is the button saying it has been overruled, and
-     dawn is the page still coming up - without that check the first frame
+     It hung on the same instant the fireworks do, the last board coming over
+     the horizon; it hangs on DUSK_AT now, just past his floating line, which
+     is a good deal earlier. The sunset is three and a bit seconds long and it
+     needs road to happen over - started at the board it was still going while
+     the shells were, and what he asked for is a sky that is already dark when
+     the first one opens. Everything downstream reads data-mode, so this is
+     still one attribute. modeLock is the button saying it has been overruled,
+     and dawn is the page still coming up - without that check the first frame
      would write `day` over the black before it had a chance to lift. */
   if(!ROOT.dataset.modeLock && !ROOT.dataset.dawn){
-    const m = t>=fwAt ? 'night' : 'day';
+    const m = t>=DUSK_AT ? 'night' : 'day';
     if(ROOT.dataset.mode!==m) ROOT.dataset.mode=m;
   }
   const t0=performance.now(); place(distance(u)); const cost=performance.now()-t0;
