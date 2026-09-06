@@ -71,7 +71,7 @@ const stage=document.getElementById('stage'), props=document.getElementById('pro
 const EYE=129, ROAD=360, LINE=311, GRASS=546, LANE=3.6, F0=0.62;
 const GOLD_LANE=8, GOLD=ROAD-GOLD_LANE;
 const VP=0.644, SEA=0.693;    /* his vanishing point, and his water line */
-const RUN=12600;
+const RUN=10530;
 /* WHERE THE DRIVE LIVES IN THE SCROLL. He gives these in page terms - the road
    starts moving at 6%, the second board is up at 33%, and it is all over by
    70% - so they are written that way and converted once. Everything downstream
@@ -292,19 +292,38 @@ function measure(){
    a board placed at u*RUN would sit somewhere the camera never stops. */
 const clamp=(x,a,b)=>x<a?a:x>b?b:x;
 const smooth=x=>{x=clamp(x,0,1);return x*x*(3-2*x)};
-const DIP=0.93, EASE=0.115, STEPS=1024;
+/* THREE PLACES THE ROAD EASES, AND NOT BY THE SAME AMOUNT. It was two - the
+   boards - on one depth and one width for both. His floating line is a thing
+   to read as much as a board is, so it gets one of its own; and the LAST board
+   is the end of the drive, so it gets the deepest and the widest of the three
+   and the road is properly crawling by the time it is overhead. `dip` is how
+   much of the speed goes, `ease` is how far either side in u it takes to go.
+   0.97 is a road nearly stopped; 0.82 at the line is a car easing off to read
+   something, not pulling over for it. */
+const SLOWS=[{u:STOPS[0], dip:0.93, ease:0.115},
+             {u:TEXT_U,   dip:0.82, ease:0.105},
+             {u:STOPS[1], dip:0.97, ease:0.155}];
+const STEPS=1024;
 const TABLE=(function(){
   const t=new Float64Array(STEPS+1);
   let sum=0;
   for(let i=0;i<=STEPS;i++){
     const u=i/STEPS;
     let slow=0;
-    for(const s of STOPS) slow=Math.max(slow,1-smooth(Math.abs(u-s)/EASE));
-    t[i]=sum; sum+=1-DIP*slow;
+    for(const s of SLOWS) slow=Math.max(slow, s.dip*(1-smooth(Math.abs(u-s.u)/s.ease)));
+    t[i]=sum; sum+=1-slow;
   }
   for(let i=0;i<=STEPS;i++) t[i]=t[i]/sum*RUN;   /* the trip is still RUN long */
   return t;
 })();
+/* AND RUN CAME DOWN TO PAY FOR THEM. The table is normalised to RUN, so adding
+   two more slowdowns to a fixed total would have made the open road faster to
+   make up the difference - the opposite of what was asked. 12,600 to 10,530 is
+   the number that leaves the unslowed stretches at exactly the speed they were
+   and lets the trip simply cover less ground: the first board still plants at
+   1,446 out, the line at 3,776 where it was 4,458, the last board at 6,230
+   where it was 7,955. Every one of them still arrives at the same scroll mark,
+   because a board is planted off THIS table and not off u*RUN. */
 /* how far down the road we are at u */
 function distance(u){
   const x=clamp(u,0,1)*STEPS, i=Math.min(STEPS-1,x|0), f=x-i;

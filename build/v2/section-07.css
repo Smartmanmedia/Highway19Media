@@ -78,11 +78,20 @@
   pointer-events:none;will-change:transform;
   --sun-a:rgba(255,255,255,.98); --sun-b:rgba(255,255,255,0);
   background:radial-gradient(760px 620px at 11% 48%, var(--sun-a), var(--sun-b) 60%);
+  transition:transform 1.1s ease-out, opacity .5s linear,
+             --sun-a .6s linear, --sun-b .6s linear}
+/* THE EVENING IS STAGED; THE MORNING IS A SWITCH. A transition belongs to the
+   state being moved TO, so the long delays live in the night rules and the day
+   rules keep their own short ones. Written once on the element they applied
+   BOTH ways - scrolling back up, nothing moved for a second and a half and
+   then took another two to come back, which is a page that looks broken rather
+   than a page turning the light on. */:root[data-mode="night"] .sec7 .sun{transform:translateY(var(--sun-set,70vh));opacity:0;
+  --sun-a:rgba(255,146,42,.95); --sun-b:rgba(255,86,20,0);
   transition:transform 3s cubic-bezier(.35,0,.65,1),
              --sun-a 1.9s linear .35s, --sun-b 1.9s linear .35s,
-             opacity 1s ease-in 2s}:root[data-mode="night"] .sec7 .sun{transform:translateY(var(--sun-set,70vh));opacity:0;
-  --sun-a:rgba(255,146,42,.95); --sun-b:rgba(255,86,20,0)}
-@media (prefers-reduced-motion: reduce){.sec7 .sun{transition:opacity .35s linear}:root[data-mode="night"] .sec7 .sun{transform:none}
+             opacity 1s ease-in 2s}
+@media (prefers-reduced-motion: reduce){.sec7 .sun,
+:root[data-mode="night"] .sec7 .sun{transform:none;transition:opacity .35s linear}
 }
 /* HIS LIGHT, NOT FLAT PAINT. Every ground in his file is a RADIAL gradient
    whose centre sits under the sun - top left, the same place the sky's glow
@@ -145,11 +154,12 @@
 .sec7 .sea::after,
 .sec7 .land::after,
 .sec7 .road::after{
-  content:'';position:absolute;inset:0;opacity:0;transition:opacity 1.8s linear 1.5s;
+  content:'';position:absolute;inset:0;opacity:0;transition:opacity .9s linear;
   pointer-events:none;will-change:opacity}:root[data-mode="night"] .sec7 .sky::after,
 :root[data-mode="night"] .sec7 .sea::after,
 :root[data-mode="night"] .sec7 .land::after,
-:root[data-mode="night"] .sec7 .road::after{opacity:1}.sec7 .sky::after{background:linear-gradient(180deg,#02060f 0%,#050d1e 34%,#081833 62%,#0d2447 84%,#12305a 100%)}
+:root[data-mode="night"] .sec7 .road::after{
+  opacity:1;transition:opacity 1.8s linear 1.5s}.sec7 .sky::after{background:linear-gradient(180deg,#02060f 0%,#050d1e 34%,#081833 62%,#0d2447 84%,#12305a 100%)}
 /* the moon's wash on the water is tighter than the sun's was - a moon lights a
    patch of sea, not the whole of it, and at 150% by 260% there was no dark
    water left on the near side at all */.sec7 .sea::after{background:
@@ -162,7 +172,7 @@
 
 /* his sky at night: a moon where his sun was, and a tiled starfield. Two
    background layers of dots repeated is a whole sky for nothing. */
-/* the stars come out AFTER the sun is down, not with it */.sec7 .stars{position:absolute;opacity:0;transition:opacity 1.6s linear 1.6s;
+/* the stars come out AFTER the sun is down, not with it */.sec7 .stars{position:absolute;opacity:0;transition:opacity .6s linear;
   pointer-events:none;will-change:opacity}.sec7 .stars{inset:0;background-image:
   radial-gradient(1.5px 1.5px at 18% 22%,rgba(255,255,255,.95),transparent),
   radial-gradient(1.1px 1.1px at 62% 9%,rgba(255,255,255,.75),transparent),
@@ -214,16 +224,23 @@
    out along the same arc it came in on. */.sec7 .moon{position:absolute;left:6.5%;top:5%;width:clamp(130px,19vh,290px);
   aspect-ratio:1;opacity:0;pointer-events:none;
   will-change:transform,opacity;transform:translateX(-125%);
-  transition:opacity .9s linear 1s,
-             transform 2.2s cubic-bezier(.39,.575,.565,1) 1s}.sec7 .moon .orb{position:absolute;inset:0;display:grid;place-items:center;
+  transition:opacity .5s linear,
+             transform 1.1s cubic-bezier(.39,.575,.565,1)}.sec7 .moon .orb{position:absolute;inset:0;display:grid;place-items:center;
   transform:translateY(-125%);
-  transition:transform 2.2s cubic-bezier(.47,0,.745,.715) 1s;
-  background:radial-gradient(closest-side,rgba(178,208,255,.20),rgba(140,180,255,0) 76%)}.sec7 .moon img{display:block;width:54%;height:auto}:root[data-mode="night"] .sec7 .stars{opacity:1}:root[data-mode="night"] .sec7 .moon{opacity:1;transform:none}:root[data-mode="night"] .sec7 .moon .orb{transform:none}
-@media (prefers-reduced-motion: reduce){.sec7 .moon{transform:none;transition:opacity .35s linear}.sec7 .moon .orb{transform:none;transition:none}
+  transition:transform 1.1s cubic-bezier(.47,0,.745,.715);
+  background:radial-gradient(closest-side,rgba(178,208,255,.20),rgba(140,180,255,0) 76%)}.sec7 .moon img{display:block;width:54%;height:auto}:root[data-mode="night"] .sec7 .stars{opacity:1;transition:opacity 1.6s linear 1.6s}:root[data-mode="night"] .sec7 .moon{opacity:1;transform:none;
+  transition:opacity .9s linear 1s,
+             transform 2.2s cubic-bezier(.39,.575,.565,1) 1s}:root[data-mode="night"] .sec7 .moon .orb{transform:none;
+  transition:transform 2.2s cubic-bezier(.47,0,.745,.715) 1s}
+@media (prefers-reduced-motion: reduce){.sec7 .moon,
+:root[data-mode="night"] .sec7 .moon{transform:none;transition:opacity .35s linear}.sec7 .moon .orb,
+:root[data-mode="night"] .sec7 .moon .orb{transform:none;transition:none}
 }
 
 /* the paint dims - it is only as bright as what falls on it */.sec7 .edge,
-.sec7 .dash{transition:background-color 1.8s linear 1.5s}:root[data-mode="night"] .sec7 .edge{background:#8195b4}:root[data-mode="night"] .sec7 .dash{background:#8195b4}:root[data-mode="night"] .sec7 .edge.gold{background:#8a6a26}
+.sec7 .dash{transition:background-color .9s linear}:root[data-mode="night"] .sec7 .edge,
+:root[data-mode="night"] .sec7 .dash{
+  background:#8195b4;transition:background-color 1.8s linear 1.5s}:root[data-mode="night"] .sec7 .edge.gold{background:#8a6a26}
 
 /* ---- what stands on it --------------------------------------------------
    Sprites, not vector. His four trees carry 247 shapes and 246 gradients -
@@ -256,6 +273,12 @@
 .sec7 .pole,
 .sec7 .truss,
 .sec7 .sign img{
+  transition:filter .9s linear}:root[data-mode="night"] .sec7 .palm img,
+:root[data-mode="night"] .sec7 .lamp img:not(.light),
+:root[data-mode="night"] .sec7 .wave img,
+:root[data-mode="night"] .sec7 .pole,
+:root[data-mode="night"] .sec7 .truss,
+:root[data-mode="night"] .sec7 .sign img{
   transition:filter 1.8s linear 1.5s}
 /* HIS CLOUDS ARE WHITE, AND WHITE HAS NO HUE - rotating it does nothing, which
    is why they came out as grey smudges rather than blue. sepia() gives the
@@ -275,7 +298,8 @@
    fades up over the other - a board cannot be recoloured through an <img>, and
    a filter that darkened the green would darken the gold and the white type
    with it, which is exactly what he said not to do. */.sec7 .sign{isolation:isolate}.sec7 .sign img{filter:drop-shadow(0 14px 20px rgba(0,0,0,.22))}.sec7 .sign .night-art{position:absolute;inset:0;height:100%;width:100%;
-  opacity:0;transition:opacity 1.8s linear 1.5s}:root[data-mode="night"] .sec7 .sign .night-art{opacity:1}:root[data-mode="night"] .sec7 .sign img{filter:drop-shadow(0 0 11px rgba(255,186,74,.28))}
+  opacity:0;transition:opacity .9s linear}:root[data-mode="night"] .sec7 .sign .night-art{opacity:1;
+  transition:opacity 1.8s linear 1.5s}:root[data-mode="night"] .sec7 .sign img{filter:drop-shadow(0 0 11px rgba(255,186,74,.28))}
 /* HIS SIGN LAMPS ARE IN THE BOARDS THEMSELVES. His overlay files were cut to
    the home page hero's 2.685 to one; both boards on this road are 3.183, so
    stretched over them the beams land between the brackets rather than under
@@ -291,7 +315,9 @@
 /* the lamps come on a little after the land starts going, which is the order
    it happens in: the light leaves, and then the lights answer it */.sec7 .lamp::after,
 .sec7 .lamp::before{content:'';position:absolute;pointer-events:none;
-  opacity:0;transition:opacity 1.4s linear 1.9s}.sec7 .lamp::after{width:185%;aspect-ratio:1;left:33.3%;top:4.4%;transform:translate(-50%,-50%);
+  opacity:0;transition:opacity .8s linear}:root[data-mode="night"] .sec7 .lamp::after,
+:root[data-mode="night"] .sec7 .lamp::before,
+:root[data-mode="night"] .sec7 .lamp .light{transition:opacity 1.4s linear 1.9s}.sec7 .lamp::after{width:185%;aspect-ratio:1;left:33.3%;top:4.4%;transform:translate(-50%,-50%);
   background:radial-gradient(closest-side,rgba(255,222,158,.98),
     rgba(255,182,74,.42) 30%,rgba(255,164,40,0) 70%)}
 /* THE LIGHT A STREET LAMP THROWS, as ONE BITMAP. It was three live layers - a
@@ -312,7 +338,7 @@
    1.25 with the bulb at 0.955, 0.112 of it. In per cent of the lamp's WIDTH -
    which is 0.1921 of its height - that is 572.6% across, and the left edge
    sits 0.955 of that to the left of the head at 33.3%. */.sec7 .lamp .light{position:absolute;width:572.6%;height:125%;left:-513.5%;top:-9.6%;
-  max-width:none;pointer-events:none;opacity:0;transition:opacity 1.4s linear 1.9s}.sec7 .a-lamp-l .light{left:40.9%;transform:scaleX(-1)}:root[data-mode="night"] .sec7 .lamp .light{opacity:1}
+  max-width:none;pointer-events:none;opacity:0;transition:opacity .8s linear}.sec7 .a-lamp-l .light{left:40.9%;transform:scaleX(-1)}:root[data-mode="night"] .sec7 .lamp .light{opacity:1}
 /* the floating line, laid out once at this size and scaled from here */.sec7 .copy{display:grid;place-items:center;height:200px;white-space:nowrap}.sec7 .copy .copyline{font-weight:800;font-size:150px;line-height:1;letter-spacing:-.02em;
   color:#fff;text-shadow:0 6px 26px rgba(0,40,90,.45)}.sec7 .pole{background:linear-gradient(90deg,#8a9199,#f4f7fa 38%,#cdd4db 66%,#7d848c);
   border-radius:99px}
@@ -351,7 +377,8 @@
    properties are named here now, and both start at 2.2 - after the ground,
    after the lamps, after the moon is nearly down - because a cloud is the last
    thing in the sky to lose the sun, which is the whole reason it is worth
-   watching one at dusk. */.sec7 .cloud img{transition:filter 1.6s linear 2.2s, opacity 1.4s linear 2.2s}:root[data-mode="night"] .sec7 .cloud.thin img{opacity:0}.sec7 .cloud img{display:block;width:100%;height:auto}
+   watching one at dusk. */.sec7 .cloud img{transition:filter .9s linear, opacity .9s linear}:root[data-mode="night"] .sec7 .cloud img{
+  transition:filter 1.6s linear 2.2s, opacity 1.4s linear 2.2s}:root[data-mode="night"] .sec7 .cloud.thin img{opacity:0}.sec7 .cloud img{display:block;width:100%;height:auto}
 /* HIS WAVE LINES. One strip each, laid flat on the water at its own depth and
    carried past by the same projection as the road, so they open out and slow
    down as they come. width:100% because a wave is stretched to the sea's
