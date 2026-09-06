@@ -174,6 +174,17 @@
 
   defs.insertAdjacentHTML('beforeend', '<svg>' + beamDefs() + '</svg>');
 
+  /* THE MUTE IS GONE FROM HERE. It used to be a second sprite per vehicle -
+     his shadow silhouette in a near-black, laid exactly over the car - and it
+     is now one filter on the group instead; see traffic.css. Measured, that is
+     three and a half milliseconds a frame back on his coast road at night.
+
+     A BITMAP DID NOT HELP, and it is worth writing down so nobody tries it
+     again: both night layers were baked through a canvas into PNGs at exactly
+     the size they are painted, and the frame did not move - 48.7ms against
+     48.9. Neither did an <image> of the same art as SVG. The cost was never
+     rasterising the drawing; it was the blend mode over the top of it. */
+
   /* -- the roads ------------------------------------------------------------ */
   var roads = ROADS.map(function (cfg) {
     var parts = cfg.secs.map(function (n) {
@@ -204,22 +215,34 @@
          mix-blend-mode written as an XML attribute. */
       var beamG = document.createElementNS(SVGNS, 'g');
       beamG.setAttribute('class', 'beams');
-      beamG.style.mixBlendMode = 'screen';
-      beamG.style.isolation = 'isolate';
+      /* NO BLEND MODE, AND THIS WAS THE FLICKER. `screen` on this group, with
+         the `isolate` that a blend mode needs to stay off the rest of the
+         page, is the single most expensive thing in the night scene: measured
+         over a scripted scroll through his coast road, 48ms a frame with it
+         and 26 without - as much as deleting the beams altogether, and against
+         17 for the same page carrying no traffic at all. A blend mode makes
+         the browser hold the group in a buffer of its own and composite it
+         over the backdrop every frame, and a backdrop that is scrolling is a
+         backdrop that is new every frame.
+
+         AND IT LOOKS THE SAME. Screen over black IS the source - a + b - ab
+         with b at nought is a - and his tarmac after dark is very nearly
+         black, which is the only place these beams are ever seen. Compared
+         side by side at 700 by 500 there is nothing in it. The blend was
+         buying a difference that only exists over a light ground, and there
+         is no light ground here. */
       var carG = document.createElementNS(SVGNS, 'g');
       carG.setAttribute('class', 'cars');
-      /* AND ONE MORE ABOVE THEM, TO MUTE THEM AT NIGHT. His own shadow
-         silhouettes again, sitting exactly ON each car rather than offset by
-         the sun, in a night colour. That is what takes the paint down without
-         a filter - and a filter is the one thing to avoid here, because this
-         is the group that moves every single frame. Costs nothing by day: the
-         group is at opacity zero and never composites. */
-      var tintG = document.createElementNS(SVGNS, 'g');
-      tintG.setAttribute('class', 'tints');
-      svg.appendChild(shadeG); svg.appendChild(beamG);
-      svg.appendChild(carG); svg.appendChild(tintG);
+      /* THERE IS NO MUTE LAYER ANY MORE. It was a fourth group above the cars
+         carrying his shadow silhouette again, in a night colour, sitting
+         exactly ON each vehicle - the paint taken down without a filter,
+         because a filter PER CAR on the group that moves every frame is the
+         one thing to avoid. That reasoning was right and the conclusion was
+         wrong: the filter goes on the GROUP, once, and thirty-five moving
+         sprites go away. See traffic.css. */
+      svg.appendChild(shadeG); svg.appendChild(beamG); svg.appendChild(carG);
       return { n: n, el: el, svg: svg, shadeG: shadeG,
-               beamG: beamG, carG: carG, tintG: tintG, path: P[n] };
+               beamG: beamG, carG: carG, path: P[n] };
     }).filter(Boolean);
     if (!parts.length) return null;
     return { parts: parts, thin: cfg.thin, cap: cfg.cap, dens: cfg.dens || 1,
@@ -539,9 +562,7 @@
             sh = use(id + '_shade'); part.shadeG.appendChild(sh);
           }
           var bm = use(id + '_beams'); part.beamG.appendChild(bm);
-          var tn = sh ? use(id + '_shade') : null;
-          if (tn) part.tintG.appendChild(tn);
-          c.nodes.push({ u: u, sh: sh, bm: bm, tn: tn, part: part });
+          c.nodes.push({ u: u, sh: sh, bm: bm, part: part });
         });
         road.cars.push(c);
       }
@@ -641,7 +662,6 @@
       n.u.style.display = d;
       if (n.sh) n.sh.style.display = d;
       if (n.bm) n.bm.style.display = d;
-      if (n.tn) n.tn.style.display = d;
     });
   }
   /* into the biggest gap its lane has, or not at all this frame */
@@ -797,13 +817,26 @@
   }
 
   /* -- the loop ------------------------------------------------------------- */
-  var last = 0;
+  var last = 0, wasNight = document.documentElement.dataset.mode === 'night',
+      litUntil = 0;
   function frame(now) {
     var dt = last ? Math.min((now - last) / 1000, 0.05) : 0.016;
     last = now;
 
     var share = nightShare(now, roads);
     var stare = rubberneck(now, dt);
+    /* ARE THE NIGHT LAYERS WORTH MOVING THIS FRAME? One read of one attribute,
+       once, against a hundred-odd vehicles times two nodes times two sections
+       that would otherwise be transformed to be invisible. */
+    var isNight = document.documentElement.dataset.mode === 'night';
+    if (isNight !== wasNight) { wasNight = isNight; litUntil = now + 1300; }
+    /* `lit` is "the beams are worth moving": all night, and either side of the
+       switch while they fade. `shaded` is the same question for the sun's
+       shadows, which is the opposite one - all DAY, and either side while THEY
+       fade. Both have to cover the crossing or a layer is taken out of the tree
+       while it still has opacity, which is a pop rather than a fade. */
+    var lit = isNight || now < litUntil;
+    var shaded = !isNight || now < litUntil;
     roads.forEach(function (road) {
       /* THE CENSUS RUNS EVEN ON A ROAD THAT IS ASLEEP, and it has to. A road
          whose section is off screen is paused - none of its cars move, so none
@@ -917,12 +950,53 @@
         var x = p.x - ty * off, y = p.y + tx * off;
         c.wx = x; c.wy = y;                 /* where a finger would find it */
         var b = box[c.id], cx = b.x + b.width / 2, cy = b.y + b.height / 2;
-        c.nodes.forEach(function (n) {
-          var t = 'rotate(' + ang.toFixed(1) + ') scale(' + c.k.toFixed(4) + ') ' +
-                  'translate(' + (-cx).toFixed(1) + ' ' + (-cy).toFixed(1) + ')';
-          n.u.setAttribute('transform',
-            'translate(' + (x - n.part.ox).toFixed(1) + ' ' +
-                           (y - n.part.oy).toFixed(1) + ') ' + t);
+        var spin = 'rotate(' + ang.toFixed(1) + ') scale(' + c.k.toFixed(4) + ') ' +
+                   'translate(' + (-cx).toFixed(1) + ' ' + (-cy).toFixed(1) + ')';
+        for (var ni = 0; ni < c.nodes.length; ni++) {
+          var n = c.nodes[ni], part = n.part;
+          var lx = x - part.ox, ly = y - part.oy;
+          /* IS THIS CAR EVEN IN THIS SECTION? His coast road runs through two,
+             so every car on it carries a whole set of nodes in EACH - which is
+             what makes a car cross the seam without a join. A car in section
+             one is therefore also being drawn, transformed and composited in
+             section two, off the end of its own box, where it is clipped away
+             and nobody ever sees it. That is half the work on the longest road
+             on the page, thrown away every frame.
+
+             display:none is what takes it out - a hidden <use> is not laid out,
+             not painted and not composited - and it is written ONCE, on the
+             frame it crosses out, not every frame it is away. `pad` is a whole
+             car's length of slack so the swap always happens off screen. */
+          var pad = c.long + 40;
+          var on = lx > -pad && ly > -pad && lx < part.w + pad && ly < part.h + pad;
+          if (on !== n.on) {
+            n.on = on;
+            var d = on ? '' : 'none';
+            n.u.style.display = d;
+            if (n.bm) n.bm.style.display = d;
+            if (n.sh) n.sh.style.display = d;
+            n.shOn = on;
+          }
+          /* the sun's shadows leave the tree at dusk rather than fading to an
+             opacity nobody can see: at zero opacity they still cost a full
+             raster of his art on every vehicle in every frame */
+          if (n.sh && n.shOn !== (on && shaded)) {
+            n.shOn = on && shaded;
+            n.sh.style.display = n.shOn ? '' : 'none';
+          }
+          if (!on) continue;
+          var move = 'translate(' + lx.toFixed(1) + ' ' + ly.toFixed(1) + ') ' + spin;
+          n.u.setAttribute('transform', move);
+          /* AND THE NIGHT LAYERS ARE NOT WRITTEN IN THE DAY. The beams and the
+             mute are at zero opacity until dark, so through the whole of the
+             day scene these two lines were building a string and parsing it
+             into a matrix for a hundred vehicles, sixty times a second, to move
+             something nobody can see. `lit` stays true for a second and a bit
+             after the switch is thrown, because that is how long they take to
+             fade and they have to be in the right place while they do. */
+          if (lit) {
+            if (n.bm) n.bm.setAttribute('transform', move);
+          }
           /* THE SUN DOES NOT TURN WITH THE CAR. His shadow art is registered to
              the car exactly - measured, 0.00 units out on all twenty - so the
              shadow takes the car's own rotation and scale, and the sun's
@@ -931,19 +1005,10 @@
              pointing, which is the whole difference between a sun and a smudge.
              (The boat's shadow spins with the hull; that is a boat's own wake
              sitting under it, not the same thing.) */
-          /* the same transform, so the beams turn with the car through every
-             bend without a line of code working out which way it is facing */
-          if (n.bm) n.bm.setAttribute('transform',
-            'translate(' + (x - n.part.ox).toFixed(1) + ' ' +
-                           (y - n.part.oy).toFixed(1) + ') ' + t);
-          /* the mute sits exactly on the car - the car's own transform, no sun */
-          if (n.tn) n.tn.setAttribute('transform',
-            'translate(' + (x - n.part.ox).toFixed(1) + ' ' +
-                           (y - n.part.oy).toFixed(1) + ') ' + t);
-          if (n.sh) n.sh.setAttribute('transform',
-            'translate(' + (x - n.part.ox + n.part.sunX).toFixed(1) + ' ' +
-                           (y - n.part.oy + n.part.sunY).toFixed(1) + ') ' + t);
-        });
+          if (n.sh && shaded) n.sh.setAttribute('transform',
+            'translate(' + (lx + part.sunX).toFixed(1) + ' ' +
+                           (ly + part.sunY).toFixed(1) + ') ' + spin);
+        }
       });
     });
     requestAnimationFrame(frame);

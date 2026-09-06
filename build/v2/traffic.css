@@ -17,7 +17,16 @@ section .traffic{
    lights the whole page. They are their own group inside each section's
    traffic layer - see traffic.js for why the order of children was not
    enough. */
-section .traffic .shades{ opacity:.30 }
+/* AND THEY GO OUT AFTER DARK, because there is no sun to cast them. That is
+   the correct picture and it is also the single most expensive layer in the
+   scene: a hundred-odd silhouettes of his own car art, re-rasterised every
+   frame because they move and scale. Measured, taking them out of the night
+   frame is 28% of it. Nothing is lost - a thirty-per-cent black shadow on a
+   road that is itself nearly black was never visible; what reads as a car
+   sitting on the tarmac at night is the lamp pool it drives through. */
+section .traffic .shades{ opacity:calc(.30 * (1 - var(--night, 0)));
+  transition:opacity 1s linear }
+@media (prefers-reduced-motion: reduce){ section .traffic .shades{ transition:none } }
 
 /* HIS HEADLIGHTS. One group, one number: zero through the day - not faint,
    zero, because a beam at noon reads as a mistake - and full at night, over a
@@ -32,27 +41,34 @@ section .traffic .beams{
 
 /* HIS CARS AT NIGHT. Zero by day, so the layer never composites at all. */
 section .traffic .shades{ fill:#000 }
-section .traffic .tints{
-  /* HIS CARS GO NEARLY OUT: a tenth of their brightness and a fifth of their
-     colour with it.
+/* HIS CARS AT NIGHT: a tenth of their brightness and a fifth of their colour
+   with it. ONE FILTER ON THE GROUP, not a sprite each.
 
-     THE TINT IS NOT QUITE BLACK, AND THAT IS WHAT DESATURATES. Over pure black
-     the brightness and the chroma fall by exactly the same factor, so the hues
-     stay as saturated as they ever were however dark the car gets - which is
-     why 0.44 and 0.78 both still read as coloured paint, just less of it. A
-     tint with a little grey in it adds to the lightness without adding to the
-     chroma, and saturation is the ratio between those two. Solving both at
-     once for a mid-tone car: 0.92 opacity puts the brightness at a tenth, and
-     the rgb(2,2,5) of grey inside the tint takes a fifth of the saturation.
+   It was his shadow silhouette laid exactly over every vehicle in a near-black
+   - the right instinct when the alternative was a filter PER CAR, and the
+   wrong one against a filter on the group they all live in. That is one pass
+   over one buffer instead of thirty-five more moving sprites to transform and
+   composite, and it measured three and a half milliseconds a frame back on his
+   coast road after dark.
 
-     Still not a filter. This is the layer that moves every frame, and a filter
-     over it would be re-rendered on all hundred-odd vehicles sixty times a
-     second; his own silhouettes laid exactly over the cars cost nothing. */
-  fill:#020205;
-  opacity:calc(var(--night, 0) * 0.92);
-  transition:opacity 1s linear;
+   THE NUMBERS ARE THE SAME PICTURE. 0.92 of an rgb(2,2,5) tint put a mid-tone
+   car at a tenth of its brightness and a fifth of its saturation, which is
+   what solving for both at once gave; brightness and saturate say it directly.
+
+   AND THERE IS NO FILTER AT ALL IN THE DAY SCENE. A filter list interpolating
+   from `none` is treated as the same list at its identity values, so the fade
+   still works in both directions and daylight pays nothing for it. */
+section .traffic .cars{ transition:filter 1s linear }
+:root[data-mode="night"] section .traffic .cars,
+:root[data-theme="dark"]:not([data-mode="day"]) section .traffic .cars{
+  filter:brightness(.10) saturate(.20);
 }
-@media (prefers-reduced-motion: reduce){ section .traffic .tints{ transition:none } }
+@media (prefers-color-scheme: dark){
+  :root:not([data-mode="day"]):not([data-theme="light"]) section .traffic .cars{
+    filter:brightness(.10) saturate(.20);
+  }
+}
+@media (prefers-reduced-motion: reduce){ section .traffic .cars{ transition:none } }
 
 /* A LONG PRESS ON THE ROAD IS NOT A DRAG AND NOT A SELECTION. Stopping a car
    is a tap, but a finger that rests on his tarmac would otherwise get the
