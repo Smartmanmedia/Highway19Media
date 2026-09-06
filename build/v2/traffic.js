@@ -212,6 +212,65 @@
   }).filter(Boolean);
   if (!roads.length) return;
 
+  /* -- HIS SHOULDER LINES ------------------------------------------------------
+   * A solid gold line down each side, outboard of the white ones he already
+   * drew, with a strip of his tarmac showing between them - which is what a
+   * road actually looks like and what the drive already does.
+   *
+   * DRAWN FROM THE CENTRELINE, NOT ADDED TO HIS ART. The alternative was to
+   * find every edge marking in the tiles and put a copy beside it, and that
+   * falls apart on the bends: an edge there is a filled arc ribbon, and moving
+   * one "outward" means knowing the centre it was struck from. The line the
+   * cars drive on already knows where the road is at every point, so the
+   * shoulders are the same line pushed sideways - which also means they follow
+   * his tarmac exactly, through every tile and every curve, and cost nothing
+   * per frame because they are two paths written once.
+   *
+   * HOW MUCH GREY THERE IS BETWEEN THEM IS DECIDED BY HIS ART, not by me. The
+   * road is 95.06 units across; his white lines sit 40.2 out from the middle
+   * and are 3.3 wide, so there are 5.65 units of tarmac outboard of them and
+   * that is the whole budget. A gold line as thick as his would eat 3.3 of it
+   * and leave a hairline; at 2.4, flush to the edge, it leaves 3.25 - which is
+   * a strip of road you can see rather than a gap you have to be told about.
+   *
+   * THE ENDS ARE TRIMMED BACK BY THE EXTENSION. The centreline is deliberately
+   * run off the page at both ends so cars wrap out of sight; paint it and the
+   * gold runs off into his grass.
+   */
+  var EDGE_OUT = 0.9748, EDGE_W = 2.4 / 95.06;
+  function shoulderPath(road, off, ox, oy) {
+    var p = road.pts, c = road.cum, hi = road.len - road.ext, d = '';
+    for (var i = 0; i < p.length; i++) {
+      if (c[i] < road.ext || c[i] > hi) continue;
+      var a = p[i > 0 ? i - 1 : 0], b = p[i < p.length - 1 ? i + 1 : i];
+      var dx = b[0] - a[0], dy = b[1] - a[1], m = Math.hypot(dx, dy) || 1;
+      d += (d ? 'L' : 'M') + (p[i][0] - dy / m * off - ox).toFixed(1) + ' ' +
+                             (p[i][1] + dx / m * off - oy).toFixed(1);
+    }
+    return d;
+  }
+  function shoulders(road) {
+    var off = road.laneW * EDGE_OUT, w = road.laneW * 2 * EDGE_W;
+    road.parts.forEach(function (part) {
+      if (!part.edges) {
+        var g = document.createElementNS(SVGNS, 'g');
+        g.setAttribute('class', 'shoulders');
+        part.svg.insertBefore(g, part.svg.firstChild);
+        part.edges = [0, 1].map(function () {
+          var e = document.createElementNS(SVGNS, 'path');
+          e.setAttribute('fill', 'none');
+          e.setAttribute('stroke', 'var(--edge)');
+          g.appendChild(e);
+          return e;
+        });
+      }
+      part.edges.forEach(function (e, i) {
+        e.setAttribute('stroke-width', w.toFixed(2));
+        e.setAttribute('d', shoulderPath(road, i ? off : -off, part.ox, part.oy));
+      });
+    });
+  }
+
   function use(id) {
     var u = document.createElementNS(SVGNS, 'use');
     u.setAttributeNS(XLINK, 'xlink:href', '#' + id);
@@ -326,6 +385,8 @@
       }
       road.pts = pts; road.cum = cum; road.len = L;
       road.scale = road.parts[0].w;                       /* speeds scale with it */
+      road.ext = EXT;
+      shoulders(road);
 
       /* HOW LONG A VEHICLE THIS ROAD CAN ACTUALLY HOLD.
          A rigid body on a curve bulges away from the arc by about L*L/(8R) at
