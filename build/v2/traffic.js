@@ -31,20 +31,26 @@
   /* His roads. One and two are a single run in his art, so they are one road
      here. `thin` is a density multiplier - the desert straight is meant to be
      the quiet one. */
-  var ROADS = [{ secs: ['01', '02'], thin: 0.7, quick: 1.2 },
+  var ROADS = [{ secs: ['01', '02'], thin: 0.7, dens: 0.55, quick: 1.4 },
                /* HIS DESERT STRAIGHT IS THE EMPTY ONE. `thin` alone could not
                   hold it there: it is the longest road on the page, so a share
                   of a long road is still a lot of cars. A ceiling of its own
                   is the only thing that says "quiet" and keeps saying it
                   whatever the road's length works out to. */
-               { secs: ['03'],       thin: 0.85, cap: 16 },
+               { secs: ['03'],       thin: 0.85, cap: 16, dens: 0.60, quick: 1.9 },
                /* HIS FOREST RUN IS THE OPEN ONE. Thirty per cent fewer cars
                   and a fifth more speed - a road that is moving, against the
                   desert's quiet and the coast's queue. `quick` is a multiplier
                   on every car's top speed, so the spread of speeds that makes
                   the queueing survives it: they all go faster, they do not all
                   go the SAME faster. */
-               { secs: ['04'],       thin: 0.7, quick: 1.2 }];
+               { secs: ['04'],       thin: 0.7, dens: 0.50, quick: 1.7 }];
+  /* `dens` IS HIS, off the panel, and it is a separate number from `thin` on
+     purpose. `thin` is what his art asks for - a desert that reads empty next
+     to a coast that reads busy - and it belongs to the drawing. `dens` is the
+     hour he spent with the sliders deciding how full the whole page should
+     feel. Kept apart, the tuner still opens at 100% (this IS 100% now) and the
+     art's own relative weighting survives anything he does to the page. */
   /* HOW MUCH TRAFFIC, AND WHY IT IS NOT 0.70. Thirty per cent fewer cars took
      the queueing with them: measured over 900 frames, a car's own speed swung
      63% of its cruise at full density and 24% at 0.70 - a road that never has
@@ -68,7 +74,18 @@
                              up, which is where most of the queueing comes
                              from - it is the same reason real traffic jams. */
       ACCEL     = 0.055, DECEL = 0.14,  /* same units, per second squared */
-      HEADWAY   = 4.00,   /* seconds of gap a driver wants */
+      HEADWAY   = 1.30,   /* seconds of gap a driver wants. His. Four seconds
+                             was chosen against a road half again as full: with
+                             the counts above the median gap roughly doubled,
+                             and a four-second rule turned that into a road
+                             where nobody reached a third of their own limit. */
+      /* AND A CAR STOPS BEHIND A CAR, NOT ON IT. The gap below is measured
+         bumper to bumper, so a rule of `gap / headway` asks a driver to come to
+         rest with nothing left between them - which is exactly what he saw when
+         the queues settled. A driver aims at this much clear road instead, as a
+         share of the following car's OWN length, so his semitrailer leaves more
+         room than a mini without a second number. */
+      STANDOFF  = 0.34,
       REACT     = 1.45,   /* SECONDS OF REACTION DELAY, and the whole reason the
                              traffic queues rather than settling into a convoy.
                              A driver who responds instantly to the gap ahead
@@ -205,7 +222,7 @@
                beamG: beamG, carG: carG, tintG: tintG, path: P[n] };
     }).filter(Boolean);
     if (!parts.length) return null;
-    return { parts: parts, thin: cfg.thin, cap: cfg.cap,
+    return { parts: parts, thin: cfg.thin, cap: cfg.cap, dens: cfg.dens || 1,
              quick: cfg.quick || 1,
              cars: [], parked: [], n0: 0, share: 1,
              live: true, pts: [], len: 0, laneW: 0 };
@@ -484,6 +501,12 @@
        out as twenty cars on his desert. */
     var n = Math.max(2, Math.min(road.cap ? road.cap / 2 : 30, Math.round(DENSITY *
       Math.min(30, Math.round(road.len * road.thin / (road.scale * SPACING))))));
+    /* HIS SHARE LAST, AFTER THE CAP, for the same reason DENSITY is: two of
+       the three roads sit on a ceiling, and a share taken before one is not a
+       share at all. This is the identical arithmetic the tuner's Cars slider
+       does to n0 through the census - so the road opens at the count he set
+       and the panel opens at 100%. */
+    n = Math.max(1, Math.round(n * (road.dens || 1)));
     /* the vehicles that fit this road's tightest bend - always at least the
        shortest one, so a hairpin still gets traffic */
     var fits = NAMES.filter(function (nm) {
@@ -556,8 +579,8 @@
    * frame: getComputedStyle is the one expensive call in this file.
    */
   /* the two numbers the tuner can move that are not a road's own */
-  var TUNE = window.H19_TUNE = { nightKeep: 0.7, headway: HEADWAY,
-                                 stareAt: 5, stareTo: 0.4, tuning: false };
+  var TUNE = window.H19_TUNE = { nightKeep: 0.6, headway: HEADWAY,
+                                 stareAt: 15, stareTo: 0.5, tuning: false };
   /* WHAT THE ROAD IS ACTUALLY DOING, as a share of what its drivers WANT to be
      doing. This is the number that makes the panel honest: at his density the
      median gap is 64px and a four-second headway lets a car have 16px/s of it
@@ -809,7 +832,7 @@
           gap -= (c.uLong + ahead.uLong) / 2;
           /* what this driver would like to be doing - but seen late */
           var raw = Math.max(0, Math.min(c.vbase * road.quick * stare,
-                                         gap / TUNE.headway));
+                                         (gap - c.uLong * STANDOFF * 1.4) / TUNE.headway));
           /* A DRIVER WHO HAS BEEN TAPPED DOES NOT HAVE TO THINK ABOUT IT. Every
              other desire is seen late, through REACT, which is what makes the
              waves; this one is immediate, so the car brakes at DECEL like a car
@@ -840,7 +863,16 @@
           for (var k = q.length - 1; k >= 0; k--) {
             var c2 = q[k], lead = q[(k + 1) % q.length];
             var ring = lead.u - c2.u; if (ring <= 0) ring += road.len;
-            var least = (c2.uLong + lead.uLong) / 2 * 1.06;
+            /* A FLOOR NOBODY SHOULD REACH. Six per cent of a car length used
+               to be the whole of it, so the clamp WAS the queue: every driver
+               aimed at nought gap and this caught them all at touching. Now the
+               rule above aims at a third of a car length and this sits under it
+               it at the same third - so a driver who overshot through REACT
+               still ends up with the room the rule asked for rather than on
+               the bumper in front. The rule aims a little FURTHER back than
+               this (1.4x), so the two agree about where a queue stands and the
+               clamp is only ever worth a pixel or two. */
+            var least = (c2.uLong + lead.uLong) / 2 + c2.uLong * STANDOFF;
             if (ring < least) {
               c2.u = lead.u - least;
               if (c2.u < 0) c2.u += road.len;
