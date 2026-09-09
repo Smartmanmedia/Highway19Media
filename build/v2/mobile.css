@@ -273,8 +273,47 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      the whole panel stands on sand, so the section carries the colour and the
      strip would only be a second one above the water. */
   :root .sec2 > .sand{ display:none }
+  /* HIS SURF IS TALLER THAN I HAD IT. The four bands are sized off the WIDTH -
+     126% of the wrapper, his own geometry, all four registered to each other -
+     so the wrapper's height is not a scale, it is a WINDOW: at 133 pixels it
+     was showing about two thirds of the water he drew and cropping the rest.
+     He draws 197 at this width, which is half the screen. */
   :root .sec2 > .waves,:root .sec2 .waves.z-ground{ display:block; position:relative;
-    width:100%; height:clamp(120px,34vw,180px); margin:0; inset:auto }
+    width:100%; height:clamp(170px,50.5vw,260px); margin:0; inset:auto;
+    overflow:hidden;
+    /* A HAIRLINE OF SEA BEHIND THE TOP OF IT. The wrapper stands on the sand -
+       that is the section's own ground - and his first line of foam lands one
+       pixel from its top edge, so any rounding leaves a sliver of BEACH above
+       the water. Eight per cent of blue behind the top costs nothing (his art
+       covers all of it) and there is no arithmetic that can open that seam. */
+    background:linear-gradient(180deg,var(--mob-blue-2) 0 8%,transparent 8%) }
+  /* AND THE BANDS THEMSELVES SCALE UP, which is the part the wrapper cannot do.
+     Each one is width:126% with height:auto - its size comes from the WIDTH, so
+     a taller wrapper only adds empty space under it. At 126% of a 390 phone his
+     water is 135 pixels where he draws 197; 184% is that ratio, and all four
+     take it together so they stay registered to each other to the unit. The
+     left inset follows so the middle of his surf stays the middle of the
+     screen: (100 - 184) / 2. */
+  /* AND THEY ARE STRETCHED, WHICH IS WHAT HE OFFERED. His surf is drawn for a
+     1920 column: two wave cycles across a phone and 95 pixels of water, where
+     his mobile drawing has the same rhythm at twice the height. Scaling both
+     axes to fix that would put six cycles across 390 and read as a choppy sea.
+     So the WIDTH keeps his rhythm - 184% of the phone, the same two cycles -
+     and preserveAspectRatio:none takes the height on its own. All four bands
+     take the identical treatment, so they stay registered to each other to the
+     unit and his foam still breaks in the right places. */
+  :root .sec2 .waves .wave{
+    width:184% !important; left:-42% !important;
+    /* AND PULLED UP SO THE WATER STARTS AT THE TOP EDGE. Only the bottom two
+       thirds of each band is painted - the rest is the sky he drew above the
+       sea - so a band sitting flush left a third of the wrapper transparent
+       and the section's SAND showed through above the water. Stretched to 151%
+       and lifted, the first line of foam lands on the wrapper's own top
+       and the last one on its bottom, with his blue between them and nothing
+       of the beach in the middle of the sea. */
+    height:284% !important; top:-104% !important;
+    preserveAspectRatio:none;
+  }
   :root .sec2 > .copy,:root .sec2 > .mob-road{ display:block }
   .sec2{ background:var(--mob-sand); color:#241a06 }
   .sec2 h2,.sec2 .sub,.sec2 .body{ color:#241a06 }
