@@ -331,6 +331,14 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      thing that was giving this section a height - it is a stack of absolutely
      positioned layers - and the band grew to whatever the sand image felt like,
      280 pixels against his 174. */
+  /* AND THE SECTIONS STOP OVERLAPPING EACH OTHER. Three and four are pulled up
+     over the section above them in his desktop composition - 10% and 16% of the
+     WIDTH - because the top of each artboard is empty and that emptiness is
+     meant to lie over the one before. On a phone they are bands in a column
+     and there is nothing empty left to hide, so the overlap only ate things:
+     sec3's -10% was taking 41 pixels off the bottom of his road band, which is
+     where the broken white line lives. That is why the band had no dashes. */
+  .sec3,.sec4{ margin-top:0 !important }
   .sec3{ display:block; padding:0; overflow:hidden }
   /* HIS ROCKS, HALF AGAIN THE SIZE. On a desktop this band is 1922 units wide
      and the mountains read at that width; on a phone the same drawing puts
@@ -359,12 +367,14 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      so cropping only ever changes how much GREEN is on show. What makes more
      woodland is a bigger picture - 220% of the phone, pulled back to centre -
      which is more rows of his trees and larger ones, both. */
+  /* HIS FOREST IS 275 PIXELS DEEP WITH CROWNS ABOUT 43 ACROSS - both, and they
+     pull against each other, because a bigger picture gives bigger trees AND a
+     deeper band at the same time. 135% of the phone is 43-pixel crowns on a
+     341 band; lifting it by the top fifth, which is the open green ABOVE his
+     tree line, leaves 273 of woodland. 220% was twice his depth. */
   :root .sec4 > .z-back{ display:block; position:static !important;
-    width:220% !important; max-width:none !important;
-    /* AND PULLED UP TO MEET THE DESERT. The top fifth of his canopy picture is
-       the open green ABOVE the tree line; at 220% that is 78 pixels of empty
-       field between the rocks and the first tree. */
-    margin:-20vw 0 0 -60% !important;
+    width:135% !important; max-width:none !important;
+    margin:-16.5vw 0 0 -17.5% !important;
     height:auto !important; inset:auto !important }
   /* HIS GREEN BOARD CARRIES ITS OWN WORDS. In the drawing the two lines and
      the strapline are inside the sign, to the right of the arrow - not
@@ -380,9 +390,11 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
     width:82vw; max-width:400px;
     /* 858 by 371 stretched to 858 by 564, which is his 305 by 210 */
     aspect-ratio:858 / 564;
-    /* the plate's empty band is still 21% of this box, so the board is lifted
-       by that much again to sit where he drew it */
-    margin:calc(-1 * clamp(190px,58vw,300px) - 6vw) auto clamp(22px,7vw,36px);
+    /* ON THE TOP OF THE TREES, where he has it - a fifth of the way into the
+       woodland with its head over the rocks - not at the foot of it. The empty
+       band the hidden plate leaves at the top of this box is 21% of it, and
+       that is in here too. */
+    margin:-77vw auto clamp(22px,7vw,36px);
   }
   /* his lamp plate is a desktop fitting and is not in the mobile drawing */
   :root .sec4 .signlamps{ display:none !important }
