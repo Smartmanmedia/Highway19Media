@@ -39,7 +39,15 @@ const CUTS = {
      reaching past x 1000 is the gantry; the board, its banner, its three
      dividers, its four arrows and its brackets all end before it. What comes
      out is 10KB instead of 271. */
-  'hero-board': { y: [400, 1570], drop: ['text', 'image'], maxRight: 1000 }
+  'hero-board': { y: [400, 1570], drop: ['text', 'image'], maxRight: 1000 },
+  /* HIS ROAD BAND, as he drew it. Mine was CSS - four stripes in a gradient -
+     and wrong in the one way that shows: gold shoulders. Seen from the road his
+     band is grey tarmac with a THIN WHITE line down each edge and a broken
+     white line between them, and nothing gold anywhere. His own art settles it.
+     Two halves in his file, side by side, so both come. */
+  'road-band':  { y: [1580, 1775] },
+  /* and the road down the right of his forest, which is a CURVE, not a strip */
+  'road-right': { y: [7620, 9150], minLeft: 800 }
 };
 
 (async () => {
@@ -78,6 +86,7 @@ const CUTS = {
           if (mid < cut.y[0] || mid > cut.y[1]) return;
           if (cut.drop && cut.drop.includes(c.tagName.toLowerCase())) return;
           if (cut.maxRight && b.x + b.width > cut.maxRight) return;
+          if (cut.minLeft && b.x + b.width / 2 < cut.minLeft) return;
           if (cut.x && (b.x + b.width / 2 < cut.x[0] || b.x + b.width / 2 > cut.x[1])) return;
           keep.push(c.outerHTML);
           x0 = Math.min(x0, b.x); x1 = Math.max(x1, b.x + b.width);
@@ -100,7 +109,13 @@ const CUTS = {
       'xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="' + out.vb.join(' ') + '" ' +
       'width="' + out.vb[2] + '" height="' + out.vb[3] + '">\n' +
       (uses ? out.defs + '\n' : '') + out.body + '\n</svg>\n';
-    fs.writeFileSync(path.join(OUT, name + '.svg'), svg);
+    /* HIS ROAD COLOURS ARE THE PAGE'S ROAD COLOURS, to the digit: #575757 is
+       --tarmac and #fff is --marking, the two variables every other road on
+       the site is painted with. Swapping the literals for the names is all it
+       takes for his bands to go quiet after dark with everything else. */
+    const themed = svg.replace(/fill="#575757"/g, 'fill="var(--tarmac)"')
+                      .replace(/fill="#fff"/g, 'fill="var(--marking)"');
+    fs.writeFileSync(path.join(OUT, name + '.svg'), themed);
     console.log(name.padEnd(14), out.vb[2].toFixed(0) + ' x ' + out.vb[3].toFixed(0),
       ' ', (svg.length / 1024).toFixed(0) + 'KB');
   }

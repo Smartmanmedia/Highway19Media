@@ -137,19 +137,16 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
   :root .sec4 .body span + span::before{ content:" " }
 
   /* -- 3. THE ROAD, AS A RULE BETWEEN PANELS ------------------------------- */
-  /* HIS BAND, IN CSS AND NOT AS ART. Seen from the road it is four flat
-     stripes: tarmac, a gold shoulder either side and a broken white line down
-     the middle. A gradient says that in one declaration, it costs no element
-     and no request, and it takes the night palette with everything else. */
-  .mob-road{
-    display:block; width:100%; height:clamp(34px,9.5vw,46px);
-    background:
-      repeating-linear-gradient(90deg,
-        var(--marking,#fff) 0 6.6vw, transparent 6.6vw 12vw) 0 50% / 100% 4px no-repeat,
-      linear-gradient(180deg,
-        var(--mob-gold) 0 6%, var(--mob-tar) 6% 94%, var(--mob-gold) 94% 100%);
-    background-repeat:no-repeat, no-repeat;
-  }
+  /* HIS BAND, AND NOT MY IMPRESSION OF IT. This was four stripes in a CSS
+     gradient - tarmac, a gold shoulder either side, a broken white line - and
+     it was wrong in the one way anyone would notice: there is no gold on it.
+     Seen from the road he draws grey tarmac with a THIN WHITE line down each
+     edge and the broken line between them, and the dashes are longer and finer
+     than the ones I guessed. His own art, cut by tools/cut_mobile.js, with
+     #575757 and #fff swapped for --tarmac and --marking so it goes quiet at
+     night with every other road on the site. */
+  .mob-road{ display:block; width:100%; line-height:0 }
+  .mob-road svg{ display:block; width:100%; height:auto }
 
   /* -- 4. HIS STACKED BOARD ------------------------------------------------ */
   /* Four services down instead of four across, hovering over the blue exactly
@@ -177,7 +174,9 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
     display:block; padding:0 32% 0 6.5%;
     color:#fff; text-decoration:none;
     font-family:"Be Vietnam Pro",system-ui,sans-serif; font-weight:700;
-    font-size:clamp(15px,4.4vw,20px); line-height:1.1;
+    /* his labels measured off the artboard: 15px on a 325 board at 390, which
+       is 4.6% of the board's own width - and the board here is a shade wider */
+    font-size:clamp(16px,4.9vw,22px); line-height:1.1;
   }
   .mob-board a:active{ opacity:.7 }
 
@@ -196,7 +195,7 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
   }
   .mob-board .mob-banner b{
     color:#1a1a1a; font-family:"Be Vietnam Pro",system-ui,sans-serif;
-    font-weight:800; font-size:clamp(10px,3.05vw,14px); line-height:1.12;
+    font-weight:800; font-size:clamp(11.5px,3.55vw,16px); line-height:1.14;
     letter-spacing:-.01em;
   }
   /* AND HIS GANTRY, running off the right edge behind the board. One tile of
@@ -277,13 +276,22 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      the band he drew. Squashing it into a flow column would only take three
      layers that are registered to each other and stand them apart. All that
      goes is the road running through it and the cloud over it. */
-  .sec3{ display:block; height:auto; padding:0 }
+  /* AND ITS OWN ASPECT RATIO STAYS ON. Writing height:auto here took the one
+     thing that was giving this section a height - it is a stack of absolutely
+     positioned layers - and the band grew to whatever the sand image felt like,
+     280 pixels against his 174. */
+  .sec3{ display:block; padding:0 }
   :root .sec3 > .z-road, :root .sec3 > .z-cloud{ display:none }
 
   /* sec 4: his forest, his green sign, his copy, his button, his rocks */
   .sec4{ background:#1c9022 }
+  /* HIS CANOPY IS A BAND, NOT THE WHOLE PICTURE. At its own aspect ratio the
+     forest is 340 pixels of trees on a 390 screen where he drew 90 - it is a
+     hedge along the top of the green, and the rest of his composition is under
+     it. Cropped to its bottom edge, which is where the tree line is. */
   :root .sec4 > .z-back{ display:block; position:static !important; width:100% !important;
-    height:auto !important; margin:0 !important; inset:auto !important }
+    height:clamp(84px,25vw,130px) !important; object-fit:cover; object-position:50% 100%;
+    margin:0 !important; inset:auto !important }
   /* HIS GREEN BOARD CARRIES ITS OWN WORDS. In the drawing the two lines and
      the strapline are inside the sign, to the right of the arrow - not
      underneath it - so the wrapper holds the board and the copy sits on it. */
@@ -316,20 +324,33 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
     font-size:clamp(9.5px,2.9vw,13px) !important; line-height:1.28;
     margin:0 !important; text-align:left; white-space:normal !important;
   }
-  /* HIS ROAD DOWN THE RIGHT EDGE. Same four stripes as the band between
-     panels, stood on end - it is the same road, seen the same way. */
+  /* HIS ROAD DOWN THE RIGHT EDGE, and it is a CURVE - it comes in from the
+     left under the trees, turns, and runs down off the bottom. A vertical
+     strip was the same mistake as the gold band: near enough in description
+     and not his drawing. */
+  /* PLACED OFF HIS ARTBOARD, not off the right edge. The cut box runs from
+     x 865 to 1378 of his 1080-wide drawing - it hangs 298 units off the canvas
+     on purpose, because the road leaves the screen - so the box is 47.5% of the
+     width starting at 80.1%. Pinning it to right:0 instead pulled the whole
+     thing inboard and ran his road straight down through the body copy. */
   :root .sec4 > .mob-roadv{
-    display:block; position:absolute; right:2%; top:6%; bottom:0;
-    width:clamp(30px,9vw,44px); z-index:0; pointer-events:none;
-    background:
-      repeating-linear-gradient(180deg,
-        var(--marking,#fff) 0 5.5vw, transparent 5.5vw 10vw) 50% 0 / 3px 100% no-repeat,
-      linear-gradient(90deg,
-        var(--mob-gold) 0 7%, var(--mob-tar) 7% 93%, var(--mob-gold) 93% 100%);
-    background-repeat:no-repeat,no-repeat;
+    display:block; position:absolute; left:80.1%; right:auto;
+    top:clamp(80px,24vw,126px); width:47.5%;
+    z-index:0; pointer-events:none; line-height:0;
   }
+  /* the curve runs off the bottom of his green, so the green has to hold it */
+  .sec4{ overflow:hidden }
+  :root .sec4 .mob-roadv svg{ display:block; width:100%; height:auto }
   :root .sec4 > .z-back,:root .sec4 > .mob-sign,:root .sec4 > .body,
   :root .sec4 > .mob-btn{ position:relative; z-index:1 }
+  /* AND THE COPY STANDS CLEAR OF IT. His road takes the right fifth of the
+     green, so the paragraph and the button are a narrower column set to the
+     left of it rather than the centre of the section - which is what he drew,
+     and the only way a line does not end up reading through a kerb. */
+  :root .sec4 > .body,:root .sec4 > .mob-btn{
+    width:min(70vw,380px) !important;
+    margin-left:6.5vw !important; margin-right:auto !important;
+  }
   /* the first pass had this copy standing UNDER the board and sized for that;
      it lives on the board now, and two rules of equal weight meant the later
      one - this one - was quietly winning */
@@ -403,9 +424,13 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
     margin:0 !important; transform:none !important;
   }
   :root .sec6 .page .card .label{ width:46% !important; height:auto !important }
+  /* THE ICON LIVES ON THE TAB, so it is measured against the TAB and not
+     against the card: his tab is 46% of the card wide and hangs from the top,
+     and an icon at 24% of the CARD spilled off the bottom of it. */
   :root .sec6 .page .card .icon{
-    position:absolute !important; left:50% !important; top:6% !important;
-    width:24% !important; transform:translateX(-50%) !important;
+    position:absolute !important; left:50% !important; top:4% !important;
+    width:17% !important; max-width:none !important;
+    transform:translateX(-50%) !important;
   }
   :root .sec6 .page .card h3{
     font-size:clamp(15px,4.3vw,18px) !important; line-height:1.15;
