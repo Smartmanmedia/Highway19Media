@@ -22,8 +22,35 @@
    is the only way round: these sections are flat lists of forty absolutely
    positioned things, and opting out one by one would miss the next one he adds.
 
-   NOTHING ABOVE 900px CHANGES. Every rule here lives inside the query.
-   ========================================================================= */
+   NOTHING BUT A PHONE CHANGES. Every rule here lives inside one query, and
+   that query asks TWO things: a narrow viewport AND a coarse pointer. A width
+   on its own called three desktops a phone - the artifact in a side panel, a
+   window dragged narrow, and a laptop at 175% zoom, where a 1440 screen
+   reports 823px - and drive.js reads the same query to choose its camera, so
+   what he got was the phone's drive on his desktop. A mouse is never a phone.
+   drive.js asks this in the same words; the two must not drift apart.
+
+   AND THE FURNITURE IS OFF UNTIL IT IS ASKED FOR. Everything below builds the
+   phone out of wrappers the desktop has no use for - .mob-board, .mob-road,
+   .mob-head, .mob-sign, .mob-btn, .mob-roadv - and they sit in the markup on
+   every screen. Listing them in a guard at the bottom is a list somebody has
+   to remember to add to, and the one that got missed painted his mobile road
+   across the mountains at the top of section four. So they are hidden by
+   DEFAULT, outside the query, by the shape of their name, and the phone turns
+   the ones it wants back on. A new .mob-anything is invisible until it is. */
+[class^="mob-"],[class*=" mob-"]{ display:none }
+/* EXCEPT THE ONES THAT ARE NOT FURNITURE. Four of these wrap things the
+   DESKTOP draws - .mob-head has his hero sign and headline inside it,
+   .mob-sign his green board and its copy, .mob-btn the yellow plate and its
+   label, .mob-scene the whole of section three's desert - and they exist so a
+   phone can move or scale a group as one piece. Hiding those takes his own
+   artwork with them, which is what happened the first time this guard went in.
+   They say so in their name: .mob-wrap generates NO BOX above the breakpoint,
+   so the desktop is exactly what it was before the wrapper existed and his
+   absolutely placed layers still measure against the section, not the span.
+   Furniture hides, wrappers vanish - and both are decided by the class, so
+   neither is a list at the bottom of the file that somebody has to maintain. */
+.mob-wrap{ display:contents }
 
 /* NO FONT BOOSTING. Chrome on Android inflates text it decides is too small,
    AFTER layout: only the small ranks move, the headlines do not, and every
@@ -32,7 +59,7 @@
    check a breakpoint. */
 html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
 
-@media (max-width:900px){
+@media (max-width:900px) and (pointer:coarse){
 
   html,body{ overflow-x:clip }
 
@@ -210,7 +237,7 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      his own truss repeated - the same file section one hangs its hero sign
      from - laid at the height of the board's own mounting brackets. */
   .mob-board .mob-gantry{
-    position:absolute; left:60%; right:-30vw; top:34%; height:14%;
+    display:block; position:absolute; left:60%; right:-30vw; top:34%; height:14%;
     background:url("../../assets/v2/section-01/truss-cell.webp") repeat-x center;
     background-size:auto 100%; z-index:-1; pointer-events:none;
   }
@@ -589,7 +616,6 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
   .mode-switch{ z-index:10002 }
 }
 
-/* the mobile-only furniture never exists on a desktop */
-@media (min-width:901px){
-  .mob-road,.mob-board{ display:none !important }
-}
+/* NO GUARD AT THE BOTTOM ANY MORE - see the top of this file. A guard is a
+   list of names, and the name that is missing from it is the one that shows
+   up on his desktop. The furniture is off by default instead. */

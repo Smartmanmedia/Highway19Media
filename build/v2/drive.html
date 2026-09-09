@@ -625,9 +625,21 @@ const stage=document.getElementById('stage'), props=document.getElementById('pro
    just over half way up, which is a camera sitting down ON the road looking
    along it rather than a driver looking over a bonnet at a vanishing point.
 
-   It is read ONCE, at load, and not on resize: every table in this file is
-   built against it. A phone does not change width without a reload. */
-const MOBILE = matchMedia('(max-width:900px)').matches;
+   IT IS A PHONE TEST, NOT A WIDTH TEST, and that is the whole point. A width
+   on its own said "the phone camera" to three things that are not a phone: the
+   artifact opened in a side panel, a browser window dragged narrow, and - the
+   one that actually bit - a laptop at 175% zoom, where a 1440 screen reports a
+   823px viewport. Worse, it is read ONCE at load and never again, so a page
+   that opened narrow kept the phone camera after the window was widened: his
+   desktop drive with the eye on the tarmac and the boards drawn for a 390
+   screen. A mouse is never a phone however narrow its window, so the pointer
+   is asked as well, and mobile.css asks the same question in the same words.
+
+   Read once, at load, and not on resize: every table in this file is built
+   against it. A phone does not change width without a reload. (To see the
+   phone build on a desktop, use the browser's device emulation - it reports a
+   coarse pointer. Narrowing the window deliberately no longer does it.) */
+const MOBILE = matchMedia('(max-width:900px) and (pointer:coarse)').matches;
 const EYE=MOBILE?470:129, ROAD=360, LINE=311, GRASS=546, LANE=3.6, F0=0.62;
 const GOLD_LANE=8, GOLD=ROAD-GOLD_LANE;
 /* AND THE HORIZON COMES DOWN WITH IT, a little. A lower eye puts more road in

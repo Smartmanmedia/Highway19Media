@@ -12,10 +12,12 @@
        has these rocks half again the size they are on a desktop, and they are
        three layers registered to each other to the unit - scaling them one by
        one would pull them apart. A wrapper can be scaled as a piece.
-       display:contents above 900px, so it is not in the box tree at all there
-       and his absolutely placed layers still answer to .sec3 exactly as they
-       did before it existed. -->
-  <div class="mob-scene">
+       It carries mob-wrap, which is what tells mobile.css this is a WRAPPER
+       round his own artwork and not phone-only furniture: furniture is hidden
+       above the breakpoint, a wrapper is display:contents, so it is not in the
+       box tree at all there and his absolutely placed layers still answer to
+       .sec3 exactly as they did before it existed. -->
+  <div class="mob-wrap mob-scene">
 
   <!-- HIS DESERT, IN THREE LAYERS. He exported the sand, the mountains' cast
        shadow and the mountains separately, each cropped by Illustrator to its
