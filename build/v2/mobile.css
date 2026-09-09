@@ -348,7 +348,10 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      the tree line, and the section clips what goes over the edges. */
   :root .sec3 .mob-scene{
     display:block; position:absolute; inset:0;
-    transform:scale(1.55); transform-origin:50% 88%;
+    /* 1.55 filled the band to the brim; he leaves a good third of pale sand
+       over the top of his rocks, so it comes back to 1.35 and the pivot drops
+       to the very foot of the band. */
+    transform:scale(1.35); transform-origin:50% 100%;
   }
   :root .sec3 .z-road, :root .sec3 .z-cloud{ display:none }
 
@@ -373,8 +376,8 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      341 band; lifting it by the top fifth, which is the open green ABOVE his
      tree line, leaves 273 of woodland. 220% was twice his depth. */
   :root .sec4 > .z-back{ display:block; position:static !important;
-    width:135% !important; max-width:none !important;
-    margin:-16.5vw 0 0 -17.5% !important;
+    width:148% !important; max-width:none !important;
+    margin:-18vw 0 0 -24% !important;
     height:auto !important; inset:auto !important }
   /* HIS GREEN BOARD CARRIES ITS OWN WORDS. In the drawing the two lines and
      the strapline are inside the sign, to the right of the arrow - not
@@ -394,7 +397,15 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
        woodland with its head over the rocks - not at the foot of it. The empty
        band the hidden plate leaves at the top of this box is 21% of it, and
        that is in here too. */
-    margin:-77vw auto clamp(22px,7vw,36px);
+    margin:-87vw auto clamp(22px,7vw,36px);
+  }
+  /* HIS BOARD HANGS FROM A GANTRY, same as the one in the hero - it runs off
+     to the right of the sign, behind it, and it is the same truss tile section
+     one uses. */
+  :root .sec4 .mob-sign > .mob-gantry{
+    display:block; position:absolute; left:72%; right:-24vw; top:38%; height:20%;
+    background:url("../../assets/v2/section-01/truss-cell.webp") repeat-x center;
+    background-size:auto 100%; z-index:-1; pointer-events:none;
   }
   /* his lamp plate is a desktop fitting and is not in the mobile drawing */
   :root .sec4 .signlamps{ display:none !important }
