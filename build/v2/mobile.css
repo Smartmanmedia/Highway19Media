@@ -331,8 +331,18 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      thing that was giving this section a height - it is a stack of absolutely
      positioned layers - and the band grew to whatever the sand image felt like,
      280 pixels against his 174. */
-  .sec3{ display:block; padding:0 }
-  :root .sec3 > .z-road, :root .sec3 > .z-cloud{ display:none }
+  .sec3{ display:block; padding:0; overflow:hidden }
+  /* HIS ROCKS, HALF AGAIN THE SIZE. On a desktop this band is 1922 units wide
+     and the mountains read at that width; on a phone the same drawing puts
+     them in the bottom third of the band with a field of empty sand over the
+     top, which is not what he drew for a phone. The three layers are scaled
+     AS A PIECE, about a point near the foot of the band so their base stays on
+     the tree line, and the section clips what goes over the edges. */
+  :root .sec3 .mob-scene{
+    display:block; position:absolute; inset:0;
+    transform:scale(1.55); transform-origin:50% 88%;
+  }
+  :root .sec3 .z-road, :root .sec3 .z-cloud{ display:none }
 
   /* sec 4: his forest, his green sign, his copy, his button, his rocks */
   .sec4{ background:#1c9022 }
@@ -340,19 +350,67 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      forest is 340 pixels of trees on a 390 screen where he drew 90 - it is a
      hedge along the top of the green, and the rest of his composition is under
      it. Cropped to its bottom edge, which is where the tree line is. */
-  :root .sec4 > .z-back{ display:block; position:static !important; width:100% !important;
-    height:clamp(84px,25vw,130px) !important; object-fit:cover; object-position:50% 100%;
-    margin:0 !important; inset:auto !important }
+  /* AND HIS FOREST IS DEEP. It was 90 pixels - a hedge - and he draws a band
+     of woodland the green sign stands on, with the ragged edge where the trees
+     give out to open grass well down the screen. */
+  /* AND HIS FOREST IS DEEP. It was 90 pixels - a hedge - where he draws a band
+     of woodland the green board stands on. object-fit cannot make it deeper:
+     his canopy is trees along the top of a picture that is plain green below,
+     so cropping only ever changes how much GREEN is on show. What makes more
+     woodland is a bigger picture - 220% of the phone, pulled back to centre -
+     which is more rows of his trees and larger ones, both. */
+  :root .sec4 > .z-back{ display:block; position:static !important;
+    width:220% !important; max-width:none !important;
+    /* AND PULLED UP TO MEET THE DESERT. The top fifth of his canopy picture is
+       the open green ABOVE the tree line; at 220% that is 78 pixels of empty
+       field between the rocks and the first tree. */
+    margin:-20vw 0 0 -60% !important;
+    height:auto !important; inset:auto !important }
   /* HIS GREEN BOARD CARRIES ITS OWN WORDS. In the drawing the two lines and
      the strapline are inside the sign, to the right of the arrow - not
      underneath it - so the wrapper holds the board and the copy sits on it. */
+  /* HIS BOARD STANDS ON THE TREES, not below them. In his drawing it straddles
+     the line where the desert gives out - the top of it is on the rocks and the
+     foot of it is in the woodland - and it is a TALLER box than the desktop
+     one: 305 by 210 at this width against an artwork drawn 858 by 371. So it is
+     pulled up over the canopy by the canopy's own height and stretched, which
+     is the same bargain the surf took. */
   :root .sec4 > .mob-sign{
-    display:block; position:relative; width:94vw; max-width:460px;
-    margin:clamp(22px,6vw,38px) auto clamp(18px,5vw,28px);
+    display:block; position:relative; z-index:2;
+    width:82vw; max-width:400px;
+    /* 858 by 371 stretched to 858 by 564, which is his 305 by 210 */
+    aspect-ratio:858 / 564;
+    /* the plate's empty band is still 21% of this box, so the board is lifted
+       by that much again to sit where he drew it */
+    margin:calc(-1 * clamp(190px,58vw,300px) - 6vw) auto clamp(22px,7vw,36px);
   }
+  /* his lamp plate is a desktop fitting and is not in the mobile drawing */
+  :root .sec4 .signlamps{ display:none !important }
+  /* THE REST AREA PLATE IS INSIDE HIS BOARD'S OWN SVG, which is why hiding
+     elements around it kept changing nothing: the file is a board rect, an
+     arrow, a yellow plate with its shadow and the shield as an <image>, all in
+     one drawing. His mobile version has the board and the arrow and no plate,
+     so the three pieces that make it are named by the numbers they carry - and
+     nothing else in the file carries them. */
+  :root .sec4 .our-sign rect[width="362.52"],
+  :root .sec4 .our-sign rect[width="361.47"],
+  :root .sec4 .our-sign image,
+  /* and the words ON the plate, which are their own <text> and survived every
+     shape being taken out from under them. Nothing else in this file is type -
+     the board's own lines are HTML. */
+  :root .sec4 .our-sign text{ display:none }
+  /* AND THE STRETCH IS A TRANSFORM, because preserveAspectRatio is an SVG
+     ATTRIBUTE and not a CSS property - written in a stylesheet it does nothing
+     at all, and an <svg> given a taller box than its viewBox simply letterboxes
+     the drawing inside it. scaleY from the top edge is the same picture and it
+     can be asked for below 900px only. The copy is a SIBLING, so it is not
+     stretched with the board. */
   :root .sec4 .mob-sign > .our-sign{
-    display:block; position:static !important; width:100% !important;
-    height:auto !important; margin:0 !important; inset:auto !important;
+    display:block; position:absolute !important;
+    left:0 !important; top:0 !important; right:auto !important;
+    width:100% !important; height:auto !important;
+    transform:scaleY(1.52) !important; transform-origin:50% 0;
+    margin:0 !important;
   }
   /* MEASURED OFF THE ARTWORK, not off the wrapper. His board carries a REST
      AREA plate above it inside the same SVG, so the green FACE is only the
@@ -361,18 +419,18 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
   :root .sec4 .mob-sign > .sign-copy{
     display:flex !important; flex-direction:column; justify-content:center;
     position:absolute !important;
-    left:29% !important; right:4% !important;
+    left:33% !important; right:5% !important;
     top:21.4% !important; bottom:.3% !important;
     transform:none !important;
     width:auto !important; height:auto !important; margin:0 !important;
     text-align:left; padding:0 0 2% !important; overflow:visible;
   }
   :root .sec4 .mob-sign h2{
-    font-size:clamp(13px,3.95vw,18px) !important; line-height:1.14;
-    margin:0 0 .35em !important; text-align:left; white-space:normal !important;
+    font-size:clamp(15px,4.5vw,20px) !important; line-height:1.16;
+    margin:0 0 .5em !important; text-align:left; white-space:normal !important;
   }
   :root .sec4 .mob-sign p{
-    font-size:clamp(9.5px,2.9vw,13px) !important; line-height:1.28;
+    font-size:clamp(11px,3.3vw,15px) !important; line-height:1.3;
     margin:0 !important; text-align:left; white-space:normal !important;
   }
   /* HIS ROAD DOWN THE RIGHT EDGE, and it is a CURVE - it comes in from the

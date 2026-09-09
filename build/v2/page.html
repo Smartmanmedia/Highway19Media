@@ -626,6 +626,14 @@ section + section{ margin-top:-1px }</style>
 </section>
 
 <section class="sec3">
+  <!-- ONE WRAPPER ROUND THE WHOLE DESERT, for the phone. His mobile drawing
+       has these rocks half again the size they are on a desktop, and they are
+       three layers registered to each other to the unit - scaling them one by
+       one would pull them apart. A wrapper can be scaled as a piece.
+       display:contents above 900px, so it is not in the box tree at all there
+       and his absolutely placed layers still answer to .sec3 exactly as they
+       did before it existed. -->
+  <div class="mob-scene">
 
   <!-- HIS DESERT, IN THREE LAYERS. He exported the sand, the mountains' cast
        shadow and the mountains separately, each cropped by Illustrator to its
@@ -1981,6 +1989,7 @@ section + section{ margin-top:-1px }</style>
        style="left:71.85%;top:37.43%;width:25.19%">
 
 
+</div>
 </section>
 
 <section class="sec4">
