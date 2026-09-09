@@ -185,17 +185,19 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      17% of the artwork, which is where the yellow is. */
   .mob-board .mob-banner{
     position:absolute; left:0; right:0; top:0; height:17.03%;
-    margin:0; padding:0 3% 0 2%;
-    display:flex; align-items:center; gap:3%;
+    margin:0; padding:0 3% 0 1.5%;
+    display:flex; align-items:center; gap:2.5%;
   }
   .mob-board .mob-banner img{
-    display:block; width:16%; height:auto; flex:0 0 auto;
-    /* his badge overhangs the banner top and bottom, as he drew it */
-    margin:-14% 0;
+    display:block; width:23%; height:auto; flex:0 0 auto;
+    /* his badge overhangs the banner top and bottom, as he drew it - and the
+       bigger it gets the further it hangs, which is why this is a share of its
+       own width and not a fixed number */
+    margin:-19% 0;
   }
   .mob-board .mob-banner b{
     color:#1a1a1a; font-family:"Be Vietnam Pro",system-ui,sans-serif;
-    font-weight:800; font-size:clamp(11.5px,3.55vw,16px); line-height:1.14;
+    font-weight:800; font-size:clamp(13px,4.15vw,19px); line-height:1.14;
     letter-spacing:-.01em;
   }
   /* AND HIS GANTRY, running off the right edge behind the board. One tile of
