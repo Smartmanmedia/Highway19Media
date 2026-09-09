@@ -68,9 +68,27 @@ const stage=document.getElementById('stage'), props=document.getElementById('pro
    OPENS the tarmac out at the bottom of the frame and takes back some of the
    water at the sides. Narrowing the road by the same 15% would hold the
    framing and only fold the ground up - say the word. */
-const EYE=129, ROAD=360, LINE=311, GRASS=546, LANE=3.6, F0=0.62;
+/* THE CAMERA SITS LOWER ON A PHONE. EYE is how far ABOVE the tarmac the eye
+   is, in the same world units the road is 360 wide in - and it is NOT free,
+   because the band of frame below the horizon is fixed by VP: the road's
+   half-width where it runs off the bottom is ROAD*(1-VP)*Hs/EYE. So EYE and VP
+   are one setting with two numbers in it. On mobile the frame IS the scene
+   (see measure), which makes that band 45% of 844 rather than 40% of 219 -
+   four times as much ground - and EYE has to come up with it or the tarmac is
+   three thousand pixels across a 390 screen. 470 against a 45% band puts his
+   road at about three quarters of the width at the foot and the horizon at
+   just over half way up, which is a camera sitting down ON the road looking
+   along it rather than a driver looking over a bonnet at a vanishing point.
+
+   It is read ONCE, at load, and not on resize: every table in this file is
+   built against it. A phone does not change width without a reload. */
+const MOBILE = matchMedia('(max-width:900px)').matches;
+const EYE=MOBILE?470:129, ROAD=360, LINE=311, GRASS=546, LANE=3.6, F0=0.62;
 const GOLD_LANE=8, GOLD=ROAD-GOLD_LANE;
-const VP=0.644, SEA=0.693;    /* his vanishing point, and his water line */
+/* AND THE HORIZON COMES DOWN WITH IT, a little. A lower eye puts more road in
+   the frame; leaving the vanishing point where it was would have pushed the
+   whole scene up into the sky it no longer needs. */
+const VP=MOBILE?0.55:0.644, SEA=MOBILE?0.60:0.693;
 const RUN=14875;
 /* WHERE THE DRIVE LIVES IN THE SCROLL. He gives these in page terms - the road
    starts moving at 6%, the second board is up at 33%, and it is all over by
@@ -187,7 +205,17 @@ function measure(){
      horizon is measured against it, and the horizon is set UP FROM THE BOTTOM
      so the road always runs off the foot of the frame however tall it is.
      On a desktop Hs is H and every number below is exactly what it was. */
-  const Hs=Math.min(H, W*REF/1440);
+  /* AND ON A PHONE IT FILLS THE FRAME INSTEAD. Keeping the desktop's
+     proportions is right for a laptop in a small window and wrong for a phone:
+     390 by 844 gave Hs 219, so the whole world was drawn at a quarter scale in
+     a strip along the bottom under six hundred pixels of empty sky. He asked
+     for the camera down on the road, and that means the frame IS the scene -
+     Hs is H, one world unit is a phone pixel, and the road, the palms and the
+     boards come at you the size they would if you were sitting in the car.
+     EYE and VP up at the top carry the rest of it: the ground band is
+     (1-VP)*Hs and the road's half-width at the foot is ROAD*(1-VP)*Hs/EYE, so
+     those two numbers together are what put his tarmac across the width. */
+  const Hs=MOBILE?H:Math.min(H, W*REF/1440);
   U=Hs/REF;               /* one world unit, in this stage's pixels */
   hor=Math.round(H-(1-VP)*Hs);
   seaY=Math.round(hor+(SEA-VP)*Hs);
@@ -204,6 +232,13 @@ function measure(){
      shell takes most of a second to climb, so by the time one opens the sign
      is properly on the horizon underneath it. */
   fwAt=START+atDistance(distance(STOPS[STOPS.length-1])+AHEAD-dSea)*RANGE;
+  /* AND NEVER BEFORE THE SUN IS DOWN. This is worked out from a DEPTH - the
+     point at which the last board is dSea out, the far edge of the world - and
+     dSea is a property of the camera, not of the road: drop the eye to the
+     tarmac for a phone and the far edge comes in so close that the board is
+     already there at the first bend, which put shells over a blue sky beside
+     the FIRST sign. The evening is the floor either way. */
+  fwAt=Math.max(fwAt, DUSK_AT+0.02);
   /* AND WHERE IT ENDS: when his contact band has closed over the sky. That
      section rides up a whole viewport into the last screen of road, and the
      top 180px of it are transparent - so the fireworks are still going behind
@@ -538,12 +573,23 @@ for(let i=0;i<20;i++){
 const COPY_H=200;   /* the box it is laid out in, before any scaling */
 
 const AHEAD=420;
-plant({cls:'copy',art:'copyline',x:0,h:132,lift:430,z:-distance(TEXT_U)-AHEAD});
+/* HIS FLOATING LINE COMES DOWN TOO. `h` is its height in world units and the
+   whole line is scaled from it - 132 is set against a 1440 road, and with the
+   camera on the tarmac for a phone the same line is half again wider than the
+   screen and reads as "ghway 19 Me". 86 puts it inside 390 with air either
+   side, and it rides the same projection as everything else. */
+plant({cls:'copy',art:'copyline',x:0,h:MOBILE?86:132,lift:MOBILE?300:430,
+       z:-distance(TEXT_U)-AHEAD});
 /* TWO BOARDS, NOT THE SAME ONE TWICE. Both hang 875 wide off the gantry - that
    is the width his picture sets - so the height follows from each board's own
    aspect rather than being chosen. Both of his are 940.5 by 295.5 - 3.183 to
    one - so both come out 178 tall at this width. */
-const BOARD_W=566, BOARDS=[{art:'sign1',ar:940.5/295.5},{art:'sign3',ar:940.5/295.5}];
+/* HIS BOARDS COME DOWN FOR THE PHONE. At 566 they are drawn to hang over a
+   1440 road; on a 390 screen with the camera on the tarmac the same board is
+   wider than the frame and his shield is cut off the left edge before it can
+   be read. 380 is the width that lands inside it with the gantry still
+   showing at both ends. */
+const BOARD_W=MOBILE?380:566, BOARDS=[{art:'sign1',ar:940.5/295.5},{art:'sign3',ar:940.5/295.5}];
 STOPS.forEach((s,si)=>{
   const z=-distance(s)-AHEAD, b=BOARDS[si%BOARDS.length];
   /* THE GANTRY DOES NOT MOVE. It towers because the avenue came down, not

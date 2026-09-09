@@ -1574,7 +1574,7 @@
        carry his scale(.82 1), so the box is widened by 1/.82 and squeezed
        back; the body copy and the button label carry no squeeze. -->
   <div class="sign-copy par par-sign">
-    <h2>We Handle the Marketing.<br>You Run the Business.</h2>
+    <h2>We Handle the Marketing. <br>You Run the Business.</h2>
     <p>One team, one vision, one goal: growing your business.</p>
   </div>
 
@@ -1584,6 +1584,13 @@
          thing that can be done to an image at night is a filter over the
          whole of it - which takes his white type down with his paint. Inline,
          each of his fills is its own switch. -->
+  <!-- ONE WRAPPER, FOR THE PHONE. His plate and his label are two absolutely
+       positioned things side by side in the drawing, which is fine while they
+       are placed against the section - and impossible to stack once the
+       section becomes a flow column. A STATIC wrapper changes nothing above
+       900px, because an absolutely positioned child still positions against
+       the nearest POSITIONED ancestor and that is still .sec4. -->
+  <span class="mob-btn">
   <svg class="z-copy" data-at aria-hidden="true" style="left:54.97%;top:70.26%;width:19.21%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="370.80" height="65.20" viewBox="1061.20 1142.73 370.80 65.20"><g id="explore-our-services-Explore_Our_Services" data-name="Explore Our Services">
             <rect x="1105.16" y="1144.87" width="326.84" height="61.17" rx="16.2" ry="16.2" fill="#ffda00" stroke="#fff" stroke-miterlimit="10" stroke-width="2"></rect>
             <g>
@@ -1607,6 +1614,7 @@
             </g>
           </g></svg>
   <p class="copy cta z-copy" style="left:56.80%;top:71.36%;width:17.38%">Explore Our Services</p>
+  </span>
 
   <img class="z-cloud par par-cloud" data-at src="../../assets/v2/section-04/cloud2.svg" alt=""
        style="left:6.25%;top:15.56%;width:29.60%">
