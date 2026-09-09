@@ -181,6 +181,33 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
   }
   .mob-board a:active{ opacity:.7 }
 
+  /* HIS BANNER, over the yellow. The badge is a picture because it is a
+     picture in his file too; the line beside it is type. Both sit in the top
+     17% of the artwork, which is where the yellow is. */
+  .mob-board .mob-banner{
+    position:absolute; left:0; right:0; top:0; height:17.03%;
+    margin:0; padding:0 3% 0 2%;
+    display:flex; align-items:center; gap:3%;
+  }
+  .mob-board .mob-banner img{
+    display:block; width:16%; height:auto; flex:0 0 auto;
+    /* his badge overhangs the banner top and bottom, as he drew it */
+    margin:-14% 0;
+  }
+  .mob-board .mob-banner b{
+    color:#1a1a1a; font-family:"Be Vietnam Pro",system-ui,sans-serif;
+    font-weight:800; font-size:clamp(10px,3.05vw,14px); line-height:1.12;
+    letter-spacing:-.01em;
+  }
+  /* AND HIS GANTRY, running off the right edge behind the board. One tile of
+     his own truss repeated - the same file section one hangs its hero sign
+     from - laid at the height of the board's own mounting brackets. */
+  .mob-board .mob-gantry{
+    position:absolute; left:60%; right:-30vw; top:34%; height:14%;
+    background:url("../../assets/v2/section-01/truss-cell.webp") repeat-x center;
+    background-size:auto 100%; z-index:-1; pointer-events:none;
+  }
+
   /* -- 5. WHAT COMES BACK, SECTION BY SECTION ------------------------------ */
   /* sec 1: the board, a road, his first panel, a road, his second panel */
   :root .sec1 .page > .mob-board,
@@ -200,9 +227,28 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
     font-size:clamp(15px,4.4vw,19px) !important;
   }
 
-  /* his motorway shield and his warning triangles sit ABOVE their headline
-     here rather than beside it - a 390 column has no room for a sign and a
-     display line side by side */
+  /* HIS SIGN AND HIS HEADLINE STAND SIDE BY SIDE, which is what he drew - the
+     shield left of "A Clear Road Forward", the triangle left of "Great Work,
+     No Signage". A wrapper puts them on one row and the headline goes left in
+     that row rather than centred, because a centred line beside a fixed sign
+     leaves a hole on one side. */
+  :root .sec1 .page > .mob-head{
+    display:flex; align-items:center; justify-content:center;
+    gap:4vw; width:min(88vw,470px); margin:clamp(24px,7vw,40px) auto clamp(10px,3vw,16px);
+  }
+  :root .sec1 .mob-head > svg.z-copy{
+    display:block; flex:0 0 auto; position:static !important;
+    width:clamp(44px,13vw,62px) !important; height:auto !important;
+    margin:0 !important; inset:auto !important;
+  }
+  /* AND THE HEADLINE STOPS CLAIMING THE WHOLE COLUMN. The shared copy rule
+     gives every block min(86vw,460px), which inside a row leaves the sign
+     nowhere to stand and pushes it off the top of the line. */
+  :root .sec1 .mob-head > .copy,:root .sec1 .mob-head > h2.copy{
+    margin:0 !important; width:auto !important; max-width:none !important;
+    flex:0 1 auto; text-align:left;
+  }
+  :root .sec1 .mob-head h1,:root .sec1 .mob-head h2.copy{ margin:0 }
   :root .sec1 .page > svg.z-copy,
   :root .sec2 > svg.z-copy{
     display:block; position:static !important;
@@ -238,14 +284,55 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
   .sec4{ background:#1c9022 }
   :root .sec4 > .z-back{ display:block; position:static !important; width:100% !important;
     height:auto !important; margin:0 !important; inset:auto !important }
-  :root .sec4 > .our-sign{ display:block; position:static !important;
-    width:82vw !important; max-width:400px; height:auto !important;
-    margin:clamp(20px,6vw,36px) auto clamp(6px,2vw,12px) !important }
-  :root .sec4 > .sign-copy{ display:block; margin:0 var(--mob-pad) clamp(18px,5vw,26px) }
-  :root .sec4 .sign-copy h2{ font-size:clamp(21px,6vw,28px) !important;
-    margin:0 0 .35em; white-space:normal !important }
-  :root .sec4 .sign-copy p{ font-size:clamp(14px,3.9vw,17px) !important;
-    white-space:normal !important }
+  /* HIS GREEN BOARD CARRIES ITS OWN WORDS. In the drawing the two lines and
+     the strapline are inside the sign, to the right of the arrow - not
+     underneath it - so the wrapper holds the board and the copy sits on it. */
+  :root .sec4 > .mob-sign{
+    display:block; position:relative; width:94vw; max-width:460px;
+    margin:clamp(22px,6vw,38px) auto clamp(18px,5vw,28px);
+  }
+  :root .sec4 .mob-sign > .our-sign{
+    display:block; position:static !important; width:100% !important;
+    height:auto !important; margin:0 !important; inset:auto !important;
+  }
+  /* MEASURED OFF THE ARTWORK, not off the wrapper. His board carries a REST
+     AREA plate above it inside the same SVG, so the green FACE is only the
+     lower 78.3% of the box - centring the copy on the wrapper put it half over
+     the plate and half off the top of the sign. */
+  :root .sec4 .mob-sign > .sign-copy{
+    display:flex !important; flex-direction:column; justify-content:center;
+    position:absolute !important;
+    left:29% !important; right:4% !important;
+    top:21.4% !important; bottom:.3% !important;
+    transform:none !important;
+    width:auto !important; height:auto !important; margin:0 !important;
+    text-align:left; padding:0 0 2% !important; overflow:visible;
+  }
+  :root .sec4 .mob-sign h2{
+    font-size:clamp(13px,3.95vw,18px) !important; line-height:1.14;
+    margin:0 0 .35em !important; text-align:left; white-space:normal !important;
+  }
+  :root .sec4 .mob-sign p{
+    font-size:clamp(9.5px,2.9vw,13px) !important; line-height:1.28;
+    margin:0 !important; text-align:left; white-space:normal !important;
+  }
+  /* HIS ROAD DOWN THE RIGHT EDGE. Same four stripes as the band between
+     panels, stood on end - it is the same road, seen the same way. */
+  :root .sec4 > .mob-roadv{
+    display:block; position:absolute; right:2%; top:6%; bottom:0;
+    width:clamp(30px,9vw,44px); z-index:0; pointer-events:none;
+    background:
+      repeating-linear-gradient(180deg,
+        var(--marking,#fff) 0 5.5vw, transparent 5.5vw 10vw) 50% 0 / 3px 100% no-repeat,
+      linear-gradient(90deg,
+        var(--mob-gold) 0 7%, var(--mob-tar) 7% 93%, var(--mob-gold) 93% 100%);
+    background-repeat:no-repeat,no-repeat;
+  }
+  :root .sec4 > .z-back,:root .sec4 > .mob-sign,:root .sec4 > .body,
+  :root .sec4 > .mob-btn{ position:relative; z-index:1 }
+  /* the first pass had this copy standing UNDER the board and sized for that;
+     it lives on the board now, and two rules of equal weight meant the later
+     one - this one - was quietly winning */
   :root .sec4 > .body{ display:block; color:#fff }
   /* HIS EXPLORE BUTTON is a yellow plate and a label drawn as two separate
      things; the wrapper stacks them here and nowhere else. */
@@ -268,8 +355,30 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
   .sec4 > .rock-layer,.sec4 > .z-ground.rock-shadow{ display:none }
 
   /* -- 6. HIS CARDS, TWO IN A ROW ------------------------------------------ */
-  .sec6{ height:auto; min-height:0; padding:clamp(30px,9vw,54px) 0 clamp(34px,10vw,60px) }
-  .sec6 > .rock-layer,.sec6 > .sky-cloud{ display:none }
+  /* HIS ROCK BAND SITS BETWEEN THE GREEN AND THE CARDS, as he drew it - the
+     same band section four's forest stands on, continued. It is already here;
+     it only has to stop being a layer and become a strip. */
+  /* AND THE SECTION HAS TO BE ALLOWED TO GROW. It is drawn on an aspect ratio
+     like every other one, which fixes its height from its width - so his cards,
+     set in a column at phone type sizes, ran straight out of the bottom and
+     under section seven's sky. */
+  /* AND ITS GROUND IS WHITE, not the page's navy. His rock band is drawn with
+     open sky above the rocks, so anything behind it shows through - which put a
+     navy stripe between the green and the stones. */
+  .sec6{ display:flex; flex-direction:column;
+    height:auto !important; min-height:0; aspect-ratio:auto !important;
+    background:var(--sec6-bg,#fff);
+    padding:0 0 clamp(34px,10vw,60px) }
+  /* AN SVG WITH A viewBox AND NO height IS ZERO PIXELS TALL IN FLOW. It works
+     absolutely positioned, where width and height:auto give it the viewBox's
+     ratio; in a column it collapses. Stating the ratio is what brings it back. */
+  :root .sec6 > .rock-layer{
+    display:block; position:static !important; order:-1;
+    width:100% !important; height:auto !important; aspect-ratio:1918.34 / 497.43;
+    /* pulled up so the stones sit ON the green, as he drew them */
+    margin:-9vw 0 clamp(24px,7vw,40px) !important; inset:auto !important;
+  }
+  :root .sec6 > .sky-cloud{ display:none }
   :root .sec6 .page{ position:static; width:auto; margin:0 var(--mob-pad);
     display:grid; grid-template-columns:1fr 1fr; gap:4vw }
   :root .sec6 .page > .copy{ grid-column:1 / -1; position:static !important;

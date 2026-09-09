@@ -348,7 +348,12 @@
    which is 0.1921 of its height - that is 572.6% across, and the left edge
    sits 0.955 of that to the left of the head at 33.3%. */.sec7 .lamp .light{position:absolute;width:572.6%;height:125%;left:-513.5%;top:-9.6%;
   max-width:none;pointer-events:none;opacity:0;transition:opacity .8s linear}.sec7 .a-lamp-l .light{left:40.9%;transform:scaleX(-1)}:root[data-mode="night"] .sec7 .lamp .light{opacity:1}
-/* the floating line, laid out once at this size and scaled from here */.sec7 .copy{display:grid;place-items:center;height:200px;white-space:nowrap}.sec7 .copy .copyline{font-weight:800;font-size:150px;line-height:1;letter-spacing:-.02em;
+/* the floating line, laid out once at this size and scaled from here */.sec7 .copy{display:grid;place-items:center;height:200px;white-space:nowrap}
+/* HIS TYPEFACE, SAID OUT LOUD. Standing alone this file had it on <body>, and
+   the body rule is exactly what the section scoper drops - so once the drive
+   became section seven of a page his floating line fell back to the browser's
+   serif and has been setting "Highway 19 Media" in Times ever since. */.sec7 .copy .copyline{font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
+  font-weight:800;font-size:150px;line-height:1;letter-spacing:-.02em;
   color:#fff;text-shadow:0 6px 26px rgba(0,40,90,.45)}.sec7 .pole{background:linear-gradient(90deg,#8a9199,#f4f7fa 38%,#cdd4db 66%,#7d848c);
   border-radius:99px}
 /* HIS GANTRY ARM, the same tile the page already uses over his hero sign,

@@ -385,7 +385,12 @@ html,body{margin:0;background:#0a1020;color:#fff;
 :root[data-mode="night"] .lamp .light{opacity:1}
 /* the floating line, laid out once at this size and scaled from here */
 .copy{display:grid;place-items:center;height:200px;white-space:nowrap}
-.copy .copyline{font-weight:800;font-size:150px;line-height:1;letter-spacing:-.02em;
+/* HIS TYPEFACE, SAID OUT LOUD. Standing alone this file had it on <body>, and
+   the body rule is exactly what the section scoper drops - so once the drive
+   became section seven of a page his floating line fell back to the browser's
+   serif and has been setting "Highway 19 Media" in Times ever since. */
+.copy .copyline{font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
+  font-weight:800;font-size:150px;line-height:1;letter-spacing:-.02em;
   color:#fff;text-shadow:0 6px 26px rgba(0,40,90,.45)}
 .pole{background:linear-gradient(90deg,#8a9199,#f4f7fa 38%,#cdd4db 66%,#7d848c);
   border-radius:99px}

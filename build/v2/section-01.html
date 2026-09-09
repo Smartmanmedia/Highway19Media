@@ -122,6 +122,16 @@
       </g>
     </g>
 </svg>
+    <!-- HIS BANNER: the badge on the left, his line beside it. Both are drawn
+         into the artboard as a raster and as SVG text; here the badge is the
+         only part that has to be a picture (it IS a raster in his file) and
+         the line is HTML for the same reason the four labels are. -->
+    <p class="mob-banner">
+      <img src="../../assets/v2/mobile/shield-badge.png" alt="Highway 19 Media">
+      <b>All Roads Lead<br>To Your Business</b>
+    </p>
+    <!-- and his gantry, running off the right edge behind the board -->
+    <span class="mob-gantry" aria-hidden="true"></span>
     <ul>
       <li><a href="#services">Social Media</a></li>
       <li><a href="#services">Website Design</a></li>
@@ -285,6 +295,11 @@
          thing that can be done to an image at night is a filter over the
          whole of it - which takes his white type down with his paint. Inline,
          each of his fills is its own switch. -->
+  <!-- His shield and his headline stand SIDE BY SIDE on the phone, which two
+       siblings in a flow column cannot do. A static wrapper puts them on one
+       row there and changes nothing above 900px: both are absolutely
+       positioned in the drawing and still answer to .sec1. -->
+  <span class="mob-head">
   <svg class="z-copy" data-at aria-hidden="true" style="left:30.14%;top:34.29%;width:4.61%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="88.65" height="135.33" viewBox="666.92 620.88 88.65 135.33"><g id="highwaysign-Highwaysign">
         <g>
           <rect x="643.74" y="644.37" width="135.02" height="88.34" rx="5.42" ry="5.42" transform="translate(22.6992 1399.7896) rotate(-90)" fill="#fff"></rect>
@@ -307,6 +322,7 @@
   <div class="copy z-copy" style="left:36.54%;top:33.85%;width:16.97%;--sx:0.97">
     <h1><span class="l1">A Clear Road</span><span class="l2">Forward</span><span class="l3">for Your Business</span></h1>
   </div>
+  </span>
 
   <p class="copy sub z-copy" style="left:30.29%;top:44.28%;width:18.72%;--sx:0.82"><span>You've done the hard part.</span><span>Now let's make sure people can see it.</span></p>
 
@@ -346,6 +362,7 @@
          whole of it - which takes his white type down with his paint. Inline,
          each of his fills is its own switch. -->
   <div class="mob-road" aria-hidden="true"></div>
+  <span class="mob-head">
   <svg class="z-copy" data-at aria-hidden="true" style="left:27.67%;top:80.91%;width:7.54%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="145.00" height="128.03" viewBox="619.51 1464.88 145.00 128.03"><g id="bridge-sign-Bridge_sign" data-name="Bridge sign">
         <g>
           <path d="M763.11,1579.43c1.57,2.72,1.57,6.11,0,8.83-1.57,2.72-4.5,4.42-7.65,4.42h-126.9c-3.15,0-6.08-1.69-7.65-4.42-1.57-2.72-1.57-6.11,0-8.83l63.27-109.58c.78-1.49,1.95-2.72,3.41-3.56,4.22-2.44,9.63-.98,12.07,3.23l63.46,109.91Z" fill="#fff"></path>
@@ -363,6 +380,7 @@
       </g></svg>
 
   <h2 class="copy z-copy" style="left:37.82%;top:80.98%;width:33.88%;--sx:0.9666">Great Work, No Signage</h2>
+  </span>
 
   <p class="copy sub z-copy" style="left:36.10%;top:85.5%;width:30.68%;--sx:0.82"><span>The best shop on the road is worthless if nobody sees the sign.</span></p>
 

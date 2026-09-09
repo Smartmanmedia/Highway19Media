@@ -182,6 +182,9 @@
    triangle runs 0–67.8 of a 290.03-wide button, so the label's space is
    23.37%–100% and its centre is 61.7%, not the 60% a naive box gave. */
 .sec1 .cta span{
+  /* named, not inherited - the anchor sits inside .page and nothing between it
+     and <html> states the family, so it was falling back to serif */
+  font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
   position:absolute; left:23.37%; right:0; top:50%; transform:translateY(-50%);
   /* his 20.52 ExtraBold — 1.066% of the column, and the button is 15.07% of
      it, so 7.07 of the button's own width */
