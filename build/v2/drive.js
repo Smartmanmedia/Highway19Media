@@ -627,13 +627,16 @@ const AHEAD=420;
    IT IS A PICTURE NOW, NOT A LINE OF TYPE, so it is planted the way everything
    else is - by its foot, at a height in world units - rather than by a
    baseline and a scale. Three lines and a strapline are a block, not a line:
-   480 tall is 878 across at his 1.829, which is the width the old line came
-   out at, and the lift comes down from 430 to 300 because he wants it lower.
-   Not further than that: below 300 the block sits over the road rather than
-   over the sky, and his billboard - which stands 0.09 of the trip beyond it -
-   comes up THROUGH the middle of the type instead of under it.
+   AND IT STANDS ON THE ROAD. It has come down twice - 430, then 300 - and
+   the last step is the whole point of the first two: white type over a pale
+   sky is white type on white, and the one dark ground in this picture is the
+   tarmac. lift 0 puts its foot on the surface, so the road comes up behind
+   it as it nears and the block reads against the grey it was always going to
+   need. Smaller with it - 360 rather than 480 - because a block sitting on
+   the road has the whole width of the road to fill and does not need to fill
+   the whole width of the frame.
    The phone gets the same block at the width its own road can hold. */
-plant({cls:'copy',art:'copyline',x:0,h:MOBILE?330:480,lift:MOBILE?230:300,
+plant({cls:'copy',art:'copyline',x:0,h:MOBILE?250:360,lift:MOBILE?0:0,
        z:-distance(TEXT_U)-AHEAD});
 /* TWO BOARDS, NOT THE SAME ONE TWICE. Both hang 875 wide off the gantry - that
    is the width his picture sets - so the height follows from each board's own
@@ -1086,13 +1089,19 @@ function tick(now){
        scrolling before it. */
     const cy    = (cardsBot - scrollY) / innerHeight;
     const road  = (Math.max(0, secTop - scrollY) + hor) / innerHeight;
-    const hold  = Math.max(0.41, Math.min(0.79, 0.62 * hor / innerHeight));
-    /* AND IT NEVER LEAVES THE BAND HE MARKED. 0.79 of the way down the window
-       is where it arrives and 0.41 is where it stops climbing, both read off
-       his own screenshot and both hard limits - not numbers the geometry is
-       trusted to land on.
+    /* AND WHERE IT STOPS IS HIS NUMBER, NOT THE HORIZON'S. The hold used to be
+       0.62 of the way down to the horizon, which on this scene works out at
+       0.40 - so the line stopped a tenth of a screen short of the top of the
+       band he asked for and never reached it. 0.31 is his, and it is well
+       clear of the horizon at 0.645 either way. */
+    const hold  = 0.31;
+    /* AND IT NEVER LEAVES THE BAND HE MARKED. It arrives at 0.58 of the way
+       down the window and stops climbing at 0.31 - two hundred pixels above
+       where it came in and a hundred above where it used to stop, on the
+       970-pixel window he measured them on. Both are hard limits, not numbers
+       the geometry is trusted to land on.
 
-       BELOW 0.79 IT IS NOT ON THE SCREEN AT ALL. Letting it slide up through
+       BELOW 0.58 IT IS NOT ON THE SCREEN AT ALL. Letting it slide up through
        the bottom edge put half a line of it under the fold, which is outside
        the band as surely as being over the cards would be; and he does not
        want it faded in, so it cannot arrive by getting brighter either. It is
@@ -1100,7 +1109,7 @@ function tick(now){
        whole line to stand inside the band, and then it is simply there. */
     const y = (cy + road) / 2;
     runway.style.setProperty('--hello-y',
-      Math.round((y > 0.79 ? 1.5 : Math.max(hold, y)) * innerHeight) + 'px');
+      Math.round((y > 0.58 ? 1.5 : Math.max(hold, y)) * innerHeight) + 'px');
     runway.style.setProperty('--hello', String(1 - smooth(t / START)));
   }
   /* THE SHOW RUNS EXACTLY WHERE THE WORLD IS GOING. It lights the moment the

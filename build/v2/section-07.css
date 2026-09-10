@@ -105,13 +105,29 @@
    away to the far corner. Mine were three flat vertical ramps, which is why
    the render came back soft and cartoonish beside his: nothing in it agreed
    about where the light was coming from. One radial each, laid over the ramp
-   that gives the near-to-far falloff, and the whole scene picks a side. */.sec7 .sea{position:absolute;left:0;right:0;
+   that gives the near-to-far falloff, and the whole scene picks a side. */
+/* AND THEY ARE HIS COLOURS NOW, OFF HIS OWN FILES, AND THEY RUN HIS WAY UP.
+   Both of mine were dark at the BOTTOM and light at the top, which is a
+   picture of a wall rather than of a plane going away from you. In his
+   New_darker_ocean the water is #00287d at the far edge over a base that runs
+   #004ca2 to #045dc3 across, and the dark only reaches seven tenths of the
+   way down; in his Road the verge is #006837 at the far edge and #39b54a at
+   the near one. Dark at the horizon, opening up as it comes at you - which is
+   both what he drew and what water and grass actually do.
+
+   HIS RAMP RUNS THE WHOLE HEIGHT OF HIS ROAD DRAWING, though, and the strip
+   of verge this scene can actually see is the top of it - so taken end to end
+   his light green arrived halfway up the picture. The bright end is held back
+   to the last fifteen per cent, which is where his own file puts it. */.sec7 .sea{position:absolute;left:0;right:0;
   background:
-    radial-gradient(150% 260% at 6% -10%, rgba(120,205,255,.85), rgba(120,205,255,0) 62%),
-    linear-gradient(180deg,#2064bd 0%,#12488f 44%,#08305f 100%)}.sec7 .land{position:absolute;left:0;
+    radial-gradient(150% 260% at 6% -10%, rgba(120,205,255,.30), rgba(120,205,255,0) 55%),
+    linear-gradient(180deg,#00287d 0%,rgba(0,45,131,.90) 21%,rgba(0,51,140,.78) 30%,
+      rgba(1,61,152,.60) 40%,rgba(2,73,168,.37) 50%,rgba(3,87,188,.10) 62%,
+      rgba(4,93,195,0) 71%),
+    linear-gradient(90deg,#004ca2 0%,#045dc3 100%)}.sec7 .land{position:absolute;left:0;
   background:
-    radial-gradient(140% 220% at 6% -14%, rgba(190,255,120,.72), rgba(190,255,120,0) 58%),
-    linear-gradient(180deg,#37850f 0%,#256409 46%,#164a05 100%)}.sec7 .road,
+    radial-gradient(140% 220% at 6% -14%, rgba(170,245,150,.30), rgba(170,245,150,0) 55%),
+    linear-gradient(180deg,#005c31 0%,#00693a 30%,#0a763c 62%,#188540 85%,#2a9d45 100%)}.sec7 .road,
 .sec7 .edge,
 .sec7 .dash{position:absolute;left:0;top:0}.sec7 .road{background:
     radial-gradient(150% 240% at 6% -12%, rgba(255,255,255,.34), rgba(255,255,255,0) 60%),
