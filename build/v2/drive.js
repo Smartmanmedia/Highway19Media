@@ -152,6 +152,13 @@ const FADE_AT=0.8208;
    climbs. Three and a bit seconds of dusk want more than a board's width of
    road to happen in. */
 const DUSK_AT=0.3761;
+/* WHERE HIS SKY LINE HAS TO BE GONE: the cards' bottom edge at this share of
+   a window is the moment the first lamp comes over the bottom edge and the
+   road starts to show. It is not the same moment on the two layouts, because
+   the phone's camera sits far higher and brings the verge up much sooner -
+   0.25 of a window of cards still showing on a desktop against 0.33 on a
+   phone, where the line has that much less room to run. */
+const HELLO_OUT=MOBILE?0.33:0.25;
 const RANGE=END-START;
 const STOPS=SIGN_AT.map(a=>(a-START)/RANGE);
 const TEXT_U=(TEXT_AT-START)/RANGE;
@@ -1024,13 +1031,23 @@ function tick(now){
        nothing else in the sky yet - and ends as the edge leaves the top,
        which is still 50 pixels of scroll before the first board shows.
 
-       It arrives at 0.66 of the way down the window and climbs to 0.18,
-       holding full white until the last stretch. */
-    const p = clamp((0.54 - (cardsBot - scrollY) / innerHeight) / 0.52, 0, 1);
+       AND IT TRAVELS IN THE BAND HE MARKED, not across the whole window: the
+       middle of the line runs from 0.60 of the way down to 0.42 - a fifth of
+       a screen of movement over a quarter of a screen of scrolling, so it
+       rides up at about seven tenths of the page's speed. It goes up the screen while
+       it goes down the page, which is the lag that makes a parallax read as
+       one rather than as something pinned.
+
+       IT STARTS AS THE CARDS' BOTTOM EDGE CROSSES 0.50 - any earlier and the
+       bigger type runs into the bottom of the cards rather than sitting in
+       his sky - and it is out by
+       HELLO_OUT, which is where the road begins to show. */
+    const cy = (cardsBot - scrollY) / innerHeight;
+    const p  = clamp((0.50 - cy) / (0.50 - HELLO_OUT), 0, 1);
     runway.style.setProperty('--hello', String(Math.min(
-      smooth(p / 0.10), 1 - smooth((p - 0.70) / 0.30))));
+      smooth(p / 0.12), 1 - smooth((p - 0.62) / 0.38))));
     runway.style.setProperty('--hello-y',
-      Math.round((0.66 - 0.48 * p) * innerHeight) + 'px');
+      Math.round((0.60 - 0.18 * p) * innerHeight) + 'px');
   }
   /* THE SHOW RUNS EXACTLY WHERE THE WORLD IS GOING. It lights the moment the
      last board comes over the horizon, so the sky is already going long

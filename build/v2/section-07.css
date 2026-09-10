@@ -401,14 +401,18 @@
    top reaches the top of the screen only the LOWER part of it is in view, and
    44% of the stage is then most of the way down the window. It sits at 45% of
    whatever band of the stage you can actually see, which is 45% of the window
-   once it pins and rides up out of the sign as it gets there. */.sec7 .hello{position:fixed;left:0;right:0;top:var(--hello-y,50vh);z-index:4;
+   once it pins and rides up out of the sign as it gets there. */
+/* --hello-y IS THE MIDDLE OF THE LINE, not its top edge - it is pulled back
+   half its own height. Driven off the top edge, making the type bigger moved
+   the line down the screen as well as growing it, and the band it is meant to
+   travel in stopped being the band you set. */.sec7 .hello{position:fixed;left:0;right:0;top:var(--hello-y,50vh);z-index:4;
   text-align:center;pointer-events:none;white-space:nowrap;
   font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
-  font-weight:900;letter-spacing:-.02em;line-height:1;text-transform:uppercase;
-  font-size:clamp(26px,3.9vw,78px);color:#fff;
+  font-weight:900;letter-spacing:-.045em;line-height:1;text-transform:uppercase;
+  font-size:clamp(30px,5.2vw,104px);color:#fff;
   text-shadow:0 6px 26px rgba(0,40,90,.45);
   opacity:var(--hello,1);
-  translate:0 calc((1 - var(--hello,1)) * -2.5vh)}
+  translate:0 calc(-50% + (1 - var(--hello,1)) * -2.5vh)}
 /* fewer of them after dark - five of the eight go out. The fade is put on the
    IMAGE, not on the cloud: the cloud's own opacity is the scroll's hand-over
    at the end of the road, and one element cannot hold two fades on the same
