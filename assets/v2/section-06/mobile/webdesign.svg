@@ -1,0 +1,20 @@
+<!-- HIS WEBSITE DESIGN ICON, from his own render (../../webdesign.png is an
+     external reference and does not travel with the file). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none"
+     stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+  <!-- the window -->
+  <path d="M14 22h92a8 8 0 0 1 8 8v62a8 8 0 0 1-8 8H14a8 8 0 0 1-8-8V30a8 8 0 0 1 8-8z"/>
+  <path d="M6 44h108"/>
+  <circle cx="20" cy="33" r="3.5" fill="#fff" stroke="none"/>
+  <circle cx="32" cy="33" r="3.5" fill="#fff" stroke="none"/>
+  <circle cx="44" cy="33" r="3.5" fill="#fff" stroke="none"/>
+  <!-- a picture in it -->
+  <path d="M20 56h38v30H20z"/>
+  <path d="M20 79l10-10 8 8 7-8 13 13"/>
+  <circle cx="48" cy="65" r="4"/>
+  <!-- and his lines beside it -->
+  <path d="M70 58h32M70 70h32M70 82h20"/>
+  <!-- the pencil he draws it with -->
+  <path d="M78 112l6-16 26-26 10 10-26 26z"/>
+  <path d="M104 78l10 10"/>
+</svg>
