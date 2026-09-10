@@ -151,7 +151,12 @@ const FADE_AT=0.8208;
    the sky is properly dark by the time the board is up and the first shell
    climbs. Three and a bit seconds of dusk want more than a board's width of
    road to happen in. */
-const DUSK_AT=0.3761;
+/* THE SUN GOES DOWN AT THE BILLBOARD. He has moved it twice and settled it:
+   the evening starts as you reach his board, so the credentials are read in
+   the last of the light and the board is lit by the time it is behind you.
+   It is one number now, not two that had to be kept in step by hand. */
+const BILL_AT=0.44;
+const DUSK_AT=BILL_AT;
 const RANGE=END-START;
 const STOPS=SIGN_AT.map(a=>(a-START)/RANGE);
 const TEXT_U=(TEXT_AT-START)/RANGE;
@@ -253,7 +258,11 @@ function measure(){
      which the board's own depth is exactly dSea: the frame it appears in. A
      shell takes most of a second to climb, so by the time one opens the sign
      is properly on the horizon underneath it. */
-  fwAt=START+atDistance(distance(STOPS[STOPS.length-1])+AHEAD-dSea)*RANGE;
+  /* HIS OWN CALL, NOT THE HORIZON'S. The board's first frame is a long way
+     out - a whole stretch of road before you can read it - and he wants the
+     sky going as you COME UP ON the last sign, not as it appears. So the show
+     is hung off the sign's own place in the trip, a short run short of it. */
+  fwAt=SIGN_AT[SIGN_AT.length-1]-0.055;
   /* AND NEVER BEFORE THE SUN IS DOWN. This is worked out from a DEPTH - the
      point at which the last board is dSea out, the far edge of the world - and
      dSea is a property of the camera, not of the road: drop the eye to the
@@ -675,7 +684,7 @@ STOPS.forEach((s,si)=>{
    post standing on the water. 460 puts it in the same band as his palms,
    with a clear width of verge outside it, and the shadow it throws lands on
    green rather than on the sea where nothing could see it. */
-const BILL_AT=0.44, BILL_H=MOBILE?900:720;
+const BILL_H=MOBILE?900:720;
 plant({cls:'sign',art:'bill',fx:0.961,shadow:true,
   x:460, z:-distance((BILL_AT-START)/RANGE)-AHEAD, h:BILL_H});
 /* HIS STREET LAMPS. He drew each one eight times over, once per distance, but
@@ -1059,9 +1068,21 @@ function tick(now){
        scrolling before it. */
     const cy    = (cardsBot - scrollY) / innerHeight;
     const road  = (Math.max(0, secTop - scrollY) + hor) / innerHeight;
-    const hold  = 0.62 * hor / innerHeight;
+    const hold  = Math.max(0.41, Math.min(0.79, 0.62 * hor / innerHeight));
+    /* AND IT NEVER LEAVES THE BAND HE MARKED. 0.79 of the way down the window
+       is where it arrives and 0.41 is where it stops climbing, both read off
+       his own screenshot and both hard limits - not numbers the geometry is
+       trusted to land on.
+
+       BELOW 0.79 IT IS NOT ON THE SCREEN AT ALL. Letting it slide up through
+       the bottom edge put half a line of it under the fold, which is outside
+       the band as surely as being over the cards would be; and he does not
+       want it faded in, so it cannot arrive by getting brighter either. It is
+       parked a screen and a half down until the gap has opened enough for the
+       whole line to stand inside the band, and then it is simply there. */
+    const y = (cy + road) / 2;
     runway.style.setProperty('--hello-y',
-      Math.round(Math.min(1.3, Math.max(hold, (cy + road) / 2)) * innerHeight) + 'px');
+      Math.round((y > 0.79 ? 1.5 : Math.max(hold, y)) * innerHeight) + 'px');
     runway.style.setProperty('--hello', String(1 - smooth(t / START)));
   }
   /* THE SHOW RUNS EXACTLY WHERE THE WORLD IS GOING. It lights the moment the

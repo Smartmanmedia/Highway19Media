@@ -77,8 +77,8 @@ text{font-family:BVP,sans-serif;dominant-baseline:auto}
 <rect width="${FW}" height="${FH}" fill="url(#glow)"/>
 
 <!-- HIS ROAD, sweeping in from the bottom and away behind the shield -->
-<path d="M1259 ${FH} C1440 ${FH - 44} 1600 ${FH - 194} 1676 ${FH - 369}
-         L${FW} ${FH - 413} L${FW} ${FH} Z" fill="url(#road)"/>
+<path d="M1210 ${FH} C1400 ${FH - 40} 1570 ${FH - 178} 1652 ${FH - 350}
+         L${FW} ${FH - 396} L${FW} ${FH} Z" fill="url(#road)"/>
 <path d="M1300 ${FH} C1462 ${FH - 46} 1596 ${FH - 192} 1668 ${FH - 361}"
       fill="none" stroke="#4a5057" stroke-width="6" opacity=".75"/>
 <path d="M1352 ${FH} C1500 ${FH - 47} 1622 ${FH - 189} 1688 ${FH - 347}"
@@ -86,24 +86,26 @@ text{font-family:BVP,sans-serif;dominant-baseline:auto}
       stroke-dasharray="42 38" stroke-linecap="butt"/>
 
 <!-- HIS KICKER, a rule either side -->
-<rect x="${L}" y="98" width="109" height="9" fill="${RED}"/>
-${T('TAMPA BAY', 288, 122, 54, 483, 500, '#fff')}
-<rect x="808" y="98" width="168" height="9" fill="${RED}"/>
+<rect x="${L}" y="79" width="158" height="9" fill="${RED}"/>
+${T('TAMPA BAY', 305, 111, 52, 495, 500, '#fff')}
+<rect x="849" y="79" width="161" height="9" fill="${RED}"/>
 
-<!-- AND HIS TWO LINES -->
-${TT('ROAD MAP BUILT FOR', L, 265, 116, 930, 900, 'url(#silver)', 'sh')}
-${TT('YOUR BUSINESS.', L, 448, 201, 1076, 900, GOLD, 'sh')}
-${TT('25+ years of experience, put to work for your business.', L, 566, 41, 1066, 500, '#fff')}
+<!-- AND HIS TWO LINES, at his widths: both are condensed, and a condensed
+     face is a WIDTH, so each is set into the span it occupies on his render
+     rather than to a letter spacing that would only be right at one size -->
+${TT('ROAD MAP BUILT FOR', L, 268, 100, 963, 900, 'url(#silver)', 'sh')}
+${TT('YOUR BUSINESS.', L, 462, 173, 1292, 900, GOLD, 'sh')}
+${TT('25+ years of experience, put to work for your business.', L, 566, 44, 1292, 500, '#fff')}
 
 <!-- HIS THREE WORDS, the rules between them his red -->
-${T('STRATEGY', L, 730, 31, 216, 500, '#fff')}
-<rect x="${L + 258}" y="700" width="5" height="38" fill="${RED}"/>
-${T('CREATIVE', L + 305, 730, 31, 200, 500, '#fff')}
-<rect x="${L + 547}" y="700" width="5" height="38" fill="${RED}"/>
-${T('RESULTS', L + 594, 730, 31, 176, 500, '#fff')}
+${T('STRATEGY', L, 723, 31, 224, 500, '#fff')}
+<rect x="${L + 268}" y="694" width="5" height="38" fill="${RED}"/>
+${T('CREATIVE', L + 317, 723, 31, 208, 500, '#fff')}
+<rect x="${L + 569}" y="694" width="5" height="38" fill="${RED}"/>
+${T('RESULTS', L + 618, 723, 31, 183, 500, '#fff')}
 
 <!-- HIS SHIELD -->
-<image x="1416" y="70" width="500" height="500"
+<image x="1462" y="90" width="511" height="511"
        xlink:href="data:image/webp;base64,${b64('assets/v2/ui-shield.webp')}"/>
 </svg>`.replace('<stop offset="0" stop-color="#ffd košík"/>', '<stop offset="0" stop-color="#ffd34d"/>');
 
@@ -122,13 +124,20 @@ const withFace = frame.replace('<!-- his map raster, dead link, replaced below -
   `<g transform="translate(.08 34.32) scale(.44)">${inner}</g>`);
 const DAY = withFace.replace(CONES, '');
 
-/* AND THE SAME BOARD AFTER DARK. A billboard is a lit thing: the face keeps
- * its colour and the six lamps above it are what change, so the night twin is
- * the day face under a thin warm wash with the metalwork taken down. */
-const NIGHT = withFace.replace(CONES, m => m.replace('/>', ' opacity=".34"/>')).replace('</svg>',
-  `<rect width="1101.49" height="919.66" fill="#0b1d3a" opacity=".34"/>` +
-  `<g transform="translate(.08 34.32) scale(.44)">` +
-  `<rect width="${FW}" height="${FH}" fill="#ffbe5c" opacity=".13"/></g></svg>`);
+/* AND THE SAME BOARD AFTER DARK - AN LED PANEL, which is a different thing
+ * from a poster with lamps on it. A poster is lit FROM OUTSIDE, so at night
+ * you dim the whole board and paint the lamplight back on; that is what put a
+ * warm rectangle over his artwork and a halo round the outside of it, which
+ * is what he saw and did not want.
+ *
+ * An LED board makes its own light. So the frame goes dark - it is metal at
+ * night like every other mast in the scene - and the FACE is redrawn over the
+ * top at full strength, untouched. Nothing is added around it: the light in
+ * the picture is the light. And the six floodlight cones come off entirely,
+ * day and night, because a screen is not floodlit. */
+const NIGHT = withFace.replace(CONES, '').replace('</svg>',
+  `<rect width="1101.49" height="919.66" fill="#06122b" opacity=".58"/>` +
+  `<g transform="translate(.08 34.32) scale(.44)">${inner}</g></svg>`);
 
 (async () => {
   const br = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
