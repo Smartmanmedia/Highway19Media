@@ -656,6 +656,23 @@ STOPS.forEach((s,si)=>{
      page's is furniture this thin. */
   plant({cls:'pole',x:414,z,h:515+SIGN_LIFT-371,w:40,shadow:true});
 });
+/* HIS BILLBOARD, ON THE VERGE BEFORE THE SUN GOES DOWN.
+   It is the credentials beat - twenty five years, the three words - and it
+   belongs in daylight, so it stands between the first gantry at 0.169 and his
+   floating line at 0.347, well clear of DUSK_AT. Pass it and the evening
+   starts; the success board is the thing at the end of the dark.
+
+   IT STANDS BY ITS MAST, not by the middle of its picture. The mast is at
+   0.961 across his drawing - the board hangs off it to the left - so fx says
+   so, exactly the way a street lamp does, or the post lands out over the
+   water while the face sits on the verge.
+
+   AND ITS FOOT IS ON THE GRASS. The verge only reaches GRASS across, so the
+   mast goes at 520 and the face reaches back in over the road, which is what
+   a board of this size does anyway. */
+const BILL_AT=0.30, BILL_H=MOBILE?900:720;
+plant({cls:'sign',art:'bill',fx:0.961,shadow:true,
+  x:520, z:-distance((BILL_AT-START)/RANGE)-AHEAD, h:BILL_H});
 /* HIS STREET LAMPS. He drew each one eight times over, once per distance, but
    the scene only needs the shape twice - mast right with the arm reaching left
    for the seaward verge, and its mirror - because the projection does the rest.
