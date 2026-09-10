@@ -4558,13 +4558,16 @@ section + section{ margin-top:-1px }</style>
     <div id="shadows"></div>
     <div id="marks"></div>
     <div id="props"></div>
-    <!-- HIS LINE OVER THE OPEN SKY, between the cards and the first of the
-         road. It is not in the world - it has no depth and nothing drives at
-         it; it is a title on the sky, and it goes as the road arrives. Last in
-         the stage so it paints over the sky and his clouds, and under #props,
-         which is where the palms and the lamps come in from the bottom. -->
-    <div class="hello" aria-hidden="true">We Ride With You</div>
   </div>
+  <!-- HIS LINE OVER THE OPEN SKY, between the cards and the first of the road.
+       It is not in the world - it has no depth and nothing drives at it - and
+       it is OUTSIDE the stage on purpose. The stage clips its own overflow, so
+       anything inside it can never be higher on the screen than the stage's own
+       top edge - and while the section is scrolling in that edge is most of the
+       way down the window, which is why this line could only ever come up from
+       the bottom. Fixed to the window instead, and turned off by opacity
+       outside its own moment, so it can start in the middle of the screen. -->
+  <div class="hello" aria-hidden="true">We Ride With You</div>
 <div id="art" hidden>
   <img class="palm-a" src="../../assets/v2/section-05/palm-a.webp" alt="">
   <img class="palm-b" src="../../assets/v2/section-05/palm-b.webp" alt="">

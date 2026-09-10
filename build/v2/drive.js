@@ -1016,11 +1016,26 @@ function tick(now){
      section, where the road does not start for 365 - so the sky is empty
      again well before the first dash moves. */
   {
+    /* HIS TITLE STARTS IN THE MIDDLE OF THE SCREEN and rises out of the top.
+       q runs from the section's top touching the BOTTOM of the window to the
+       moment the world begins to move - a viewport of approach plus START.
+
+       IT ARRIVES AT 0.36 OF THAT, and the number is not a taste: the stage is
+       what has to be behind it, and the stage covers the middle of the screen
+       only once it has come up half a viewport, which is 0.5H of scrolling.
+       0.5H over the whole clock is 0.356 on a desktop and 0.356 on a phone -
+       the same fraction, because both terms scale with the viewport. Earlier
+       than that and his line is over the cards, not over his sky.
+
+       From there it climbs to a quarter of the way down the window and is out
+       at 0.80, which is about 110 pixels past the top of the section where the
+       road does not start for 365. */
     const total = innerHeight + START * secSpan;
     const q = clamp((scrollY - (secTop - innerHeight)) / total, 0, 1);
-    stage.style.setProperty('--hello', String(1 - smooth((q - 0.55) / 0.30)));
-    stage.style.setProperty('--hello-y',
-      Math.round((0.60 - 0.36 * q) * hor) + 'px');
+    runway.style.setProperty('--hello', String(Math.min(
+      smooth((q - 0.36) / 0.08), 1 - smooth((q - 0.60) / 0.20))));
+    runway.style.setProperty('--hello-y',
+      Math.round(Math.max(0.14, 0.50 - 0.58 * (q - 0.36)) * innerHeight) + 'px');
   }
   /* THE SHOW RUNS EXACTLY WHERE THE WORLD IS GOING. It lights the moment the
      last board comes over the horizon, so the sky is already going long

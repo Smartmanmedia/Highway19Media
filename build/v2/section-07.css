@@ -401,7 +401,7 @@
    top reaches the top of the screen only the LOWER part of it is in view, and
    44% of the stage is then most of the way down the window. It sits at 45% of
    whatever band of the stage you can actually see, which is 45% of the window
-   once it pins and rides up out of the sign as it gets there. */.sec7 .hello{position:absolute;left:0;right:0;top:var(--hello-y,44%);
+   once it pins and rides up out of the sign as it gets there. */.sec7 .hello{position:fixed;left:0;right:0;top:var(--hello-y,50vh);z-index:4;
   text-align:center;pointer-events:none;white-space:nowrap;
   font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
   font-weight:900;letter-spacing:-.02em;line-height:1;text-transform:uppercase;
