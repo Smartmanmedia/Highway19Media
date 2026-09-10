@@ -151,11 +151,18 @@ const FADE_AT=0.8208;
    the sky is properly dark by the time the board is up and the first shell
    climbs. Three and a bit seconds of dusk want more than a board's width of
    road to happen in. */
-/* THE SUN GOES DOWN AT THE BILLBOARD. He has moved it twice and settled it:
+/* THE SUN GOES DOWN AT THE BILLBOARD - and the board has moved back to make
+   room for it. At 0.44 his floating block was still going past the camera
+   while the board was already up, and the two sat on top of each other for a
+   whole stretch: the block is three lines and a strapline now, not one line,
+   so it is on screen far longer than the thing it replaced. 0.52 puts clear
+   road between them - read the block, then come up on the board, then the sun
+   goes - and still leaves the whole of the dark before the last sign.
+ He has moved it twice and settled it:
    the evening starts as you reach his board, so the credentials are read in
    the last of the light and the board is lit by the time it is behind you.
    It is one number now, not two that had to be kept in step by hand. */
-const BILL_AT=0.44;
+const BILL_AT=0.52;
 const DUSK_AT=BILL_AT;
 const RANGE=END-START;
 const STOPS=SIGN_AT.map(a=>(a-START)/RANGE);
@@ -379,8 +386,17 @@ const smooth=x=>{x=clamp(x,0,1);return x*x*(3-2*x)};
    three widths are the ones he settled on, scaled by 0.787 so each still runs
    the same number of SCROLL PIXELS as it did on the 593vh page - otherwise
    lengthening the drive would have quietly stretched every slowdown with it. */
+/* AND A FOURTH, AT THE BILLBOARD. The sun starts down as you reach his board
+   and the whole sunset is three and a bit seconds of CSS - which is a length
+   of TIME, and the only thing that decides how much of it you see is how fast
+   the road is going underneath it. At the open-road speed the evening happens
+   in a screen and a half and is over before the board is behind you. This is
+   the widest ease of the four: the road is well off its speed for a long
+   stretch either side, so the sky has room to go over. */
+const BILL_U=(BILL_AT-START)/RANGE;
 const SLOWS=[{u:STOPS[0], dip:0.93, ease:0.0905},
              {u:TEXT_U,   dip:0.82, ease:0.0826},
+             {u:BILL_U,   dip:0.90, ease:0.1500},
              {u:STOPS[1], dip:0.97, ease:0.1219}];
 const STEPS=1024;
 const TABLE=(function(){
@@ -601,15 +617,23 @@ for(let i=0;i<20;i++){
    everything else is that type cannot be given a height in pixels and stretched
    to it: it is laid out ONCE at a fixed size and then scaled, which is one
    transform and no reflow at any distance. */
-const COPY_H=200;   /* the box it is laid out in, before any scaling */
 
 const AHEAD=420;
-/* HIS FLOATING LINE COMES DOWN TOO. `h` is its height in world units and the
-   whole line is scaled from it - 132 is set against a 1440 road, and with the
-   camera on the tarmac for a phone the same line is half again wider than the
-   screen and reads as "ghway 19 Me". 86 puts it inside 390 with air either
-   side, and it rides the same projection as everything else. */
-plant({cls:'copy',art:'copyline',x:0,h:MOBILE?86:132,lift:MOBILE?300:430,
+/* HIS LINE IN THE MIDDLE OF THE ROAD. It used to say "Highway 19 Media",
+   which names the company to somebody who has been reading its name since the
+   first screen; he has replaced it with MORE MILES / FOR YOUR / BUDGET, drawn
+   as his own file and baked by tools/make_more_miles.js.
+
+   IT IS A PICTURE NOW, NOT A LINE OF TYPE, so it is planted the way everything
+   else is - by its foot, at a height in world units - rather than by a
+   baseline and a scale. Three lines and a strapline are a block, not a line:
+   480 tall is 878 across at his 1.829, which is the width the old line came
+   out at, and the lift comes down from 430 to 300 because he wants it lower.
+   Not further than that: below 300 the block sits over the road rather than
+   over the sky, and his billboard - which stands 0.09 of the trip beyond it -
+   comes up THROUGH the middle of the type instead of under it.
+   The phone gets the same block at the width its own road can hold. */
+plant({cls:'copy',art:'copyline',x:0,h:MOBILE?330:480,lift:MOBILE?230:300,
        z:-distance(TEXT_U)-AHEAD});
 /* TWO BOARDS, NOT THE SAME ONE TWICE. Both hang 875 wide off the gantry - that
    is the width his picture sets - so the height follows from each board's own
@@ -833,13 +857,7 @@ function place(drive){
     if(up<=0.004){it.el.style.opacity=0;if(it.sh)it.sh.style.opacity=0;continue}
     it.el.style.opacity=up;
     it.el.style.zIndex=Math.round(9000-D/4);
-    if(it.cls==='copy'){
-      /* hung by its own baseline at the world point and scaled about it, so
-         the line grows upward from where it stands rather than being stretched
-         to a height it was never laid out at */
-      it.el.style.transform='translate('+x+'px,'+(baseY-U*it.lift*k)+'px)'+
-        ' translate(-50%,-100%) scale('+(h/COPY_H)+')';
-    } else {
+    {
       it.el.style.height=h+'px';
       if(it.w) it.el.style.width=(U*it.w*k)+'px';
       it.el.style.transform='translate('+x+'px,'+(baseY-h-U*it.lift*k)+'px)'+

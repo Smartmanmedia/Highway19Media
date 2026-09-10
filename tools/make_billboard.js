@@ -47,24 +47,67 @@ const FACE =
  * soft-light ellipse, which is right over the pale ground it was drawn
  * against and is a white blot over a navy face - six of them, straight across
  * the copy. And this board is an LED panel, which is not floodlit at all. */
-const frame = fs.readFileSync(path.join(DIR, 'billboard-fixed.svg'), 'utf8')
-  .replace('<g isolation="isolate">', '<g style="isolation:isolate">');
 const CONES = /<ellipse[^>]*mix-blend-mode:soft-light[^>]*\/>/g;
+const frame = fs.readFileSync(path.join(DIR, 'billboard-fixed.svg'), 'utf8')
+  .replace('<g isolation="isolate">', '<g style="isolation:isolate">')
+  /* HIS THICKNESS LAYER, PUT BACK ON THE BOARD'S CORNERS.
+   *
+   * Behind the face he drew the board's edge - the dark shape that makes it
+   * read as a panel with depth rather than a decal. Illustrator wrote it as a
+   * self-crossing outline,
+   *
+   *   871.98 401.4  9.22 401.4  1.24 395.06  863.81 34.33  871.98 40.57
+   *
+   * and the long leg from the bottom-left corner to the top-right one is a
+   * DIAGONAL. Filled non-zero, which is what a browser does with it, that is
+   * not an edge at all: it is a triangle across the lower half of the board.
+   * So the thickness sat under one corner and nowhere near the other three,
+   * which is exactly what he is looking at.
+   *
+   * It is the rectangle it was always meant to be: top-left on the face's own
+   * top-left, and 17.4 wide of it to the right and 11.1 below - his own two
+   * offsets, kept. */
+  .replace(/<polygon points="871\.98 401\.4[^"]*"\s*\/>/,
+    '<rect x="0.08" y="34.32" width="871.90" height="367.08" fill="#0a1526"/>');
 const face  = `<g transform="translate(.08 34.32) scale(.44)">${FACE}</g>`;
 const DAY   = frame.replace('<!-- his map raster, dead link, replaced below -->', face)
                    .replace(CONES, '');
 
-/* AND THE SAME BOARD AFTER DARK - AN LED PANEL, which is a different thing
- * from a poster with lamps on it. A poster is lit FROM OUTSIDE, so at night
- * you dim the whole board and paint the lamplight back on; that is what put a
- * warm rectangle over his artwork and a halo round the outside of it.
+/* AND THE SAME BOARD AFTER DARK.
  *
- * An LED board makes its own light. So the frame goes dark - it is metal at
- * night like every other mast in the scene - and the face is redrawn over the
- * top at full strength, untouched. Nothing is added around it: the light in
- * the picture is the light. */
-const NIGHT = DAY.replace('</svg>',
-  `<rect width="${W}" height="${H}" fill="#06122b" opacity=".58"/>${face}</svg>`);
+ * TWO THINGS WERE WRONG WITH THE LAST ONE.
+ *
+ * The square. The frame was darkened by laying a flat rect over the WHOLE
+ * 1101 x 920 box - and most of that box is empty. A rect does not care: it
+ * filled every transparent pixel with dark blue, so the board arrived at night
+ * inside a solid rectangle of sky that was not the sky. It is a FILTER now,
+ * which multiplies the colour and leaves the alpha alone, so nothing that was
+ * transparent stops being transparent.
+ *
+ * And his spotlights. He drew a cone under each of the six fittings and asked
+ * where they had gone: they came off in both twins when the halo did, which
+ * was one cut too many. They belong at night - that is the whole point of
+ * them - so the night twin has them and the day twin does not, which is also
+ * how a real board behaves.
+ *
+ * The face is still redrawn at full strength over the darkened frame: an LED
+ * panel makes its own light, so the metalwork goes dark and the picture does
+ * not. */
+const cones = (frame.match(CONES) || []).join('');
+const NIGHT = frame
+  .replace('<!-- his map raster, dead link, replaced below -->', '')
+  .replace(CONES, '')
+  .replace(/(<svg[^>]*>)/, `$1<defs><filter id="dusk" color-interpolation-filters="sRGB">` +
+    `<feColorMatrix type="matrix" values="` +
+    `.34 0 0 0 .012   0 .34 0 0 .022   0 0 .38 0 .055   0 0 0 1 0"/></filter></defs>` +
+    `<g filter="url(#dusk)">`)
+  /* THE FACE, THEN HIS SIX CONES ON TOP OF IT. The order matters and it is
+     not the order they are drawn in: his cones sit over the face, and the
+     face is being redrawn after the frame to keep it out of the darkening -
+     so drawn in place they would end up underneath it and invisible, which is
+     what "where are my spot lights" was. Out of the filtered group, over the
+     face, on the blend he gave them. */
+  .replace('</svg>', `</g>${face}<g opacity=".42">${cones}</g></svg>`);
 
 (async () => {
   const br = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });

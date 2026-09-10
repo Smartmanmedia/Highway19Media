@@ -85,6 +85,12 @@ html,body{margin:0;background:#0a1020;color:#fff;
   background:radial-gradient(760px 620px at 11% 48%, var(--sun-a), var(--sun-b) 60%);
   transition:transform 1.1s ease-out, opacity .5s linear,
              --sun-a .6s linear, --sun-b .6s linear}
+/* AND THE EVENING TAKES ITS TIME. Every number below was set against a road
+   at its open speed, where four seconds of sunset is a screen and a half and
+   the sky is dark before you are level with the thing that started it. The
+   road now eases hard at the billboard AND the whole sequence runs half again
+   longer - a little over six seconds end to end - so the sun goes down over a
+   proper stretch of road instead of between two frames of it. */
 /* THE EVENING IS STAGED; THE MORNING IS A SWITCH. A transition belongs to the
    state being moved TO, so the long delays live in the night rules and the day
    rules keep their own short ones. Written once on the element they applied
@@ -93,7 +99,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
    than a page turning the light on. */
 :root[data-mode="night"] .sun{transform:translateY(var(--sun-set,70vh));opacity:0;
   --sun-a:rgba(255,146,42,.95); --sun-b:rgba(255,86,20,0);
-  transition:transform 3s cubic-bezier(.35,0,.65,1),
+  transition:transform 4.8s cubic-bezier(.35,0,.65,1),
              --sun-a 1.9s linear .35s, --sun-b 1.9s linear .35s,
              opacity 1s ease-in 2s}
 @media (prefers-reduced-motion: reduce){
@@ -163,7 +169,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
    land; the moon begins its arc at 1.0 and is on its mark at 3.2; the sun
    fades out over the last second of its own fall; the sky finishes last. */
 .sky::after,.sea::after,.land::after,.road::after{
-  content:'';position:absolute;inset:0;opacity:0;transition:opacity .9s linear;
+  content:'';position:absolute;inset:0;opacity:0;transition:opacity 1.4s linear;
   pointer-events:none;will-change:opacity}
 /* AND THEY DO NOT ALL GO AT ONCE. They did - one delay, one duration, four
    grounds - and the tarmac still read as going FIRST, because his road is a
@@ -178,10 +184,10 @@ html,body{margin:0;background:#0a1020;color:#fff;
    it is the surface a driver is still looking at when everything else has
    gone. Eight tenths of a second between the water and the road is enough to
    read as an order rather than a mistake. */
-:root[data-mode="night"] .sea::after{opacity:1;transition:opacity 1.8s linear 1.4s}
-:root[data-mode="night"] .sky::after{opacity:1;transition:opacity 1.8s linear 1.5s}
-:root[data-mode="night"] .land::after{opacity:1;transition:opacity 1.7s linear 1.9s}
-:root[data-mode="night"] .road::after{opacity:1;transition:opacity 1.8s linear 2.3s}
+:root[data-mode="night"] .sea::after{opacity:1;transition:opacity 2.9s linear 2.2s}
+:root[data-mode="night"] .sky::after{opacity:1;transition:opacity 2.9s linear 2.4s}
+:root[data-mode="night"] .land::after{opacity:1;transition:opacity 2.7s linear 3.0s}
+:root[data-mode="night"] .road::after{opacity:1;transition:opacity 2.9s linear 3.7s}
 .sky::after{background:linear-gradient(180deg,#02060f 0%,#050d1e 34%,#081833 62%,#0d2447 84%,#12305a 100%)}
 /* AND ON A PHONE THE SKY COMES OUT OF THE WHITE ABOVE IT. His own sky already
    washes to white, but along a 112-degree diagonal - which on a 1440 frame
@@ -273,12 +279,12 @@ html,body{margin:0;background:#0a1020;color:#fff;
   transition:transform 1.1s cubic-bezier(.47,0,.745,.715);
   background:radial-gradient(closest-side,rgba(178,208,255,.20),rgba(140,180,255,0) 76%)}
 .moon img{display:block;width:54%;height:auto}
-:root[data-mode="night"] .stars{opacity:1;transition:opacity 1.6s linear 1.6s}
+:root[data-mode="night"] .stars{opacity:1;transition:opacity 2.6s linear 2.6s}
 :root[data-mode="night"] .moon{opacity:1;transform:none;
-  transition:opacity .9s linear 1s,
+  transition:opacity 1.4s linear 1.6s,
              transform 2.2s cubic-bezier(.39,.575,.565,1) 1s}
 :root[data-mode="night"] .moon .orb{transform:none;
-  transition:transform 2.2s cubic-bezier(.47,0,.745,.715) 1s}
+  transition:transform 3.5s cubic-bezier(.47,0,.745,.715) 1.6s}
 @media (prefers-reduced-motion: reduce){
   .moon,:root[data-mode="night"] .moon{transform:none;transition:opacity .35s linear}
   .moon .orb,:root[data-mode="night"] .moon .orb{transform:none;transition:none}
@@ -287,7 +293,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
 /* the paint dims - it is only as bright as what falls on it */
 .edge,.dash{transition:background-color .9s linear}
 :root[data-mode="night"] .edge,:root[data-mode="night"] .dash{
-  background:#8195b4;transition:background-color 1.8s linear 2.3s}
+  background:#8195b4;transition:background-color 2.9s linear 3.7s}
 :root[data-mode="night"] .edge.gold{background:#8a6a26}
 
 /* ---- what stands on it --------------------------------------------------
@@ -403,15 +409,8 @@ html,body{margin:0;background:#0a1020;color:#fff;
   max-width:none;pointer-events:none;opacity:0;transition:opacity .8s linear}
 .a-lamp-l .light{left:40.9%;transform:scaleX(-1)}
 :root[data-mode="night"] .lamp .light{opacity:1}
-/* the floating line, laid out once at this size and scaled from here */
-.copy{display:grid;place-items:center;height:200px;white-space:nowrap}
-/* HIS TYPEFACE, SAID OUT LOUD. Standing alone this file had it on <body>, and
-   the body rule is exactly what the section scoper drops - so once the drive
-   became section seven of a page his floating line fell back to the browser's
-   serif and has been setting "Highway 19 Media" in Times ever since. */
-.copy .copyline{font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
-  font-weight:800;font-size:150px;line-height:1;letter-spacing:-.02em;
-  color:#fff;text-shadow:0 6px 26px rgba(0,40,90,.45)}
+/* the floating block. It was a grid holding one line of type at a fixed size;
+   it is his own drawing now, so it is sized like every other standing thing. */
 .pole{background:linear-gradient(90deg,#8a9199,#f4f7fa 38%,#cdd4db 66%,#7d848c);
   border-radius:99px}
 /* HIS GANTRY ARM, the same tile the page already uses over his hero sign,
@@ -579,7 +578,7 @@ html,body{margin:0;background:#0a1020;color:#fff;
   <img class="cloud-4" src="../../assets/v2/section-05/cloud-4.svg" alt="">
   <img class="sign1" src="../../assets/v2/section-05/sign-1.webp" alt="">
   <img class="sign3" src="../../assets/v2/section-05/sign-3.webp" alt="">
-  <span class="copyline">Highway&nbsp;19&nbsp;Media</span>
+  <img class="copyline" src="../../assets/v2/section-07/more-miles.webp" alt="">
   <img class="lamplight" src="../../assets/v2/section-05/lamp-light.webp" alt="">
   <img class="sign1-n" src="../../assets/v2/section-05/sign-1-night.webp" alt="">
   <img class="sign3-n" src="../../assets/v2/section-05/sign-3-night.webp" alt="">
@@ -753,11 +752,18 @@ const FADE_AT=0.8208;
    the sky is properly dark by the time the board is up and the first shell
    climbs. Three and a bit seconds of dusk want more than a board's width of
    road to happen in. */
-/* THE SUN GOES DOWN AT THE BILLBOARD. He has moved it twice and settled it:
+/* THE SUN GOES DOWN AT THE BILLBOARD - and the board has moved back to make
+   room for it. At 0.44 his floating block was still going past the camera
+   while the board was already up, and the two sat on top of each other for a
+   whole stretch: the block is three lines and a strapline now, not one line,
+   so it is on screen far longer than the thing it replaced. 0.52 puts clear
+   road between them - read the block, then come up on the board, then the sun
+   goes - and still leaves the whole of the dark before the last sign.
+ He has moved it twice and settled it:
    the evening starts as you reach his board, so the credentials are read in
    the last of the light and the board is lit by the time it is behind you.
    It is one number now, not two that had to be kept in step by hand. */
-const BILL_AT=0.44;
+const BILL_AT=0.52;
 const DUSK_AT=BILL_AT;
 const RANGE=END-START;
 const STOPS=SIGN_AT.map(a=>(a-START)/RANGE);
@@ -981,8 +987,17 @@ const smooth=x=>{x=clamp(x,0,1);return x*x*(3-2*x)};
    three widths are the ones he settled on, scaled by 0.787 so each still runs
    the same number of SCROLL PIXELS as it did on the 593vh page - otherwise
    lengthening the drive would have quietly stretched every slowdown with it. */
+/* AND A FOURTH, AT THE BILLBOARD. The sun starts down as you reach his board
+   and the whole sunset is three and a bit seconds of CSS - which is a length
+   of TIME, and the only thing that decides how much of it you see is how fast
+   the road is going underneath it. At the open-road speed the evening happens
+   in a screen and a half and is over before the board is behind you. This is
+   the widest ease of the four: the road is well off its speed for a long
+   stretch either side, so the sky has room to go over. */
+const BILL_U=(BILL_AT-START)/RANGE;
 const SLOWS=[{u:STOPS[0], dip:0.93, ease:0.0905},
              {u:TEXT_U,   dip:0.82, ease:0.0826},
+             {u:BILL_U,   dip:0.90, ease:0.1500},
              {u:STOPS[1], dip:0.97, ease:0.1219}];
 const STEPS=1024;
 const TABLE=(function(){
@@ -1203,15 +1218,23 @@ for(let i=0;i<20;i++){
    everything else is that type cannot be given a height in pixels and stretched
    to it: it is laid out ONCE at a fixed size and then scaled, which is one
    transform and no reflow at any distance. */
-const COPY_H=200;   /* the box it is laid out in, before any scaling */
 
 const AHEAD=420;
-/* HIS FLOATING LINE COMES DOWN TOO. `h` is its height in world units and the
-   whole line is scaled from it - 132 is set against a 1440 road, and with the
-   camera on the tarmac for a phone the same line is half again wider than the
-   screen and reads as "ghway 19 Me". 86 puts it inside 390 with air either
-   side, and it rides the same projection as everything else. */
-plant({cls:'copy',art:'copyline',x:0,h:MOBILE?86:132,lift:MOBILE?300:430,
+/* HIS LINE IN THE MIDDLE OF THE ROAD. It used to say "Highway 19 Media",
+   which names the company to somebody who has been reading its name since the
+   first screen; he has replaced it with MORE MILES / FOR YOUR / BUDGET, drawn
+   as his own file and baked by tools/make_more_miles.js.
+
+   IT IS A PICTURE NOW, NOT A LINE OF TYPE, so it is planted the way everything
+   else is - by its foot, at a height in world units - rather than by a
+   baseline and a scale. Three lines and a strapline are a block, not a line:
+   480 tall is 878 across at his 1.829, which is the width the old line came
+   out at, and the lift comes down from 430 to 300 because he wants it lower.
+   Not further than that: below 300 the block sits over the road rather than
+   over the sky, and his billboard - which stands 0.09 of the trip beyond it -
+   comes up THROUGH the middle of the type instead of under it.
+   The phone gets the same block at the width its own road can hold. */
+plant({cls:'copy',art:'copyline',x:0,h:MOBILE?330:480,lift:MOBILE?230:300,
        z:-distance(TEXT_U)-AHEAD});
 /* TWO BOARDS, NOT THE SAME ONE TWICE. Both hang 875 wide off the gantry - that
    is the width his picture sets - so the height follows from each board's own
@@ -1435,13 +1458,7 @@ function place(drive){
     if(up<=0.004){it.el.style.opacity=0;if(it.sh)it.sh.style.opacity=0;continue}
     it.el.style.opacity=up;
     it.el.style.zIndex=Math.round(9000-D/4);
-    if(it.cls==='copy'){
-      /* hung by its own baseline at the world point and scaled about it, so
-         the line grows upward from where it stands rather than being stretched
-         to a height it was never laid out at */
-      it.el.style.transform='translate('+x+'px,'+(baseY-U*it.lift*k)+'px)'+
-        ' translate(-50%,-100%) scale('+(h/COPY_H)+')';
-    } else {
+    {
       it.el.style.height=h+'px';
       if(it.w) it.el.style.width=(U*it.w*k)+'px';
       it.el.style.transform='translate('+x+'px,'+(baseY-h-U*it.lift*k)+'px)'+
