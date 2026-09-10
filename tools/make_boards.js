@@ -18,6 +18,15 @@ const fs = require('fs'), path = require('path');
 const { chromium } = require('/home/user/storyboard-app/node_modules/playwright');
 const ROOT = path.join(__dirname, '..'), DIR = path.join(ROOT, 'assets', 'v2', 'section-05');
 const W = 940.5, H = 295.5, OUT_W = 1800;
+/* HIS BOARD ONE CARRIES A PLATE OVER IT NOW - "THE ROAD AHEAD", with his
+ * strapline beside it - and that plate stands ABOVE the green, so board one is
+ * a taller drawing than board three. Read off his own mock-up, where the board
+ * is 925 across and the plate is 585 of it, starting 185 in and rising 32
+ * above the top edge: 63.2% of the board wide, 20.0% in, 3.46% of the board's
+ * WIDTH above it. His plate file is 583.4 across, so it is scaled to land. */
+const PLATE_W = 0.632, PLATE_X = 0.200, PLATE_UP = 0.0346;
+const K = PLATE_W * W / 583.4;                    /* his plate, to our board  */
+const RISE = Math.round((PLATE_UP * W + 5.36 * K) * 100) / 100;
 /* HIS NIGHT GREEN AND HIS NIGHT GOLD, the same two the site's night palette
  * uses. A board is one bitmap, so the night board is a second bitmap: nothing
  * inside an <img> can be recoloured by CSS. */
@@ -42,15 +51,22 @@ const FONTS =
   face('BeVietnamPro-Black', 400, 'BeVietnamPro-Black.woff2') +
   face('BeVietnamPro-Medium', 400, 'BeVietnamPro-Medium.woff2') +
   face('Be Vietnam Pro', 500, 'BeVietnamPro-Medium.woff2') +
-  face('Be Vietnam Pro', 800, 'BeVietnamPro-Black.woff2');
+  face('Be Vietnam Pro', 800, 'BeVietnamPro-Black.woff2') +
+  /* his plate asks for these two by name */
+  face('BeVietnamPro-ExtraBold', 400, 'BeVietnamPro-ExtraBold.woff2') +
+  face('BeVietnamPro-Light', 400, 'BeVietnamPro-Light.woff2');
 
 /* HIS BOARD ONE, WHOLE. Nothing is added to it - the copy, the shield and the
  * lane diagram are all in the file he drew. */
+const H1 = Math.round((H + RISE) * 100) / 100;    /* board one, plate and all */
 const sign1 =
 `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+     width="${W}" height="${H1}" viewBox="0 ${-RISE} ${W} ${H1}">
 <style>${FONTS}</style>
 ${bodyOf('sign-1-src.svg')}
+<g transform="translate(${(PLATE_X * W - 1.21 * K).toFixed(2)} ${(-PLATE_UP * W - 5.36 * K).toFixed(2)}) scale(${K.toFixed(4)})">
+${bodyOf('sign-1-plate-src.svg')}
+</g>
 </svg>`;
 
 const body = bodyOf('sign-3-src.svg');
@@ -95,18 +111,19 @@ const nightOf = svg => {
   return n.replace('</svg>', BEAMS + '</svg>');
 };
 
-const BOARDS = [['sign-1', sign1], ['sign-3', sign3]];
+/* each board carries its own box now, because one of them is taller */
+const BOARDS = [['sign-1', sign1, W, H1], ['sign-3', sign3, W, H]];
 
 (async () => {
   const br = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
-  const OUT_H = Math.round(OUT_W * H / W);
-  for (const [name, day] of BOARDS) {
+  for (const [name, day, w, h] of BOARDS) {
+    const OUT_H = Math.round(OUT_W * h / w);
     const night = nightOf(day);
     fs.writeFileSync(path.join(DIR, name + '.svg'), day);
     fs.writeFileSync(path.join(DIR, name + '-night.svg'), night);
     for (const [file, art] of [[name + '.webp', day], [name + '-night.webp', night]]) {
       const p = await br.newPage({ viewport: { width: OUT_W, height: OUT_H } });
-      await p.setContent('<body style="margin:0">' + art.replace(`width="${W}" height="${H}"`,
+      await p.setContent('<body style="margin:0">' + art.replace(`width="${w}" height="${h}"`,
         `width="${OUT_W}" height="${OUT_H}"`) + '</body>');
       await p.evaluate(() => document.fonts.ready);
       await p.waitForTimeout(400);
@@ -124,5 +141,5 @@ const BOARDS = [['sign-1', sign1], ['sign-3', sign3]];
     }
   }
   await br.close();
-  console.log('aspect ' + (W / H).toFixed(3));
+  console.log('aspect  board 1 ' + (W / H1).toFixed(4) + '   board 3 ' + (W / H).toFixed(4));
 })();

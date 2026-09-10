@@ -1196,7 +1196,14 @@ plant({cls:'copy',art:'copyline',x:0,h:MOBILE?86:132,lift:MOBILE?300:430,
    stands 31 clear of the truss's head, both kept as offsets so the three stay
    one object at either height. */
 const SIGN_LIFT=MOBILE?620:371;
-const BOARD_W=MOBILE?380:566, BOARDS=[{art:'sign1',ar:940.5/295.5},{art:'sign3',ar:940.5/295.5}];
+/* AND THE TWO BOARDS ARE NO LONGER THE SAME SHAPE. His first one carries THE
+   ROAD AHEAD on a yellow plate that stands above the green, so its drawing is
+   940.5 by 333.5 where his second is 940.5 by 295.5 - 2.8201 against 3.1827,
+   both printed by tools/make_boards.js, which is where the plate is composed.
+   Each board's height follows its OWN aspect, so the plate rises above the
+   gantry rather than squashing the sign into the same box. */
+const BOARD_W=MOBILE?380:566,
+      BOARDS=[{art:'sign1',ar:2.8201},{art:'sign3',ar:3.1827}];
 STOPS.forEach((s,si)=>{
   const z=-distance(s)-AHEAD, b=BOARDS[si%BOARDS.length];
   /* THE GANTRY DOES NOT MOVE. It towers because the avenue came down, not
@@ -1215,7 +1222,11 @@ STOPS.forEach((s,si)=>{
   const armL=-14+BOARD_W/2, armR=414+11;
   const armW=MOBILE?armR-armL:149, armX=MOBILE?(armL+armR)/2:342;
   plant({cls:'truss',x:armX,z,h:62,w:armW,lift:SIGN_LIFT+51,shadow:true});
-  plant({cls:'pole',x:414,z,h:515+SIGN_LIFT-371,w:22,shadow:true});
+  /* HIS MAST IS A COLUMN, NOT A ROD. On his own mock-up it is 65 units across
+     a board 925 wide - seven per cent of it - where this was 22 against 566,
+     which is under four. Half the reason his picture reads heavier than the
+     page's is furniture this thin. */
+  plant({cls:'pole',x:414,z,h:515+SIGN_LIFT-371,w:40,shadow:true});
 });
 /* HIS STREET LAMPS. He drew each one eight times over, once per distance, but
    the scene only needs the shape twice - mast right with the arm reaching left
@@ -1386,7 +1397,12 @@ function place(drive){
         const g=it.shGeo;
         /* his groups carry 54% and the rasteriser flattened it into the pixels
            rather than the alpha, so it goes back on here */
-        it.sh.style.opacity=.54*up;
+        /* HIS SHADOWS ARE HEAVIER THAN .54. His groups carry 54% and the
+           rasteriser flattened it into the pixels, so it goes back on here -
+           but his own drawing of this scene lays them down darker than that,
+           and a light shadow is the other half of why his picture reads with
+           more weight than the page's. */
+        it.sh.style.opacity=.70*up;
         it.sh.style.width=(h*g.w)+'px';
         it.sh.style.height=(h*g.h)+'px';
         it.sh.style.transform='translate('+(x+h*g.dx)+'px,'+(baseY+h*g.dy)+'px)';

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" width="583.92" height="60.74" viewBox="0 0 583.92 60.74">
+  <g id="Layer_1-2" data-name="Layer 1">
+    <g>
+      <g>
+        <rect x="0" y="8.2" width="583.4" height="52.54" rx="9.81" ry="9.81"/>
+        <rect x="1.21" y="5.36" width="581.71" height="52.54" rx="7.34" ry="7.34" fill="#ffda00" stroke="#fff" stroke-miterlimit="10" stroke-width="2"/>
+      </g>
+      <text transform="translate(28.36 42.54)" font-family="BeVietnamPro-ExtraBold, &apos;Be Vietnam Pro&apos;" font-size="29.43" font-weight="700"><tspan x="0" y="0">THE </tspan><tspan x="68.18" y="0" letter-spacing="-.04em">R</tspan><tspan x="88.48" y="0" letter-spacing="-.04em">O</tspan><tspan x="111.7" y="0">AD AHEAD</tspan></text>
+      <text transform="translate(312.13 41.2)" font-family="BeVietnamPro-Medium, &apos;Be Vietnam Pro&apos;" font-size="12.52" font-weight="500"><tspan x="0" y="0" letter-spacing="-.05em">F</tspan><tspan x="7.38" y="0" letter-spacing="-.03em">r</tspan><tspan x="12.01" y="0" letter-spacing="0em">o</tspan><tspan x="20.08" y="0">m </tspan><tspan x="34.16" y="0" letter-spacing="-.02em">g</tspan><tspan x="42.07" y="0" letter-spacing="0em">e</tspan><tspan x="49.52" y="0" letter-spacing="0em">t</tspan><tspan x="54.82" y="0">ti</tspan><tspan x="63.66" y="0" letter-spacing="0em">n</tspan><tspan x="70.91" y="0" letter-spacing="0em">g </tspan><tspan x="81.9" y="0" letter-spacing="0em">n</tspan><tspan x="89.15" y="0" letter-spacing="0em">o</tspan><tspan x="97.13" y="0" letter-spacing="0em">ti</tspan><tspan x="105.97" y="0" letter-spacing="0em">c</tspan><tspan x="113.68" y="0" letter-spacing="0em">e</tspan><tspan x="121.2" y="0">d </tspan><tspan x="132.3" y="0" letter-spacing="-.02em">t</tspan><tspan x="137.5" y="0">o </tspan><tspan x="148.48" y="0" letter-spacing="-.02em">g</tspan><tspan x="156.4" y="0" letter-spacing="0em">e</tspan><tspan x="163.85" y="0" letter-spacing="0em">t</tspan><tspan x="169.14" y="0" letter-spacing="0em">ti</tspan><tspan x="177.98" y="0" letter-spacing="0em">n</tspan><tspan x="185.23" y="0" letter-spacing="0em">g </tspan><tspan x="196.23" y="0" letter-spacing="0em">bo</tspan><tspan x="212.43" y="0" letter-spacing="0em">o</tspan><tspan x="220.51" y="0" letter-spacing="-.04em">k</tspan><tspan x="227.11" y="0" letter-spacing="0em">e</tspan><tspan x="234.62" y="0">d.</tspan></text>
+      <g>
+        <rect x="408.83" y="5.52" width="27.06" height="7.83" rx="3" ry="3" transform="translate(844.72 18.87) rotate(-180)"/>
+        <rect x="416.31" y="4.17" width="11.75" height="3.4" transform="translate(416.31 428.06) rotate(-90)"/>
+      </g>
+      <g>
+        <rect x="144.83" y="5.52" width="27.06" height="7.83" rx="3" ry="3" transform="translate(316.72 18.87) rotate(-180)"/>
+        <rect x="152.31" y="4.17" width="11.75" height="3.4" transform="translate(152.31 164.06) rotate(-90)"/>
+      </g>
+    </g>
+  </g>
+</svg>
