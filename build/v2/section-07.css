@@ -390,8 +390,16 @@
    sits 0.955 of that to the left of the head at 33.3%. */.sec7 .lamp .light{position:absolute;width:572.6%;height:125%;left:-513.5%;top:-9.6%;
   max-width:none;pointer-events:none;opacity:0;transition:opacity .8s linear}.sec7 .a-lamp-l .light{left:40.9%;transform:scaleX(-1)}:root[data-mode="night"] .sec7 .lamp .light{opacity:1}
 /* the floating block. It was a grid holding one line of type at a fixed size;
-   it is his own drawing now, so it is sized like every other standing thing. */.sec7 .pole{background:linear-gradient(90deg,#8a9199,#f4f7fa 38%,#cdd4db 66%,#7d848c);
-  border-radius:99px}
+   it is his own drawing now, so it is sized like every other standing thing. */
+/* HIS MAST IS A CYLINDER, WHICH HAS ONE CAP, NOT TWO. border-radius:99px on a
+   tall box is a lozenge - a half-circle at the top AND a half-circle at the
+   bottom - so the thing tapered to a point where it meets the ground and read
+   as hanging rather than standing. His own billboard mast is drawn with a
+   shallow ellipse over the top and nothing at the foot, because the foot is
+   in the grass. Same here: a 6% ellipse at the head, square at the base, and
+   one more stop in the barrel gradient so it turns like a pipe. */.sec7 .pole{background:linear-gradient(90deg,#6f757d 0%,#9aa1a9 9%,#f4f7fa 36%,
+    #e2e8ed 52%,#cdd4db 66%,#9aa1a9 87%,#6d737b 100%);
+  border-radius:50% 50% 0 0 / 6% 6% 0 0}
 /* HIS GANTRY ARM, the same tile the page already uses over his hero sign,
    repeated along the arm so the cell keeps its shape whatever length the arm
    works out to at this distance. The tile is set from script off the hidden
@@ -411,7 +419,17 @@
 
    The gantry is the exception - he drew no shadow for it - so the board, the
    arm and the pole still get the flipped-and-skewed kind, which is right
-   enough for three flat rectangles. */.sec7 .shadow{transform-origin:50% 100%}.sec7 .shadow-derived{filter:brightness(0) blur(1.5px);opacity:.26}.sec7 .shadow img{display:block;height:100%;width:100%}
+   enough for three flat rectangles. */.sec7 .shadow{transform-origin:50% 100%}
+/* THE THROWN SHADOW, HEAVIER. .26 over green is a rumour, and a thing whose
+   shadow you cannot see is a thing standing on nothing. */.sec7 .shadow-derived{filter:brightness(0) blur(1.5px);opacity:.26}
+/* AND THE ONE THAT MATTERS: THE PATCH UNDER THE FOOT ITSELF. Every mast in
+   this scene is planted correctly and every one of them looked like it was
+   hanging, because a shadow thrown sideways leaves the base of the thing
+   bare - there is nothing where the metal meets the ground, and the eye reads
+   that gap as air. This is the contact: a dark ellipse centred exactly on the
+   foot, sized off the thing's own width, which is what makes a post touch. */.sec7 .foot{position:absolute;left:0;top:0;pointer-events:none;
+  background:radial-gradient(50% 50% at 50% 50%,
+    rgba(0,0,0,.52) 0%, rgba(0,0,0,.34) 42%, rgba(0,0,0,0) 72%)}.sec7 .shadow img{display:block;height:100%;width:100%}
 
 /* HIS CLOUDS, four of his own drawings instead of the four soft blobs that
    stood in for them. They are small enough to travel as SVG and they scale

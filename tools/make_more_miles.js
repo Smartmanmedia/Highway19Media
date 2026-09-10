@@ -37,9 +37,22 @@ const FONTS =
 
 const body = fs.readFileSync(path.join(DIR, 'more-miles-src.svg'), 'utf8')
   .replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
+/* AND IT IS NOT A FLAT WHITE ANY MORE. His block is white type and it spends
+ * half its run over a pale sky and the top of a white cloud, where white on
+ * white is nothing at all. It gets an edge straight down: the thing that makes
+ * a letter read as a solid object rather than a hole in the sky.
+ *
+ * AND IT IS A SECOND COPY OF HIS TYPE, NOT A FILTER. An feDropShadow says the
+ * same thing in one line and took this file from 32K to 206K: a filter makes
+ * the renderer composite the whole group off-screen, and what comes back has
+ * soft alpha over every edge where flat shapes had none - which is precisely
+ * what a webp cannot pack. His own outlines, offset and darkened, are flat
+ * shapes again, and flat shapes cost nothing. */
+const shadowOf = b => '<g transform="translate(0 5.5)" opacity=".5">' +
+  b.split('fill="#fff"').join('fill="#04264f"') + '</g>';
 const ART =
 `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
-<style>${FONTS}</style>${body}</svg>`;
+<style>${FONTS}</style>${shadowOf(body)}${body}</svg>`;
 
 (async () => {
   const br = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
@@ -60,7 +73,7 @@ const ART =
     return { x: b.x, y: b.y, w: b.width, h: b.height };
   });
   await p0.close();
-  const M = 2;
+  const M = 8;    /* room for the shadow, which the bbox does not count */
   const VX = +(bb.x - M).toFixed(2), VY = +(bb.y - M).toFixed(2);
   const VW = +(bb.w + M * 2).toFixed(2), VH = +(bb.h + M * 2).toFixed(2);
   console.log('ink ' + VW + ' x ' + VH + '  (his artboard was ' + W + ' x ' + H + ')');
@@ -76,7 +89,7 @@ const ART =
     const i = new Image(); i.src = 'data:image/png;base64,' + d; await i.decode();
     const c = document.createElement('canvas'); c.width = i.width; c.height = i.height;
     c.getContext('2d').drawImage(i, 0, 0);
-    return c.toDataURL('image/webp', 0.86).split(',')[1];
+    return c.toDataURL('image/webp', 0.80).split(',')[1];
   }, { d: png.toString('base64') });
   fs.writeFileSync(path.join(DIR, 'more-miles.webp'), Buffer.from(webp, 'base64'));
   await p.close(); await br.close();

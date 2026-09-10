@@ -427,8 +427,16 @@ html,body{margin:0;background:#0a1020;color:#fff;
 :root[data-mode="night"] .lamp .light{opacity:1}
 /* the floating block. It was a grid holding one line of type at a fixed size;
    it is his own drawing now, so it is sized like every other standing thing. */
-.pole{background:linear-gradient(90deg,#8a9199,#f4f7fa 38%,#cdd4db 66%,#7d848c);
-  border-radius:99px}
+/* HIS MAST IS A CYLINDER, WHICH HAS ONE CAP, NOT TWO. border-radius:99px on a
+   tall box is a lozenge - a half-circle at the top AND a half-circle at the
+   bottom - so the thing tapered to a point where it meets the ground and read
+   as hanging rather than standing. His own billboard mast is drawn with a
+   shallow ellipse over the top and nothing at the foot, because the foot is
+   in the grass. Same here: a 6% ellipse at the head, square at the base, and
+   one more stop in the barrel gradient so it turns like a pipe. */
+.pole{background:linear-gradient(90deg,#6f757d 0%,#9aa1a9 9%,#f4f7fa 36%,
+    #e2e8ed 52%,#cdd4db 66%,#9aa1a9 87%,#6d737b 100%);
+  border-radius:50% 50% 0 0 / 6% 6% 0 0}
 /* HIS GANTRY ARM, the same tile the page already uses over his hero sign,
    repeated along the arm so the cell keeps its shape whatever length the arm
    works out to at this distance. The tile is set from script off the hidden
@@ -451,7 +459,18 @@ html,body{margin:0;background:#0a1020;color:#fff;
    arm and the pole still get the flipped-and-skewed kind, which is right
    enough for three flat rectangles. */
 .shadow{transform-origin:50% 100%}
+/* THE THROWN SHADOW, HEAVIER. .26 over green is a rumour, and a thing whose
+   shadow you cannot see is a thing standing on nothing. */
 .shadow-derived{filter:brightness(0) blur(1.5px);opacity:.26}
+/* AND THE ONE THAT MATTERS: THE PATCH UNDER THE FOOT ITSELF. Every mast in
+   this scene is planted correctly and every one of them looked like it was
+   hanging, because a shadow thrown sideways leaves the base of the thing
+   bare - there is nothing where the metal meets the ground, and the eye reads
+   that gap as air. This is the contact: a dark ellipse centred exactly on the
+   foot, sized off the thing's own width, which is what makes a post touch. */
+.foot{position:absolute;left:0;top:0;pointer-events:none;
+  background:radial-gradient(50% 50% at 50% 50%,
+    rgba(0,0,0,.52) 0%, rgba(0,0,0,.34) 42%, rgba(0,0,0,0) 72%)}
 
 .shadow img{display:block;height:100%;width:100%}
 
@@ -712,7 +731,12 @@ const stage=document.getElementById('stage'), props=document.getElementById('pro
    phone build on a desktop, use the browser's device emulation - it reports a
    coarse pointer. Narrowing the window deliberately no longer does it.) */
 const MOBILE = matchMedia('(max-width:900px) and (pointer:coarse)').matches;
-const EYE=MOBILE?470:129, ROAD=360, LINE=311, GRASS=546, LANE=3.6, F0=0.62;
+/* AND THE PHONE'S EYE COMES DOWN A FIFTH. 470 was set to keep his gantry out
+   of a 390-wide frame, and it reads as a drone shot: the road falls away
+   below you and the whole avenue is laid out flat. 376 is a fifth closer to
+   the tarmac - the horizon drops, the road opens, and the things standing on
+   it stand over you rather than under you. */
+const EYE=MOBILE?376:129, ROAD=360, LINE=311, GRASS=546, LANE=3.6, F0=0.62;
 const GOLD_LANE=8, GOLD=ROAD-GOLD_LANE;
 /* AND THE HORIZON COMES DOWN WITH IT, a little. A lower eye puts more road in
    the frame; leaving the vanishing point where it was would have pushed the
@@ -1176,6 +1200,15 @@ function plant(o){
     if(!drawn) sh.style.transformOrigin=(it.fx*100)+'% 100%';
     it.sh=sh; it.shGeo=drawn||null;
   }
+  /* AND A PATCH UNDER THE FOOT, for anything with a foot worth seeing. o.foot
+     is its width in world units - a share of the thing's own base, not a
+     number in pixels, so it grows and shrinks with what it belongs to. */
+  if(o.foot){
+    const ft=document.createElement('div');
+    ft.className='foot';
+    shadows.appendChild(ft);
+    it.ft=ft;
+  }
   items.push(it); return it;
 }
 /* HIS AVENUE. Four trees cycling, alternating sides, the far row offset by
@@ -1242,7 +1275,18 @@ for(let i=0;i<20;i++){
    to it: it is laid out ONCE at a fixed size and then scaled, which is one
    transform and no reflow at any distance. */
 
-const AHEAD=420;
+/* HOW FAR AHEAD OF ITS STOP A BOARD IS PLANTED. Further on a phone: the frame
+   is a third the width, so a board has to be read from further out to be read
+   at all, and it has to be gone sooner because at 390 across it fills the
+   screen and runs off both edges long before it is overhead. 620 gives it the
+   room to do both. */
+const AHEAD=MOBILE?620:420;
+/* WHERE A BOARD IS FIRST AND LAST SEEN. Far: the phone's dSea is far enough
+   out to hold the whole road at once, so a board gets its own nearer horizon.
+   Near: it is out well before the projection starts stretching it, and still
+   a good deal closer than AHEAD, which is where it is meant to be read. */
+const SIGN_FAR=MOBILE?3400:2000, SIGN_FADE=900,
+      SIGN_NEAR=MOBILE?380:210, SIGN_NEAR_FADE=MOBILE?200:150;
 /* HIS LINE IN THE MIDDLE OF THE ROAD. It used to say "Highway 19 Media",
    which names the company to somebody who has been reading its name since the
    first screen; he has replaced it with MORE MILES / FOR YOUR / BUDGET, drawn
@@ -1314,7 +1358,7 @@ STOPS.forEach((s,si)=>{
      a board 925 wide - seven per cent of it - where this was 22 against 566,
      which is under four. Half the reason his picture reads heavier than the
      page's is furniture this thin. */
-  plant({cls:'pole',x:414,z,h:515+SIGN_LIFT-371,w:40,shadow:true});
+  plant({cls:'pole',x:414,z,h:515+SIGN_LIFT-371,w:40,shadow:true,foot:170});
 });
 /* HIS BILLBOARD, ON THE VERGE BEFORE THE SUN GOES DOWN.
    It is the credentials beat - twenty five years, the three words - and it
@@ -1335,8 +1379,13 @@ STOPS.forEach((s,si)=>{
    post standing on the water. 460 puts it in the same band as his palms,
    with a clear width of verge outside it, and the shadow it throws lands on
    green rather than on the sea where nothing could see it. */
-const BILL_H=MOBILE?900:720;
-plant({cls:'sign',art:'bill',fx:0.961,shadow:true,
+/* AND THE PHONE'S BOARD COMES DOWN WITH THE PHONE'S EYE. 900 was set against
+   a camera at 470, where a board that size was overhead and readable; at 376
+   the same board is wider than a 390 frame long before you are level with it -
+   his shield off one edge and his headline off the other. 560 lands inside it
+   with the gantry still showing at both ends. */
+const BILL_H=MOBILE?500:720;
+plant({cls:'sign',art:'bill',fx:0.961,shadow:true,foot:250,
   x:460, z:-distance((BILL_AT-START)/RANGE)-AHEAD, h:BILL_H});
 /* HIS STREET LAMPS. He drew each one eight times over, once per distance, but
    the scene only needs the shape twice - mast right with the arm reaching left
@@ -1353,7 +1402,7 @@ plant({cls:'sign',art:'bill',fx:0.961,shadow:true,
 const LAMP_H=Math.round(620*STANDING), LAMP_N=7, LAMP_GAP=LOOP/LAMP_N;
 for(let i=0;i<LAMP_N*2;i++){
   const side=i%2?1:-1, n=Math.floor(i/2);
-  plant({cls:'lamp',art:side>0?'lamp-r':'lamp-l',shadow:true,
+  plant({cls:'lamp',art:side>0?'lamp-r':'lamp-l',shadow:true,foot:95,
     x:side*414, h:LAMP_H,
     z:-420-n*LAMP_GAP-(side>0?LAMP_GAP/2:0)+LAMP_GAP/2, loop:true});
 }
@@ -1480,8 +1529,27 @@ function place(drive){
        have to be a switch. Over the last dFade of the run a thing comes up
        from nothing, so it arrives out of the haze at the horizon instead of
        appearing. Smoothed at both ends, or the ramp itself shows as a corner. */
-    const up=smooth((dSea-D)/dFade);
-    if(up<=0.004){it.el.style.opacity=0;if(it.sh)it.sh.style.opacity=0;continue}
+    let up=smooth((dSea-D)/dFade);
+    /* HIS BOARDS DO NOT ALL STAND THERE AT ONCE, AND THEY DO NOT COME APART IN
+       YOUR FACE EITHER.
+
+       FAR: everything in this scene fades up at dSea, the far edge of the
+       world, and dSea belongs to the CAMERA - so on a phone, where the eye
+       sits high, it is thousands of units out and every board on the road is
+       in the frame together with the copy block between them. A board gets a
+       nearer edge of its own: it comes up out of the haze at SIGN_FAR and
+       nothing is visible beyond it.
+
+       NEAR: a flat sprite driven under is a flat sprite stretched, and past a
+       certain closeness it stops reading as a board and starts reading as a
+       green band across the middle of the picture - which is exactly what he
+       photographed and called squishing. It is gone by SIGN_NEAR, which is
+       still half as far again as the stop where it is meant to be read, so
+       nothing is lost but the distortion. */
+    if(it.cls==='sign'||it.cls==='truss'||it.cls==='pole')
+      up=Math.min(up, smooth((SIGN_FAR-D)/SIGN_FADE), smooth((D-SIGN_NEAR)/SIGN_NEAR_FADE));
+    if(up<=0.004){it.el.style.opacity=0;if(it.sh)it.sh.style.opacity=0;
+      if(it.ft)it.ft.style.opacity=0;continue}
     it.el.style.opacity=up;
     it.el.style.zIndex=Math.round(9000-D/4);
     {
@@ -1489,6 +1557,14 @@ function place(drive){
       if(it.w) it.el.style.width=(U*it.w*k)+'px';
       it.el.style.transform='translate('+x+'px,'+(baseY-h-U*it.lift*k)+'px)'+
         ' translateX(-'+(it.fx*100)+'%)';
+    }
+    if(it.ft){
+      const fw=U*it.foot*k;
+      it.ft.style.opacity=up;
+      it.ft.style.width=fw+'px';
+      it.ft.style.height=(fw*0.34)+'px';
+      it.ft.style.zIndex=3;
+      it.ft.style.transform='translate('+x+'px,'+baseY+'px) translate(-50%,-50%)';
     }
     if(it.sh){
       it.sh.style.zIndex=2;
