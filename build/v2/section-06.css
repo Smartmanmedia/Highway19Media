@@ -283,7 +283,12 @@
    of each card is BeVietnamPro-SemiBold at 600 and the six under it are Light
    at 300; this had the lead at 500, which reads as barely emphasised beside
    its own body copy. */
-.sec6 .page .card p > b{ display:block; font-weight:600 }
+.sec6 .page .card p > b{ display:block; font-weight:600;
+  /* AND HALF A LINE UNDER IT. His lead and his body run as one block in the
+     SVG because Illustrator sets a paragraph as a stack of tspans on a fixed
+     leading and cannot say "a bit more here"; on a page it can. Half of the
+     1.09 line the copy is set on. */
+  margin-bottom:0.545em }
 .sec6 .page .card p .nb{ white-space:nowrap }
 /* It sits on his mark, but it is not there until you ask for it: it fades in
    while sliding UP INTO that mark, so the arrival reads as the button coming

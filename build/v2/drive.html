@@ -1286,7 +1286,8 @@ const AHEAD=MOBILE?620:420;
    Near: it is out well before the projection starts stretching it, and still
    a good deal closer than AHEAD, which is where it is meant to be read. */
 const SIGN_FAR=MOBILE?3400:2000, SIGN_FADE=900,
-      SIGN_NEAR=MOBILE?380:210, SIGN_NEAR_FADE=MOBILE?200:150;
+      SIGN_NEAR=MOBILE?380:210, SIGN_NEAR_FADE=MOBILE?200:150,
+      COPY_NEAR=MOBILE?380:230, COPY_NEAR_FADE=MOBILE?200:170;
 /* HIS LINE IN THE MIDDLE OF THE ROAD. It used to say "Highway 19 Media",
    which names the company to somebody who has been reading its name since the
    first screen; he has replaced it with MORE MILES / FOR YOUR / BUDGET, drawn
@@ -1548,6 +1549,13 @@ function place(drive){
        nothing is lost but the distortion. */
     if(it.cls==='sign'||it.cls==='truss'||it.cls==='pole')
       up=Math.min(up, smooth((SIGN_FAR-D)/SIGN_FADE), smooth((D-SIGN_NEAR)/SIGN_NEAR_FADE));
+    /* AND HIS BLOCK GOES THE SAME WAY. Type driven under is type stretched:
+       three lines that read cleanly at the stop are four letters across the
+       whole frame a moment later, and then they slide off the edges rather
+       than passing. It is out before that, which for a thing you have already
+       read costs nothing. */
+    if(it.cls==='copy')
+      up=Math.min(up, smooth((D-COPY_NEAR)/COPY_NEAR_FADE));
     if(up<=0.004){it.el.style.opacity=0;if(it.sh)it.sh.style.opacity=0;
       if(it.ft)it.ft.style.opacity=0;continue}
     it.el.style.opacity=up;
@@ -1792,16 +1800,18 @@ function tick(now){
     /* AND WHERE IT STOPS IS HIS NUMBER, NOT THE HORIZON'S. The hold used to be
        0.62 of the way down to the horizon, which on this scene works out at
        0.40 - so the line stopped a tenth of a screen short of the top of the
-       band he asked for and never reached it. 0.31 is his, and it is well
-       clear of the horizon at 0.645 either way. */
-    const hold  = 0.31;
-    /* AND IT NEVER LEAVES THE BAND HE MARKED. It arrives at 0.58 of the way
-       down the window and stops climbing at 0.31 - two hundred pixels above
-       where it came in and a hundred above where it used to stop, on the
-       970-pixel window he measured them on. Both are hard limits, not numbers
-       the geometry is trusted to land on.
+       band he asked for and never reached it. This is his number now. */
+    const hold  = 0.07;
+    /* AND IT NEVER LEAVES THE BAND HE SET. Three hundred pixels higher again,
+       on the 970-pixel window he measures these on: it arrives at 0.271 of
+       the way down rather than 0.58, and stops climbing at 0.07 rather than
+       0.31. The exit is the one number that is not the full 300 - at 0.001
+       the MIDDLE of the line would sit on the top edge of the window with
+       half the type off the screen, so it stops where the line still fits
+       under it, which is a little over half its own height down. Both are
+       hard limits, not numbers the geometry is trusted to land on.
 
-       BELOW 0.58 IT IS NOT ON THE SCREEN AT ALL. Letting it slide up through
+       BELOW 0.271 IT IS NOT ON THE SCREEN AT ALL. Letting it slide up through
        the bottom edge put half a line of it under the fold, which is outside
        the band as surely as being over the cards would be; and he does not
        want it faded in, so it cannot arrive by getting brighter either. It is
@@ -1809,7 +1819,7 @@ function tick(now){
        whole line to stand inside the band, and then it is simply there. */
     const y = (cy + road) / 2;
     runway.style.setProperty('--hello-y',
-      Math.round((y > 0.58 ? 1.5 : Math.max(hold, y)) * innerHeight) + 'px');
+      Math.round((y > 0.271 ? 1.5 : Math.max(hold, y)) * innerHeight) + 'px');
     runway.style.setProperty('--hello', String(1 - smooth(t / START)));
   }
   /* THE SHOW RUNS EXACTLY WHERE THE WORLD IS GOING. It lights the moment the

@@ -48,7 +48,7 @@ const body = fs.readFileSync(path.join(DIR, 'more-miles-src.svg'), 'utf8')
  * soft alpha over every edge where flat shapes had none - which is precisely
  * what a webp cannot pack. His own outlines, offset and darkened, are flat
  * shapes again, and flat shapes cost nothing. */
-const shadowOf = b => '<g transform="translate(0 5.5)" opacity=".5">' +
+const shadowOf = b => '<g transform="translate(0 3)" opacity=".5">' +
   b.split('fill="#fff"').join('fill="#04264f"') + '</g>';
 const ART =
 `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">

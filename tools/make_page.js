@@ -18,23 +18,25 @@ const HEADER =
   '<header class="hdr">\n' +
   '  <div class="hdr-in">\n' +
   '    <button class="mode-switch" type="button" aria-label="Switch to night">\n' +
-  '      <img class="to-night" src="../../assets/brand/Moon.svg" alt="">\n' +
-  '      <img class="to-day" src="../../assets/brand/Sun.svg" alt="">\n' +
+  '      <img class="to-night" src="../../assets/v2/header/moon.svg" alt="">\n' +
+  '      <img class="to-day" src="../../assets/v2/header/sun.svg" alt="">\n' +
   '    </button>\n' +
   '    <a class="hdr-logo" href="#top">\n' +
   '      <span class="hdr-lock">HIGHWAY<i>19</i>MEDIA</span>\n' +
   '      <span class="hdr-rule"></span>\n' +
   '      <span class="hdr-tag">Creative Marketing for Tampa Bay Businesses</span>\n' +
   '    </a>\n' +
+  '    <img class="hdr-shield" src="../../assets/v2/ui-shield.webp" alt="Highway 19 Media">\n' +
   '    <nav class="hdr-nav">\n' +
   '      <a href="#services">Services</a>\n' +
   '      <a href="#roadmap">The Road Map</a>\n' +
   '      <a href="#qa">Q&amp;A</a>\n' +
   '    </nav>\n' +
   '    <a class="hdr-cta" href="#contact">\n' +
-  '      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor"' +
-       ' stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' +
-       '<path d="M4 5h16v14H4z"/><path d="m4 6 8 6 8-6"/></svg>\n' +
+  '      <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">' +
+       '<path d="M6.6 2.6a2 2 0 0 1 2.8.5l1.7 2.5a2 2 0 0 1-.3 2.6l-1.2 1a11.6 11.6 0 0 0 3.5 3.5' +
+       'l1-1.2a2 2 0 0 1 2.6-.3l2.5 1.7a2 2 0 0 1 .5 2.8l-1.1 1.6a3 3 0 0 1-3.4 1.1' +
+       'C11.2 20.4 3.6 12.8 1.9 6.5A3 3 0 0 1 3 3.1z"/></svg>\n' +
   '      Contact Us\n' +
   '    </a>\n' +
   '  </div>\n' +
