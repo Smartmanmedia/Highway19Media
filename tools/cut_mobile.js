@@ -13,7 +13,7 @@
  * defs, ready to be inlined - inlined and not <img>, so his Be Vietnam Pro
  * reaches the type inside it.
  */
-const { chromium } = require('playwright');
+const { chromium } = require('/home/user/storyboard-app/node_modules/playwright');
 const fs = require('fs'), path = require('path');
 const SRC = process.argv[2] ||
   '/tmp/claude-0/-home-user-storyboard-app/1a554a96-134b-52ef-894a-d9448b97add1/scratchpad/mobile.svg';
@@ -46,13 +46,17 @@ const CUTS = {
      white line between them, and nothing gold anywhere. His own art settles it.
      Two halves in his file, side by side, so both come. */
   'road-band':  { y: [1580, 1775] },
-  /* and the road down the right of his forest, which is a CURVE, not a strip */
+  /* and the road down the right of his forest, which is a CURVE, not a strip.
+     IT IS MEANT TO STOP SHORT OF THE STONES. Re-cut against his newer
+     Mobile_Layout file to check: his tarmac ends at 9146 and his green gives
+     out at 9425, so there are 279 units - a hundred pixels at 390 - of plain
+     grass under the last dash. The hard end is his. */
   'road-right': { y: [7620, 9150], minLeft: 800 }
 };
 
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
-  const br = await chromium.launch();
+  const br = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
   const pg = await br.newPage({ viewport: { width: 1200, height: 900 } });
   await pg.setContent('<style>body{margin:0}</style>' + fs.readFileSync(SRC, 'utf8'),
                       { waitUntil: 'load' });

@@ -74,6 +74,7 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      430 one does not run away with it: the floor is 0.88 of his 390 size and
      the ceiling 1.18, which is his size on a 460 screen. */
   :root{
+    --mix:7vw;    /* how far his rocks hang down into the woodland */
     --t-h1a:   clamp(27px, 7.85vw, 36px);   /* "A Clear Road"        84.72 */
     --t-h1b:   clamp(44px, 12.8vw, 58px);   /* "Forward"            146.49 */
     --t-h1c:   clamp(19px, 5.59vw, 26px);   /* "for Your Business"   60.47 */
@@ -445,7 +446,30 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      and there is nothing empty left to hide, so the overlap only ate things:
      sec3's -10% was taking 41 pixels off the bottom of his road band, which is
      where the broken white line lives. That is why the band had no dashes. */
-  .sec3,.sec4{ margin-top:0 !important }
+  .sec3{ margin-top:0 !important }
+  /* HIS ROCKS HANG DOWN INTO HIS TREES, and that is the whole of the join -
+     not a tree line meeting a sand line on a ruled edge, which is what he
+     photographed. Three things make it: section three's SAND stops short of
+     its own bottom (background-size, so his gradient is untouched and simply
+     is not painted in the last strip), his mountain layers still run to the
+     bottom edge as they always did, and section three is lifted over section
+     four so those rocks paint on top of the woodland rather than under it. */
+  .sec3{ position:relative; z-index:1;
+         /* AND IT IS ALLOWED TO HANG OVER THE EDGE, but only the bottom one.
+            overflow:hidden clips all four sides and his mountains are wider
+            than the phone, so the sides have to stay clipped or the page grows
+            sideways; the top has to stay clipped or his sand climbs into the
+            beach. A clip-path can say all of that: nothing above, nothing at
+            the sides beyond a margin, and --mix below. */
+         overflow:visible !important;
+         clip-path:inset(0 -60% calc(-1 * var(--mix)) -60%) }
+  /* SECTION FOUR STILL OVERLAPS, AND HAS TO. Its woodland is meant to close
+     over the foot of his desert - a ragged tree line across the mountains'
+     bases, not a ruled edge between a sand band and a green one, which is what
+     zeroing this gave him. The section is pulled up over section three and its
+     own top strip is left TRANSPARENT for exactly that much, so the desert
+     shows through everywhere his trees do not. */
+  .sec4{ margin-top:0 !important }
   .sec3{ display:block; padding:0; overflow:hidden }
   /* HIS ROCKS, HALF AGAIN THE SIZE. On a desktop this band is 1922 units wide
      and the mountains read at that width; on a phone the same drawing puts
@@ -460,10 +484,25 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
        to the very foot of the band. */
     transform:scale(1.35); transform-origin:50% 100%;
   }
+  /* AND HIS MOUNTAINS ARE THE ONES THAT HANG. Three layers live in here -
+     sand, the mountains' cast shadow, then the mountains - and only the last
+     of them has a ragged foot worth showing against his trees. Pushing all
+     three down would only move the sand's flat edge, which is the thing being
+     got rid of. The divide is inside .mob-scene, which is scaled 1.35, so the
+     shift is divided by that to come out --mix on the screen. */
+  /* named by his own width, not by position: :last-of-type counts every <svg>
+     in the wrapper, road and clouds included, and matched none of these */
+  :root .sec3 .mob-scene > svg.z-ground[style*="width:99.783%"]{
+    transform:translateY(calc(var(--mix) / 1.35));
+  }
   :root .sec3 .z-road, :root .sec3 .z-cloud{ display:none }
 
   /* sec 4: his forest, his green sign, his copy, his button, his rocks */
-  .sec4{ background:#1c9022 }
+  /* AND HIS GREEN RUNS ON PAST THE BUTTON. He leaves 354 units of plain grass
+     between "Explore Our Services" and the line where the green gives out -
+     128 pixels at 390 - and his stone band starts 31 pixels under the button,
+     not 55 above it. Without this the rocks came up through his own words. */
+  .sec4{ background:#1c9022; padding-bottom:26vw }
   /* HIS CANOPY IS A BAND, NOT THE WHOLE PICTURE. At its own aspect ratio the
      forest is 340 pixels of trees on a 390 screen where he drew 90 - it is a
      hedge along the top of the green, and the rest of his composition is under
@@ -509,7 +548,10 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
     aspect-ratio:1002.82 / 744.19;
     /* HIS SIGN STANDS ON THE TREE LINE, its head over the rocks - but not
        over the section's own top edge, which clips. */
-    margin:-79vw auto clamp(20px,6vw,32px);
+    /* AND IT STANDS DOWN IN THE WOODLAND, not on the first row of trees:
+       he leaves 60 pixels of forest between his rock line and the top of the
+       REST AREA banner. */
+    margin:-70vw auto clamp(20px,6vw,32px);
   }
   :root .sec4 .mob-sign > .mob-restsign{
     display:block; position:absolute; inset:0;
@@ -643,15 +685,31 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
   .sec6{ display:flex; flex-direction:column;
     height:auto !important; min-height:0; aspect-ratio:auto !important;
     background:var(--sec6-bg,#fff);
+    /* AND ITS STONES ARE ALLOWED OUT OF THE TOP. The band is lifted so his
+       green runs behind it, and overflow:hidden was cutting off everything
+       above this section's own edge - which is the whole of the part that is
+       meant to be on the green. Same clip-path bargain as section three: open
+       at the top by the lift, closed at the sides so the page cannot grow. */
+    overflow:visible !important;
+    clip-path:inset(-34vw -60% 0 -60%);
     padding:0 0 clamp(34px,10vw,60px) }
   /* AN SVG WITH A viewBox AND NO height IS ZERO PIXELS TALL IN FLOW. It works
      absolutely positioned, where width and height:auto give it the viewBox's
      ratio; in a column it collapses. Stating the ratio is what brings it back. */
   :root .sec6 > .rock-layer{
     display:block; position:static !important; order:-1;
-    width:100% !important; height:auto !important; aspect-ratio:1918.34 / 497.43;
-    /* pulled up so the stones sit ON the green, as he drew them */
-    margin:-9vw 0 clamp(24px,7vw,40px) !important; inset:auto !important;
+    /* HIS STONES ARE HALF AGAIN THE SIZE AGAIN. He crops this band 1370 units
+       wide on a 1080 canvas - 127% of the screen - and 497 tall, which is 179
+       pixels at 390. The file we ship is a wider crop of the same rocks, 1918
+       by 497, so it takes 177% of the width to put his stones at his size. */
+    width:177% !important; height:auto !important; aspect-ratio:1918.34 / 497.43;
+    /* AND THE GREEN RUNS BEHIND THE STONES, not up to them. His band is 497
+       units tall and his green ends 9425 into a band that starts at 9078 -
+       seven tenths of the way DOWN it - so the straight edge where the green
+       gives out to white is under the rocks, not above them. At -9vw it was a
+       third of the way down and the ruled line was in plain sight. Seven
+       tenths of 25.93vw is 18.2. */
+    margin:-32vw -38.5% clamp(24px,7vw,40px) !important; inset:auto !important;
   }
   :root .sec6 > .sky-cloud{ display:none }
   /* HIS CARD BLOCK IS WIDER THAN HIS COPY. The four cards run 39 to 1037 of
