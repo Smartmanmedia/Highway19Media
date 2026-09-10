@@ -1612,15 +1612,17 @@ function tick(now){
        the same fraction, because both terms scale with the viewport. Earlier
        than that and his line is over the cards, not over his sky.
 
-       From there it climbs to a quarter of the way down the window and is out
-       at 0.80, which is about 110 pixels past the top of the section where the
-       road does not start for 365. */
+       From there it climbs, holding full white the whole way, and only lets
+       go over the last stretch: the rise and the fade now finish together at
+       0.80, about 110 pixels past the top of the section, where the road does
+       not start for 365. It used to fade out at half height and leave the top
+       of its travel empty. */
     const total = innerHeight + START * secSpan;
     const q = clamp((scrollY - (secTop - innerHeight)) / total, 0, 1);
     runway.style.setProperty('--hello', String(Math.min(
-      smooth((q - 0.36) / 0.08), 1 - smooth((q - 0.60) / 0.20))));
+      smooth((q - 0.36) / 0.08), 1 - smooth((q - 0.70) / 0.10))));
     runway.style.setProperty('--hello-y',
-      Math.round(Math.max(0.14, 0.50 - 0.58 * (q - 0.36)) * innerHeight) + 'px');
+      Math.round(Math.max(0.14, 0.50 - 0.82 * (q - 0.36)) * innerHeight) + 'px');
   }
   /* THE SHOW RUNS EXACTLY WHERE THE WORLD IS GOING. It lights the moment the
      last board comes over the horizon, so the sky is already going long
