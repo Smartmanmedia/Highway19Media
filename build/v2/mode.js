@@ -53,11 +53,17 @@
     }
   }
 
-  var b = document.querySelector('.mode-switch');
-  if (!b) return;
+  /* WHAT IS ON SCREEN RIGHT NOW, however it got that way - the system setting
+     counts, so the first click always flips what he can actually see.
 
-  /* what is on screen right now, however it got that way - the system setting
-     counts, so the first click always flips what he can actually see */
+     AND IT IS PUBLISHED, because night.css lights things from THREE selectors
+     and anything that reads only one of them is wrong on somebody's machine.
+     `--night: 1` is set by data-mode="night", by data-theme="dark", and by a
+     dark system setting with no explicit choice - so traffic.js asking only
+     `dataset.mode === 'night'` had his headlights painted at full brightness
+     on a dark-mode machine while the engine, believing it was daytime, never
+     moved them: every beam left lying where it was last written, out over the
+     water beside the road. One ladder, published here, read there. */
   function isNight() {
     if (root.dataset.mode === 'night') return true;
     if (root.dataset.mode === 'day') return false;
@@ -65,6 +71,10 @@
     if (root.dataset.theme === 'light') return false;
     return matchMedia('(prefers-color-scheme: dark)').matches;
   }
+  window.H19_NIGHT = isNight;
+
+  var b = document.querySelector('.mode-switch');
+  if (!b) return;
 
   b.addEventListener('click', function () {
     var next = isNight() ? 'day' : 'night';

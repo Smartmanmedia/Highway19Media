@@ -817,8 +817,26 @@
   }
 
   /* -- the loop ------------------------------------------------------------- */
-  var last = 0, wasNight = document.documentElement.dataset.mode === 'night',
-      litUntil = 0;
+  /* IS IT NIGHT? ASK THE SAME QUESTION THE STYLESHEET ASKS.
+     night.css lights the beams from `--night: 1`, and THREE selectors set it:
+     data-mode="night", data-theme="dark", and a dark system setting with no
+     explicit choice. This asked only the first, so on a machine in dark mode
+     the beams were painted at full brightness while the engine, believing it
+     was daytime, never wrote their transforms - and a beam that is never
+     written stays wherever it last was, which is out over the water beside
+     the road. That is what "stray cars" were. mode.js publishes the ladder it
+     already used for the switch; one truth, read here. */
+  var darkMQ = matchMedia('(prefers-color-scheme: dark)');
+  function nightNow() {
+    if (window.H19_NIGHT) return window.H19_NIGHT();
+    var d = document.documentElement.dataset;              /* mode.js absent */
+    if (d.mode === 'night') return true;
+    if (d.mode === 'day') return false;
+    if (d.theme === 'dark') return true;
+    if (d.theme === 'light') return false;
+    return darkMQ.matches;
+  }
+  var last = 0, wasNight = nightNow(), litUntil = 0;
   function frame(now) {
     var dt = last ? Math.min((now - last) / 1000, 0.05) : 0.016;
     last = now;
@@ -828,7 +846,7 @@
     /* ARE THE NIGHT LAYERS WORTH MOVING THIS FRAME? One read of one attribute,
        once, against a hundred-odd vehicles times two nodes times two sections
        that would otherwise be transformed to be invisible. */
-    var isNight = document.documentElement.dataset.mode === 'night';
+    var isNight = nightNow();
     if (isNight !== wasNight) { wasNight = isNight; litUntil = now + 1300; }
     /* `lit` is "the beams are worth moving": all night, and either side of the
        switch while they fade. `shaded` is the same question for the sun's
@@ -973,9 +991,20 @@
             n.on = on;
             var d = on ? '' : 'none';
             n.u.style.display = d;
-            if (n.bm) n.bm.style.display = d;
             if (n.sh) n.sh.style.display = d;
             n.shOn = on;
+          }
+          /* A BEAM IS HIDDEN WHENEVER IT IS NOT WORTH MOVING, which is the
+             same bargain the shadows already had and the reason they never
+             had this fault. Through the day the beams are at zero opacity and
+             their transforms are not written, so they go stale - and a beam
+             that is stale but DISPLAYED only needs something to light it to
+             become a headlight lying on the water beside the road. Tying the
+             two together means a displayed beam is always a beam that was
+             written this frame, whatever the theme, the mode or the timing. */
+          if (n.bm && n.bmOn !== (on && lit)) {
+            n.bmOn = on && lit;
+            n.bm.style.display = n.bmOn ? '' : 'none';
           }
           /* the sun's shadows leave the tree at dusk rather than fading to an
              opacity nobody can see: at zero opacity they still cost a full
@@ -994,6 +1023,12 @@
              something nobody can see. `lit` stays true for a second and a bit
              after the switch is thrown, because that is how long they take to
              fade and they have to be in the right place while they do. */
+          /* AND A BEAM IS NEVER SHOWN WHERE IT LAST WAS. Through the day the
+             beams are at zero opacity and not worth moving, so their transform
+             goes stale - which is harmless until something lights them. The
+             frame a node crosses INTO a section is the one frame that has to
+             be written anyway, lit or not: after it, a beam that is displayed
+             is a beam in the right place, whatever turns the light on next. */
           if (lit) {
             if (n.bm) n.bm.setAttribute('transform', move);
           }
