@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="57.89" height="57.89" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 57.89 57.89">
+  <defs>
+    <clipPath id="clippath">
+      <rect width="57.89" height="57.89" fill="none"/>
+    </clipPath>
+    <radialGradient id="_ÂÁ_Ï_ÌÌ_È_ËÂÌÚ_6" data-name="¡ÂÁ˚ÏˇÌÌ˚È „‡‰ËÂÌÚ 6" cx="28.27" cy="28.67" fx="28.27" fy="28.67" r="29.56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset=".08" stop-color="#f7f7f7"/>
+      <stop offset=".2" stop-color="#e3e3e3"/>
+      <stop offset=".34" stop-color="#c1c1c1"/>
+      <stop offset=".5" stop-color="#929292"/>
+      <stop offset=".68" stop-color="#575757"/>
+      <stop offset=".86" stop-color="#0f0f0f"/>
+      <stop offset=".9" stop-color="#000"/>
+    </radialGradient>
+    <radialGradient id="_ÂÁ_Ï_ÌÌ_È_ËÂÌÚ_6-2" data-name="¡ÂÁ˚ÏˇÌÌ˚È „‡‰ËÂÌÚ 6" cx="28.76" cy="28.67" fx="28.76" fy="28.67" r="33.4" xlink:href="#_ÂÁ_Ï_ÌÌ_È_ËÂÌÚ_6"/>
+    <radialGradient id="radial-gradient" cx="28.27" cy="28.67" fx="28.27" fy="28.67" r="25.38" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffdc00"/>
+      <stop offset=".18" stop-color="#fcd900"/>
+      <stop offset=".3" stop-color="#f3d200"/>
+      <stop offset=".4" stop-color="#e4c500"/>
+      <stop offset=".5" stop-color="#cfb200"/>
+      <stop offset=".58" stop-color="#b39a00"/>
+      <stop offset=".66" stop-color="#917d00"/>
+      <stop offset=".74" stop-color="#695a00"/>
+      <stop offset=".82" stop-color="#3a3200"/>
+      <stop offset=".88" stop-color="#070600"/>
+      <stop offset=".89" stop-color="#000"/>
+    </radialGradient>
+    <radialGradient id="_ÂÁ_Ï_ÌÌ_È_ËÂÌÚ_6-3" data-name="¡ÂÁ˚ÏˇÌÌ˚È „‡‰ËÂÌÚ 6" cx="28.27" cy="28.67" fx="28.27" fy="28.67" r="22.32" xlink:href="#_ÂÁ_Ï_ÌÌ_È_ËÂÌÚ_6"/>
+    <radialGradient id="radial-gradient-2" cx="28.34" cy="28.73" fx="28.34" fy="28.73" r="21.69" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset=".06" stop-color="#fffdf3"/>
+      <stop offset=".17" stop-color="#fff7d4"/>
+      <stop offset=".32" stop-color="#ffefa1"/>
+      <stop offset=".5" stop-color="#ffe35c"/>
+      <stop offset=".64" stop-color="#ffd91e"/>
+      <stop offset="1" stop-color="#ffa51f"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-3" cx="28.38" cy="28.6" fx="28.38" fy="28.6" r="21.97" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset=".08" stop-color="#f7f7f7"/>
+      <stop offset=".2" stop-color="#e3e3e3"/>
+      <stop offset=".34" stop-color="#c1c1c1"/>
+      <stop offset=".5" stop-color="#929292"/>
+      <stop offset=".68" stop-color="#575757"/>
+      <stop offset=".86" stop-color="#0f0f0f"/>
+      <stop offset=".9" stop-color="#000"/>
+    </radialGradient>
+  </defs>
+  <g isolation="isolate">
+    <g id="Layer_2" data-name="Layer 2">
+      <g id="Clouds">
+        <g clip-path="url(#clippath)">
+          <g>
+            <circle cx="28.27" cy="28.67" r="24.89" fill="url(#_ÂÁ_Ï_ÌÌ_È_ËÂÌÚ_6)" mix-blend-mode="screen" opacity=".91"/>
+            <circle cx="28.76" cy="28.67" r="28.13" fill="url(#_ÂÁ_Ï_ÌÌ_È_ËÂÌÚ_6-2)" mix-blend-mode="screen" opacity=".41"/>
+            <circle cx="28.27" cy="28.67" r="21.37" fill="url(#radial-gradient)" mix-blend-mode="screen" opacity=".5"/>
+            <circle cx="28.27" cy="28.67" r="18.8" fill="url(#_ÂÁ_Ï_ÌÌ_È_ËÂÌÚ_6-3)" mix-blend-mode="screen" opacity=".4"/>
+            <circle cx="28.34" cy="28.73" r="18.26" fill="url(#radial-gradient-2)"/>
+            <circle cx="28.38" cy="28.6" r="18.5" fill="url(#radial-gradient-3)" mix-blend-mode="screen" opacity=".4"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
