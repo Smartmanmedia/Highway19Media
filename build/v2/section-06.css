@@ -237,6 +237,15 @@
 
 .sec6 .page .card .icon{ height:auto }
 
+/* HIS 0.97 SIDEWAYS SQUEEZE, WHICH EVERY BLOCK IN Cards New CARRIES. Every
+   <text> in that file is transform="... scale(.97 1)" - his own kerning trick,
+   the same one sections one, two and four already honour through --sx - and
+   section six was the one that did not. Three per cent is not nothing at this
+   size: it is the difference between "Social Media & Paid Ads" sitting inside
+   its card with air either side and touching both edges. */
+.sec6 [style*="--sx"]{ transform:scaleX(var(--sx)); transform-origin:50% 0 }
+.sec6 .page .card h3,
+.sec6 .page .card p { transform:scaleX(0.97); transform-origin:50% 0 }
 .sec6 .page .card h3{
   left:0; right:0; top:26.09%; font-size:1.808cqw; font-weight:900;
   line-height:1.00; color:var(--card-ink, #1a1a1a);
@@ -251,7 +260,14 @@
      longest line is 213 of those, which is 13.18 ems - and 13.18 ems of type
      that is NOT condensed is 174 on this card, not 160. At 160 his one-line
      leads broke into two and his body wrapped a word early on every card. */
-  left:5.68%; right:5.68%; top:44.63%; font-size:0.917cqw; font-weight:300;
+  /* THE BOX IS WIDENED BY 1/0.97 AND PULLED BACK BY HALF THE DIFFERENCE. A
+     scaleX squeezes AFTER the text has laid out and wrapped, so at his own
+     5.68% margins the copy wraps to a 88.64% box and is then painted into
+     86.0% of one - and the lead line, now the SemiBold he set rather than a
+     Medium, no longer fits on the one line his file gives it. 4.31% either
+     side lays it out in 91.38%, which is 88.64% once squeezed: his box, his
+     wrapping, his tracking. */
+  left:4.31%; right:4.31%; top:44.63%; font-size:0.917cqw; font-weight:300;
   line-height:1.09; color:var(--card-sub, #333);
 }
 /* AND HIS LEAD LINE, which is a line and not a lead-in: SemiBold, on its own
@@ -263,7 +279,11 @@
    about five per cent wider than the 213 units he allows it and breaks his
    one-line lead into two. Medium holds his break and still stands off the
    Light body under it. */
-.sec6 .page .card p > b{ display:block; font-weight:500 }
+/* AND HIS LEAD LINE IS A SEMIBOLD, NOT A MEDIUM. In his file the first line
+   of each card is BeVietnamPro-SemiBold at 600 and the six under it are Light
+   at 300; this had the lead at 500, which reads as barely emphasised beside
+   its own body copy. */
+.sec6 .page .card p > b{ display:block; font-weight:600 }
 .sec6 .page .card p .nb{ white-space:nowrap }
 /* It sits on his mark, but it is not there until you ask for it: it fades in
    while sliding UP INTO that mark, so the arrival reads as the button coming

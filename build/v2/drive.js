@@ -434,30 +434,37 @@ const TRUSS_TILE=art.querySelector('.trusstile').src;
 /* Per tree: fx is where the TRUNK stands across its own sprite, and the
    shadow's size and offset are multiples of the tree's height, measured
    from that trunk. */
+/* fx RE-READ OFF HIS NEW TREES. He has repainted all four - a lighter, yellower
+   green with fuller fronds - and a repainted tree is a differently balanced
+   one: the foot moved as much as a quarter of the sprite's width under c and
+   d. It is measured off the ink by tools/make_palms_new.js, not carried over.
+   The four SHADOW ratios below are his originals and stay: he drew those
+   properly projected, the trees have not changed pose, and nothing derived
+   comes close to a drawn one. */
 const SH={
  "a": {
-  "fx": 0.4207,
+  "fx": 0.3510,
   "w": 0.655,
   "h": 0.1845,
   "dx": -0.0151,
   "dy": -0.0559
  },
  "b": {
-  "fx": 0.6105,
+  "fx": 0.6155,
   "w": 0.945,
   "h": 0.3495,
   "dx": -0.0223,
   "dy": -0.019
  },
  "c": {
-  "fx": 0.346,
+  "fx": 0.6052,
   "w": 0.9829,
   "h": 0.3635,
   "dx": -0.034,
   "dy": -0.0245
  },
  "d": {
-  "fx": 0.6012,
+  "fx": 0.4220,
   "w": 0.8428,
   "h": 0.2535,
   "dx": -0.0162,
