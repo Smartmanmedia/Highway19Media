@@ -103,7 +103,9 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
     --t-h3:    clamp(28px, 8.0vw, 36px);    /* "Pick Your Lane."     94.98 */
     --t-h3s:   clamp(15px, 4.45vw, 20px);   /* "Take one lane..."    49.46 */
     --t-card:  clamp(20px, 5.91vw, 27px);   /* card headings         63.80 */
-    --t-cardp: clamp(10px, 2.87vw, 13px);   /* card copy             31    */
+    /* his card copy is set at 31 and SCALED 1.1 in the vertical, so what a
+       reader sees is 34.1 - and 34.1 of his 1080 is 12.3 on a 390 phone */
+    --t-cardp: clamp(11px, 3.15vw, 14px);   /* card copy          31 x 1.1 */
     --t-learn: clamp(11px, 3.26vw, 15px);   /* "Learn More"          35.16 */
   }
 
@@ -548,10 +550,11 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
     aspect-ratio:1002.82 / 744.19;
     /* HIS SIGN STANDS ON THE TREE LINE, its head over the rocks - but not
        over the section's own top edge, which clips. */
-    /* AND IT STANDS DOWN IN THE WOODLAND, not on the first row of trees:
-       he leaves 60 pixels of forest between his rock line and the top of the
-       REST AREA banner. */
-    margin:-70vw auto clamp(20px,6vw,32px);
+    /* AND IT HANGS OFF THE RIGHT-HAND EDGE, which is what his gantry is for.
+       He places this drawing at x 78 of a 1080 canvas and it is 1002.82 wide,
+       so its right edge is the screen's right edge and the truss runs off it.
+       Centred, the gantry stopped fourteen pixels short and read as a stub. */
+    margin:-70vw 0 clamp(20px,6vw,32px) auto;
   }
   :root .sec4 .mob-sign > .mob-restsign{
     display:block; position:absolute; inset:0;
@@ -607,6 +610,16 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
   }
   /* his headline breaks after "Marketing." on his own board too */
   :root .sec4 .mob-sign h2 br{ display:inline }
+  /* AND IT FLOATS AGAINST THE GROUND. His board hovers over the woodland on a
+     desktop - parallax.css gives the sign, its copy and the gantry one shared
+     travel - and on a phone the desktop sign is hidden, so that whole group
+     capped itself to nothing and the board sat welded to the trees. The
+     WRAPPER takes the travel here instead, so the picture, the plate's words
+     and the copy on the board move as one object without any of them needing a
+     transform of its own. Its own lock, deliberately: joining the desktop
+     group would let a hidden element cap the real sign to zero. */
+  :root .sec4 .par-sign-m{ --par:9; --par-bias:-0.12 }
+
   /* AND IT GOES QUIET AFTER DARK. The desktop board is inline SVG, so night
      .css switches its two fills; this one is a picture and the only thing that
      can be done to a picture is a filter over the whole of it - which is the
@@ -717,7 +730,11 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      takes a little more. Sharing --mob-pad between them was costing the grid
      twenty pixels and putting "We Handle the Drive." onto a third line. */
   :root .sec6 .page{ position:static; width:auto; margin:0 3.6vw;
-    display:grid; grid-template-columns:1fr 1fr; gap:4.3vw }
+    /* minmax(0,1fr) AND NOT 1fr. A grid item's automatic minimum is its
+       content, and a card with an aspect-ratio on it reports a min-content
+       WIDTH tall enough to hold its copy - so two 1fr tracks came out 186 wide
+       inside a 362 box and the cards hung over both edges. */
+    display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:4.3vw }
   /* HIS HEADLINE BREAKS AFTER "Lane.", and there is no width that produces
      that break on its own: "Pick Your Lane. We" fits the column and "We Handle
      the Drive." does not fit what is left over, so any measure narrow enough to
@@ -739,7 +756,14 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
     width:auto !important; height:auto !important; margin:0 !important;
     transform:none !important; font-size:inherit;
     display:flex; flex-direction:column; align-items:center;
-    padding:0 4% 5.8%; overflow:visible;
+    /* HIS CARD IS A TALL CARD - 475.97 by 832.86, which is 172 by 301 here -
+       and the page was drawing it 173 by 273. That is the whole reason his
+       paragraph looked cramped: he lengthened the card so the copy could be
+       read at his size, and a shorter box made the copy the thing that had to
+       give. The padding comes off the card and goes on the pieces, because his
+       tab is 46.7% of the CARD and a padded box made it 42. */
+    aspect-ratio:475.97 / 832.86; min-width:0;
+    padding:0 0 5.8%; overflow:visible;
   }
   :root .sec6 .page .card > *{
     position:static !important; inset:auto !important;
@@ -757,6 +781,15 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      units ABOVE the card's own top edge, which is the 2.3% here */
   :root .sec6 .page .card .label{ width:46.7% !important; height:auto !important;
     margin-top:-2.3% !important }
+  /* HIS MEASURE, ADJUSTED FOR THE REAL FACE. He sets the paragraph in a box
+     330 units wide on a 476 card - 15% of air down each side - but that box
+     was drawn against a fallback: in Be Vietnam Pro Light his own first line,
+     "Logos, flyers, signage,", needs about 350. Holding his 15% would break
+     every line a word early and turn six lines into nine, which is the thing
+     he lengthened these cards to avoid. 8% is the same paragraph at his size
+     with his own breaks. */
+  :root .sec6 .page .card h3{ padding:0 2% }
+  :root .sec6 .page .card p { padding:0 8% }
   /* THE ICON LIVES ON THE TAB, so it is measured against the TAB and not
      against the card: his tab is 46% of the card wide and hangs from the top,
      and an icon at 24% of the CARD spilled off the bottom of it. */
@@ -764,17 +797,26 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      a 476 card and a 222 tab - 27.9% of the one and 60% of the other - and it
      starts twelve units above the card's own top edge, on the part of the tab
      that overhangs. At 17% it was a stamp in the middle of a lozenge. */
+  /* AND IT SITS IN THE TAB RATHER THAN FILLING IT. On his card the icon is
+     147.9 tall in a tab 174.35 deep - 85% - with 7 units of air above it and
+     19 below, so it hangs slightly high of centre and clears the tab's rounded
+     foot. Ours was flush with the top edge at 87%, which is what made it read
+     as too big for the shape it is standing in. (His own four icons are
+     print.png, social.png, video.png and webdesign.png, which are external
+     references in his file and did not come with it - these are the page's own
+     line drawings at his proportions.) */
   :root .sec6 .page .card .icon{
-    position:absolute !important; left:50% !important; top:-1.2% !important;
-    width:27.9% !important; max-width:none !important;
+    position:absolute !important; left:50% !important; top:1.4% !important;
+    width:25% !important; max-width:none !important;
     transform:translateX(-50%) !important;
   }
   :root .sec6 .page .card h3{
     font-size:var(--t-card) !important; line-height:1;
-    margin:.62em 0 .5em !important; text-align:center;
+    margin:.66em 0 .52em !important; text-align:center;
   }
   :root .sec6 .page .card p{
-    font-size:var(--t-cardp) !important; line-height:1.18; font-weight:300;
+    /* 34.44 of line spacing against a 31 face, both scaled 1.1 - his 1.11 */
+    font-size:var(--t-cardp) !important; line-height:1.12; font-weight:300;
     margin:0 0 1.3em !important; text-align:center; color:#333;
   }
   :root .sec6 .page .card p br{ display:none }
@@ -787,14 +829,13 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
     position:static !important; opacity:1 !important; translate:none !important;
     pointer-events:auto !important; transition:none !important;
     width:75.6% !important; margin-top:auto !important;
-    padding:.72em 0 !important; border-radius:.42em !important;
+    /* 79.45 tall on an 832.86 card is 9.5% of it, which at his type size is
+       a shade over half an em of padding either side of the label */
+    padding:.62em 0 !important; border-radius:.42em !important;
     border-width:1px !important;
     font-size:var(--t-learn) !important; font-weight:500; white-space:nowrap;
   }
-  /* and the card stops being a fixed rectangle with a hole in the bottom of
-     it: two cards side by side are the same height because the grid makes
-     them so, and the button goes to the foot of whichever is taller */
-  :root .sec6 .page .card{ min-height:100% }
+
   :root .sec6 .page h2.copy{ white-space:normal !important }
   :root .sec6 .page .sub{ white-space:normal !important }
 
