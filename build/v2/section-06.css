@@ -189,7 +189,11 @@
    driven off --c. Children are positioned against the CARD, not the section,
    which is the one place that rule earns its keep.                          */
 .sec6 .page .card{
-  position:absolute; top:21.45%; width:13.46%; height:33.62%;
+  /* HIS NEW CARD IS TALLER. Cards_New draws it 258.8 by 484.41 on a 1918.8
+     artboard - 13.49% of the width and 25.24% of it again in height, which on
+     this 891-tall page is 40.80%. It was 33.62%, and that shortfall is why his
+     copy had to be set at two thirds the size he asks for. */
+  position:absolute; top:21.45%; width:13.49%; height:40.80%;
   background:var(--card-bg, #fff); border:0.052cqw solid var(--card-line, #1a1a1a); border-radius:1.071cqw;
   z-index:1;
   font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
@@ -224,7 +228,8 @@
    shape, filled from the card's own colour - which is what "change the label
    colour to each card" means. */
 .sec6 .page .card .label{
-  left:23.48%; top:-3.73%; width:53.03%; height:23.75%;
+  /* his tab is 120.92 wide on a 258.8 card and hangs 15.7 above its top */
+  left:24.65%; top:-3.24%; width:46.72%; height:17.28%;
   overflow:visible;
 }
 .sec6 .page .card .label .body{ fill:var(--c) }
@@ -233,30 +238,49 @@
 .sec6 .page .card .icon{ height:auto }
 
 .sec6 .page .card h3{
-  left:0; right:0; top:29.88%; font-size:1.804cqw; font-weight:900;
+  left:0; right:0; top:26.09%; font-size:1.808cqw; font-weight:900;
   line-height:1.00; color:var(--card-ink, #1a1a1a);
 }
 .sec6 .page .card p{
-  left:6%; right:6%; top:55.43%; font-size:0.667cqw; font-weight:500;
-  line-height:1.19; color:var(--card-sub, #333);
+  /* HIS COPY, AT HIS SIZE. He sets it 16 and scales it 1.1 in the vertical, so
+     what a reader sees is 17.6 of his 1918.8 - 0.917cqw, where this was 0.667
+     and read as small print.
+
+     AND THE MEASURE IS 13.18 EMS, NOT 213 UNITS. That scale is 1.01 ACROSS and
+     1.1 DOWN, so his type is a shade condensed: 17.6 tall on a 16.16 body. His
+     longest line is 213 of those, which is 13.18 ems - and 13.18 ems of type
+     that is NOT condensed is 174 on this card, not 160. At 160 his one-line
+     leads broke into two and his body wrapped a word early on every card. */
+  left:5.68%; right:5.68%; top:44.63%; font-size:0.917cqw; font-weight:300;
+  line-height:1.09; color:var(--card-sub, #333);
 }
+/* AND HIS LEAD LINE, which is a line and not a lead-in: SemiBold, on its own
+   above the body, and a <b> rather than a <br> so it holds its own line at
+   both sizes without depending on a break the phone rules take out. */
+/* HIS LEAD IS SEMIBOLD AND WE DO NOT SHIP ONE. The page carries Light 300,
+   Medium 500, Bold 700, ExtraBold 800 and Black 900 - five files, subset from
+   his own - and 600 falls up to Bold, which sets "Your business. Open 24/7."
+   about five per cent wider than the 213 units he allows it and breaks his
+   one-line lead into two. Medium holds his break and still stands off the
+   Light body under it. */
+.sec6 .page .card p > b{ display:block; font-weight:500 }
+.sec6 .page .card p .nb{ white-space:nowrap }
 /* It sits on his mark, but it is not there until you ask for it: it fades in
    while sliding UP INTO that mark, so the arrival reads as the button coming
    to meet you rather than appearing out of nowhere. `translate` again, so it
    composes with the card's own `scale` instead of fighting a transform. */
 .sec6 .page .card .btn{
-  left:12.22%; width:75.56%; top:81.85%; height:10.80%;
+  left:13.06%; width:75.58%; top:86.41%; height:8.92%;
   background:var(--c); border:0.104cqw solid #fff; border-radius:0.582cqw;
   display:flex; align-items:center; justify-content:center;
-  color:#fff; font-size:0.994cqw; font-weight:500; white-space:nowrap;
-  opacity:0; translate:0 60%;
-  transition:opacity .18s linear, translate .26s cubic-bezier(.22,.61,.36,1);
-  pointer-events:none;
-}
-.sec6 .page .card:hover .btn,
-.sec6 .page .card:focus-within .btn{
-  opacity:1; translate:0 0;
-  pointer-events:auto;
+  color:#fff; font-size:0.996cqw; font-weight:500; white-space:nowrap;
+  /* AND IT IS ON THE CARD, NOT UNDER A CURSOR. It used to rise in on hover -
+     a nice move, and not what he drew: Cards_New has all four buttons on all
+     four cards, and a card with a hole where its call to action should be is
+     what the page looked like to anyone who was not pointing at it. The lift
+     on hover stays; the button just does not have to be summoned. */
+  opacity:1; translate:0 0; pointer-events:auto;
+  transition:none;
 }
 
 @media (prefers-reduced-motion: reduce){
