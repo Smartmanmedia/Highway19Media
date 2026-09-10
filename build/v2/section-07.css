@@ -392,6 +392,23 @@
 /* HIS CLOUDS, four of his own drawings instead of the four soft blobs that
    stood in for them. They are small enough to travel as SVG and they scale
    for nothing, so they can drift at whatever size the sky wants. */.sec7 .cloud{position:absolute;left:0;top:0}
+/* HIS TITLE ON THE SKY. Set like the floating line inside the drive - his
+   Black weight, his tight tracking and the same soft blue shadow - so the two
+   read as one voice a screen apart. It holds while the sky is empty and lifts
+   away as the tarmac comes up under it; --hello is written from the scroll in
+   tick(), which is the only place the trip's own fraction exists. */
+/* ITS HEIGHT IS WRITTEN, not set: the stage is sticky, so until the section's
+   top reaches the top of the screen only the LOWER part of it is in view, and
+   44% of the stage is then most of the way down the window. It sits at 45% of
+   whatever band of the stage you can actually see, which is 45% of the window
+   once it pins and rides up out of the sign as it gets there. */.sec7 .hello{position:absolute;left:0;right:0;top:var(--hello-y,44%);
+  text-align:center;pointer-events:none;white-space:nowrap;
+  font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
+  font-weight:900;letter-spacing:-.02em;line-height:1;text-transform:uppercase;
+  font-size:clamp(26px,3.9vw,78px);color:#fff;
+  text-shadow:0 6px 26px rgba(0,40,90,.45);
+  opacity:var(--hello,1);
+  translate:0 calc((1 - var(--hello,1)) * -2.5vh)}
 /* fewer of them after dark - five of the eight go out. The fade is put on the
    IMAGE, not on the cloud: the cloud's own opacity is the scroll's hand-over
    at the end of the road, and one element cannot hold two fades on the same

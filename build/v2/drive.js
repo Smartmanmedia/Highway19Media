@@ -979,6 +979,21 @@ function tick(now){
      at full strength from the first pixel of the section, because you scroll
      to it rather than have it appear */
   stage.style.setProperty('--out', String(1-smooth((t-FADE_AT)/(1-FADE_AT))));
+  /* AND HIS TITLE GOES AS THE ROAD COMES. START is where the world begins to
+     move, so it holds through the first third of the approach and is gone by
+     the time there is anything to look at. */
+  stage.style.setProperty('--hello',
+    String(1-smooth((t-START*0.35)/(START*0.65))));
+  {
+    /* AND IT STAYS OFF THE BOARD. 45% of the band you can see is right in the
+       middle of the sky on a desktop and exactly where his green sign hangs on
+       a phone, because the phone's horizon is at 55% of the frame and his
+       board rides high over it. So it is also held above the HORIZON - 62% of
+       the way down to it - and the tighter of the two wins. */
+    const off = Math.max(0, secTop - scrollY);   /* stage top, on the screen */
+    stage.style.setProperty('--hello-y',
+      Math.round(Math.min(0.45 * (innerHeight - off), 0.62 * hor)) + 'px');
+  }
   /* THE SHOW RUNS EXACTLY WHERE THE WORLD IS GOING. It lights the moment the
      last board comes over the horizon, so the sky is already going long
      before the road starts to fade, and it is wiped the instant the scroll leaves the
