@@ -63,6 +63,49 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
 
   html,body{ overflow-x:clip }
 
+  /* -- HIS TYPE SCALE, OFF HIS OWN ARTBOARD --------------------------------
+     Highway_19_Website_Mobile_Layout.svg is drawn 1080 wide, and a phone is
+     390 - so every size in his file converts by ONE number: 390/1080, which
+     is 0.3611. In vw that is even simpler, because 390 wide makes 1vw = 3.9px
+     and his N units land at N/10.8 vw. Nothing below is a judgement about what
+     reads well on a phone; it is his drawing, arithmetic, and nothing else.
+
+     Each one is clamped so a 320 phone does not drop under legibility and a
+     430 one does not run away with it: the floor is 0.88 of his 390 size and
+     the ceiling 1.18, which is his size on a 460 screen. */
+  :root{
+    --t-h1a:   clamp(27px, 7.85vw, 36px);   /* "A Clear Road"        84.72 */
+    --t-h1b:   clamp(44px, 12.8vw, 58px);   /* "Forward"            146.49 */
+    --t-h1c:   clamp(19px, 5.59vw, 26px);   /* "for Your Business"   60.47 */
+    /* his 115 is 41.5 here, and at 41.5 "Great Work," is wider than what is
+       left of the row once his triangle has taken 88 of it - so it comes back
+       to the largest that keeps his own two-line break */
+    --t-h2:    clamp(35px, 10.1vw, 46px);   /* "Great Work..."      115    */
+    --t-h2b:   clamp(32px, 9.2vw, 42px);    /* "You've Been Down"   104.06 */
+    --t-lead:  clamp(19px, 5.67vw, 26px);   /* his sign-face leads   61.25 */
+    --t-leadb: clamp(18px, 5.13vw, 24px);   /* the beach's lead      55.43 */
+    --t-body:  clamp(16px, 4.63vw, 21px);   /* body                  50    */
+    --t-bodyb: clamp(15px, 4.19vw, 19px);   /* the beach's body      45.24 */
+    --t-board: clamp(21px, 6.05vw, 28px);   /* board labels          65.36 */
+    --t-banner:clamp(14px, 4.15vw, 19px);   /* "All Roads Lead"      44.92 */
+    --t-cta:   clamp(18px, 5.33vw, 24px);   /* "Your Road Map"       57.56 */
+    --t-cta2:  clamp(14px, 4.04vw, 19px);   /* "Explore Our..."      43.66 */
+    --t-rest:  clamp(14px, 3.98vw, 18px);   /* "REST AREA"           43.02 */
+    --t-sign:  clamp(24px, 6.89vw, 32px);   /* the board's headline  74.42 */
+    --t-signp: clamp(15px, 4.44vw, 20px);   /* and its strapline     48    */
+    /* THE ONE PLACE HIS ARTBOARD ASKS FOR MORE THAN 390 PIXELS HOLD. At his
+       94.98 - 34.3 here - "We Handle the Drive." measures 392 against a screen
+       that is 390 wide edge to edge, and no margin makes that fit. His own file
+       gets away with it because Illustrator set it at 0.9666 of its width; the
+       honest version of the same 3% is to take it off the size rather than
+       squash the letters, so this is the largest that fits his own break. */
+    --t-h3:    clamp(28px, 8.0vw, 36px);    /* "Pick Your Lane."     94.98 */
+    --t-h3s:   clamp(15px, 4.45vw, 20px);   /* "Take one lane..."    49.46 */
+    --t-card:  clamp(20px, 5.91vw, 27px);   /* card headings         63.80 */
+    --t-cardp: clamp(10px, 2.87vw, 13px);   /* card copy             31    */
+    --t-learn: clamp(11px, 3.26vw, 15px);   /* "Learn More"          35.16 */
+  }
+
   /* -- HIS PALETTE, ONCE ---------------------------------------------------- */
   :root{
     --mob-blue:#00287d;      /* the top of his hero */
@@ -117,26 +160,44 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
        resets left and right to nought and put his body copy edge to edge. A
        width plus auto insets says the same thing and cannot be undone by a
        shorthand that is only trying to space paragraphs. */
-    width:min(86vw,460px) !important; max-width:none !important;
+    width:min(91vw,470px) !important; max-width:none !important;
     height:auto !important;
     margin-left:auto !important; margin-right:auto !important; padding:0;
     text-align:center; transform:none !important;
     white-space:normal !important;
   }
 
-  /* HIS HEADLINES. Two lines of display type on a 390 screen is 30px, not the
-     4.4% of a 1920 artboard that reads as 84 on a desktop and 17 here. */
-  :root .sec1 h1,:root .sec1 h2.copy,:root .sec2 h2.copy,:root .sec4 h2{
-    font-size:clamp(30px,8.4vw,42px) !important; line-height:1.08;
+  /* HIS HEADLINES, AT HIS SIZES. Three separate ones, not one rule for all
+     three: his hero stack, "Great Work, No Signage" and "You've Been Down
+     This Road Before" are 146, 115 and 104 on his artboard, and grouping them
+     was the reason none of them was right. */
+  :root .sec1 h1{
+    font-size:var(--t-h1b) !important; line-height:.92;
     letter-spacing:-.01em; margin:0 0 .5em; white-space:normal !important;
   }
-  :root .sec1 h1 .l1{ font-size:.72em !important }
+  :root .sec1 h2.copy{
+    font-size:var(--t-h2) !important; line-height:1.2;
+    letter-spacing:-.01em; margin:0 0 .42em; white-space:normal !important;
+  }
+  :root .sec2 h2.copy{
+    font-size:var(--t-h2b) !important; line-height:1.2;
+    letter-spacing:-.01em; margin:0 0 .42em; white-space:normal !important;
+  }
+  /* his three lines are 84.72, 146.49 and 60.47 against each other */
+  :root .sec1 h1 .l1{ font-size:.578em !important }
   :root .sec1 h1 .l2{ font-size:1em !important }
-  :root .sec1 h1 .l3{ font-size:.52em !important }
+  :root .sec1 h1 .l3{ font-size:.412em !important; line-height:1.24 }
   :root .sec1 h1 span,:root .sec2 h2 span{ display:block }
-  :root .sec1 .sub,:root .sec2 .sub{
-    font-size:clamp(17px,4.9vw,21px) !important; line-height:1.34;
-    margin:0 0 1.15em; font-weight:700;
+  /* HIS LEAD LINES ARE HIGHWAY GOTHIC AND THEY ARE NOT BOLD. The face ships
+     in one weight, so asking for 700 got a browser-drawn fake of it - and his
+     own file sets them plain at 61.25 and 55.43. */
+  :root .sec1 .sub{
+    font-size:var(--t-lead) !important; line-height:1.18;
+    margin:0 0 1.05em; font-weight:400;
+  }
+  :root .sec2 .sub{
+    font-size:var(--t-leadb) !important; line-height:1.18;
+    margin:0 0 1.05em; font-weight:400;
   }
   /* his subheads are one long nowrap line drawn for a 1920 column */
   :root .sec1 .sub span,:root .sec2 .sub span{
@@ -144,13 +205,17 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
   }
   :root .sec1 .page > .body:last-of-type,
   :root .sec2 > .body{ margin-bottom:clamp(52px,15vw,86px) !important }
-  :root .sec1 .body,:root .sec2 .body,:root .sec4 .body{
-    /* SIXTEEN IS THE FLOOR ON A PHONE. Below it a browser starts offering to
-       zoom, and a paragraph of body copy at fourteen is a paragraph nobody
-       finishes - which is the whole reason his drawing throws the scenery out
-       and gives the width to the words. */
-    font-size:clamp(16.5px,4.7vw,19px) !important; line-height:1.52;
-    margin:0 0 1.5em; font-weight:400;
+  /* HIS BODY IS 50 ON THE BLUE AND THE GREEN, 45.24 ON THE SAND, and it is
+     Light - the same weight the desktop sets. The line spacing is his too:
+     59 over 50 is 1.18, not the 1.52 that had four sentences reading as a
+     column of separate lines. */
+  :root .sec1 .body,:root .sec4 .body{
+    font-size:var(--t-body) !important; line-height:1.18;
+    margin:0 0 1.4em; font-weight:300;
+  }
+  :root .sec2 .body{
+    font-size:var(--t-bodyb) !important; line-height:1.18;
+    margin:0 0 1.4em; font-weight:300;
   }
   /* HIS LINE BREAKS ARE SET FOR A 1920 COLUMN and read as ragged holes at 390,
      so they go - and there is no way to say that in CSS alone. A <br> cannot be
@@ -188,7 +253,11 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      answer to the page's own type scale - and readable type was the brief. */
   .mob-board{
     display:block; position:relative; width:86vw; max-width:420px;
-    margin:clamp(28px,9vw,54px) auto clamp(26px,8vw,48px);
+    /* HIS OWN AIR. He hangs the board 154 pixels down a 390 screen and leaves
+       85 under it before the tarmac - a sixth of the first screen is empty
+       blue, on purpose, and cropping that to 35 was what made the phone read
+       as a squeezed desktop rather than his drawing. */
+    margin:clamp(96px,38.5vw,190px) auto clamp(56px,21.8vw,104px);
   }
   .mob-board svg{ display:block; width:100%; height:auto }
   .mob-board ul{
@@ -204,12 +273,12 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
   }
   .mob-board li{ display:grid; align-items:center }
   .mob-board a{
-    display:block; padding:0 32% 0 6.5%;
+    display:block; padding:0 24% 0 6.5%;
     color:#fff; text-decoration:none;
     font-family:"Be Vietnam Pro",system-ui,sans-serif; font-weight:700;
     /* his labels measured off the artboard: 15px on a 325 board at 390, which
        is 4.6% of the board's own width - and the board here is a shade wider */
-    font-size:clamp(16px,4.9vw,22px); line-height:1.1;
+    font-size:var(--t-board); line-height:1.1;
   }
   .mob-board a:active{ opacity:.7 }
 
@@ -230,7 +299,7 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
   }
   .mob-board .mob-banner b{
     color:#1a1a1a; font-family:"Be Vietnam Pro",system-ui,sans-serif;
-    font-weight:800; font-size:clamp(13px,4.15vw,19px); line-height:1.14;
+    font-weight:800; font-size:var(--t-banner); line-height:1.14;
     letter-spacing:-.01em;
   }
   /* AND HIS GANTRY, running off the right edge behind the board. One tile of
@@ -257,9 +326,11 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
     margin:clamp(10px,3vw,18px) auto clamp(52px,15vw,86px) !important;
     width:min(80vw,360px) !important;
   }
-  :root .sec1 .cta span,:root .sec4 .cta span{
-    font-size:clamp(15px,4.4vw,19px) !important;
-  }
+  /* HIS TWO BUTTONS ARE NOT THE SAME SIZE: "Your Road Map" is 57.56 on his
+     artboard and "Explore Our Services" is 43.66, because one is a line and
+     the other is three words that have to fit a plate. */
+  :root .sec1 .cta span{ font-size:var(--t-cta) !important; font-weight:700 }
+  :root .sec4 .cta span{ font-size:var(--t-cta2) !important; font-weight:700 }
 
   /* HIS SIGN AND HIS HEADLINE STAND SIDE BY SIDE, which is what he drew - the
      shield left of "A Clear Road Forward", the triangle left of "Great Work,
@@ -271,13 +342,21 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      as a paragraph wedged into a gap rather than a page with sections in it. */
   :root .sec1 .page > .mob-head{
     display:flex; align-items:center; justify-content:center;
-    gap:4.5vw; width:min(88vw,470px);
+    gap:4.5vw; width:min(94vw,470px);
     margin:clamp(46px,13vw,78px) auto clamp(16px,4.5vw,24px);
   }
+  /* HIS TWO SIGNS ARE NOT THE SAME SIZE, and one rule for both had them both
+     wrong. The shield beside "A Clear Road Forward" is 172 by 262 on his
+     artboard and the warning triangle beside "Great Work, No Signage" is 243
+     by 215 - so at 390 one is 62 across and the other 88, and the wide one was
+     coming out at 51 with its own headline three times its height. */
   :root .sec1 .mob-head > svg.z-copy{
     display:block; flex:0 0 auto; position:static !important;
-    width:clamp(44px,13vw,62px) !important; height:auto !important;
+    width:clamp(50px,15.9vw,73px) !important; height:auto !important;
     margin:0 !important; inset:auto !important;
+  }
+  :root .sec1 .mob-head:has(h2) > svg.z-copy{
+    width:clamp(70px,22.6vw,104px) !important;
   }
   /* AND THE HEADLINE STOPS CLAIMING THE WHOLE COLUMN. The shared copy rule
      gives every block min(86vw,460px), which inside a row leaves the sign
@@ -290,8 +369,9 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
   :root .sec1 .page > svg.z-copy,
   :root .sec2 > svg.z-copy{
     display:block; position:static !important;
-    width:clamp(56px,16vw,80px) !important; height:auto !important;
-    margin:clamp(46px,13vw,78px) auto clamp(18px,5vw,26px) !important;
+    /* 279 by 246 on a 1080 artboard is 101 across at 390 - his, not mine */
+    width:clamp(84px,25.9vw,118px) !important; height:auto !important;
+    margin:clamp(40px,11vw,66px) auto clamp(16px,4.4vw,24px) !important;
   }
 
   /* sec 2: his surf and his sand, then the panel that stands on them */
@@ -306,7 +386,7 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      was showing about two thirds of the water he drew and cropping the rest.
      He draws 197 at this width, which is half the screen. */
   :root .sec2 > .waves,:root .sec2 .waves.z-ground{ display:block; position:relative;
-    width:100%; height:clamp(170px,50.5vw,260px); margin:0; inset:auto;
+    width:100%; height:clamp(186px,55.6vw,286px); margin:0; inset:auto;
     overflow:hidden;
     /* A HAIRLINE OF SEA BEHIND THE TOP OF IT. The wrapper stands on the sand -
        that is the section's own ground - and his first line of foam lands one
@@ -409,85 +489,95 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
   /* HIS GREEN BOARD CARRIES ITS OWN WORDS. In the drawing the two lines and
      the strapline are inside the sign, to the right of the arrow - not
      underneath it - so the wrapper holds the board and the copy sits on it. */
-  /* HIS BOARD STANDS ON THE TREES, not below them. In his drawing it straddles
-     the line where the desert gives out - the top of it is on the rocks and the
-     foot of it is in the woodland - and it is a TALLER box than the desktop
-     one: 305 by 210 at this width against an artwork drawn 858 by 371. So it is
-     pulled up over the canopy by the canopy's own height and stretched, which
-     is the same bargain the surf took. */
+  /* -- HIS OWN PHONE SIGN --------------------------------------------------
+     Everything from here to the road is measured off Mobile_Sige_Rest_Area
+     .svg, which is 1002.82 by 744.19 - so every per cent below is one of his
+     numbers divided by one of those two, and none of it is a guess.
+
+     WHAT WENT: the desktop board stretched 52% taller with its REST AREA plate
+     and shield hidden inside the drawing, and a truss tile stuck on beside it.
+     That was a description of his sign. This IS his sign - he drew the phone
+     one himself, gantry and all, and it needs nothing done to it. */
+  :root .sec4 .signlamps{ display:none !important }
+  :root .sec4 .mob-sign > .our-sign{ display:none !important }
+  :root .sec4 .mob-sign > .mob-gantry{ display:none !important }
+
   :root .sec4 > .mob-sign{
     display:block; position:relative; z-index:2;
-    width:82vw; max-width:400px;
-    /* 858 by 371 stretched to 858 by 564, which is his 305 by 210 */
-    aspect-ratio:858 / 564;
-    /* ON THE TOP OF THE TREES, where he has it - a fifth of the way into the
-       woodland with its head over the rocks - not at the foot of it. The empty
-       band the hidden plate leaves at the top of this box is 21% of it, and
-       that is in here too. */
-    margin:-93vw auto clamp(22px,7vw,36px);
+    /* his artboard is 1080 across and the sign is 1002.82 of it */
+    width:92.8vw; max-width:470px;
+    aspect-ratio:1002.82 / 744.19;
+    /* HIS SIGN STANDS ON THE TREE LINE, its head over the rocks - but not
+       over the section's own top edge, which clips. */
+    margin:-79vw auto clamp(20px,6vw,32px);
   }
-  /* HIS BOARD HANGS FROM A GANTRY, same as the one in the hero - it runs off
-     to the right of the sign, behind it, and it is the same truss tile section
-     one uses. */
-  :root .sec4 .mob-sign > .mob-gantry{
-    display:block; position:absolute; left:72%; right:-24vw; top:38%; height:20%;
-    background:url("../../assets/v2/section-01/truss-cell.webp") repeat-x center;
-    background-size:auto 100%; z-index:-1; pointer-events:none;
+  :root .sec4 .mob-sign > .mob-restsign{
+    display:block; position:absolute; inset:0;
+    width:100%; height:100%; margin:0; max-width:none;
   }
-  /* his lamp plate is a desktop fitting and is not in the mobile drawing */
-  :root .sec4 .signlamps{ display:none !important }
-  /* THE REST AREA PLATE IS INSIDE HIS BOARD'S OWN SVG, which is why hiding
-     elements around it kept changing nothing: the file is a board rect, an
-     arrow, a yellow plate with its shadow and the shield as an <image>, all in
-     one drawing. His mobile version has the board and the arrow and no plate,
-     so the three pieces that make it are named by the numbers they carry - and
-     nothing else in the file carries them. */
-  :root .sec4 .our-sign rect[width="362.52"],
-  :root .sec4 .our-sign rect[width="361.47"],
-  :root .sec4 .our-sign image,
-  /* and the words ON the plate, which are their own <text> and survived every
-     shape being taken out from under them. Nothing else in this file is type -
-     the board's own lines are HTML. */
-  :root .sec4 .our-sign text{ display:none }
-  /* AND THE STRETCH IS A TRANSFORM, because preserveAspectRatio is an SVG
-     ATTRIBUTE and not a CSS property - written in a stylesheet it does nothing
-     at all, and an <svg> given a taller box than its viewBox simply letterboxes
-     the drawing inside it. scaleY from the top edge is the same picture and it
-     can be asked for below 900px only. The copy is a SIBLING, so it is not
-     stretched with the board. */
-  :root .sec4 .mob-sign > .our-sign{
-    display:block; position:absolute !important;
-    left:0 !important; top:0 !important; right:auto !important;
-    width:100% !important; height:auto !important;
-    transform:scaleY(1.52) !important; transform-origin:50% 0;
-    margin:0 !important;
+  /* HIS PLATE READS "REST AREA" AND THE WORDS ARE NOT IN THE FILE ANY MORE -
+     they were SVG text and came out with the rest of it. His own box for them
+     starts at 334.9 of 1002.82 and sits on a baseline at 116.23 of 744.19. */
+  :root .sec4 .mob-sign > .mob-restlabel{
+    display:block; position:absolute;
+    left:33.4%; top:10.4%; height:6.4%;
+    line-height:1; color:#1a1a1a;
+    font-family:"Be Vietnam Pro",system-ui,sans-serif; font-weight:800;
+    font-size:var(--t-rest); letter-spacing:.005em; white-space:nowrap;
   }
-  /* MEASURED OFF THE ARTWORK, not off the wrapper. His board carries a REST
-     AREA plate above it inside the same SVG, so the green FACE is only the
-     lower 78.3% of the box - centring the copy on the wrapper put it half over
-     the plate and half off the top of the sign. */
+  /* AND HIS TWO LINES SIT IN HIS OWN BOX. Headline 52.2 to 697.9 across and
+     205.6 down; strapline 130.2 to 629.5 and 384.3. Both are centred on
+     themselves in his file, which is why this is one centred column and not
+     two separately placed lines. */
   :root .sec4 .mob-sign > .sign-copy{
-    display:flex !important; flex-direction:column; justify-content:center;
-    position:absolute !important;
-    /* his arrow runs to 32% of the board and his first letter starts at 39%,
-       which is what breaks the line into his four rather than my two */
-    left:38% !important; right:4% !important;
-    top:21.4% !important; bottom:.3% !important;
+    display:block !important; position:absolute !important;
+    left:2.5% !important; right:14.5% !important;
+    top:27.6% !important; bottom:auto !important;
     transform:none !important;
     width:auto !important; height:auto !important; margin:0 !important;
-    text-align:left; padding:0 0 2% !important; overflow:visible;
+    text-align:center; padding:0 !important; overflow:visible;
+  }
+  /* AND THEY ARE SQUEEZED TO 82%, which is not a liberty - his own file sets
+     scale(.82 1) on both of these text elements, and the desktop board already
+     does the same thing. Without it "We Handle the Marketing." is wider than
+     the board he drew it on and breaks into three lines. */
+  /* AND THE BOX HAS TO GROW BY WHAT THE SQUEEZE TAKES AWAY. A transform does
+     not change where a line breaks: the text is laid out at the element's real
+     width, wraps there, and only then gets squashed - so scaleX on its own
+     bought a narrower picture of the SAME four lines. The element is made
+     1/0.82 wider (121.95%), pulled back by half the difference so it stays
+     centred, and scaled to exactly 100% again. Now it wraps where his does. */
+  :root .sec4 .mob-sign h2,:root .sec4 .mob-sign p{
+    transform:scaleX(.82) !important; transform-origin:50% 50%;
+    width:121.95% !important; margin-left:-10.98% !important;
+    white-space:normal !important; text-align:center;
   }
   :root .sec4 .mob-sign h2{
-    font-size:clamp(18px,5.4vw,24px) !important; line-height:1.16;
-    margin:0 0 .55em !important; text-align:left; white-space:normal !important;
+    font-size:var(--t-sign) !important; line-height:.97;
+    margin:0 0 .5em -10.98% !important;
   }
+  /* HIS STRAPLINE SITS IN A NARROWER BOX THAN HIS HEADLINE - 499 against 646
+     on his own board - which is what breaks it after "goal:" rather than after
+     "growing". Same squeeze, less width to wrap in. */
   :root .sec4 .mob-sign p{
-    /* MEASURED OFF HIS BOARD, not guessed: his headline is a tenth of the
-       board's own height and his strapline is six per cent of it. At 16px the
-       strapline pushed the four lines above it out through the top edge. */
-    font-size:clamp(11px,3.3vw,15px) !important; line-height:1.3;
-    margin:0 !important; text-align:left; white-space:normal !important;
+    font-size:var(--t-signp) !important; line-height:1.01;
+    width:103% !important; margin:0 0 0 -1.5% !important;
   }
+  /* his headline breaks after "Marketing." on his own board too */
+  :root .sec4 .mob-sign h2 br{ display:inline }
+  /* AND IT GOES QUIET AFTER DARK. The desktop board is inline SVG, so night
+     .css switches its two fills; this one is a picture and the only thing that
+     can be done to a picture is a filter over the whole of it - which is the
+     same bargain the road bands and the canopy already take. */
+  :root[data-mode="night"] .sec4 .mob-restsign,
+  :root[data-theme="dark"]:not([data-mode="day"]) .sec4 .mob-restsign{
+    filter:brightness(.40) saturate(.72);
+  }
+  :root[data-mode="night"] .sec4 .mob-restlabel,
+  :root[data-theme="dark"]:not([data-mode="day"]) .sec4 .mob-restlabel{
+    color:#4a4028;
+  }
+
   /* HIS ROAD DOWN THE RIGHT EDGE, and it is a CURVE - it comes in from the
      left under the trees, turns, and runs down off the bottom. A vertical
      strip was the same mistake as the gold band: near enough in description
@@ -564,13 +654,24 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
     margin:-9vw 0 clamp(24px,7vw,40px) !important; inset:auto !important;
   }
   :root .sec6 > .sky-cloud{ display:none }
-  :root .sec6 .page{ position:static; width:auto; margin:0 var(--mob-pad);
-    display:grid; grid-template-columns:1fr 1fr; gap:4vw }
+  /* HIS CARD BLOCK IS WIDER THAN HIS COPY. The four cards run 39 to 1037 of
+     his 1080 - a 3.6% margin - and his two headings start at 59, so the copy
+     takes a little more. Sharing --mob-pad between them was costing the grid
+     twenty pixels and putting "We Handle the Drive." onto a third line. */
+  :root .sec6 .page{ position:static; width:auto; margin:0 3.6vw;
+    display:grid; grid-template-columns:1fr 1fr; gap:4.3vw }
+  /* HIS HEADLINE BREAKS AFTER "Lane.", and there is no width that produces
+     that break on its own: "Pick Your Lane. We" fits the column and "We Handle
+     the Drive." does not fit what is left over, so any measure narrow enough to
+     push "We" down is too narrow for the line it lands on. It is marked in the
+     markup instead - an empty <i class="mob-br">, which the blanket rule at the
+     top of this file already keeps out of the desktop's way. */
+  :root .sec6 .page .copy .mob-br{ display:block; height:0 }
   :root .sec6 .page > .copy{ grid-column:1 / -1; position:static !important;
-    width:auto !important; margin:0; text-align:left;
-    font-size:clamp(26px,7.4vw,34px) !important; line-height:1.1 }
-  :root .sec6 .page > .copy.sub{ font-size:clamp(14px,3.9vw,17px) !important;
-    margin:0 0 1.4em; font-weight:400 }
+    width:auto !important; margin:0 0 .2em; text-align:left;
+    font-size:var(--t-h3) !important; line-height:1 }
+  :root .sec6 .page > .copy.sub{ font-size:var(--t-h3s) !important;
+    margin:0 0 1.5em; font-weight:500; line-height:1.2 }
   /* HIS CARDS, REBUILT AS CARDS. Everything inside one is absolutely placed
      against the card in the drawing - the tab, the icon, the heading, the copy
      and the button all at their own per cent - and a phone has no room for
@@ -580,35 +681,62 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
     width:auto !important; height:auto !important; margin:0 !important;
     transform:none !important; font-size:inherit;
     display:flex; flex-direction:column; align-items:center;
-    padding:0 6% 6%; overflow:visible;
+    padding:0 4% 5.8%; overflow:visible;
   }
   :root .sec6 .page .card > *{
     position:static !important; inset:auto !important;
     width:auto !important; height:auto !important;
     margin:0 !important; transform:none !important;
   }
-  :root .sec6 .page .card .label{ width:46% !important; height:auto !important }
+  /* HIS ORDER IS NOT THE DESKTOP'S. Four across reads left to right; two by
+     two on a phone he puts Print and Social on the top row and Website and
+     Video under them, and the markup is in the desktop's order. */
+  :root .sec6 .page .card:nth-of-type(1){ order:3 }   /* Website Design   */
+  :root .sec6 .page .card:nth-of-type(2){ order:4 }   /* Video Production */
+  :root .sec6 .page .card:nth-of-type(3){ order:1 }   /* Print & Branding */
+  :root .sec6 .page .card:nth-of-type(4){ order:2 }   /* Social & Paid Ads*/
+  /* his tab is 222.39 wide on a card 475.97 across - 46.7% - and it hangs 19
+     units ABOVE the card's own top edge, which is the 2.3% here */
+  :root .sec6 .page .card .label{ width:46.7% !important; height:auto !important;
+    margin-top:-2.3% !important }
   /* THE ICON LIVES ON THE TAB, so it is measured against the TAB and not
      against the card: his tab is 46% of the card wide and hangs from the top,
      and an icon at 24% of the CARD spilled off the bottom of it. */
+  /* HIS ICON VERY NEARLY FILLS THE TAB. On his card it is 132.6 wide against
+     a 476 card and a 222 tab - 27.9% of the one and 60% of the other - and it
+     starts twelve units above the card's own top edge, on the part of the tab
+     that overhangs. At 17% it was a stamp in the middle of a lozenge. */
   :root .sec6 .page .card .icon{
-    position:absolute !important; left:50% !important; top:4% !important;
-    width:17% !important; max-width:none !important;
+    position:absolute !important; left:50% !important; top:-1.2% !important;
+    width:27.9% !important; max-width:none !important;
     transform:translateX(-50%) !important;
   }
   :root .sec6 .page .card h3{
-    font-size:clamp(15px,4.3vw,18px) !important; line-height:1.15;
-    margin:.7em 0 .45em !important; text-align:center;
+    font-size:var(--t-card) !important; line-height:1;
+    margin:.62em 0 .5em !important; text-align:center;
   }
   :root .sec6 .page .card p{
-    font-size:clamp(11px,3vw,13px) !important; line-height:1.38;
-    margin:0 0 1.1em !important; text-align:center;
+    font-size:var(--t-cardp) !important; line-height:1.18; font-weight:300;
+    margin:0 0 1.3em !important; text-align:center; color:#333;
   }
   :root .sec6 .page .card p br{ display:none }
+  /* HIS BUTTON IS ON THE CARD, NOT UNDER A CURSOR. On a desktop it rises in
+     on hover, so it is at zero opacity until then - and a phone has no hover,
+     which is why four cards on his drawing had a Learn More and four cards on
+     the page had a hole where one should be. It stands there instead: his own
+     359.74 by 79.45 on a 475.97 card, which is 75.6% wide. */
   :root .sec6 .page .card .btn{
-    font-size:clamp(11px,3.1vw,13px) !important; padding:.6em 1.5em !important;
-    white-space:nowrap;
+    position:static !important; opacity:1 !important; translate:none !important;
+    pointer-events:auto !important; transition:none !important;
+    width:75.6% !important; margin-top:auto !important;
+    padding:.72em 0 !important; border-radius:.42em !important;
+    border-width:1px !important;
+    font-size:var(--t-learn) !important; font-weight:500; white-space:nowrap;
   }
+  /* and the card stops being a fixed rectangle with a hole in the bottom of
+     it: two cards side by side are the same height because the grid makes
+     them so, and the button goes to the foot of whichever is taller */
+  :root .sec6 .page .card{ min-height:100% }
   :root .sec6 .page h2.copy{ white-space:normal !important }
   :root .sec6 .page .sub{ white-space:normal !important }
 
