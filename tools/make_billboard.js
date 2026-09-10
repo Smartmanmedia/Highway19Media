@@ -36,7 +36,7 @@ const FONTS =
  * placed at translate(.08 34.32) scale(.44), so anything drawn in that box
  * lands exactly where his artwork was meant to. */
 const FW = 1942, FH = 809, L = 86;
-const RED = '#d2232a', GOLD = '#ffc220';
+const RED = '#d2232a', GOLD = '#f5b81c';
 
 /* one line of his kicker, tracked out to a width rather than to a letter
  * spacing - the width is what is readable off his render */
@@ -71,19 +71,42 @@ const FACE = `
 </defs>
 <style>${FONTS}
 text{font-family:BVP,sans-serif;dominant-baseline:auto}
-.sh{filter:drop-shadow(0 6px 0 rgba(0,0,0,.35))}
+.sh{filter:drop-shadow(0 7px 1px rgba(0,0,0,.45))}
+.shd{filter:drop-shadow(0 5px 14px rgba(0,0,0,.55))}
 </style>
 <rect width="${FW}" height="${FH}" fill="url(#bg)"/>
 <rect width="${FW}" height="${FH}" fill="url(#glow)"/>
 
+<!-- HIS GROUND IS A CHART, not a flat navy. The raster he drew carries a
+     coastline and a street grid across the right of the board at a whisper -
+     six or seven per cent - and without it the panel reads as a slab. This is
+     texture at that weight, not cartography: nothing on it is meant to be
+     read as a place, and at the size the road draws this board it is a change
+     of tone and nothing more. -->
+<g opacity=".085" fill="#8fc4ff">
+  <path d="M905 0 L1010 62 1046 148 1120 176 1157 122 1232 140 1258 214 1210 268
+           1246 322 1338 300 1392 236 1470 268 1512 196 1604 214 1662 150 1720 188
+           1786 132 1860 166 1942 108 1942 0 Z"/>
+  <path d="M1288 344 L1352 382 1330 438 1252 420 Z"/>
+  <path d="M1520 300 L1596 330 1570 386 1498 360 Z"/>
+  <path d="M842 0 L878 44 836 96 782 58 800 8 Z"/>
+</g>
+<g opacity=".05" stroke="#a9d2ff" stroke-width="2" fill="none">
+  <path d="M1060 0 V320 M1210 0 V300 M1360 40 V330 M1510 0 V300 M1660 60 V300"/>
+  <path d="M1000 92 H1942 M1000 174 H1900 M1060 252 H1942"/>
+</g>
+
 <!-- HIS ROAD, sweeping in from the bottom and away behind the shield -->
-<path d="M1210 ${FH} C1400 ${FH - 40} 1570 ${FH - 178} 1652 ${FH - 350}
-         L${FW} ${FH - 396} L${FW} ${FH} Z" fill="url(#road)"/>
-<path d="M1300 ${FH} C1462 ${FH - 46} 1596 ${FH - 192} 1668 ${FH - 361}"
-      fill="none" stroke="#4a5057" stroke-width="6" opacity=".75"/>
-<path d="M1352 ${FH} C1500 ${FH - 47} 1622 ${FH - 189} 1688 ${FH - 347}"
-      fill="none" stroke="${GOLD}" stroke-width="12"
-      stroke-dasharray="42 38" stroke-linecap="butt"/>
+<path d="M1092 ${FH} C1306 ${FH - 34} 1516 ${FH - 168} 1618 ${FH - 356}
+         L${FW} ${FH - 404} L${FW} ${FH} Z" fill="url(#road)"/>
+<path d="M1150 ${FH} C1352 ${FH - 36} 1548 ${FH - 168} 1646 ${FH - 350}"
+      fill="none" stroke="#5b626a" stroke-width="5" opacity=".55"/>
+<path d="M1268 ${FH} C1442 ${FH - 40} 1608 ${FH - 166} 1698 ${FH - 332}"
+      fill="none" stroke="${GOLD}" stroke-width="11"
+      stroke-dasharray="44 40" stroke-linecap="butt"/>
+<path d="M1336 ${FH} C1500 ${FH - 42} 1654 ${FH - 162} 1740 ${FH - 320}"
+      fill="none" stroke="${GOLD}" stroke-width="11"
+      stroke-dasharray="44 40" stroke-linecap="butt"/>
 
 <!-- HIS KICKER, a rule either side -->
 <rect x="${L}" y="79" width="158" height="9" fill="${RED}"/>
@@ -105,7 +128,7 @@ ${T('CREATIVE', L + 317, 723, 31, 208, 500, '#fff')}
 ${T('RESULTS', L + 618, 723, 31, 183, 500, '#fff')}
 
 <!-- HIS SHIELD -->
-<image x="1462" y="90" width="511" height="511"
+<image x="1462" y="90" width="511" height="511" class="shd"
        xlink:href="data:image/webp;base64,${b64('assets/v2/ui-shield.webp')}"/>
 </svg>`.replace('<stop offset="0" stop-color="#ffd košík"/>', '<stop offset="0" stop-color="#ffd34d"/>');
 
