@@ -169,6 +169,18 @@
    it is the surface a driver is still looking at when everything else has
    gone. Eight tenths of a second between the water and the road is enough to
    read as an order rather than a mistake. */:root[data-mode="night"] .sec7 .sea::after{opacity:1;transition:opacity 1.8s linear 1.4s}:root[data-mode="night"] .sec7 .sky::after{opacity:1;transition:opacity 1.8s linear 1.5s}:root[data-mode="night"] .sec7 .land::after{opacity:1;transition:opacity 1.7s linear 1.9s}:root[data-mode="night"] .sec7 .road::after{opacity:1;transition:opacity 1.8s linear 2.3s}.sec7 .sky::after{background:linear-gradient(180deg,#02060f 0%,#050d1e 34%,#081833 62%,#0d2447 84%,#12305a 100%)}
+/* AND ON A PHONE THE SKY COMES OUT OF THE WHITE ABOVE IT. His own sky already
+   washes to white, but along a 112-degree diagonal - which on a 1440 frame
+   puts the pale corner across most of the top edge and on a 390 one tucks it
+   into a corner, so what meets section six's white page is a ruled horizontal
+   line. A second wash straight down the top fifth closes it. It is a ::before
+   on the sky itself, which paints over the sky's own gradient and UNDER the
+   clouds and the moon, so nothing in the scene is veiled by it - and under the
+   night sheet, which is ::after and opaque at the top, so after dark it is not
+   there at all and the join is his own black meeting section six's. */
+@media (max-width:900px) and (pointer:coarse){.sec7 .sky::before{content:'';position:absolute;left:0;right:0;top:0;height:21vh;
+    background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,.72) 34%,rgba(255,255,255,0) 100%)}
+}
 /* the moon's wash on the water is tighter than the sun's was - a moon lights a
    patch of sea, not the whole of it, and at 150% by 260% there was no dark
    water left on the near side at all */.sec7 .sea::after{background:

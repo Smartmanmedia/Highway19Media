@@ -601,6 +601,19 @@ plant({cls:'copy',art:'copyline',x:0,h:MOBILE?86:132,lift:MOBILE?300:430,
    wider than the frame and his shield is cut off the left edge before it can
    be read. 380 is the width that lands inside it with the gantry still
    showing at both ends. */
+/* AND IT HAS TO HANG OVER YOUR HEAD, which on a phone it was not doing. lift
+   is how far the board's foot stands above the tarmac, and the EYE is at 129
+   on a desktop and 470 on the phone's high seat - so a board at 371 is well
+   over a driver's head and BELOW a phone camera's. What that looks like is
+   what he photographed: coming up to it the sign does not climb out of the top
+   of the frame the way a motorway sign does, it swells into a green band
+   across the middle and slides past at eye level, which reads as the thing
+   losing its shape rather than being driven under. 620 puts its foot 150 above
+   the phone's eye, and it leaves the frame upwards like the desktop's does.
+   The gantry follows it: his truss sits 51 above the board's foot and his mast
+   stands 31 clear of the truss's head, both kept as offsets so the three stay
+   one object at either height. */
+const SIGN_LIFT=MOBILE?620:371;
 const BOARD_W=MOBILE?380:566, BOARDS=[{art:'sign1',ar:940.5/295.5},{art:'sign3',ar:940.5/295.5}];
 STOPS.forEach((s,si)=>{
   const z=-distance(s)-AHEAD, b=BOARDS[si%BOARDS.length];
@@ -609,9 +622,18 @@ STOPS.forEach((s,si)=>{
      of the frame and left the sign reading as an afterthought above the
      picture rather than part of it. Width and height off the ground are both
      his; STANDING does the rest. */
-  plant({cls:'sign',art:b.art,x:-14,z,h:Math.round(BOARD_W/b.ar),lift:371,shadow:true});
-  plant({cls:'truss',x:342,z,h:62,w:149,lift:422,shadow:true});
-  plant({cls:'pole',x:414,z,h:515,w:22,shadow:true});
+  plant({cls:'sign',art:b.art,x:-14,z,h:Math.round(BOARD_W/b.ar),lift:SIGN_LIFT,shadow:true});
+  /* AND THE TRUSS REACHES THE BOARD. It is a repeating tile, so its length is
+     free - and its length was chosen against the DESKTOP board, whose right
+     edge lands at 269 where the tile starts at 267. The phone's board is 380
+     wide instead of 566, so its edge falls back to 176 and a ninety-unit hole
+     opened between the sign and the thing it is meant to hang from. The span
+     is worked out from the two ends instead of picked: from the board's own
+     right edge to the mast, whatever width the board is. */
+  const armL=-14+BOARD_W/2, armR=414+11;
+  const armW=MOBILE?armR-armL:149, armX=MOBILE?(armL+armR)/2:342;
+  plant({cls:'truss',x:armX,z,h:62,w:armW,lift:SIGN_LIFT+51,shadow:true});
+  plant({cls:'pole',x:414,z,h:515+SIGN_LIFT-371,w:22,shadow:true});
 });
 /* HIS STREET LAMPS. He drew each one eight times over, once per distance, but
    the scene only needs the shape twice - mast right with the arm reaching left
@@ -640,8 +662,11 @@ for(let i=0;i<LAMP_N*2;i++){
    them so they only ever show in the water either side of the land. */
 /* SEA_W only sets how THICK a wave line is drawn - its length is the frame -
    so halving it halves the lines and nothing else. */
-const SEA_W=1150, WAVE_GAP=190, WAVES=[];
-for(let i=0;i<15;i++){
+/* AND HIS SWELL RUNS THE SAME DISTANCE, for the same reason: fifteen lines at
+   190 apart span 2,850, which is a desktop's whole ocean and a quarter of a
+   phone's. Fifty-eight spans 11,020. */
+const SEA_W=1150, WAVE_GAP=190, N_WAVE=MOBILE?58:15, WAVES=[];
+for(let i=0;i<N_WAVE;i++){
   const el=document.createElement('div');
   el.className='wave';
   const art='wave-'+(1+i%5);
@@ -668,8 +693,19 @@ for(let i=0;i<8;i++){
    twenty-two of them are a road of any length, and because each is placed by
    the same projection as everything else they stretch and slow with distance
    on their own - which is the whole of what makes it read as speed. */
+/* HOW MANY, AND IT IS NOT A TASTE. The pool wraps through a fixed span - the
+   count times one dash and one gap - and the road is only painted as far out
+   as that span reaches. dSea is the far edge of the world and it belongs to
+   the CAMERA: 2,235 world units from a saloon and 10,706 from the phone's high
+   seat, nearly five times as deep. Twenty-six of them span 4,108, which covers
+   a desktop twice over and stops two fifths of the way to a phone's horizon -
+   which is exactly what he photographed, a road whose markings run out in the
+   middle distance. Seventy spans 11,060, which is past his water line. They
+   cost nothing out there: anything beyond the fade is skipped before it is
+   transformed. */
+const N_DASH=MOBILE?70:26;
 const DASHES=[];
-for(let i=0;i<26;i++){
+for(let i=0;i<N_DASH;i++){
   const d=document.createElement('div');
   d.className='dash';
   marks.appendChild(d);
