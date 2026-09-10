@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="night.css">
 <link rel="stylesheet" href="traffic.css">
 <link rel="stylesheet" href="sun.css">
+<link rel="stylesheet" href="header.css">
 <link rel="stylesheet" href="mobile.css">
 <style>body{margin:0;background:#04264f}
 /* the sections stack with nothing between them: each is a fixed ratio of the
@@ -33,6 +34,29 @@ section + section{ margin-top:-1px }</style>
 <!-- The page opens black and comes up into day - .dawn in night.css, the storyline in mode.js. -->
 <script>var r=document.documentElement;r.dataset.mode='night';r.dataset.dawn='1'</script>
 <div class="dawn" aria-hidden="true"></div>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <button class="mode-switch" type="button" aria-label="Switch to night">
+      <img class="to-night" src="../../assets/brand/Moon.svg" alt="">
+      <img class="to-day" src="../../assets/brand/Sun.svg" alt="">
+    </button>
+    <a class="hdr-logo" href="#top">
+      <span class="hdr-lock">HIGHWAY<i>19</i>MEDIA</span>
+      <span class="hdr-rule"></span>
+      <span class="hdr-tag">Creative Marketing for Tampa Bay Businesses</span>
+    </a>
+    <nav class="hdr-nav">
+      <a href="#services">Services</a>
+      <a href="#roadmap">The Road Map</a>
+      <a href="#qa">Q&amp;A</a>
+    </nav>
+    <a class="hdr-cta" href="#contact">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="m4 6 8 6 8-6"/></svg>
+      Contact Us
+    </a>
+  </div>
+</header>
 
 <section class="sec1">
 <!-- HIS NIGHT CLOUDS, AS A DUOTONE. "Dark blue to light muted" cannot be
@@ -4507,14 +4531,20 @@ section + section{ margin-top:-1px }</style>
          for a few rounds because the ones inside his Cards file were external
          xlink:hrefs at a path on his machine.
 
-         AND EACH ONE SITS WHERE HE PUT IT. Cards New.svg carries these four
-         as embedded PNGs with a transform apiece - his own left, top and
-         width against his own card, which is why no two of them are the same
-         size or at the same height. Read off that file, not chosen: the four
-         icons are different shapes and he balanced each one in its shield by
-         eye. -->
+         EACH ONE IS HIS OWN SIZE AND HEIGHT. Cards New.svg carries these four
+         as embedded PNGs with a transform apiece, so the width and the top
+         are read off that file rather than chosen - no two of the drawings
+         are the same shape and he set each one in its shield himself.
+
+         BUT THEY ARE CENTRED ON THE COLOUR, NOT ON THE LABEL. The label is a
+         137.3-wide box and the coloured shield only fills 120.92 of it: the
+         rest is the black fold, which is a corner turning over and not part
+         of the shape the icon sits in. Centred in the box, every icon sat six
+         per cent of a card to the right of the colour it belongs to. The
+         shield's own middle is 44.03% of the label, which is 45.22% of the
+         card. -->
       <img class="icon" src="../../assets/v2/section-06/icon-webdesign.webp" alt=""
-         style="left:33.75%;top:-2.5%;width:29.31%">
+         style="left:30.57%;top:-2.5%;width:29.31%">
     <h3>Website <br>Design</h3>
     <p><b>Your business. Open 24/7.</b>Custom websites, landing pages, <span class="nb">e-commerce</span>, and ongoing updates - built to make you look professional, get found, and turn visitors into customers.</p>
     <span class="btn">Explore This Lane</span>
@@ -4523,7 +4553,7 @@ section + section{ margin-top:-1px }</style>
   <article class="card" tabindex="0" style="left:36.43%;--c:#662d91">
     <svg class="label" viewBox="0 0 137.3 95" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><polygon class="fold" points="137.3 15.2 62.5 15.2 62.5 .8 120.9 0 137.3 15.2"/><path class="body" d="M0,.2h120.92v34.34c0,33.37-27.09,60.46-60.46,60.46h0C27.09,95,0,67.91,0,34.54V.2H0Z"/></svg>
     <img class="icon" src="../../assets/v2/section-06/icon-video.webp" alt=""
-         style="left:38.85%;top:-1.86%;width:25.5%">
+         style="left:32.47%;top:-1.86%;width:25.5%">
     <h3>Video <br>Production</h3>
     <p><b>Show them what you do best.</b>We come to you and capture the real people, work, products, and services behind your business - then turn it into video that gets attention.</p>
     <span class="btn">Explore This Lane</span>
@@ -4532,7 +4562,7 @@ section + section{ margin-top:-1px }</style>
   <article class="card" tabindex="0" style="left:51.22%;--c:#d4145a">
     <svg class="label" viewBox="0 0 137.3 95" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><polygon class="fold" points="137.3 15.2 62.5 15.2 62.5 .8 120.9 0 137.3 15.2"/><path class="body" d="M0,.2h120.92v34.34c0,33.37-27.09,60.46-60.46,60.46h0C27.09,95,0,67.91,0,34.54V.2H0Z"/></svg>
     <img class="icon" src="../../assets/v2/section-06/icon-print.webp" alt=""
-         style="left:36.06%;top:-2.95%;width:31.25%">
+         style="left:29.6%;top:-2.95%;width:31.25%">
     <h3>Print <br>&amp; Branding</h3>
     <p><b>Look the part. Everywhere.</b>Logos, business cards, flyers, catalogs, signage, vehicle graphics, branded merchandise, and more - one consistent look wherever customers find you.</p>
     <span class="btn">Explore This Lane</span>
@@ -4541,7 +4571,7 @@ section + section{ margin-top:-1px }</style>
   <article class="card" tabindex="0" style="left:66.02%;--c:#f7931e">
     <svg class="label" viewBox="0 0 137.3 95" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><polygon class="fold" points="137.3 15.2 62.5 15.2 62.5 .8 120.9 0 137.3 15.2"/><path class="body" d="M0,.2h120.92v34.34c0,33.37-27.09,60.46-60.46,60.46h0C27.09,95,0,67.91,0,34.54V.2H0Z"/></svg>
     <img class="icon" src="../../assets/v2/section-06/icon-social.webp" alt=""
-         style="left:37.82%;top:-2.6%;width:29.31%">
+         style="left:30.57%;top:-2.6%;width:29.31%">
     <h3>Social Media <br>&amp; Paid Ads</h3>
     <p><b>Put some traffic behind it.</b>Content, social media management, Google Ads, Meta Ads, targeting, and campaign management &mdash; built to put your business in front of the right local customers.</p>
     <span class="btn">Explore This Lane</span>
@@ -4800,13 +4830,8 @@ section + section{ margin-top:-1px }</style>
   </div>
 </section>
 
-<!-- HIS TEMPORARY DAY/NIGHT SWITCH. Both icons ship; night.css decides which
-     one shows, by the same selectors that decide the palette, so the button
-     can never disagree with the page. -->
-<button class="mode-switch" type="button" aria-label="Switch to night">
-  <img class="to-night" src="../../assets/v2/ui-moon.svg" alt="" width="38" height="38">
-  <img class="to-day" src="../../assets/v2/ui-sun.svg" alt="" width="38" height="38">
-</button>
+<script src="header.js" defer></script>
+
 
 <script src="parallax.js" defer></script>
 <script src="sprite.js" defer></script>

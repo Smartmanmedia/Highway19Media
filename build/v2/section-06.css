@@ -293,14 +293,21 @@
   left:13.06%; width:75.58%; top:86.41%; height:8.92%;
   background:var(--c); border:0.104cqw solid #fff; border-radius:0.582cqw;
   display:flex; align-items:center; justify-content:center;
-  color:#fff; font-size:0.996cqw; font-weight:500; white-space:nowrap;
-  /* AND IT IS ON THE CARD, NOT UNDER A CURSOR. It used to rise in on hover -
-     a nice move, and not what he drew: Cards_New has all four buttons on all
-     four cards, and a card with a hole where its call to action should be is
-     what the page looked like to anyone who was not pointing at it. The lift
-     on hover stays; the button just does not have to be summoned. */
-  opacity:1; translate:0 0; pointer-events:auto;
-  transition:none;
+  color:#fff; font-size:0.86cqw; font-weight:500; white-space:nowrap;
+  /* AND IT IS SUMMONED AGAIN. It was made permanent because Cards_New draws
+     all four buttons on all four cards - which it does, and which is a still
+     picture of a page nobody is pointing at. He wants the hover back: the
+     card is quiet until you go to it, and the button rises into the space
+     that was already left for it. */
+  opacity:0; translate:0 22%; pointer-events:none;
+  transition:opacity .18s linear, translate .22s cubic-bezier(.2,.7,.3,1);
+}
+.sec6 .page .card:hover .btn,
+.sec6 .page .card:focus-visible .btn,
+.sec6 .page .card:focus-within .btn{ opacity:1; translate:0 0; pointer-events:auto }
+/* AND ON A TOUCHSCREEN THERE IS NO HOVER, so there it simply is. */
+@media (hover:none){
+  .sec6 .page .card .btn{ opacity:1; translate:0 0; pointer-events:auto }
 }
 
 @media (prefers-reduced-motion: reduce){

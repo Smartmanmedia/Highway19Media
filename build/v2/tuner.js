@@ -26,7 +26,10 @@
 
   var css = document.createElement('style');
   css.textContent =
-    '.tune-btn{position:fixed;top:14px;right:74px;z-index:10000;width:52px;height:52px;' +
+    /* OUT OF THE TOP RIGHT CORNER. His header lives there now and this is a dev
+   panel that comes out before launch; it sits at the bottom instead, where
+   it is out of the way of the thing the page is actually for. */
+    '.tune-btn{position:fixed;bottom:14px;right:14px;z-index:10000;width:52px;height:52px;' +
       'padding:0;border:0;border-radius:50%;background:rgba(0,0,0,.30);' +
       'backdrop-filter:blur(2px);cursor:pointer;display:grid;place-items:center;' +
       'box-shadow:0 2px 10px rgba(0,0,0,.35);transition:background .25s,transform .25s}' +
@@ -34,7 +37,7 @@
     '.tune-btn svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2.6;' +
       'stroke-linecap:round;stroke-linejoin:round;transition:rotate .25s}' +
     '.tune-btn[aria-expanded="true"] svg{rotate:180deg}' +
-    '.tune{position:fixed;top:74px;right:14px;z-index:10001;width:290px;' +
+    '.tune{position:fixed;bottom:74px;right:14px;z-index:10001;width:290px;' +
       'max-height:70vh;overflow:auto;padding:14px 16px 12px;border-radius:14px;' +
       'background:rgba(8,14,26,.94);backdrop-filter:blur(6px);color:#fff;' +
       'box-shadow:0 10px 40px rgba(0,0,0,.5);' +
@@ -57,7 +60,7 @@
       'background:rgba(255,255,255,.12);color:#fff;font:800 11px/1 inherit;' +
       'letter-spacing:.1em;text-transform:uppercase;cursor:pointer}' +
     '.tune .rst:hover{background:rgba(255,255,255,.2)}' +
-    '@media (max-width:900px){.tune-btn{top:10px;right:70px}' +
+    '@media (max-width:900px){.tune-btn{bottom:10px;right:10px}' +
       '.tune{top:70px;right:10px;left:10px;width:auto}}';
   document.head.appendChild(css);
 

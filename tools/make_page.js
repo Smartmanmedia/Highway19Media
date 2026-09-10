@@ -9,7 +9,39 @@ const fs = require('fs'), path = require('path');
 const DIR = path.join(__dirname, '..', 'build', 'v2');
 
 const files = fs.readdirSync(DIR).filter(f => /^section-\d\d\.html$/.test(f)).sort();
+/* HIS HEADER, from assets/brand/Header.svg, as markup rather than as the
+ * picture he drew it as. Links have to be links, the type has to reflow on a
+ * phone, and his day/night switch lives in it now instead of floating over the
+ * top right corner of whatever section happens to be under it. Every size is a
+ * share of the bar's own height - see header.css. */
+const HEADER =
+  '<header class="hdr">\n' +
+  '  <div class="hdr-in">\n' +
+  '    <button class="mode-switch" type="button" aria-label="Switch to night">\n' +
+  '      <img class="to-night" src="../../assets/brand/Moon.svg" alt="">\n' +
+  '      <img class="to-day" src="../../assets/brand/Sun.svg" alt="">\n' +
+  '    </button>\n' +
+  '    <a class="hdr-logo" href="#top">\n' +
+  '      <span class="hdr-lock">HIGHWAY<i>19</i>MEDIA</span>\n' +
+  '      <span class="hdr-rule"></span>\n' +
+  '      <span class="hdr-tag">Creative Marketing for Tampa Bay Businesses</span>\n' +
+  '    </a>\n' +
+  '    <nav class="hdr-nav">\n' +
+  '      <a href="#services">Services</a>\n' +
+  '      <a href="#roadmap">The Road Map</a>\n' +
+  '      <a href="#qa">Q&amp;A</a>\n' +
+  '    </nav>\n' +
+  '    <a class="hdr-cta" href="#contact">\n' +
+  '      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor"' +
+       ' stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' +
+       '<path d="M4 5h16v14H4z"/><path d="m4 6 8 6 8-6"/></svg>\n' +
+  '      Contact Us\n' +
+  '    </a>\n' +
+  '  </div>\n' +
+  '</header>';
+
 const parts = files.map(f => {
+
   const html = fs.readFileSync(path.join(DIR, f), 'utf8');
   const m = html.match(/<section\b[\s\S]*<\/section>/);
   if (!m) throw new Error(f + ': no <section> found');
@@ -28,6 +60,7 @@ files.map(f => '<link rel="stylesheet" href="' + f.replace('.html','.css') + '">
   + '<link rel="stylesheet" href="night.css">\n' +
 '<link rel="stylesheet" href="traffic.css">\n' +
 '<link rel="stylesheet" href="sun.css">\n' +
+'<link rel="stylesheet" href="header.css">\n' +
 /* last, so a phone rule beats every desktop one it has to */
 '<link rel="stylesheet" href="mobile.css">\n' +
 '<style>body{margin:0;background:#04264f}\n' +
@@ -49,14 +82,10 @@ files.map(f => '<link rel="stylesheet" href="' + f.replace('.html','.css') + '">
   '<!-- The page opens black and comes up into day - .dawn in night.css, the storyline in mode.js. -->\n' +
   '<script>var r=document.documentElement;r.dataset.mode=\'night\';r.dataset.dawn=\'1\'</script>\n' +
   '<div class="dawn" aria-hidden="true"></div>\n\n' +
+  HEADER + '\n\n' +
 parts.join('\n\n') +
-  '\n\n<!-- HIS TEMPORARY DAY/NIGHT SWITCH. Both icons ship; night.css decides which\n' +
-  '     one shows, by the same selectors that decide the palette, so the button\n' +
-  '     can never disagree with the page. -->\n' +
-  '<button class="mode-switch" type="button" aria-label="Switch to night">\n' +
-  '  <img class="to-night" src="../../assets/v2/ui-moon.svg" alt="" width="38" height="38">\n' +
-  '  <img class="to-day" src="../../assets/v2/ui-sun.svg" alt="" width="38" height="38">\n' +
-  '</button>'
+  ''
+  + '\n\n<script src="header.js" defer></script>\n'
   + '\n\n<script src="parallax.js" defer></script>\n'
   /* his vehicles and his road, then the traffic that drives on it - in that
      order, because traffic.js reads both at start-up */
