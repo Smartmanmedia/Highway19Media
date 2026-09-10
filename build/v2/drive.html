@@ -1249,21 +1249,26 @@ STOPS.forEach((s,si)=>{
 });
 /* HIS BILLBOARD, ON THE VERGE BEFORE THE SUN GOES DOWN.
    It is the credentials beat - twenty five years, the three words - and it
-   belongs in daylight, so it stands between the first gantry at 0.169 and his
-   floating line at 0.347, well clear of DUSK_AT. Pass it and the evening
-   starts; the success board is the thing at the end of the dark.
+   comes AFTER his floating line at 0.347, not before it: the line names the
+   company and the board says what the company has done. That puts it past
+   DUSK_AT, which is the right side of it anyway - a billboard is a lit thing
+   and the six floodlights he drew on it have something to do. The success
+   board is still the last thing, at the end of the dark.
 
    IT STANDS BY ITS MAST, not by the middle of its picture. The mast is at
    0.961 across his drawing - the board hangs off it to the left - so fx says
    so, exactly the way a street lamp does, or the post lands out over the
    water while the face sits on the verge.
 
-   AND ITS FOOT IS ON THE GRASS. The verge only reaches GRASS across, so the
-   mast goes at 520 and the face reaches back in over the road, which is what
-   a board of this size does anyway. */
-const BILL_AT=0.30, BILL_H=MOBILE?900:720;
+   AND ITS FOOT IS ON THE GRASS - properly on it, not on the hem of it. The
+   verge reaches GRASS=546 across, and a mast at 520 stood 26 units inside
+   that: three per cent of the green, which from a moving camera reads as a
+   post standing on the water. 460 puts it in the same band as his palms,
+   with a clear width of verge outside it, and the shadow it throws lands on
+   green rather than on the sea where nothing could see it. */
+const BILL_AT=0.44, BILL_H=MOBILE?900:720;
 plant({cls:'sign',art:'bill',fx:0.961,shadow:true,
-  x:520, z:-distance((BILL_AT-START)/RANGE)-AHEAD, h:BILL_H});
+  x:460, z:-distance((BILL_AT-START)/RANGE)-AHEAD, h:BILL_H});
 /* HIS STREET LAMPS. He drew each one eight times over, once per distance, but
    the scene only needs the shape twice - mast right with the arm reaching left
    for the seaward verge, and its mirror - because the projection does the rest.
