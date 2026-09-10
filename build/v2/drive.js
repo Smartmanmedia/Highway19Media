@@ -181,7 +181,7 @@ const REF=810;
    forces the layout the whole engine is built to avoid. */
 const runway=document.querySelector('.runway');
 let W=0,H=0,U=1,f=REF*F0*2,hor=0,seaY=0,curve=0,near=-300,kSea=0,dSea=0,dFade=0,
-    secTop=0,secSpan=1;
+    secTop=0,secSpan=1,cardsBot=0;
 /* WHERE IN THE TRIP A THING AT THIS DEPTH IS - the speed table read
    backwards. The table gives distance for a fraction; this walks it once to
    give the fraction back for a distance, which is all that is needed to hang
@@ -204,6 +204,16 @@ function measure(){
   fctx.setTransform(FDPR,0,0,FDPR,0,0);
   secTop=runway.getBoundingClientRect().top+scrollY;
   secSpan=Math.max(1,runway.offsetHeight-H);
+  /* WHERE THE CARDS ACTUALLY STOP, which is not where their section stops:
+     section six runs on for another five hundred and thirty five pixels of
+     empty ground below the last button. His line belongs to the gap that
+     opens the moment the cards clear, so it is hung off the cards. */
+  {
+    let b=0;
+    document.querySelectorAll('.sec6 .page .card').forEach(el=>{
+      const r=el.getBoundingClientRect().bottom+scrollY; if(r>b) b=r; });
+    cardsBot = b || secTop;
+  }
   /* THE SCENE IS SIZED OFF THE FRAME IT WAS DRAWN FOR, NOT OFF THIS ONE.
      Every world unit was a share of the HEIGHT, which is right on any screen
      shaped like a screen and wrong on a phone: the road's half-width at the
@@ -995,49 +1005,32 @@ function tick(now){
      at full strength from the first pixel of the section, because you scroll
      to it rather than have it appear */
   stage.style.setProperty('--out', String(1-smooth((t-FADE_AT)/(1-FADE_AT))));
-  /* HIS TITLE RISES, AND IT IS GONE BEFORE THE DRIVING STARTS.
-     Its whole life happens BEFORE t means anything: t is nought until the
-     section's top reaches the top of the window, so the approach - a full
-     viewport of scrolling - is one flat number as far as the trip is
-     concerned. So it has a clock of its own, q, which runs from the moment
-     the section's top enters the BOTTOM of the window to the moment the world
-     begins to move: a viewport of approach plus START of the trip.
-
-     AND ITS HEIGHT IS IN THE SCENE'S OWN COORDINATES, which is the whole of
-     what was wrong with it. Placed against the band you can SEE, it climbed
-     the screen and sank into the picture at the same time, because that band
-     grows from the bottom as the stage comes up - so the sky went past it
-     rather than it going past the sky. Written against the STAGE it falls
-     from 0.60 of the way down to the horizon to 0.24, while the stage itself
-     is coming up under it: it rises on the screen AND rises through his sky,
-     which is the way round a parallax reads.
-
-     It is out at 0.85 of that clock - about 175 pixels past the top of the
-     section, where the road does not start for 365 - so the sky is empty
-     again well before the first dash moves. */
+  /* HIS TITLE RISES THROUGH THE GAP THE CARDS LEAVE, AND IT IS GONE BEFORE
+     THE DRIVING STARTS. Its whole life happens before t means anything - t is
+     nought until the section's top reaches the top of the window - so it has
+     a clock of its own, written below against the bottom edge of the cards
+     rather than against this section, because the section starts 535 pixels
+     lower than the cards end. */
   {
-    /* HIS TITLE STARTS IN THE MIDDLE OF THE SCREEN and rises out of the top.
-       q runs from the section's top touching the BOTTOM of the window to the
-       moment the world begins to move - a viewport of approach plus START.
+    /* HIS LINE LIVES IN THE GAP THE CARDS LEAVE BEHIND, and that gap is not
+       where the section boundary is. Section six ends 535 pixels below the
+       last card, so a clock hung off the section's top started the title half
+       a screen too late - down where the first gantry is already coming up
+       over the bottom edge, which is exactly the frame he marked "not here".
 
-       IT ARRIVES AT 0.36 OF THAT, and the number is not a taste: the stage is
-       what has to be behind it, and the stage covers the middle of the screen
-       only once it has come up half a viewport, which is 0.5H of scrolling.
-       0.5H over the whole clock is 0.356 on a desktop and 0.356 on a phone -
-       the same fraction, because both terms scale with the viewport. Earlier
-       than that and his line is over the cards, not over his sky.
+       So it is hung off the CARDS. p is one as the cards' bottom edge crosses
+       the window: it starts as that edge is a little over half way down the
+       screen - his "here", the cards still filling the top of the frame and
+       nothing else in the sky yet - and ends as the edge leaves the top,
+       which is still 50 pixels of scroll before the first board shows.
 
-       From there it climbs, holding full white the whole way, and only lets
-       go over the last stretch: the rise and the fade now finish together at
-       0.80, about 110 pixels past the top of the section, where the road does
-       not start for 365. It used to fade out at half height and leave the top
-       of its travel empty. */
-    const total = innerHeight + START * secSpan;
-    const q = clamp((scrollY - (secTop - innerHeight)) / total, 0, 1);
+       It arrives at 0.66 of the way down the window and climbs to 0.18,
+       holding full white until the last stretch. */
+    const p = clamp((0.54 - (cardsBot - scrollY) / innerHeight) / 0.52, 0, 1);
     runway.style.setProperty('--hello', String(Math.min(
-      smooth((q - 0.36) / 0.08), 1 - smooth((q - 0.70) / 0.10))));
+      smooth(p / 0.10), 1 - smooth((p - 0.70) / 0.30))));
     runway.style.setProperty('--hello-y',
-      Math.round(Math.max(0.14, 0.50 - 0.82 * (q - 0.36)) * innerHeight) + 'px');
+      Math.round((0.66 - 0.48 * p) * innerHeight) + 'px');
   }
   /* THE SHOW RUNS EXACTLY WHERE THE WORLD IS GOING. It lights the moment the
      last board comes over the horizon, so the sky is already going long
