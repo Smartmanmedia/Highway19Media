@@ -1166,24 +1166,33 @@ function tick(now){
        0.40 - so the line stopped a tenth of a screen short of the top of the
        band he asked for and never reached it. This is his number now. */
     const hold  = 0.07;
-    /* AND IT NEVER LEAVES THE BAND HE SET. Three hundred pixels higher again,
-       on the 970-pixel window he measures these on: it arrives at 0.271 of
-       the way down rather than 0.58, and stops climbing at 0.07 rather than
-       0.31. The exit is the one number that is not the full 300 - at 0.001
-       the MIDDLE of the line would sit on the top edge of the window with
-       half the type off the screen, so it stops where the line still fits
-       under it, which is a little over half its own height down. Both are
-       hard limits, not numbers the geometry is trusted to land on.
+    /* AND IT IS THREE HUNDRED PIXELS HIGHER THAN THE PLACE IT COMES TO.
+       THAT IS ALL IT IS, AND IT IS WHY IT KEPT NOT MOVING.
 
-       BELOW 0.271 IT IS NOT ON THE SCREEN AT ALL. Letting it slide up through
-       the bottom edge put half a line of it under the fold, which is outside
-       the band as surely as being over the cards would be; and he does not
-       want it faded in, so it cannot arrive by getting brighter either. It is
-       parked a screen and a half down until the gap has opened enough for the
-       whole line to stand inside the band, and then it is simply there. */
+       There are two numbers in here and they do different jobs. y is WHERE the
+       line sits - the middle of the gap between the cards' bottom edge and the
+       horizon. The threshold is WHEN it is allowed on screen at all: below the
+       bottom edge there is no gap yet, and he does not want it faded in, so it
+       waits off-screen until the gap has opened and is then simply there.
+
+       Raising the line means subtracting from y. Raising the THRESHOLD does
+       not raise anything: it makes the line wait longer, and the wait is what
+       he has been looking at three times running - by the moment y finally got
+       under 0.271, the hold had already caught it and it was skipping most of
+       its own run. So the threshold is back where it was and the 300 comes off
+       the position instead, in real pixels on whatever window is open. */
     const y = (cy + road) / 2;
+    const RAISE = 300;
+    /* AND WHAT DECIDES WHETHER IT IS ON SCREEN IS THE CARDS, NOT THE MIDPOINT.
+       The midpoint is half the horizon, and the horizon is still a long way
+       below the bottom edge when the cards clear - so a threshold on y waited
+       for the ROAD to come up and left a screen of empty sky with nothing in
+       it, which is what he is looking at. The cards' own bottom edge crossing
+       half the window is the moment the gap opens, and the moment it belongs
+       in. Where it then sits is y, three hundred pixels up from it. */
     runway.style.setProperty('--hello-y',
-      Math.round((y > 0.271 ? 1.5 : Math.max(hold, y)) * innerHeight) + 'px');
+      Math.round(cy > 0.50 ? innerHeight * 1.5
+        : Math.max(hold * innerHeight, y * innerHeight - RAISE)) + 'px');
     runway.style.setProperty('--hello', String(1 - smooth(t / START)));
   }
   /* THE SHOW RUNS EXACTLY WHERE THE WORLD IS GOING. It lights the moment the
