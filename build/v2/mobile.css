@@ -404,7 +404,7 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
        the wave rather than on an edge.
        Measured, not chosen: sampled at eleven columns across the rendered
        page, the crest runs between 172 and 189 pixels down the window. */
-    width:100%; height:clamp(152px,46.2vw,238px); margin:0; inset:auto;
+    width:100%; height:clamp(119px,36.2vw,186px); margin:0; inset:auto;
     /* AND THE FOAM RUNS ON OVER THE SAND. overflow:hidden would cut it dead on
        the same line, which is the fault this rule is fixing; a clip-path can
        say "the sides and the top, but let the bottom out" - the same thing
@@ -426,9 +426,22 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
        water gained is water and not a crop of his art.
        Both colours are the variables the surf itself uses - so the join
        follows him into the night without a second rule. */
-    background:
-      linear-gradient(180deg,var(--mob-blue-2) 0, rgba(0,0,0,0) 34%),
-      linear-gradient(90deg,var(--sea-far-a,#004ba0),var(--sea-far-b,#0561ca)) }
+    /* AND THE WATER ABOVE THE SURF IS SECTION ONE'S OWN LAST COLOUR, exactly.
+       This was his blue fading into the far band's gradient, and it drew a
+       line across the screen at the join - because what is directly above the
+       join is neither of those two. .sec1::after is a 14% tall fade at the
+       bottom of section one, masked in from nothing, painting
+       linear-gradient(90deg,#014ea5,#055fc6) - a HORIZONTAL ramp - and it was
+       meeting a flat #045dc3. Twenty-six levels of blue apart at the left edge
+       and identical at the right, which is exactly what a colour change that
+       is not a transition looks like.
+       So the window carries the same expression, variable and all, and the two
+       cannot come apart - at any width, and after dark, where night.css sets
+       --sec1-fade for both of them at once. Measured after: the last row of
+       section one and the first row of the water are the same colour at both
+       edges of the screen, to the level. */
+    background: var(--sec1-fade,
+      linear-gradient(90deg,#014ea5 0%,#055fc6 100%)) }
   /* AND THE BANDS THEMSELVES SCALE UP, which is the part the wrapper cannot do.
      Each one is width:126% with height:auto - its size comes from the WIDTH, so
      a taller wrapper only adds empty space under it. At 126% of a 390 phone his
@@ -462,11 +475,15 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
 
        The two landmarks, measured off his own art: the first line of foam sits
        36.7% down the band and the shore foam 71.9% down it. So at 170.6vw the
-       surf itself is 60vw of water, the shore lands 122.6vw below the band's
-       top, and lifting the band 52.6vw puts that shore on the wrapper's bottom
-       edge with 10vw of OPEN SEA above the first wave. That is the space he
-       asked for, and the surf is 8% bigger than it was into the bargain. */
-    height:170.6vw !important; top:-52.6vw !important;
+       surf itself is 60vw of water and the shore lands 122.6vw below the
+       band's top, so the lift and the window's height move together: whatever
+       is taken off one comes off the other, and the shore stays on the
+       wrapper's bottom edge to the pixel.
+       62.6 and 36.2 is ten vw further up than the first pass - the open water
+       above the first crest was half the ocean, and with the join now
+       invisible it read as a field of blue that the surf arrived after rather
+       than as the top of the same sea. */
+    height:170.6vw !important; top:-62.6vw !important;
     preserveAspectRatio:none;
   }
   /* AND THE SWELL IS FIVE TIMES THE SIZE, because the amplitude is written in
