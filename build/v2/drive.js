@@ -665,6 +665,22 @@ const AHEAD=MOBILE?620:420;
    it; 60 holds it full until it is 175 out and lets it go over the last of
    the approach, so what it loses is only the part where it stops being a
    board. */
+/* AND HIS BLOCK DOES NOT EXIST UNTIL THE FIRST BOARD IS BEHIND YOU.
+   Same fault as the boards had, and the same cause: dSea belongs to the CAMERA,
+   and on a phone the eye sits high enough that the far edge of the world is
+   thousands of units out - so MORE MILES FOR YOUR BUDGET was standing in the
+   haze, four letters high, in the same frame as the board you are meant to be
+   reading. Two pieces of copy competing at once, and the small one wins because
+   it is in the middle of the road.
+
+   The cut-off is not a number picked to look right: it is the distance from the
+   FIRST BOARD'S STOP to the block, so the block is at exactly zero at the
+   moment that board is being read and comes up over the next 900 units of road
+   - which is his "right after the first highway sign", written as the geometry
+   rather than as a guess. The desktop's own horizon already does this, so it
+   keeps what he signed off on. */
+const COPY_FAR=MOBILE?distance(TEXT_U)-distance(STOPS[0])+AHEAD:Infinity,
+      COPY_FAR_FADE=900;
 const SIGN_FAR=MOBILE?3400:2000, SIGN_FADE=900,
       SIGN_NEAR=MOBILE?170:60, SIGN_NEAR_FADE=MOBILE?170:120,
       COPY_NEAR=MOBILE?380:230, COPY_NEAR_FADE=MOBILE?200:170;
@@ -708,14 +724,25 @@ plant({cls:'copy',art:'copyline',x:0,h:MOBILE?250:360,lift:MOBILE?0:0,
    The gantry follows it: his truss sits 51 above the board's foot and his mast
    stands 31 clear of the truss's head, both kept as offsets so the three stay
    one object at either height. */
-const SIGN_LIFT=MOBILE?620:371;
+/* AND ON A PHONE IT COMES BACK DOWN. 620 put the board's foot 244 above the
+   eye and its top a quarter of the way down a 844-high frame, with the whole
+   lower two thirds empty road under it - a sign hung in the sky rather than
+   over the road. 440 drops the foot to just over the horizon, where a motorway
+   sign actually sits, and puts the board across the middle third of the frame
+   with the tarmac running under it. Measured, not chosen: U*k is 0.646 at the
+   stop, so every 100 of lift is 65 pixels of screen. */
+const SIGN_LIFT=MOBILE?440:371;
 /* AND THE TWO BOARDS ARE NO LONGER THE SAME SHAPE. His first one carries THE
    ROAD AHEAD on a yellow plate that stands above the green, so its drawing is
    940.5 by 333.5 where his second is 940.5 by 295.5 - 2.8201 against 3.1827,
    both printed by tools/make_boards.js, which is where the plate is composed.
    Each board's height follows its OWN aspect, so the plate rises above the
    gantry rather than squashing the sign into the same box. */
-const BOARD_W=MOBILE?380:566,
+/* AND IT IS THE SIZE HE DREW IT AT. 380 rendered his first board 245 pixels
+   across a 390 screen - 63% - where the desktop reads it at 84% of the frame.
+   500 is that same share on a phone, which is the point: the board is the copy,
+   and a board you have to lean in to read is not doing its job. */
+const BOARD_W=MOBILE?500:566,
       BOARDS=[{art:'sign1',ar:2.8201},{art:'sign3',ar:3.1827}];
 STOPS.forEach((s,si)=>{
   const z=-distance(s)-AHEAD, b=BOARDS[si%BOARDS.length];
@@ -935,7 +962,8 @@ function place(drive){
        than passing. It is out before that, which for a thing you have already
        read costs nothing. */
     if(it.cls==='copy')
-      up=Math.min(up, smooth((D-COPY_NEAR)/COPY_NEAR_FADE));
+      up=Math.min(up, smooth((D-COPY_NEAR)/COPY_NEAR_FADE),
+                     smooth((COPY_FAR-D)/COPY_FAR_FADE));
     if(up<=0.004){it.el.style.opacity=0;if(it.sh)it.sh.style.opacity=0;
       if(it.ft)it.ft.style.opacity=0;continue}
     it.el.style.opacity=up;
