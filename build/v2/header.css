@@ -23,23 +23,35 @@
    his file does: the lockup keeps its proportions while the row it sits in
    spreads with the screen.
    ========================================================================= */
-:root{ --hh:clamp(66px, 5.943vw, 124px) }
+:root{
+  --hh:clamp(66px, 5.943vw, 124px);
+  /* THE BAR AS TOKENS, so the night palette can reach it the way it reaches
+     everything else: night.css sets these three, this file only says what
+     they are at noon. See the block at the end of night.css. */
+  --hdr-bg:linear-gradient(90deg,#00287d 0%,#0459bd 42%,#0358bc 48%,
+    #02459e 62%,#013887 75%,#002f7a 88%,#002d76 100%);
+  --hdr-edge:rgba(0,8,26,.55);
+  --hdr-cast:0 3px 4px rgba(0,10,35,.42), 0 14px 26px rgba(0,16,50,.30);
+  --hdr-cta-bg:#ffde17;
+  --hdr-cta-ink:#0b1f3f;
+  --hdr-cta-cast:0 3px 9px rgba(0,10,40,.40);
+}
 
 .hdr{
   position:fixed; left:0; right:0; top:0; z-index:9000;
   height:var(--hh);
-  background:linear-gradient(90deg,#00287d 0%,#0459bd 42%,#0358bc 48%,
-    #02459e 62%,#013887 75%,#002f7a 88%,#002d76 100%);
+  background:var(--hdr-bg);
   /* HIS SHADOW LAYER: the 44 units under the bar in his file are a hard dark
      edge with a soft fall below it. A box-shadow alone is the soft half and
      misses the line, which is the half you notice. */
-  border-bottom:2px solid rgba(0,8,26,.55);
-  box-shadow:0 3px 4px rgba(0,10,35,.42), 0 14px 26px rgba(0,16,50,.30);
+  border-bottom:2px solid var(--hdr-edge);
+  box-shadow:var(--hdr-cast);
   font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
   /* retracts on the way down, back on the way up - a transform, so the page
      under it never reflows */
   transform:translateY(0);
-  transition:transform .28s cubic-bezier(.3,.7,.3,1);
+  transition:transform .28s cubic-bezier(.3,.7,.3,1),
+    background-image .9s linear, border-color .9s linear, box-shadow .9s linear;
   will-change:transform;
 }
 .hdr[data-hide="1"]{ transform:translateY(calc(-1 * var(--hh) - 20px)) }
@@ -95,14 +107,15 @@
 .hdr-cta{
   position:absolute; left:81.6%; top:50%; translate:0 -50%;
   display:flex; align-items:center; gap:.6em;
-  background:#ffde17; color:#0b1f3f; text-decoration:none;
+  background:var(--hdr-cta-bg); color:var(--hdr-cta-ink); text-decoration:none;
   font-weight:900; font-size:calc(var(--hh) * .1412); letter-spacing:.045em;
   text-transform:uppercase; white-space:nowrap;
   padding:calc(var(--hh) * .125) calc(var(--hh) * .20)
           calc(var(--hh) * .125) calc(var(--hh) * .125);
   border-radius:calc(var(--hh) * .075);
-  box-shadow:0 3px 9px rgba(0,10,40,.40);
-  transition:transform .18s ease, box-shadow .18s ease;
+  box-shadow:var(--hdr-cta-cast);
+  transition:transform .18s ease, box-shadow .18s ease,
+    background-color .9s linear, color .9s linear;
 }
 .hdr-cta:hover{ transform:translateY(-1px) scale(1.015);
   box-shadow:0 5px 16px rgba(0,10,40,.5) }

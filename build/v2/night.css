@@ -650,3 +650,42 @@ section svg.z-copy [fill^="#"],
     --d3f7a00: #0e1912;
   }
 /* <<< desert */
+
+/* --- HIS HEADER AFTER DARK -------------------------------------------------
+   The bar was the one thing on this page that stayed at noon while everything
+   under it went dark: an interstate-blue band across the top of a black sky,
+   which is the join you cannot not see.
+
+   THE BAR GOES DOWN WITH THE SKY. Same ramp, same shape, four fifths of the
+   way to black - the centre keeps just enough blue to read as his gradient
+   rather than as a flat black strip.
+
+   AND CONTACT US GOES RED, which is the one place this departs from the rule
+   the rest of the night follows. Everywhere else the yellow stays exactly as
+   bright as it is at noon, because it is the thing the eye is meant to find.
+   On a bar this dark the yellow stops being a button and starts being a lamp;
+   his own night mock has it in the interstate red off the shield, which is on
+   the badge six inches to its left and carries at that size without shouting.
+
+   The lockup, the tagline, the rule and the nav do not change: they are white
+   and #29abe2 on dark either way. */
+:root[data-theme="dark"]:not([data-mode="day"]),
+:root[data-mode="night"]{
+  --hdr-bg:linear-gradient(90deg,#010817 0%,#06214e 42%,#062253 48%,
+    #04173a 62%,#031029 75%,#020b1d 88%,#01060f 100%);
+  --hdr-edge:rgba(0,0,0,.72);
+  --hdr-cast:0 3px 5px rgba(0,0,0,.55), 0 14px 30px rgba(0,0,0,.45);
+  --hdr-cta-bg:#c8161d;
+  --hdr-cta-ink:#fff;
+  --hdr-cta-cast:0 3px 10px rgba(0,0,0,.55);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]):not([data-mode="day"]){
+    --hdr-bg:linear-gradient(90deg,#010817 0%,#06214e 42%,#062253 48%,
+      #04173a 62%,#031029 75%,#020b1d 88%,#01060f 100%);
+    --hdr-edge:rgba(0,0,0,.72);
+    --hdr-cast:0 3px 5px rgba(0,0,0,.55), 0 14px 30px rgba(0,0,0,.45);
+    --hdr-cta-bg:#c8161d;
+    --hdr-cta-ink:#fff;
+    --hdr-cta-cast:0 3px 10px rgba(0,0,0,.55);
+  }}
