@@ -32,8 +32,8 @@ const HEADER =
   '<header class="hdr">\n' +
   '  <div class="hdr-in">\n' +
   '    <button class="mode-switch" type="button" aria-label="Switch to night">\n' +
-  '      <img class="to-night" src="../../assets/v2/header/moon.svg" alt="">\n' +
-  '      <img class="to-day" src="../../assets/v2/header/sun.svg" alt="">\n' +
+  '      <img class="is-day" src="../../assets/v2/header/sun.svg" alt="">\n' +
+  '      <img class="is-night" src="../../assets/v2/header/moon.svg" alt="">\n' +
   '    </button>\n' +
   '    <a class="hdr-logo" href="#top">\n' +
   '      <span class="hdr-lock">HIGHWAY<i>19</i>MEDIA</span>\n' +
@@ -51,6 +51,23 @@ const HEADER =
   '      Contact Us\n' +
   '    </a>\n' +
   '  </div>\n' +
+  /* HIS PULL-DOWN, under the bar and part of it. Three nav items will not fit
+     across 390 pixels beside his lockup at any size worth reading, and his own
+     drawing does not try: there is a second, shorter strip under the bar with
+     three white rules centred in it, and that is the menu. It rides inside
+     .hdr so the whole thing retracts as one object, and it is off above the
+     breakpoint, where the nav is already in the bar. */
+  '  <button class="hdr-bar" type="button" aria-expanded="false"\n' +
+  '          aria-controls="hdr-menu" aria-label="Open the menu">\n' +
+  '    <span class="hdr-burger" aria-hidden="true"></span>\n' +
+  '  </button>\n' +
+  '  <nav class="hdr-menu" id="hdr-menu" hidden>\n' +
+  '    <a href="#services">Services</a>\n' +
+  '    <a href="#roadmap">The Road Map</a>\n' +
+  '    <a href="#promise">How We Work</a>\n' +
+  '    <a href="' + SOON + '">Q&amp;A</a>\n' +
+  '    <a href="#contact">Contact Us</a>\n' +
+  '  </nav>\n' +
   '</header>';
 
 const parts = files.map(f => {
@@ -96,7 +113,7 @@ const out =
   description:DESC,
   url:SITE + '/',
   image:SITE + '/assets/v2/meta/og.jpg',
-  email:'hello@highway19media.com',
+  email:'highway19media@gmail.com',
   parentOrganization:{ '@type':'Organization', name:'Smart Man Media' },
   areaServed:{ '@type':'AdministrativeArea', name:'Tampa Bay, Florida' },
   address:{ '@type':'PostalAddress', addressRegion:'FL', addressCountry:'US' },

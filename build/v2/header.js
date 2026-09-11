@@ -40,7 +40,7 @@
     if (acc > DEAD) { hide(); acc = 0; }
     else if (acc < -DEAD) { show(); acc = 0; }
   }
-  function hide() { if (!hidden) { hidden = true; hdr.dataset.hide = '1' } }
+  function hide() { if (!hidden && !open) { hidden = true; hdr.dataset.hide = '1' } }
   function show() { if (hidden) { hidden = false; hdr.removeAttribute('data-hide') } }
 
   addEventListener('scroll', function () {
@@ -53,4 +53,52 @@
   addEventListener('mouseout', function (e) {
     if (!e.relatedTarget && e.clientY <= 4) show();
   });
+
+  /* ---- HIS STRIP, AND THE MENU IT PULLS DOWN ------------------------------
+   * The phone's nav. Three items will not fit across 390 pixels beside his
+   * lockup, and his own drawing does not try: there is a band under the bar
+   * with three rules in it, and pressing it drops the menu.
+   *
+   * The state is `hidden` on the drawer and aria-expanded on the strip - one
+   * fact, written where a screen reader and the stylesheet both read it - and
+   * the ANIMATION is the stylesheet's business (see .hdr-menu, which tells
+   * [hidden] not to take the element away so there is something to animate
+   * from). Nothing here measures or sets a height.
+   *
+   * And the header does not retract while it is open: a drawer that slides up
+   * off the screen because you scrolled a little is a drawer that ate the tap.
+   */
+  var strip = hdr.querySelector('.hdr-bar'),
+      menu  = hdr.querySelector('.hdr-menu'),
+      open  = false;
+
+  function setOpen(v) {
+    open = v;
+    strip.setAttribute('aria-expanded', v ? 'true' : 'false');
+    strip.setAttribute('aria-label', v ? 'Close the menu' : 'Open the menu');
+    menu.classList.toggle('is-open', v);
+    if (v) { menu.removeAttribute('hidden'); show(); }
+    else {
+      /* the attribute goes back on only once the drawer has finished closing,
+         so the transition has something to run on */
+      setTimeout(function () { if (!open) menu.setAttribute('hidden', '') }, 280);
+    }
+  }
+
+  if (strip && menu) {
+    strip.addEventListener('click', function () { setOpen(!open); });
+    /* a link is a destination: close on the way out, so the drawer is not
+       still sitting over the section it just scrolled to */
+    menu.addEventListener('click', function (e) {
+      if (e.target.closest('a')) setOpen(false);
+    });
+    addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && open) { setOpen(false); strip.focus(); }
+    });
+    /* anywhere else on the page closes it, which is what every reader expects
+       and what stops the drawer from being a mode you can get stuck in */
+    addEventListener('pointerdown', function (e) {
+      if (open && !hdr.contains(e.target)) setOpen(false);
+    }, true);
+  }
 })();

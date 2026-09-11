@@ -913,7 +913,16 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
   :root .sec6 .page .sub{ white-space:normal !important }
 
   /* -- 7. THE SWITCHES STAY ------------------------------------------------- */
+  /* AND THE ONE IN THE BAR TAKES NO z-index AT ALL. This number is left over
+     from when the switch floated over the top right corner of whatever section
+     happened to be under it, and it had to out-rank the drive. In the header
+     it is a positioned child of a bar that is already at 9000, so it needs
+     nothing - and a z-index on a positioned element makes it a stacking
+     context, which ISOLATES BLENDING. His sun and his moon are six `screen`
+     circles apiece; isolated, those ramps composite against nothing and come
+     out as a hard grey ring instead of a glow on his blue. */
   .mode-switch{ z-index:10002 }
+  .hdr .mode-switch{ z-index:auto }
 }
 
 /* NO GUARD AT THE BOTTOM ANY MORE - see the top of this file. A guard is a

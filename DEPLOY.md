@@ -19,8 +19,29 @@ Free, no bandwidth cap, global CDN, free SSL, and it redeploys on every push.
    - Build command: `node tools/make_page.js && node tools/build_site.js`
    - Build output directory: `dist/site`
 3. **Custom domains** → add `highway19media.com` and `www.highway19media.com`.
-   Cloudflare gives the DNS records; set them at the current registrar, or move
-   the nameservers across and it does it itself.
+
+### Pointing the domain, with the registrar at Hostinger
+
+Two ways, and the second is the one to take.
+
+**Nameservers (recommended).** In Cloudflare, **Add a site** →
+`highway19media.com` → Free plan. Cloudflare reads the DNS Hostinger is
+serving and shows two nameservers (`something.ns.cloudflare.com`). In
+Hostinger: **Domains → highway19media.com → DNS / Nameservers → Change
+nameservers → Use custom nameservers**, paste both, save. It takes anywhere
+from ten minutes to a few hours. After it goes active, the Pages project's
+**Custom domains** tab adds the records itself and the SSL certificate is
+issued automatically.
+
+**CNAME only.** Keep Hostinger's nameservers and add, in Hostinger's DNS
+editor, a CNAME from `www` to `<project>.pages.dev`, plus a redirect from the
+bare domain to `www`. It works, but the bare domain cannot be a CNAME at most
+registrars, and Cloudflare's caching and SSL are only partly in play.
+
+**The WordPress install can stay where it is** until the switch: nothing here
+touches Hostinger's hosting, only which nameservers answer for the domain. If
+the WordPress site is live on that domain now, it stops being reachable the
+moment the nameservers change - so change them when the Pages build is green.
 
 Every other branch gets its own preview URL automatically — that is the staging
 site, no second setup. To make a branch build the noindex version, set its build
@@ -35,7 +56,7 @@ visitor downloads almost nothing.
 
 `build/v2/section-08.html` carries the two lines that decide where a lead goes:
 
-    data-to="hello@highway19media.com"      the mailbox
+    data-to="highway19media@gmail.com"      the mailbox
     data-endpoint=""                        empty = open the visitor's email
 
 Empty is the current setting, and it works on any host with no account
@@ -52,8 +73,11 @@ Nothing else changes — `form.js` posts the same fields either way.
 ## Links that are not built yet
 
 Every service page, the Q&A, the legal pages and the three social icons point
-at `/coming-soon/`, which is `build/v2/soon.html`. Replace that file with the
-real construction page when it exists; the links do not need touching.
+at `/coming-soon/`, which is his own **Road work ahead** page
+(`build/v2/soon.html`, from `incoming/Under Construction.rar`). It is also the
+404, so a mistyped URL gets the same answer. Two changes were made to it: its
+fonts come from `section-fonts.css` instead of Google, and its button opens a
+mail draft to the address below.
 
 ## What is not on the site, deliberately
 

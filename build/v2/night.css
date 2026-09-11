@@ -371,17 +371,23 @@ section .z-cloud{
 }
 .mode-switch:hover{ transform:scale(1.06) }
 .mode-switch:focus-visible{ outline:3px solid #fcee21; outline-offset:3px }
-.mode-switch img{ width:38px; height:38px; display:block }
-.mode-switch .to-night{ display:block }
-.mode-switch .to-day{ display:none }
+.mode-switch img,.mode-switch svg{ width:38px; height:38px; display:block }
+/* THE ICON IS THE HOUR YOU ARE IN, NOT THE ONE YOU WOULD GO TO. It used to
+   show the destination - a moon in daylight, meaning "press for night" - which
+   is how a button label works and not how a sky works. His own drawing has the
+   sun on the blue bar and the moon on the black one, so the switch now reads
+   as the time of day and the press is what changes it. The class names say
+   which HOUR each belongs to, so nothing here has to be read twice. */
+.mode-switch .is-day{ display:block }
+.mode-switch .is-night{ display:none }
 @media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]):not([data-mode="day"]) .mode-switch .to-night{ display:none }
-  :root:not([data-theme="light"]):not([data-mode="day"]) .mode-switch .to-day{ display:block }
+  :root:not([data-theme="light"]):not([data-mode="day"]) .mode-switch .is-day{ display:none }
+  :root:not([data-theme="light"]):not([data-mode="day"]) .mode-switch .is-night{ display:block }
 }
-:root[data-theme="dark"]:not([data-mode="day"]) .mode-switch .to-night,
-:root[data-mode="night"] .mode-switch .to-night{ display:none }
-:root[data-theme="dark"]:not([data-mode="day"]) .mode-switch .to-day,
-:root[data-mode="night"] .mode-switch .to-day{ display:block }
+:root[data-theme="dark"]:not([data-mode="day"]) .mode-switch .is-day,
+:root[data-mode="night"] .mode-switch .is-day{ display:none }
+:root[data-theme="dark"]:not([data-mode="day"]) .mode-switch .is-night,
+:root[data-mode="night"] .mode-switch .is-night{ display:block }
 
 
 /* HIS CARDS TAKE THEIR OWN COLOUR AT NIGHT. In daylight the outline is his
@@ -677,6 +683,7 @@ section svg.z-copy [fill^="#"],
     #04173a 62%,#031029 75%,#020b1d 88%,#01060f 100%);
   --hdr-edge:rgba(0,0,0,.72);
   --hdr-cast:0 3px 5px rgba(0,0,0,.55), 0 14px 30px rgba(0,0,0,.45);
+  --hdr-bar-bg:linear-gradient(90deg,#020c1d 0%,#0a2b4d 46%,#0a2b4d 54%,#020c1d 100%);
   --hdr-cta-bg:#c8161d;
   --hdr-cta-ink:#fff;
   --hdr-cta-cast:0 3px 10px rgba(0,0,0,.55);
@@ -687,6 +694,7 @@ section svg.z-copy [fill^="#"],
       #04173a 62%,#031029 75%,#020b1d 88%,#01060f 100%);
     --hdr-edge:rgba(0,0,0,.72);
     --hdr-cast:0 3px 5px rgba(0,0,0,.55), 0 14px 30px rgba(0,0,0,.45);
+    --hdr-bar-bg:linear-gradient(90deg,#020c1d 0%,#0a2b4d 46%,#0a2b4d 54%,#020c1d 100%);
     --hdr-cta-bg:#c8161d;
     --hdr-cta-ink:#fff;
     --hdr-cta-cast:0 3px 10px rgba(0,0,0,.55);

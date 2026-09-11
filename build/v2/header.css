@@ -32,6 +32,8 @@
     #02459e 62%,#013887 75%,#002f7a 88%,#002d76 100%);
   --hdr-edge:rgba(0,8,26,.55);
   --hdr-cast:0 3px 4px rgba(0,10,35,.42), 0 14px 26px rgba(0,16,50,.30);
+  /* the strip under the bar, which is a lighter run of the same sky */
+  --hdr-bar-bg:linear-gradient(90deg,#013a86 0%,#0a6ec9 46%,#0a6ec9 54%,#013a86 100%);
   --hdr-cta-bg:#ffde17;
   --hdr-cta-ink:#0b1f3f;
   --hdr-cta-cast:0 3px 9px rgba(0,10,40,.40);
@@ -63,13 +65,22 @@
   position:absolute; left:5.82%; top:50%; translate:-50% -50%;
   width:calc(var(--hh) * .62); height:calc(var(--hh) * .62);
   background:none; box-shadow:none; padding:0;
+  /* AND NOTHING HERE MAY ISOLATE. His sun and his moon are six `screen`
+     circles each - that is how the glow is drawn, and screen over black IS the
+     backdrop, so the ramps are meant to disappear into his blue. A
+     backdrop-filter makes the element a stacking context that isolates
+     blending, and the blends then composite against nothing and come out as
+     what they are: a hard grey ring round the sun. It is inherited from the
+     floating button this used to be, and it has no work to do on a bar. */
+  backdrop-filter:none; -webkit-backdrop-filter:none;
 }
 .hdr .mode-switch:hover{ background:none; transform:scale(1.07) }
 /* NO display HERE. night.css shows one icon and hides the other with
-   display:block/none on .to-day and .to-night; a rule with one more class in
+   display:block/none on .is-day and .is-night; a rule with one more class in
    it that also sets display wins, and both the moon and the sun paint at
    once - which is what was stacked in the corner. Size only. */
-.hdr .mode-switch img{ width:100%; height:100% }
+.hdr .mode-switch img,
+.hdr .mode-switch svg{ width:100%; height:100%; overflow:visible }
 
 .hdr-logo{ position:absolute; left:17.94%; top:0; height:100%;
   text-decoration:none; display:flex; flex-direction:column;
@@ -123,33 +134,129 @@
    handset in it, not a glyph that looks a bit like one */
 .hdr-cta img{ width:calc(var(--hh) * .225); height:auto; display:block }
 
+/* ---------------------------------------------------------------------------
+   HIS STRIP, AND THE MENU IT PULLS DOWN
+   Off above the breakpoint - up there the nav is already across the bar - and
+   the whole of it lives inside .hdr so it retracts with the bar as one object.
+   --hbar is nought here, so every sum below that adds it is the desktop's own
+   number until a phone gives it a height.
+   ------------------------------------------------------------------------- */
+:root{ --hbar:0px }
+.hdr-bar,.hdr-menu{ display:none }
+
 /* the page starts under the bar */
-body{ padding-top:var(--hh) }
+body{ padding-top:calc(var(--hh) + var(--hbar)) }
 
 /* AND ON A PHONE THE MIDDLE GOES. Three nav items, a lockup and a badge do
    not fit across 390 pixels at any size worth reading, so what is left is the
    switch, his name and the one thing the header is for. */
 @media (max-width:900px){
-  :root{ --hh:64px }
-  .hdr-nav,.hdr-tag,.hdr-rule,.hdr-shield{ display:none }
-  .hdr .mode-switch{ left:8%; width:calc(var(--hh) * .56); height:calc(var(--hh) * .56) }
-  .hdr-logo{ left:15.5% }
-  /* AND THE LOCKUP COMES DOWN TO FIT BESIDE THE BUTTON. At the desktop's .298
-     of the bar it is two hundred pixels of type in a hundred and forty of
-     room, and what that looks like is HIGHWAY 19 MEDI[A] with the button
-     printed over the last letter. */
-  .hdr-lock{ font-size:calc(var(--hh) * .235); letter-spacing:0 }
-  .hdr-cta{ left:auto; right:3.5%;
-    font-size:calc(var(--hh) * .135); letter-spacing:.03em;
-    gap:.45em; padding:calc(var(--hh) * .115) calc(var(--hh) * .16)
-      calc(var(--hh) * .115) calc(var(--hh) * .10) }
-  .hdr-cta img{ width:calc(var(--hh) * .20) }
+  :root{ --hh:76px; --hbar:26px }
+
+  /* THE BAR IS NO LONGER THE WHOLE HEADER. The strip hangs under it, so the
+     header's own height is the two of them and the retract has to take both -
+     which -100% does, whatever they add up to. The shield is why the desktop
+     cannot use that: up there it hangs BELOW the bar, and down here it is
+     hidden. */
+  .hdr{ height:auto }
+  .hdr-in{ height:var(--hh) }
+  .hdr[data-hide="1"]{ transform:translateY(calc(-100% - 4px)) }
+
+  .hdr-nav,.hdr-shield{ display:none }
+  .hdr .mode-switch{ left:7.5%; width:calc(var(--hh) * .50); height:calc(var(--hh) * .50) }
+
+  /* HIS LOCKUP GOES TO THE MIDDLE, and it keeps its rule and its strapline -
+     that is the whole of what his phone drawing changes about the bar. Centred
+     on the WINDOW, not on what is left between the switch and the button,
+     because those two are not the same width and a flex row would put his name
+     off centre by the difference. */
+  .hdr-logo{ left:50%; right:auto; translate:-50% 0;
+    align-items:center; text-align:center; max-width:62vw }
+  .hdr-lock{ font-size:calc(var(--hh) * .252); letter-spacing:0; margin-left:0 }
+  .hdr-rule{ display:block; width:78%; max-width:none;
+    margin:calc(var(--hh) * .055) auto calc(var(--hh) * .05);
+    height:max(1px, calc(var(--hh) * .018)) }
+  /* AND THE STRAPLINE IS THE THING THAT HAS TO FIT. Forty-three characters of
+     uppercase across 390 pixels with a switch on one side and a button on the
+     other: at his desktop tracking it is 210 wide and lands on the button.
+     .026em and .088 of the bar is 187, which leaves 101 a side - and the
+     button, with the handset out and its own type a shade down, is 74. */
+  .hdr-tag{ display:block; font-size:calc(var(--hh) * .088); letter-spacing:.026em }
+
+  /* AND THE BUTTON LOSES THE HANDSET. It is in his desktop drawing and not in
+     his phone one, and the twenty pixels it costs are twenty the strapline
+     needs. */
+  .hdr-cta img{ display:none }
+  .hdr-cta{ left:auto; right:3.2%;
+    font-size:calc(var(--hh) * .108); letter-spacing:.015em; gap:0;
+    padding:calc(var(--hh) * .10) calc(var(--hh) * .115);
+    border-radius:calc(var(--hh) * .06) }
+
+  /* -- HIS STRIP ---------------------------------------------------------- */
+  /* The whole strip is the button: his drawing has three rules centred in a
+     band the full width of the screen, and a 26-pixel target that only counts
+     where the rules are is a 34-pixel target. */
+  .hdr-bar{
+    display:grid; place-items:center;
+    width:100%; height:var(--hbar); padding:0; border:0;
+    border-top:1px solid rgba(0,6,20,.55);
+    background:var(--hdr-bar-bg); cursor:pointer;
+    transition:background-image .9s linear;
+  }
+  .hdr-bar:focus-visible{ outline:2px solid #ffde17; outline-offset:-3px }
+  /* three rules drawn as one box and two shadows of itself, so the gap between
+     them is one number and the burger is one element */
+  .hdr-burger{
+    display:block; position:relative;
+    width:34px; height:3px; border-radius:2px; background:#fff;
+    box-shadow:0 -7px 0 #fff, 0 7px 0 #fff;
+    transition:transform .22s cubic-bezier(.3,.7,.3,1), box-shadow .18s linear;
+  }
+  /* open, it is a cross: the outer two rules come in under the middle one and
+     that one crosses with a rule of its own - same element, no second drawing */
+  .hdr-bar[aria-expanded="true"] .hdr-burger{
+    box-shadow:0 0 0 #fff, 0 0 0 #fff; transform:rotate(45deg);
+  }
+  .hdr-bar[aria-expanded="true"] .hdr-burger::after{
+    content:""; position:absolute; inset:0;
+    border-radius:2px; background:#fff; transform:rotate(90deg);
+  }
+
+  /* -- AND WHAT IT PULLS DOWN --------------------------------------------- */
+  .hdr-menu{
+    display:grid; position:absolute; left:0; right:0; top:100%;
+    background:var(--hdr-bg); border-bottom:2px solid var(--hdr-edge);
+    box-shadow:var(--hdr-cast);
+    /* CLOSED IS A ROW OF NOTHING, NOT display:none. A drawer that is
+       display:none cannot be animated to anywhere, and one that snaps open is
+       the single thing that makes a page feel unfinished. 0fr collapses the
+       row with the links still laid out inside it. */
+    grid-template-rows:0fr; overflow:hidden;
+    transition:grid-template-rows .26s cubic-bezier(.3,.7,.3,1);
+  }
+  /* the attribute is the STATE, and the paint is this file's business - so
+     [hidden] has to be told not to take the element away, or there is nothing
+     left to animate from */
+  .hdr-menu[hidden]{ display:grid }
+  .hdr-menu > *{ min-height:0 }
+  .hdr-menu.is-open{ grid-template-rows:1fr }
+  .hdr-menu a{
+    display:block; color:#fff; text-decoration:none;
+    font-weight:700; font-size:calc(var(--hh) * .175); letter-spacing:.01em;
+    padding:calc(var(--hh) * .17) 7vw;
+    border-top:1px solid rgba(255,255,255,.10);
+  }
+  .hdr-menu a:first-child{ border-top:0 }
+  .hdr-menu a:active{ background:rgba(255,255,255,.08) }
+  /* and a collapsed row still holds focusable children, so they are taken out
+     of the tab order until it is open */
+  .hdr-menu:not(.is-open) a{ visibility:hidden }
 }
 
 /* AN ANCHOR HAS TO CLEAR THE BAR. The header is fixed, so a jump to #services
    lands the section's top edge under it and the first line of his headline is
    simply gone. scroll-margin moves where the browser thinks the top is, and
    nothing about the layout changes. */
-section[id]{ scroll-margin-top:calc(var(--hh) + 8px) }
+section[id]{ scroll-margin-top:calc(var(--hh) + var(--hbar) + 8px) }
 html{ scroll-behavior:smooth }
 @media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto } }

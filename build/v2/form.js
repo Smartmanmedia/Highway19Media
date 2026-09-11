@@ -38,7 +38,7 @@
       say('That email address does not look right.', false); fMail.focus(); return; }
 
     const f = Object.fromEntries(new FormData(form).entries());
-    const to  = form.dataset.to || 'hello@highway19media.com';
+    const to  = form.dataset.to || 'highway19media@gmail.com';
     const url = (form.dataset.endpoint || '').trim();
 
     if (!url) {
