@@ -11,7 +11,7 @@
      Form sits on the page, not behind a link. Since we don't take calls,
      every extra click costs a lead.
      ======================================================================= -->
-<section class="sec8">
+<section class="sec8" id="contact">
 
   <!-- HIS TWO SIGNS, INLINE. A <use> can only reach a symbol that is in the
        same document, and the page is folded into one file at build time - so
@@ -57,10 +57,14 @@
       and what we&rsquo;d do next.
     </p>
 
-    <!-- NOT WIRED YET. Booking tool and business email are still open.
-         Set data-endpoint to the form handler once chosen; until then it
-         fails loudly rather than silently swallowing a lead. -->
-    <form class="form" id="contact-form" data-endpoint="" novalidate>
+    <!-- WHERE A LEAD GOES. data-to is the mailbox, and it is the only line to
+         change if the address does. data-endpoint is optional: set it to a form
+         handler (Web3Forms, Formspree, a Pages Function) and the form posts
+         there in the background. Leave it empty and form.js opens a prefilled
+         mail draft instead - which means the form works on day one, on any
+         host, with no account anywhere. Either way it reaches the same inbox. -->
+    <form class="form" id="contact-form" novalidate
+          data-to="hello@highway19media.com" data-endpoint="">
       <div class="field">
         <label for="f-name">Your name</label>
         <input id="f-name" name="name" type="text" autocomplete="name" required>
@@ -95,7 +99,7 @@
       <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
 
       <p class="form__alt">
-        Prefer to talk it through? <a href="#" data-booking>Book a free consult</a>.
+        Rather just write? <a href="mailto:hello@highway19media.com">hello@highway19media.com</a>.
       </p>
     </form>
   </div>

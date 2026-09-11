@@ -166,6 +166,8 @@
 }
 .sec8 .form__alt a{ font-weight:700; color:var(--sec8-link,var(--blue-700)) }
 .sec8 .form__status{ margin:1rem 0 0; font-size:.94rem; font-weight:600; text-align:center }
+.sec8 .form__status.is-ok { color:var(--sec8-ok, #0a7d36) }
+.sec8 .form__status.is-err{ color:var(--sec8-err,#c8161d) }
 
 /* HIS BUTTON: a real warning triangle rides on it, not an arrow glyph. */
 .sec8 .btn{

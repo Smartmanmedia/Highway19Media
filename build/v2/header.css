@@ -145,3 +145,11 @@ body{ padding-top:var(--hh) }
       calc(var(--hh) * .115) calc(var(--hh) * .10) }
   .hdr-cta img{ width:calc(var(--hh) * .20) }
 }
+
+/* AN ANCHOR HAS TO CLEAR THE BAR. The header is fixed, so a jump to #services
+   lands the section's top edge under it and the first line of his headline is
+   simply gone. scroll-margin moves where the browser thinks the top is, and
+   nothing about the layout changes. */
+section[id]{ scroll-margin-top:calc(var(--hh) + 8px) }
+html{ scroll-behavior:smooth }
+@media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto } }
