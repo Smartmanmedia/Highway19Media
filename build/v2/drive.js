@@ -168,7 +168,14 @@ const FADE_AT=0.8208;
    the last of the light and the board is lit by the time it is behind you.
    It is one number now, not two that had to be kept in step by hand. */
 const BILL_AT=0.52;
-const DUSK_AT=BILL_AT;
+/* AND THE SUN IS ALREADY GOING WHEN THE BOARD COMES UP. Hung on BILL_AT the
+   evening started as you ARRIVED at the billboard, so the board was read in
+   flat daylight and the sky only turned once it was behind you. He wants it
+   the other way round: the light changing on the approach, so the board comes
+   up out of a sky that is already on the move. 0.44 is between his floating
+   block at 0.347 and the board at 0.52 - the sunset plays over the stretch
+   between the two and the board is lit by the end of it. */
+const DUSK_AT=0.44;
 const RANGE=END-START;
 const STOPS=SIGN_AT.map(a=>(a-START)/RANGE);
 const TEXT_U=(TEXT_AT-START)/RANGE;
@@ -270,11 +277,12 @@ function measure(){
      which the board's own depth is exactly dSea: the frame it appears in. A
      shell takes most of a second to climb, so by the time one opens the sign
      is properly on the horizon underneath it. */
-  /* HIS OWN CALL, NOT THE HORIZON'S. The board's first frame is a long way
-     out - a whole stretch of road before you can read it - and he wants the
-     sky going as you COME UP ON the last sign, not as it appears. So the show
-     is hung off the sign's own place in the trip, a short run short of it. */
-  fwAt=SIGN_AT[SIGN_AT.length-1]-0.055;
+  /* AND THE SHELLS GO UP THE MOMENT THE BILLBOARD IS BEHIND YOU. Hung off the
+     last sign it was the end of the drive announcing itself; hung here it is
+     the answer to the board you have just read - twenty five years, the three
+     words - and it carries the whole of the dark stretch between the two
+     rather than lighting only the last of it. */
+  fwAt=BILL_AT+0.03;
   /* AND NEVER BEFORE THE SUN IS DOWN. This is worked out from a DEPTH - the
      point at which the last board is dSea out, the far edge of the world - and
      dSea is a property of the camera, not of the road: drop the eye to the
@@ -647,10 +655,18 @@ for(let i=0;i<20;i++){
 const AHEAD=MOBILE?620:420;
 /* WHERE A BOARD IS FIRST AND LAST SEEN. Far: the phone's dSea is far enough
    out to hold the whole road at once, so a board gets its own nearer horizon.
-   Near: it is out well before the projection starts stretching it, and still
-   a good deal closer than AHEAD, which is where it is meant to be read. */
+   Near: it is out before the projection starts stretching it, and still a
+   good deal closer than AHEAD, which is where it is meant to be read.
+
+   AND THE NEAR EDGE IS AS LATE AS THE PROJECTION ALLOWS. A board 566 wide is
+   U*566 across at a depth of nothing - a third of the frame - and everything
+   past that is the sprite being driven under and stretched. 210 was taking
+   his last board away at half that, with a stretch of road still in front of
+   it; 60 holds it full until it is 175 out and lets it go over the last of
+   the approach, so what it loses is only the part where it stops being a
+   board. */
 const SIGN_FAR=MOBILE?3400:2000, SIGN_FADE=900,
-      SIGN_NEAR=MOBILE?380:210, SIGN_NEAR_FADE=MOBILE?200:150,
+      SIGN_NEAR=MOBILE?170:60, SIGN_NEAR_FADE=MOBILE?170:120,
       COPY_NEAR=MOBILE?380:230, COPY_NEAR_FADE=MOBILE?200:170;
 /* HIS LINE IN THE MIDDLE OF THE ROAD. It used to say "Highway 19 Media",
    which names the company to somebody who has been reading its name since the
