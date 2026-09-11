@@ -1801,7 +1801,10 @@ function tick(now){
        0.62 of the way down to the horizon, which on this scene works out at
        0.40 - so the line stopped a tenth of a screen short of the top of the
        band he asked for and never reached it. This is his number now. */
-    const hold  = 0.07;
+    /* AND WHERE IT STICKS IS TWO HUNDRED PIXELS FROM THE TOP, his number, in
+       real pixels rather than a share of a window: the line climbs until its
+       middle is 200 down and then holds there for the rest of its run. */
+    const hold  = 200 / innerHeight;
     /* AND IT IS THREE HUNDRED PIXELS HIGHER THAN THE PLACE IT COMES TO.
        THAT IS ALL IT IS, AND IT IS WHY IT KEPT NOT MOVING.
 

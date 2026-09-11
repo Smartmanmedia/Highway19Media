@@ -1,118 +1,134 @@
 /* ============================================================================
-   HIS HEADER — Header.svg, built as markup rather than shipped as a picture.
+   HIS HEADER — Header.svg, to his own coordinates.
    ==========================================================================
-   Every number below is read off his file, which is 1923.11 across with the
-   bar itself 114.28 of the 158.15 tall (the rest is the glow under it):
+   The first pass built this as a flex row: logo hard left, nav pushed right
+   with margin-left:auto, button at the edge. That is a header, and it is not
+   HIS header — his lockup sits a fifth of the way in and his nav and button
+   sit well short of the right edge, and a row that fills the bar can never
+   land on either. Everything below is placed at the percentage his file puts
+   it at, so the bar is his drawing with live type in it.
 
-     the ground   a horizontal ramp, #00287d at the left through #0358bc at
-                  0.55 and back down to #002d76 at the right. His gradient is
-                  written right-to-left in userSpaceOnUse, so the stops are
-                  reversed here to say the same thing the way CSS reads them.
-     the rule     321.26 x 1.44 at #29abe2, under the lockup
-     the nav      21.11 Medium, white
-     CONTACT US   16.14 Black on his yellow
-     the tagline  12.97 SemiBold, white
+   HIS NUMBERS. The file is 1923.11 across with the bar 114.28 of the 158.15
+   tall (the rest is the shadow), and everything in it is:
 
-   Sizes are a share of the BAR, not pixels, so the whole thing scales as one
-   object: 21.11 of 114.28 is .1847 of the height, and so on. --hh is the only
-   number to change.
+     bar        114.28 / 1923.11  =  5.943% of the window's WIDTH
+     moon       centred at 5.82% across
+     lockup     x 18.49%, baseline 49.5% of the bar
+     rule       18.49% -> 35.20%, at 58.6% of the bar, 1.44 tall, #29abe2
+     tagline    x 17.94%, baseline 77.2% of the bar, 12.97 = 11.35% of it
+     nav        x 56.66%, baseline 55.4% of the bar, 21.11 = 18.47% of it
+     CONTACT    x 83.10%, baseline 55.3% of the bar, 16.14 = 14.12% of it
 
-   AND IT IS A REAL BAR, NOT AN IMAGE. Links have to be links, the type has to
-   reflow on a phone, and his day/night switch lives in it - none of which an
-   <img> can do.
+   Type is sized off the BAR and positions are off the WINDOW, which is what
+   his file does: the lockup keeps its proportions while the row it sits in
+   spreads with the screen.
    ========================================================================= */
-:root{ --hh:78px }
-@media (max-width:900px){ :root{ --hh:60px } }
+:root{ --hh:clamp(66px, 5.943vw, 124px) }
 
 .hdr{
   position:fixed; left:0; right:0; top:0; z-index:9000;
   height:var(--hh);
   background:linear-gradient(90deg,#00287d 0%,#0459bd 42%,#0358bc 48%,
     #02459e 62%,#013887 75%,#002f7a 88%,#002d76 100%);
-  /* HIS SHADOW LAYER. The bar in Header.svg is 114.28 of a 158.15-tall file:
-     the other 44 is a shadow he drew under it, a hard dark edge and a soft
-     fall below that. A box-shadow alone is the soft half and misses the line,
-     which is the half you notice. */
+  /* HIS SHADOW LAYER: the 44 units under the bar in his file are a hard dark
+     edge with a soft fall below it. A box-shadow alone is the soft half and
+     misses the line, which is the half you notice. */
   border-bottom:2px solid rgba(0,8,26,.55);
   box-shadow:0 3px 4px rgba(0,10,35,.42), 0 14px 26px rgba(0,16,50,.30);
-  /* RETRACTS ON THE WAY DOWN AND COMES BACK ON THE WAY UP. A transform, not a
-     height: a transform is the one thing that costs the compositor nothing,
-     and the page below it never reflows. */
+  font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
+  /* retracts on the way down, back on the way up - a transform, so the page
+     under it never reflows */
   transform:translateY(0);
   transition:transform .28s cubic-bezier(.3,.7,.3,1);
   will-change:transform;
 }
-.hdr[data-hide="1"]{ transform:translateY(calc(-1 * var(--hh) - 18px)) }
+.hdr[data-hide="1"]{ transform:translateY(calc(-1 * var(--hh) - 20px)) }
+.hdr-in{ position:relative; height:100% }
 
-.hdr-in{
-  height:100%; display:flex; align-items:center; gap:clamp(10px,2.2vw,44px);
-  padding:0 clamp(12px,2.6vw,50px);
-  font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
-}
-
-/* HIS SWITCH, OUT OF THE CORNER AND INTO THE BAR. It was fixed to the top
-   right of the window, over whatever happened to be under it; it is a piece
-   of furniture in his header now, first in the row, and everything positional
-   about the old rule has to be undone rather than merely overridden. */
+/* HIS SWITCH, at his moon's own place in the bar rather than fixed to the
+   corner of the window the way it used to be. */
 .hdr .mode-switch{
-  position:static; top:auto; right:auto; flex:0 0 auto;
-  width:calc(var(--hh) * .60); height:calc(var(--hh) * .60);
-  background:rgba(255,255,255,.10); box-shadow:none;
+  position:absolute; left:5.82%; top:50%; translate:-50% -50%;
+  width:calc(var(--hh) * .62); height:calc(var(--hh) * .62);
+  background:none; box-shadow:none; padding:0;
 }
-.hdr .mode-switch:hover{ background:rgba(255,255,255,.18); transform:scale(1.06) }
-.hdr .mode-switch img{ width:calc(var(--hh) * .46); height:calc(var(--hh) * .46) }
+.hdr .mode-switch:hover{ background:none; transform:scale(1.07) }
+/* NO display HERE. night.css shows one icon and hides the other with
+   display:block/none on .to-day and .to-night; a rule with one more class in
+   it that also sets display wins, and both the moon and the sun paint at
+   once - which is what was stacked in the corner. Size only. */
+.hdr .mode-switch img{ width:100%; height:100% }
 
-.hdr-logo{ flex:0 0 auto; text-decoration:none; display:block; line-height:1 }
+.hdr-logo{ position:absolute; left:17.94%; top:0; height:100%;
+  text-decoration:none; display:flex; flex-direction:column;
+  justify-content:center; line-height:1 }
 .hdr-lock{ display:block; white-space:nowrap; color:#fff;
-  font-weight:900; letter-spacing:.01em; font-size:calc(var(--hh) * .298) }
-.hdr-lock i{ font-style:normal; color:#29abe2; font-size:calc(var(--hh) * .35);
-  margin:0 .16em }
-.hdr-rule{ display:block; height:max(1px, calc(var(--hh) * .0126));
-  background:#29abe2; margin:calc(var(--hh) * .055) 0 calc(var(--hh) * .045) }
-.hdr-tag{ display:block; white-space:nowrap; color:#fff; opacity:.94;
-  font-weight:600; font-size:calc(var(--hh) * .1135); letter-spacing:.045em;
+  font-weight:900; letter-spacing:.005em; font-size:calc(var(--hh) * .298);
+  margin-left:.55%; }
+.hdr-lock i{ font-style:normal; color:#29abe2; font-size:calc(var(--hh) * .352);
+  margin:0 .14em }
+.hdr-rule{ display:block; width:16.71vw; max-width:321px;
+  height:max(1px, calc(var(--hh) * .0126));
+  background:#29abe2; margin:calc(var(--hh) * .075) 0 calc(var(--hh) * .06);
+  margin-left:.55% }
+.hdr-tag{ display:block; white-space:nowrap; color:#fff;
+  font-weight:600; font-size:calc(var(--hh) * .1135); letter-spacing:.055em;
   text-transform:uppercase }
 
-/* HIS SHIELD, IN THE MIDDLE OF THE BAR. Absolutely placed rather than in the
-   flex row, so it is centred on the WINDOW and not on whatever is left over
-   after the lockup and the nav have taken their share. It hangs a little
+/* HIS SHIELD, on the middle of the WINDOW - which is what he means by the
+   logo being centred, and which a flex row cannot do because it centres on
+   whatever is left after its neighbours have taken their share. It hangs
    below the bar the way a badge does. */
-.hdr-shield{ position:absolute; left:50%; top:calc(var(--hh) * .10);
-  translate:-50% 0; height:calc(var(--hh) * 1.06); width:auto;
-  filter:drop-shadow(0 3px 7px rgba(0,10,35,.5)); pointer-events:none }
+.hdr-shield{ position:absolute; left:50%; top:calc(var(--hh) * .06);
+  translate:-50% 0; height:calc(var(--hh) * 1.14); width:auto;
+  filter:drop-shadow(0 4px 9px rgba(0,10,35,.55)); pointer-events:none }
 
-.hdr-nav{ margin-left:auto; display:flex; gap:clamp(12px,2.4vw,52px) }
-.hdr-nav a{ color:#fff; text-decoration:none; white-space:nowrap;
+.hdr-nav{ position:absolute; left:56.66%; top:50%; translate:0 -50%;
+  display:flex; gap:3.2vw; white-space:nowrap }
+.hdr-nav a{ color:#fff; text-decoration:none;
   font-weight:500; font-size:calc(var(--hh) * .1847);
-  opacity:.92; transition:opacity .18s linear }
+  opacity:.94; transition:opacity .18s linear }
 .hdr-nav a:hover,.hdr-nav a:focus-visible{ opacity:1; text-decoration:underline;
-  text-underline-offset:.35em; text-decoration-thickness:.09em;
+  text-underline-offset:.4em; text-decoration-thickness:.08em;
   text-decoration-color:#29abe2 }
 
 .hdr-cta{
-  flex:0 0 auto; display:flex; align-items:center; gap:.55em;
-  background:#ffde17; color:#062a63; text-decoration:none;
-  font-weight:900; font-size:calc(var(--hh) * .1412); letter-spacing:.05em;
+  position:absolute; left:81.6%; top:50%; translate:0 -50%;
+  display:flex; align-items:center; gap:.6em;
+  background:#ffde17; color:#0b1f3f; text-decoration:none;
+  font-weight:900; font-size:calc(var(--hh) * .1412); letter-spacing:.045em;
   text-transform:uppercase; white-space:nowrap;
-  padding:calc(var(--hh) * .155) calc(var(--hh) * .30);
-  border-radius:calc(var(--hh) * .085);
-  box-shadow:0 2px 8px rgba(0,10,40,.35);
+  padding:calc(var(--hh) * .125) calc(var(--hh) * .20)
+          calc(var(--hh) * .125) calc(var(--hh) * .125);
+  border-radius:calc(var(--hh) * .075);
+  box-shadow:0 3px 9px rgba(0,10,40,.40);
   transition:transform .18s ease, box-shadow .18s ease;
 }
-.hdr-cta:hover{ transform:translateY(-1px); box-shadow:0 4px 14px rgba(0,10,40,.45) }
-.hdr-cta svg{ width:1.25em; height:1.25em; display:block }
+.hdr-cta:hover{ transform:translateY(-1px) scale(1.015);
+  box-shadow:0 5px 16px rgba(0,10,40,.5) }
+/* his own phone, from Phone.svg - the white tile with the blue field and the
+   handset in it, not a glyph that looks a bit like one */
+.hdr-cta img{ width:calc(var(--hh) * .225); height:auto; display:block }
 
-/* THE PAGE STARTS UNDER IT. The bar is fixed, so without this the top of
-   section one is behind it on first paint. */
+/* the page starts under the bar */
 body{ padding-top:var(--hh) }
 
-/* AND ON A PHONE THE MIDDLE GOES. Three nav items and a lockup do not fit
-   across 390 pixels at any size worth reading, so what is left is the switch,
-   his name and the one thing the header is for. */
+/* AND ON A PHONE THE MIDDLE GOES. Three nav items, a lockup and a badge do
+   not fit across 390 pixels at any size worth reading, so what is left is the
+   switch, his name and the one thing the header is for. */
 @media (max-width:900px){
-  .hdr-nav{ display:none }
-  .hdr-tag{ display:none }
-  .hdr-rule{ display:none }
-  .hdr-shield{ display:none }
-  .hdr-cta{ margin-left:auto }
+  :root{ --hh:64px }
+  .hdr-nav,.hdr-tag,.hdr-rule,.hdr-shield{ display:none }
+  .hdr .mode-switch{ left:8%; width:calc(var(--hh) * .56); height:calc(var(--hh) * .56) }
+  .hdr-logo{ left:15.5% }
+  /* AND THE LOCKUP COMES DOWN TO FIT BESIDE THE BUTTON. At the desktop's .298
+     of the bar it is two hundred pixels of type in a hundred and forty of
+     room, and what that looks like is HIGHWAY 19 MEDI[A] with the button
+     printed over the last letter. */
+  .hdr-lock{ font-size:calc(var(--hh) * .235); letter-spacing:0 }
+  .hdr-cta{ left:auto; right:3.5%;
+    font-size:calc(var(--hh) * .135); letter-spacing:.03em;
+    gap:.45em; padding:calc(var(--hh) * .115) calc(var(--hh) * .16)
+      calc(var(--hh) * .115) calc(var(--hh) * .10) }
+  .hdr-cta img{ width:calc(var(--hh) * .20) }
 }

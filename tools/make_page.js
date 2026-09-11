@@ -33,10 +33,7 @@ const HEADER =
   '      <a href="#qa">Q&amp;A</a>\n' +
   '    </nav>\n' +
   '    <a class="hdr-cta" href="#contact">\n' +
-  '      <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">' +
-       '<path d="M6.6 2.6a2 2 0 0 1 2.8.5l1.7 2.5a2 2 0 0 1-.3 2.6l-1.2 1a11.6 11.6 0 0 0 3.5 3.5' +
-       'l1-1.2a2 2 0 0 1 2.6-.3l2.5 1.7a2 2 0 0 1 .5 2.8l-1.1 1.6a3 3 0 0 1-3.4 1.1' +
-       'C11.2 20.4 3.6 12.8 1.9 6.5A3 3 0 0 1 3 3.1z"/></svg>\n' +
+  '      <img src="../../assets/v2/header/phone.svg" alt="">\n' +
   '      Contact Us\n' +
   '    </a>\n' +
   '  </div>\n' +
