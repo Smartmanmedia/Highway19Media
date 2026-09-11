@@ -890,7 +890,12 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
   :root .sec6 .page .card p{
     /* 34.44 of line spacing against a 31 face, both scaled 1.1 - his 1.11 */
     font-size:var(--t-cardp) !important; line-height:1.12; font-weight:300;
-    margin:0 0 1.3em !important; text-align:center; color:#333;
+    margin:0 0 1.3em !important; text-align:center;
+    /* AND THE COLOUR IS THE TOKEN, NOT A HEX. #333 was written here when this
+       block was about type size and nothing else, and it beat the variable
+       the desktop card reads - so on a phone after dark his copy stayed a
+       near-black on a near-black card while the heading above it went white. */
+    color:var(--card-sub, #333);
   }
   :root .sec6 .page .card p br{ display:none }
   /* HIS BUTTON IS ON THE CARD, NOT UNDER A CURSOR. On a desktop it rises in

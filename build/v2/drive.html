@@ -1367,6 +1367,17 @@ plant({cls:'copy',art:'copyline',x:0,h:MOBILE?250:360,lift:MOBILE?0:0,
    sign actually sits, and puts the board across the middle third of the frame
    with the tarmac running under it. Measured, not chosen: U*k is 0.646 at the
    stop, so every 100 of lift is 65 pixels of screen. */
+/* WHEN HIS LINE COMES IN AND WHEN IT GOES OUT.
+   HELLO_IN is the cards' bottom edge, as a share of the window, at the moment
+   the line is allowed on screen - half a window on a desktop, where the cards
+   are four across, and a twelfth on a phone, where they are two by two and
+   half the screen tall. HELLO_OUT and HELLO_SPAN are where the fade begins and
+   how long it takes, in the drive's own t: unchanged on a desktop, and pushed
+   into the drive on a phone so the later entrance does not shorten its run. */
+const HELLO_IN  = MOBILE ? 0.08  : 0.50,
+      HELLO_OUT = MOBILE ? 0.055 : 0,
+      HELLO_SPAN= MOBILE ? 0.065 : START;
+
 const SIGN_LIFT=MOBILE?440:371;
 /* AND THE TWO BOARDS ARE NO LONGER THE SAME SHAPE. His first one carries THE
    ROAD AHEAD on a yellow plate that stands above the green, so its drawing is
@@ -1873,10 +1884,25 @@ function tick(now){
        it, which is what he is looking at. The cards' own bottom edge crossing
        half the window is the moment the gap opens, and the moment it belongs
        in. Where it then sits is y, three hundred pixels up from it. */
+    /* AND HALF A WINDOW IS THE DESKTOP'S MOMENT, NOT A PHONE'S. Up there the
+       cards are four across and their bottom edge crossing the middle of the
+       window IS the gap opening. Down here they are two by two and half a
+       screen tall, so at the same moment the phone still has both of the
+       bottom cards in frame - and his line came up across them, which is what
+       he photographed. It waits until their bottom edge is in the top twelfth
+       of the window: the cards are gone, the sky is open, and the line arrives
+       at the 200 he asked it to stick at rather than sliding down to it. */
     runway.style.setProperty('--hello-y',
-      Math.round(cy > 0.50 ? innerHeight * 1.5
+      Math.round(cy > HELLO_IN ? innerHeight * 1.5
         : Math.max(hold * innerHeight, y * innerHeight - RAISE)) + 'px');
-    runway.style.setProperty('--hello', String(1 - smooth(t / START)));
+    /* AND IT STAYS AS LONG AS IT DID. Arriving four hundred pixels of scroll
+       later and still going out the instant the road moves would have cost it
+       most of its run, so on a phone the fade starts a little way into the
+       drive rather than at the section's own top edge. Measured: 755 pixels of
+       scroll from the moment it appears to the moment it is gone, against 764
+       before. His words were not to fade it IN, and it does not. */
+    runway.style.setProperty('--hello',
+      String(1 - smooth((t - HELLO_OUT) / HELLO_SPAN)));
   }
   /* THE SHOW RUNS EXACTLY WHERE THE WORLD IS GOING. It lights the moment the
      last board comes over the horizon, so the sky is already going long

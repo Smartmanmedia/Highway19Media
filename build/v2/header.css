@@ -249,20 +249,33 @@ body{ padding-top:calc(var(--hh) + var(--hbar)) }
   /* -- AND WHAT IT PULLS DOWN --------------------------------------------- */
   .hdr-menu{
     display:grid; position:absolute; left:0; right:0; top:100%;
-    background:var(--hdr-menu-bg); border-bottom:2px solid var(--hdr-edge);
-    box-shadow:var(--hdr-cast);
+    background:var(--hdr-menu-bg);
     /* CLOSED IS A ROW OF NOTHING, NOT display:none. A drawer that is
        display:none cannot be animated to anywhere, and one that snaps open is
        the single thing that makes a page feel unfinished. 0fr collapses the
-       row with the links still laid out inside it. */
+       row with the links still laid out inside it - and it is ONE row, so the
+       five links live in one box. Straight children would be five rows, four
+       of them implicit and auto-sized, and grid-template-rows would only
+       collapse the first: the drawer stayed its full height with its
+       background painting over whatever was under the bar. */
     grid-template-rows:0fr; overflow:hidden;
     transition:grid-template-rows .26s cubic-bezier(.3,.7,.3,1);
+  }
+  /* AND NEITHER THE RULE NOR THE SHADOW MAY SIT ON A BOX THAT HAS TO REACH
+     ZERO. min-height:0 takes an element's CONTENT to nothing and leaves its
+     border outside that, so two pixels of edge on the drawer or on this box is
+     two pixels of row that never collapses - a hairline of white, or of black,
+     under his bar at all times. They go on the last link, which is inside the
+     clip and disappears with it. */
+  .hdr-menu-in{ min-height:0; overflow:hidden }
+  .hdr-menu-in a:last-child{
+    border-bottom:2px solid var(--hdr-edge);
+    box-shadow:var(--hdr-cast);
   }
   /* the attribute is the STATE, and the paint is this file's business - so
      [hidden] has to be told not to take the element away, or there is nothing
      left to animate from */
   .hdr-menu[hidden]{ display:grid }
-  .hdr-menu > *{ min-height:0 }
   .hdr-menu.is-open{ grid-template-rows:1fr }
   .hdr-menu a{
     display:block; color:var(--hdr-menu-ink); text-decoration:none;
@@ -272,7 +285,7 @@ body{ padding-top:calc(var(--hh) + var(--hbar)) }
     padding:calc(var(--hh) * .29) 7vw;
     border-top:1px solid var(--hdr-menu-rule);
   }
-  .hdr-menu a:first-child{ border-top:0 }
+  .hdr-menu-in a:first-child{ border-top:0 }
   .hdr-menu a:active{ background:var(--hdr-menu-rule) }
   /* and a collapsed row still holds focusable children, so they are taken out
      of the tab order until it is open */

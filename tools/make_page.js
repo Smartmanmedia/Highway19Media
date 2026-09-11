@@ -71,12 +71,21 @@ const HEADER =
   '          aria-controls="hdr-menu" aria-label="Open the menu">\n' +
   '    <span class="hdr-burger" aria-hidden="true"></span>\n' +
   '  </button>\n' +
+  /* ONE CHILD, and it is not decoration. The drawer closes by taking its grid
+     row to 0fr, which is the only way to animate a height that is not known -
+     and grid-template-rows sets the FIRST row. Five links are five rows, four
+     of them implicit and auto-sized, so the thing stayed 247 pixels tall with
+     its background painting over whatever was under the bar: white over his
+     hero by day, black over the contact headline at night. The links go in one
+     box and the box is the row. */
   '  <nav class="hdr-menu" id="hdr-menu" hidden>\n' +
-  '    <a href="#services">Services</a>\n' +
-  '    <a href="#roadmap">The Road Map</a>\n' +
-  '    <a href="#promise">How We Work</a>\n' +
-  '    <a href="' + SOON + '">Q&amp;A</a>\n' +
-  '    <a href="#contact">Contact Us</a>\n' +
+  '    <div class="hdr-menu-in">\n' +
+  '      <a href="#services">Services</a>\n' +
+  '      <a href="#roadmap">The Road Map</a>\n' +
+  '      <a href="#promise">How We Work</a>\n' +
+  '      <a href="' + SOON + '">Q&amp;A</a>\n' +
+  '      <a href="#contact">Contact Us</a>\n' +
+  '    </div>\n' +
   '  </nav>\n' +
   '</header>';
 

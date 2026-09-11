@@ -195,5 +195,27 @@
 }
 @media (max-width:900px){
   .sec8 .head,.sec8 .body-copy{ text-align:left }
-  .sec8 .sign{ height:44px }
+  /* AND ON A PHONE THE PLATE STANDS BESIDE THE HEADLINE, NOT OVER IT. Stacked
+     and centred, his sign sat on its own in the middle of the screen with the
+     headline left-aligned underneath, and the two read as two things. Side by
+     side is his own hero's arrangement - the shield left of "A Clear Road
+     Forward", the triangle left of "Great Work, No Signage" - and it is the
+     one that makes a plate and a line of type read as one object.
+
+     align-items:center is what he means by equally high: the sign's middle on
+     the headline block's middle, whether that block runs to two lines or
+     three. Sized off the type rather than picked, so they stay a pair: his
+     headline is 2.05rem over 1.04 and wraps to two lines, which is 4.3rem of
+     cap-to-baseline, and the plate is that plus the subhead's first line. */
+  .sec8 .headline{
+    flex-direction:row; align-items:center; justify-content:flex-start;
+    gap:clamp(12px,3.6vw,20px);
+  }
+  .sec8 .headline > div{ flex:1 1 auto; min-width:0; text-align:left }
+  .sec8 .sign{ height:clamp(62px,16.5vw,86px) }
+  /* AND THE HEADLINE GIVES BACK WHAT THE PLATE TAKES. A 56-pixel plate and its
+     gap is 70 of a 390 screen; at the size it was set, "Wheel?" fell to a
+     third line on its own. */
+  .sec8 h2{ font-size:clamp(1.68rem,7.4vw,2.3rem) }
+  .sec8 .sub{ font-size:clamp(.98rem,3.9vw,1.2rem) }
 }
