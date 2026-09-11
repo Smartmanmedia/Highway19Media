@@ -684,6 +684,9 @@ section svg.z-copy [fill^="#"],
   --hdr-edge:rgba(0,0,0,.72);
   --hdr-cast:0 3px 5px rgba(0,0,0,.55), 0 14px 30px rgba(0,0,0,.45);
   --hdr-bar-bg:linear-gradient(90deg,#020c1d 0%,#0a2b4d 46%,#0a2b4d 54%,#020c1d 100%);
+  --hdr-menu-bg:#000;
+  --hdr-menu-ink:#fff;
+  --hdr-menu-rule:rgba(255,255,255,.15);
   --hdr-cta-bg:#c8161d;
   --hdr-cta-ink:#fff;
   --hdr-cta-cast:0 3px 10px rgba(0,0,0,.55);
@@ -695,6 +698,9 @@ section svg.z-copy [fill^="#"],
     --hdr-edge:rgba(0,0,0,.72);
     --hdr-cast:0 3px 5px rgba(0,0,0,.55), 0 14px 30px rgba(0,0,0,.45);
     --hdr-bar-bg:linear-gradient(90deg,#020c1d 0%,#0a2b4d 46%,#0a2b4d 54%,#020c1d 100%);
+  --hdr-menu-bg:#000;
+  --hdr-menu-ink:#fff;
+  --hdr-menu-rule:rgba(255,255,255,.15);
     --hdr-cta-bg:#c8161d;
     --hdr-cta-ink:#fff;
     --hdr-cta-cast:0 3px 10px rgba(0,0,0,.55);

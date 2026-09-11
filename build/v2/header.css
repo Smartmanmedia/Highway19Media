@@ -34,6 +34,14 @@
   --hdr-cast:0 3px 4px rgba(0,10,35,.42), 0 14px 26px rgba(0,16,50,.30);
   /* the strip under the bar, which is a lighter run of the same sky */
   --hdr-bar-bg:linear-gradient(90deg,#013a86 0%,#0a6ec9 46%,#0a6ec9 54%,#013a86 100%);
+  /* AND THE DRAWER IS PAPER, NOT SKY. It was the bar's own blue, which put his
+     five links on the same colour as the thing they dropped out of and read as
+     the header growing rather than a menu opening. White by day and black at
+     night: the one place on this page that is not his palette, and is not
+     meant to be - a menu is a sheet over the page, and a sheet is not sky. */
+  --hdr-menu-bg:#fff;
+  --hdr-menu-ink:#0b1f3f;
+  --hdr-menu-rule:rgba(4,24,64,.13);
   --hdr-cta-bg:#ffde17;
   --hdr-cta-ink:#0b1f3f;
   --hdr-cta-cast:0 3px 9px rgba(0,10,40,.40);
@@ -133,6 +141,8 @@
 /* his own phone, from Phone.svg - the white tile with the blue field and the
    handset in it, not a glyph that looks a bit like one */
 .hdr-cta img{ width:calc(var(--hh) * .225); height:auto; display:block }
+/* and the handset alone, which only the phone's square button uses */
+.hdr-cta-g{ display:none }
 
 /* ---------------------------------------------------------------------------
    HIS STRIP, AND THE MENU IT PULLS DOWN
@@ -172,25 +182,39 @@ body{ padding-top:calc(var(--hh) + var(--hbar)) }
      off centre by the difference. */
   .hdr-logo{ left:50%; right:auto; translate:-50% 0;
     align-items:center; text-align:center; max-width:62vw }
-  .hdr-lock{ font-size:calc(var(--hh) * .252); letter-spacing:0; margin-left:0 }
+  /* AND A SHARE OF THE BAR IS NOT ENOUGH ON ITS OWN. --hh is a fixed 76 on
+     every phone, so the lockup came out the same 222 pixels on a 430 screen
+     and on a 320 one - where it ran under the button. Whichever is smaller:
+     his proportion of the bar, or a share of the actual screen. */
+  .hdr-lock{ font-size:min(calc(var(--hh) * .285), 5.55vw);
+    letter-spacing:0; margin-left:0 }
   .hdr-rule{ display:block; width:78%; max-width:none;
     margin:calc(var(--hh) * .055) auto calc(var(--hh) * .05);
     height:max(1px, calc(var(--hh) * .018)) }
   /* AND THE STRAPLINE IS THE THING THAT HAS TO FIT. Forty-three characters of
      uppercase across 390 pixels with a switch on one side and a button on the
      other: at his desktop tracking it is 210 wide and lands on the button.
-     .026em and .088 of the bar is 187, which leaves 101 a side - and the
-     button, with the handset out and its own type a shade down, is 74. */
-  .hdr-tag{ display:block; font-size:calc(var(--hh) * .088); letter-spacing:.026em }
+     .028em and .092 of the bar is 196, which leaves 97 a side - and the
+     button, now that it is a square with his handset in it, is 38. */
+  .hdr-tag{ display:block; font-size:min(calc(var(--hh) * .092), 1.80vw);
+    letter-spacing:.028em }
 
-  /* AND THE BUTTON LOSES THE HANDSET. It is in his desktop drawing and not in
-     his phone one, and the twenty pixels it costs are twenty the strapline
-     needs. */
-  .hdr-cta img{ display:none }
-  .hdr-cta{ left:auto; right:3.2%;
-    font-size:calc(var(--hh) * .108); letter-spacing:.015em; gap:0;
-    padding:calc(var(--hh) * .10) calc(var(--hh) * .115);
-    border-radius:calc(var(--hh) * .06) }
+  /* AND THE BUTTON IS THE HANDSET AND NOTHING ELSE. Set as words it is 75
+     pixels wide and his lockup is 202, and on a 381-wide phone those two meet:
+     CONTACT US prints over the A of MEDIA. A square with his own phone in it
+     is 38, which gives the strapline back its room AND lets the lockup grow,
+     and says the same thing. The name survives in aria-label on the link. */
+  .hdr-cta-t{ display:none }
+  .hdr-cta{ left:auto; right:4%; gap:0;
+    width:calc(var(--hh) * .50); height:calc(var(--hh) * .50);
+    padding:0; display:grid; place-items:center;
+    border-radius:calc(var(--hh) * .125) }
+  /* the sign goes and the ink stays: a square button with a white tile with a
+     blue field with a handset in it is three boxes saying one thing */
+  /* `.hdr-cta img` is a class AND a type, so a bare class here loses to it and
+     both the sign and the ink paint, one under the other */
+  .hdr-cta img.hdr-cta-i{ display:none }
+  .hdr-cta-g{ display:block; height:56%; width:auto }
 
   /* -- HIS STRIP ---------------------------------------------------------- */
   /* The whole strip is the button: his drawing has three rules centred in a
@@ -225,7 +249,7 @@ body{ padding-top:calc(var(--hh) + var(--hbar)) }
   /* -- AND WHAT IT PULLS DOWN --------------------------------------------- */
   .hdr-menu{
     display:grid; position:absolute; left:0; right:0; top:100%;
-    background:var(--hdr-bg); border-bottom:2px solid var(--hdr-edge);
+    background:var(--hdr-menu-bg); border-bottom:2px solid var(--hdr-edge);
     box-shadow:var(--hdr-cast);
     /* CLOSED IS A ROW OF NOTHING, NOT display:none. A drawer that is
        display:none cannot be animated to anywhere, and one that snaps open is
@@ -241,13 +265,15 @@ body{ padding-top:calc(var(--hh) + var(--hbar)) }
   .hdr-menu > *{ min-height:0 }
   .hdr-menu.is-open{ grid-template-rows:1fr }
   .hdr-menu a{
-    display:block; color:#fff; text-decoration:none;
+    display:block; color:var(--hdr-menu-ink); text-decoration:none;
     font-weight:700; font-size:calc(var(--hh) * .175); letter-spacing:.01em;
-    padding:calc(var(--hh) * .17) 7vw;
-    border-top:1px solid rgba(255,255,255,.10);
+    /* a row a thumb can hit without aiming: 22 above and below his cap height
+       is a 59-pixel row, against the 44 a phone asks for as a minimum */
+    padding:calc(var(--hh) * .29) 7vw;
+    border-top:1px solid var(--hdr-menu-rule);
   }
   .hdr-menu a:first-child{ border-top:0 }
-  .hdr-menu a:active{ background:rgba(255,255,255,.08) }
+  .hdr-menu a:active{ background:var(--hdr-menu-rule) }
   /* and a collapsed row still holds focusable children, so they are taken out
      of the tab order until it is open */
   .hdr-menu:not(.is-open) a{ visibility:hidden }

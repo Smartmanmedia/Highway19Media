@@ -46,9 +46,19 @@ const HEADER =
   '      <a href="#roadmap">The Road Map</a>\n' +
   '      <a href="' + SOON + '">Q&amp;A</a>\n' +
   '    </nav>\n' +
-  '    <a class="hdr-cta" href="#contact">\n' +
-  '      <img src="../../assets/v2/header/phone.svg" alt="">\n' +
-  '      Contact Us\n' +
+  /* the label is its own element so a phone can drop it and keep the handset -
+     his button down there is a square with the icon in it and nothing else -
+     without the link losing its name to a screen reader */
+  '    <a class="hdr-cta" href="#contact" aria-label="Contact us">\n' +
+  '      <img class="hdr-cta-i" src="../../assets/v2/header/phone.svg" alt="">\n' +
+  /* and the ink on its own for the phone's square button - inline, because
+     currentColor is the whole point of it and an <img> cannot see the page */
+  '      ' + fs.readFileSync(path.join(__dirname, '..', 'assets', 'v2', 'header',
+      'phone-glyph.svg'), 'utf8')
+      .replace(/<\?xml[^>]*\?>|<!--[\s\S]*?-->/g, '')
+      .replace(/\s+/g, ' ').trim()
+      .replace('<svg ', '<svg class="hdr-cta-g" ') + '\n' +
+  '      <span class="hdr-cta-t">Contact Us</span>\n' +
   '    </a>\n' +
   '  </div>\n' +
   /* HIS PULL-DOWN, under the bar and part of it. Three nav items will not fit
