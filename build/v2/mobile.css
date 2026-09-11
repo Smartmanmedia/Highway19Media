@@ -141,10 +141,17 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
     display:none;
   }
 
-  /* THE TRAFFIC DOES NOT COME TO THE PHONE AT ALL. There is no top-down road
-     for it to drive on any more, and it was the most expensive thing on the
-     page - a hundred vehicles transformed and composited every frame. */
-  .traffic, .sec1 .traffic, .sec2 .traffic, .sec3 .traffic, .sec4 .traffic{ display:none }
+  /* THE DESKTOP'S TRAFFIC DOES NOT COME TO THE PHONE - its roads are not here.
+     Those layers are appended to the SECTION, so a direct-child selector takes
+     all four of them and leaves the ones traffic.js puts inside his phone
+     roads, which are nested a level deeper. Every road he drew gets cars: the
+     three bands and the curve down the green. */
+  .sec1 > .traffic, .sec2 > .traffic,
+  .sec3 > .traffic, .sec4 > .traffic{ display:none }
+  /* AND A BAND HAS TO BE A POSITIONING CONTEXT. The traffic layer is absolute
+     at 100% of its parent; in a static wrapper it would measure the section
+     instead and lay his cars down the whole column. */
+  .mob-road{ position:relative }
 
   /* -- 2. THE PIECES THAT BELONG ON A PHONE -------------------------------- */
   /* a panel of copy: full width, generous margins, centred, readable */
@@ -389,14 +396,25 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      was showing about two thirds of the water he drew and cropping the rest.
      He draws 197 at this width, which is half the screen. */
   :root .sec2 > .waves,:root .sec2 .waves.z-ground{ display:block; position:relative;
-    width:100%; height:clamp(186px,55.6vw,286px); margin:0; inset:auto;
+    width:100%; height:clamp(230px,70vw,360px); margin:0; inset:auto;
     overflow:hidden;
-    /* A HAIRLINE OF SEA BEHIND THE TOP OF IT. The wrapper stands on the sand -
-       that is the section's own ground - and his first line of foam lands one
-       pixel from its top edge, so any rounding leaves a sliver of BEACH above
-       the water. Eight per cent of blue behind the top costs nothing (his art
-       covers all of it) and there is no arithmetic that can open that seam. */
-    background:linear-gradient(180deg,var(--mob-blue-2) 0 8%,transparent 8%) }
+    /* AND OPEN WATER ABOVE THE FIRST WAVE, WHICH IS WHAT WAS MISSING.
+       Section one's gradient ends on #045dc3 and the far band's own fill is
+       #004ba0 to #0561ca across the width, so where the band's straight top
+       edge met the section above it there was a ruled line right across the
+       screen - two blues that nearly match, meeting on a hard edge, which is
+       the worst of both. Two layers fix it and give him the space he asked
+       for at the same time: the band's OWN horizontal gradient behind the
+       whole wrapper, so the top edge now meets its own colour at every x and
+       cannot show; and section one's blue over the top of that, fading out by
+       a third of the way down, so the sea arrives out of the sky instead of
+       starting at a line. The wrapper is taller by the same amount, so the
+       water gained is water and not a crop of his art.
+       Both colours are the variables the surf itself uses - so the join
+       follows him into the night without a second rule. */
+    background:
+      linear-gradient(180deg,var(--mob-blue-2) 0, rgba(0,0,0,0) 34%),
+      linear-gradient(90deg,var(--sea-far-a,#004ba0),var(--sea-far-b,#0561ca)) }
   /* AND THE BANDS THEMSELVES SCALE UP, which is the part the wrapper cannot do.
      Each one is width:126% with height:auto - its size comes from the WIDTH, so
      a taller wrapper only adds empty space under it. At 126% of a 390 phone his
@@ -421,9 +439,37 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
        and lifted, the first line of foam lands on the wrapper's own top
        and the last one on its bottom, with his blue between them and nothing
        of the beach in the middle of the sea. */
-    height:284% !important; top:-104% !important;
+    /* AND MEASURED IN vw, NOT IN PER CENT OF THE WRAPPER. A percentage height
+       resolves against the wrapper, so making the wrapper taller scaled the
+       band with it and the picture came out identical, only bigger - there was
+       no way to add water above the surf without also adding it below, where
+       it shows as a strip of blue between the last foam and his beach. In vw
+       the band's size and the window's size are two numbers instead of one.
+
+       The two landmarks, measured off his own art: the first line of foam sits
+       36.7% down the band and the shore foam 71.9% down it. So at 170.6vw the
+       surf itself is 60vw of water, the shore lands 122.6vw below the band's
+       top, and lifting the band 52.6vw puts that shore on the wrapper's bottom
+       edge with 10vw of OPEN SEA above the first wave. That is the space he
+       asked for, and the surf is 8% bigger than it was into the bargain. */
+    height:170.6vw !important; top:-52.6vw !important;
     preserveAspectRatio:none;
   }
+  /* AND THE SWELL IS FIVE TIMES THE SIZE, because the amplitude is written in
+     cqw - a share of the SECTION - and a section is 1990 wide on his desktop
+     and 390 on a phone. The same 1.20cqw that moves his nearest band 24 pixels
+     there moves it four and a half here, which is not motion anyone can see.
+     Five puts the phone back on the desktop's own travel in PIXELS, and the
+     four bands keep their relation because --swell scales all of them
+     together. The wrapper hides 88% of a band above its own top edge, so
+     there is nothing this can push into view. */
+  :root .sec2 .waves{ --swell:5 }
+  /* and a shorter period with it - his own ratios, a third quicker, so the sea
+     reads as moving rather than breathing */
+  :root .sec2 .wave-surf { --dur:6s }
+  :root .sec2 .wave-mid  { --dur:8s }
+  :root .sec2 .wave-swell{ --dur:10s }
+  :root .sec2 .wave-far  { --dur:13s }
   :root .sec2 > .copy,:root .sec2 > .mob-road{ display:block }
   .sec2{ background:var(--mob-sand); color:#241a06 }
   .sec2 h2,.sec2 .sub,.sec2 .body{ color:#241a06 }
@@ -494,7 +540,15 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      shift is divided by that to come out --mix on the screen. */
   /* named by his own width, not by position: :last-of-type counts every <svg>
      in the wrapper, road and clouds included, and matched none of these */
-  :root .sec3 .mob-scene > svg.z-ground[style*="width:99.783%"]{
+  /* HIS MOUNTAINS AND THE SHADOW THEY CAST MOVE AS ONE. Only the mountains
+     were shifted here, and the cast shadow is a separate layer of his - drawn
+     already offset, sitting under them - so pushing one down by --mix and not
+     the other slid the shadow out from under its own ridge by 27 pixels. They
+     are a matched pair and take the same translate. Named by his own widths:
+     :last-of-type counts every <svg> in the wrapper, road and clouds included,
+     and matched none of these. */
+  :root .sec3 .mob-scene > svg.z-ground[style*="width:99.783%"],
+  :root .sec3 .mob-scene > svg.z-ground[style*="width:116.809%"]{
     transform:translateY(calc(var(--mix) / 1.35));
   }
   :root .sec3 .z-road, :root .sec3 .z-cloud{ display:none }
@@ -723,6 +777,24 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
        third of the way down and the ruled line was in plain sight. Seven
        tenths of 25.93vw is 18.2. */
     margin:-32vw -38.5% clamp(24px,7vw,40px) !important; inset:auto !important;
+  }
+  /* AND ITS SHADOW UNDER IT. Absolute rather than another item in the column:
+     the band is the first thing in the flex order and carries its own negative
+     margins, and a second flow item would stack BELOW it instead of under it.
+     The numbers are the band's own - the same -32vw it is pulled up by and the
+     same -38.5% and 177% it is drawn at - so the two cannot come apart. The
+     sun's own offset arrives on top of this, from --lift in sun.css. */
+  :root .sec6 > .mob-cast{
+    display:block; position:absolute !important;
+    width:177% !important; height:auto !important; aspect-ratio:1918.34 / 497.43;
+    margin:0 !important; z-index:1; pointer-events:none;
+    /* MARKED, because the element carries its own style attribute - it has to,
+       since sun.css finds a shadow by [style*="--lift"] - and an inline left
+       and top outrank any selector that is not. And no `inset:auto` near them:
+       inset is the shorthand for all four, so writing it after left and top
+       throws both away. */
+    right:auto !important; bottom:auto !important;
+    left:-38.5% !important; top:-32vw !important;
   }
   :root .sec6 > .sky-cloud{ display:none }
   /* HIS CARD BLOCK IS WIDER THAN HIS COPY. The four cards run 39 to 1037 of

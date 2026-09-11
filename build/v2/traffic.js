@@ -28,6 +28,55 @@
   if (!P || !SPRITE || !NAMES) return;
 
   var SVGNS = 'http://www.w3.org/2000/svg', XLINK = 'http://www.w3.org/1999/xlink';
+
+  /* A PHONE HAS ITS OWN ROADS, AND THEY ARE NOT THESE.
+   *
+   * The sections stop being drawings below the breakpoint and become columns,
+   * so the top-down roads underneath are gone - and with them the centrelines
+   * in paths.js, which are percentages of a section that no longer has that
+   * shape. What his phone drawing has instead is a BAND of tarmac used as a
+   * rule between one panel of copy and the next, three times, and the curve
+   * that runs down the right of his green. Traffic belongs on all four: they
+   * are roads, drawn from directly overhead, exactly like the ones above the
+   * breakpoint.
+   *
+   * The engine below never cared which element it was given. It measures a box
+   * and reads a centreline in percentages OF THAT BOX, so a road is a box plus
+   * a line - which is all these are. Nothing under here changes for them.
+   *
+   * The same query mobile.css and drive.js ask, in the same words: a narrow
+   * viewport AND a coarse pointer. A mouse is never a phone.
+   */
+  var MOBILE = matchMedia('(max-width:900px) and (pointer:coarse)').matches;
+
+  /* HIS BAND, measured off the art itself. viewBox -1.76 1582.76 1087.21
+     186.75: the tarmac runs y 1583.76 to 1768.51 and his broken centre line
+     sits at 1671.63 with a height of 6.87, so its middle is 1675.07 - which is
+     49.427% down the box. The road is 184.75 units across, and `w` is a share
+     of the box's WIDTH, so that is 184.75/186.75 x 186.75/1087.21. */
+  var MOB_BAND = { w: 16.993, p: [[0, 49.427], [100, 49.427]] };
+
+  /* AND HIS CURVE. viewBox 864.47 7629.93 512.52 1997.5. The straight leg's
+     tarmac runs x 865.47 to 1058.85, so its middle is 962.16 - 19.06% across -
+     and the bend is a true quarter circle about (1375.99, 8142.33) with the
+     outer edge at 510.4 and the inner at 317.0, so the centreline's radius is
+     414.0. In the box's own percentages that centre is (99.805, 25.653) and
+     the radius is 80.773 of the width by 20.725 of the height - the same
+     circle, written in a box that is not square. Sampled every four and a half
+     degrees; the engine resamples it to a smooth curve anyway. */
+  var MOB_VERT = (function () {
+    var cx = 99.805, cy = 25.653, Rw = 80.773, Rh = 20.725, p = [];
+    for (var a = 90; a <= 180.01; a += 4.5) {
+      var t = a * Math.PI / 180;
+      p.push([+(cx + Rw * Math.cos(t)).toFixed(3),
+              +(cy - Rh * Math.sin(t)).toFixed(3)]);
+    }
+    /* then straight down and off the bottom of the box, which is where the
+       rock band at the top of section six takes over and swallows it */
+    p.push([19.06, 60], [19.06, 100]);
+    return { w: 37.73, p: p };
+  })();
+
   /* His roads. One and two are a single run in his art, so they are one road
      here. `thin` is a density multiplier - the desert straight is meant to be
      the quiet one. */
@@ -45,6 +94,32 @@
                   the queueing survives it: they all go faster, they do not all
                   go the SAME faster. */
                { secs: ['04'],       thin: 0.7, dens: 0.50, quick: 1.7 }];
+
+  /* ON A PHONE, EVERY DRAWN ROAD IS ITS OWN ROAD. There is no art joining one
+     band to the next - they are separate rules on a page - so each is its own
+     loop with its own traffic, found in the markup rather than listed here, so
+     a band he adds later gets cars without anyone remembering to.
+
+     Thinner and a little quicker than the desktop's: a band is 390 across
+     where his coast road is 1990, so the same count would be nose to tail, and
+     a car that takes twenty seconds to cross a phone reads as parked. `cap` is
+     a road's WHOLE traffic - the loop below runs n twice, once per lane.
+
+     AND THE CURVE'S `quick` IS TWICE THE BANDS'. Speed is a share of the
+     road's own scale, which is its element's width - and the curve's element
+     is 185 across where a band is the whole 390, so the same multiplier put
+     its cars at half the pace on a road twice as long. 3.6 lands them within
+     a few pixels a second of each other, which is what reads as one road
+     network rather than four unrelated ones. */
+  if (MOBILE) {
+    ROADS = [];
+    [].forEach.call(document.querySelectorAll('.mob-road'), function (el) {
+      ROADS.push({ els: [el], path: MOB_BAND, thin: 1, cap: 10, dens: 1, quick: 1.9 });
+    });
+    [].forEach.call(document.querySelectorAll('.mob-roadv'), function (el) {
+      ROADS.push({ els: [el], path: MOB_VERT, thin: 1, cap: 12, dens: 1, quick: 3.6 });
+    });
+  }
   /* `dens` IS HIS, off the panel, and it is a separate number from `thin` on
      purpose. `thin` is what his art asks for - a desert that reads empty next
      to a coast that reads busy - and it belongs to the drawing. `dens` is the
@@ -187,9 +262,13 @@
 
   /* -- the roads ------------------------------------------------------------ */
   var roads = ROADS.map(function (cfg) {
-    var parts = cfg.secs.map(function (n) {
-      var el = document.querySelector('.sec' + (+n));
-      if (!el || !P[n]) return null;
+    var parts = (cfg.els || cfg.secs).map(function (src) {
+      /* a desktop road names a section and looks its centreline up in
+         paths.js; a phone road hands over the element and the line itself */
+      var el = cfg.els ? src : document.querySelector('.sec' + (+src));
+      var n = cfg.els ? 'm' : src;
+      var path = cfg.path || P[src];
+      if (!el || !path) return null;
       var svg = document.createElementNS(SVGNS, 'svg');
       svg.setAttribute('class', 'traffic z-road');
       svg.setAttribute('aria-hidden', 'true');
@@ -242,7 +321,7 @@
          sprites go away. See traffic.css. */
       svg.appendChild(shadeG); svg.appendChild(beamG); svg.appendChild(carG);
       return { n: n, el: el, svg: svg, shadeG: shadeG,
-               beamG: beamG, carG: carG, path: P[n] };
+               beamG: beamG, carG: carG, path: path };
     }).filter(Boolean);
     if (!parts.length) return null;
     return { parts: parts, thin: cfg.thin, cap: cfg.cap, dens: cfg.dens || 1,

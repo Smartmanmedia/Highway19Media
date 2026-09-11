@@ -324,3 +324,13 @@
 
 /* the rock band's lower half - the same art section four draws the top of */
 .sec6 .rock-layer{ position:absolute; display:block; height:auto; z-index:1 }
+
+/* AND THE BAND'S SHADOW, WHICH ONLY THE PHONE DRAWS. Above the breakpoint
+   section four casts it across the whole band and this copy stays out of the
+   way; below it, section four's half of the band and its shadow are both
+   hidden and the stones were sitting on his green with nothing under them.
+   Hidden HERE rather than by the mob- guard at the top of mobile.css, because
+   the rule above it - .sec6 .rock-layer - is a class more specific and was
+   quietly bringing it back on a desktop. */
+.sec6 .mob-cast{ display:none }
+.sec6 .rock-shadow{ filter:brightness(0) }
