@@ -396,8 +396,22 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      was showing about two thirds of the water he drew and cropping the rest.
      He draws 197 at this width, which is half the screen. */
   :root .sec2 > .waves,:root .sec2 .waves.z-ground{ display:block; position:relative;
-    width:100%; height:clamp(230px,70vw,360px); margin:0; inset:auto;
-    overflow:hidden;
+    /* AND THE SURF IS WHERE THE SEA ENDS. The window was 70vw, and his shore
+       foam breaks at 46 of it - so the last ninety pixels were open water
+       below the last wave, ending on a ruled line across the screen where the
+       sand began. That is not a beach; it is a sea that has been cut off. The
+       window now stops in the MIDDLE of his shore foam, so the water ends on
+       the wave rather than on an edge.
+       Measured, not chosen: sampled at eleven columns across the rendered
+       page, the crest runs between 172 and 189 pixels down the window. */
+    width:100%; height:clamp(152px,46.2vw,238px); margin:0; inset:auto;
+    /* AND THE FOAM RUNS ON OVER THE SAND. overflow:hidden would cut it dead on
+       the same line, which is the fault this rule is fixing; a clip-path can
+       say "the sides and the top, but let the bottom out" - the same thing
+       section three does to hang his rocks into his trees. The wrapper's own
+       background stops at the edge either way: a clip does not extend a box's
+       paint, it only allows what is inside it to show. */
+    overflow:visible; clip-path:inset(0 0 -18px 0);
     /* AND OPEN WATER ABOVE THE FIRST WAVE, WHICH IS WHAT WAS MISSING.
        Section one's gradient ends on #045dc3 and the far band's own fill is
        #004ba0 to #0561ca across the width, so where the band's straight top
