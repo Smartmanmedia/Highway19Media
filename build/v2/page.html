@@ -4764,14 +4764,21 @@ section + section{ margin-top:-1px }</style>
       and what we&rsquo;d do next.
     </p>
 
-    <!-- WHERE A LEAD GOES. data-to is the mailbox, and it is the only line to
-         change if the address does. data-endpoint is optional: set it to a form
-         handler (Web3Forms, Formspree, a Pages Function) and the form posts
-         there in the background. Leave it empty and form.js opens a prefilled
-         mail draft instead - which means the form works on day one, on any
-         host, with no account anywhere. Either way it reaches the same inbox. -->
+    <!-- WHERE A LEAD GOES. A page on a static host cannot send mail - there is
+         no server behind it - so the send is done by a form service: the
+         browser POSTs the fields, the service sends the email, and the reader
+         never leaves the page.
+           data-key   the account key the service emails you on sign-up. It
+                      belongs in the markup: that is how these are built, and
+                      it only says "deliver to this inbox".
+           data-to    the inbox itself, for the copy and the fallback.
+         With data-key empty the form opens a prefilled mail draft instead, so
+         it is not a dead end on a site that is already up. That is a stopgap;
+         fill the key in and form.js never touches mailto again. -->
     <form class="form" id="contact-form" novalidate
-          data-to="highway19media@gmail.com" data-endpoint="">
+          data-to="highway19media@gmail.com"
+          data-endpoint="https://api.web3forms.com/submit"
+          data-key="">
       <div class="field">
         <label for="f-name">Your name</label>
         <input id="f-name" name="name" type="text" autocomplete="name" required>
@@ -4793,6 +4800,13 @@ section + section{ margin-top:-1px }</style>
         <label for="f-msg">What do you want it to do?</label>
         <textarea id="f-msg" name="message"></textarea>
       </div>
+
+      <!-- NOT FOR PEOPLE. Off screen rather than display:none, because a bot
+           that reads the markup will fill anything it can see there and a
+           screen reader is told to skip it. form.js answers a filled one like
+           a success and sends nothing. -->
+      <input type="checkbox" name="botcheck" tabindex="-1" aria-hidden="true"
+             style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
 
       <p class="form__promise">
         <i class="btn__tri" aria-hidden="true" style="width:1.1em;height:1.1em;color:#e9a800"></i>

@@ -1,16 +1,22 @@
-/* THE CONTACT FORM, AND WHERE A LEAD ACTUALLY GOES.
+/* THE CONTACT FORM, AND HOW A LEAD REACHES HIS INBOX.
  *
- * Two routes, both ending in the same mailbox - the address is data-to on the
- * form, and it is the only line to change if it moves:
+ * A page on a static host cannot send mail. There is no server behind it to
+ * hand a message to - which is the whole reason it is fast, free and has
+ * nothing to patch. So the send is done by a form service: the browser POSTs
+ * the fields to it, it sends the email, and the reader never leaves the page.
  *
- *   data-endpoint set    POST the fields as JSON and stay on the page. Any
- *                        handler that speaks JSON works - Web3Forms,
- *                        Formspree, a Cloudflare Pages Function.
- *   data-endpoint empty  open a prefilled mail draft to data-to. No account,
- *                        no service, no server. The form works on day one.
+ *   data-endpoint   the service's URL
+ *   data-key        the account key it emails you when you sign up. It belongs
+ *                   in the markup - that is how these services are built, the
+ *                   key only says "deliver to this inbox" and cannot read
+ *                   anything back.
+ *   data-to         the inbox, for the fallback below and for the copy
  *
- * There is no third state where a lead quietly disappears, which is what an
- * unwired form does by default. */
+ * UNTIL THERE IS A KEY, the form opens a prefilled mail draft instead, so it
+ * is never a dead end on a site that is already up. That is a stopgap and it
+ * reads like one: the moment data-key is filled in, this file never touches
+ * mailto again.
+ */
 (() => {
   const form = document.getElementById('contact-form');
   if (!form) return;
@@ -37,11 +43,17 @@
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
       say('That email address does not look right.', false); fMail.focus(); return; }
 
-    const f = Object.fromEntries(new FormData(form).entries());
+    const f   = Object.fromEntries(new FormData(form).entries());
     const to  = form.dataset.to || 'highway19media@gmail.com';
     const url = (form.dataset.endpoint || '').trim();
+    const key = (form.dataset.key || '').trim();
 
-    if (!url) {
+    /* A BOT FILLED THE HIDDEN FIELD. Nobody else can see it, so anything in it
+       came from something reading the markup rather than the page. It is
+       answered like a success and goes nowhere. */
+    if (f.botcheck) { form.reset(); say('Got it. We’ll come back to you within 24 hours.', true); return; }
+
+    if (!url || !key) {
       const body = [
         'Name: '     + name,
         'Business: ' + (f.business || '-'),
@@ -66,15 +78,23 @@
       const r = await fetch(url, {
         method : 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        /* access_key is what Web3Forms wants; a handler that does not use it
-           ignores it. subject and from_name make the inbox readable. */
-        body   : JSON.stringify(Object.assign({}, f, {
-          access_key: form.dataset.accessKey || undefined,
-          subject   : 'Website enquiry - ' + (f.business || name),
-          from_name : name
-        }))
+        /* subject and from_name are what make the inbox readable at a glance;
+           replyto is what makes hitting Reply go to the person who wrote in
+           rather than to the form service. */
+        body   : JSON.stringify({
+          access_key : key,
+          subject    : 'Website enquiry - ' + (f.business || name),
+          from_name  : name,
+          replyto    : email,
+          name       : name,
+          business   : f.business || '',
+          email      : email,
+          'What they have now'   : f.existing || '',
+          'What they want it to do': f.message || ''
+        })
       });
-      if (!r.ok) throw new Error(r.status);
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || j.success === false) throw new Error(j.message || r.status);
       form.reset();
       say('Got it. We’ll come back to you within 24 hours.', true);
     } catch (err) {

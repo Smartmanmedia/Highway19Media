@@ -54,21 +54,31 @@ visitor downloads almost nothing.
 
 ## The contact form
 
-`build/v2/section-08.html` carries the two lines that decide where a lead goes:
+A page on a static host cannot send mail — there is no server behind it, which
+is the whole reason it is fast, free and has nothing to patch. So the send is
+done by a form service: the browser POSTs the fields, the service sends the
+email, and the reader never leaves the page.
 
-    data-to="highway19media@gmail.com"      the mailbox
-    data-endpoint=""                        empty = open the visitor's email
+`build/v2/section-08.html` carries the three lines that decide where a lead
+goes:
 
-Empty is the current setting, and it works on any host with no account
-anywhere: the form validates, then opens a prefilled message to `data-to`.
+    data-to="highway19media@gmail.com"                 the inbox
+    data-endpoint="https://api.web3forms.com/submit"   the service
+    data-key=""                                        the account key
 
-To take the send in the background instead, sign up at **web3forms.com** (free,
-no backend, it emails you), then set:
+**To turn it on:** go to web3forms.com, type the inbox address, and they email
+an access key straight back — no account, no card. Paste it into `data-key`.
+That is the whole setup.
 
-    data-endpoint="https://api.web3forms.com/submit"
-    data-access-key="<the key they email you>"
+Until the key is there the form opens a prefilled mail draft instead, so it is
+not a dead end on a site that is already up. It is a stopgap and it reads like
+one: with a key, `form.js` never touches mailto again.
 
-Nothing else changes — `form.js` posts the same fields either way.
+The email arrives with a readable subject — "Website enquiry - <business>" —
+and **Reply goes to the person who wrote in**, not to the service.
+
+There is a honeypot field in the form: invisible to a reader, irresistible to a
+bot, and anything that fills it is answered like a success and sent nowhere.
 
 ## Links that are not built yet
 
