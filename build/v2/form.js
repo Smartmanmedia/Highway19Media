@@ -20,6 +20,11 @@
 (() => {
   const form = document.getElementById('contact-form');
   if (!form) return;
+  /* A WAY TO SEE WHAT THE SERVICE ACTUALLY SAID, from a phone, with no console.
+     ?formdebug=1 puts the HTTP status and the first 300 characters of the
+     reply in the status line instead of the friendly wording, and sends
+     nothing anywhere else. Off for every ordinary visitor. */
+  const DEBUG = /[?&]formdebug=1\b/.test(location.search);
   const out = document.getElementById('form-status');
   const btn = form.querySelector('button[type="submit"]');
   /* the colour is a class, not a hex: the card behind this line is white by
@@ -124,12 +129,22 @@
           'What they want it to do': f.message || ''
         })
       });
-      const j = await r.json().catch(() => ({}));
-      if (!r.ok || j.success === false) throw new Error(j.message || r.status);
+      /* SUCCESS HAS TO BE SAID, NOT MERELY NOT-DENIED. This read
+         `j.success === false`, so a 200 carrying anything that is not JSON -
+         a gateway's HTML error page, a rate-limit notice, an empty body -
+         parsed to {}, failed to be `false`, and was shown to the reader as
+         "Got it" while nothing had been sent. A service that answers in JSON
+         says success:true when it means it; anything else is a failure and is
+         treated as one. */
+      const raw = await r.text();
+      let j = {}; try { j = JSON.parse(raw) } catch (_) {}
+      if (DEBUG) { say('HTTP ' + r.status + ' — ' + raw.slice(0, 300), r.ok); return; }
+      if (!r.ok || j.success !== true) throw new Error(j.message || ('HTTP ' + r.status));
       form.reset();
       done();
     } catch (err) {
-      say('That did not go through. Email us at ' + to + ' and we’ll pick it up.', false);
+      say(DEBUG ? ('FAILED — ' + (err && err.message))
+                : ('That did not go through. Email us at ' + to + ' and we’ll pick it up.'), false);
     } finally {
       btn.disabled = false;
     }
