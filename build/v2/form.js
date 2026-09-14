@@ -28,6 +28,37 @@
     out.textContent = t;
     out.className = 'form__status' + (ok === false ? ' is-err' : ok ? ' is-ok' : ''); };
 
+  /* THE CARD COLLAPSES TO ITS ANSWER.
+   *
+   * Five empty fields and a Send button left standing under the word "Got it"
+   * is a form asking to be filled in again, and the one thing a reader wants
+   * at that moment is to know what happens next. So the fields go and the
+   * panel takes their place - in the same card, which keeps its paper, its
+   * yellow strip and its place on the page while it changes size.
+   *
+   * The height is MEASURED at both ends rather than guessed at either: what it
+   * is now, then what it becomes with the panel in it, and the transition runs
+   * between the two. A card that snaps from 700 pixels to 260 takes the rest
+   * of the page with it and the reader loses their place. */
+  function done() {
+    const body = form.querySelector('.form__body');
+    const panel = form.querySelector('.form__done');
+    if (!body || !panel) { say('Got it. We’ll come back to you within 24 hours.', true); return; }
+
+    const from = form.offsetHeight;
+    body.hidden = true; panel.hidden = false;
+    const to = form.offsetHeight;
+
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    form.style.height = from + 'px';
+    form.getBoundingClientRect();              /* commit the start height */
+    form.style.transition = 'height .5s cubic-bezier(.3,.7,.3,1)';
+    form.style.height = to + 'px';
+    const clear = () => { form.style.height = ''; form.style.transition = ''; };
+    form.addEventListener('transitionend', clear, { once: true });
+    setTimeout(clear, 800);                    /* in case the event never comes */
+  }
+
   form.addEventListener('submit', async e => {
     e.preventDefault();
 
@@ -51,7 +82,7 @@
     /* A BOT FILLED THE HIDDEN FIELD. Nobody else can see it, so anything in it
        came from something reading the markup rather than the page. It is
        answered like a success and goes nowhere. */
-    if (f.botcheck) { form.reset(); say('Got it. We’ll come back to you within 24 hours.', true); return; }
+    if (f.botcheck) { form.reset(); done(); return; }
 
     if (!url || !key) {
       const body = [
@@ -96,7 +127,7 @@
       const j = await r.json().catch(() => ({}));
       if (!r.ok || j.success === false) throw new Error(j.message || r.status);
       form.reset();
-      say('Got it. We’ll come back to you within 24 hours.', true);
+      done();
     } catch (err) {
       say('That did not go through. Email us at ' + to + ' and we’ll pick it up.', false);
     } finally {

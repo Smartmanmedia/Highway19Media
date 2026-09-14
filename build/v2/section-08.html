@@ -72,6 +72,9 @@
           data-to="highway19media@gmail.com"
           data-endpoint="https://api.web3forms.com/submit"
           data-key="e2f57011-b7df-4b38-9c6d-6ba1bf1c04b7">
+    <!-- THE FIELDS ARE THEIR OWN BOX so the card can swap them for the panel
+         below without losing its own shape while it does it. -->
+    <div class="form__body">
       <div class="field">
         <label for="f-name">Your name</label>
         <input id="f-name" name="name" type="text" autocomplete="name" required>
@@ -115,6 +118,20 @@
       <p class="form__alt">
         Rather just write? <a href="mailto:highway19media@gmail.com">highway19media@gmail.com</a>.
       </p>
+    </div>
+
+    <!-- AND WHAT STANDS THERE AFTERWARDS. Five empty fields and a Send button
+         left sitting under "Got it" is a form asking to be filled in again;
+         the one thing a reader wants at that moment is to know what happens
+         next. The card collapses to this. -->
+    <div class="form__done" hidden>
+      <svg class="form__done-sign" viewBox="0 0 285.08 435.17" aria-hidden="true"
+           focusable="false"><use href="#sg-motorway"/></svg>
+      <h3>You&rsquo;re On the Right Path.</h3>
+      <p>We&rsquo;ve got it. Within 24&nbsp;hours we&rsquo;ll come back with an honest read
+         on what you have now &mdash; what&rsquo;s working, what isn&rsquo;t, and what
+         we&rsquo;d do first. No pitch, and no call unless you ask for one.</p>
+    </div>
     </form>
   </div>
 </section>

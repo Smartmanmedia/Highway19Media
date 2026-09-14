@@ -219,3 +219,26 @@
   .sec8 h2{ font-size:clamp(1.68rem,7.4vw,2.3rem) }
   .sec8 .sub{ font-size:clamp(.98rem,3.9vw,1.2rem) }
 }
+
+/* ---- and what the card becomes once it has been sent --------------------- */
+/* FIVE EMPTY FIELDS AND A SEND BUTTON UNDER THE WORD "GOT IT" is a form asking
+   to be filled in again. The card collapses to a single answer instead, and
+   the collapse is animated from the height it had to the height it needs -
+   see form.js, which measures both rather than guessing either. */
+.sec8 .form{ overflow:hidden }
+.sec8 .form__done{ text-align:center; padding:clamp(6px,1.2vw,14px) 0 }
+.sec8 .form__done-sign{
+  display:block; margin:0 auto clamp(14px,1.8vw,22px);
+  height:clamp(56px,6vw,82px); width:auto;
+  filter:drop-shadow(0 3px 8px rgba(0,0,0,.28));
+}
+.sec8 .form__done h3{
+  margin:0; font-weight:900; line-height:1.06; letter-spacing:-.02em;
+  font-size:clamp(1.45rem,2.5vw,2rem); color:var(--sec8-ink,var(--ink));
+  text-wrap:balance;
+}
+.sec8 .form__done p{
+  margin:.85em auto 0; max-width:38ch;
+  font-size:1.02rem; line-height:1.62; color:var(--sec8-label,var(--ink-soft));
+  text-wrap:pretty;
+}
