@@ -24,6 +24,7 @@ const SITE = 'https://highway19media.com';
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
 
+const crypto = require('crypto');
 const rd = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const wr = (p, s) => { fs.mkdirSync(path.dirname(path.join(OUT, p)), { recursive: true });
                        fs.writeFileSync(path.join(OUT, p), s); };
@@ -36,7 +37,10 @@ const pageSrc = rd('build/v2/page.html');
 const code = [...pageSrc.matchAll(/(?:href|src)="(?!https?:|\.\.\/)([^"]+\.(?:css|js))"/g)]
   .map(m => m[1]);
 if (!code.length) throw new Error('no local css/js found in page.html');
-code.forEach(f => wr('build/v2/' + f, rd('build/v2/' + f)));
+const stamp = {};                       /* file -> 8 hex of its own bytes */
+code.forEach(f => { const src = rd('build/v2/' + f);
+  stamp[f] = crypto.createHash('sha1').update(src).digest('hex').slice(0, 8);
+  wr('build/v2/' + f, src); });
 
 /* 2. every asset any of it actually asks for. Walking the references rather
  *    than copying assets/ wholesale is the difference between shipping his art
@@ -69,7 +73,14 @@ for (const a of wanted) {
 let page = rd('build/v2/page.html')
   .replace(/(<link rel="stylesheet" href=")(?!https?:|\/)/g, '$1build/v2/')
   .replace(/(<script src=")(?!https?:|\/)/g,               '$1build/v2/')
-  .replace(/\.\.\/\.\.\/assets\//g, 'assets/');
+  .replace(/\.\.\/\.\.\/assets\//g, 'assets/')
+  /* AND EVERY STYLESHEET AND SCRIPT CARRIES ITS OWN CONTENT HASH.
+     Without this the page revalidates on every visit and the code does not:
+     a reader who has been here before gets the new markup wearing last
+     week's stylesheet, which is a broken page, not an old one. The hash
+     changes only when the file does, so the long cache above stays true. */
+  .replace(/(?:href|src)="build\/v2\/([^"?]+\.(?:css|js))"/g,
+           (m, f) => stamp[f] ? m.slice(0, -1) + '?v=' + stamp[f] + '"' : m);
 if (STAGING && !/name="robots"/.test(page))
   page = page.replace(/<link rel="canonical"[^>]*>\n/,
     m => m + '<meta name="robots" content="noindex,nofollow">\n');
