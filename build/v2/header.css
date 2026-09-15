@@ -90,12 +90,15 @@
 .hdr .mode-switch img,
 .hdr .mode-switch svg{ width:100%; height:100%; overflow:visible }
 
+/* THE THREE LINES ARE CENTRED ON EACH OTHER. The strapline is the widest of
+   them and the rule follows it, so left-aligning left his name hanging short
+   of both. */
 .hdr-logo{ position:absolute; left:17.94%; top:0; height:100%;
   text-decoration:none; display:flex; flex-direction:column;
-  justify-content:center; line-height:1 }
+  justify-content:center; align-items:center; text-align:center;
+  line-height:1 }
 .hdr-lock{ display:block; white-space:nowrap; color:#fff;
-  font-weight:900; letter-spacing:.005em; font-size:calc(var(--hh) * .265);
-  margin-left:.55%; }
+  font-weight:900; letter-spacing:.005em; font-size:calc(var(--hh) * .265); }
 .hdr-lock i{ font-style:normal; color:#29abe2; font-size:calc(var(--hh) * .313);
   margin:0 .14em }
 /* THE RULE IS AS WIDE AS THE LOCKUP, always. It used to be a fixed slice of
@@ -104,8 +107,7 @@
    the name above it. */
 .hdr-rule{ display:block; width:100%;
   height:max(1px, calc(var(--hh) * .0126));
-  background:#29abe2; margin:calc(var(--hh) * .075) 0 calc(var(--hh) * .06);
-  margin-left:.55% }
+  background:#29abe2; margin:calc(var(--hh) * .075) 0 calc(var(--hh) * .06) }
 .hdr-tag{ display:block; white-space:nowrap; color:#fff;
   font-weight:600; font-size:calc(var(--hh) * .1135); letter-spacing:.055em;
   text-transform:uppercase }
