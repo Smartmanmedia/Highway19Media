@@ -108,3 +108,19 @@
    markup for why it is derived rather than a file of its own. A static layer,
    so the filter is computed once. */
 .sec4 .rock-shadow{ filter:brightness(0) }
+
+/* HIS TREES, DAY AND NIGHT. Two layers on the same spot, cross-faded on
+   --night - the number the drive already moves from 0 to 1 half way down the
+   road - so the cluster changes with the rest of the scene instead of
+   snapping. One second, linear, the same fade the headlights and the car
+   shadows use, so nothing in the picture changes at a different speed.
+
+   The day layer FADES OUT. Leaving it underneath would be cheaper, but his
+   night trees sit on the day ones within a pixel and two sets of
+   anti-aliased edges that close leave a daylight-green rim around every
+   crown. */
+.sec4 .tree-day  { opacity:calc(1 - var(--night, 0)); transition:opacity 1s linear }
+.sec4 .tree-night{ opacity:var(--night, 0);           transition:opacity 1s linear }
+@media (prefers-reduced-motion: reduce){
+  .sec4 .tree-day,.sec4 .tree-night{ transition:none }
+}

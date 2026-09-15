@@ -838,7 +838,7 @@
 
   <!-- His tree cluster, 673 paths, INLINE for the same reason. Source:
        assets/v2/section-04/trees.svg -->
-  <svg class="z-ground" data-at aria-hidden="true"
+  <svg class="z-ground tree-day" data-at aria-hidden="true"
        style="left:-2.19%;top:64.02%;width:26.3%"
        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
        viewBox="-42.34 1041.15 507.67 275.03"><defs></defs><g id="trees-Trees">
@@ -1518,6 +1518,25 @@
                 <path d="M401.5,1079.29l.39-3.39c1.26,1.38.18,2.28-.39,3.39Z" fill="#2a5c2d"></path>
               </g>
             </g></svg>
+
+  <!-- AND THE SAME CLUSTER AFTER DARK, his own repaint ("Trees 2@2x night.png"
+       in assets/scene, re-encoded here). A filter could not do this: his night
+       trees are not the day ones dimmed, they are cool blue-greens with one
+       tree still catching light, and the trunk warm against them.
+
+       IT IS DRAWN ON ITS OWN ARTBOARD, wider than the day file and cropped
+       differently, so it cannot share the day's numbers. The two were
+       registered by matching their alpha masks - best fit at 1.30x the day's
+       width, shifted 9.36% right and 2.76% up of the day box, an overlap of 90%
+       against 64% for a naive stretch - and those are the numbers below.
+
+       The two cross-fade on --night, which the drive moves from 0 to 1 half
+       way down the road, so the trees change with everything else rather than
+       snapping. The day layer fades OUT rather than simply sitting underneath:
+       two sets of anti-aliased edges a pixel apart would otherwise leave a
+       daylight-green rim around every tree. -->
+  <img class="z-ground tree-night" data-at src="../../assets/v2/section-04/trees-night.webp" alt=""
+       style="left:0.272%;top:63.553%;width:34.19%">
 
   <!-- HIS SECOND SIGN'S SHADOW. Same story as the hero's: it was a black rect
        behind the green board, 0.43 right and 1.45 down, which is an edge
