@@ -40,7 +40,8 @@
     var cs = getComputedStyle(el);
     return { el: el, sec: el.closest('section'),
              want: parseFloat(cs.getPropertyValue('--par')) || 0,
-             bias: parseFloat(cs.getPropertyValue('--par-bias')) || 0, amp: 0,
+             wantX: parseFloat(cs.getPropertyValue('--par-x')) || 0,
+             bias: parseFloat(cs.getPropertyValue('--par-bias')) || 0, amp: 0, ampX: 0,
              key: (cs.getPropertyValue('--par-lock').trim() || 'solo:' + i++) +
                   '@' + el.closest('section').className };
   });
@@ -85,6 +86,19 @@
       if (up   > 0) want = Math.min(want, (r.top - sr.top) / up);
       if (down > 0) want = Math.min(want, (sr.bottom - r.bottom) / down);
       e.amp = Math.max(0, want);
+      /* AND THE SAME, SIDEWAYS. Vertical travel is boxed in by the height of
+         the section a cloud lives in, and in the ocean that box is short
+         enough that the cap eats half the movement - which is why a bigger
+         number alone changes nothing you can see. A section is far wider than
+         it is tall, so the room to drift ACROSS is the room there actually is,
+         and a cloud crossing the frame is the motion the eye reads. Capped the
+         And it is NOT capped, unlike the vertical. A section runs the full
+         width of the window, so its left and right edges ARE the edges of the
+         screen: a cloud that drifts past one has left the frame, which is what
+         a cloud does. The vertical cap exists because the top and bottom edges
+         are seams in the middle of the picture - his ocean against his sand -
+         and a cloud cut by one of those shows a straight line across itself. */
+      e.ampX = sr.width * e.wantX / 100;
       var k = e.key;
       caps[k] = caps[k] === undefined ? e.amp : Math.min(caps[k], e.amp);
     }
@@ -103,8 +117,9 @@
       var e = els[i], p = seen.get(e.sec);
       if (p === undefined) { p = progress(e.sec); seen.set(e.sec, p); }
       if (!p0.has(e.sec)) p0.set(e.sec, anchor(e.sec));
-      e.el.style.translate = '0 ' +
-        ((p0.get(e.sec) + e.bias - p) * 2 * e.amp).toFixed(2) + 'px';
+      var t = (p0.get(e.sec) + e.bias - p) * 2;
+      e.el.style.translate = (t * e.ampX).toFixed(2) + 'px ' +
+                             (t * e.amp).toFixed(2) + 'px';
     }
   }
   function ping() { if (!queued) { queued = true; requestAnimationFrame(frame); } }

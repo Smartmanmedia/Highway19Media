@@ -23,8 +23,16 @@
    224px of relative travel at a 1400px screen.
    ========================================================================= */
 .par        { will-change:translate }
-.par-first  { --par:20 }                    /* the clouds you meet first, hardest */
-.par-cloud  { --par:8 }
+/* THE CLOUDS DRIFT ACROSS AS WELL AS UP. On the vertical alone they moved
+   about as far as the signs did - 242px against the sign's 363 in section
+   four - so everything slid together and nothing read as moving at all. A
+   cloud that also crosses the frame reads immediately, and sideways is where
+   the room is: a section is twice as wide as it is tall, so the sideways
+   travel is never capped down to nothing the way the vertical one is in the
+   ocean. The two sets drift OPPOSITE ways, which is what makes the scroll
+   feel like it is carrying them. */
+.par-first  { --par:30; --par-x:9 }        /* the clouds you meet first, hardest */
+.par-cloud  { --par:18; --par-x:-8 }
 .par-sign   { --par:12; --par-bias:-0.12; --par-lock:gantry }                    /* THE GANTRY SHARES THIS. A sign
                                                hangs off a truss: give them
                                                different amplitudes and the sign
