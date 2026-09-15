@@ -217,18 +217,22 @@
 :root[data-theme="dark"]:not([data-mode="day"]),
 :root[data-mode="night"]{
   --sec8-band:linear-gradient(180deg, rgba(7,20,38,0) 0, rgba(7,20,38,0) calc(var(--sec8-fade,180px) - 150px), #071426 var(--sec8-fade,180px), #071426 100%);
-  --sec8-paper:#dbe8f7; --sec8-ink:#0b1f3f; --sec8-label:#49607f;
-  --sec8-field:#fff; --sec8-rule:#a8c1de; --sec8-ring:rgba(18,86,159,.28);
-  --sec8-link:#0a54b0; --sec8-edge:rgba(6,30,70,.16);
+  --sec8-paper:#c7dcf8; --sec8-ink:#0b2247; --sec8-label:#49607f;
+  --sec8-say-bg:linear-gradient(158deg,#0c1e38 0%,#07142a 50%,#050f22 100%);
+  --sec8-ask-ink:#5470a0; --sec8-ico:#4f6c9c; --sec8-rule-on:#0b3b96;
+  --sec8-field:#fff; --sec8-rule:#93aed4; --sec8-ring:rgba(18,86,159,.28);
+  --sec8-link:#0a54b0; --sec8-edge:rgba(126,176,255,.55);
   --sec8-ok:#0a7d36; --sec8-err:#c8161d;
   --sec9-bg:#050c1a; --sec9-sign:#0c5f26;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]):not([data-mode="day"]){
     --sec8-band:linear-gradient(180deg, rgba(7,20,38,0) 0, rgba(7,20,38,0) calc(var(--sec8-fade,180px) - 150px), #071426 var(--sec8-fade,180px), #071426 100%);
-    --sec8-paper:#dbe8f7; --sec8-ink:#0b1f3f; --sec8-label:#49607f;
-    --sec8-field:#fff; --sec8-rule:#a8c1de; --sec8-ring:rgba(18,86,159,.28);
-    --sec8-link:#0a54b0; --sec8-edge:rgba(6,30,70,.16);
+    --sec8-paper:#c7dcf8; --sec8-ink:#0b2247; --sec8-label:#49607f;
+  --sec8-say-bg:linear-gradient(158deg,#0c1e38 0%,#07142a 50%,#050f22 100%);
+  --sec8-ask-ink:#5470a0; --sec8-ico:#4f6c9c; --sec8-rule-on:#0b3b96;
+    --sec8-field:#fff; --sec8-rule:#93aed4; --sec8-ring:rgba(18,86,159,.28);
+    --sec8-link:#0a54b0; --sec8-edge:rgba(126,176,255,.55);
   --sec8-ok:#0a7d36; --sec8-err:#c8161d;
     --sec9-bg:#050c1a; --sec9-sign:#0c5f26;
   }}
@@ -274,7 +278,9 @@
   --sec8-band: initial;
   --sec8-paper: initial; --sec8-ink: initial; --sec8-label: initial;
   --sec8-field: initial; --sec8-rule: initial; --sec8-ring: initial;
-  --sec8-link: initial; --sec9-bg: initial; --sec9-sign: initial;
+  --sec8-link: initial; --sec8-say-bg: initial;
+  --sec8-ask-ink: initial; --sec8-ico: initial; --sec8-rule-on: initial;
+  --sec9-bg: initial; --sec9-sign: initial;
 }
 
 /* THE SCENERY, AND ONLY THE SCENERY. Named layer by layer rather than by

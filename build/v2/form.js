@@ -119,14 +119,16 @@
            rather than to the form service. */
         body   : JSON.stringify({
           access_key : key,
-          subject    : 'Website enquiry - ' + (f.business || name),
+          subject    : 'Website enquiry - ' + (f.website || name),
           from_name  : name,
           replyto    : email,
           name       : name,
-          business   : f.business || '',
           email      : email,
-          'What they have now'   : f.existing || '',
-          'What they want it to do': f.message || ''
+          'Website'  : f.website || '',
+          'Phone'    : f.phone || '',
+          'Interested in'  : f.interested || '',
+          'Heard about us' : f.heard || '',
+          'Notes'    : f.message || ''
         })
       });
       /* SUCCESS HAS TO BE SAID, NOT MERELY NOT-DENIED. This read
