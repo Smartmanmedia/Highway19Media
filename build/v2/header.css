@@ -94,11 +94,15 @@
   text-decoration:none; display:flex; flex-direction:column;
   justify-content:center; line-height:1 }
 .hdr-lock{ display:block; white-space:nowrap; color:#fff;
-  font-weight:900; letter-spacing:.005em; font-size:calc(var(--hh) * .298);
+  font-weight:900; letter-spacing:.005em; font-size:calc(var(--hh) * .265);
   margin-left:.55%; }
-.hdr-lock i{ font-style:normal; color:#29abe2; font-size:calc(var(--hh) * .352);
+.hdr-lock i{ font-style:normal; color:#29abe2; font-size:calc(var(--hh) * .313);
   margin:0 .14em }
-.hdr-rule{ display:block; width:16.71vw; max-width:321px;
+/* THE RULE IS AS WIDE AS THE LOCKUP, always. It used to be a fixed slice of
+   the window, which meant it fell short of his own title at most widths. The
+   column is sized by its widest line, so 100% is that line - never less than
+   the name above it. */
+.hdr-rule{ display:block; width:100%;
   height:max(1px, calc(var(--hh) * .0126));
   background:#29abe2; margin:calc(var(--hh) * .075) 0 calc(var(--hh) * .06);
   margin-left:.55% }
@@ -186,9 +190,9 @@ body{ padding-top:calc(var(--hh) + var(--hbar)) }
      every phone, so the lockup came out the same 222 pixels on a 430 screen
      and on a 320 one - where it ran under the button. Whichever is smaller:
      his proportion of the bar, or a share of the actual screen. */
-  .hdr-lock{ font-size:min(calc(var(--hh) * .285), 5.55vw);
+  .hdr-lock{ font-size:min(calc(var(--hh) * .258), 5.02vw);
     letter-spacing:0; margin-left:0 }
-  .hdr-rule{ display:block; width:78%; max-width:none;
+  .hdr-rule{ display:block; width:100%; max-width:none;
     margin:calc(var(--hh) * .055) auto calc(var(--hh) * .05);
     height:max(1px, calc(var(--hh) * .018)) }
   /* AND THE STRAPLINE IS THE THING THAT HAS TO FIT. Forty-three characters of
