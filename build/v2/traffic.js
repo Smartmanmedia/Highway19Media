@@ -352,19 +352,43 @@
    * and leave a hairline; at 2.4, flush to the edge, it leaves 3.25 - which is
    * a strip of road you can see rather than a gap you have to be told about.
    *
-   * THE ENDS ARE TRIMMED BACK BY THE EXTENSION. The centreline is deliberately
-   * run off the page at both ends so cars wrap out of sight; paint it and the
-   * gold runs off into his grass.
+   * THE ENDS ARE CLIPPED TO HIS TARMAC, not trimmed by a fixed amount. They
+   * used to come back by exactly the extension, and that is not where his road
+   * ends: the centreline is a record of his DASHES, and in section three the
+   * last dash is at 96.8% while his tarmac runs to 100.05%. Trimming by the
+   * extension therefore stopped the gold three per cent inside the frame and
+   * left the last sixty pixels of road with no edge line at all - the break he
+   * marked. The test is now simply whether the point is over one of the panels
+   * this road crosses, which is true wherever his tarmac is and false out in
+   * the grass, so the line ends where the road does at both ends.
    */
   var EDGE_OUT = 0.9748, EDGE_W = 2.4 / 95.06;
+  function onArt(road, x, y) {
+    for (var k = 0; k < road.parts.length; k++) {
+      var q = road.parts[k];
+      if (x >= q.ox && x <= q.ox + q.w && y >= q.oy && y <= q.oy + q.h) return true;
+    }
+    return false;
+  }
   function shoulderPath(road, off, ox, oy) {
-    var p = road.pts, c = road.cum, hi = road.len - road.ext, d = '';
-    for (var i = 0; i < p.length; i++) {
-      if (c[i] < road.ext || c[i] > hi) continue;
-      var a = p[i > 0 ? i - 1 : 0], b = p[i < p.length - 1 ? i + 1 : i];
+    var p = road.pts, n = p.length, q = [], on = [];
+    for (var i = 0; i < n; i++) {
+      var a = p[i > 0 ? i - 1 : 0], b = p[i < n - 1 ? i + 1 : i];
       var dx = b[0] - a[0], dy = b[1] - a[1], m = Math.hypot(dx, dy) || 1;
-      d += (d ? 'L' : 'M') + (p[i][0] - dy / m * off - ox).toFixed(1) + ' ' +
-                             (p[i][1] + dx / m * off - oy).toFixed(1);
+      q.push([p[i][0] - dy / m * off, p[i][1] + dx / m * off]);
+      on.push(false);
+    }
+    for (var i = 0; i < n; i++) on[i] = onArt(road, q[i][0], q[i][1]);
+    /* ONE POINT PAST THE EDGE AT EACH END. The curve is resampled every ten
+       pixels, so the last point that tests inside can be ten pixels short of
+       his tarmac - visible as a nick in the corner. Carrying the neighbour
+       takes the line over the edge instead, and the section's own overflow
+       cuts it exactly at the boundary. */
+    var d = '', pen = 'M';
+    for (var i = 0; i < n; i++) {
+      if (!(on[i] || on[i - 1] || on[i + 1])) { pen = 'M'; continue; }
+      d += pen + (q[i][0] - ox).toFixed(1) + ' ' + (q[i][1] - oy).toFixed(1);
+      pen = 'L';
     }
     return d;
   }
