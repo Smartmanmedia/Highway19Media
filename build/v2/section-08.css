@@ -46,7 +46,7 @@
   --blue-900:#062f5e; --blue-700:#12569f; --blue-100:#e6effa;
   --sign-green:#1c9022; --green-800:#0d5c12; --green-500:#059236;
   --yellow-500:#ffc72c; --yellow-600:#e9a800;
-  --ink:#12161c; --ink-soft:#454c57; --paper:#fff;
+  --ink:#12161c; --ink-soft:#454c57; --paper:#eaf2fc;
   --font-sign:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
   --shell:1200px; --gutter:clamp(20px,4vw,48px);
 
@@ -138,15 +138,23 @@
   box-shadow:inset 0 0 0 1px var(--sec8-edge,transparent),
              0 22px 50px rgba(3,20,42,.3);
 }
-.sec8 .field{ margin-bottom:1.05rem }
+.sec8 .field{ position:relative; margin-bottom:.95rem }
+
+/* THE REQUEST SITS IN THE BOX, not as a title over it. It starts where the
+   answer will start, and rises to a small cap line the moment there is one -
+   so a filled form still says which question each answer belongs to. */
 .sec8 .field label{
-  display:block; font-size:.76rem; font-weight:800;
-  letter-spacing:.11em; text-transform:uppercase;
-  margin-bottom:.5em; color:var(--sec8-label,var(--ink-soft));
+  position:absolute; left:calc(.95em + 2px); top:1.02em;
+  font-size:1rem; font-weight:600; line-height:1.15;
+  color:var(--sec8-label,var(--ink-soft));
+  pointer-events:none; transform-origin:0 0;
+  max-width:calc(100% - 2.2em);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  transition:transform .16s cubic-bezier(.3,.7,.3,1), color .16s ease;
 }
 .sec8 .field input,.sec8 .field textarea{
   width:100%; font:inherit; font-size:1rem;
-  padding:.85em .95em;
+  padding:1.62em .95em .62em;
   border:2px solid var(--sec8-rule,#cdd3dc); border-radius:6px;
   background:var(--sec8-field,#fff); color:var(--sec8-ink,var(--ink));
 }
@@ -155,6 +163,16 @@
   outline:none; border-color:var(--blue-700);
   box-shadow:0 0 0 3px var(--sec8-ring,var(--blue-100));
 }
+.sec8 .field input:focus ~ label,
+.sec8 .field input:not(:placeholder-shown) ~ label,
+.sec8 .field textarea:focus ~ label,
+.sec8 .field textarea:not(:placeholder-shown) ~ label{
+  transform:translateY(-.66em) scale(.7);
+  font-weight:800; letter-spacing:.1em; text-transform:uppercase;
+  max-width:calc(142% - 3.1em);
+}
+.sec8 .field input:focus ~ label,.sec8 .field textarea:focus ~ label{ color:var(--blue-700) }
+
 .sec8 .form__promise{
   display:flex; align-items:center; gap:.6em;
   margin:0 0 1.5rem; font-size:.9rem; color:var(--sec8-label,var(--ink-soft));

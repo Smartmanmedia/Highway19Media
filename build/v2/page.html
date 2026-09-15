@@ -4782,26 +4782,29 @@ section + section{ margin-top:-1px }</style>
     <!-- THE FIELDS ARE THEIR OWN BOX so the card can swap them for the panel
          below without losing its own shape while it does it. -->
     <div class="form__body">
+      <!-- LABEL INSIDE THE BOX. The input comes first in the markup so the
+           label can be its sibling and rise on :focus / :not(:placeholder-shown);
+           placeholder=" " is the trick that makes an empty field report itself
+           as "showing a placeholder" without printing anything. -->
       <div class="field">
+        <input id="f-name" name="name" type="text" autocomplete="name" placeholder=" " required>
         <label for="f-name">Your name</label>
-        <input id="f-name" name="name" type="text" autocomplete="name" required>
       </div>
       <div class="field">
+        <input id="f-business" name="business" type="text" autocomplete="organization" placeholder=" ">
         <label for="f-business">Business name</label>
-        <input id="f-business" name="business" type="text" autocomplete="organization">
       </div>
       <div class="field">
+        <input id="f-email" name="email" type="email" autocomplete="email" placeholder=" " required>
         <label for="f-email">Email</label>
-        <input id="f-email" name="email" type="email" autocomplete="email" required>
       </div>
       <div class="field">
+        <input id="f-have" name="existing" type="text" placeholder=" ">
         <label for="f-have">What have you got right now?</label>
-        <input id="f-have" name="existing" type="text"
-               placeholder="Website, Facebook page, logo &mdash; paste a link or just tell us">
       </div>
       <div class="field">
+        <textarea id="f-msg" name="message" placeholder=" "></textarea>
         <label for="f-msg">What do you want it to do?</label>
-        <textarea id="f-msg" name="message"></textarea>
       </div>
 
       <!-- NOT FOR PEOPLE. Off screen rather than display:none, because a bot
