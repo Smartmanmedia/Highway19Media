@@ -578,8 +578,13 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      are a matched pair and take the same translate. Named by his own widths:
      :last-of-type counts every <svg> in the wrapper, road and clouds included,
      and matched none of these. */
+  /* THE RANGE AND THE RANGE BEHIND IT MOVE TOGETHER. Matched on the width in
+     their style attribute, which is brittle - the back range's width changed
+     when it was re-placed off his artboard and this silently stopped matching
+     it, leaving the two ranges to slide apart on a phone. Both numbers live
+     in section-03.html; change one there and change it here. */
   :root .sec3 .mob-scene > svg.z-ground[style*="width:99.783%"],
-  :root .sec3 .mob-scene > svg.z-ground[style*="width:116.809%"]{
+  :root .sec3 .mob-scene > svg.z-ground[style*="width:103.75%"]{
     transform:translateY(calc(var(--mix) / 1.35));
   }
   :root .sec3 .z-road, :root .sec3 .z-cloud{ display:none }

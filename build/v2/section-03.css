@@ -41,7 +41,10 @@
 }
 
 .sec3 [data-at]{ position:absolute; display:block }
-.sec3 img[data-at], .sec3 svg[data-at]{ height:auto }
+/* height follows width, EXCEPT where a layer sets its own - the back range
+   does, because its export and his composition do not share an aspect ratio
+   and it has to match his on both axes. */
+.sec3 img[data-at], .sec3 svg[data-at]:not([style*="height:"]){ height:auto }
 
 .sec3 .z-ground{ z-index:0 } .sec3 .z-road{ z-index:1 }
 .sec3 .z-cloud { z-index:3 }
