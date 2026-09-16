@@ -89,7 +89,10 @@ wr('index.html', page);
 /* 4. the holding page every unbuilt link points at, and the 404 - the same
  *    page, because a mistyped URL and an unbuilt one need the same answer. */
 const soon = rd('build/v2/soon.html')
-  .replace(/href="section-fonts\.css"/, 'href="/build/v2/section-fonts.css"')
+  /* the card is one file for both pages - see build/v2/form-card.html */
+  .replace('<!--FORM-CARD-->', () => rd('build/v2/form-card.html'))
+  .replace(/(?:href|src)="((?:section-fonts|form-card)\.css|form\.js)"/g,
+           (m, f) => m.replace('"' + f + '"', '"/build/v2/' + f + '"'))
   .replace(/\.\.\/\.\.\/assets\//g, '/assets/');
 wr('coming-soon/index.html', soon);
 wr('404.html', soon);

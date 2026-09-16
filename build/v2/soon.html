@@ -7,6 +7,7 @@
 <!-- HIS OWN FONT FILES, self-hosted, the same two weights this page asks
      Google for. build_site.js rewrites this one href for the live tree. -->
 <link rel="stylesheet" href="section-fonts.css">
+<link rel="stylesheet" href="form-card.css">
 <!-- A HOLDING PAGE IS STILL A PAGE, so it is not indexed: a search for his
      own name should not turn up five copies of this instead of the site. -->
 <meta name="robots" content="noindex,follow">
@@ -275,6 +276,36 @@
   #h19-detour{--copy-max:32rem;--sign-height:1.9em}
 }
 @media (prefers-reduced-motion:reduce){#h19-detour .cta{transition:none}}
+/* ---- THE FORM, ON THE ASPHALT -------------------------------------------
+   The same card as the home page (form-card.css owns the layout), wearing
+   this page's colours: his black for the half we speak on, a light grey for
+   the half we ask on, and the roadworks amber on the button. The blue of the
+   marks and the rules is the one thing carried over - it is what makes the
+   fields read as fields.
+
+   It stands on the road's own black so the scene runs into it rather than
+   stopping at a seam. */
+#h19-detour .soon-form{
+  background:var(--asphalt);
+  padding:clamp(34px,6vw,78px) clamp(16px,4vw,40px) clamp(56px,9vw,120px);
+  scroll-margin-top:12px;
+}
+#h19-detour .soon-form .fcard{
+  --fc-paper:#e9eaea;
+  --fc-say-bg:#000;
+  --fc-say-ink:#fff;
+  --fc-ink:#123a7a;
+  --fc-ask-ink:#4c6da4;
+  --fc-ico:#3d5f9b;
+  --fc-rule:#4266a4;
+  --fc-rule-on:#12569f;
+  --fc-edge:transparent;
+  --fc-link:#123a7a;
+  --fc-btn:var(--accent); --fc-btn-ink:var(--accent-ink); --fc-btn-hi:#ffc45c;
+  --fc-ok:#7ee0a4; --fc-err:#ff9aa1;
+  --fc-cast:0 22px 50px rgba(0,0,0,.55);
+  --fc-fs:clamp(.84rem,.92vw,.94rem);
+}
 </style>
 </head>
 <body style="margin:0">
@@ -313,7 +344,7 @@
         <p class="lead">Got somewhere you're trying to get to? Tell us about it &mdash; that's the part we're good at.</p>
       </div>
     </div>
-    <a class="cta" href="mailto:highway19media@gmail.com?subject=Tell%20us%20about%20your%20project">Tell us about your project</a>
+    <a class="cta" href="#contact">Tell us about your project</a>
   </section>
 
   <div class="stage-wrap">
@@ -1779,7 +1810,16 @@
     </svg>
   </div>
 
+  <!-- THE FORM, INSIDE THE WRAPPER. Every token on this page and its typeface
+       are scoped to #h19-detour, so a section outside it would have come out
+       in Times on a white ground with an invisible button. -->
+  <section id="contact" class="soon-form">
+    <!--FORM-CARD-->
+  </section>
+
 </div>
+
+<script src="form.js" defer></script>
 
 <!-- Layout first, and inline: the crop must be right at first paint and must
      not depend on a CDN answering. Then GSAP, then the animation. -->

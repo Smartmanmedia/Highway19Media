@@ -89,9 +89,17 @@ const HEADER =
   '  </nav>\n' +
   '</header>';
 
+/* THE FORM CARD IS ITS OWN FILE. It stands on two pages - the close here and
+ * the holding page, which build_site.js assembles the same way - so a section
+ * asks for it with <!--FORM-CARD--> rather than carrying a copy that drifts.
+ * The <symbol> defs come with it: a <use> can only reach a symbol in its own
+ * document, and neither page has a head this could live in. */
+const CARD = fs.readFileSync(path.join(DIR, 'form-card.html'), 'utf8');
+
 const parts = files.map(f => {
 
-  const html = fs.readFileSync(path.join(DIR, f), 'utf8');
+  const html = fs.readFileSync(path.join(DIR, f), 'utf8')
+                 .replace('<!--FORM-CARD-->', () => CARD);
   const m = html.match(/<section\b[\s\S]*<\/section>/);
   if (!m) throw new Error(f + ': no <section> found');
   return m[0];
@@ -146,6 +154,7 @@ const out =
 '<!-- Both families are his own files, self-hosted. No external font requests. -->\n' +
 '<link rel="stylesheet" href="section-fonts.css">\n' +
 files.map(f => '<link rel="stylesheet" href="' + f.replace('.html','.css') + '">').join('\n') +
+'\n<link rel="stylesheet" href="form-card.css">' +
 '\n<link rel="stylesheet" href="parallax.css">\n'
   + '<link rel="stylesheet" href="night.css">\n' +
 '<link rel="stylesheet" href="traffic.css">\n' +
