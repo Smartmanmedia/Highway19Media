@@ -102,6 +102,10 @@ const out =
   serviceArea:{ '@type':'AdministrativeArea', name:'Tampa Bay, Florida' },
   address:{ '@type':'PostalAddress', addressLocality:'Tampa',
             addressRegion:'FL', addressCountry:'US' },
+  /* THE FACEBOOK PROFILE, TOLD TO GOOGLE TOO. sameAs is how a search engine
+     ties this business to the account it already knows about, so the footer
+     icon and the structured data have to carry the same URL. */
+  sameAs:['https://www.facebook.com/Highway19Media'],
   knowsAbout:['Website Design','Video Production','Print and Branding',
               'Social Media Marketing','Paid Advertising'],
   hasOfferCatalog:{ '@type':'OfferCatalog', name:'Services', itemListElement:
