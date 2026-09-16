@@ -41,7 +41,9 @@
     return { el: el, sec: el.closest('section'),
              want: parseFloat(cs.getPropertyValue('--par')) || 0,
              wantX: parseFloat(cs.getPropertyValue('--par-x')) || 0,
-             bias: parseFloat(cs.getPropertyValue('--par-bias')) || 0, amp: 0, ampX: 0,
+             bias: parseFloat(cs.getPropertyValue('--par-bias')) || 0,
+             even: cs.getPropertyValue('--par-bias').trim() === 'auto',
+             amp: 0, ampX: 0, z: 0,
              key: (cs.getPropertyValue('--par-lock').trim() || 'solo:' + i++) +
                   '@' + el.closest('section').className };
   });
@@ -81,11 +83,31 @@
     var caps = {};
     for (var j = 0; j < els.length; j++) {
       var e = els[j], sr = e.sec.getBoundingClientRect(), r = e.el.getBoundingClientRect();
-      var want = sr.width * e.want / 100, z = p0.get(e.sec) + e.bias;
+      var want = sr.width * e.want / 100;
+      var over = r.top - sr.top, under = sr.bottom - r.bottom;   /* room, each way */
+      var z = p0.get(e.sec) + e.bias;
+
+      /* --par-bias:auto - SPEND ALL THE ROOM THERE IS.
+         The amplitude is capped by whichever way a piece has less room, and
+         the split between the two ways is decided by z: a piece travels
+         z*2*amp down and (1-z)*2*amp up. Leave z at the middle of the pass
+         and a cloud sitting low in its section is held to twice its small
+         bottom gap while a screen and a half of sky above it goes unused -
+         which is why raising the number changed nothing anyone could see.
+         Balancing the two - z = under / (over + under) - makes the two caps
+         equal, and the travel becomes the WHOLE free room rather than twice
+         the smaller half of it. It also starts the piece part way along that
+         travel, already climbing when it comes into view, which is the other
+         half of what he asked for. */
+      if (e.even && over + under > 0) {
+        z = Math.min(.92, Math.max(.08, under / (over + under)));
+        want = Math.min(want, (over + under) / 2);
+      }
       var up = (1 - z) * 2, down = z * 2;
-      if (up   > 0) want = Math.min(want, (r.top - sr.top) / up);
-      if (down > 0) want = Math.min(want, (sr.bottom - r.bottom) / down);
+      if (up   > 0) want = Math.min(want, over  / up);
+      if (down > 0) want = Math.min(want, under / down);
       e.amp = Math.max(0, want);
+      e.z = z;
       /* AND THE SAME, SIDEWAYS. Vertical travel is boxed in by the height of
          the section a cloud lives in, and in the ocean that box is short
          enough that the cap eats half the movement - which is why a bigger
@@ -116,8 +138,8 @@
     for (var i = 0; i < els.length; i++) {
       var e = els[i], p = seen.get(e.sec);
       if (p === undefined) { p = progress(e.sec); seen.set(e.sec, p); }
-      if (!p0.has(e.sec)) p0.set(e.sec, anchor(e.sec));
-      var t = (p0.get(e.sec) + e.bias - p) * 2;
+      if (!p0.has(e.sec)) { p0.set(e.sec, anchor(e.sec)); fit(); }
+      var t = (e.z - p) * 2;
       e.el.style.translate = (t * e.ampX).toFixed(2) + 'px ' +
                              (t * e.amp).toFixed(2) + 'px';
     }

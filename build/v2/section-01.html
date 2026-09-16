@@ -133,10 +133,10 @@
     <!-- and his gantry, running off the right edge behind the board -->
     <span class="mob-gantry" aria-hidden="true"></span>
     <ul>
-      <li><a href="#services">Social Media</a></li>
-      <li><a href="#services">Website Design</a></li>
-      <li><a href="#services">Print Design</a></li>
-      <li><a href="#services">Video Production</a></li>
+      <li><a href="/coming-soon/">Social Media</a></li>
+      <li><a href="/coming-soon/">Website Design</a></li>
+      <li><a href="/coming-soon/">Print Design</a></li>
+      <li><a href="/coming-soon/">Video Production</a></li>
     </ul>
   </div>
   <div class="mob-road" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-1.76 1582.76 1087.21 186.75" width="1087.21" height="186.75">
@@ -200,14 +200,9 @@
   <svg class="z-road" data-at aria-hidden="true" style="left:15.25%;top:87.11%;width:4.95%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="1326.29 1.04 95.06 324.70"><g><rect x="1326.29" y="1.04" width="95.06" height="324.7" fill="var(--tarmac)"></rect><rect x="1412.19" y="1.04" width="3.29" height="324.7" fill="var(--marking)"></rect><rect x="1331.94" y="1.04" width="3.3" height="324.7" fill="var(--marking)"></rect><g><rect x="1372.6" y="284.89" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="1372.6" y="237.58" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="1372.6" y="190.27" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="1372.6" y="142.96" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="1372.6" y="95.66" width="3.53" height="28.27" fill="var(--marking)"></rect><rect x="1372.6" y="48.35" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="1372.6" y="1.04" width="3.53" height="28.26" fill="var(--marking)"></rect></g></g></svg>
 
 
-  <!-- HIS MOON, night only, at his own place and size: his halo circle is
-       r 23.9 on 1452.23, 42.75 of his 1920 x 1808 artboard, and his moon file
-       is that circle exactly, 47.8 square. Mine was two and a half times the
-       size and 9% of the picture too far right. The column of light under it
-       was mine too and is gone - there is no reflection in any of his five
-       artboards. -->
-  <img class="moon" data-at src="../../assets/v2/ui-moon.svg" alt="" aria-hidden="true"
-       style="left:74.392%;top:1.043%;width:2.490%">
+  <!-- HIS MOON IS OUT. It sat on the water at his own mark, and with the
+       switch in the bar already showing one, a second moon lying on the sea
+       read as its reflection rather than as the moon. His call. -->
 
   <!-- BOAT -->
   <!-- HIS BOAT AND ITS SHADOW. The two exports were cropped to their own
@@ -290,23 +285,28 @@
                  1.39x the Print Design text, and that ratio would carry Video
                  Production's line past its own panel. Hidden until you hover the
                  panel, then it grows out from its centre - see section-01.css.
-                 Each <g class="svc"> becomes an <a> when the pages exist. -->
-            <g class="svc">
+                 AND EACH PANEL IS A LINK NOW. An <a> inside an SVG is a real
+                 one - it takes href, it is in the tab order, and the browser
+                 shows the target - so the panel does not need a hit layer of
+                 its own beyond the rect that was already there for the hover.
+                 Until each service has a page of its own they all land on the
+                 holding page, which is where he wants them. -->
+            <a href="/coming-soon/" aria-label="Website Design"><g class="svc">
               <rect class="hit" x="583.47" y="243.00" width="234.32" height="273.00" fill="none" pointer-events="all"><title>Website Design</title></rect>
               <rect class="ul" x="613.77" y="488.86" width="173.7" height="2.73" rx="1.36" ry="1.36" fill="#fff"></rect>
-            </g>
-            <g class="svc">
+            </g></a>
+            <a href="/coming-soon/" aria-label="Print Design"><g class="svc">
               <rect class="hit" x="820.12" y="243.00" width="241.36" height="273.00" fill="none" pointer-events="all"><title>Print Design</title></rect>
               <rect class="ul" x="853.92" y="488.86" width="173.7" height="2.73" rx="1.36" ry="1.36" fill="#fff"></rect>
-            </g>
-            <g class="svc">
+            </g></a>
+            <a href="/coming-soon/" aria-label="Video Production"><g class="svc">
               <rect class="hit" x="1063.81" y="243.00" width="230.73" height="273.00" fill="none" pointer-events="all"><title>Video Production</title></rect>
               <rect class="ul" x="1092.32" y="488.86" width="173.7" height="2.73" rx="1.36" ry="1.36" fill="#fff"></rect>
-            </g>
-            <g class="svc">
+            </g></a>
+            <a href="/coming-soon/" aria-label="Social Media"><g class="svc">
               <rect class="hit" x="1296.87" y="243.00" width="224.62" height="273.00" fill="none" pointer-events="all"><title>Social Media</title></rect>
               <rect class="ul" x="1322.32" y="488.86" width="173.7" height="2.73" rx="1.36" ry="1.36" fill="#fff"></rect>
-            </g>
+            </g></a>
           </g>
           <rect x="766.28" y="190.44" width="583.4" height="52.54" rx="9.81" ry="9.81"></rect>
           <rect x="767.49" y="187.6" width="581.71" height="52.54" rx="7.34" ry="7.34" fill="#ffda00" stroke="#fff" stroke-miterlimit="10" stroke-width="2"></rect>

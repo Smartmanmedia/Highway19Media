@@ -495,23 +495,7 @@
 
 
 
-/* --- HIS MOON -----------------------------------------------------------
-   Night only, at HIS position and HIS size, read straight out of artboard
-   one: his halo circle is r 23.9 centred on 1452.23, 42.75 of his 1920 x
-   1808 board, and ui-moon.svg is that circle exactly - 47.8 square, halo
-   included. So the three numbers in the markup are his, not a placement.
+/* HIS MOON IS OUT - see section-01.html. The column of light under it had
+   already gone, and with it the page's last mix-blend-mode; now the disc has
+   followed. */
 
-   THE COLUMN OF LIGHT ON THE WATER IS GONE. It was mine, not his - there is
-   no reflection in any of his five artboards - and it read as pasted on.
-   Its blend went with it, which leaves the page with no mix-blend-mode at
-   all: the one thing that could reach back into daylight and cost his body
-   copy its subpixel antialiasing. */
-.sec1 .moon{
-  position:absolute; display:block; height:auto; z-index:4;
-  opacity:var(--night, 0);
-  transition:opacity 1s linear;
-  pointer-events:none;
-}
-@media (prefers-reduced-motion: reduce){
-  .sec1 .moon{ transition:none }
-}

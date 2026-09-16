@@ -31,8 +31,19 @@
    travel is never capped down to nothing the way the vertical one is in the
    ocean. The two sets drift OPPOSITE ways, which is what makes the scroll
    feel like it is carrying them. */
-.par-first  { --par:30; --par-x:9 }        /* the clouds you meet first, hardest */
-.par-cloud  { --par:18; --par-x:-8 }
+/* MOSTLY UP, A LITTLE ACROSS. His note: the sideways drift is what made the
+   movement readable, but it should not be the movement - scrolling DOWN should
+   send them UP, and the across is a lean on top of that. So the vertical is
+   nearly doubled and the sideways cut to a third of it.
+
+   AND THEY START EARLIER IN THEIR OWN TRAVEL. --par-bias shifts where in the
+   section's pass a cloud sits on its mark: negative means it is already part
+   way up when it comes into view, which both leaves more of the section's
+   upward room for it to use - the cap is worked out from this number - and
+   means it is visibly climbing from the first frame rather than turning round
+   in the middle of the screen. */
+.par-first  { --par:52; --par-x:4; --par-bias:auto }   /* the clouds you meet first, hardest */
+.par-cloud  { --par:34; --par-x:-3; --par-bias:auto }
 .par-sign   { --par:12; --par-bias:-0.12; --par-lock:gantry }                    /* THE GANTRY SHARES THIS. A sign
                                                hangs off a truss: give them
                                                different amplitudes and the sign
