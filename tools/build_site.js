@@ -75,6 +75,11 @@ function minify(src, kind) {
 /* the page keeps its doctype and its structure; only the comments and the
  * indentation between tags go */
 function minifyHtml(src) {
+  /* every page that goes out gets the share card's content hash - doing it
+     here rather than per page is what stops a new page shipping the stale
+     card, the same reason the chrome is built from one module */
+  src = src.replace(/(https:\/\/[^"]*\/assets\/v2\/meta\/og\.jpg)"/g,
+                    '$1?v=' + ogStamp + '"');
   return src.replace(/<!--(?!\[if)[\s\S]*?-->/g, '')
             .replace(/^[ \t]+/gm, '')
             .replace(/\n{2,}/g, '\n');
@@ -101,6 +106,15 @@ collect(rd('build/v2/soon.html'));
    cannot see - and a card that 404s is the blank rectangle it was drawn to
    replace. */
 wanted.add('assets/v2/meta/og.jpg');
+
+/* AND THE SHARE CARD CARRIES ITS CONTENT HASH TOO.
+ * /assets/* is served immutable for a year, which is only true while a file's
+ * contents do not change under its name - and the og card is the one asset
+ * that does change. Facebook and WhatsApp cache it by URL as well, so without
+ * this a redrawn card keeps showing the old one in every preview. The hash is
+ * the same mechanism the stylesheets use; it moves only when the image does. */
+const ogStamp = crypto.createHash('sha1')
+  .update(fs.readFileSync(path.join(ROOT, 'assets/v2/meta/og.jpg'))).digest('hex').slice(0, 8);
 
 let bytes = 0;
 for (const a of wanted) {
