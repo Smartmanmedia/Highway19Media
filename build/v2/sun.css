@@ -61,7 +61,7 @@
 /* A SHADOW ON A LAYER OF ITS OWN - the sign's, which has to fall on the water
    and the road but not on the gantry, so it cannot live inside the sign. Same
    two numbers drive it. */
-[style*="--lift"]:not(.cast):not(.cast-svg){
+[style*="--lift"]:not(.cast){
   opacity: var(--sun-ink);
   translate: calc((var(--sun-x) + var(--sun-lean)) * var(--lift) * var(--sun-len) * 1cqw)
              calc(var(--sun-y) * var(--lift) * var(--sun-len) * 1cqw);
@@ -72,10 +72,4 @@
    since the whole SVG does. So the same --sun drives it, with its own --lift-u.
    His hero sign is the case: the shadow was already a separate rect, it just
    had his offset baked into its x and y. */
-.cast-svg{ overflow:visible }   /* or a shadow thrown clear of the art is cut
-                                   off at the viewBox edge */
-.cast-svg .shade{
-  opacity: var(--sun-ink);
-  translate: calc((var(--sun-x) + var(--sun-lean)) * var(--lift-u) * 1px)
-             calc(var(--sun-y) * var(--lift-u) * 1px);
-}
+

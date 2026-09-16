@@ -43,26 +43,10 @@
    - the page's own ground can never appear there.
       ========================================================================= */
 .sec8{
-  --blue-900:#062f5e; --blue-700:#12569f; --blue-100:#e6effa;
-  --sign-green:#1c9022; --green-800:#0d5c12; --green-500:#059236;
-  --yellow-500:#ffc72c; --yellow-600:#e9a800;
-  --ink:#12161c; --ink-soft:#454c57; --paper:#eaf2fc;
-  /* HIS CARD'S OWN PALETTE, day values. Night restates the four that change
-     (night.css): the paper goes to his pale blue, the blue panel goes almost
-     black, and the edge becomes a lit hairline. The ink stays navy in both,
-     because the paper stays paper. */
-  --f-round:22px;
-  /* THE FIELD TYPE SIZE IS A TOKEN because the Notes rules are drawn in line
-     heights, and a gradient on the ROW cannot read the textarea's em. */
-  --f-fs:clamp(.88rem,.98vw,.97rem);
-  --f-line:calc(var(--f-fs) * 2.15);
-  --f-say-bg:var(--sec8-say-bg, linear-gradient(158deg,#1150bb 0%,#0b3b96 46%,#08307f 100%));
-  --f-ink:#123a7a;                                      /* type on the paper half */
-  --f-ask-ink:var(--sec8-ask-ink, #5c79a8);             /* a request, not yet an answer */
-  --f-ico:var(--sec8-ico, #7b95c0);
-  --f-rule:var(--sec8-rule, #b9c9e4);
-  --f-rule-on:var(--sec8-rule-on, #12569f);
-  --font-sign:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  --blue-900:#062f5e;
+  --sign-green:#1c9022; --green-500:#059236;
+  --yellow-500:#ffc72c;
+  --ink:#12161c; --ink-soft:#454c57;
   --shell:1240px; --gutter:clamp(20px,4vw,48px);
 
   position:relative;

@@ -168,10 +168,7 @@
 /* the last 150px of section four's rock band, redrawn ON TOP of the white so
    the mountains carry across the transition instead of stopping dead at it.
    Same drawing, same scale, same left and width as it has up there. */
-.sec6 .rock-cross{
-  position:absolute; display:block;
-  left:-2.92%; top:0; width:104.16%; height:auto; z-index:1;
-}
+
 
 .sec6 .page [data-at]{ position:absolute; display:block }
 .sec6 .page img[data-at], .sec6 .page svg[data-at]{ height:auto }

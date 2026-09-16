@@ -37,8 +37,44 @@ const pageSrc = rd('build/v2/page.html');
 const code = [...pageSrc.matchAll(/(?:href|src)="(?!https?:|\.\.\/)([^"]+\.(?:css|js))"/g)]
   .map(m => m[1]);
 if (!code.length) throw new Error('no local css/js found in page.html');
+/* ---------------------------------------------------------------------------
+ * WHAT SHIPS IS THE CODE WITHOUT ITS PROSE. The sources are heavily commented
+ * on purpose - that is where the reasoning lives - but a reader downloading the
+ * site does not need any of it, and it is a third of the transfer: measured on
+ * the 25 files the two pages load, gzip goes from 212K to 102K.
+ *
+ * DELIBERATELY CONSERVATIVE. Block comments, whole-line // comments, leading
+ * indentation and blank lines - nothing else. An aggressive pass that also
+ * collapsed the space around { } : ; , saved one further kilobyte over the
+ * wire, which is not worth the chance of it walking into a url(), a content:
+ * string or a regex. Comments are what compress badly; the punctuation between
+ * them does not.
+ *
+ * THE ONE GUARD: a file with a template literal spanning lines keeps its
+ * indentation, because inside those backticks the leading spaces are part of
+ * the string rather than layout. sprite.js is the file that needs it. */
+const MULTILINE_TEMPLATE = /`[^`]*\n[^`]*`/;
+function minify(src, kind) {
+  let s = src.replace(/\/\*[\s\S]*?\*\//g, '');       /* block comments */
+  if (kind === 'js') {
+    if (MULTILINE_TEMPLATE.test(src)) return s;          /* indentation is data here */
+    s = s.replace(/^[ \t]*\/\/.*$/gm, '');               /* whole-line // only: a
+                                                          // inside a url is not
+                                                          a comment */
+  }
+  return s.replace(/^[ \t]+/gm, '').replace(/\n{2,}/g, '\n').trim() + '\n';
+}
+/* the page keeps its doctype and its structure; only the comments and the
+ * indentation between tags go */
+function minifyHtml(src) {
+  return src.replace(/<!--(?!\[if)[\s\S]*?-->/g, '')
+            .replace(/^[ \t]+/gm, '')
+            .replace(/\n{2,}/g, '\n');
+}
+
 const stamp = {};                       /* file -> 8 hex of its own bytes */
-code.forEach(f => { const src = rd('build/v2/' + f);
+code.forEach(f => { const src = minify(rd('build/v2/' + f),
+                                       f.endsWith('.js') ? 'js' : 'css');
   stamp[f] = crypto.createHash('sha1').update(src).digest('hex').slice(0, 8);
   wr('build/v2/' + f, src); });
 
@@ -84,7 +120,7 @@ let page = rd('build/v2/page.html')
 if (STAGING && !/name="robots"/.test(page))
   page = page.replace(/<link rel="canonical"[^>]*>\n/,
     m => m + '<meta name="robots" content="noindex,nofollow">\n');
-wr('index.html', page);
+wr('index.html', minifyHtml(page));
 
 /* 4. the holding page every unbuilt link points at, and the 404 - the same
  *    page, because a mistyped URL and an unbuilt one need the same answer. */
@@ -114,8 +150,9 @@ const soon = rd('build/v2/soon.html')
   .replace(/\.\.\/\.\.\/assets\//g, '/assets/')
   /* and from here, the home page is one directory up */
   .replace(/\{\{ROOT\}\}/g, '/');
-wr('coming-soon/index.html', soon);
-wr('404.html', soon);
+const soonOut = minifyHtml(soon);
+wr('coming-soon/index.html', soonOut);
+wr('404.html', soonOut);
 
 /* 5. what the host needs to be told.
  *    Cache-Control is the whole point of splitting the files up: the page is
