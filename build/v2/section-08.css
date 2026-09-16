@@ -1,0 +1,97 @@
+/* ============================================================================
+   SECTION EIGHT - THE CLOSE
+
+   THIS IS HIS FIRST SITE'S SECTION 09, MOVED ACROSS, NOT REDRAWN. The band,
+   the destination plate over the headline, the copy, the five fields, the
+   24-hour promise and the yellow warning-triangle button are all his - lifted
+   out of index.html and assets/css/highway19.css and scoped under .sec8 so
+   they cannot reach the rest of this page. Nothing here was invented; what
+   changed is only what had to, to sit under a drive that did not exist when
+   he wrote it.
+
+   IT RIDES UP OVER THE END OF THE DRIVE. A whole viewport of negative margin,
+   so the band climbs into frame across the last screen of road with the
+   fireworks still going above it, instead of waiting for the road to run out
+   first. That, and the padding taken out from over the headline, is what puts
+   his form on screen about a thousand pixels of scroll earlier than it was.
+
+   AND IT IS TRANSPARENT ALL THE WAY DOWN TO HIS FORM. That is what makes the
+   join work
+   at ANY scroll position rather than one. The old top strip was the drive's
+   last row, sampled and repainted - which is exact only while the two edges
+   actually meet. Once the section rides up over the road it meets a different
+   row every frame, and a repainted one would be wrong in all of them. A ramp
+   from nothing to his interstate blue is right in all of them: whatever is
+   behind shows through the top of it and there is no edge to match.
+
+   AND IT STAYS CLEAR, it does not fade the whole way. A ramp that starts
+   closing at the seam has the blue at half strength by the headline, which is
+   most of the fireworks gone before you have read a word. So it holds at
+   nothing until 150px short of the card and closes there: the sign, the
+   headline, the subhead and the copy are all read against the live sky with
+   the show still going behind them, and the blue arrives just in time to be
+   the ground the form stands on.
+
+   HOW FAR DOWN IS MEASURED, NOT PICKED. --sec8-fade is written on the section
+   by the drive, which measures where his form card actually starts - so the
+   sky runs out exactly where the reading starts, at any width, and the same
+   number ends the fireworks. One measurement, so the paint and the show can
+   never disagree. 180px is the fallback if the script never runs.
+
+   NOTHING SHOWS THROUGH THAT SHOULD NOT. The section rides a whole viewport up
+   into the road, so the drive's stage is behind every pixel of the clear part
+   - the page's own ground can never appear there.
+      ========================================================================= */
+.sec8{
+  --blue-900:#062f5e;
+  --sign-green:#1c9022; --green-500:#059236;
+  --yellow-500:#ffc72c;
+  --ink:#12161c; --ink-soft:#454c57;
+  /* HIS TYPEFACE. This went out with the dead tokens in a range cut and took
+     the whole section to Times with it - the card, the headline, the fields.
+     It was never dead: font-family right below reads it. A token is only safe
+     to remove by NAME, after checking nothing reads it; removing a block of
+     lines because most of them were dead is how a live one goes too. */
+  --font-sign:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  --shell:1240px; --gutter:clamp(20px,4vw,48px);
+
+  position:relative;
+  color:#fff;
+  font-family:var(--font-sign);
+  font-size:clamp(16px,1.05vw,17.5px);
+  line-height:1.62; font-weight:450;
+  margin-top:-100vh;
+  padding:clamp(26px,2.4vw,36px) 0 clamp(88px,10vw,140px);
+  /* the ramp's last stop holds to the foot of the section, so one gradient is
+     both the join and the ground */
+  background:var(--sec8-band,
+    linear-gradient(180deg,
+      rgba(18,86,159,0) 0,
+      rgba(18,86,159,0) calc(var(--sec8-fade,180px) - 150px),
+      #12569f var(--sec8-fade,180px), #12569f 100%));
+}
+.sec8 *,.sec8 *::before,.sec8 *::after{ box-sizing:border-box }
+.sec8 img{ max-width:100%; display:block }
+.sec8 a{ color:inherit }
+
+.sec8 .inner{
+  position:relative; z-index:3;
+  max-width:var(--shell); margin:0 auto; padding:0 var(--gutter);
+}
+
+/* ---- the card, wearing section eight's palette --------------------------
+   form-card.css owns the layout and asks for nothing; this is the one place
+   that says what it looks like HERE, so night.css keeps reaching it through
+   the --sec8-* it already sets. The holding page sets its own. */
+.sec8 .fcard{
+  --fc-paper:var(--sec8-paper, #fff);
+  --fc-say-bg:var(--sec8-say-bg, linear-gradient(158deg,#1150bb 0%,#0b3b96 46%,#08307f 100%));
+  --fc-ink:var(--sec8-ink, #123a7a);
+  --fc-ask-ink:var(--sec8-ask-ink, #57729f);
+  --fc-ico:var(--sec8-ico, #7b95c0);
+  --fc-rule:var(--sec8-rule, #b9c9e4);
+  --fc-rule-on:var(--sec8-rule-on, #12569f);
+  --fc-edge:var(--sec8-edge, transparent);
+  --fc-link:var(--sec8-link, #123a7a);
+  --fc-btn:var(--yellow-500);
+}

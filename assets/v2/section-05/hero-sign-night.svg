@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="938.50" height="349.56" viewBox="583.47 168.97 938.50 349.56"><g id="hero-sign-Hero_Sign" data-name="Hero Sign">
+        <g>
+          <rect x="583.95" y="227.87" width="938.02" height="290.66" rx="26.4" ry="26.4" stroke="#000" stroke-miterlimit="10" stroke-width="2"></rect>
+          <rect x="583.47" y="226.45" width="938.02" height="290.66" rx="26.4" ry="26.4" fill="#0a3d1f" stroke="#fff" stroke-miterlimit="10" stroke-width="2"></rect>
+          <rect x="817.79" y="226.3" width="2.33" height="289.73" transform="translate(1637.8982 742.3288) rotate(-180)" fill="#fff"></rect>
+          <rect x="1061.48" y="226.3" width="2.33" height="289.73" transform="translate(2125.2796 742.3288) rotate(-180)" fill="#fff"></rect>
+          <rect x="1294.54" y="226.3" width="2.33" height="289.73" transform="translate(2591.4027 742.3288) rotate(-180)" fill="#fff"></rect>
+          <g>
+            <rect x="922.82" y="309.52" width="36.43" height="100.24" fill="#fff"></rect>
+            <path d="M940.48,261.56l-34.29,55.28h69.71l-35.42-55.28Z" fill="#fff" fill-rule="evenodd"></path>
+          </g>
+          <g>
+            <path d="M766.36,291.96l-52.6-32.62v66.32l52.6-33.69Z" fill="#fff" fill-rule="evenodd"></path>
+            <path d="M694.34,409.76h-32.95v-82.27c0-7.09,1.39-13.97,4.14-20.46,2.65-6.26,6.43-11.88,11.26-16.7,4.82-4.82,10.44-8.61,16.7-11.26,6.49-2.74,13.37-4.14,20.46-4.14h2.83v32.95h-2.83c-10.81,0-19.6,8.79-19.6,19.6v82.27Z" fill="#fff"></path>
+          </g>
+          <g>
+            <path d="M1116.84,293.4l52.6-32.62v66.32l-52.6-33.69Z" fill="#fff" fill-rule="evenodd"></path>
+            <path d="M1225.03,409.76h-32.95v-82.27c0-10.81-8.79-19.6-19.6-19.6h-2.83v-32.95h2.83c7.09,0,13.97,1.39,20.46,4.14,6.26,2.65,11.88,6.43,16.7,11.26,4.82,4.82,8.61,10.44,11.26,16.7,2.74,6.49,4.14,13.37,4.14,20.46v82.27Z" fill="#fff"></path>
+          </g>
+          <g>
+            <path d="M1369.78,379.95l-32.63-52.6h66.32l-33.69,52.6Z" fill="#fff" fill-rule="evenodd"></path>
+            <path d="M1466.98,409.76h-32.95v-82.27c0-10.81-8.79-19.6-19.6-19.6h-5.43c-10.93,0-19.83,8.9-19.83,19.83h-32.95c0-7.12,1.4-14.03,4.15-20.55,2.66-6.29,6.46-11.93,11.3-16.77,4.84-4.84,10.49-8.65,16.77-11.3,6.52-2.76,13.43-4.15,20.55-4.15h5.43c7.09,0,13.97,1.39,20.46,4.14,6.26,2.65,11.88,6.43,16.7,11.26,4.82,4.82,8.61,10.44,11.26,16.7,2.74,6.49,4.14,13.37,4.14,20.46v82.27Z" fill="#fff"></path>
+          </g>
+          <text transform="translate(940.77 465.63) scale(.97 1)" fill="#fff" font-family="BeVietnamPro-Black, 'Be Vietnam Pro'" font-size="24" font-weight="800" text-anchor="middle"><tspan x="0" y="0">Print Design</tspan></text>
+          <text transform="translate(1179.17 465.6352) scale(.9666 1)" fill="#fff" font-family="BeVietnamPro-Black, 'Be Vietnam Pro'" font-size="24" font-weight="800" text-anchor="middle"><tspan x="0" y="0">Video Production</tspan></text>
+          <text transform="translate(700.62 465.64) scale(.97 1)" fill="#fff" font-family="BeVietnamPro-Black, 'Be Vietnam Pro'" font-size="24" font-weight="800" text-anchor="middle"><tspan x="0" y="0">Website Design</tspan></text>
+          <text transform="translate(1409.17 462.8026) scale(.9666 1)" fill="#fff" font-family="BeVietnamPro-Black, 'Be Vietnam Pro'" font-size="24" font-weight="800" text-anchor="middle"><tspan x="0" y="0">Social Media</tspan></text>
+          <rect id="hero-sign-Hover_line" data-name="Hover line" x="855.21" y="488.86" width="173.7" height="2.73" rx="1.36" ry="1.36" fill="#fff"></rect>
+        </g>
+        <rect x="766.28" y="190.44" width="583.4" height="52.54" rx="9.81" ry="9.81"></rect>
+        <rect x="767.49" y="187.6" width="581.71" height="52.54" rx="7.34" ry="7.34" fill="#e7aa28" stroke="#fff" stroke-miterlimit="10" stroke-width="2"></rect>
+        <image width="711" height="713" transform="translate(995.05 168.97) scale(.19)" xlink:href="../../assets/v2/ui-shield.webp"></image>
+        <text transform="translate(881.27 221.35) scale(.97 1)" font-family="BeVietnamPro-Black, 'Be Vietnam Pro'" font-size="24" font-weight="800" text-anchor="middle"><tspan x="0" y="0">All Roads Lead </tspan></text>
+        <text transform="translate(1239.62 220.8451) scale(.9666 1)" font-family="BeVietnamPro-Black, 'Be Vietnam Pro'" font-size="24" font-weight="800" text-anchor="middle"><tspan x="0" y="0">To Your Business</tspan></text>
+      </g></svg>

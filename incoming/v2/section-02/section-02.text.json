@@ -1,0 +1,99 @@
+[
+  {
+    "text": "You've Been Down This Road Before",
+    "left": 42.74,
+    "top": 63.41,
+    "width": 40.15,
+    "align": "centre",
+    "lines": [
+      {
+        "txt": "You've Been Down This Road Before",
+        "left": 42.74,
+        "top": 63.41,
+        "size": 43.69,
+        "weight": "900"
+      }
+    ]
+  },
+  {
+    "text": "And somebody sold you a detour.",
+    "left": 51.03,
+    "top": 70.98,
+    "width": 16.96,
+    "align": "centre",
+    "lines": [
+      {
+        "txt": "And somebody sold you a detour.",
+        "left": 51.03,
+        "top": 70.98,
+        "size": 29.55,
+        "weight": "400"
+      }
+    ]
+  },
+  {
+    "text": "A template website that looks like",
+    "left": 44.23,
+    "top": 77.62,
+    "width": 35.15,
+    "align": "right",
+    "lines": [
+      {
+        "txt": "A template website that looks like nine hundred others. Stock photos",
+        "left": 44.9,
+        "top": 77.62,
+        "size": 19.71,
+        "weight": "300"
+      },
+      {
+        "txt": "A template website that looks like nine hundred others. Stock photos",
+        "left": 44.9,
+        "top": 77.62,
+        "size": 19.71,
+        "weight": "300"
+      },
+      {
+        "txt": "posted to your page for a monthly fee. You saw nothing come back and",
+        "left": 44.23,
+        "top": 80.32,
+        "size": 19.71,
+        "weight": "300"
+      },
+      {
+        "txt": "posted to your page for a monthly fee. You saw nothing come back and",
+        "left": 44.23,
+        "top": 80.32,
+        "size": 19.71,
+        "weight": "300"
+      },
+      {
+        "txt": "figured this stuff doesn't work for businesses like yours.",
+        "left": 44.35,
+        "top": 83.02,
+        "size": 19.71,
+        "weight": "300"
+      },
+      {
+        "txt": "It works. It just",
+        "left": 71.13,
+        "top": 83.02,
+        "size": 19.71,
+        "weight": "800"
+      },
+      {
+        "txt": "has to be built from your business, not pulled off a shelf.",
+        "left": 47.19,
+        "top": 85.72,
+        "size": 19.71,
+        "weight": "800"
+      },
+      {
+        "txt": "has to be built from your business, not pulled off a shelf.",
+        "left": 47.19,
+        "top": 85.72,
+        "size": 19.71,
+        "weight": "800"
+      }
+    ]
+  }
+]

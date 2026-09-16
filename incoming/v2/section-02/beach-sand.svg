@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" width="1920.8" height="530.4" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1920.8 530.4">
+  <defs>
+    <linearGradient id="linear-gradient" x1="960.4" y1="0" x2="960.4" y2="530.4" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fec35f"/>
+      <stop offset=".31" stop-color="#fdf6e4"/>
+      <stop offset="1" stop-color="#fdf6e4"/>
+    </linearGradient>
+  </defs>
+  <g id="Clouds">
+    <rect width="1920.8" height="530.4" fill="url(#linear-gradient)"/>
+  </g>
+</svg>

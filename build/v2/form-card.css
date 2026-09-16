@@ -1,0 +1,293 @@
+/* ============================================================================
+   THE FORM CARD
+   ----------------------------------------------------------------------------
+   His layout, and it stands on TWO pages now - the home page's close and the
+   holding page - so it is its own file with its own palette API rather than a
+   thing that belongs to section eight. A host sets the --fc-* it wants to
+   change on .fcard (or on anything above it) and leaves the rest; nothing in
+   here reaches out for a token that belongs to a section.
+
+   WHAT WE SAY on the dark half, WHAT WE ASK on the light one, and the join is
+   one ellipse arc bulging across. That is a border-radius, not a clip-path and
+   not an image: the right corners take a HORIZONTAL radius, which cuts the top
+   and bottom of that edge back, and a VERTICAL radius of half the panel's
+   height, which carries the two arcs into each other exactly at the middle.
+   One line, no raster, and it reflows at any size. On a phone the same arc
+   turns through ninety degrees - the BOTTOM corners take the horizontal radius
+   - and the bulge becomes a dome.
+   ========================================================================= */
+
+.fcard{
+  /* ---- the palette a host may change ---------------------------------- */
+  --fc-round:22px;
+  --fc-paper:#fff;                       /* the half we ask on */
+  --fc-say-bg:linear-gradient(158deg,#1150bb 0%,#0b3b96 46%,#08307f 100%);
+  --fc-say-ink:#fff;                     /* type on the dark half */
+  --fc-ink:#123a7a;                      /* type on the paper half */
+  --fc-ask-ink:#57729f;                  /* a request, not yet an answer.
+                                          4.7:1 on white - the shade above
+                                          it measured 4.42, and AA wants 4.5 */
+  --fc-ico:#7b95c0;
+  --fc-rule:#b9c9e4;
+  --fc-rule-on:#12569f;
+  --fc-edge:transparent;                 /* the hairline round the card */
+  --fc-link:#123a7a;
+  --fc-btn:#ffc72c; --fc-btn-ink:#0b2247; --fc-btn-hi:#ffd45a;
+  --fc-ok:#9df0bd; --fc-err:#ffc0c4;
+  --fc-cast:var(--fc-cast);
+  /* THE FIELD TYPE SIZE IS A TOKEN because the Notes rules are drawn in line
+     heights, and a gradient on the ROW cannot read the textarea's em. */
+  --fc-fs:clamp(.88rem,.98vw,.97rem);
+  --fc-line:calc(var(--fc-fs) * 2.15);
+
+  font-family:inherit;
+}
+.fcard *,.fcard *::before,.fcard *::after{ box-sizing:border-box }
+
+.fcard{
+  max-width:920px; margin:clamp(20px,3vw,44px) auto 0;
+  background:var(--fc-paper);
+  color:var(--fc-ink);
+  position:relative;
+  border-radius:var(--fc-round);
+  box-shadow:var(--fc-cast);
+}
+/* HIS HAIRLINE, AND IT HAS TO BE ON TOP. As an inset shadow on the card it was
+   painted first and the blue panel covered its own two thirds of it, so the
+   line only showed along the paper. A layer of its own goes over both halves
+   and follows the same corner radius. */
+.fcard::after{
+  content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
+  border-radius:inherit;
+  box-shadow:inset 0 0 0 1.5px var(--fc-edge);
+}
+.fcard .form__body{
+  display:grid; grid-template-columns:50% 1fr; align-items:stretch;
+}
+/* a display rule of our own beats the browser's [hidden], and form.js hides
+   this box by setting exactly that when the send lands */
+.fcard .form__body[hidden]{ display:none }
+
+/* ---- what we say -------------------------------------------------------- */
+.fcard .f-say{
+  grid-area:1 / 1;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; color:var(--fc-say-ink);
+  background:var(--fc-say-bg);
+  /* the bulge: horizontal radius cuts the corners back, vertical radius is
+     half the height so the two arcs meet in the middle */
+  border-radius:var(--fc-round) 30% 30% var(--fc-round) / var(--fc-round) 50% 50% var(--fc-round);
+  padding:clamp(20px,3.4vh,46px) clamp(30px,4.2vw,58px) clamp(20px,3.4vh,46px) clamp(26px,3.4vw,44px);
+}
+.fcard .headline{
+  display:flex; align-items:center; justify-content:center;
+  gap:clamp(12px,1.4vw,18px);
+}
+/* fc- prefixed, because the holding page has a .sign of its own - its
+   roadworks triangle - and that rule is #id-scoped, so it won an unprefixed
+   name and blew this plate up to the height of the headline. */
+.fcard .fc-sign{
+  height:clamp(48px,4.4vw,66px); width:auto; flex:none;
+  filter:drop-shadow(0 3px 8px rgba(0,0,0,.4));
+}
+.fcard h2{
+  margin:0; font-weight:800; line-height:1.06; letter-spacing:-.022em;
+  font-size:clamp(1.5rem,2.5vw,2.05rem); text-wrap:balance;
+}
+.fcard .sub{
+  margin:.7em 0 0; font-weight:600; line-height:1.3; letter-spacing:-.012em;
+  font-size:clamp(.98rem,1.18vw,1.1rem); color:color-mix(in srgb, var(--fc-say-ink) 95%, transparent);
+}
+.fcard .body-copy{
+  margin:.75em 0 0; max-width:34ch;
+  font-size:clamp(.86rem,.95vw,.95rem); line-height:1.52;
+  color:color-mix(in srgb, var(--fc-say-ink) 88%, transparent);
+}
+.fcard .btn{
+  margin:clamp(14px,2.2vh,26px) 0 0;
+  display:inline-flex; align-items:center; justify-content:center;
+  font:inherit; font-weight:800; font-size:clamp(.92rem,1.02vw,1rem);
+  letter-spacing:-.005em;
+  padding:.85em 1.9em; border:0; border-radius:999px;
+  background:var(--fc-btn); color:var(--fc-btn-ink); cursor:pointer;
+  box-shadow:0 6px 18px rgba(2,14,32,.35);
+  transition:background .16s ease, transform .16s ease, box-shadow .16s ease;
+}
+.fcard .btn:hover{ background:var(--fc-btn-hi); transform:translateY(-2px);
+  box-shadow:0 10px 24px rgba(2,14,32,.42) }
+.fcard .btn:active{ transform:translateY(0) }
+.fcard .btn:focus-visible{ outline:3px solid var(--fc-say-ink); outline-offset:3px }
+.fcard .btn[disabled]{ opacity:.6; cursor:default; transform:none }
+@media (prefers-reduced-motion:reduce){
+  .fcard .btn{ transition:background .16s ease }
+  .fcard .btn:hover{ transform:none }
+}
+/* the reply to a send, on his blue rather than on paper */
+.fcard .f-say .form__status{
+  margin:.9rem 0 0; font-size:.88rem; font-weight:600; min-height:1.2em;
+}
+.fcard .f-say .form__status.is-ok { color:var(--fc-ok) }
+.fcard .f-say .form__status.is-err{ color:var(--fc-err) }
+
+/* ---- what we ask -------------------------------------------------------- */
+.fcard .f-ask{
+  grid-area:1 / 2;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:clamp(18px,3.1vh,40px) clamp(26px,3.4vw,46px);
+}
+/* A ROW IS A MARK, A REQUEST AND A RULE - and the rule is under both, which is
+   why the row carries it rather than the input. */
+/* HIS PITCH, NOT MINE. On his artboard the seven rows sit 48px apart on a
+   card 920 wide - the rule between them IS the separation, and there is
+   almost no margin on top of it. Mine were 66 apart, which is where a card
+   he drew at 1.9 wide-to-tall became 1.5 and started filling the window.
+   The vertical measure is in vh as well as rem from here down, so a short
+   window closes the gaps rather than pushing the card off the screen. */
+.fcard .field{
+  position:relative; display:flex; align-items:center; gap:.7em;
+  padding:.35em 0 .3em; margin:0 0 clamp(2px,.55vh,7px);
+  border-bottom:1.5px solid var(--fc-rule);
+}
+/* A COLOUR CHANGE ON A HAIRLINE IS NOT A FOCUS INDICATOR. These rows took
+   outline:none - a box would have fought the design - and put the whole
+   signal into the rule going from grey to blue. Tabbing through with a
+   keyboard, that is almost impossible to follow, and no automated check
+   catches it because the colour did technically change.
+   So the rule THICKENS as well, and the row lights up behind it. Both at
+   once, so it survives being colour-blind and it survives a bright room. */
+.fcard .field:focus-within{
+  border-bottom-color:var(--fc-rule-on);
+  border-bottom-width:3px;
+  margin-bottom:calc(clamp(2px,.55vh,7px) - 1.5px);        /* no reflow */
+  background:var(--fc-focus, rgba(18,86,159,.07));
+  border-radius:4px 4px 0 0;
+}
+.fcard .field:focus-within .ico{ color:var(--fc-rule-on) }
+.fcard .field .ico{
+  width:1.16em; height:1.16em; flex:none; color:var(--fc-ico);
+}
+.fcard .field .sr-only{
+  position:absolute; width:1px; height:1px; margin:-1px; padding:0; border:0;
+  overflow:hidden; clip-path:inset(50%); white-space:nowrap;
+}
+.fcard .field input,
+.fcard .field select,
+.fcard .field textarea{
+  flex:1 1 auto; min-width:0; width:100%;
+  font:inherit; font-size:var(--fc-fs); font-weight:500;
+  color:var(--fc-ink);
+  background:transparent; border:0; outline:none; margin:0;
+  /* 23 PIXELS TALL WAS THE LINE BOX AND NOTHING ELSE. WCAG asks for 24 on a
+     pointer target, and a row you have to hit dead centre is a bad row on a
+     phone whatever the number says. */
+  padding:.32em .5em; border-radius:4px;
+}
+.fcard .field input::placeholder,
+.fcard .field textarea::placeholder{ color:var(--fc-ask-ink); opacity:1 }
+
+/* the two he draws with a chevron. appearance:none so the mark is ours and
+   not the operating system's, and the native one cannot show through. */
+.fcard .field--pick select{
+  appearance:none; -webkit-appearance:none;
+  padding-right:1.6em; cursor:pointer;
+}
+/* A SELECT STILL ON ITS FIRST OPTION IS A REQUEST, NOT AN ANSWER, and has to
+   read like the placeholders above it. :invalid needs `required`, which these
+   two are not - :has is what actually asks the question. */
+.fcard .field--pick select:has(option[value=""]:checked){ color:var(--fc-ask-ink) }
+.fcard .field--pick .chev{
+  position:absolute; right:0; top:50%; translate:0 -50%;
+  width:1.05em; height:1.05em; color:var(--fc-ico); pointer-events:none;
+}
+
+/* NOTES IS RULED PAPER, not a box - two lines, each with its own rule, which
+   is what he drew. The rules are one repeating gradient on the textarea, so
+   they follow the line height rather than being placed by hand, and the row
+   itself carries none. */
+/* THE RULES BELONG TO THE ROW, NOT TO THE TEXTAREA. On the textarea they
+   started where the text starts - inboard of the mark - and read as a
+   different kind of line from the six above them, which run the full width.
+   Drawn on the row they line up with the rest. They are measured in --fc-line
+   rather than em because the row's em is the section's and the textarea's is
+   its own. */
+.fcard .field--notes{
+  border-bottom:0; align-items:flex-start; padding-bottom:0;
+  background-repeat:no-repeat;
+  /* THE OFFSET IS THE ROW'S OWN TOP PADDING, and it has to stay that way:
+     tightening the rows moved the text up and left the rules where they were,
+     which took the second one off the bottom of the card entirely. The
+     textarea contributes no top padding of its own so there is one number
+     here, not two in different ems. */
+  background-position:0 .35em;
+  background-size:100% calc(var(--fc-line) * 2);
+  background-image:repeating-linear-gradient(to bottom,
+    transparent 0 calc(var(--fc-line) - 1.5px),
+    var(--fc-rule) calc(var(--fc-line) - 1.5px) var(--fc-line));
+}
+.fcard .field--notes .ico{ margin-top:.18em }
+.fcard .field--notes textarea{
+  resize:none; overflow:hidden; background:none; padding:0 .5em;
+  line-height:2.15em; height:4.3em;
+}
+
+.fcard .form__alt{
+  margin:clamp(.7rem,1.4vh,1.1rem) 0 0;
+  font-size:.72rem; line-height:1.5;
+  /* NO OPACITY HERE. It was .85, and a fade reads to the eye exactly like a
+     lighter colour while staying invisible to anyone reading the hex - it is
+     what took this line to 3.3:1 against a 4.5 requirement. A line that
+     should be quieter gets a quieter COLOUR. */
+  color:var(--fc-alt-ink, var(--fc-ask-ink));
+}
+.fcard .form__alt a{ font-weight:600; color:var(--fc-link);
+  text-underline-offset:2px }
+
+/* ---- the phone: his dome ------------------------------------------------- */
+/* Same two halves, stacked, and the arc turns through ninety degrees with
+   them: the blue panel's BOTTOM corners take the horizontal radius now, so
+   the edge that was a bulge to the right becomes a dome underneath. */
+@media (max-width:900px){
+  .fcard .form__body{ grid-template-columns:1fr }
+  .fcard .f-say{
+    grid-area:auto;
+    border-radius:var(--fc-round) var(--fc-round) 50% 50% / var(--fc-round) var(--fc-round) 22% 22%;
+    padding:clamp(28px,7vw,40px) clamp(24px,7vw,38px) clamp(46px,13vw,72px);
+  }
+  .fcard .f-ask{ grid-area:auto; padding:clamp(22px,6vw,34px) clamp(22px,6vw,34px) clamp(26px,7vw,38px) }
+  .fcard .headline{ justify-content:center }
+  /* fc- prefixed, because the holding page has a .sign of its own - its
+   roadworks triangle - and that rule is #id-scoped, so it won an unprefixed
+   name and blew this plate up to the height of the headline. */
+.fcard .fc-sign{ height:clamp(52px,13vw,68px) }
+  .fcard h2{ font-size:clamp(1.55rem,6.6vw,2.1rem) }
+  .fcard .sub{ font-size:clamp(1rem,4vw,1.16rem) }
+  .fcard .body-copy{ font-size:clamp(.88rem,3.5vw,1rem); max-width:38ch }
+  .fcard{ --fc-fs:1rem }
+}
+
+/* ---- and what the card becomes once it has been sent --------------------- */
+/* FIVE EMPTY FIELDS AND A SEND BUTTON UNDER THE WORD "GOT IT" is a form asking
+   to be filled in again. The card collapses to a single answer instead, and
+   the collapse is animated from the height it had to the height it needs -
+   see form.js, which measures both rather than guessing either. */
+.fcard{ overflow:hidden }
+.fcard .form__done{ text-align:center; padding:clamp(6px,1.2vw,14px) 0 }
+.fcard .form__done-sign{
+  display:block; margin:0 auto clamp(14px,1.8vw,22px);
+  height:clamp(56px,6vw,82px); width:auto;
+  filter:drop-shadow(0 3px 8px rgba(0,0,0,.28));
+}
+.fcard .form__done h3{
+  margin:0; font-weight:900; line-height:1.06; letter-spacing:-.02em;
+  font-size:clamp(1.45rem,2.5vw,2rem); color:var(--fc-ink);
+  text-wrap:balance;
+}
+.fcard .form__done p{
+  margin:.85em auto 0; max-width:38ch;
+  font-size:1.02rem; line-height:1.62; color:var(--fc-ask-ink);
+  text-wrap:pretty;
+}
+
+/* the success panel stands on the paper, and the card's padding lives on the
+   two halves - so this brings its own */
+.fcard .form__done{ padding:clamp(34px,4.4vw,58px) clamp(26px,4vw,52px) }

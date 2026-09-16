@@ -1,0 +1,70 @@
+<!-- ========================================================================
+     THE HEADER. It stands on both pages, so it lives here and is dropped in at
+     a marker by tools/make_page.js and tools/build_site.js.
+
+     TWO TOKENS, because two links differ between them and nothing else does:
+       {{ROOT}}  nothing on the home page, "/" on the holding page - so a nav
+                 item is #services there and /#services here.
+       {{LOGO}}  the lockup goes to the top of the home page, and to the home
+                 page itself from anywhere else.
+     Contact is #contact on both: each page has its own form.
+     {{SWITCH}} is the day/night button, which only the home page has a night
+     to switch to.
+     ======================================================================== -->
+<!-- THE FIRST THING IN THE TAB ORDER, and invisible until it is focused.
+     Without it a keyboard reader crosses the switch, the lockup, three nav
+     items and the contact button on every single page before reaching the
+     content - and on this one, the content is most of the page. -->
+<a class="skip" href="#top">Skip to content</a>
+<header class="hdr">
+  <div class="hdr-in">
+{{SWITCH}}    <a class="hdr-logo" href="{{LOGO}}">
+      <span class="hdr-lock">HIGHWAY<i>19</i>MEDIA</span>
+      <span class="hdr-rule"></span>
+      <span class="hdr-tag">Creative Marketing for Tampa Bay Businesses</span>
+    </a>
+    <img class="hdr-shield" src="../../assets/v2/ui-shield.webp" alt="Highway 19 Media">
+    <nav class="hdr-nav">
+      <a href="{{ROOT}}#services">Services</a>
+      <a href="{{ROOT}}#roadmap">The Road Map</a>
+      <a href="/coming-soon/">Q&amp;A</a>
+    </nav>
+    <!-- the label is its own element so a phone can drop it and keep the
+         handset - his button down there is a square with the icon in it and
+         nothing else - without the link losing its name to a screen reader -->
+    <a class="hdr-cta" href="#contact" aria-label="Contact us">
+      <img class="hdr-cta-i" src="../../assets/v2/header/phone.svg" alt="">
+      <!-- and the ink on its own for the phone's square button - inline,
+           because currentColor is the whole point of it and an <img> cannot
+           see the page -->
+      {{PHONE-GLYPH}}
+      <span class="hdr-cta-t">Contact Us</span>
+    </a>
+  </div>
+  <!-- HIS PULL-DOWN, under the bar and part of it. Three nav items will not fit
+       across 390 pixels beside his lockup at any size worth reading, and his
+       own drawing does not try: there is a second, shorter strip under the bar
+       with three white rules centred in it, and that is the menu. It rides
+       inside .hdr so the whole thing retracts as one object, and it is off
+       above the breakpoint, where the nav is already in the bar. -->
+  <button class="hdr-bar" type="button" aria-expanded="false"
+          aria-controls="hdr-menu" aria-label="Open the menu">
+    <span class="hdr-burger" aria-hidden="true"></span>
+  </button>
+  <!-- ONE CHILD, and it is not decoration. The drawer closes by taking its
+       grid row to 0fr, which is the only way to animate a height that is not
+       known - and grid-template-rows sets the FIRST row. Five links are five
+       rows, four of them implicit and auto-sized, so the thing stayed 247
+       pixels tall with its background painting over whatever was under the
+       bar: white over his hero by day, black over the contact headline at
+       night. The links go in one box and the box is the row. -->
+  <nav class="hdr-menu" id="hdr-menu" hidden>
+    <div class="hdr-menu-in">
+      <a href="{{ROOT}}#services">Services</a>
+      <a href="{{ROOT}}#roadmap">The Road Map</a>
+      <a href="{{ROOT}}#promise">How We Work</a>
+      <a href="/coming-soon/">Q&amp;A</a>
+      <a href="#contact">Contact Us</a>
+    </div>
+  </nav>
+</header>

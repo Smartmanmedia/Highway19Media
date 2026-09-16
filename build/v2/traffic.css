@@ -1,0 +1,76 @@
+/* The traffic layer: one <svg> per section, filling it, at his road's own
+   depth. In section four that is BELOW the rock band (z-ground, 2) and in
+   section two BELOW nothing that matters - which is how a car drives under
+   his mountains without a line of code asking it to.
+
+   overflow:visible so a car straddling a section's edge is clipped by the
+   SECTION rather than by this box; that clip is what makes the two halves of a
+   car crossing the one/two seam meet exactly. */
+section .traffic{
+  position:absolute; left:0; top:0; width:100%; height:100%;
+  overflow:visible; pointer-events:none;
+}
+@media (prefers-reduced-motion: reduce){ section .traffic{ display:none } }
+
+/* HIS CAR SHADOWS. The art carries no fill, so it renders black on its own;
+   the opacity is the same 0.30 the boats and the hero sign use, so one sun
+   lights the whole page. They are their own group inside each section's
+   traffic layer - see traffic.js for why the order of children was not
+   enough. */
+/* AND THEY GO OUT AFTER DARK, because there is no sun to cast them. That is
+   the correct picture and it is also the single most expensive layer in the
+   scene: a hundred-odd silhouettes of his own car art, re-rasterised every
+   frame because they move and scale. Measured, taking them out of the night
+   frame is 28% of it. Nothing is lost - a thirty-per-cent black shadow on a
+   road that is itself nearly black was never visible; what reads as a car
+   sitting on the tarmac at night is the lamp pool it drives through. */
+section .traffic .shades{ opacity:calc(.30 * (1 - var(--night, 0)));
+  transition:opacity 1s linear }
+@media (prefers-reduced-motion: reduce){ section .traffic .shades{ transition:none } }
+
+/* HIS HEADLIGHTS. One group, one number: zero through the day - not faint,
+   zero, because a beam at noon reads as a mistake - and full at night, over a
+   second so the change is a fade. The screen blend that makes them read as
+   light on the road rather than yellow paint over it is set inline on the
+   group in traffic.js, because a browser ignores it written as an attribute. */
+section .traffic .beams{
+  opacity:var(--night, 0);
+  transition:opacity 1s linear;
+}
+@media (prefers-reduced-motion: reduce){ section .traffic .beams{ transition:none } }
+
+/* HIS CARS AT NIGHT. Zero by day, so the layer never composites at all. */
+section .traffic .shades{ fill:#000 }
+/* HIS CARS AT NIGHT: a tenth of their brightness and a fifth of their colour
+   with it. ONE FILTER ON THE GROUP, not a sprite each.
+
+   It was his shadow silhouette laid exactly over every vehicle in a near-black
+   - the right instinct when the alternative was a filter PER CAR, and the
+   wrong one against a filter on the group they all live in. That is one pass
+   over one buffer instead of thirty-five more moving sprites to transform and
+   composite, and it measured three and a half milliseconds a frame back on his
+   coast road after dark.
+
+   THE NUMBERS ARE THE SAME PICTURE. 0.92 of an rgb(2,2,5) tint put a mid-tone
+   car at a tenth of its brightness and a fifth of its saturation, which is
+   what solving for both at once gave; brightness and saturate say it directly.
+
+   AND THERE IS NO FILTER AT ALL IN THE DAY SCENE. A filter list interpolating
+   from `none` is treated as the same list at its identity values, so the fade
+   still works in both directions and daylight pays nothing for it. */
+section .traffic .cars{ transition:filter 1s linear }
+:root[data-mode="night"] section .traffic .cars,
+:root[data-theme="dark"]:not([data-mode="day"]) section .traffic .cars{
+  filter:brightness(.10) saturate(.20);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-mode="day"]):not([data-theme="light"]) section .traffic .cars{
+    filter:brightness(.10) saturate(.20);
+  }
+}
+@media (prefers-reduced-motion: reduce){ section .traffic .cars{ transition:none } }
+
+/* A LONG PRESS ON THE ROAD IS NOT A DRAG AND NOT A SELECTION. Stopping a car
+   is a tap, but a finger that rests on his tarmac would otherwise get the
+   browser's own "save image" callout over the top of the scene. */
+section .traffic{ -webkit-touch-callout:none; -webkit-user-select:none; user-select:none }

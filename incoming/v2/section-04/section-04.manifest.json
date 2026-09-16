@@ -1,0 +1,99 @@
+{
+  "file": "section-04.svg",
+  "artboard": {
+    "w": 1930.6,
+    "h": 1626.4
+  },
+  "column": {
+    "x": 0,
+    "w": 1930.6
+  },
+  "bleed": {
+    "left": 0,
+    "right": 0
+  },
+  "aspect": 0.8424,
+  "layers": [
+    {
+      "name": "Clouds",
+      "shapes": 3278,
+      "left": -2.92,
+      "top": 0,
+      "width": 104.16,
+      "height": 115.65,
+      "bleeds": true
+    },
+    {
+      "name": "Cloud2",
+      "shapes": 38,
+      "left": 6.25,
+      "top": 15.56,
+      "width": 29.6,
+      "height": 21.65,
+      "bleeds": false
+    },
+    {
+      "name": "Our_sign",
+      "shapes": 4,
+      "left": 41.7,
+      "top": 24.45,
+      "width": 44.27,
+      "height": 18.41,
+      "bleeds": false
+    },
+    {
+      "name": "Stright",
+      "shapes": 10,
+      "left": 0.45,
+      "top": 58.67,
+      "width": 17.79,
+      "height": 6.18,
+      "bleeds": false
+    },
+    {
+      "name": "Curve",
+      "shapes": 25,
+      "left": 18.02,
+      "top": 58.67,
+      "width": 23.23,
+      "height": 26.01,
+      "bleeds": false
+    },
+    {
+      "name": "End_rocks",
+      "shapes": 829,
+      "left": -2.92,
+      "top": 63.84,
+      "width": 104.16,
+      "height": 51.81,
+      "bleeds": true
+    },
+    {
+      "name": "Trees",
+      "shapes": 673,
+      "left": -2.19,
+      "top": 64.02,
+      "width": 26.3,
+      "height": 16.91,
+      "bleeds": true
+    },
+    {
+      "name": "Explore_Our_Services",
+      "shapes": 14,
+      "left": 54.97,
+      "top": 70.26,
+      "width": 19.21,
+      "height": 4.01,
+      "bleeds": false
+    },
+    {
+      "name": "Stright-2",
+      "shapes": 8,
+      "left": 36.11,
+      "top": 83.9,
+      "width": 5.21,
+      "height": 21.11,
+      "bleeds": false
+    }
+  ]
+}

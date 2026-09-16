@@ -1,0 +1,181 @@
+<!-- ========================================================================
+     THE FORM CARD - markup and the signs it uses.
+     It stands on two pages (the home page close and the holding page), so it
+     lives here and is dropped into both at build time wherever the card
+     marker appears - see tools/make_page.js and tools/build_site.js, which
+     name it. It cannot be quoted in here: an HTML comment ends at the first
+     close sequence, whatever it was meant to be quoting. Edit the card once
+     and both pages follow.
+     ======================================================================== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <symbol id="sg-motorway" viewBox="0 0 285.08 435.17">
+    <g>
+      <rect x="-74.55" y="75.55" width="434.17" height="284.08" rx="5.42" ry="5.42" transform="translate(-75.05 360.13) rotate(-90)" fill="#fff"/>
+      <path d="M279.16,435.17H5.92c-3.26,0-5.92-2.65-5.92-5.92V5.92C0,2.65,2.65,0,5.92,0h273.25c3.26,0,5.92,2.65,5.92,5.92v423.34c0,3.26-2.65,5.92-5.92,5.92ZM5.92,1C3.21,1,1,3.21,1,5.92v423.34c0,2.71,2.21,4.92,4.92,4.92h273.25c2.71,0,4.92-2.21,4.92-4.92V5.92c0-2.71-2.21-4.92-4.92-4.92H5.92Z"/>
+    </g>
+    <rect x="4.66" y="4.66" width="275.76" height="425.86" rx="4" ry="4" transform="translate(285.08 435.17) rotate(-180)" fill="#059236"/>
+    <g>
+      <polygon points="26.87 176.06 26.87 192.52 48.97 192.52 48.97 204.85 66.34 204.85 66.34 192.52 220.8 192.52 220.8 204.85 238.16 204.85 238.16 192.52 258.21 192.52 258.21 176.06 26.87 176.06" fill="#fff"/>
+      <polygon points="135.86 58.85 113.24 58.85 98.69 162.7 129.77 162.7 135.86 58.85" fill="#fff"/>
+      <polygon points="69.02 374.51 117.35 374.51 127.3 204.85 92.79 204.85 69.02 374.51" fill="#fff"/>
+      <polygon points="186.39 162.7 171.84 58.85 149.22 58.85 155.31 162.7 186.39 162.7" fill="#fff"/>
+      <polygon points="157.78 204.85 167.73 374.51 216.06 374.51 192.29 204.85 157.78 204.85" fill="#fff"/>
+    </g>
+  </symbol>
+  <symbol id="sg-warning" viewBox="0 0 64 60">
+    <path d="M32 3.6 61.4 55.4H2.6z" fill="#fff" stroke="#e01b24" stroke-width="6.4" stroke-linejoin="round"/>
+    <path d="M29.9 20h4.2l-.8 18h-2.6z" fill="#161616"/>
+    <circle cx="32" cy="44.6" r="2.9" fill="#161616"/>
+  </symbol>
+  <!-- THE SEVEN FIELD MARKS from his layout. One stroked path each, drawn on
+       a 24 box so they all sit on the same optical weight, and they take
+       currentColor so the one token colours them in both palettes. -->
+  <symbol id="ic-user" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="8" r="3.6"/><path d="M4.8 20c.9-3.7 3.8-5.6 7.2-5.6s6.3 1.9 7.2 5.6"/>
+  </symbol>
+  <symbol id="ic-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2.8" y="5.2" width="18.4" height="13.6" rx="2.2"/><path d="m3.6 7 8.4 6 8.4-6"/>
+  </symbol>
+  <symbol id="ic-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9S9.6 5.5 12 3Z"/>
+  </symbol>
+  <symbol id="ic-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="6.4" y="2.4" width="11.2" height="19.2" rx="2.6"/><path d="M10.4 18.6h3.2"/>
+  </symbol>
+  <symbol id="ic-search" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="10.6" cy="10.6" r="6.4"/><path d="m15.4 15.4 4.8 4.8"/>
+  </symbol>
+  <symbol id="ic-info" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="9"/><path d="M12 11v5.4"/><path d="M12 7.7v.1"/>
+  </symbol>
+  <symbol id="ic-clip" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 11.5 12.2 19.3a5 5 0 0 1-7.1-7.1l8.3-8.3a3.4 3.4 0 0 1 4.8 4.8l-8.3 8.3a1.8 1.8 0 0 1-2.5-2.5l7.5-7.5"/>
+  </symbol>
+  <symbol id="ic-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m5.5 9 6.5 6.5L18.5 9"/>
+  </symbol>
+</defs></svg>
+
+    <!-- HIS CARD, TWO HALVES. What he says is on the left, on his blue; what
+     he asks for is on the right, on paper. The join is not a straight
+     line: the blue panel's right edge is one ellipse arc bulging into the
+     paper, which is a border-radius rather than a clip path or an image -
+     the corners' horizontal radius cuts the top and bottom back while the
+     vertical radius, half the panel's height, carries the two arcs into
+     each other at the middle. It costs nothing and it reflows.
+
+     AND THE WHOLE THING IS THE FORM. The headline used to stand on the sky
+     above a separate card; his layout puts it inside, which means the
+     copy, the button and the fields are one element and the success panel
+     can replace all of it at once. -->
+<form class="form fcard" id="contact-form" novalidate
+  data-to="highway19media@gmail.com"
+  data-endpoint="https://api.web3forms.com/submit"
+  data-key="e2f57011-b7df-4b38-9c6d-6ba1bf1c04b7">
+<div class="form__body">
+
+  <!-- WHAT WE SAY -->
+  <div class="f-say">
+    <div class="headline">
+  <svg class="fc-sign" viewBox="0 0 285.08 435.17" aria-hidden="true" focusable="false"><use href="#sg-motorway"/></svg>
+  <h2>Ready to Take<br>the Wheel?</h2>
+    </div>
+    <p class="sub">The Road to Success Starts Here.</p>
+    <p class="body-copy">
+  Send us what you&rsquo;ve got right now &mdash; your site, your page, your logo,
+  whatever exists. Within 24&nbsp;hours, we&rsquo;ll come back with an honest read
+  on where you stand and what we&rsquo;d do next.
+    </p>
+    <button class="btn" type="submit">Let&rsquo;s go Places</button>
+    <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
+  </div>
+
+  <!-- WHAT WE ASK. Each row is a mark, the request itself as the
+   placeholder, and a rule under the pair. -->
+  <div class="f-ask">
+    <div class="field">
+  <svg class="ico" aria-hidden="true" focusable="false"><use href="#ic-user"/></svg>
+  <label class="sr-only" for="f-name">Name</label>
+  <input id="f-name" name="name" type="text" autocomplete="name" placeholder="Name" required>
+    </div>
+    <div class="field">
+  <svg class="ico" aria-hidden="true" focusable="false"><use href="#ic-mail"/></svg>
+  <label class="sr-only" for="f-email">Email</label>
+  <input id="f-email" name="email" type="email" autocomplete="email" placeholder="Email" required>
+    </div>
+    <div class="field">
+  <svg class="ico" aria-hidden="true" focusable="false"><use href="#ic-globe"/></svg>
+  <label class="sr-only" for="f-site">Website</label>
+  <input id="f-site" name="website" type="text" autocomplete="url" placeholder="Website">
+    </div>
+    <div class="field">
+  <svg class="ico" aria-hidden="true" focusable="false"><use href="#ic-phone"/></svg>
+  <label class="sr-only" for="f-phone">Phone Number</label>
+  <input id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="Phone Number">
+    </div>
+    <div class="field field--pick">
+  <svg class="ico" aria-hidden="true" focusable="false"><use href="#ic-search"/></svg>
+  <label class="sr-only" for="f-want">Interested In</label>
+  <select id="f-want" name="interested">
+    <option value="" selected>Interested In</option>
+    <option>Website</option>
+    <option>Video Production</option>
+    <option>Print &amp; Branding</option>
+    <option>Social &amp; Paid Ads</option>
+    <option>Not sure yet</option>
+  </select>
+  <svg class="chev" aria-hidden="true" focusable="false"><use href="#ic-chev"/></svg>
+    </div>
+    <div class="field field--pick">
+  <svg class="ico" aria-hidden="true" focusable="false"><use href="#ic-info"/></svg>
+  <label class="sr-only" for="f-heard">How you Heard About Us</label>
+  <select id="f-heard" name="heard">
+    <option value="" selected>How you Heard About Us</option>
+    <option>Google</option>
+    <option>Facebook or Instagram</option>
+    <option>A friend told me</option>
+    <option>I saw your work</option>
+    <option>Other</option>
+  </select>
+  <svg class="chev" aria-hidden="true" focusable="false"><use href="#ic-chev"/></svg>
+    </div>
+    <div class="field field--notes">
+  <svg class="ico" aria-hidden="true" focusable="false"><use href="#ic-clip"/></svg>
+  <label class="sr-only" for="f-msg">Notes</label>
+  <textarea id="f-msg" name="message" rows="2" placeholder="Notes"></textarea>
+    </div>
+
+    <!-- NOT FOR PEOPLE. Off screen rather than display:none, because a bot
+     that reads the markup will fill anything it can see there and a
+     screen reader is told to skip it. form.js answers a filled one
+     like a success and sends nothing. -->
+    <input type="checkbox" name="botcheck" tabindex="-1" aria-hidden="true"
+       style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+
+    <p class="form__alt">
+  Rather just write? <a href="mailto:highway19media@gmail.com">highway19media@gmail.com</a>
+    </p>
+  </div>
+</div>
+
+<!-- AND WHAT STANDS THERE AFTERWARDS. Seven empty fields and a button left
+     sitting under "Got it" is a form asking to be filled in again; the one
+     thing a reader wants at that moment is to know what happens next. The
+     card collapses to this. -->
+<div class="form__done" hidden>
+  <svg class="form__done-sign" viewBox="0 0 285.08 435.17" aria-hidden="true"
+   focusable="false"><use href="#sg-motorway"/></svg>
+  <h3>You&rsquo;re On the Right Path.</h3>
+  <p>We&rsquo;ve got it. Within 24&nbsp;hours we&rsquo;ll come back with an honest read
+     on what you have now &mdash; what&rsquo;s working, what isn&rsquo;t, and what
+     we&rsquo;d do first. No pitch, and no call unless you ask for one.</p>
+</div>
+</form>

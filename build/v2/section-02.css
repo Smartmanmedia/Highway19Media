@@ -1,0 +1,252 @@
+/* ============================================================================
+   SECTION TWO — the beach
+   ----------------------------------------------------------------------------
+   Same rule as section one: the section is a fixed ratio of its own width and
+   everything inside is a percentage of that box. His artboard is 1938.1 wide
+   and his sand runs x 15.23 for 1920.8 — that sand IS the art column, the same
+   way the ocean was in section one, so the ratio is 931.4 / 1920.8.
+   ========================================================================= */
+
+.sec2{
+  position:relative;
+  width:100%;
+  aspect-ratio:1920.8 / 931.4;          /* 0.4849 */
+  container-type:inline-size;
+  /* HIS OWN OCEAN COLOUR, taken off the top band of the wave art itself
+     rather than section one's. His band runs #004ba0 to #0561ca ACROSS THE
+     IMAGE, and the image is 126% of the section, so the part you can actually
+     see is the middle 79% of that ramp: #014ea5 to #055fc6. Section one fades
+     into this blue at its bottom edge, so the join has no line.
+
+     THE BAND STOPS ON TOP OF IT ARE THE OCEAN'S OWN COLOURS, sampled straight
+     down the wave art by tools/ocean_underlay.js. You never see them: the art
+     paints over every one. They are here for the moment the browser is short
+     of memory and has not finished painting - which is what made the ocean
+     look like it stopped in mid-air. Now the wrong thing to see is the right
+     colour at the right height, with only the wave edges missing. */
+  background: var(--sec2-bg,
+    linear-gradient(180deg,
+      #0357b6 0.03%, #0256b5 12.41%, #a2c1e4 12.54%, #ffffff 12.67%,
+      #ffffff 12.80%, #92b2d8 12.93%, #014ca4 13.07%, #014ca4 13.59%,
+      #0364d7 13.85%, #0263d6 17.37%, #0087ef 17.63%, #0087ef 26.76%,
+      #2f9ef2 26.89%, #ffffff 27.02%, #ffffff 27.54%, #3a8ec5 27.67%,
+      #016db4 27.80%, #016db4 28.19%, #0195e8 28.32%, #039ff3 28.45%,
+      #029ef3 33.80%, #52ade3 34.06%, #52ade3 42.66%, #acd5f3 42.79%,
+      #eef1ff 42.92%, #eef2ff 45.40%),
+    linear-gradient(90deg,#014ea5 0%,#055fc6 100%));
+  overflow:hidden;
+  isolation:isolate;
+}
+
+/* his sand: one rect with a vertical gradient, so a CSS gradient and no shapes.
+   The box starts at 36% rather than his 43.05% so the surf overlaps it by 14.3%
+   of the section - 103px at 1920, 79px at 1480, and past 50px down to a 930px
+   screen. The gradient itself is still pinned to his 43.05%-to-100% run
+   (sized to 88.98% of a box that is 64% tall, anchored to the bottom), so the
+   sand you can actually see is the colour he drew; only the part hidden under
+   the surf is new. */
+.sec2 .sand{
+  position:absolute; left:0; right:0; top:36%; bottom:0;
+  background: var(--sec2-sand,
+    /* HIS BEACH NOW WALKS INTO HIS DESERT. It used to hold #fdf6e4 flat all
+       the way to its foot and then meet the desert's #fedca3 across the road
+       - two thirds of a step in green and blue, in one line, which is the
+       edge he could see. The last quarter warms into the top of his desert
+       art instead, so the two sands are the same colour where they meet and
+       the road is the only thing between them. His own colours either end;
+       only the run between them is new. */
+    linear-gradient(180deg,#fec35f 0%,#fdf6e4 31%,#fdf6e4 50%,
+                    #fef1d8 72%,#ffd486 92%,#ffd486 100%) 0 100% / 100% 88.98% no-repeat,
+    #fec35f);
+  z-index:0;
+}
+
+/* --- THE SURF, MOVING ---------------------------------------------------
+   HIS CLIPPATH, AS A WRAPPER. waves.svg carried a clip rect at x 15.63 w
+   1922.47, trimming the 15pc of bleed he drew past his artboard - and it lands
+   within 2px of the section's own edges. It becomes overflow:hidden here,
+   because the window has to STAY STILL while the bands slide under it. That is
+   what makes this safe: no band can ever bring an edge into view, whatever it
+   does, because there are 302px of his art hidden to the left and 213px to the
+   right at a 1990 screen, and 17px below.
+
+   The wrapper is a hair wider than his clip (0 to 100pc rather than 0.02 to
+   100.11pc) - which reveals 2px MORE of his art on the right, never less.
+   ---------------------------------------------------------------------- */
+.sec2 .waves{
+  position:absolute; left:0; right:0; top:0;
+  /* HIS CLIP RECT WAS y 0 h 452.8 of a 486.84 box - 48.613% - but that cut
+     into his own foam: the surf band's paint runs on to 50.34%, and the 1.7%
+     he was hiding is exactly the edge that should lie OVER the sand. Taken to
+     the full extent of his ink, so the surf finishes on the beach rather than
+     disappearing behind it. */
+  height:50.34%;
+  overflow:hidden; z-index:1; pointer-events:none;
+}
+/* every band keeps the WHOLE of his geometry - same viewBox, same box - so the
+   four of them are registered to each other to the unit. Only the percentages
+   change, because they resolve against the wrapper now and not the section. */
+.sec2 .waves .wave{
+  position:absolute; left:-15.17%; top:-3.970%; width:126%; height:auto;
+  display:block;
+}
+
+/* HIS SWELL. One ellipse per band, traversed at a constant speed, which is
+   what water does - a wave surges sideways and lifts at the same time, and the
+   two are a quarter-cycle apart. --ax and --ay are the amplitude, in cqw, so
+   the motion is a share of the section and scales with everything else.
+
+   NEAREST MOVES MOST, and the four periods share no common multiple, so the
+   bands drift through each other and the picture never repeats. The negative
+   delays start each one part-way round, so they are already out of phase at
+   first paint rather than setting off together.
+
+   THE LIFT IS WHAT YOU ACTUALLY SEE, not the drift. Sliding a long horizontal
+   wavy line sideways is close to invisible - the line is quasi-periodic, so a
+   shifted copy looks like the same line. It is the vertical that reads. The
+   first pass had 18px of side-to-side against 5px of lift and the whole thing
+   was imperceptible; the lift now carries most of it. 24px across and 15px up
+   at the shore, 9px and 5px at the horizon, on a 1990 screen. */
+@keyframes swell{
+  0%   { translate: calc(var(--ax) * var(--swell) * -1) 0 }
+  25%  { translate: 0 calc(var(--ay) * var(--swell)) }
+  50%  { translate: calc(var(--ax) * var(--swell)) 0 }
+  75%  { translate: 0 calc(var(--ay) * var(--swell) * -1) }
+  100% { translate: calc(var(--ax) * var(--swell) * -1) 0 }
+}
+.sec2 .waves .wave{
+  animation: swell var(--dur) linear var(--delay) infinite;
+}
+/* ONE DIAL FOR THE WHOLE OCEAN. --swell scales all four bands together and
+   keeps their relation, so there is one number to turn if it reads too strong
+   or too weak. 0 stops it dead; 2 is twice this. The headroom is enormous -
+   even at 4 the nearest band has 300px of his bleed left on either side - so
+   the only limit is taste. */
+.sec2 .waves{ --swell:1 }
+.sec2 .wave-surf { --ax:1.20cqw; --ay:0.75cqw; --dur:9s;  --delay:0s }
+.sec2 .wave-mid  { --ax:0.90cqw; --ay:0.55cqw; --dur:12s; --delay:-3.5s }
+.sec2 .wave-swell{ --ax:0.65cqw; --ay:0.38cqw; --dur:15s; --delay:-7s }
+.sec2 .wave-far  { --ax:0.45cqw; --ay:0.25cqw; --dur:19s; --delay:-11s }
+
+/* off screen it stops - four forever-animations on a page this long is exactly
+   the kind of cost that adds up for nothing. parallax.js sets .still. */
+.sec2 .waves.still .wave{ animation-play-state:paused }
+
+@media (prefers-reduced-motion: reduce){
+  .sec2 .waves .wave{ animation:none }
+}
+
+/* --- HIS NIGHT OCEAN ----------------------------------------------------
+   waves_Night.svg is his day surf recoloured - same eleven shapes, same
+   order, same geometry - so night is a set of colours on HIS OWN GRADIENT
+   STOPS and not a second copy of the art in the page. Two reasons that is
+   the right shape for it. A stop-color animates, so the sea turns over the
+   same second as the sky rather than snapping the moment the mode changes;
+   and there is one set of paths to move, so the four bands cannot drift out
+   of register with each other.
+
+   THE DAY VALUE IS THE FALLBACK IN EVERY ONE OF THESE, taken off his own
+   day file, so with no night variables set this whole block resolves back to
+   the picture he drew and daylight cannot be changed from here by accident.
+   One variable serves both ends of a gradient wherever his night colour is
+   flat - the two ends only differ in daylight, and that difference lives in
+   the fallback.
+
+   His foam and his #002b61 shade stay as they are in three bands of the
+   four: what turns is the water under them. The exception is the horizon,
+   where he lifts the shade to #233e77 and drops the crest altogether - no
+   white water that far out at night.
+
+   Addressed by position rather than by class because these paths are his,
+   pasted whole by tools/split_waves.js; giving them classes would mean
+   hand-editing his art back in every time he re-exports. The order is his
+   paint order: shade, crest, water. */
+/* HIS FOAM, MOONLIT. It was the one thing left at daylight value - a flat
+   #fff on the two crest lines and a ramp to #fefeff across the broad wedge at
+   the shore - and against water taken down to a lightness of 36 it was the
+   only bright thing in the section by a factor of seven. Muted to 121 at the
+   wedge's dark end and 157 at its light one, which still puts it four times
+   above the water it breaks on: foam under a moon rather than under a sun. */
+.sec2 #waves-g1 stop:first-child{ stop-color: var(--sea-foam-a, #dee5ff) }
+.sec2 #waves-g1 stop:last-child { stop-color: var(--sea-foam-b, #fefeff) }
+.sec2 .waves [fill="#fff"]{ fill: var(--sea-foam, #fff); transition: fill 1s linear }
+.sec2 #waves-g2 stop:first-child{ stop-color: var(--sea-surf-hi, #93dbfb) }
+.sec2 #waves-g2 stop:last-child { stop-color: var(--sea-surf-hi, #1281cc) }
+.sec2 #waves-g3 stop:first-child{ stop-color: var(--sea-surf-lo, #00ccfd) }
+.sec2 #waves-g3 stop:last-child { stop-color: var(--sea-surf-lo, #0572e9) }
+.sec2 #waves-linear-gradient-2 stop:first-child{ stop-color: var(--sea-mid, #0094f6) }
+.sec2 #waves-linear-gradient-2 stop:last-child { stop-color: var(--sea-mid, #007be8) }
+.sec2 #waves-linear-gradient-3 stop:first-child{ stop-color: var(--sea-swell, #0066e2) }
+.sec2 #waves-linear-gradient-3 stop:last-child { stop-color: var(--sea-swell, #0561ca) }
+.sec2 #waves-linear-gradient-4 stop:first-child{ stop-color: var(--sea-far-a, #004ba0) }
+.sec2 #waves-linear-gradient-4 stop:last-child { stop-color: var(--sea-far-b, #0561ca) }
+.sec2 .waves stop{ transition: stop-color 1s linear }
+
+/* --- HIS NIGHT BEACH ----------------------------------------------------
+   The second place a brightness cannot go. His day sand is a warm tan and his
+   night sand is a dark violet, so taking the tan down only ever gave darker
+   tan - a black hole under his water, where his own artboard has the one warm
+   surface in the section.
+
+   These are his colours off artboard two, read across it at every 4pc of its
+   height: bluest where the water leaves it, warmest a third of the way down,
+   easing back at the foot. It is laid over his day sand rather than replacing
+   it because a background-image cannot be transitioned and a fade cannot be
+   faked - the sea beside it turns over a second, and a beach that snapped
+   would be the one thing in the section that did. At opacity 0 this is his
+   daylight, untouched, and the whole night lives in one number. */
+.sec2 .sand::after{
+  content:''; position:absolute; inset:0;
+  /* OFF THE PURPLE. His artboard sand reads #1e192b through the middle -
+     more red than green, which is what makes it violet next to a blue
+     desert. The same lightnesses with green brought up past red and the
+     blue lifted a little: a blue-grey sand rather than a mauve one, so the
+     two sections sit in the same family with the desert below. */
+  /* OFF THE PURPLE, TWICE. Bringing green past red was not enough: these
+     still sat at a hue of 230 to 234, and 234 is violet - blue is 240 with
+     red climbing back in beyond it. Every stop is turned to a hue of 218,
+     the side of blue with no red in it, then scaled back to the luminance
+     it had, because a hue turn on its own lifts a colour and this scene is
+     going down, not up. His dunes below take the identical turn. */
+  background: linear-gradient(180deg,
+    #0b1321 0%, #0e1522 22%, #171e2a 53%, #151c28 88%, #151e2f 100%);
+  opacity: var(--night, 0);
+  transition: opacity 1s linear;
+}
+
+/* the horizon band: his shade lifts, his crest goes */
+.sec2 .wave-far > g > path:nth-child(1){
+  fill: var(--sea-far-shade, #002b61);
+  transition: fill 1s linear;
+}
+.sec2 .wave-far > g > path:nth-child(2){
+  opacity: var(--sea-far-foam, 1);
+  transition: opacity 1s linear;
+}
+
+.sec2 [data-at]{ position:absolute; display:block }
+.sec2 img[data-at], .sec2 svg[data-at]{ height:auto }
+/* the surf sits ON the sand by its own z-index, not by being later in the
+   markup - painting order is too easy to break by moving one line */
+.sec2 .z-ground{ z-index:1 } .sec2 .z-road{ z-index:2 }
+.sec2 .z-copy{ z-index:3 }   .sec2 .z-cloud{ z-index:4 }
+
+/* his type, his sizes, his weights, his squeeze — all read out of the export */
+.sec2 .copy{
+  position:absolute; margin:0; text-align:center; color:var(--sec2-ink, #333);
+  font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
+}
+.sec2 [style*="--sx"]{ transform:scaleX(var(--sx)); transform-origin:50% 0 }
+.sec2 h2.copy{
+  margin:0; font-weight:900; line-height:1.06; font-size:2.275cqw;
+  /* his heading is one line, and his box is its ink width — which is exactly
+     the width at which a browser decides to wrap it */
+  white-space:nowrap;
+}
+.sec2 .sub{
+  font-size:1.538cqw; font-weight:400; line-height:1.28;
+  font-family:"Highway Gothic Expanded","Be Vietnam Pro",Arial,sans-serif;
+}
+.sec2 .sub span{ display:block; white-space:nowrap }
+.sec2 .body{ font-size:1.026cqw; font-weight:300; line-height:1.42 }
+.sec2 .body b{ font-weight:800 }

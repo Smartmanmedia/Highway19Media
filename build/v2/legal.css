@@ -1,0 +1,67 @@
+/* ============================================================================
+   THE LEGAL PAGES - privacy, terms, cookies.
+   ----------------------------------------------------------------------------
+   One stylesheet, one shell, three bodies. These are pages people arrive at to
+   check one thing and leave, so they are set to be READ: a single column at a
+   comfortable measure, his type, and nothing moving. No scene, no traffic, no
+   night palette - the header and the footer carry the brand and the rest is
+   just prose on paper.
+   ========================================================================= */
+.legal{
+  --blue-900:#062f5e; --blue-700:#12569f;
+  --ink:#16202e; --ink-soft:#4a5668; --rule:#dfe6f0;
+  --font-sign:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+
+  font-family:var(--font-sign);
+  color:var(--ink); background:#fff;
+  font-size:clamp(16px,1.02vw,17px); line-height:1.7; font-weight:400;
+  padding:clamp(28px,5vw,64px) clamp(20px,5vw,40px) clamp(56px,8vw,96px);
+}
+.legal *,.legal *::before,.legal *::after{ box-sizing:border-box }
+.legal .wrap{ max-width:46rem; margin:0 auto }
+
+.legal .eyebrow{
+  margin:0 0 .6em; font-size:.74rem; font-weight:800;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--blue-700);
+}
+.legal h1{
+  margin:0; font-weight:800; line-height:1.06; letter-spacing:-.025em;
+  font-size:clamp(2rem,4.4vw,3rem); text-wrap:balance;
+}
+.legal .stamp{
+  margin:.9em 0 0; padding:0 0 1.4em; border-bottom:2px solid var(--rule);
+  font-size:.92rem; color:var(--ink-soft);
+}
+.legal h2{
+  margin:2.1em 0 .5em; font-weight:800; line-height:1.2;
+  letter-spacing:-.015em; font-size:clamp(1.18rem,1.9vw,1.4rem);
+}
+.legal h3{ margin:1.5em 0 .35em; font-weight:700; font-size:1.02rem }
+.legal p{ margin:0 0 1em }
+.legal ul{ margin:0 0 1em; padding-left:1.25em }
+.legal li{ margin:0 0 .45em }
+.legal a{ color:var(--blue-700); text-underline-offset:2px }
+.legal strong{ font-weight:700 }
+
+/* THE PLAIN-ENGLISH LINE AT THE TOP OF A SECTION. Every section of these pages
+   opens with one sentence of what it actually means, because a policy nobody
+   reads protects nobody. */
+.legal .plain{
+  margin:0 0 1.1em; padding:.85em 1.1em;
+  background:#f2f7fd; border-left:4px solid var(--blue-700); border-radius:0 6px 6px 0;
+  font-size:.95rem; color:var(--ink-soft);
+}
+.legal .plain b{ color:var(--ink) }
+
+/* the honest note about what this document is and is not */
+.legal .caveat{
+  margin:2.6em 0 0; padding:1.1em 1.25em;
+  border:2px solid var(--rule); border-radius:8px;
+  font-size:.9rem; color:var(--ink-soft);
+}
+.legal .contact-card{
+  margin:1.2em 0; padding:1.1em 1.25em;
+  background:#f7f9fc; border-radius:8px; font-size:.96rem;
+}
+.legal .contact-card p{ margin:0 0 .3em }
+.legal .contact-card p:last-child{ margin:0 }

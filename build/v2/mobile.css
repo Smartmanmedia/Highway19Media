@@ -1,0 +1,976 @@
+/* ============================================================================
+   MOBILE — his own artboard, Highway_19_Website_MobileArtboard_8
+   ----------------------------------------------------------------------------
+   THE FIRST PASS CROPPED THE DESKTOP AND HE HAS DRAWN SOMETHING ELSE. That
+   version put each drawn section at a fixed 900 units and let the phone look at
+   the middle of it, so his road still came in at one edge and left at the
+   other. It worked, and it was the wrong answer: a phone is 390 across and the
+   road, the ocean, the boats and the clouds were eating the whole screen to
+   say something the copy says better. His drawing throws all of it out.
+
+   WHAT HE DREW. The camera is down ON the road, so the road is a BAND across
+   the screen rather than a landscape - tarmac, two gold shoulders, a broken
+   white line, forty pixels tall - and it is used as a rule between one panel
+   of copy and the next. The green signs still hover, the scenery still arrives
+   as full-width strips (the surf, the sand, the desert, the forest, the rocks),
+   and everything else - the clouds, the boats, the traffic, the yacht's
+   circuit - is gone. What is left is type at a size a person can read.
+
+   HOW IT IS BUILT. Every section stops being a drawing and becomes a COLUMN:
+   position static, height auto, one flex column. Everything inside is hidden
+   and then the pieces that belong on a phone are put back, in his order. That
+   is the only way round: these sections are flat lists of forty absolutely
+   positioned things, and opting out one by one would miss the next one he adds.
+
+   NOTHING BUT A PHONE CHANGES. Every rule here lives inside one query, and
+   that query asks TWO things: a narrow viewport AND a coarse pointer. A width
+   on its own called three desktops a phone - the artifact in a side panel, a
+   window dragged narrow, and a laptop at 175% zoom, where a 1440 screen
+   reports 823px - and drive.js reads the same query to choose its camera, so
+   what he got was the phone's drive on his desktop. A mouse is never a phone.
+   drive.js asks this in the same words; the two must not drift apart.
+
+   AND THE FURNITURE IS OFF UNTIL IT IS ASKED FOR. Everything below builds the
+   phone out of wrappers the desktop has no use for - .mob-board, .mob-road,
+   .mob-head, .mob-sign, .mob-btn, .mob-roadv - and they sit in the markup on
+   every screen. Listing them in a guard at the bottom is a list somebody has
+   to remember to add to, and the one that got missed painted his mobile road
+   across the mountains at the top of section four. So they are hidden by
+   DEFAULT, outside the query, by the shape of their name, and the phone turns
+   the ones it wants back on. A new .mob-anything is invisible until it is. */
+[class^="mob-"],[class*=" mob-"]{ display:none }
+/* EXCEPT THE ONES THAT ARE NOT FURNITURE. Four of these wrap things the
+   DESKTOP draws - .mob-head has his hero sign and headline inside it,
+   .mob-sign his green board and its copy, .mob-btn the yellow plate and its
+   label, .mob-scene the whole of section three's desert - and they exist so a
+   phone can move or scale a group as one piece. Hiding those takes his own
+   artwork with them, which is what happened the first time this guard went in.
+   They say so in their name: .mob-wrap generates NO BOX above the breakpoint,
+   so the desktop is exactly what it was before the wrapper existed and his
+   absolutely placed layers still measure against the section, not the span.
+   Furniture hides, wrappers vanish - and both are decided by the class, so
+   neither is a list at the bottom of the file that somebody has to maintain. */
+.mob-wrap{ display:contents }
+
+/* NO FONT BOOSTING. Chrome on Android inflates text it decides is too small,
+   AFTER layout: only the small ranks move, the headlines do not, and every
+   block grows into whatever is under it. Outside the query on purpose - the
+   desktop page can be opened on a phone in landscape, and boosting does not
+   check a breakpoint. */
+html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
+
+@media (max-width:900px) and (pointer:coarse){
+
+  html,body{ overflow-x:clip }
+
+  /* -- HIS TYPE SCALE, OFF HIS OWN ARTBOARD --------------------------------
+     Highway_19_Website_Mobile_Layout.svg is drawn 1080 wide, and a phone is
+     390 - so every size in his file converts by ONE number: 390/1080, which
+     is 0.3611. In vw that is even simpler, because 390 wide makes 1vw = 3.9px
+     and his N units land at N/10.8 vw. Nothing below is a judgement about what
+     reads well on a phone; it is his drawing, arithmetic, and nothing else.
+
+     Each one is clamped so a 320 phone does not drop under legibility and a
+     430 one does not run away with it: the floor is 0.88 of his 390 size and
+     the ceiling 1.18, which is his size on a 460 screen. */
+  :root{
+    --mix:7vw;    /* how far his rocks hang down into the woodland */
+    --t-h1a:   clamp(27px, 7.85vw, 36px);   /* "A Clear Road"        84.72 */
+    --t-h1b:   clamp(44px, 12.8vw, 58px);   /* "Forward"            146.49 */
+    --t-h1c:   clamp(19px, 5.59vw, 26px);   /* "for Your Business"   60.47 */
+    /* his 115 is 41.5 here, and at 41.5 "Great Work," is wider than what is
+       left of the row once his triangle has taken 88 of it - so it comes back
+       to the largest that keeps his own two-line break */
+    --t-h2:    clamp(35px, 10.1vw, 46px);   /* "Great Work..."      115    */
+    --t-h2b:   clamp(32px, 9.2vw, 42px);    /* "You've Been Down"   104.06 */
+    --t-lead:  clamp(19px, 5.67vw, 26px);   /* his sign-face leads   61.25 */
+    --t-leadb: clamp(18px, 5.13vw, 24px);   /* the beach's lead      55.43 */
+    --t-body:  clamp(16px, 4.63vw, 21px);   /* body                  50    */
+    --t-bodyb: clamp(15px, 4.19vw, 19px);   /* the beach's body      45.24 */
+    --t-board: clamp(21px, 6.05vw, 28px);   /* board labels          65.36 */
+    --t-banner:clamp(14px, 4.15vw, 19px);   /* "All Roads Lead"      44.92 */
+    --t-cta:   clamp(18px, 5.33vw, 24px);   /* "Your Road Map"       57.56 */
+    --t-cta2:  clamp(14px, 4.04vw, 19px);   /* "Explore Our..."      43.66 */
+    --t-rest:  clamp(14px, 3.98vw, 18px);   /* "REST AREA"           43.02 */
+    --t-sign:  clamp(24px, 6.89vw, 32px);   /* the board's headline  74.42 */
+    --t-signp: clamp(15px, 4.44vw, 20px);   /* and its strapline     48    */
+    /* THE ONE PLACE HIS ARTBOARD ASKS FOR MORE THAN 390 PIXELS HOLD. At his
+       94.98 - 34.3 here - "We Handle the Drive." measures 392 against a screen
+       that is 390 wide edge to edge, and no margin makes that fit. His own file
+       gets away with it because Illustrator set it at 0.9666 of its width; the
+       honest version of the same 3% is to take it off the size rather than
+       squash the letters, so this is the largest that fits his own break. */
+    --t-h3:    clamp(28px, 8.0vw, 36px);    /* "Pick Your Lane."     94.98 */
+    --t-h3s:   clamp(15px, 4.45vw, 20px);   /* "Take one lane..."    49.46 */
+    --t-card:  clamp(20px, 5.91vw, 27px);   /* card headings         63.80 */
+    /* his card copy is set at 31 and SCALED 1.1 in the vertical, so what a
+       reader sees is 34.1 - and 34.1 of his 1080 is 12.3 on a 390 phone */
+    --t-cardp: clamp(11px, 3.15vw, 14px);   /* card copy          31 x 1.1 */
+    --t-learn: clamp(11px, 3.26vw, 15px);   /* "Learn More"          35.16 */
+  }
+
+  /* -- HIS PALETTE, ONCE ---------------------------------------------------- */
+  :root{
+    --mob-blue:#00287d;      /* the top of his hero */
+    --mob-blue-2:#045dc3;    /* and the bottom of it */
+    --mob-sand:#fbe7c2;
+    --mob-ink:#fff;
+    --mob-pad:7vw;           /* the margin every panel of copy stands in */
+    --mob-tar:#5b5b5b;
+    --mob-gold:#e8b800;
+  }
+  :root[data-mode="night"]{ --mob-blue:#020a1e; --mob-blue-2:#062a5c;
+                            --mob-sand:#2a2418; --mob-tar:#242a34; --mob-gold:#8a6a26 }
+
+  /* -- 1. THE SECTIONS STOP BEING DRAWINGS --------------------------------- */
+  .sec1,.sec2,.sec4{
+    position:relative; width:100%; margin:0; padding:0;
+    height:auto; min-height:0; aspect-ratio:auto;
+    display:flex; flex-direction:column; align-items:stretch;
+    container-type:normal;
+    background:linear-gradient(180deg,var(--mob-blue) 0,var(--mob-blue-2) 100%);
+  }
+  .sec1 > .page{ display:contents }
+  /* EVERYTHING IN THEM GOES, and comes back one at a time below. The leading
+     :root is not decoration: the sections set their own `display` on tag-and-
+     class selectors like `.sec1 svg.z-sign`, which outranks a plain
+     `.sec1 .page > *`, and his desktop hero sign was still hanging over the
+     stacked board because of it. One more class in the chain settles it
+     without reaching for !important. */
+  :root .sec1 .page > *, :root .sec2 > *, :root .sec4 > *{
+    display:none;
+  }
+
+  /* THE DESKTOP'S TRAFFIC DOES NOT COME TO THE PHONE - its roads are not here.
+     Those layers are appended to the SECTION, so a direct-child selector takes
+     all four of them and leaves the ones traffic.js puts inside his phone
+     roads, which are nested a level deeper. Every road he drew gets cars: the
+     three bands and the curve down the green. */
+  .sec1 > .traffic, .sec2 > .traffic,
+  .sec3 > .traffic, .sec4 > .traffic{ display:none }
+  /* AND A BAND HAS TO BE A POSITIONING CONTEXT. The traffic layer is absolute
+     at 100% of its parent; in a static wrapper it would measure the section
+     instead and lay his cars down the whole column. */
+  .mob-road{ position:relative }
+
+  /* -- 2. THE PIECES THAT BELONG ON A PHONE -------------------------------- */
+  /* a panel of copy: full width, generous margins, centred, readable */
+  /* !important IS THE ONLY THING THAT REACHES THESE. Every one of them carries
+     an inline style="left:..;top:..;width:29.85%" written against his 1920
+     artboard - shares of a column that does not exist on a phone - and an
+     inline declaration outranks any selector that is not marked. The section
+     also scales them sideways through `--sx`, which is his own kerning trick
+     for a wide artboard and reads as squashed type at 390. */
+  :root .sec1 .copy, :root .sec2 .copy, :root .sec4 .copy,
+  :root .sec1 .cta, :root .sec4 .cta, :root .sec4 .sign-copy{
+    position:static !important; inset:auto !important;
+    /* ONE COLUMN, CENTRED, AND THE SIDE MARGINS SET WHERE NOTHING LATER TOUCHES
+       THEM. Writing them into `margin` here does not hold: the rules below set
+       a bottom margin on .sub and .body with the shorthand, which quietly
+       resets left and right to nought and put his body copy edge to edge. A
+       width plus auto insets says the same thing and cannot be undone by a
+       shorthand that is only trying to space paragraphs. */
+    width:min(91vw,470px) !important; max-width:none !important;
+    height:auto !important;
+    margin-left:auto !important; margin-right:auto !important; padding:0;
+    text-align:center; transform:none !important;
+    white-space:normal !important;
+  }
+
+  /* HIS HEADLINES, AT HIS SIZES. Three separate ones, not one rule for all
+     three: his hero stack, "Great Work, No Signage" and "You've Been Down
+     This Road Before" are 146, 115 and 104 on his artboard, and grouping them
+     was the reason none of them was right. */
+  :root .sec1 h1{
+    font-size:var(--t-h1b) !important; line-height:.92;
+    letter-spacing:-.01em; margin:0 0 .5em; white-space:normal !important;
+  }
+  :root .sec1 h2.copy{
+    font-size:var(--t-h2) !important; line-height:1.2;
+    letter-spacing:-.01em; margin:0 0 .42em; white-space:normal !important;
+  }
+  :root .sec2 h2.copy{
+    font-size:var(--t-h2b) !important; line-height:1.2;
+    letter-spacing:-.01em; margin:0 0 .42em; white-space:normal !important;
+  }
+  /* his three lines are 84.72, 146.49 and 60.47 against each other */
+  :root .sec1 h1 .l1{ font-size:.578em !important }
+  :root .sec1 h1 .l2{ font-size:1em !important }
+  :root .sec1 h1 .l3{ font-size:.412em !important; line-height:1.24 }
+  :root .sec1 h1 span,:root .sec2 h2 span{ display:block }
+  /* HIS LEAD LINES ARE HIGHWAY GOTHIC AND THEY ARE NOT BOLD. The face ships
+     in one weight, so asking for 700 got a browser-drawn fake of it - and his
+     own file sets them plain at 61.25 and 55.43. */
+  :root .sec1 .sub{
+    font-size:var(--t-lead) !important; line-height:1.18;
+    margin:0 0 1.05em; font-weight:400;
+  }
+  :root .sec2 .sub{
+    font-size:var(--t-leadb) !important; line-height:1.18;
+    margin:0 0 1.05em; font-weight:400;
+  }
+  /* his subheads are one long nowrap line drawn for a 1920 column */
+  :root .sec1 .sub span,:root .sec2 .sub span{
+    display:block; white-space:normal !important;
+  }
+  :root .sec1 .page > .body:last-of-type,
+  :root .sec2 > .body{ margin-bottom:clamp(52px,15vw,86px) !important }
+  /* HIS BODY IS 50 ON THE BLUE AND THE GREEN, 45.24 ON THE SAND, and it is
+     Light - the same weight the desktop sets. The line spacing is his too:
+     59 over 50 is 1.18, not the 1.52 that had four sentences reading as a
+     column of separate lines. */
+  :root .sec1 .body,:root .sec4 .body{
+    font-size:var(--t-body) !important; line-height:1.18;
+    margin:0 0 1.4em; font-weight:300;
+  }
+  :root .sec2 .body{
+    font-size:var(--t-bodyb) !important; line-height:1.18;
+    margin:0 0 1.4em; font-weight:300;
+  }
+  /* HIS LINE BREAKS ARE SET FOR A 1920 COLUMN and read as ragged holes at 390,
+     so they go - and there is no way to say that in CSS alone. A <br> cannot be
+     turned into a space: `content` does nothing to it, `display:inline` and
+     `display:inline-block` still break, and `display:none`/`display:contents`
+     take the break AND the gap, which is how "websites,social" and
+     "andlanding" got onto his page. The build pads a space in front of every
+     one of them instead - invisible at the end of a line on a desktop, and the
+     word gap that survives here. */
+  :root .sec1 .body br,:root .sec2 .body br,:root .sec4 .body br{ display:none }
+  /* AND SEC 4'S BODY IS SPANS, NOT BREAKS - one per line of his composition,
+     set flush against each other with no space between them, which is the same
+     "websites,social" the padded breaks fixed elsewhere. A generated space
+     between siblings is the equivalent, and it costs nothing on a desktop
+     because they are display:block there and a leading space collapses. */
+  :root .sec1 .body span,:root .sec4 .body span{ display:inline }
+  :root .sec4 .body span + span::before{ content:" " }
+
+  /* -- 3. THE ROAD, AS A RULE BETWEEN PANELS ------------------------------- */
+  /* HIS BAND, AND NOT MY IMPRESSION OF IT. This was four stripes in a CSS
+     gradient - tarmac, a gold shoulder either side, a broken white line - and
+     it was wrong in the one way anyone would notice: there is no gold on it.
+     Seen from the road he draws grey tarmac with a THIN WHITE line down each
+     edge and the broken line between them, and the dashes are longer and finer
+     than the ones I guessed. His own art, cut by tools/cut_mobile.js, with
+     #575757 and #fff swapped for --tarmac and --marking so it goes quiet at
+     night with every other road on the site. */
+  .mob-road{ display:block; width:100%; line-height:0 }
+  .mob-road svg{ display:block; width:100%; height:auto }
+
+  /* -- 4. HIS STACKED BOARD ------------------------------------------------ */
+  /* Four services down instead of four across, hovering over the blue exactly
+     as he drew it. The BOARD is his artwork; the four labels are HTML laid on
+     top of it, because SVG text cannot wrap, cannot be selected and does not
+     answer to the page's own type scale - and readable type was the brief. */
+  .mob-board{
+    display:block; position:relative; width:86vw; max-width:420px;
+    /* HIS OWN AIR. He hangs the board 154 pixels down a 390 screen and leaves
+       85 under it before the tarmac - a sixth of the first screen is empty
+       blue, on purpose, and cropping that to 35 was what made the phone read
+       as a squeezed desktop rather than his drawing. */
+    margin:clamp(96px,38.5vw,190px) auto clamp(56px,21.8vw,104px);
+  }
+  .mob-board svg{ display:block; width:100%; height:auto }
+  .mob-board ul{
+    position:absolute; left:0; right:0;
+    /* HIS OWN ROWS, MEASURED OFF HIS OWN ARROWS. The four turn arrows centre
+       at 29.73, 48.32, 66.92 and 84.89 per cent of the artwork's height - read
+       off the rendered SVG, not guessed from the drawing - so the rows are
+       18.6 apart and the first one starts at 20.4. The banner overlaps the top
+       of the green face, which is why this is not simply the face itself. */
+    top:20.4%; bottom:5.8%;
+    margin:0; padding:0; list-style:none;
+    display:grid; grid-template-rows:repeat(4,1fr);
+  }
+  .mob-board li{ display:grid; align-items:center }
+  .mob-board a{
+    display:block; padding:0 24% 0 6.5%;
+    color:#fff; text-decoration:none;
+    font-family:"Be Vietnam Pro",system-ui,sans-serif; font-weight:700;
+    /* his labels measured off the artboard: 15px on a 325 board at 390, which
+       is 4.6% of the board's own width - and the board here is a shade wider */
+    font-size:var(--t-board); line-height:1.1;
+  }
+  .mob-board a:active{ opacity:.7 }
+
+  /* HIS BANNER, over the yellow. The badge is a picture because it is a
+     picture in his file too; the line beside it is type. Both sit in the top
+     17% of the artwork, which is where the yellow is. */
+  .mob-board .mob-banner{
+    position:absolute; left:0; right:0; top:0; height:17.03%;
+    margin:0; padding:0 3% 0 1.5%;
+    display:flex; align-items:center; gap:2.5%;
+  }
+  .mob-board .mob-banner img{
+    display:block; width:23%; height:auto; flex:0 0 auto;
+    /* his badge overhangs the banner top and bottom, as he drew it - and the
+       bigger it gets the further it hangs, which is why this is a share of its
+       own width and not a fixed number */
+    margin:-19% 0;
+  }
+  .mob-board .mob-banner b{
+    color:#1a1a1a; font-family:"Be Vietnam Pro",system-ui,sans-serif;
+    font-weight:800; font-size:var(--t-banner); line-height:1.14;
+    letter-spacing:-.01em;
+  }
+  /* AND HIS GANTRY, running off the right edge behind the board. One tile of
+     his own truss repeated - the same file section one hangs its hero sign
+     from - laid at the height of the board's own mounting brackets. */
+  .mob-board .mob-gantry{
+    display:block; position:absolute; left:60%; right:-30vw; top:34%; height:14%;
+    background:url("../../assets/v2/section-01/truss-cell.webp") repeat-x center;
+    background-size:auto 100%; z-index:-1; pointer-events:none;
+  }
+
+  /* -- 5. WHAT COMES BACK, SECTION BY SECTION ------------------------------ */
+  /* sec 1: the board, a road, his first panel, a road, his second panel */
+  :root .sec1 .page > .mob-board,
+  :root .sec1 .page > .mob-road,
+  :root .sec1 .page > .copy,
+  :root .sec1 .page > .cta{ display:block }
+  /* THE BUTTON KEEPS ITS OWN POSITIONING CONTEXT. Its label is an absolutely
+     positioned span centred in the green plate beside his triangle - make the
+     anchor static like everything else and the label goes looking for the
+     section instead, which is a green button with no words on it. */
+  :root .sec1 .page > .cta,:root .sec4 > .cta{
+    position:relative !important;
+    margin:clamp(10px,3vw,18px) auto clamp(52px,15vw,86px) !important;
+    width:min(80vw,360px) !important;
+  }
+  /* HIS TWO BUTTONS ARE NOT THE SAME SIZE: "Your Road Map" is 57.56 on his
+     artboard and "Explore Our Services" is 43.66, because one is a line and
+     the other is three words that have to fit a plate. */
+  :root .sec1 .cta span{ font-size:var(--t-cta) !important; font-weight:700 }
+  :root .sec4 .cta span{ font-size:var(--t-cta2) !important; font-weight:700 }
+
+  /* HIS SIGN AND HIS HEADLINE STAND SIDE BY SIDE, which is what he drew - the
+     shield left of "A Clear Road Forward", the triangle left of "Great Work,
+     No Signage". A wrapper puts them on one row and the headline goes left in
+     that row rather than centred, because a centred line beside a fixed sign
+     leaves a hole on one side. */
+  /* AND THE PANELS STAND OFF THE ROAD. Between two bands of tarmac the copy
+     was starting 27 pixels under one and ending 30 above the next, which reads
+     as a paragraph wedged into a gap rather than a page with sections in it. */
+  :root .sec1 .page > .mob-head{
+    display:flex; align-items:center; justify-content:center;
+    gap:4.5vw; width:min(94vw,470px);
+    margin:clamp(46px,13vw,78px) auto clamp(16px,4.5vw,24px);
+  }
+  /* HIS TWO SIGNS ARE NOT THE SAME SIZE, and one rule for both had them both
+     wrong. The shield beside "A Clear Road Forward" is 172 by 262 on his
+     artboard and the warning triangle beside "Great Work, No Signage" is 243
+     by 215 - so at 390 one is 62 across and the other 88, and the wide one was
+     coming out at 51 with its own headline three times its height. */
+  :root .sec1 .mob-head > svg.z-copy{
+    display:block; flex:0 0 auto; position:static !important;
+    width:clamp(50px,15.9vw,73px) !important; height:auto !important;
+    margin:0 !important; inset:auto !important;
+  }
+  :root .sec1 .mob-head:has(h2) > svg.z-copy{
+    width:clamp(70px,22.6vw,104px) !important;
+  }
+  /* AND THE HEADLINE STOPS CLAIMING THE WHOLE COLUMN. The shared copy rule
+     gives every block min(86vw,460px), which inside a row leaves the sign
+     nowhere to stand and pushes it off the top of the line. */
+  :root .sec1 .mob-head > .copy,:root .sec1 .mob-head > h2.copy{
+    margin:0 !important; width:auto !important; max-width:none !important;
+    flex:0 1 auto; text-align:left;
+  }
+  :root .sec1 .mob-head h1,:root .sec1 .mob-head h2.copy{ margin:0 }
+  :root .sec1 .page > svg.z-copy,
+  :root .sec2 > svg.z-copy{
+    display:block; position:static !important;
+    /* 279 by 246 on a 1080 artboard is 101 across at 390 - his, not mine */
+    width:clamp(84px,25.9vw,118px) !important; height:auto !important;
+    margin:clamp(40px,11vw,66px) auto clamp(16px,4.4vw,24px) !important;
+  }
+
+  /* sec 2: his surf and his sand, then the panel that stands on them */
+  /* HIS BEACH IS THE SECTION, NOT A BAND IN IT. The .sand element is a strip
+     drawn to meet the surf at a particular height in a 1920 composition; here
+     the whole panel stands on sand, so the section carries the colour and the
+     strip would only be a second one above the water. */
+  :root .sec2 > .sand{ display:none }
+  /* HIS SURF IS TALLER THAN I HAD IT. The four bands are sized off the WIDTH -
+     126% of the wrapper, his own geometry, all four registered to each other -
+     so the wrapper's height is not a scale, it is a WINDOW: at 133 pixels it
+     was showing about two thirds of the water he drew and cropping the rest.
+     He draws 197 at this width, which is half the screen. */
+  :root .sec2 > .waves,:root .sec2 .waves.z-ground{ display:block; position:relative;
+    /* AND THE SURF IS WHERE THE SEA ENDS. The window was 70vw, and his shore
+       foam breaks at 46 of it - so the last ninety pixels were open water
+       below the last wave, ending on a ruled line across the screen where the
+       sand began. That is not a beach; it is a sea that has been cut off. The
+       window now stops in the MIDDLE of his shore foam, so the water ends on
+       the wave rather than on an edge.
+       Measured, not chosen: sampled at eleven columns across the rendered
+       page, the crest runs between 172 and 189 pixels down the window. */
+    width:100%; height:clamp(119px,36.2vw,186px); margin:0; inset:auto;
+    /* AND THE FOAM RUNS ON OVER THE SAND. overflow:hidden would cut it dead on
+       the same line, which is the fault this rule is fixing; a clip-path can
+       say "the sides and the top, but let the bottom out" - the same thing
+       section three does to hang his rocks into his trees. The wrapper's own
+       background stops at the edge either way: a clip does not extend a box's
+       paint, it only allows what is inside it to show. */
+    overflow:visible; clip-path:inset(0 0 -18px 0);
+    /* AND OPEN WATER ABOVE THE FIRST WAVE, WHICH IS WHAT WAS MISSING.
+       Section one's gradient ends on #045dc3 and the far band's own fill is
+       #004ba0 to #0561ca across the width, so where the band's straight top
+       edge met the section above it there was a ruled line right across the
+       screen - two blues that nearly match, meeting on a hard edge, which is
+       the worst of both. Two layers fix it and give him the space he asked
+       for at the same time: the band's OWN horizontal gradient behind the
+       whole wrapper, so the top edge now meets its own colour at every x and
+       cannot show; and section one's blue over the top of that, fading out by
+       a third of the way down, so the sea arrives out of the sky instead of
+       starting at a line. The wrapper is taller by the same amount, so the
+       water gained is water and not a crop of his art.
+       Both colours are the variables the surf itself uses - so the join
+       follows him into the night without a second rule. */
+    /* AND THE WATER ABOVE THE SURF IS SECTION ONE'S OWN LAST COLOUR, exactly.
+       This was his blue fading into the far band's gradient, and it drew a
+       line across the screen at the join - because what is directly above the
+       join is neither of those two. .sec1::after is a 14% tall fade at the
+       bottom of section one, masked in from nothing, painting
+       linear-gradient(90deg,#014ea5,#055fc6) - a HORIZONTAL ramp - and it was
+       meeting a flat #045dc3. Twenty-six levels of blue apart at the left edge
+       and identical at the right, which is exactly what a colour change that
+       is not a transition looks like.
+       So the window carries the same expression, variable and all, and the two
+       cannot come apart - at any width, and after dark, where night.css sets
+       --sec1-fade for both of them at once. Measured after: the last row of
+       section one and the first row of the water are the same colour at both
+       edges of the screen, to the level. */
+    background: var(--sec1-fade,
+      linear-gradient(90deg,#014ea5 0%,#055fc6 100%)) }
+  /* AND THE BANDS THEMSELVES SCALE UP, which is the part the wrapper cannot do.
+     Each one is width:126% with height:auto - its size comes from the WIDTH, so
+     a taller wrapper only adds empty space under it. At 126% of a 390 phone his
+     water is 135 pixels where he draws 197; 184% is that ratio, and all four
+     take it together so they stay registered to each other to the unit. The
+     left inset follows so the middle of his surf stays the middle of the
+     screen: (100 - 184) / 2. */
+  /* AND THEY ARE STRETCHED, WHICH IS WHAT HE OFFERED. His surf is drawn for a
+     1920 column: two wave cycles across a phone and 95 pixels of water, where
+     his mobile drawing has the same rhythm at twice the height. Scaling both
+     axes to fix that would put six cycles across 390 and read as a choppy sea.
+     So the WIDTH keeps his rhythm - 184% of the phone, the same two cycles -
+     and preserveAspectRatio:none takes the height on its own. All four bands
+     take the identical treatment, so they stay registered to each other to the
+     unit and his foam still breaks in the right places. */
+  :root .sec2 .waves .wave{
+    width:184% !important; left:-42% !important;
+    /* AND PULLED UP SO THE WATER STARTS AT THE TOP EDGE. Only the bottom two
+       thirds of each band is painted - the rest is the sky he drew above the
+       sea - so a band sitting flush left a third of the wrapper transparent
+       and the section's SAND showed through above the water. Stretched to 151%
+       and lifted, the first line of foam lands on the wrapper's own top
+       and the last one on its bottom, with his blue between them and nothing
+       of the beach in the middle of the sea. */
+    /* AND MEASURED IN vw, NOT IN PER CENT OF THE WRAPPER. A percentage height
+       resolves against the wrapper, so making the wrapper taller scaled the
+       band with it and the picture came out identical, only bigger - there was
+       no way to add water above the surf without also adding it below, where
+       it shows as a strip of blue between the last foam and his beach. In vw
+       the band's size and the window's size are two numbers instead of one.
+
+       The two landmarks, measured off his own art: the first line of foam sits
+       36.7% down the band and the shore foam 71.9% down it. So at 170.6vw the
+       surf itself is 60vw of water and the shore lands 122.6vw below the
+       band's top, so the lift and the window's height move together: whatever
+       is taken off one comes off the other, and the shore stays on the
+       wrapper's bottom edge to the pixel.
+       62.6 and 36.2 is ten vw further up than the first pass - the open water
+       above the first crest was half the ocean, and with the join now
+       invisible it read as a field of blue that the surf arrived after rather
+       than as the top of the same sea. */
+    height:170.6vw !important; top:-62.6vw !important;
+    preserveAspectRatio:none;
+  }
+  /* AND THE SWELL IS FIVE TIMES THE SIZE, because the amplitude is written in
+     cqw - a share of the SECTION - and a section is 1990 wide on his desktop
+     and 390 on a phone. The same 1.20cqw that moves his nearest band 24 pixels
+     there moves it four and a half here, which is not motion anyone can see.
+     Five puts the phone back on the desktop's own travel in PIXELS, and the
+     four bands keep their relation because --swell scales all of them
+     together. The wrapper hides 88% of a band above its own top edge, so
+     there is nothing this can push into view. */
+  :root .sec2 .waves{ --swell:5 }
+  /* and a shorter period with it - his own ratios, a third quicker, so the sea
+     reads as moving rather than breathing */
+  :root .sec2 .wave-surf { --dur:6s }
+  :root .sec2 .wave-mid  { --dur:8s }
+  :root .sec2 .wave-swell{ --dur:10s }
+  :root .sec2 .wave-far  { --dur:13s }
+  :root .sec2 > .copy,:root .sec2 > .mob-road{ display:block }
+  .sec2{ background:var(--mob-sand); color:#241a06 }
+  .sec2 h2,.sec2 .sub,.sec2 .body{ color:#241a06 }
+  :root[data-mode="night"] .sec2{ color:#d9cdb6 }
+  :root[data-mode="night"] .sec2 h2,:root[data-mode="night"] .sec2 .sub,
+  :root[data-mode="night"] .sec2 .body{ color:#d9cdb6 }
+
+  /* SEC 3 IS NOT FLATTENED, AND IT DOES NOT NEED TO BE. It carries no copy -
+     it is his desert and nothing else - and it is drawn on an aspect ratio of
+     1922 by 856, so a 390 phone gives it 174 pixels of its own accord. That IS
+     the band he drew. Squashing it into a flow column would only take three
+     layers that are registered to each other and stand them apart. All that
+     goes is the road running through it and the cloud over it. */
+  /* AND ITS OWN ASPECT RATIO STAYS ON. Writing height:auto here took the one
+     thing that was giving this section a height - it is a stack of absolutely
+     positioned layers - and the band grew to whatever the sand image felt like,
+     280 pixels against his 174. */
+  /* AND THE SECTIONS STOP OVERLAPPING EACH OTHER. Three and four are pulled up
+     over the section above them in his desktop composition - 10% and 16% of the
+     WIDTH - because the top of each artboard is empty and that emptiness is
+     meant to lie over the one before. On a phone they are bands in a column
+     and there is nothing empty left to hide, so the overlap only ate things:
+     sec3's -10% was taking 41 pixels off the bottom of his road band, which is
+     where the broken white line lives. That is why the band had no dashes. */
+  .sec3{ margin-top:0 !important }
+  /* HIS ROCKS HANG DOWN INTO HIS TREES, and that is the whole of the join -
+     not a tree line meeting a sand line on a ruled edge, which is what he
+     photographed. Three things make it: section three's SAND stops short of
+     its own bottom (background-size, so his gradient is untouched and simply
+     is not painted in the last strip), his mountain layers still run to the
+     bottom edge as they always did, and section three is lifted over section
+     four so those rocks paint on top of the woodland rather than under it. */
+  .sec3{ position:relative; z-index:1;
+         /* AND IT IS ALLOWED TO HANG OVER THE EDGE, but only the bottom one.
+            overflow:hidden clips all four sides and his mountains are wider
+            than the phone, so the sides have to stay clipped or the page grows
+            sideways; the top has to stay clipped or his sand climbs into the
+            beach. A clip-path can say all of that: nothing above, nothing at
+            the sides beyond a margin, and --mix below. */
+         overflow:visible !important;
+         clip-path:inset(0 -60% calc(-1 * var(--mix)) -60%) }
+  /* SECTION FOUR STILL OVERLAPS, AND HAS TO. Its woodland is meant to close
+     over the foot of his desert - a ragged tree line across the mountains'
+     bases, not a ruled edge between a sand band and a green one, which is what
+     zeroing this gave him. The section is pulled up over section three and its
+     own top strip is left TRANSPARENT for exactly that much, so the desert
+     shows through everywhere his trees do not. */
+  .sec4{ margin-top:0 !important }
+  .sec3{ display:block; padding:0; overflow:hidden }
+  /* HIS ROCKS, HALF AGAIN THE SIZE. On a desktop this band is 1922 units wide
+     and the mountains read at that width; on a phone the same drawing puts
+     them in the bottom third of the band with a field of empty sand over the
+     top, which is not what he drew for a phone. The three layers are scaled
+     AS A PIECE, about a point near the foot of the band so their base stays on
+     the tree line, and the section clips what goes over the edges. */
+  :root .sec3 .mob-scene{
+    display:block; position:absolute; inset:0;
+    /* 1.55 filled the band to the brim; he leaves a good third of pale sand
+       over the top of his rocks, so it comes back to 1.35 and the pivot drops
+       to the very foot of the band. */
+    transform:scale(1.35); transform-origin:50% 100%;
+  }
+  /* AND HIS MOUNTAINS ARE THE ONES THAT HANG. Three layers live in here -
+     sand, the mountains' cast shadow, then the mountains - and only the last
+     of them has a ragged foot worth showing against his trees. Pushing all
+     three down would only move the sand's flat edge, which is the thing being
+     got rid of. The divide is inside .mob-scene, which is scaled 1.35, so the
+     shift is divided by that to come out --mix on the screen. */
+  /* named by his own width, not by position: :last-of-type counts every <svg>
+     in the wrapper, road and clouds included, and matched none of these */
+  /* HIS MOUNTAINS AND THE SHADOW THEY CAST MOVE AS ONE. Only the mountains
+     were shifted here, and the cast shadow is a separate layer of his - drawn
+     already offset, sitting under them - so pushing one down by --mix and not
+     the other slid the shadow out from under its own ridge by 27 pixels. They
+     are a matched pair and take the same translate. Named by his own widths:
+     :last-of-type counts every <svg> in the wrapper, road and clouds included,
+     and matched none of these. */
+  /* THE RANGE AND THE RANGE BEHIND IT MOVE TOGETHER. Matched on the width in
+     their style attribute, which is brittle - the back range's width changed
+     when it was re-placed off his artboard and this silently stopped matching
+     it, leaving the two ranges to slide apart on a phone. Both numbers live
+     in section-03.html; change one there and change it here. */
+  :root .sec3 .mob-scene > svg.z-ground[style*="width:99.783%"],
+  :root .sec3 .mob-scene > svg.z-ground[style*="width:103.75%"]{
+    transform:translateY(calc(var(--mix) / 1.35));
+  }
+  :root .sec3 .z-road, :root .sec3 .z-cloud{ display:none }
+
+  /* sec 4: his forest, his green sign, his copy, his button, his rocks */
+  /* AND HIS GREEN RUNS ON PAST THE BUTTON. He leaves 354 units of plain grass
+     between "Explore Our Services" and the line where the green gives out -
+     128 pixels at 390 - and his stone band starts 31 pixels under the button,
+     not 55 above it. Without this the rocks came up through his own words. */
+  /* HIS GREEN, FIVE PER CENT DOWN, AND ONLY HERE. White copy on #1c9022 is
+     4.15:1 and AA wants 4.5 for text this size - and on a phone his artwork is
+     not behind the copy, this flat green is. #1a8820 is the smallest step that
+     clears it (4.58) and it is a background, not his sign: the motorway plate,
+     the shield and every fill in his art keep the green he drew. */
+  .sec4{ background:#1a8820; padding-bottom:26vw }
+  /* HIS CANOPY IS A BAND, NOT THE WHOLE PICTURE. At its own aspect ratio the
+     forest is 340 pixels of trees on a 390 screen where he drew 90 - it is a
+     hedge along the top of the green, and the rest of his composition is under
+     it. Cropped to its bottom edge, which is where the tree line is. */
+  /* AND HIS FOREST IS DEEP. It was 90 pixels - a hedge - and he draws a band
+     of woodland the green sign stands on, with the ragged edge where the trees
+     give out to open grass well down the screen. */
+  /* AND HIS FOREST IS DEEP. It was 90 pixels - a hedge - where he draws a band
+     of woodland the green board stands on. object-fit cannot make it deeper:
+     his canopy is trees along the top of a picture that is plain green below,
+     so cropping only ever changes how much GREEN is on show. What makes more
+     woodland is a bigger picture - 220% of the phone, pulled back to centre -
+     which is more rows of his trees and larger ones, both. */
+  /* HIS FOREST IS 275 PIXELS DEEP WITH CROWNS ABOUT 43 ACROSS - both, and they
+     pull against each other, because a bigger picture gives bigger trees AND a
+     deeper band at the same time. 135% of the phone is 43-pixel crowns on a
+     341 band; lifting it by the top fifth, which is the open green ABOVE his
+     tree line, leaves 273 of woodland. 220% was twice his depth. */
+  :root .sec4 > .z-back{ display:block; position:static !important;
+    width:168% !important; max-width:none !important;
+    margin:-21vw 0 0 -34% !important;
+    height:auto !important; inset:auto !important }
+  /* HIS GREEN BOARD CARRIES ITS OWN WORDS. In the drawing the two lines and
+     the strapline are inside the sign, to the right of the arrow - not
+     underneath it - so the wrapper holds the board and the copy sits on it. */
+  /* -- HIS OWN PHONE SIGN --------------------------------------------------
+     Everything from here to the road is measured off Mobile_Sige_Rest_Area
+     .svg, which is 1002.82 by 744.19 - so every per cent below is one of his
+     numbers divided by one of those two, and none of it is a guess.
+
+     WHAT WENT: the desktop board stretched 52% taller with its REST AREA plate
+     and shield hidden inside the drawing, and a truss tile stuck on beside it.
+     That was a description of his sign. This IS his sign - he drew the phone
+     one himself, gantry and all, and it needs nothing done to it. */
+  :root .sec4 .signlamps{ display:none !important }
+  :root .sec4 .mob-sign > .our-sign{ display:none !important }
+  :root .sec4 .mob-sign > .mob-gantry{ display:none !important }
+
+  :root .sec4 > .mob-sign{
+    display:block; position:relative; z-index:2;
+    /* his artboard is 1080 across and the sign is 1002.82 of it */
+    width:92.8vw; max-width:470px;
+    aspect-ratio:1002.82 / 744.19;
+    /* HIS SIGN STANDS ON THE TREE LINE, its head over the rocks - but not
+       over the section's own top edge, which clips. */
+    /* AND IT HANGS OFF THE RIGHT-HAND EDGE, which is what his gantry is for.
+       He places this drawing at x 78 of a 1080 canvas and it is 1002.82 wide,
+       so its right edge is the screen's right edge and the truss runs off it.
+       Centred, the gantry stopped fourteen pixels short and read as a stub. */
+    margin:-70vw 0 clamp(20px,6vw,32px) auto;
+  }
+  :root .sec4 .mob-sign > .mob-restsign{
+    display:block; position:absolute; inset:0;
+    width:100%; height:100%; margin:0; max-width:none;
+  }
+  /* HIS PLATE READS "REST AREA" AND THE WORDS ARE NOT IN THE FILE ANY MORE -
+     they were SVG text and came out with the rest of it. His own box for them
+     starts at 334.9 of 1002.82 and sits on a baseline at 116.23 of 744.19. */
+  :root .sec4 .mob-sign > .mob-restlabel{
+    display:block; position:absolute;
+    left:33.4%; top:10.4%; height:6.4%;
+    line-height:1; color:#1a1a1a;
+    font-family:"Be Vietnam Pro",system-ui,sans-serif; font-weight:800;
+    font-size:var(--t-rest); letter-spacing:.005em; white-space:nowrap;
+  }
+  /* AND HIS TWO LINES SIT IN HIS OWN BOX. Headline 52.2 to 697.9 across and
+     205.6 down; strapline 130.2 to 629.5 and 384.3. Both are centred on
+     themselves in his file, which is why this is one centred column and not
+     two separately placed lines. */
+  :root .sec4 .mob-sign > .sign-copy{
+    display:block !important; position:absolute !important;
+    left:2.5% !important; right:14.5% !important;
+    top:27.6% !important; bottom:auto !important;
+    transform:none !important;
+    width:auto !important; height:auto !important; margin:0 !important;
+    text-align:center; padding:0 !important; overflow:visible;
+  }
+  /* AND THEY ARE SQUEEZED TO 82%, which is not a liberty - his own file sets
+     scale(.82 1) on both of these text elements, and the desktop board already
+     does the same thing. Without it "We Handle the Marketing." is wider than
+     the board he drew it on and breaks into three lines. */
+  /* AND THE BOX HAS TO GROW BY WHAT THE SQUEEZE TAKES AWAY. A transform does
+     not change where a line breaks: the text is laid out at the element's real
+     width, wraps there, and only then gets squashed - so scaleX on its own
+     bought a narrower picture of the SAME four lines. The element is made
+     1/0.82 wider (121.95%), pulled back by half the difference so it stays
+     centred, and scaled to exactly 100% again. Now it wraps where his does. */
+  :root .sec4 .mob-sign h2,:root .sec4 .mob-sign p{
+    transform:scaleX(.82) !important; transform-origin:50% 50%;
+    width:121.95% !important; margin-left:-10.98% !important;
+    white-space:normal !important; text-align:center;
+  }
+  :root .sec4 .mob-sign h2{
+    font-size:var(--t-sign) !important; line-height:.97;
+    margin:0 0 .5em -10.98% !important;
+  }
+  /* HIS STRAPLINE SITS IN A NARROWER BOX THAN HIS HEADLINE - 499 against 646
+     on his own board - which is what breaks it after "goal:" rather than after
+     "growing". Same squeeze, less width to wrap in. */
+  :root .sec4 .mob-sign p{
+    font-size:var(--t-signp) !important; line-height:1.01;
+    width:103% !important; margin:0 0 0 -1.5% !important;
+  }
+  /* his headline breaks after "Marketing." on his own board too */
+  :root .sec4 .mob-sign h2 br{ display:inline }
+  /* AND IT FLOATS AGAINST THE GROUND. His board hovers over the woodland on a
+     desktop - parallax.css gives the sign, its copy and the gantry one shared
+     travel - and on a phone the desktop sign is hidden, so that whole group
+     capped itself to nothing and the board sat welded to the trees. The
+     WRAPPER takes the travel here instead, so the picture, the plate's words
+     and the copy on the board move as one object without any of them needing a
+     transform of its own. Its own lock, deliberately: joining the desktop
+     group would let a hidden element cap the real sign to zero. */
+  :root .sec4 .par-sign-m{ --par:9; --par-bias:-0.12 }
+
+  /* AND IT GOES QUIET AFTER DARK. The desktop board is inline SVG, so night
+     .css switches its two fills; this one is a picture and the only thing that
+     can be done to a picture is a filter over the whole of it - which is the
+     same bargain the road bands and the canopy already take. */
+  :root[data-mode="night"] .sec4 .mob-restsign,
+  :root[data-theme="dark"]:not([data-mode="day"]) .sec4 .mob-restsign{
+    filter:brightness(.40) saturate(.72);
+  }
+  :root[data-mode="night"] .sec4 .mob-restlabel,
+  :root[data-theme="dark"]:not([data-mode="day"]) .sec4 .mob-restlabel{
+    color:#4a4028;
+  }
+
+  /* HIS ROAD DOWN THE RIGHT EDGE, and it is a CURVE - it comes in from the
+     left under the trees, turns, and runs down off the bottom. A vertical
+     strip was the same mistake as the gold band: near enough in description
+     and not his drawing. */
+  /* PLACED OFF HIS ARTBOARD, not off the right edge. The cut box runs from
+     x 865 to 1378 of his 1080-wide drawing - it hangs 298 units off the canvas
+     on purpose, because the road leaves the screen - so the box is 47.5% of the
+     width starting at 80.1%. Pinning it to right:0 instead pulled the whole
+     thing inboard and ran his road straight down through the body copy. */
+  :root .sec4 > .mob-roadv{
+    display:block; position:absolute; left:80.1%; right:auto;
+    top:clamp(80px,24vw,126px); width:47.5%;
+    z-index:0; pointer-events:none; line-height:0;
+  }
+  /* the curve runs off the bottom of his green, so the green has to hold it */
+  .sec4{ overflow:hidden }
+  :root .sec4 .mob-roadv svg{ display:block; width:100%; height:auto }
+  :root .sec4 > .z-back,:root .sec4 > .mob-sign,:root .sec4 > .body,
+  :root .sec4 > .mob-btn{ position:relative; z-index:1 }
+  /* AND THE COPY STANDS CLEAR OF IT. His road takes the right fifth of the
+     green, so the paragraph and the button are a narrower column set to the
+     left of it rather than the centre of the section - which is what he drew,
+     and the only way a line does not end up reading through a kerb. */
+  :root .sec4 > .body,:root .sec4 > .mob-btn{
+    width:min(70vw,380px) !important;
+    margin-left:6.5vw !important; margin-right:auto !important;
+  }
+  /* the first pass had this copy standing UNDER the board and sized for that;
+     it lives on the board now, and two rules of equal weight meant the later
+     one - this one - was quietly winning */
+  :root .sec4 > .body{ display:block; color:#fff }
+  /* HIS EXPLORE BUTTON is a yellow plate and a label drawn as two separate
+     things; the wrapper stacks them here and nowhere else. */
+  :root .sec4 > .mob-btn{
+    display:block; position:relative; width:min(80vw,340px);
+    margin:0 auto clamp(26px,8vw,42px);
+  }
+  :root .sec4 .mob-btn > svg.z-copy{
+    display:block; position:static !important; width:100% !important;
+    height:auto !important; inset:auto !important;
+  }
+  :root .sec4 .mob-btn > .cta{
+    position:absolute !important; left:0 !important; right:0 !important;
+    top:50% !important; transform:translateY(-50%) !important;
+    width:auto !important; margin:0 !important; text-align:center;
+    font-size:clamp(14px,4vw,17px) !important; white-space:nowrap !important;
+  }
+  :root .sec4 .body span{ white-space:normal !important }
+  .sec4 > .z-ground{ display:none }
+  .sec4 > .rock-layer,.sec4 > .z-ground.rock-shadow{ display:none }
+
+  /* -- 6. HIS CARDS, TWO IN A ROW ------------------------------------------ */
+  /* HIS ROCK BAND SITS BETWEEN THE GREEN AND THE CARDS, as he drew it - the
+     same band section four's forest stands on, continued. It is already here;
+     it only has to stop being a layer and become a strip. */
+  /* AND THE SECTION HAS TO BE ALLOWED TO GROW. It is drawn on an aspect ratio
+     like every other one, which fixes its height from its width - so his cards,
+     set in a column at phone type sizes, ran straight out of the bottom and
+     under section seven's sky. */
+  /* AND ITS GROUND IS WHITE, not the page's navy. His rock band is drawn with
+     open sky above the rocks, so anything behind it shows through - which put a
+     navy stripe between the green and the stones. */
+  .sec6{ display:flex; flex-direction:column;
+    height:auto !important; min-height:0; aspect-ratio:auto !important;
+    background:var(--sec6-bg,#fff);
+    /* AND ITS STONES ARE ALLOWED OUT OF THE TOP. The band is lifted so his
+       green runs behind it, and overflow:hidden was cutting off everything
+       above this section's own edge - which is the whole of the part that is
+       meant to be on the green. Same clip-path bargain as section three: open
+       at the top by the lift, closed at the sides so the page cannot grow. */
+    overflow:visible !important;
+    clip-path:inset(-34vw -60% 0 -60%);
+    padding:0 0 clamp(34px,10vw,60px) }
+  /* AN SVG WITH A viewBox AND NO height IS ZERO PIXELS TALL IN FLOW. It works
+     absolutely positioned, where width and height:auto give it the viewBox's
+     ratio; in a column it collapses. Stating the ratio is what brings it back. */
+  :root .sec6 > .rock-layer{
+    display:block; position:static !important; order:-1;
+    /* HIS STONES ARE HALF AGAIN THE SIZE AGAIN. He crops this band 1370 units
+       wide on a 1080 canvas - 127% of the screen - and 497 tall, which is 179
+       pixels at 390. The file we ship is a wider crop of the same rocks, 1918
+       by 497, so it takes 177% of the width to put his stones at his size. */
+    width:177% !important; height:auto !important; aspect-ratio:1918.34 / 497.43;
+    /* AND THE GREEN RUNS BEHIND THE STONES, not up to them. His band is 497
+       units tall and his green ends 9425 into a band that starts at 9078 -
+       seven tenths of the way DOWN it - so the straight edge where the green
+       gives out to white is under the rocks, not above them. At -9vw it was a
+       third of the way down and the ruled line was in plain sight. Seven
+       tenths of 25.93vw is 18.2. */
+    margin:-32vw -38.5% clamp(24px,7vw,40px) !important; inset:auto !important;
+  }
+  /* AND ITS SHADOW UNDER IT. Absolute rather than another item in the column:
+     the band is the first thing in the flex order and carries its own negative
+     margins, and a second flow item would stack BELOW it instead of under it.
+     The numbers are the band's own - the same -32vw it is pulled up by and the
+     same -38.5% and 177% it is drawn at - so the two cannot come apart. The
+     sun's own offset arrives on top of this, from --lift in sun.css. */
+  :root .sec6 > .mob-cast{
+    display:block; position:absolute !important;
+    width:177% !important; height:auto !important; aspect-ratio:1918.34 / 497.43;
+    margin:0 !important; z-index:1; pointer-events:none;
+    /* MARKED, because the element carries its own style attribute - it has to,
+       since sun.css finds a shadow by [style*="--lift"] - and an inline left
+       and top outrank any selector that is not. And no `inset:auto` near them:
+       inset is the shorthand for all four, so writing it after left and top
+       throws both away. */
+    right:auto !important; bottom:auto !important;
+    left:-38.5% !important; top:-32vw !important;
+  }
+  :root .sec6 > .sky-cloud{ display:none }
+  /* HIS CARD BLOCK IS WIDER THAN HIS COPY. The four cards run 39 to 1037 of
+     his 1080 - a 3.6% margin - and his two headings start at 59, so the copy
+     takes a little more. Sharing --mob-pad between them was costing the grid
+     twenty pixels and putting "We Handle the Drive." onto a third line. */
+  :root .sec6 .page{ position:static; width:auto; margin:0 3.6vw;
+    /* minmax(0,1fr) AND NOT 1fr. A grid item's automatic minimum is its
+       content, and a card with an aspect-ratio on it reports a min-content
+       WIDTH tall enough to hold its copy - so two 1fr tracks came out 186 wide
+       inside a 362 box and the cards hung over both edges. */
+    display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:4.3vw }
+  /* HIS HEADLINE BREAKS AFTER "Lane.", and there is no width that produces
+     that break on its own: "Pick Your Lane. We" fits the column and "We Handle
+     the Drive." does not fit what is left over, so any measure narrow enough to
+     push "We" down is too narrow for the line it lands on. It is marked in the
+     markup instead - an empty <i class="mob-br">, which the blanket rule at the
+     top of this file already keeps out of the desktop's way. */
+  :root .sec6 .page .copy .mob-br{ display:block; height:0 }
+  :root .sec6 .page > .copy{ grid-column:1 / -1; position:static !important;
+    width:auto !important; margin:0 0 .2em; text-align:left;
+    font-size:var(--t-h3) !important; line-height:1 }
+  :root .sec6 .page > .copy.sub{ font-size:var(--t-h3s) !important;
+    margin:0 0 1.5em; font-weight:500; line-height:1.2 }
+  /* HIS CARDS, REBUILT AS CARDS. Everything inside one is absolutely placed
+     against the card in the drawing - the tab, the icon, the heading, the copy
+     and the button all at their own per cent - and a phone has no room for
+     that composition. They flow: tab, icon on it, heading, copy, button. */
+  :root .sec6 .page .card{
+    position:relative !important; inset:auto !important;
+    width:auto !important; height:auto !important; margin:0 !important;
+    transform:none !important; font-size:inherit;
+    display:flex; flex-direction:column; align-items:center;
+    /* HIS CARD IS A TALL CARD - 475.97 by 832.86, which is 172 by 301 here -
+       and the page was drawing it 173 by 273. That is the whole reason his
+       paragraph looked cramped: he lengthened the card so the copy could be
+       read at his size, and a shorter box made the copy the thing that had to
+       give. The padding comes off the card and goes on the pieces, because his
+       tab is 46.7% of the CARD and a padded box made it 42. */
+    aspect-ratio:475.97 / 832.86; min-width:0;
+    padding:0 0 5.8%; overflow:visible;
+  }
+  :root .sec6 .page .card > *{
+    position:static !important; inset:auto !important;
+    width:auto !important; height:auto !important;
+    margin:0 !important; transform:none !important;
+  }
+  /* HIS ORDER IS NOT THE DESKTOP'S. Four across reads left to right; two by
+     two on a phone he puts Print and Social on the top row and Website and
+     Video under them, and the markup is in the desktop's order. */
+  :root .sec6 .page .card:nth-of-type(1){ order:3 }   /* Website Design   */
+  :root .sec6 .page .card:nth-of-type(2){ order:4 }   /* Video Production */
+  :root .sec6 .page .card:nth-of-type(3){ order:1 }   /* Print & Branding */
+  :root .sec6 .page .card:nth-of-type(4){ order:2 }   /* Social & Paid Ads*/
+  /* his tab is 222.39 wide on a card 475.97 across - 46.7% - and it hangs 19
+     units ABOVE the card's own top edge, which is the 2.3% here */
+  :root .sec6 .page .card .label{ width:46.7% !important; height:auto !important;
+    margin-top:-2.3% !important }
+  /* HIS MEASURE, ADJUSTED FOR THE REAL FACE. He sets the paragraph in a box
+     330 units wide on a 476 card - 15% of air down each side - but that box
+     was drawn against a fallback: in Be Vietnam Pro Light his own first line,
+     "Logos, flyers, signage,", needs about 350. Holding his 15% would break
+     every line a word early and turn six lines into nine, which is the thing
+     he lengthened these cards to avoid. 8% is the same paragraph at his size
+     with his own breaks. */
+  :root .sec6 .page .card h3{ padding:0 2% }
+  :root .sec6 .page .card p { padding:0 8% }
+  /* THE ICON LIVES ON THE TAB, so it is measured against the TAB and not
+     against the card: his tab is 46% of the card wide and hangs from the top,
+     and an icon at 24% of the CARD spilled off the bottom of it. */
+  /* AND IT SITS IN THE TAB RATHER THAN FILLING IT. On his card the icon is
+     147.9 tall in a tab 174.35 deep - 85% - with 7 units of air above it and
+     19 below, so it hangs slightly high of centre and clears the tab's rounded
+     foot. Ours was flush with the top edge at 87%, which is what made it read
+     as too big for the shape it is standing in. (His own four icons are
+     print.png, social.png, video.png and webdesign.png, which are external
+     references in his file and did not come with it - these are the page's own
+     line drawings at his proportions.) */
+  /* HIS ICON SITS IN THE TAB rather than filling it. On his card it is 147.9
+     tall in a tab 174.35 deep - 85% - with 7 units of air above it and 19
+     below, so it hangs slightly high of centre and clears the tab's rounded
+     foot. There is only ONE image per card now: the same four drawings serve
+     both sizes, so this is a placement and not a swap. */
+  :root .sec6 .page .card > .icon{
+    position:absolute !important; left:50% !important; top:0.6% !important;
+    width:26% !important; height:auto !important; max-width:none !important;
+    transform:translateX(-50%) !important; margin:0 !important;
+  }
+  :root .sec6 .page .card h3{
+    font-size:var(--t-card) !important; line-height:1;
+    margin:.66em 0 .52em !important; text-align:center;
+  }
+  :root .sec6 .page .card p{
+    /* 34.44 of line spacing against a 31 face, both scaled 1.1 - his 1.11 */
+    font-size:var(--t-cardp) !important; line-height:1.12; font-weight:300;
+    margin:0 0 1.3em !important; text-align:center;
+    /* AND THE COLOUR IS THE TOKEN, NOT A HEX. #333 was written here when this
+       block was about type size and nothing else, and it beat the variable
+       the desktop card reads - so on a phone after dark his copy stayed a
+       near-black on a near-black card while the heading above it went white. */
+    color:var(--card-sub, #333);
+  }
+  :root .sec6 .page .card p br{ display:none }
+  /* HIS BUTTON IS ON THE CARD, NOT UNDER A CURSOR. On a desktop it rises in
+     on hover, so it is at zero opacity until then - and a phone has no hover,
+     which is why four cards on his drawing had a Learn More and four cards on
+     the page had a hole where one should be. It stands there instead: his own
+     359.74 by 79.45 on a 475.97 card, which is 75.6% wide. */
+  :root .sec6 .page .card .btn{
+    position:static !important; opacity:1 !important; translate:none !important;
+    pointer-events:auto !important; transition:none !important;
+    width:75.6% !important; margin-top:auto !important;
+    /* 79.45 tall on an 832.86 card is 9.5% of it, which at his type size is
+       a shade over half an em of padding either side of the label */
+    padding:.62em 0 !important; border-radius:.42em !important;
+    border-width:1px !important;
+    font-size:var(--t-learn) !important; font-weight:500; white-space:nowrap;
+  }
+
+  :root .sec6 .page h2.copy{ white-space:normal !important }
+  :root .sec6 .page .sub{ white-space:normal !important }
+
+  /* -- 7. THE SWITCHES STAY ------------------------------------------------- */
+  /* AND THE ONE IN THE BAR TAKES NO z-index AT ALL. This number is left over
+     from when the switch floated over the top right corner of whatever section
+     happened to be under it, and it had to out-rank the drive. In the header
+     it is a positioned child of a bar that is already at 9000, so it needs
+     nothing - and a z-index on a positioned element makes it a stacking
+     context, which ISOLATES BLENDING. His sun and his moon are six `screen`
+     circles apiece; isolated, those ramps composite against nothing and come
+     out as a hard grey ring instead of a glow on his blue. */
+  .mode-switch{ z-index:10002 }
+  .hdr .mode-switch{ z-index:auto }
+}
+
+/* NO GUARD AT THE BOTTOM ANY MORE - see the top of this file. A guard is a
+   list of names, and the name that is missing from it is the one that shows
+   up on his desktop. The furniture is off by default instead. */

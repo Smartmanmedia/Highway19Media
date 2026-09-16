@@ -1,0 +1,333 @@
+/* ============================================================================
+   SECTION SIX — pick your lane
+   ----------------------------------------------------------------------------
+   His artboard is 3127.99 x 1496.53, but the PAGE inside it is the white rect:
+   x 66.34, width 1923.2, height 1189.6. The rest is workspace, and his rock
+   band carries a second copy of itself out there for tiling. So the column is
+   the white rect and the ratio is 1189.6 / 1923.2.
+
+   Everything read_section and read_text report as a TOP or a HEIGHT is a share
+   of the ARTBOARD height, not the page's - so those numbers are scaled here by
+   1496.53 / 1189.6 = 1.258. Lefts and widths are already against the column.
+   ========================================================================= */
+
+.sec6{
+  position:relative;
+  width:100%;
+  /* his page is 1923.2 x 1189.6, plus 55 units on top for the mountains to
+     cross into and 164.5 more to clear them before his heading - see .page.
+     THE FOOT. The room under the cards was where his snow range stood; with the
+     range gone it is empty, and how much of it there should be is a matter of
+     how much room the sky needs to open in. Halved to 198px it was too little
+     for the gradient to breathe, so it is 448 at 1440 now - and set as a share
+     of the WIDTH, like every other number here, so it holds its proportion at
+     any size rather than being a fixed 250 that vanishes on a big screen.
+
+     Whatever it is set to, it is only ever the SECTION that changes: .page
+     below keeps its own height off the width instead of filling to this
+     section's bottom, so the cards stay exactly the size and place they were.
+     That is the difference between cutting a gap and zooming out.
+     Cards end at 0.4549 of the width; the foot is 0.3125 more. */
+  aspect-ratio:1923.2 / 1475.9;
+  container-type:inline-size;
+  margin-top:-2.860%;
+  /* THE WHITE STARTS INSIDE THE ROCKS, NOT AT THE SECTION'S EDGE.
+     A flat #fff here painted white from this section's top edge down, straight
+     across section four's mountains, and the band is nowhere near solid that
+     high: measured on the composite (tools/seam_cover.js) the rocks cover only
+     65% of the columns there, so one column in three showed a dead straight
+     green-to-white line through the gaps. That is the seam he keeps seeing.
+     The band covers EVERY column edge to edge over one narrow strip only -
+     3.29% to 5.77% of this section - so the switch has to happen inside it.
+     THOSE FIGURES ARE SHARES OF THIS SECTION'S HEIGHT, so every time the foot
+     changes they have to be re-derived - which is the trap this section keeps
+     setting. Section four's bottom edge is a fixed 2.86% of the WIDTH below
+     this section's top (margin-top is width-based); against the height it was
+     3.903%, then 4.82%, and is 3.727% now. The strip itself is 3.14% to 5.51%.
+     3.67% sits in it and a whisker above that edge, so the two overlap and no
+     hairline of page background can open
+     between them. Above the line this section is transparent and section four
+     paints through, mountains, shadow and grass together - which is why there
+     is no colour step either. */
+  /* THIS PAGE ENDS ON THE SKY THE DRIVE BEGINS WITH, exactly - not near it.
+     Section seven's first frame is his sky, which is a 112deg ramp plus a sun
+     glow at 11% -4% over a box one viewport tall, so its top ROW is white on
+     the left running to blue on the right and not one flat colour. To land on
+     that row the same two gradients are laid at the foot of this section,
+     mirrored: a 112deg ramp turned upside down is a 68deg ramp, and over a box
+     of the same 100% by 100vh its BOTTOM row is the other's TOP row. The glow
+     mirrors with it, -4% becoming 104%. The white above simply stops being
+     opaque over the last viewport, so the two are one continuous sky with no
+     seam to see and nothing to fade.
+
+     AND IT STARTS BELOW THE CARDS, not behind them. The white holds solid to
+     100px past the cards' bottom edge - which is 59.28% of this section - and
+     only then opens into the sky. Run over the whole viewport as it was, the
+     blue was already climbing up behind the cards and pulling the eye off them.
+
+     The first 3.85% stays transparent for the reason it always did: section
+     four paints through there, so the two overlap and no hairline can open. */
+  background: var(--sec6-bg,
+    linear-gradient(180deg, transparent 0, transparent 3.67%,
+      #fff 3.67%, #fff calc(59.28% + 100px), rgba(255,255,255,0) 100%)),
+    var(--sec6-sky-glow,
+      radial-gradient(760px 620px at 11% 104%,
+        rgba(255,255,255,.98), rgba(255,255,255,0) 60%)) left bottom / 100% 100vh no-repeat,
+    var(--sec6-sky,
+      linear-gradient(68deg,#fff 0%,#d4e7ff 15%,#a3ccff 36%,#7cb7ff 55%,
+        #60a8ff 73%,#4f9fff 88%,#4a9cff 100%)) left bottom / 100% 100vh no-repeat;
+  /* AND NO BACKGROUND-COLOUR UNDER ANY OF IT. A flat #fff behind the layers
+     fills the transparent strip at the top as well, which is the one place
+     this section must NOT paint - section four's rocks and green show through
+     there, and a white row opened straight across them. The white layer above
+     already covers everything from 4.75% down; nothing needs a colour. */
+  overflow:hidden;
+  isolation:isolate;
+}
+
+/* ============================================================================
+   THE SKY BEGINS ON THIS PAGE, NOT AT THE SEAM.
+   The gradient already arrives at the drive's first row exactly, but the
+   drive's sky brings its stars and its clouds with it and they used to start
+   dead on the section boundary - a line of nothing, then a sky full of things.
+   So both start up here and fade in, and the two sections read as one sky
+   deepening rather than one page handing over to another.
+
+   Anchored to the BOTTOM, both of them, because that is the edge the two
+   sections share: whatever height this section is given, the last row of these
+   is the row the drive continues from.
+   ========================================================================= */
+
+/* HIS STARFIELD, the same six tiles the drive uses so the two are one sky. The
+   mask is what makes it a fade rather than an edge - a background cannot be
+   given an alpha ramp any other way. */
+.sec6::after{
+  content:''; position:absolute; inset:0; z-index:0; pointer-events:none;
+  opacity:var(--night, 0); transition:opacity 1s linear;
+  background-image:
+    radial-gradient(1.5px 1.5px at 18% 22%,rgba(255,255,255,.95),transparent),
+    radial-gradient(1.1px 1.1px at 62% 9%,rgba(255,255,255,.75),transparent),
+    radial-gradient(1.3px 1.3px at 84% 41%,rgba(255,255,255,.85),transparent),
+    radial-gradient(1px 1px at 37% 58%,rgba(210,230,255,.7),transparent),
+    radial-gradient(1.6px 1.6px at 8% 74%,rgba(255,255,255,.6),transparent),
+    radial-gradient(1.1px 1.1px at 71% 66%,rgba(220,235,255,.65),transparent);
+  background-size:340px 240px,340px 240px,470px 330px,470px 330px,610px 410px,610px 410px;
+  background-position:left bottom;
+  -webkit-mask-image:linear-gradient(180deg,transparent 44%,#000 96%);
+          mask-image:linear-gradient(180deg,transparent 44%,#000 96%);
+}
+
+/* AND HIS CLOUDS, THREE OF THEM, DRIFTING. They were background layers on this
+   pseudo-element and they sat still, which was worse than not having them:
+   below the seam the drive's sky is moving and above it his was frozen.
+
+   They are elements now, moved by TRANSFORM. A background-position animation
+   would have repainted a section-sized layer sixty times a second; a transform
+   is handed to the compositor and costs nothing, which is the same reason
+   every sprite in the drive is placed the way it is.
+
+   They keep going after dark, in the drive's own night duotone, for the reason
+   the stars start up here at all: a sky that has clouds below the seam and
+   none above it is the discontinuity this was meant to close. */
+.sec6 .sky-cloud{
+  position:absolute; left:0; z-index:0; pointer-events:none; height:auto;
+  animation:h19-drift 240s linear infinite;
+  filter:brightness(1) sepia(0) saturate(1) hue-rotate(0deg) brightness(1);
+  transition:filter 1s linear;
+}
+:root[data-mode="night"] .sec6 .sky-cloud{
+  filter:brightness(.4) sepia(1) saturate(6) hue-rotate(200deg) brightness(.45);
+}
+@keyframes h19-drift{ from{ translate:-24vw 0 } to{ translate:124vw 0 } }
+@media (prefers-reduced-motion: reduce){ .sec6 .sky-cloud{ animation:none } }
+
+/* THE MOUNTAINS HAVE TO CROSS THE TRANSITION. His rock band ends at section
+   four's artboard edge - there is no more of it drawn - so the way to get it
+   past the boundary is to start this section 150px early and leave that band
+   transparent. Section four's rocks are already painted there, so they run on
+   through it, and his white page begins underneath them at the old boundary.
+   HOW FAR. His artboard has the rocks sitting on green right to its bottom
+   edge, so the crossing is a hairline, not a band: 55 units, about 40px at a
+   1400px page. At 150px the white came up through the middle of the mountains
+   and read as far too much. His page then starts a further 164.5 units down,
+   so the heading still clears the rock line by about 150px. Everything below
+   is a share of THE PAGE, not of the section, so all of his numbers stand. */
+/* HIS PAGE KEEPS ITS OWN PROPORTIONS. It used to run from 15.58% of this
+   section down to its bottom edge, which meant every card was a share of the
+   SECTION'S height - shorten the section and the cards shrink with it, which
+   is not cutting a gap, it is zooming out. Its height is his artboard's now,
+   1923.2 by 1189.6 off the width, so the cards are nailed to the width and the
+   section's foot can be trimmed to whatever is wanted underneath them. Its own
+   empty bottom hangs past the section and is clipped, which costs nothing: the
+   only thing that was ever drawn down there was the snow range. */
+.sec6 .page{
+  position:absolute; left:0; right:0; top:14.88%; z-index:0;
+  aspect-ratio:1923.2 / 1189.6;
+}
+
+/* the last 150px of section four's rock band, redrawn ON TOP of the white so
+   the mountains carry across the transition instead of stopping dead at it.
+   Same drawing, same scale, same left and width as it has up there. */
+
+
+.sec6 .page [data-at]{ position:absolute; display:block }
+.sec6 .page img[data-at], .sec6 .page svg[data-at]{ height:auto }
+.sec6 .page .z-ground{ z-index:0 }
+.sec6 .page .copy{ position:absolute; margin:0; text-align:center; color:var(--sec6-ink, #1a1a1a);
+  font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif; z-index:2 }
+
+.sec6 .page h2.copy{ font-size:2.133cqw; font-weight:900; line-height:1.1; white-space:nowrap }
+.sec6 .page .sub    { font-size:1.508cqw; font-weight:500; line-height:1.2; white-space:nowrap }
+
+/* ---- the cards ------------------------------------------------------------
+   Four of the same thing, so they are a component rather than 1,340 shapes.
+   The box, the radius, the rule and the colours are all his: 13.46% x 33.62%
+   of the section, rx 20.6 units, a #1a1a1a hairline, and one colour per card
+   driven off --c. Children are positioned against the CARD, not the section,
+   which is the one place that rule earns its keep.                          */
+.sec6 .page .card{
+  /* HIS NEW CARD IS TALLER. Cards_New draws it 258.8 by 484.41 on a 1918.8
+     artboard - 13.49% of the width and 25.24% of it again in height, which on
+     this 891-tall page is 40.80%. It was 33.62%, and that shortfall is why his
+     copy had to be set at two thirds the size he asks for. */
+  position:absolute; top:21.45%; width:13.49%; height:40.80%;
+  background:var(--card-bg, #fff); border:0.052cqw solid var(--card-line, #1a1a1a); border-radius:1.071cqw;
+  z-index:1;
+  font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
+  /* `scale` and `box-shadow`, not `transform` - his squeezed copy elsewhere on
+     the page owns transform, and keeping to the standalone property means a
+     card never has to know what else is on it. */
+  scale:1;
+  /* AT NIGHT THIS BECOMES A GLOW in the lane's own colour, on at rest - see
+     night.css, where it is written against the card because that is the only
+     place --c exists. Flat on his white page by day, as it was. */
+  box-shadow:none;
+  transition:scale .22s ease-out, box-shadow .22s ease-out,
+             background-color .22s ease-out;
+}
+/* PICK YOUR LANE: the card lifts and the button arrives. The lifted card is
+   raised a layer so it grows over its neighbours rather than under them.
+   :focus-within covers the click - the <article> carries tabindex="0" until
+   these become links, so a tap or a keyboard tab opens it the same way. */
+.sec6 .page .card:hover,
+.sec6 .page .card:focus-within{
+  scale:1.05;
+  /* daylight keeps his drop shadow; at night the card fills in black and the
+     glow comes up instead, because a black shadow on a black page is a
+     smudge and nothing else. */
+  box-shadow:0 0.16cqw 0.85cqw rgba(0,0,0,.16);
+  background:var(--card-hover-bg, var(--card-bg, #fff));
+  z-index:2;
+}
+.sec6 .page .card > *{ position:absolute; margin:0; text-align:center }
+
+/* his tag: a flat top with a folded corner, rounded off at the bottom. One
+   shape, filled from the card's own colour - which is what "change the label
+   colour to each card" means. */
+.sec6 .page .card .label{
+  /* his tab is 120.92 wide on a 258.8 card and hangs 15.7 above its top */
+  left:24.65%; top:-3.24%; width:46.72%; height:17.28%;
+  overflow:visible;
+}
+.sec6 .page .card .label .body{ fill:var(--c) }
+.sec6 .page .card .label .fold{ fill:#1a1a1a }
+
+.sec6 .page .card .icon{ height:auto }
+
+/* HIS 0.97 SIDEWAYS SQUEEZE, WHICH EVERY BLOCK IN Cards New CARRIES. Every
+   <text> in that file is transform="... scale(.97 1)" - his own kerning trick,
+   the same one sections one, two and four already honour through --sx - and
+   section six was the one that did not. Three per cent is not nothing at this
+   size: it is the difference between "Social Media & Paid Ads" sitting inside
+   its card with air either side and touching both edges. */
+.sec6 [style*="--sx"]{ transform:scaleX(var(--sx)); transform-origin:50% 0 }
+.sec6 .page .card h3,
+.sec6 .page .card p { transform:scaleX(0.97); transform-origin:50% 0 }
+.sec6 .page .card h3{
+  left:0; right:0; top:26.09%; font-size:1.808cqw; font-weight:900;
+  line-height:1.00; color:var(--card-ink, #1a1a1a);
+}
+.sec6 .page .card p{
+  /* HIS COPY, AT HIS SIZE. He sets it 16 and scales it 1.1 in the vertical, so
+     what a reader sees is 17.6 of his 1918.8 - 0.917cqw, where this was 0.667
+     and read as small print.
+
+     AND THE MEASURE IS 13.18 EMS, NOT 213 UNITS. That scale is 1.01 ACROSS and
+     1.1 DOWN, so his type is a shade condensed: 17.6 tall on a 16.16 body. His
+     longest line is 213 of those, which is 13.18 ems - and 13.18 ems of type
+     that is NOT condensed is 174 on this card, not 160. At 160 his one-line
+     leads broke into two and his body wrapped a word early on every card. */
+  /* THE BOX IS WIDENED BY 1/0.97 AND PULLED BACK BY HALF THE DIFFERENCE. A
+     scaleX squeezes AFTER the text has laid out and wrapped, so at his own
+     5.68% margins the copy wraps to a 88.64% box and is then painted into
+     86.0% of one - and the lead line, now the SemiBold he set rather than a
+     Medium, no longer fits on the one line his file gives it. 4.31% either
+     side lays it out in 91.38%, which is 88.64% once squeezed: his box, his
+     wrapping, his tracking. */
+  left:4.31%; right:4.31%; top:44.63%; font-size:0.917cqw; font-weight:300;
+  line-height:1.09; color:var(--card-sub, #333);
+}
+/* AND HIS LEAD LINE, which is a line and not a lead-in: SemiBold, on its own
+   above the body, and a <b> rather than a <br> so it holds its own line at
+   both sizes without depending on a break the phone rules take out. */
+/* HIS LEAD IS SEMIBOLD AND WE DO NOT SHIP ONE. The page carries Light 300,
+   Medium 500, Bold 700, ExtraBold 800 and Black 900 - five files, subset from
+   his own - and 600 falls up to Bold, which sets "Your business. Open 24/7."
+   about five per cent wider than the 213 units he allows it and breaks his
+   one-line lead into two. Medium holds his break and still stands off the
+   Light body under it. */
+/* AND HIS LEAD LINE IS A SEMIBOLD, NOT A MEDIUM. In his file the first line
+   of each card is BeVietnamPro-SemiBold at 600 and the six under it are Light
+   at 300; this had the lead at 500, which reads as barely emphasised beside
+   its own body copy. */
+.sec6 .page .card p > b{ display:block; font-weight:600;
+  /* AND HALF A LINE UNDER IT. His lead and his body run as one block in the
+     SVG because Illustrator sets a paragraph as a stack of tspans on a fixed
+     leading and cannot say "a bit more here"; on a page it can. Half of the
+     1.09 line the copy is set on. */
+  margin-bottom:0.545em }
+.sec6 .page .card p .nb{ white-space:nowrap }
+/* It sits on his mark, but it is not there until you ask for it: it fades in
+   while sliding UP INTO that mark, so the arrival reads as the button coming
+   to meet you rather than appearing out of nowhere. `translate` again, so it
+   composes with the card's own `scale` instead of fighting a transform. */
+.sec6 .page .card .btn{
+  left:13.06%; width:75.58%; top:86.41%; height:8.92%;
+  background:var(--c); border:0.104cqw solid #fff; border-radius:0.582cqw;
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size:0.86cqw; font-weight:500; white-space:nowrap;
+  /* AND IT IS SUMMONED AGAIN. It was made permanent because Cards_New draws
+     all four buttons on all four cards - which it does, and which is a still
+     picture of a page nobody is pointing at. He wants the hover back: the
+     card is quiet until you go to it, and the button rises into the space
+     that was already left for it. */
+  opacity:0; translate:0 22%; pointer-events:none;
+  transition:opacity .18s linear, translate .22s cubic-bezier(.2,.7,.3,1);
+}
+.sec6 .page .card:hover .btn,
+.sec6 .page .card:focus-visible .btn,
+.sec6 .page .card:focus-within .btn{ opacity:1; translate:0 0; pointer-events:auto }
+/* AND ON A TOUCHSCREEN THERE IS NO HOVER, so there it simply is. */
+@media (hover:none){
+  .sec6 .page .card .btn{ opacity:1; translate:0 0; pointer-events:auto }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .sec6 .page .card{ transition:box-shadow .22s ease-out }
+  .sec6 .page .card:hover,
+  .sec6 .page .card:focus-within{ scale:1 }
+  .sec6 .page .card .btn{ translate:0 0; transition:opacity .18s linear }
+}
+
+/* the rock band's lower half - the same art section four draws the top of */
+.sec6 .rock-layer{ position:absolute; display:block; height:auto; z-index:1 }
+
+/* AND THE BAND'S SHADOW, WHICH ONLY THE PHONE DRAWS. Above the breakpoint
+   section four casts it across the whole band and this copy stays out of the
+   way; below it, section four's half of the band and its shadow are both
+   hidden and the stones were sitting on his green with nothing under them.
+   Hidden HERE rather than by the mob- guard at the top of mobile.css, because
+   the rule above it - .sec6 .rock-layer - is a class more specific and was
+   quietly bringing it back on a desktop. */
+.sec6 .mob-cast{ display:none }
+.sec6 .rock-shadow{ filter:brightness(0) }

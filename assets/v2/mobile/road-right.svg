@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="864.47 7629.93 512.52 1517.5" width="512.52" height="1517.5">
+<g id="Stright">
+      <rect x="865.47" y="8485.86" width="193.38" height="660.57" fill="var(--tarmac)"></rect>
+      <rect x="1040.23" y="8485.86" width="6.7" height="660.57" fill="var(--marking)"></rect>
+      <rect x="876.96" y="8485.86" width="6.7" height="660.57" fill="var(--marking)"></rect>
+      <g>
+        <rect x="959.69" y="9063.33" width="7.19" height="57.5" fill="var(--marking)"></rect>
+        <rect x="959.69" y="8967.08" width="7.19" height="57.5" fill="var(--marking)"></rect>
+        <rect x="959.69" y="8870.83" width="7.19" height="57.5" fill="var(--marking)"></rect>
+        <rect x="959.69" y="8774.59" width="7.19" height="57.49" fill="var(--marking)"></rect>
+        <rect x="959.69" y="8678.35" width="7.19" height="57.5" fill="var(--marking)"></rect>
+        <rect x="959.69" y="8582.11" width="7.19" height="57.49" fill="var(--marking)"></rect>
+        <rect x="959.69" y="8485.86" width="7.19" height="57.5" fill="var(--marking)"></rect>
+      </g>
+    </g>
+<g id="Curve">
+      <g>
+        <path d="M1375.99,7630.93c-149.96,4.35-272.16,61.34-364.73,157.21-91.3,94.55-145.63,222.72-145.63,354.19h193.31c0-77.59,35.34-156.56,92.43-217.76,53.97-57.86,126.28-94.79,224.62-100.15v-193.48Z" fill="var(--tarmac)"></path>
+        <path d="M1375.99,7642.93c-273.36,4.07-494.81,225.91-498.41,499.38h6.62c3.61-269.82,222.08-488.69,491.79-492.76v-6.62Z" fill="var(--marking)"></path>
+        <path d="M1375.99,7806.22c-183.35,4.05-331.62,152.61-335.2,336.08h6.62c3.57-179.82,148.88-325.41,328.58-329.45v-6.64Z" fill="var(--marking)"></path>
+        <g>
+          <path d="M1062.77,7867.28l5.03,4.26c-9.05,11.15-17.36,22.66-25.09,34.39-1.88-1.24-3.69-2.5-5.42-3.7,7.83-11.91,16.3-23.62,25.48-34.96Z" fill="var(--marking)"></path>
+          <path d="M1015.72,7928.34l5.68,3.33c-6.98,12.55-13.17,25.33-18.76,38.26-2.07-.9-4.06-1.83-5.97-2.71,5.65-13.1,11.97-26.12,19.04-38.88Z" fill="var(--marking)"></path>
+          <path d="M984.42,7995.89l6.17,2.27c-4.72,13.59-8.61,27.26-11.86,40.96-2.21-.52-4.33-1.09-6.36-1.63,3.3-13.87,7.27-27.8,12.05-41.61Z" fill="var(--marking)"></path>
+          <path d="M965.26,8067.91l6.47,1.16c-2.3,14.19-3.78,28.34-4.64,42.42-2.25-.14-4.42-.33-6.52-.5.86-14.24,2.38-28.66,4.69-43.07Z" fill="var(--marking)"></path>
+        </g>
+      </g>
+      <rect x="865.63" y="8142.33" width="193.31" height="351.48" fill="var(--tarmac)"></rect>
+      <rect x="1040.79" y="8142.33" width="6.69" height="351.48" fill="var(--marking)"></rect>
+      <rect x="877.58" y="8142.33" width="6.69" height="351.48" fill="var(--marking)"></rect>
+      <g>
+        <rect x="954.16" y="8421.75" width="7.17" height="55.64" fill="var(--marking)"></rect>
+        <rect x="954.16" y="8328.6" width="7.17" height="55.64" fill="var(--marking)"></rect>
+        <rect x="954.16" y="8235.47" width="7.17" height="55.66" fill="var(--marking)"></rect>
+        <rect x="954.16" y="8135" width="7.17" height="62.98" fill="var(--marking)"></rect>
+      </g>
+    </g>
+</svg>

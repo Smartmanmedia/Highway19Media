@@ -1,0 +1,154 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Highway 19 — section two</title>
+<!-- Both families are his own files, self-hosted. No external font requests. -->
+<link rel="stylesheet" href="section-fonts.css">
+<link rel="stylesheet" href="section-02.css">
+<link rel="stylesheet" href="parallax.css">
+<style>body{margin:0;background:#04264f}</style>
+
+<section class="sec2" id="roadmap">
+
+  <span class="sand" aria-hidden="true"></span>
+
+  <!-- HIS SURF, IN FOUR BANDS. Split out of assets/v2/section-02/waves.svg by
+       tools/split_waves.js - his own grouping, one <svg> each so each band can
+       swell on its own. Inline rather than <img> for the same reason as before:
+       an image's raster lives in the browser's image cache, and a browser short
+       of memory drops it and repaints lazily, which is what made the ocean stop
+       in mid-air on a busy machine.
+
+       The wrapper is his clipPath: a fixed window at the section's own edges,
+       with 15% of his bleed hidden either side, so the bands slide underneath
+       and no edge can ever come into view. Re-run the tool if he re-exports. -->
+  <div class="waves z-ground" aria-hidden="true">
+    <svg class="wave wave-surf" aria-hidden="true" viewBox="-276.17 -17.95 2420.20 486.84"><defs><linearGradient id="waves-g1" x1="-54.68" y1="371.56" x2="1989.45" y2="371.56" gradientUnits="userSpaceOnUse"><stop offset="0.0156" stop-color="#dee5ff"/><stop offset="0.9844" stop-color="#fefeff"/></linearGradient><linearGradient id="waves-g2" x1="-4.50" y1="350.24" x2="1940.04" y2="350.24" gradientUnits="userSpaceOnUse"><stop offset="0.0043" stop-color="#93dbfb"/><stop offset="0.9957" stop-color="#1281cc"/></linearGradient><linearGradient id="waves-g3" x1="-13.56" y1="276.47" x2="1952.98" y2="276.47" gradientUnits="userSpaceOnUse"><stop offset="0.0059" stop-color="#00ccfd"/><stop offset="0.9941" stop-color="#0572e9"/></linearGradient><linearGradient id="waves-linear-gradient-2" x1="-84.75" y1="206.2" x2="2049.65" y2="206.2" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0094f6"></stop>
+      <stop offset="1" stop-color="#007be8"></stop>
+    </linearGradient><linearGradient id="waves-linear-gradient-3" x1="-60.63" y1="122.9" x2="2121.63" y2="122.9" gradientTransform="translate(1985.4939) scale(-1.0275 1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0066e2"></stop>
+      <stop offset="1" stop-color="#0561ca"></stop>
+    </linearGradient><linearGradient id="waves-linear-gradient-4" x1="-276.18" y1="64.42" x2="2138.98" y2="64.42" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#004ba0"></stop>
+      <stop offset="1" stop-color="#0561ca"></stop>
+    </linearGradient></defs>
+      <g>
+            <g opacity=".43">
+              <path d="M2043.8,462.12s-144.76-43.04-284.66-45.77c-95.65-1.87-188.29,41.66-233.78,25.62-112.01-39.5-240.4-6.77-258.91-3.96-50.5,7.66-74.83-6.8-110.7-10.86-60.1-6.8-159.13,9.87-207.2-1.22-115.17-26.57-164.5.72-183.39,6.87-90.8,29.56-148.82,2.43-172.22,6.74-129.47,23.87-145.82-54.74-195.27-29.62-119.46,60.68-147.49,15.43-176.4,22.63-165.18,41.15-222.08-7.1-236.13-4.11-74.9,15.94-177.1,6.17-177.1,6.17v-155.56H2043.8v183.07Z" fill="#002b61"></path>
+            </g>
+            <path d="M2053.33,457.31s-144.76-43.04-284.66-45.77c-95.65-1.87-188.29,41.66-233.78,25.62-112.01-39.5-240.4-6.77-258.91-3.96-50.5,7.66-74.83-6.8-110.7-10.86-60.1-6.8-159.13,9.87-207.2-1.22-115.17-26.57-164.5.72-183.39,6.87-90.8,29.56-148.82,2.43-172.22,6.74-129.47,23.87-145.82-54.74-195.27-29.62-119.46,60.68-147.49,15.43-176.4,22.63-165.18,41.15-222.08-7.1-236.13-4.11-74.9,15.94-177.1,6.17-177.1,6.17v-155.56h2235.77v183.07Z" fill="url(#waves-g1)"/>
+            <path d="M2028.91,427.4s-143.36-38.73-281.91-41.18c-94.73-1.68-186.47,37.49-231.52,23.05-110.93-35.55-238.08-6.09-256.41-3.56-50.01,6.89-74.11-6.12-109.63-9.77-59.52-6.12-157.6,8.88-205.2-1.1-114.06-23.91-162.91.65-181.62,6.18-89.92,26.6-147.38,2.18-170.56,6.06-128.22,21.48-144.41-49.26-193.38-26.65-118.31,54.6-146.07,13.88-174.69,20.36-163.59,37.03-219.93-6.39-233.85-3.7-74.18,14.35-175.39,5.55-175.39,5.55v-139.98H2028.91v164.74Z" fill="url(#waves-g2)"/>
+            <path d="M-188.23,365s142.78-44.44,280.77-47.26c94.35-1.93,185.72,43.01,230.58,26.45,110.48-40.79,237.12-6.99,255.37-4.09,49.81,7.91,73.81-7.02,109.19-11.21,59.28-7.02,156.96,10.19,204.37-1.26,113.6-27.44,162.25.74,180.89,7.09,89.56,30.52,146.78,2.5,169.87,6.96,127.7,24.64,143.82-56.52,192.6-30.58,117.83,62.66,145.48,15.93,173.99,23.36,162.93,42.49,219.04-7.34,232.9-4.25,73.88,16.46,174.68,6.37,174.68,6.37v-160.63H-188.23v189.03Z" fill="url(#waves-g3)"/>
+          </g>
+    </svg>
+    <svg class="wave wave-mid" aria-hidden="true" viewBox="-276.17 -17.95 2420.20 486.84">
+      <g>
+            <path d="M2028.98,297.31s-138.2-38.73-271.76-41.18c-91.32-1.68-179.76,37.49-223.18,23.05-106.94-35.55-229.5-6.09-247.17-3.56-48.21,6.89-71.44-6.12-105.68-9.77-57.37-6.12-151.92,8.88-197.81-1.1-109.95-23.91-157.04.65-175.08,6.18-86.68,26.6-142.07,2.18-164.41,6.06-123.6,21.48-139.21-49.26-186.42-26.65-114.05,54.6-140.81,13.88-168.4,20.36-157.7,37.03-212.01-6.39-225.42-3.7-71.5,14.35-169.07,5.55-169.07,5.55v-139.98H2028.98v164.74Z" fill="#002b61" opacity=".43"></path>
+            <path d="M2034.3,292.5s-138.2-38.73-271.76-41.18c-91.32-1.68-179.76,37.49-223.18,23.05-106.94-35.55-229.5-6.09-247.17-3.56-48.21,6.89-71.44-6.12-105.68-9.77-57.37-6.12-151.92,8.88-197.81-1.1-109.95-23.91-157.04.65-175.08,6.18-86.68,26.6-142.07,2.18-164.41,6.06-123.6,21.48-139.21-49.26-186.42-26.65-114.05,54.6-140.81,13.88-168.4,20.36-157.7,37.03-212.01-6.39-225.42-3.7-71.5,14.35-169.07,5.55-169.07,5.55V127.76H2034.3v164.74Z" fill="#fff"></path>
+            <path d="M2049.65,288.57s-138.2-38.73-271.76-41.18c-91.32-1.68-179.76,37.49-223.18,23.05-106.94-35.55-229.5-6.09-247.17-3.56-48.21,6.89-71.44-6.12-105.68-9.77-57.37-6.12-151.92,8.88-197.81-1.1-109.95-23.91-157.04.65-175.08,6.18-86.68,26.6-142.07,2.18-164.41,6.06-123.6,21.48-139.21-49.26-186.42-26.65-114.05,54.6-140.81,13.88-168.4,20.36-157.7,37.03-212.01-6.39-225.42-3.7-71.5,14.35-169.07,5.55-169.07,5.55V123.83h2134.4v164.74Z" fill="url(#waves-linear-gradient-2)"></path>
+          </g>
+    </svg>
+    <svg class="wave wave-swell" aria-hidden="true" viewBox="-276.17 -17.95 2420.20 486.84">
+      <path d="M-194.55,205.27s145.19-38.73,285.5-41.18c95.93-1.68,188.85,37.49,234.47,23.05,112.34-35.55,241.11-6.09,259.67-3.56,50.65,6.89,75.05-6.12,111.03-9.77,60.27-6.12,159.6,8.88,207.81-1.1,115.51-23.91,164.99.65,183.93,6.18,91.07,26.6,149.25,2.18,172.73,6.06,129.85,21.48,146.25-49.26,195.85-26.65,119.82,54.6,147.93,13.88,176.92,20.36,165.67,37.03,222.73-6.39,236.82-3.7,75.12,14.35,177.62,5.55,177.62,5.55V40.54H-194.55v164.74Z" fill="url(#waves-linear-gradient-3)">
+    </svg>
+    <svg class="wave wave-far" aria-hidden="true" viewBox="-276.17 -17.95 2420.20 486.84">
+      <g>
+            <path d="M2142.44,153.54s-155.62-36.33-305.94-38.16c-102.77-1.25-202.21,36.37-251.12,22.8-120.44-33.42-258.31-4.91-278.18-2.44-54.24,6.74-80.42-5.55-118.96-8.89-64.58-5.6-170.95,9.04-222.63-.28-123.8-22.34-176.74,1.22-197.02,6.56-97.49,25.65-159.88,2.62-185.02,6.4-139.05,20.92-156.79-46.35-209.87-24.65-128.22,52.41-158.43,13.75-189.47,20.03-177.39,35.85-238.62-5.27-253.71-2.66-80.44,13.93-190.26,5.94-190.26,5.94l-.34-133.24L2142.04-3.27l.4,156.81Z" fill="#002b61" opacity=".43"></path>
+            <path d="M2144.03,146.33s-155.62-36.33-305.94-38.16c-102.77-1.25-202.21,36.37-251.12,22.8-120.44-33.42-258.31-4.91-278.18-2.44-54.24,6.74-80.42-5.55-118.96-8.89-64.58-5.6-170.95,9.04-222.63-.28-123.8-22.34-176.74,1.22-197.02,6.56-97.49,25.65-159.88,2.62-185.02,6.4-139.05,20.92-156.79-46.35-209.87-24.65-128.22,52.41-158.43,13.75-189.47,20.03-177.39,35.85-238.62-5.27-253.71-2.66-80.44,13.93-190.26,5.94-190.26,5.94l-.34-133.24,2402.13-8.2.4,156.81Z" fill="#fff"></path>
+            <path d="M2138.98,146.79s-156.37-38.73-307.5-41.18c-103.33-1.68-203.4,37.49-252.54,23.05-121-35.55-259.69-6.09-279.68-3.56-54.56,6.89-80.84-6.12-119.58-9.77-64.92-6.12-171.9,8.88-223.83-1.1-124.41-23.91-177.7.65-198.11,6.18-98.08,26.6-160.76,2.18-186.04,6.06-139.86,21.48-157.52-49.26-210.94-26.65-129.05,54.6-159.33,13.88-190.55,20.36-178.44,37.03-239.9-6.39-255.08-3.7-80.91,14.35-191.31,5.55-191.31,5.55V-17.95h2415.16v164.74Z" fill="url(#waves-linear-gradient-4)"></path>
+          </g>
+    </svg>
+  </div>
+  <!-- ROAD - shifted 0.14% right of his own numbers. His two artboards are not
+       the same width (1924.34 against 1920.8), so a road drawn continuous in
+       his master lands a third of a percent apart once each section is
+       normalised to its own column. Section one carries the sign and the whole
+       composition above it, so section two's road is what moves. The first
+       tile also starts above the section edge, to close the seam at the join. -->
+  <!-- road tile, inline so its two fills can be variables. Source: assets/v2/section-02/stright.svg -->
+  <svg class="z-road" data-at aria-hidden="true" style="left:15.25%;top:-3.00%;width:4.95%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="305.47 9.48 95.06 324.70"><g><rect x="305.47" y="9.48" width="95.06" height="324.7" fill="var(--tarmac)"></rect><rect x="391.37" y="9.48" width="3.29" height="324.7" fill="var(--marking)"></rect><rect x="311.12" y="9.48" width="3.3" height="324.7" fill="var(--marking)"></rect><g><rect x="351.78" y="293.33" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="351.78" y="246.02" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="351.78" y="198.71" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="351.78" y="151.4" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="351.78" y="104.09" width="3.53" height="28.27" fill="var(--marking)"></rect><rect x="351.78" y="56.79" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="351.78" y="9.48" width="3.53" height="28.26" fill="var(--marking)"></rect></g></g></svg>
+  <!-- road tile, inline so its two fills can be variables. Source: assets/v2/section-02/stright-2.svg -->
+  <svg class="z-road" data-at aria-hidden="true" style="left:15.25%;top:22.15%;width:4.95%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="305.47 206.28 95.06 324.70"><g data-name="Stright"><rect x="305.47" y="206.28" width="95.06" height="324.7" fill="var(--tarmac)"></rect><rect x="391.37" y="206.28" width="3.29" height="324.7" fill="var(--marking)"></rect><rect x="311.12" y="206.28" width="3.3" height="324.7" fill="var(--marking)"></rect><g><rect x="351.78" y="490.13" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="351.78" y="442.82" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="351.78" y="395.51" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="351.78" y="348.2" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="351.78" y="300.89" width="3.53" height="28.27" fill="var(--marking)"></rect><rect x="351.78" y="253.59" width="3.53" height="28.26" fill="var(--marking)"></rect><rect x="351.78" y="206.28" width="3.53" height="28.26" fill="var(--marking)"></rect></g></g></svg>
+  <!-- road tile, inline so its two fills can be variables. Source: assets/v2/section-02/curve.svg -->
+  <svg class="z-road" data-at aria-hidden="true" style="left:-0.65%;top:47.59%;width:20.82%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0.01 443.26 399.99 424.14"><g><rect y="772.32" width="149.23" height="95.02" fill="var(--tarmac)"></rect><g><path d="M149.13,867.4c73.71-2.14,133.78-30.15,179.28-77.28,44.88-46.48,71.58-109.47,71.58-174.1h-95.02c0,38.14-17.37,76.95-45.43,107.04-26.53,28.44-62.07,46.59-110.41,49.23v95.1Z" fill="var(--tarmac)"></path><path d="M149.13,861.5c134.37-2,243.22-111.04,244.99-245.47h-3.25c-1.77,132.63-109.16,240.21-241.73,242.21v3.26Z" fill="var(--marking)"></path><path d="M149.13,781.24c90.12-1.99,163.01-75.02,164.76-165.2h-3.26c-1.75,88.39-73.18,159.95-161.51,161.94v3.26Z" fill="var(--marking)"></path><g><path d="M143.51,821.39c7.74-.19,15.41-.62,22.97-1.28-.12-1.04-.25-2.12-.42-3.22-7.43.64-14.94,1.07-22.54,1.25v3.25Z" fill="var(--marking)"></path><path d="M180.33,819.3l-.35-3.23c6.98-.87,13.81-2.12,20.52-3.66.25,1.09.47,2.15.68,3.17-6.8,1.56-13.76,2.83-20.84,3.72Z" fill="var(--marking)"></path><path d="M215.02,812.13l-.95-3.1c6.68-2.19,13.16-4.73,19.45-7.53.45,1.02.86,2.02,1.26,2.98-6.38,2.84-12.97,5.42-19.76,7.64Z" fill="var(--marking)"></path><path d="M247.53,798.15l-1.61-2.81c6.05-3.62,11.81-7.53,17.34-11.65.66.89,1.29,1.78,1.88,2.62-5.59,4.19-11.48,8.16-17.6,11.84Z" fill="var(--marking)"></path><path d="M277.35,777.13l-2.08-2.49c5.34-4.62,10.32-9.48,15.06-14.5.81.77,1.57,1.52,2.31,2.26-4.79,5.1-9.9,10.03-15.29,14.73Z" fill="var(--marking)"></path><path d="M303.09,751.22l-2.47-2.09c4.45-5.48,8.53-11.14,12.33-16.91.92.61,1.82,1.23,2.66,1.82-3.85,5.86-8.01,11.61-12.53,17.18Z" fill="var(--marking)"></path><path d="M326.22,721.21l-2.79-1.63c3.43-6.17,6.48-12.45,9.22-18.8,1.02.44,2,.9,2.93,1.33-2.78,6.44-5.88,12.84-9.36,19.11Z" fill="var(--marking)"></path><path d="M341.6,688.01l-3.03-1.12c2.32-6.68,4.23-13.4,5.83-20.13,1.08.25,2.13.54,3.12.8-1.62,6.82-3.57,13.67-5.92,20.45Z" fill="var(--marking)"></path><path d="M351.02,652.61l-3.18-.57c1.13-6.97,1.86-13.93,2.28-20.85,1.1.07,2.17.16,3.21.25-.42,7-1.17,14.09-2.31,21.17Z" fill="var(--marking)"></path></g></g><rect x="304.97" y="443.26" width="95.02" height="172.77" fill="var(--tarmac)"></rect><rect x="310.6" y="443.26" width="3.29" height="172.77" fill="var(--marking)"></rect><rect x="390.83" y="443.26" width="3.29" height="172.77" fill="var(--marking)"></rect><g><rect x="352.95" y="451.33" width="3.53" height="27.35" fill="var(--marking)"></rect><rect x="352.95" y="497.11" width="3.53" height="27.35" fill="var(--marking)"></rect><rect x="352.95" y="542.89" width="3.53" height="27.36" fill="var(--marking)"></rect><rect x="352.95" y="588.67" width="3.53" height="30.96" fill="var(--marking)"></rect></g><rect y="858.22" width="149.23" height="3.28" fill="var(--marking)"></rect><rect y="777.94" width="149.23" height="3.29" fill="var(--marking)"></rect><rect x="9.49" y="818.07" width="27.35" height="3.53" fill="var(--marking)"></rect><rect x="55.27" y="818.07" width="27.35" height="3.53" fill="var(--marking)"></rect><rect x="101.05" y="818.07" width="27.35" height="3.53" fill="var(--marking)"></rect></g></svg>
+
+    <!-- HIS SIGN, from assets/scene/No left turn sign.svg, in place of the red
+         warning triangle that was here. INLINE, not an <img>: the only thing
+         that can be done to an image at night is a filter over the whole of
+         it, which takes his white down with his paint. Inline, each of his
+         fills is its own switch.
+
+         SIZED BY ITS HEIGHT, not its width. The triangle was 14.53% of the
+         section across at 279.16 by 246.48, which is 12.828% of the section
+         TALL; his is square, so it takes that number as its width and stays
+         on the triangle's own centre line. Match the widths instead and a
+         round sign stands a seventh taller than the thing it replaced. -->
+  <svg class="z-copy" data-at aria-hidden="true" style="left:26.771%;top:63.71%;width:12.829%" xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+  <g>
+    <g>
+      <g>
+        <circle cx="120" cy="120" r="119.58" fill="#fff"/>
+        <path d="M120,240c-32.05,0-62.19-12.48-84.85-35.15C12.48,182.19,0,152.05,0,120S12.48,57.81,35.15,35.15C57.81,12.48,87.95,0,120,0s62.19,12.48,84.85,35.15c22.66,22.66,35.15,52.8,35.15,84.85s-12.48,62.19-35.15,84.85c-22.66,22.66-52.8,35.15-84.85,35.15ZM120,.84c-31.83,0-61.75,12.39-84.26,34.9C13.23,58.25.84,88.17.84,120s12.39,61.75,34.9,84.26c22.51,22.51,52.43,34.9,84.26,34.9s61.75-12.39,84.26-34.9c22.51-22.51,34.9-52.43,34.9-84.26s-12.39-61.75-34.9-84.26C181.75,13.23,151.83.84,120,.84Z"/>
+      </g>
+      <path d="M184.92,85.52l-31.8-21.93v12.01h-22.56c-31.57,0-57.26,25.69-57.26,57.26v49.53h19.84v-49.53c0-20.63,16.78-37.41,37.41-37.41h22.56v12.01l31.8-21.93Z"/>
+      <path d="M200.93,39.07c-44.7-44.7-117.16-44.7-161.86,0-44.69,44.69-44.69,117.16,0,161.86,44.7,44.7,117.16,44.69,161.86,0,44.7-44.7,44.7-117.16,0-161.86ZM185.75,54.25c34.21,34.21,36.18,88.44,5.93,124.97L60.78,48.32c36.53-30.25,90.76-28.28,124.97,5.93ZM54.25,185.75c-34.21-34.21-36.18-88.44-5.93-124.97l130.9,130.9c-36.53,30.25-90.76,28.28-124.97-5.93Z" fill="#ec1d24"/>
+    </g>
+  </g>
+</svg>
+
+  <!-- Copy read out of his export by tools/read_text.js: bounds, alignment,
+       size, weight and the scale(k 1) he squeezes each block with. -->
+  <h2 class="copy z-copy" style="left:42.12%;top:63.41%;width:41.39%;--sx:0.97">You've Been Down This Road Before</h2>
+
+  <p class="copy sub z-copy" style="left:49.17%;top:70.98%;width:20.68%;--sx:0.82"><span>And somebody sold you a detour.</span></p>
+
+  <p class="copy body z-copy" style="left:44.23%;top:77.62%;width:35.15%">A new website. A few social posts. Maybe some ads.
+    Plenty of promises about leads and growth. Then the calls didn&rsquo;t come,
+    nobody could explain why, and you were right back where you started.
+    <b>The problem isn&rsquo;t that marketing doesn&rsquo;t work. It&rsquo;s that your
+    business needs its own road map &mdash; not somebody else&rsquo;s recycled plan.</b></p>
+
+  <!-- HIS CLOUD AND ITS SHADOW, as two layers. --lift is his own offset: the
+       shadow sits 12.95% of the cloud's width away in his drawing, and the
+       cloud is 26.91% of the section, so 3.485cqw. See sun.css. -->
+  <div class="mob-road" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-1.76 1582.76 1087.21 186.75" width="1087.21" height="186.75">
+<g id="Stright-6" data-name="Stright">
+      <rect x="-.76" y="1583.76" width="631.08" height="184.75" fill="var(--tarmac)"></rect>
+      <rect x="-.76" y="1595.15" width="631.08" height="6.4" fill="var(--marking)"></rect>
+      <rect x="-.76" y="1751.13" width="631.08" height="6.41" fill="var(--marking)"></rect>
+      <g>
+        <rect x="550.93" y="1671.63" width="54.93" height="6.87" fill="var(--marking)"></rect>
+        <rect x="458.98" y="1671.63" width="54.93" height="6.87" fill="var(--marking)"></rect>
+        <rect x="367.03" y="1671.63" width="54.93" height="6.87" fill="var(--marking)"></rect>
+        <rect x="275.09" y="1671.63" width="54.93" height="6.87" fill="var(--marking)"></rect>
+        <rect x="183.13" y="1671.63" width="54.94" height="6.87" fill="var(--marking)"></rect>
+        <rect x="91.19" y="1671.63" width="54.93" height="6.87" fill="var(--marking)"></rect>
+        <rect x="-.76" y="1671.63" width="54.93" height="6.87" fill="var(--marking)"></rect>
+      </g>
+    </g>
+<g id="Stright-7" data-name="Stright">
+      <rect x="453.37" y="1583.76" width="631.08" height="184.75" fill="var(--tarmac)"></rect>
+      <rect x="453.37" y="1595.15" width="631.08" height="6.4" fill="var(--marking)"></rect>
+      <rect x="453.37" y="1751.13" width="631.08" height="6.41" fill="var(--marking)"></rect>
+      <g>
+        <rect x="1005.06" y="1671.63" width="54.93" height="6.87" fill="var(--marking)"></rect>
+        <rect x="913.11" y="1671.63" width="54.93" height="6.87" fill="var(--marking)"></rect>
+        <rect x="821.16" y="1671.63" width="54.93" height="6.87" fill="var(--marking)"></rect>
+        <rect x="729.21" y="1671.63" width="54.93" height="6.87" fill="var(--marking)"></rect>
+        <rect x="637.26" y="1671.63" width="54.94" height="6.87" fill="var(--marking)"></rect>
+        <rect x="545.32" y="1671.63" width="54.93" height="6.87" fill="var(--marking)"></rect>
+        <rect x="453.37" y="1671.63" width="54.93" height="6.87" fill="var(--marking)"></rect>
+      </g>
+    </g>
+</svg></div>
+  <span class="cast z-cloud par par-cloud" data-at
+        style="left:71.9%;top:8.22%;width:26.91%;--lift:3.485">
+    <img class="shade" src="../../assets/v2/section-02/cloud4-shadow.svg" alt="" aria-hidden="true">
+    <img class="art" src="../../assets/v2/section-02/cloud4.svg" alt="">
+  </span>
+
+
+</section>
+
+<script src="parallax.js" defer></script>

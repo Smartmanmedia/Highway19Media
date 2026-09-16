@@ -1,0 +1,50 @@
+/* ============================================================================
+   PARALLAX
+   ----------------------------------------------------------------------------
+   ONLY the big green signs, the gantries they hang from, and the clouds move.
+   Road signs, buttons and the boat stay on his marks - everything floating at
+   once read as noise.
+
+   --par is the amplitude, as a share of the SECTION WIDTH so it scales with
+   everything else. --par-bias shifts a whole travel up or down the screen
+   without slowing it: the gantry carries -0.12, which lifts it clear of the
+   copy beneath it now that there is sky above to lift into.
+
+   Progress is per SECTION, not per element, and an amplitude that would carry
+   a piece of art off the top or bottom of its own section is capped to what
+   fits - see parallax.js for both. --par-lock names a group that must take the
+   SAME cap: the sign, its copy and the gantry it hangs from are one object and
+   have to be capped as one. The clouds are capped one by one, so a low cloud
+   running out of room does not slow the high one down with it.
+
+   THE SPREAD IS THE POINT. Clouds and signs on near-identical amplitudes move
+   together and read as if nothing is moving at all, however large the number.
+   The first clouds run at 20 against the signs' 12, so they visibly overtake:
+   224px of relative travel at a 1400px screen.
+   ========================================================================= */
+.par        { will-change:translate }
+/* THE CLOUDS DRIFT ACROSS AS WELL AS UP. On the vertical alone they moved
+   about as far as the signs did - 242px against the sign's 363 in section
+   four - so everything slid together and nothing read as moving at all. A
+   cloud that also crosses the frame reads immediately, and sideways is where
+   the room is: a section is twice as wide as it is tall, so the sideways
+   travel is never capped down to nothing the way the vertical one is in the
+   ocean. The two sets drift OPPOSITE ways, which is what makes the scroll
+   feel like it is carrying them. */
+/* MOSTLY UP, A LITTLE ACROSS. His note: the sideways drift is what made the
+   movement readable, but it should not be the movement - scrolling DOWN should
+   send them UP, and the across is a lean on top of that. So the vertical is
+   nearly doubled and the sideways cut to a third of it.
+
+   AND THEY START EARLIER IN THEIR OWN TRAVEL. --par-bias shifts where in the
+   section's pass a cloud sits on its mark: negative means it is already part
+   way up when it comes into view, which both leaves more of the section's
+   upward room for it to use - the cap is worked out from this number - and
+   means it is visibly climbing from the first frame rather than turning round
+   in the middle of the screen. */
+.par-first  { --par:52; --par-x:4; --par-bias:auto }   /* the clouds you meet first, hardest */
+.par-cloud  { --par:34; --par-x:-3; --par-bias:auto }
+.par-sign   { --par:12; --par-bias:-0.12; --par-lock:gantry }                    /* THE GANTRY SHARES THIS. A sign
+                                               hangs off a truss: give them
+                                               different amplitudes and the sign
+                                               floats off its own gantry. */
