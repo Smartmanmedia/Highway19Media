@@ -8,6 +8,8 @@
      Google for. build_site.js rewrites this one href for the live tree. -->
 <link rel="stylesheet" href="section-fonts.css">
 <link rel="stylesheet" href="form-card.css">
+<link rel="stylesheet" href="section-09.css">
+<link rel="stylesheet" href="header.css">
 <!-- A HOLDING PAGE IS STILL A PAGE, so it is not indexed: a search for his
      own name should not turn up five copies of this instead of the site. -->
 <meta name="robots" content="noindex,follow">
@@ -306,9 +308,36 @@
   --fc-cast:0 22px 50px rgba(0,0,0,.55);
   --fc-fs:clamp(.84rem,.92vw,.94rem);
 }
+/* ---- THE HEADER AND THE FOOTER ------------------------------------------
+   Both are shared files - build/v2/header.html and section-09 - so this page
+   and the home page cannot drift apart. What is set here is only what differs.
+
+   THE BAR IS THE PAGE'S OWN BLACK, not the home page's blue: this page is a
+   white sheet with a black road across it, and a blue bar on top of that
+   belongs to a different picture. There is no day/night switch in it either -
+   see header.html - because there is no night here to switch to.
+
+   THE FOOTER TAKES THE NIGHT VALUES he asked for, set directly rather than
+   through night.css: loading a whole palette to reach two numbers would also
+   have reached everything else on the page. */
+/* header.css already gives the BODY the bar's height as padding, so nothing
+   here needs to make room for it a second time.
+
+   The amber is written out rather than taken from --accent: every token on
+   this page is scoped to #h19-detour and the bar is outside it, so var(--accent)
+   resolves to nothing and the button loses its fill and its black label with
+   it. */
+.hdr{ --hdr-bg:#111314; --hdr-bar-bg:#1a1a1a;
+      --hdr-menu-bg:#111314; --hdr-menu-ink:#fff;
+      --hdr-menu-rule:rgba(255,255,255,.14);
+      --hdr-cta-bg:#ffb12e; --hdr-cta-ink:#111314;
+      --hdr-cta-cast:0 3px 0 #111314 }
+.sec9{ --sec9-bg:#050c1a; --sec9-sign:#0c5f26 }
 </style>
 </head>
 <body style="margin:0">
+
+<!--HEADER-->
 
 <div id="h19-detour">
 
@@ -1819,6 +1848,9 @@
 
 </div>
 
+<!--FOOTER-->
+
+<script src="header.js" defer></script>
 <script src="form.js" defer></script>
 
 <!-- Layout first, and inline: the crop must be right at first paint and must

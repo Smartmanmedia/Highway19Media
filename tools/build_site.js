@@ -88,12 +88,32 @@ wr('index.html', page);
 
 /* 4. the holding page every unbuilt link points at, and the 404 - the same
  *    page, because a mistyped URL and an unbuilt one need the same answer. */
+/* THE HOLDING PAGE IS ASSEMBLED FROM THE SAME PARTS AS THE HOME PAGE - the
+ * header, the form card and the footer are each one file, dropped in at a
+ * marker, so neither page can drift away from the other. The header's two
+ * tokens are what differ: from here a nav item has to reach across to the home
+ * page, the lockup goes to the home page rather than to the top of this one,
+ * and there is no night to switch to. */
 const soon = rd('build/v2/soon.html')
+  .replace('<!--HEADER-->', () => rd('build/v2/header.html')
+    .replace(/^<!--[\s\S]*?-->\n/, '')
+    .replace('{{PHONE-GLYPH}}', () =>
+      rd('assets/v2/header/phone-glyph.svg')
+        .replace(/<\?xml[^>]*\?>|<!--[\s\S]*?-->/g, '')
+        .replace(/\s+/g, ' ').trim()
+        .replace('<svg ', '<svg class="hdr-cta-g" '))
+    .replace('{{SWITCH}}', '')
+    .replace(/\{\{ROOT\}\}/g, '/')
+    .replace('{{LOGO}}', '/'))
+  .replace('<!--FOOTER-->', () =>
+    rd('build/v2/section-09.html').match(/<section\b[\s\S]*<\/section>/)[0])
   /* the card is one file for both pages - see build/v2/form-card.html */
   .replace('<!--FORM-CARD-->', () => rd('build/v2/form-card.html'))
-  .replace(/(?:href|src)="((?:section-fonts|form-card)\.css|form\.js)"/g,
+  .replace(/(?:href|src)="((?:section-fonts|form-card|section-09|header)\.css|(?:form|header)\.js)"/g,
            (m, f) => m.replace('"' + f + '"', '"/build/v2/' + f + '"'))
-  .replace(/\.\.\/\.\.\/assets\//g, '/assets/');
+  .replace(/\.\.\/\.\.\/assets\//g, '/assets/')
+  /* and from here, the home page is one directory up */
+  .replace(/\{\{ROOT\}\}/g, '/');
 wr('coming-soon/index.html', soon);
 wr('404.html', soon);
 

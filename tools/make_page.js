@@ -28,66 +28,28 @@ const STAGING = process.argv.includes('--staging');
  * phone, and his day/night switch lives in it now instead of floating over the
  * top right corner of whatever section happens to be under it. Every size is a
  * share of the bar's own height - see header.css. */
-const HEADER =
-  '<header class="hdr">\n' +
-  '  <div class="hdr-in">\n' +
-  '    <button class="mode-switch" type="button" aria-label="Switch to night">\n' +
-  '      <img class="is-day" src="../../assets/v2/header/sun.svg" alt="">\n' +
-  '      <img class="is-night" src="../../assets/v2/header/moon.svg" alt="">\n' +
-  '    </button>\n' +
-  '    <a class="hdr-logo" href="#top">\n' +
-  '      <span class="hdr-lock">HIGHWAY<i>19</i>MEDIA</span>\n' +
-  '      <span class="hdr-rule"></span>\n' +
-  '      <span class="hdr-tag">Creative Marketing for Tampa Bay Businesses</span>\n' +
-  '    </a>\n' +
-  '    <img class="hdr-shield" src="../../assets/v2/ui-shield.webp" alt="Highway 19 Media">\n' +
-  '    <nav class="hdr-nav">\n' +
-  '      <a href="#services">Services</a>\n' +
-  '      <a href="#roadmap">The Road Map</a>\n' +
-  '      <a href="' + SOON + '">Q&amp;A</a>\n' +
-  '    </nav>\n' +
-  /* the label is its own element so a phone can drop it and keep the handset -
-     his button down there is a square with the icon in it and nothing else -
-     without the link losing its name to a screen reader */
-  '    <a class="hdr-cta" href="#contact" aria-label="Contact us">\n' +
-  '      <img class="hdr-cta-i" src="../../assets/v2/header/phone.svg" alt="">\n' +
-  /* and the ink on its own for the phone's square button - inline, because
-     currentColor is the whole point of it and an <img> cannot see the page */
-  '      ' + fs.readFileSync(path.join(__dirname, '..', 'assets', 'v2', 'header',
-      'phone-glyph.svg'), 'utf8')
+/* THE HEADER IS ITS OWN FILE TOO - build/v2/header.html - because it stands on
+ * the holding page as well. Two links differ between the pages and nothing
+ * else does, so it carries {{ROOT}} and {{LOGO}}; {{SWITCH}} is the day/night
+ * button, which only this page has a night to switch to. */
+const HEADER = fs.readFileSync(path.join(DIR, 'header.html'), 'utf8')
+  /* the file's own comment NAMES the tokens, so it has to go before any of
+     them is replaced - otherwise the first {{SWITCH}} the replace finds is the
+     one being described, and the substitution is stripped out with it */
+  .replace(/^<!--[\s\S]*?-->\n/, '')
+  .replace('{{PHONE-GLYPH}}', () =>
+    fs.readFileSync(path.join(__dirname, '..', 'assets', 'v2', 'header',
+                              'phone-glyph.svg'), 'utf8')
       .replace(/<\?xml[^>]*\?>|<!--[\s\S]*?-->/g, '')
       .replace(/\s+/g, ' ').trim()
-      .replace('<svg ', '<svg class="hdr-cta-g" ') + '\n' +
-  '      <span class="hdr-cta-t">Contact Us</span>\n' +
-  '    </a>\n' +
-  '  </div>\n' +
-  /* HIS PULL-DOWN, under the bar and part of it. Three nav items will not fit
-     across 390 pixels beside his lockup at any size worth reading, and his own
-     drawing does not try: there is a second, shorter strip under the bar with
-     three white rules centred in it, and that is the menu. It rides inside
-     .hdr so the whole thing retracts as one object, and it is off above the
-     breakpoint, where the nav is already in the bar. */
-  '  <button class="hdr-bar" type="button" aria-expanded="false"\n' +
-  '          aria-controls="hdr-menu" aria-label="Open the menu">\n' +
-  '    <span class="hdr-burger" aria-hidden="true"></span>\n' +
-  '  </button>\n' +
-  /* ONE CHILD, and it is not decoration. The drawer closes by taking its grid
-     row to 0fr, which is the only way to animate a height that is not known -
-     and grid-template-rows sets the FIRST row. Five links are five rows, four
-     of them implicit and auto-sized, so the thing stayed 247 pixels tall with
-     its background painting over whatever was under the bar: white over his
-     hero by day, black over the contact headline at night. The links go in one
-     box and the box is the row. */
-  '  <nav class="hdr-menu" id="hdr-menu" hidden>\n' +
-  '    <div class="hdr-menu-in">\n' +
-  '      <a href="#services">Services</a>\n' +
-  '      <a href="#roadmap">The Road Map</a>\n' +
-  '      <a href="#promise">How We Work</a>\n' +
-  '      <a href="' + SOON + '">Q&amp;A</a>\n' +
-  '      <a href="#contact">Contact Us</a>\n' +
-  '    </div>\n' +
-  '  </nav>\n' +
-  '</header>';
+      .replace('<svg ', '<svg class="hdr-cta-g" '))
+  .replace('{{SWITCH}}',
+    '    <button class="mode-switch" type="button" aria-label="Switch to night">\n' +
+    '      <img class="is-day" src="../../assets/v2/header/sun.svg" alt="">\n' +
+    '      <img class="is-night" src="../../assets/v2/header/moon.svg" alt="">\n' +
+    '    </button>\n')
+  .replace(/\{\{ROOT\}\}/g, '')
+  .replace('{{LOGO}}', '#top');
 
 /* THE FORM CARD IS ITS OWN FILE. It stands on two pages - the close here and
  * the holding page, which build_site.js assembles the same way - so a section
@@ -199,5 +161,7 @@ parts.join('\n\n') +
      it has to have laid out first */
   + '<script src="drive.js" defer></script>\n';
 
-fs.writeFileSync(path.join(DIR, 'page.html'), out);
+/* {{ROOT}} is how a shared part reaches the home page from wherever it is
+ * standing. Here it is standing ON the home page, so it is nothing. */
+fs.writeFileSync(path.join(DIR, 'page.html'), out.replace(/\{\{ROOT\}\}/g, ''));
 console.log('page.html <- ' + files.join(' + '));

@@ -72,16 +72,35 @@ section + section{ margin-top:-1px }</style>
       <a href="#roadmap">The Road Map</a>
       <a href="/coming-soon/">Q&amp;A</a>
     </nav>
+    <!-- the label is its own element so a phone can drop it and keep the
+         handset - his button down there is a square with the icon in it and
+         nothing else - without the link losing its name to a screen reader -->
     <a class="hdr-cta" href="#contact" aria-label="Contact us">
       <img class="hdr-cta-i" src="../../assets/v2/header/phone.svg" alt="">
+      <!-- and the ink on its own for the phone's square button - inline,
+           because currentColor is the whole point of it and an <img> cannot
+           see the page -->
       <svg class="hdr-cta-g" xmlns="http://www.w3.org/2000/svg" viewBox="10.020 7.193 7.881 17.002" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.59,19.21c-.59.14-1.06.5-1.36.96.03-.21.09-.41.18-.6-.26-.62-.4-3.19-.4-3.93,0-.72.14-3.27.38-3.88-.1-.2-.17-.42-.2-.64.3.49.79.87,1.4,1.02.2.05.41.07.61.06l.97-4.02c-.46-.25-2.48.12-2.48.12,0,0-2.77,1.96-2.77,7.35,0,5.88,2.85,7.47,2.85,7.47,0,0,1.87.35,2.4.06l-.97-4.02c-.2,0-.4.01-.61.06Z"/><path d="M15.48,12.07s0,.07.02.1c.02.02.05.04.08.04,0,0,0,0,.01,0l.5-.06s.08-.04.09-.08l.81-3.36s0-.09-.05-.11l-.42-.28s-.07-.02-.1-.01c-.03.01-.06.04-.06.07l-.89,3.69Z"/><path d="M16.43,23.05s.03,0,.04,0c.02,0,.04,0,.06-.02l.42-.28s.06-.07.05-.11l-.81-3.36s-.05-.08-.09-.08l-.5-.06s-.07,0-.09.04c-.02.03-.03.06-.02.1l.89,3.69s.03.06.06.07Z"/></svg>
       <span class="hdr-cta-t">Contact Us</span>
     </a>
   </div>
+  <!-- HIS PULL-DOWN, under the bar and part of it. Three nav items will not fit
+       across 390 pixels beside his lockup at any size worth reading, and his
+       own drawing does not try: there is a second, shorter strip under the bar
+       with three white rules centred in it, and that is the menu. It rides
+       inside .hdr so the whole thing retracts as one object, and it is off
+       above the breakpoint, where the nav is already in the bar. -->
   <button class="hdr-bar" type="button" aria-expanded="false"
           aria-controls="hdr-menu" aria-label="Open the menu">
     <span class="hdr-burger" aria-hidden="true"></span>
   </button>
+  <!-- ONE CHILD, and it is not decoration. The drawer closes by taking its
+       grid row to 0fr, which is the only way to animate a height that is not
+       known - and grid-template-rows sets the FIRST row. Five links are five
+       rows, four of them implicit and auto-sized, so the thing stayed 247
+       pixels tall with its background painting over whatever was under the
+       bar: white over his hero by day, black over the contact headline at
+       night. The links go in one box and the box is the row. -->
   <nav class="hdr-menu" id="hdr-menu" hidden>
     <div class="hdr-menu-in">
       <a href="#services">Services</a>
@@ -92,6 +111,7 @@ section + section{ margin-top:-1px }</style>
     </div>
   </nav>
 </header>
+
 
 <section class="sec1" id="top">
 <!-- HIS NIGHT CLOUDS, AS A DUOTONE. "Dark blue to light muted" cannot be
@@ -718,8 +738,20 @@ section + section{ margin-top:-1px }</style>
        section's left edge and the rest follows. The mountains are the column to
        within four units. Only the shadow is estimated, by correlating its ink
        against the mountains' (tools/align_layers.js) - two independent readings,
-       the correlation and simply centring it, agreed to within one per cent.
-       Its left and top are the two numbers to nudge.
+       the correlation and simply centring it, agreed to within one per cent -
+       AND BOTH WERE WRONG, which he could see and the numbers could not: two
+       readings of the same ink can agree with each other and still not put a
+       shadow under the range that casts it.
+
+       IT IS SET OFF THE RIDGE NOW. The two layers are already at the same art
+       scale - 2245.68/1918.34 is exactly 116.809/99.783 - so only the
+       translation was ever in question. Taking the skyline of each (the
+       topmost ink in every column, with the boulder shadows and the forest
+       filtered out) and sweeping the offset that minimises the difference
+       between them lands on 34px right and 86px down at a 1920 viewport, which
+       is the +1.771% and +10.062% below. The match halves: 116px rms against
+       58, with a clean minimum - a step either way in either direction is
+       worse.
 
        Inline rather than <img> for the usual reason: an image's raster lives in
        the browser's cache and a busy machine drops it. Every id is prefixed, or
@@ -781,7 +813,7 @@ section + section{ margin-top:-1px }</style>
   </g>
 </svg>
   <svg class="z-ground" data-at aria-hidden="true"
-       style="left:-9.440%;top:40.000%;width:116.809%;--lift:0.9;--sun-ink:1"
+       style="left:-7.669%;top:50.062%;width:116.809%;--lift:0.9;--sun-ink:1"
        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
        viewBox="0 0 2245.68 523.69">
   <g id="mtnsh-Layer_1-2" data-name="Layer 1">
