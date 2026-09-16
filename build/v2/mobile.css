@@ -877,6 +877,22 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
        tab is 46.7% of the CARD and a padded box made it 42. */
     aspect-ratio:475.97 / 832.86; min-width:0;
     padding:0 0 5.8%; overflow:visible;
+    /* AND ALL FOUR ARE THE HEIGHT OF THE LONGEST. The ratio above is a floor,
+       not a ceiling: three of his four paragraphs run past it and the fourth
+       does not, so the cards came out 330, 317, 330, 330 and the short one sat
+       a row-end high. A grid item stretches to its row by default only while
+       its height is auto, and an aspect-ratio is not auto - so stretch has to
+       be asked for by name. Asked for, every card is the tallest one's height
+       and nothing is truncated to get there.
+
+       AND STRETCHED ON BOTH AXES, which is not belt and braces. An
+       aspect-ratio resolves whichever axis is not already determined - so
+       stretching only the height let the ratio go on to compute the WIDTH from
+       it, and the cards came out 184 in a 173 column: no overflow, because the
+       section clips, but the right-hand margin closed from 14px to 3 and the
+       row sat off-centre. Pinned on both axes the ratio drives neither, and it
+       goes back to being the floor it was meant to be. */
+    align-self:stretch; justify-self:stretch;
   }
   :root .sec6 .page .card > *{
     position:static !important; inset:auto !important;
@@ -920,7 +936,16 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      foot. There is only ONE image per card now: the same four drawings serve
      both sizes, so this is a placement and not a swap. */
   :root .sec6 .page .card > .icon{
-    position:absolute !important; left:50% !important; top:0.6% !important;
+    /* CENTRED ON THE TAB, WHICH IS NOT THE MIDDLE OF THE CARD. The label's
+       viewBox is 137.3 wide but his coloured body only runs to 120.92 - the
+       black fold overhangs it to the right - so the tab's own centre is at
+       60.46 where the box's is at 68.65. Centred on the card the icon sat
+       5.97% of the label's width right of the tab it is meant to sit in,
+       which is 4.8px on a 390 screen and plainly visible. That 5.97% of a
+       label 46.7% of the card wide is the 2.786% taken off here. His desktop
+       placement already has this right - it comes off his artboard, where the
+       icon is measured against the tab and not against the card. */
+    position:absolute !important; left:calc(50% - 2.786%) !important; top:0.6% !important;
     width:26% !important; height:auto !important; max-width:none !important;
     transform:translateX(-50%) !important; margin:0 !important;
   }
