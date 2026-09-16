@@ -36,6 +36,12 @@
 
 @media (max-width:560px){
   .consent{ flex-direction:column; align-items:stretch; text-align:left }
+  /* AND THE TEXT STOPS BEING 22rem TALL. `flex:1 1 22rem` above is a basis on
+     the MAIN axis, which is the width while the bar is a row - and becomes the
+     HEIGHT the moment this rule turns it into a column. The paragraph was
+     being held open to 352px and the bar filled half a phone. On this axis it
+     should simply be as tall as its own words. */
+  .consent__text{ flex:0 1 auto }
   .consent__act{ margin-left:0 }
   .consent__btn{ flex:1 1 0 }
 }

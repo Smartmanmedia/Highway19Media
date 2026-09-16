@@ -38,7 +38,24 @@
    * live, and connect-src / script-src in tools/build_site.js has to be
    * widened to let it through - the content policy will block it otherwise,
    * which is the safety net working. */
-  var TAGS = [];
+  var TAGS = [
+    /* GOOGLE ANALYTICS 4, AND NOT IN THE HEAD. Google's own instructions say to
+       paste this immediately after <head> on every page, which would fetch it
+       and set its cookies before a visitor has been asked anything - the exact
+       thing this file exists to prevent, and the opposite of what /cookies/
+       promises. Declared here instead, it is fetched on accept and never
+       otherwise. The two gtag() calls below are Google's, run once the script
+       has actually loaded rather than queued ahead of it. */
+    { id: 'ga4', name: 'Google Analytics',
+      src: 'https://www.googletagmanager.com/gtag/js?id=G-50PLEN6KSF',
+      init: function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', 'G-50PLEN6KSF');
+      } }
+  ];
 
   var KEY = 'h19.consent.v1';
   var root = document.documentElement;
@@ -76,8 +93,8 @@
     el.setAttribute('aria-live', 'polite');
     el.setAttribute('aria-label', 'Cookie choice');
     el.innerHTML =
-      '<p class="consent__text">We would like to use cookies to measure which '
-    + 'advertising is worth paying for. Nothing is loaded unless you say yes, '
+      '<p class="consent__text">We would like to use Google Analytics to count '
+    + 'visits and see which pages get read. Nothing is loaded unless you say yes, '
     + 'and the site works either way. <a href="/cookies/">What we would use</a>.</p>'
     + '<div class="consent__act">'
     + '<button type="button" class="consent__btn consent__btn--no">Decline</button>'
