@@ -191,6 +191,15 @@
      this 891-tall page is 40.80%. It was 33.62%, and that shortfall is why his
      copy had to be set at two thirds the size he asks for. */
   position:absolute; top:21.45%; width:13.49%; height:40.80%;
+  /* THE WHOLE CARD IS THE LINK, so a browser's default underline runs through
+     every line of it - his heading, his strapline, his copy and the button
+     label alike - and a card is not a sentence with a link in it. The ink is
+     his too, not a link colour. Nothing here is the only signal that the card
+     is clickable: it lifts on hover, it carries his own button, and the
+     pointer changes, so no underline is being taken away from a reader who
+     needs one. The email address in section eight keeps its underline, which
+     IS a link inside a sentence. */
+  text-decoration:none; color:inherit;
   background:var(--card-bg, #fff); border:0.052cqw solid var(--card-line, #1a1a1a); border-radius:1.071cqw;
   z-index:1;
   font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
