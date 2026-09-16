@@ -47,6 +47,12 @@
   --sign-green:#1c9022; --green-500:#059236;
   --yellow-500:#ffc72c;
   --ink:#12161c; --ink-soft:#454c57;
+  /* HIS TYPEFACE. This went out with the dead tokens in a range cut and took
+     the whole section to Times with it - the card, the headline, the fields.
+     It was never dead: font-family right below reads it. A token is only safe
+     to remove by NAME, after checking nothing reads it; removing a block of
+     lines because most of them were dead is how a live one goes too. */
+  --font-sign:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
   --shell:1240px; --gutter:clamp(20px,4vw,48px);
 
   position:relative;
