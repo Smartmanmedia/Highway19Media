@@ -11,6 +11,11 @@
      {{SWITCH}} is the day/night button, which only the home page has a night
      to switch to.
      ======================================================================== -->
+<!-- THE FIRST THING IN THE TAB ORDER, and invisible until it is focused.
+     Without it a keyboard reader crosses the switch, the lockup, three nav
+     items and the contact button on every single page before reaching the
+     content - and on this one, the content is most of the page. -->
+<a class="skip" href="#top">Skip to content</a>
 <header class="hdr">
   <div class="hdr-in">
 {{SWITCH}}    <a class="hdr-logo" href="{{LOGO}}">

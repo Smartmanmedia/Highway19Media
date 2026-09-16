@@ -148,10 +148,12 @@ const HEADER_FOR = root => rd('build/v2/header.html')
     .replace(/\{\{ROOT\}\}/g, root)
     .replace('{{LOGO}}', root);
 const FOOTER = () =>
-  rd('build/v2/section-09.html').match(/<section\b[\s\S]*<\/section>/)[0];
+  rd('build/v2/section-09.html').match(/<(section|footer)\b[\s\S]*<\/\1>/)[0];
 
 const soon = rd('build/v2/soon.html')
-  .replace('<!--HEADER-->', () => HEADER_FOR('/'))
+  .replace('<!--HEADER-->', () => HEADER_FOR('/')
+    /* this page's main landmark carries his own id, not #top */
+    .replace('class="skip" href="#top"', 'class="skip" href="#h19-detour"'))
   .replace('<!--FOOTER-->', () => FOOTER())
   /* the card is one file for both pages - see build/v2/form-card.html */
   .replace('<!--FORM-CARD-->', () => rd('build/v2/form-card.html'))

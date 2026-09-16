@@ -24,7 +24,9 @@
   --fc-say-bg:linear-gradient(158deg,#1150bb 0%,#0b3b96 46%,#08307f 100%);
   --fc-say-ink:#fff;                     /* type on the dark half */
   --fc-ink:#123a7a;                      /* type on the paper half */
-  --fc-ask-ink:#5c79a8;                  /* a request, not yet an answer */
+  --fc-ask-ink:#57729f;                  /* a request, not yet an answer.
+                                          4.7:1 on white - the shade above
+                                          it measured 4.42, and AA wants 4.5 */
   --fc-ico:#7b95c0;
   --fc-rule:#b9c9e4;
   --fc-rule-on:#12569f;
@@ -140,7 +142,21 @@
   padding:.5em 0 .45em; margin:0 0 clamp(.7rem,1.5vw,1.1rem);
   border-bottom:1.5px solid var(--fc-rule);
 }
-.fcard .field:focus-within{ border-bottom-color:var(--fc-rule-on) }
+/* A COLOUR CHANGE ON A HAIRLINE IS NOT A FOCUS INDICATOR. These rows took
+   outline:none - a box would have fought the design - and put the whole
+   signal into the rule going from grey to blue. Tabbing through with a
+   keyboard, that is almost impossible to follow, and no automated check
+   catches it because the colour did technically change.
+   So the rule THICKENS as well, and the row lights up behind it. Both at
+   once, so it survives being colour-blind and it survives a bright room. */
+.fcard .field:focus-within{
+  border-bottom-color:var(--fc-rule-on);
+  border-bottom-width:3px;
+  margin-bottom:calc(clamp(.7rem,1.5vw,1.1rem) - 1.5px);   /* no reflow */
+  background:var(--fc-focus, rgba(18,86,159,.07));
+  border-radius:4px 4px 0 0;
+}
+.fcard .field:focus-within .ico{ color:var(--fc-rule-on) }
 .fcard .field .ico{
   width:1.16em; height:1.16em; flex:none; color:var(--fc-ico);
 }
@@ -154,8 +170,11 @@
   flex:1 1 auto; min-width:0; width:100%;
   font:inherit; font-size:var(--fc-fs); font-weight:500;
   color:var(--fc-ink);
-  background:transparent; border:0; outline:none; padding:0; margin:0;
-  border-radius:0;
+  background:transparent; border:0; outline:none; margin:0;
+  /* 23 PIXELS TALL WAS THE LINE BOX AND NOTHING ELSE. WCAG asks for 24 on a
+     pointer target, and a row you have to hit dead centre is a bad row on a
+     phone whatever the number says. */
+  padding:.32em .5em; border-radius:4px;
 }
 .fcard .field input::placeholder,
 .fcard .field textarea::placeholder{ color:var(--fc-ask-ink); opacity:1 }
@@ -196,14 +215,18 @@
 }
 .fcard .field--notes .ico{ margin-top:.18em }
 .fcard .field--notes textarea{
-  resize:none; overflow:hidden; background:none;
+  resize:none; overflow:hidden; background:none; padding:.32em .5em 0;
   line-height:2.15em; height:4.3em;
 }
 
 .fcard .form__alt{
   margin:clamp(.9rem,1.6vw,1.3rem) 0 0;
-  font-size:.72rem; line-height:1.5; opacity:.85;
-  color:var(--fc-ask-ink);
+  font-size:.72rem; line-height:1.5;
+  /* NO OPACITY HERE. It was .85, and a fade reads to the eye exactly like a
+     lighter colour while staying invisible to anyone reading the hex - it is
+     what took this line to 3.3:1 against a 4.5 requirement. A line that
+     should be quieter gets a quieter COLOUR. */
+  color:var(--fc-alt-ink, var(--fc-ask-ink));
 }
 .fcard .form__alt a{ font-weight:600; color:var(--fc-link);
   text-underline-offset:2px }

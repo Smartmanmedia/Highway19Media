@@ -589,7 +589,12 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      between "Explore Our Services" and the line where the green gives out -
      128 pixels at 390 - and his stone band starts 31 pixels under the button,
      not 55 above it. Without this the rocks came up through his own words. */
-  .sec4{ background:#1c9022; padding-bottom:26vw }
+  /* HIS GREEN, FIVE PER CENT DOWN, AND ONLY HERE. White copy on #1c9022 is
+     4.15:1 and AA wants 4.5 for text this size - and on a phone his artwork is
+     not behind the copy, this flat green is. #1a8820 is the smallest step that
+     clears it (4.58) and it is a background, not his sign: the motorway plate,
+     the shield and every fill in his art keep the green he drew. */
+  .sec4{ background:#1a8820; padding-bottom:26vw }
   /* HIS CANOPY IS A BAND, NOT THE WHOLE PICTURE. At its own aspect ratio the
      forest is 340 pixels of trees on a 390 screen where he drew 90 - it is a
      hedge along the top of the green, and the rest of his composition is under

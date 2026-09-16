@@ -81,7 +81,7 @@
   --fc-paper:var(--sec8-paper, #fff);
   --fc-say-bg:var(--sec8-say-bg, linear-gradient(158deg,#1150bb 0%,#0b3b96 46%,#08307f 100%));
   --fc-ink:var(--sec8-ink, #123a7a);
-  --fc-ask-ink:var(--sec8-ask-ink, #5c79a8);
+  --fc-ask-ink:var(--sec8-ask-ink, #57729f);
   --fc-ico:var(--sec8-ico, #7b95c0);
   --fc-rule:var(--sec8-rule, #b9c9e4);
   --fc-rule-on:var(--sec8-rule-on, #12569f);

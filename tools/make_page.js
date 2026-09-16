@@ -62,7 +62,7 @@ const parts = files.map(f => {
 
   const html = fs.readFileSync(path.join(DIR, f), 'utf8')
                  .replace('<!--FORM-CARD-->', () => CARD);
-  const m = html.match(/<section\b[\s\S]*<\/section>/);
+  const m = html.match(/<(section|footer)\b[\s\S]*<\/\1>/);
   if (!m) throw new Error(f + ': no <section> found');
   return m[0];
 });
@@ -157,7 +157,16 @@ files.map(f => '<link rel="stylesheet" href="' + f.replace('.html','.css') + '">
   '<script>var r=document.documentElement;r.dataset.mode=\'night\';r.dataset.dawn=\'1\'</script>\n' +
   '<div class="dawn" aria-hidden="true"></div>\n\n' +
   HEADER + '\n\n' +
-parts.join('\n\n') +
+/* A MAIN LANDMARK ROUND THE SCENE. Without one, a screen reader offering
+ * "jump to the main content" has nothing to jump to, and every one of the
+ * fifty blocks of copy on this page counts as orphaned - outside any region a
+ * reader can navigate by. The footer is its own landmark (it is a <footer>
+ * now) and the header was already one, so this is the piece that was missing.
+ * It carries #top, which is where the lockup has always pointed. */
+'<main id="top">\n\n' +
+parts.filter(p => !/^<footer/.test(p)).join('\n\n') +
+'\n\n</main>\n\n' +
+parts.filter(p =>  /^<footer/.test(p)).join('\n\n') +
   ''
   + '\n\n<script src="header.js" defer></script>\n'
   + '\n\n<script src="parallax.js" defer></script>\n'

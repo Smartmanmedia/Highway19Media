@@ -58,6 +58,11 @@ section + section{ margin-top:-1px }</style>
 <script>var r=document.documentElement;r.dataset.mode='night';r.dataset.dawn='1'</script>
 <div class="dawn" aria-hidden="true"></div>
 
+<!-- THE FIRST THING IN THE TAB ORDER, and invisible until it is focused.
+     Without it a keyboard reader crosses the switch, the lockup, three nav
+     items and the contact button on every single page before reaching the
+     content - and on this one, the content is most of the page. -->
+<a class="skip" href="#top">Skip to content</a>
 <header class="hdr">
   <div class="hdr-in">
     <button class="mode-switch" type="button" aria-label="Switch to night">
@@ -115,6 +120,8 @@ section + section{ margin-top:-1px }</style>
   </nav>
 </header>
 
+
+<main id="top">
 
 <section class="sec1" id="top">
 <!-- HIS NIGHT CLOUDS, AS A DUOTONE. "Dark blue to light muted" cannot be
@@ -4963,7 +4970,9 @@ section + section{ margin-top:-1px }</style>
   </div>
 </section>
 
-<section class="sec9">
+</main>
+
+<footer class="sec9">
   <div class="inner">
     <!-- The banner's own device: green guide sign, lane arrows, shield
          breaking out of the panel top and bottom. -->
@@ -4996,7 +5005,7 @@ section + section{ margin-top:-1px }</style>
     <div class="foot-cols">
 
       <div class="foot-brand">
-        <h4>Highway 19 Media</h4>
+        <h3>Highway 19 Media</h3>
         <p><b>Creative marketing built around your business.</b>
            Websites, video, branding, print, social media and advertising for
            businesses across Tampa Bay and surrounding areas.</p>
@@ -5008,7 +5017,7 @@ section + section{ margin-top:-1px }</style>
       </div>
 
       <div>
-        <h4>Services</h4>
+        <h3>Services</h3>
         <ul>
           <li><a href="/coming-soon/">Website Design</a></li>
           <li><a href="/coming-soon/">Video Production</a></li>
@@ -5018,7 +5027,7 @@ section + section{ margin-top:-1px }</style>
       </div>
 
       <div>
-        <h4>Quick Links</h4>
+        <h3>Quick Links</h3>
         <ul>
           <li><a href="#roadmap">The Road Map</a></li>
           <li><a href="#services">Our Services</a></li>
@@ -5029,7 +5038,7 @@ section + section{ margin-top:-1px }</style>
       </div>
 
       <div>
-        <h4>Contact</h4>
+        <h3>Contact</h3>
         <ul>
           <li><a href="mailto:highway19media@gmail.com">highway19media@gmail.com</a></li>
           <li><a href="#contact">Send Us Your Site</a></li>
@@ -5053,7 +5062,7 @@ section + section{ margin-top:-1px }</style>
       </span>
     </div>
   </div>
-</section>
+</footer>
 
 <script src="header.js" defer></script>
 
