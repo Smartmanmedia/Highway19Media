@@ -237,11 +237,15 @@ for (const L of LEGAL) {
  * object-src none and base-uri self cost nothing and close two old holes. */
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  /* GOOGLE ANALYTICS. Only the tag loader's own host - consent.js fetches
+   * https://www.googletagmanager.com/gtag/js and nothing else runs scripts. */
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self'",
+  /* GA still falls back to a pixel on some browsers, and it is served from
+   * the analytics hosts rather than from here. */
+  "img-src 'self' https://*.google-analytics.com https://*.googletagmanager.com",
   "font-src 'self'",
-  "connect-src 'self' https://api.web3forms.com",
+  "connect-src 'self' https://api.web3forms.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
   "form-action 'self' https://api.web3forms.com",
   "frame-ancestors 'self'",
   "base-uri 'self'",
