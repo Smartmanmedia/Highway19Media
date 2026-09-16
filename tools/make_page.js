@@ -106,8 +106,18 @@ const out =
   image:SITE + '/assets/v2/meta/og.jpg',
   email:'highway19media@gmail.com',
   parentOrganization:{ '@type':'Organization', name:'Smart Man Media' },
-  areaServed:{ '@type':'AdministrativeArea', name:'Tampa Bay, Florida' },
-  address:{ '@type':'PostalAddress', addressRegion:'FL', addressCountry:'US' },
+  /* A SERVICE-AREA BUSINESS, WHICH IS THE TRUE ANSWER. He works from home and
+     goes to the client, so there is no public street address - and a
+     PostalAddress with nothing in it but a state was telling Google there IS a
+     premises and then failing to say where. ServiceArea says the real thing:
+     no counter to walk into, this is the ground we cover. */
+  '@id': SITE + '/#business',
+  areaServed:{ '@type':'GeoCircle',
+    geoMidpoint:{ '@type':'GeoCoordinates', latitude:27.9506, longitude:-82.4572 },
+    geoRadius:'80000', description:'Tampa Bay and surrounding areas' },
+  serviceArea:{ '@type':'AdministrativeArea', name:'Tampa Bay, Florida' },
+  address:{ '@type':'PostalAddress', addressLocality:'Tampa',
+            addressRegion:'FL', addressCountry:'US' },
   knowsAbout:['Website Design','Video Production','Print and Branding',
               'Social Media Marketing','Paid Advertising'],
   hasOfferCatalog:{ '@type':'OfferCatalog', name:'Services', itemListElement:
@@ -119,6 +129,7 @@ const out =
 '<link rel="stylesheet" href="section-fonts.css">\n' +
 files.map(f => '<link rel="stylesheet" href="' + f.replace('.html','.css') + '">').join('\n') +
 '\n<link rel="stylesheet" href="form-card.css">' +
+'\n<link rel="stylesheet" href="consent.css">' +
 '\n<link rel="stylesheet" href="parallax.css">\n'
   + '<link rel="stylesheet" href="night.css">\n' +
 '<link rel="stylesheet" href="traffic.css">\n' +
@@ -159,6 +170,7 @@ parts.join('\n\n') +
   + '<script src="mode.js" defer></script>\n'
   /* the contact form - validation, and the route a lead takes to his inbox */
   + '<script src="form.js" defer></script>\n'
+  + '<script src="consent.js" defer></script>\n'
   /* the drive, last: it measures the section it lives in, so everything above
      it has to have laid out first */
   + '<script src="drive.js" defer></script>\n';

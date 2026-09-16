@@ -37,6 +37,9 @@ const pageSrc = rd('build/v2/page.html');
 const code = [...pageSrc.matchAll(/(?:href|src)="(?!https?:|\.\.\/)([^"]+\.(?:css|js))"/g)]
   .map(m => m[1]);
 if (!code.length) throw new Error('no local css/js found in page.html');
+/* the legal pages have one stylesheet of their own, and the home page - which
+ * is what the list above is read from - never links it */
+if (!code.includes('legal.css')) code.push('legal.css');
 /* ---------------------------------------------------------------------------
  * WHAT SHIPS IS THE CODE WITHOUT ITS PROSE. The sources are heavily commented
  * on purpose - that is where the reasoning lives - but a reader downloading the
@@ -55,7 +58,10 @@ if (!code.length) throw new Error('no local css/js found in page.html');
  * the string rather than layout. sprite.js is the file that needs it. */
 const MULTILINE_TEMPLATE = /`[^`]*\n[^`]*`/;
 function minify(src, kind) {
-  let s = src.replace(/\/\*[\s\S]*?\*\//g, '');       /* block comments */
+  let s = src.replace(/\/\*(?!!)[\s\S]*?\*\//g, '');    /* block comments, but
+                                                          never a /*! one: that
+                                                          is how a licence
+                                                          header is marked */
   if (kind === 'js') {
     if (MULTILINE_TEMPLATE.test(src)) return s;          /* indentation is data here */
     s = s.replace(/^[ \t]*\/\/.*$/gm, '');               /* whole-line // only: a
@@ -130,8 +136,8 @@ wr('index.html', minifyHtml(page));
  * tokens are what differ: from here a nav item has to reach across to the home
  * page, the lockup goes to the home page rather than to the top of this one,
  * and there is no night to switch to. */
-const soon = rd('build/v2/soon.html')
-  .replace('<!--HEADER-->', () => rd('build/v2/header.html')
+/* the header, wearing whichever page's two links it needs */
+const HEADER_FOR = root => rd('build/v2/header.html')
     .replace(/^<!--[\s\S]*?-->\n/, '')
     .replace('{{PHONE-GLYPH}}', () =>
       rd('assets/v2/header/phone-glyph.svg')
@@ -139,13 +145,17 @@ const soon = rd('build/v2/soon.html')
         .replace(/\s+/g, ' ').trim()
         .replace('<svg ', '<svg class="hdr-cta-g" '))
     .replace('{{SWITCH}}', '')
-    .replace(/\{\{ROOT\}\}/g, '/')
-    .replace('{{LOGO}}', '/'))
-  .replace('<!--FOOTER-->', () =>
-    rd('build/v2/section-09.html').match(/<section\b[\s\S]*<\/section>/)[0])
+    .replace(/\{\{ROOT\}\}/g, root)
+    .replace('{{LOGO}}', root);
+const FOOTER = () =>
+  rd('build/v2/section-09.html').match(/<section\b[\s\S]*<\/section>/)[0];
+
+const soon = rd('build/v2/soon.html')
+  .replace('<!--HEADER-->', () => HEADER_FOR('/'))
+  .replace('<!--FOOTER-->', () => FOOTER())
   /* the card is one file for both pages - see build/v2/form-card.html */
   .replace('<!--FORM-CARD-->', () => rd('build/v2/form-card.html'))
-  .replace(/(?:href|src)="((?:section-fonts|form-card|section-09|header)\.css|(?:form|header)\.js)"/g,
+  .replace(/(?:href|src)="((?:section-fonts|form-card|section-09|header|consent)\.css|(?:form|header|consent)\.js)"/g,
            (m, f) => m.replace('"' + f + '"', '"/build/v2/' + f + '"'))
   .replace(/\.\.\/\.\.\/assets\//g, '/assets/')
   /* and from here, the home page is one directory up */
@@ -153,6 +163,40 @@ const soon = rd('build/v2/soon.html')
 const soonOut = minifyHtml(soon);
 wr('coming-soon/index.html', soonOut);
 wr('404.html', soonOut);
+
+
+/* 4b. THE LEGAL PAGES. One shell, three bodies, the same header and footer as
+ *     everything else - so they cannot drift and they do not need their own
+ *     anything. They are indexable on purpose: a site with no reachable privacy
+ *     policy is a site an ad platform will not run, and a policy a crawler
+ *     cannot see does not count as having one. */
+const LEGAL = [
+  { slug: 'privacy', title: 'Privacy Policy', eyebrow: 'How we handle your details',
+    desc: 'What Highway 19 Media collects, why, who else sees it and how to have it deleted. No tracking, no analytics, no selling anything about you.' },
+  { slug: 'terms', title: 'Terms & Conditions', eyebrow: 'Using this site',
+    desc: 'The terms that cover highway19media.com - what the site is, what sending the contact form does and does not start, and whose law applies.' },
+  { slug: 'cookies', title: 'Cookie Policy', eyebrow: 'What is stored on your device',
+    desc: 'This site sets no cookies today. If advertising or analytics is ever added, a banner asks first and nothing loads until you accept.' },
+];
+const DATE = new Date().toLocaleDateString('en-US',
+  { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+const shell = rd('build/v2/legal.html');
+for (const L of LEGAL) {
+  let page = shell
+    .replace('<!--HEADER-->', () => HEADER_FOR('/'))
+    .replace('<!--FOOTER-->', () => FOOTER())
+    .replace('{{BODY}}', () => rd('build/v2/legal-' + L.slug + '.html').trimEnd())
+    .replace(/\{\{TITLE\}\}/g, L.title.replace(/&/g, '&amp;'))
+    .replace(/\{\{SLUG\}\}/g, L.slug)
+    .replace(/\{\{DESC\}\}/g, L.desc)
+    .replace(/\{\{EYEBROW\}\}/g, L.eyebrow)
+    .replace(/\{\{DATE\}\}/g, DATE)
+    .replace(/(?:href|src)="((?:section-fonts|header|section-09|legal|consent)\.css|(?:header|consent)\.js)"/g,
+             (m, f) => m.replace('"' + f + '"', '"/build/v2/' + f + '"'))
+    .replace(/\.\.\/\.\.\/assets\//g, '/assets/')
+    .replace(/\{\{ROOT\}\}/g, '/');
+  wr(L.slug + '/index.html', minifyHtml(page));
+}
 
 /* 5. what the host needs to be told.
  *    Cache-Control is the whole point of splitting the files up: the page is
@@ -165,7 +209,7 @@ wr('404.html', soonOut);
  * from a host nobody chose, and stops anything at all being posted to a host
  * that is not the form service. Every entry is something the built pages
  * actually use, checked rather than guessed:
- *   script   self, and cdnjs for the holding page's GSAP
+ *   script   self alone - GSAP is served from here now, not a CDN
  *   connect  self, and the form service the browser POSTs a lead to
  *   img      self only - there is not one data: URI in either page
  *   font     self only - both families are his files, served from here
@@ -175,7 +219,7 @@ wr('404.html', soonOut);
  * object-src none and base-uri self cost nothing and close two old holes. */
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com",
+  "script-src 'self' 'unsafe-inline'",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self'",
   "font-src 'self'",
@@ -216,6 +260,7 @@ if (!STAGING) wr('sitemap.xml',
 `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>${SITE}/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
+${LEGAL.map(L => `  <url><loc>${SITE}/${L.slug}/</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>`).join('\n')}
 </urlset>
 `);
 

@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="form-card.css">
 <link rel="stylesheet" href="section-09.css">
 <link rel="stylesheet" href="header.css">
+<link rel="stylesheet" href="consent.css">
 <!-- A HOLDING PAGE IS STILL A PAGE, so it is not indexed: a search for his
      own name should not turn up five copies of this instead of the site. -->
 <meta name="robots" content="noindex,follow">
@@ -1870,6 +1871,7 @@
 
 <script src="header.js" defer></script>
 <script src="form.js" defer></script>
+<script src="consent.js" defer></script>
 
 <!-- Layout first, and inline: the crop must be right at first paint and must
      not depend on a CDN answering. Then GSAP, then the animation. -->
@@ -2388,7 +2390,12 @@
   });
 })();
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<!-- GSAP, SERVED FROM HERE RATHER THAN A CDN. On the CDN this page was one
+     third-party outage away from a still picture, and every visitor handed
+     their IP to a host neither of us chose. It is 71K, it is the same 3.12.5
+     build, and it is covered by GreenSock's standard no-charge licence - the
+     header inside the file is theirs and stays. -->
+<script src="../../assets/v2/vendor/gsap.min.js"></script>
 <script>
 (function(){
   if(!window.gsap || !window.H19){return;}
