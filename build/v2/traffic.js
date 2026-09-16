@@ -110,14 +110,25 @@
      is 185 across where a band is the whole 390, so the same multiplier put
      its cars at half the pace on a road twice as long. 3.6 lands them within
      a few pixels a second of each other, which is what reads as one road
-     network rather than four unrelated ones. */
+     network rather than four unrelated ones.
+
+     AND BOTH ARE DOUBLED AGAINST WHAT THEY WERE - 1.90 and 3.60. At those a
+     car crossed a 390 band at 43px/s, nine seconds end to end, which still
+     read as a crawl on a screen you hold. Measured rather than guessed: the
+     following model turns out to pass the increase through almost whole (1.5x
+     desired gave 1.46x actual), so the ladder is close to linear and the
+     figure can simply be chosen - 9.0s, 6.2s at 1.5x, 4-5s here, 3.8s at 2.5x.
+     Repeat runs of the same setting land a few tenths apart, so these are the
+     shape of the ladder rather than exact times. Four-odd seconds to cross is
+     a car driving past. The RATIO between the two is untouched,
+     so the bands and the curve still read as one network. */
   if (MOBILE) {
     ROADS = [];
     [].forEach.call(document.querySelectorAll('.mob-road'), function (el) {
-      ROADS.push({ els: [el], path: MOB_BAND, thin: 1, cap: 10, dens: 1, quick: 1.9 });
+      ROADS.push({ els: [el], path: MOB_BAND, thin: 1, cap: 10, dens: 1, quick: 3.80 });
     });
     [].forEach.call(document.querySelectorAll('.mob-roadv'), function (el) {
-      ROADS.push({ els: [el], path: MOB_VERT, thin: 1, cap: 12, dens: 1, quick: 3.6 });
+      ROADS.push({ els: [el], path: MOB_VERT, thin: 1, cap: 12, dens: 1, quick: 7.20 });
     });
   }
   /* `dens` IS HIS, off the panel, and it is a separate number from `thin` on
