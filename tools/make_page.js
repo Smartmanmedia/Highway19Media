@@ -87,6 +87,8 @@ const out =
 '<meta property="og:image" content="' + SITE + '/assets/v2/meta/og.jpg">\n' +
 '<meta property="og:image:width" content="1200">\n' +
 '<meta property="og:image:height" content="630">\n' +
+'<meta property="og:image:alt" content="Highway 19 Media - creative marketing for Tampa Bay businesses">\n' +
+'<meta property="og:locale" content="en_US">\n' +
 '<meta name="twitter:card" content="summary_large_image">\n' +
 '<meta name="twitter:title" content="' + TITLE + '">\n' +
 '<meta name="twitter:description" content="' + DESC + '">\n' +

@@ -122,6 +122,34 @@ wr('404.html', soon);
  *    revalidated every visit, his art is not asked for twice. The fonts and
  *    art carry no hash in their names, so a year is only safe while their
  *    contents do not change under the same name - they are his finals. */
+/* WHAT THE PAGE IS ALLOWED TO TALK TO.
+ * A brochure site has a very short list, so the policy can be short too - and a
+ * short one is worth having: it is what stops an injected <script src> pulling
+ * from a host nobody chose, and stops anything at all being posted to a host
+ * that is not the form service. Every entry is something the built pages
+ * actually use, checked rather than guessed:
+ *   script   self, and cdnjs for the holding page's GSAP
+ *   connect  self, and the form service the browser POSTs a lead to
+ *   img      self only - there is not one data: URI in either page
+ *   font     self only - both families are his files, served from here
+ * 'unsafe-inline' is in there because both pages carry an inline <style> and
+ * <script>; hashing those at build time is what would drop it, and is the next
+ * thing to do here if this ever grows past two pages.
+ * object-src none and base-uri self cost nothing and close two old holes. */
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self'",
+  "font-src 'self'",
+  "connect-src 'self' https://api.web3forms.com",
+  "form-action 'self' https://api.web3forms.com",
+  "frame-ancestors 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "upgrade-insecure-requests"
+].join('; ');
+
 wr('_headers',
 `/assets/*
   Cache-Control: public, max-age=31536000, immutable
@@ -132,11 +160,20 @@ wr('_headers',
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Content-Security-Policy: ` + CSP + `
 `);
 
 wr('robots.txt', STAGING
   ? 'User-agent: *\nDisallow: /\n'
-  : 'User-agent: *\nAllow: /\nDisallow: /coming-soon/\n\nSitemap: ' + SITE + '/sitemap.xml\n');
+  /* THE HOLDING PAGE IS NOT DISALLOWED, deliberately. It carries its own
+   * noindex, and a page a crawler is forbidden to FETCH is a page whose
+   * noindex is never read - so disallowing it is how a URL ends up listed as a
+   * bare link with no title. Let it be crawled and let the noindex do the
+   * work. */
+  : 'User-agent: *\nAllow: /\n\nSitemap: ' + SITE + '/sitemap.xml\n');
 
 if (!STAGING) wr('sitemap.xml',
 `<?xml version="1.0" encoding="UTF-8"?>
