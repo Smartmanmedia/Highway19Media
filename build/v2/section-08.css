@@ -52,6 +52,10 @@
      black, and the edge becomes a lit hairline. The ink stays navy in both,
      because the paper stays paper. */
   --f-round:22px;
+  /* THE FIELD TYPE SIZE IS A TOKEN because the Notes rules are drawn in line
+     heights, and a gradient on the ROW cannot read the textarea's em. */
+  --f-fs:clamp(.88rem,.98vw,.97rem);
+  --f-line:calc(var(--f-fs) * 2.15);
   --f-say-bg:var(--sec8-say-bg, linear-gradient(158deg,#1150bb 0%,#0b3b96 46%,#08307f 100%));
   --f-ink:#123a7a;                                      /* type on the paper half */
   --f-ask-ink:var(--sec8-ask-ink, #5c79a8);             /* a request, not yet an answer */
@@ -104,9 +108,18 @@
   max-width:920px; margin:clamp(20px,3vw,44px) auto 0;
   background:var(--sec8-paper,#fff);
   color:var(--sec8-ink,var(--f-ink));
+  position:relative;
   border-radius:var(--f-round);
-  box-shadow:inset 0 0 0 1px var(--sec8-edge,transparent),
-             0 26px 60px rgba(3,20,42,.34);
+  box-shadow:0 26px 60px rgba(3,20,42,.34);
+}
+/* HIS HAIRLINE, AND IT HAS TO BE ON TOP. As an inset shadow on the card it was
+   painted first and the blue panel covered its own two thirds of it, so the
+   line only showed along the paper. A layer of its own goes over both halves
+   and follows the same corner radius. */
+.sec8 .form::after{
+  content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
+  border-radius:inherit;
+  box-shadow:inset 0 0 0 1.5px var(--sec8-edge,transparent);
 }
 .sec8 .form__body{
   display:grid; grid-template-columns:50% 1fr; align-items:stretch;
@@ -198,7 +211,7 @@
 .sec8 .field select,
 .sec8 .field textarea{
   flex:1 1 auto; min-width:0; width:100%;
-  font:inherit; font-size:clamp(.88rem,.98vw,.97rem); font-weight:500;
+  font:inherit; font-size:var(--f-fs); font-weight:500;
   color:var(--sec8-ink,var(--f-ink));
   background:transparent; border:0; outline:none; padding:0; margin:0;
   border-radius:0;
@@ -225,13 +238,25 @@
    is what he drew. The rules are one repeating gradient on the textarea, so
    they follow the line height rather than being placed by hand, and the row
    itself carries none. */
-.sec8 .field--notes{ border-bottom:0; align-items:flex-start; padding-bottom:0 }
+/* THE RULES BELONG TO THE ROW, NOT TO THE TEXTAREA. On the textarea they
+   started where the text starts - inboard of the mark - and read as a
+   different kind of line from the six above them, which run the full width.
+   Drawn on the row they line up with the rest. They are measured in --f-line
+   rather than em because the row's em is the section's and the textarea's is
+   its own. */
+.sec8 .field--notes{
+  border-bottom:0; align-items:flex-start; padding-bottom:0;
+  background-repeat:no-repeat;
+  background-position:0 .5em;
+  background-size:100% calc(var(--f-line) * 2);
+  background-image:repeating-linear-gradient(to bottom,
+    transparent 0 calc(var(--f-line) - 1.5px),
+    var(--f-rule) calc(var(--f-line) - 1.5px) var(--f-line));
+}
 .sec8 .field--notes .ico{ margin-top:.18em }
 .sec8 .field--notes textarea{
-  resize:none; overflow:hidden;
+  resize:none; overflow:hidden; background:none;
   line-height:2.15em; height:4.3em;
-  background-image:repeating-linear-gradient(to bottom,
-    transparent 0 calc(2.15em - 1.5px), var(--f-rule) calc(2.15em - 1.5px) 2.15em);
 }
 
 .sec8 .form__alt{
@@ -258,7 +283,7 @@
   .sec8 h2{ font-size:clamp(1.55rem,6.6vw,2.1rem) }
   .sec8 .sub{ font-size:clamp(1rem,4vw,1.16rem) }
   .sec8 .body-copy{ font-size:clamp(.88rem,3.5vw,1rem); max-width:38ch }
-  .sec8 .field input,.sec8 .field select,.sec8 .field textarea{ font-size:1rem }
+  .sec8{ --f-fs:1rem }
 }
 
 /* ---- and what the card becomes once it has been sent --------------------- */
