@@ -28,28 +28,12 @@ const STAGING = process.argv.includes('--staging');
  * phone, and his day/night switch lives in it now instead of floating over the
  * top right corner of whatever section happens to be under it. Every size is a
  * share of the bar's own height - see header.css. */
-/* THE HEADER IS ITS OWN FILE TOO - build/v2/header.html - because it stands on
- * the holding page as well. Two links differ between the pages and nothing
- * else does, so it carries {{ROOT}} and {{LOGO}}; {{SWITCH}} is the day/night
- * button, which only this page has a night to switch to. */
-const HEADER = fs.readFileSync(path.join(DIR, 'header.html'), 'utf8')
-  /* the file's own comment NAMES the tokens, so it has to go before any of
-     them is replaced - otherwise the first {{SWITCH}} the replace finds is the
-     one being described, and the substitution is stripped out with it */
-  .replace(/^<!--[\s\S]*?-->\n/, '')
-  .replace('{{PHONE-GLYPH}}', () =>
-    fs.readFileSync(path.join(__dirname, '..', 'assets', 'v2', 'header',
-                              'phone-glyph.svg'), 'utf8')
-      .replace(/<\?xml[^>]*\?>|<!--[\s\S]*?-->/g, '')
-      .replace(/\s+/g, ' ').trim()
-      .replace('<svg ', '<svg class="hdr-cta-g" '))
-  .replace('{{SWITCH}}',
-    '    <button class="mode-switch" type="button" aria-label="Switch to night">\n' +
-    '      <img class="is-day" src="../../assets/v2/header/sun.svg" alt="">\n' +
-    '      <img class="is-night" src="../../assets/v2/header/moon.svg" alt="">\n' +
-    '    </button>\n')
-  .replace(/\{\{ROOT\}\}/g, '')
-  .replace('{{LOGO}}', '#top');
+/* THE HEADER AND THE FOOTER COME FROM tools/chrome.js, which is the only
+ * place either is built - see the note at the top of that file. This page is
+ * the home page, so its root is nothing and its nav items are bare fragments;
+ * it is also the only page with a night to switch to. */
+const CHROME = require('./chrome');
+const HEADER = CHROME.header('', { modeSwitch: true, logo: '#top' });
 
 /* THE FORM CARD IS ITS OWN FILE. It stands on two pages - the close here and
  * the holding page, which build_site.js assembles the same way - so a section

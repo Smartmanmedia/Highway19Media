@@ -26,8 +26,10 @@ fs.mkdirSync(OUT, { recursive: true });
 
 const crypto = require('crypto');
 const rd = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
+const WRITTEN = [];
 const wr = (p, s) => { fs.mkdirSync(path.dirname(path.join(OUT, p)), { recursive: true });
-                       fs.writeFileSync(path.join(OUT, p), s); };
+                       fs.writeFileSync(path.join(OUT, p), s);
+                       if (p.endsWith('.html')) WRITTEN.push(p); };
 
 /* 1. the code the page actually links, at its own depth, byte for byte.
  *    The directory holds more than the page loads - tuner.js is a dev panel,
@@ -136,19 +138,19 @@ wr('index.html', minifyHtml(page));
  * tokens are what differ: from here a nav item has to reach across to the home
  * page, the lockup goes to the home page rather than to the top of this one,
  * and there is no night to switch to. */
-/* the header, wearing whichever page's two links it needs */
-const HEADER_FOR = root => rd('build/v2/header.html')
-    .replace(/^<!--[\s\S]*?-->\n/, '')
-    .replace('{{PHONE-GLYPH}}', () =>
-      rd('assets/v2/header/phone-glyph.svg')
-        .replace(/<\?xml[^>]*\?>|<!--[\s\S]*?-->/g, '')
-        .replace(/\s+/g, ' ').trim()
-        .replace('<svg ', '<svg class="hdr-cta-g" '))
-    .replace('{{SWITCH}}', '')
-    .replace(/\{\{ROOT\}\}/g, root)
-    .replace('{{LOGO}}', root);
-const FOOTER = () =>
-  rd('build/v2/section-09.html').match(/<(section|footer)\b[\s\S]*<\/\1>/)[0];
+/* THE SAME MODULE THE HOME PAGE USES - tools/chrome.js. Every page here
+ * reaches the home page through '/', and none of them has a night to switch
+ * to. Nothing in this file assembles a header or a footer of its own. */
+const CHROME = require('./chrome');
+const HEADER_FOR = root => CHROME.header(root, { modeSwitch: false, logo: '/' });
+const FOOTER = CHROME.footer;
+
+/* AND THE SAME CONTENT HASH THE HOME PAGE PUTS ON ITS CODE. Every page below
+ * links /build/v2/x.css, and that directory is cached for a week, so without
+ * the hash a change to header.css reaches the home page at once and the other
+ * four pages up to seven days later - the header the same size on one page and
+ * not the next, which is the one thing these pages must never do. */
+const codeHref = f => '/build/v2/' + f + (stamp[f] ? '?v=' + stamp[f] : '');
 
 const soon = rd('build/v2/soon.html')
   .replace('<!--HEADER-->', () => HEADER_FOR('/')
@@ -158,7 +160,7 @@ const soon = rd('build/v2/soon.html')
   /* the card is one file for both pages - see build/v2/form-card.html */
   .replace('<!--FORM-CARD-->', () => rd('build/v2/form-card.html'))
   .replace(/(?:href|src)="((?:section-fonts|form-card|section-09|header|consent)\.css|(?:form|header|consent)\.js)"/g,
-           (m, f) => m.replace('"' + f + '"', '"/build/v2/' + f + '"'))
+           (m, f) => m.replace('"' + f + '"', '"' + codeHref(f) + '"'))
   .replace(/\.\.\/\.\.\/assets\//g, '/assets/')
   /* and from here, the home page is one directory up */
   .replace(/\{\{ROOT\}\}/g, '/');
@@ -194,7 +196,7 @@ for (const L of LEGAL) {
     .replace(/\{\{EYEBROW\}\}/g, L.eyebrow)
     .replace(/\{\{DATE\}\}/g, DATE)
     .replace(/(?:href|src)="((?:section-fonts|header|section-09|legal|consent)\.css|(?:header|consent)\.js)"/g,
-             (m, f) => m.replace('"' + f + '"', '"/build/v2/' + f + '"'))
+             (m, f) => m.replace('"' + f + '"', '"' + codeHref(f) + '"'))
     .replace(/\.\.\/\.\.\/assets\//g, '/assets/')
     .replace(/\{\{ROOT\}\}/g, '/');
   wr(L.slug + '/index.html', minifyHtml(page));
@@ -266,9 +268,60 @@ ${LEGAL.map(L => `  <url><loc>${SITE}/${L.slug}/</loc><changefreq>yearly</change
 </urlset>
 `);
 
+/* 6. AND NOTHING SHIPS WITHOUT THE CHROME.
+ *    Building the header and the footer from one module - tools/chrome.js -
+ *    stops the copies drifting. It does not stop a NEW page being written that
+ *    forgets to ask for them, or asks for the markup and not the stylesheet
+ *    that sizes it. So every page written above is read back off disk and held
+ *    against the same rules, and a failure here stops the build rather than
+ *    letting a page reach his server wearing half a header. */
+function verifyChrome() {
+  /* a nav item reached from the home page is written '#services' and from
+     anywhere else '/#services' - the same destination, so the leading slash
+     comes off before two pages are compared. The lockup is the one link that
+     is meant to differ: '#top' at home, '/' everywhere else. */
+  const links = (html, open, close) => {
+    const i = html.indexOf(open), j = html.indexOf(close);
+    if (i < 0 || j < 0) return null;
+    return [...html.slice(i, j).matchAll(/href="([^"]*)"/g)]
+      .map(m => m[1].replace(/^\//, '') || '/')
+      .filter(h => h !== '/' && h !== 'top' && h !== '#top')
+      .join(' ');
+  };
+  let ref = null, refPage = null, bad = [];
+  for (const p of WRITTEN) {
+    const html = fs.readFileSync(path.join(OUT, p), 'utf8');
+    const say = m => bad.push(p + ': ' + m);
+
+    if (!/<header class="hdr"/.test(html))  say('no header');
+    if (!/<footer class="sec9"/.test(html)) say('no footer');
+    if (!/class="skip"/.test(html))         say('no skip link');
+    for (const f of [...CHROME.ASSETS.css, ...CHROME.ASSETS.js])
+      if (!html.includes('/build/v2/' + f) && !html.includes('"build/v2/' + f))
+        say('does not load ' + f);
+    if (/\{\{[A-Z-]+\}\}/.test(html)) say('unsubstituted token');
+
+    const sig = (links(html, '<header class="hdr"', '</header>') || '?') + ' | ' +
+                (links(html, '<footer class="sec9"', '</footer>') || '?');
+    if (ref === null) { ref = sig; refPage = p; }
+    else if (sig !== ref) say('header/footer links differ from ' + refPage +
+                              '\n    this: ' + sig + '\n    that: ' + ref);
+  }
+  if (bad.length) {
+    console.error('CHROME CHECK FAILED\n  ' + bad.join('\n  '));
+    process.exit(1);
+  }
+  console.log('  chrome: header + footer + ' +
+    (CHROME.ASSETS.css.length + CHROME.ASSETS.js.length) +
+    ' assets identical on ' + WRITTEN.length + ' pages');
+}
+
+verifyChrome();
+
 const du = d => fs.readdirSync(d, { withFileTypes: true }).reduce((n, e) =>
   n + (e.isDirectory() ? du(path.join(d, e.name)) : fs.statSync(path.join(d, e.name)).size), 0);
 console.log((STAGING ? 'dist/stage' : 'dist/site') +
   '  ' + wanted.size + ' assets, ' +
   Math.round(fs.statSync(path.join(OUT, 'index.html')).size / 1024) + ' KB page, ' +
   Math.round(du(OUT) / 1024) + ' KB total');
+
