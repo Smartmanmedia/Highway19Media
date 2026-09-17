@@ -40,14 +40,11 @@
      shadow: without it section one simply covered it. */
   z-index:5;
   box-shadow:0 1.6rem 3.4rem -.6rem rgba(2,14,34,.55);
-  /* TWO DENSITIES, BECAUSE A HERO IS THE ONE IMAGE A RETINA SCREEN SHOWS AT
-     FULL SIZE. A 1937-wide file on a 1920 window at 2x is being drawn at
-     3840 - upscaled two to one, which is what made the first version look
-     soft. image-set lets an ordinary screen take the 259KB file and a retina
-     one his own 3875-wide export at 421KB. */
+  /* His own daytime plate, 1989x1080, at its native size. No 2x half: there
+     is no higher-resolution export of this one yet, and an upscaled file
+     would only cost bytes without adding detail. */
   background:#1479d0 var(--bn-photo,
-      image-set(url("../../assets/v2/banner/road-wide.webp") 1x,
-                url("../../assets/v2/banner/road-wide@2x.webp") 2x))
+      url("../../assets/v2/banner/road-wide.webp"))
              center/cover no-repeat;
   font-family:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
   /* the sky behind the photograph, for the instant before it arrives and for
