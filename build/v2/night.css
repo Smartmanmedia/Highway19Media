@@ -709,3 +709,22 @@ section svg.z-copy [fill^="#"],
     --hdr-cta-ink:#fff;
     --hdr-cta-cast:0 3px 10px rgba(0,0,0,.55);
   }}
+
+/* --- THE MAIN BANNER AFTER DARK -------------------------------------------
+   His own night photographs - HWY19-Banner-image-night.jpg and the phone one -
+   re-encoded to WebP for the web: 2.4MB and 2.5MB of JPEG become 237KB and
+   339KB, and the star field is the part that would show a bad encode first, so
+   it was looked at rather than assumed. The wide one is a squarer crop than
+   his daytime frame (1.054 against 1.541), which is why the section covers
+   rather than contains it. */
+:root[data-theme="dark"]:not([data-mode="day"]),
+:root[data-mode="night"]{
+  --bn-photo:url("../../assets/v2/banner/road-wide-night.webp");
+  --bn-photo-mob:url("../../assets/v2/banner/road-tall-night.webp");
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]):not([data-mode="day"]){
+    --bn-photo:url("../../assets/v2/banner/road-wide-night.webp");
+    --bn-photo-mob:url("../../assets/v2/banner/road-tall-night.webp");
+  }
+}

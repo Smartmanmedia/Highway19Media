@@ -18,15 +18,40 @@
 .sec0{
   position:relative;
   width:100%;
+  /* HIS RATIO, BUT NEVER MORE THAN FOUR FIFTHS OF THE SCREEN. At 1937 x 1258
+     the banner is 1039px tall on a 1600 window - taller than most screens, so
+     his headline sat behind the header and the form ran off the bottom. Capped,
+     the section keeps the full width and the photograph covers it; his
+     composition is held at its own proportion by .bn-stage and centred in
+     whatever is left. svh rather than vh so a phone's address bar collapsing
+     does not resize the opening of the page under the reader. */
   aspect-ratio:1937.04 / 1257.84;
-  container-type:inline-size;
+  max-height:80svh;
+  display:flex; align-items:center; justify-content:center;
   overflow:hidden;
   isolation:isolate;
-  background:#1479d0 url("../../assets/v2/banner/road-wide.webp") center/cover no-repeat;
+  /* AND IT CASTS OVER WHAT FOLLOWS. A positioned section later in the document
+     paints over an earlier one, so the shadow needs the z-index as much as the
+     shadow: without it section one simply covered it. */
+  z-index:5;
+  box-shadow:0 1.6rem 3.4rem -.6rem rgba(2,14,34,.55);
+  background:#1479d0 var(--bn-photo,url("../../assets/v2/banner/road-wide.webp"))
+             center/cover no-repeat;
   font-family:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
   /* the sky behind the photograph, for the instant before it arrives and for
      the hairline at the edge of a cover crop */
   color:#fff;
+}
+
+/* HIS ARTBOARD, HELD AT ITS OWN PROPORTION AND CENTRED. Everything below is a
+   share of THIS box rather than of the section, so a capped or an unusually
+   shaped window changes how much photograph shows around his composition and
+   never the composition itself. The container lives here for the same reason:
+   cqw has to be a share of his artboard, not of the window. */
+.sec0 .bn-stage{
+  position:relative; height:100%; max-width:100%;
+  aspect-ratio:1937.04 / 1257.84;
+  container-type:inline-size;
 }
 
 /* ---- what he says, on the left ------------------------------------------ */
@@ -197,9 +222,15 @@
    ========================================================================= */
 @media (max-width:900px) and (pointer:coarse){
   .sec0{
+    /* HIS PHONE ARTBOARD IS 3.1 TIMES ITS OWN WIDTH, and that is the drawing
+       rather than an accident: capping it at 80svh here would shrink his
+       headline to a third of the size he set it at. The cap is for the wide
+       banner, where his 1.54 made a 1039px section on a 1600 window. */
     aspect-ratio:1088.16 / 3411.84;
-    background-image:url("../../assets/v2/banner/road-tall.webp");
+    max-height:none;
+    background-image:var(--bn-photo-mob,url("../../assets/v2/banner/road-tall.webp"));
   }
+  .sec0 .bn-stage{ aspect-ratio:1088.16 / 3411.84; width:100%; height:100% }
   .sec0 .bn-say{ left:13.18%; top:8.82%; width:86%;
                  display:flex; flex-direction:column; align-items:flex-start }
   .sec0 .bn-h1{ display:contents }
