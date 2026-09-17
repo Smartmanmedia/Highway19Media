@@ -40,7 +40,7 @@
      shadow: without it section one simply covered it. */
   z-index:5;
   box-shadow:0 1.6rem 3.4rem -.6rem rgba(2,14,34,.55);
-  /* His own daytime plate, 1989x1080, at its native size. No 2x half: there
+  /* His own daytime desktop plate, 1989x1080, at its native size. No 2x half:
      is no higher-resolution export of this one yet, and an upscaled file
      would only cost bytes without adding detail. */
   background:#1479d0 var(--bn-photo,
