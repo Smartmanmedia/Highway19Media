@@ -1,0 +1,241 @@
+/* ============================================================================
+   SECTION ZERO — THE MAIN BANNER
+   ----------------------------------------------------------------------------
+   His artboard is 1937.04 x 1257.84 and every number below is a share of it,
+   so the whole banner scales with the page the way his drawing does. Type is
+   in cqw for the same reason: a headline set in px would drift away from the
+   photograph it is placed against the moment the window changed.
+
+   THE PHOTOGRAPH IS THE ONLY PICTURE. His traffic light and his shield are IN
+   it, so neither is rebuilt here - which is also why the left column starts at
+   19.76% and not at the edge: that is where his artboard leaves off the pole.
+
+   AND IT WEIGHS 200KB RATHER THAN 7.6MB. His export carries the photo as a
+   base64 PNG at 8071 x 5241 - 7.6MB in a 10.6MB file, against a whole site
+   that is 3.6MB. Re-encoded to WebP at the size it is actually drawn (1937
+   across) it is 197KB, and nothing about it looks different at that size.
+   ========================================================================= */
+.sec0{
+  position:relative;
+  width:100%;
+  aspect-ratio:1937.04 / 1257.84;
+  container-type:inline-size;
+  overflow:hidden;
+  isolation:isolate;
+  background:#1479d0 url("../../assets/v2/banner/road-wide.webp") center/cover no-repeat;
+  font-family:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  /* the sky behind the photograph, for the instant before it arrives and for
+     the hairline at the edge of a cover crop */
+  color:#fff;
+}
+
+/* ---- what he says, on the left ------------------------------------------ */
+/* top is 212.1 of his 1257.84 PLUS the 43 the headline's scale(.82 1.1) grows
+   upward from its baseline - his artboard places the transformed result, and
+   a transform does not move the box the browser laid out */
+.sec0 .bn-say{ position:absolute; left:19.76%; top:20.28%; width:44%; z-index:1 }
+
+.sec0 .bn-h1{
+  margin:0; font-weight:800; letter-spacing:-.018em; line-height:.96;
+  text-shadow:0 .12cqw .5cqw rgba(0,32,64,.28);
+  /* HIS LINES ARE SET IN CAPS, AND THE MARKUP IS NOT. A screen reader given
+     "TRAFFIC?" may spell it out a letter at a time; given "Traffic?" with this
+     on top, it reads the word and the page shows his drawing. */
+  text-transform:uppercase;
+}
+/* HIS TWO HEADLINE LINES ARE SET ON A SLANT, AND SQUEEZED. Straight from his
+   export: TRAFFIC? is rotate(-2.39) scale(.82 1.1) skewX(-3.24) and the line
+   under it rotate(-2.39) scale(.83 1) skewX(-2.92). Set level and unsqueezed
+   they came out 27% wider than his - 342px against 269 on a 390 phone - and
+   ran off the edge, which is what sent me looking for the transform in the
+   first place. transform-origin is the left baseline because that is where his
+   translate() puts the text before any of it is applied. */
+.sec0 .bn-l1{ display:block; font-size:7.60cqw; transform-origin:left bottom;
+              transform:rotate(-2.39deg) scale(.82,1.1) skewX(-3.24deg) }
+/* his second line is a shade in from the first - 405.3 against 382.8 */
+.sec0 .bn-l2{ display:block; font-size:3.02cqw; font-weight:600; color:#f2f2f2;
+              margin:.28em 0 0 .38em; letter-spacing:-.01em;
+              transform-origin:left bottom;
+              transform:rotate(-2.39deg) scale(.83,1) skewX(-2.92deg) }
+
+.sec0 .bn-l3{
+  margin:1.30em 0 0 .65em; font-size:2.10cqw; font-weight:300; color:#f2f2f2;
+  letter-spacing:.005em; line-height:1.1; text-transform:uppercase;
+}
+
+/* HIS BRUSH STROKE, AND WHY IT IS A FILE. It is 47 paths of textured edge -
+   12.5KB of path data - so it is one <img> here rather than 47 more nodes in
+   every page that carries the banner. preserveAspectRatio:none in the file,
+   because he stretches it to the width of the line above it. */
+.sec0 .bn-rule{ display:block; width:66.4%; height:2.8cqw; margin:.55cqw 0 0 1.07%;
+                object-fit:fill }
+
+.sec0 .bn-list{
+  list-style:none; margin:.19cqw 0 0 2.70%; padding:0;
+  font-size:.99cqw; line-height:1.47; color:#f2f2f2; font-weight:300;
+  text-shadow:0 .08cqw .35cqw rgba(0,32,64,.30);
+}
+.sec0 .bn-list li{ position:relative; padding-left:2.1em; margin:0 0 .40em }
+.sec0 .bn-list b{ font-weight:800; color:#fff }
+/* his tick: a red disc with a white check, drawn rather than fetched */
+.sec0 .bn-list li::before{
+  content:""; position:absolute; left:0; top:.06em;
+  width:1.32em; height:1.32em; border-radius:50%;
+  background:#ef3940 no-repeat center/62% 62%;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.4 8.3l3.5 3.6L13.6 4' fill='none' stroke='%23fff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  box-shadow:0 0 0 .13em #fff inset;
+}
+
+/* ---- and what he asks, on the right ------------------------------------- */
+/* his panel: 1156.1, 177.2, 573.7 x 839.3, corner 34.4 */
+.sec0 .bn-form{
+  position:absolute; left:59.68%; top:14.09%; width:29.62%; height:66.73%;
+  z-index:2; display:flex; flex-direction:column; align-items:center;
+  box-sizing:border-box;
+  /* PADDING IN cqw AND NOT PER CENT. This box is absolutely positioned, so a
+     percentage padding on it resolves against the SECTION's width rather than
+     its own - 13.52% became 216px a side instead of 64, and the panel's
+     content box collapsed to about 120px: his heading broke over four lines
+     and the fields came out the width of their own icons. cqw is a share of
+     the same section either way, so these are his numbers with no ambiguity
+     about what they are a share of: 83.6, 77.55 and 66.2 of his 1937.04. */
+  padding:4.32cqw 4.00cqw 3.42cqw;
+  background:var(--bn-panel,#0c7c00);
+  border-radius:1.78cqw;
+  box-shadow:0 1.2cqw 3.2cqw rgba(0,28,56,.30);
+}
+.sec0 .bn-f-h{
+  margin:0; align-self:flex-start; font-size:1.70cqw; font-weight:800;
+  letter-spacing:-.005em; line-height:1.1; color:#fff; text-transform:uppercase;
+}
+.sec0 .bn-f-sub{
+  margin:.22em 0 0; align-self:flex-start; font-size:1.44cqw; font-weight:300;
+  line-height:1.15; color:#fff;
+}
+
+.sec0 .bn-fields{ width:100%; margin-top:2.07cqw; display:flex; flex-direction:column;
+                  /* 69.58 pitch against a 59.8 field is 9.78 of air, which is
+                     0.505cqw and not 1.17 - at 1.17 the seven gaps ate the 46
+                     units he leaves between his last field and his button, and
+                     the two sat touching */
+                  gap:.505cqw }
+.sec0 .bn-f{ position:relative; display:block; width:100% }
+.sec0 .bn-f input, .sec0 .bn-f select{
+  -webkit-appearance:none; appearance:none;
+  width:100%; height:3.09cqw; box-sizing:border-box;
+  border:0; border-radius:.79cqw; background:#fff;
+  font:inherit; font-size:.843cqw; font-weight:300; color:#001328;
+  /* his label sits 56.6 in from the field's own left edge - the icon's room */
+  padding:0 1.1cqw 0 2.92cqw;
+  line-height:3.09cqw;
+}
+.sec0 .bn-f select{ cursor:pointer; padding-right:2.4cqw }
+.sec0 .bn-f input::placeholder{ color:#001328; opacity:1 }
+.sec0 .bn-f :focus-visible{ outline:.18cqw solid #ffda00; outline-offset:.14cqw }
+
+/* HIS ICONS, ONE SPRITE OF ITS OWN. Seven line drawings at .9cqw, each drawn
+   as a background rather than as seven more elements in the markup. */
+.sec0 .bn-f::before{
+  content:""; position:absolute; left:1.02cqw; top:50%; translate:0 -50%;
+  width:1.18cqw; height:1.18cqw; opacity:.92;
+  background:no-repeat center/contain;
+}
+.sec0 .bn-f:nth-child(1)::before{ background-image:url("../../assets/v2/banner/i-name.svg") }
+.sec0 .bn-f:nth-child(2)::before{ background-image:url("../../assets/v2/banner/i-mail.svg") }
+.sec0 .bn-f:nth-child(3)::before{ background-image:url("../../assets/v2/banner/i-web.svg") }
+.sec0 .bn-f:nth-child(4)::before{ background-image:url("../../assets/v2/banner/i-phone.svg") }
+.sec0 .bn-f:nth-child(5)::before{ background-image:url("../../assets/v2/banner/i-find.svg") }
+.sec0 .bn-f:nth-child(6)::before{ background-image:url("../../assets/v2/banner/i-info.svg") }
+.sec0 .bn-f:nth-child(7)::before{ background-image:url("../../assets/v2/banner/i-note.svg") }
+/* the chevron on the two that open */
+.sec0 .bn-f--pick::after{
+  content:""; position:absolute; right:1.15cqw; top:50%; translate:0 -50%;
+  width:.85cqw; height:.85cqw; pointer-events:none;
+  background:no-repeat center/contain;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 6l5 5 5-5' fill='none' stroke='%23001328' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* his button: 299.1 x 57.3 at 1292.1, 893 - 52.13% of the panel, on its foot */
+.sec0 .bn-go{
+  /* 299.1 of the 418.6 his padding leaves, not of the panel's full 573.7 -
+     a static child's percentage width IS a share of its parent's content box */
+  margin-top:auto; width:71.45%; height:2.96cqw;
+  display:flex; align-items:center; justify-content:center; gap:.9cqw;
+  border:0; border-radius:.65cqw; cursor:pointer;
+  background:#ffda00; color:#001328;
+  font:inherit; font-size:1.155cqw; font-weight:800; letter-spacing:-.01em;
+  box-shadow:0 .35cqw 1.1cqw rgba(0,28,56,.28);
+  transition:background .16s ease, translate .16s ease;
+}
+.sec0 .bn-go:hover{ background:#ffe54d; translate:0 -.12cqw }
+.sec0 .bn-go:focus-visible{ outline:.18cqw solid #fff; outline-offset:.2cqw }
+.sec0 .bn-go-a{ width:1.55cqw; height:1.55cqw; flex:none }
+
+/* the status line lives in the panel's own bottom padding, out of the flow -
+   in it, it would push his button off the foot of a fixed-height panel */
+.sec0 .form__status{
+  position:absolute; left:0; right:0; bottom:.75cqw; margin:0; text-align:center;
+  font-size:.85cqw; font-weight:600; color:#fff;
+}
+.sec0 .form__status.is-err{ color:#ffd2d2 }
+.sec0 .form__status.is-ok { color:#d6ffd2 }
+
+.sec0 .sr-only{
+  position:absolute; width:1px; height:1px; margin:-1px; padding:0; border:0;
+  clip-path:inset(50%); overflow:hidden; white-space:nowrap;
+}
+
+/* ============================================================================
+   HIS PHONE ARTBOARD — 1088.16 x 3411.84
+   ----------------------------------------------------------------------------
+   Not the desktop banner reflowed: a second drawing, and the numbers below are
+   shares of that board the way the ones above are shares of the wide one. What
+   changes is more than the column count - his panel goes from solid green to a
+   translucent navy over the photograph, his red stroke moves ABOVE the third
+   line rather than under it, and "results." is set half as big again as the
+   words before it.
+   ========================================================================= */
+@media (max-width:900px) and (pointer:coarse){
+  .sec0{
+    aspect-ratio:1088.16 / 3411.84;
+    background-image:url("../../assets/v2/banner/road-tall.webp");
+  }
+  .sec0 .bn-say{ left:13.18%; top:8.82%; width:86%;
+                 display:flex; flex-direction:column; align-items:flex-start }
+  .sec0 .bn-h1{ display:contents }
+  .sec0 .bn-l1{ font-size:17.04cqw; order:1 }
+  .sec0 .bn-l2{ font-size:6.76cqw; font-weight:800; margin:.30em 0 0 .10em; order:2 }
+  /* his stroke sits between the second line and the third here */
+  .sec0 .bn-rule{ order:3; width:88.2%; height:5.52cqw; margin:2.23cqw 0 0 2.5% }
+  .sec0 .bn-l3{ order:4; margin:1.05cqw 0 0 .35%; line-height:1.02 }
+  .sec0 .bn-l3 span{ display:block; font-size:5.16cqw; font-weight:600 }
+  .sec0 .bn-l3b{ font-size:9.78cqw !important; font-weight:800 !important }
+  .sec0 .bn-list{ order:5; margin:12.2cqw 0 0 13.8%; font-size:3.64cqw;
+                  line-height:1.30; font-weight:600 }
+  .sec0 .bn-list b{ font-size:1.37em; font-weight:800; line-height:1 }
+  .sec0 .bn-list li{ padding-left:1.55em; margin:0 0 .75em }
+  .sec0 .bn-list li::before{ width:1.05em; height:1.05em; top:.30em }
+
+  /* his panel: 100.3, 1581.6, 912.8 x 1335.4 - and translucent, not green */
+  .sec0 .bn-form{
+    left:9.22%; top:46.36%; width:83.89%; height:39.14%;
+    padding:12.17cqw 11.34cqw 9.68cqw;
+    background:var(--bn-panel-mob,rgba(0,43,97,.41));
+    border-radius:3.16cqw;
+    -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px);
+    border:.18cqw solid rgba(255,255,255,.28);
+  }
+  .sec0 .bn-f-h{ font-size:4.82cqw }
+  .sec0 .bn-f-sub{ font-size:4.08cqw; margin:.18em 0 0 }
+  .sec0 .bn-fields{ margin-top:4.6cqw; gap:1.43cqw }
+  .sec0 .bn-f input, .sec0 .bn-f select{
+    height:8.74cqw; line-height:8.74cqw; border-radius:1.41cqw;
+    font-size:2.39cqw; padding:0 3.2cqw 0 8.1cqw;
+  }
+  .sec0 .bn-f::before{ left:2.9cqw; width:3.3cqw; height:3.3cqw }
+  .sec0 .bn-f--pick::after{ right:3.1cqw; width:2.4cqw; height:2.4cqw }
+  .sec0 .bn-go{ width:71.46%; height:8.38cqw; border-radius:1.16cqw;
+                font-size:3.27cqw; gap:2.2cqw }
+  .sec0 .bn-go-a{ width:4.4cqw; height:4.4cqw }
+  .sec0 .form__status{ bottom:2.2cqw; font-size:2.4cqw }
+}

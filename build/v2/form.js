@@ -18,14 +18,19 @@
  * mailto again.
  */
 (() => {
-  const form = document.getElementById('contact-form');
-  if (!form) return;
+  /* ONE FORM'S WORTH OF BEHAVIOUR, WIRED TO EVERY FORM ON THE PAGE. This used
+   * to fetch #contact-form by id and bind that one. The banner at the top of
+   * the home page carries a second form - same fields, same key, different
+   * clothes - and an id can only ever name one of them, so the second would
+   * have looked live and done nothing at all. Every form that declares where
+   * it posts gets this, and each finds its own status line inside itself. */
+  const wire = (form) => {
   /* A WAY TO SEE WHAT THE SERVICE ACTUALLY SAID, from a phone, with no console.
      ?formdebug=1 puts the HTTP status and the first 300 characters of the
      reply in the status line instead of the friendly wording, and sends
      nothing anywhere else. Off for every ordinary visitor. */
   const DEBUG = /[?&]formdebug=1\b/.test(location.search);
-  const out = document.getElementById('form-status');
+  const out = form.querySelector('.form__status');
   const btn = form.querySelector('button[type="submit"]');
   /* the colour is a class, not a hex: the card behind this line is white by
      day and #0d1a2f at night, and one green reads on exactly one of them. */
@@ -151,4 +156,7 @@
       btn.disabled = false;
     }
   });
+};
+
+  document.querySelectorAll('form[data-endpoint]').forEach(wire);
 })();

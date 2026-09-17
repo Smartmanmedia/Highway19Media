@@ -1,0 +1,85 @@
+<!-- SECTION ZERO - THE MAIN BANNER, from assets/brand/Main Banner.svg and
+     Main Banner Mobile.svg. His artboards are 1937.04 x 1257.84 and
+     1088.16 x 3411.84; every number in section-00.css is a share of one of
+     those, so this is his drawing rather than a likeness of it.
+
+     WHAT IS A PICTURE AND WHAT IS NOT. The photograph is a picture - the
+     traffic light and his shield are in it, so neither needs rebuilding. The
+     words are words and the form is a form: his export has them as <text> and
+     <rect>, and shipped that way they could not be read by a search engine,
+     selected, translated, or typed into. -->
+<section class="sec0" aria-labelledby="bn-h">
+
+  <div class="bn-say">
+    <h1 id="bn-h" class="bn-h1">
+      <span class="bn-l1">Traffic?</span>
+      <span class="bn-l2">That&rsquo;s the easy part.</span>
+    </h1>
+    <!-- one line on his desktop artboard, two on his phone one, where
+         "results." is set half as big again - hence the two spans -->
+    <p class="bn-l3"><span>Let&rsquo;s talk about</span> <span class="bn-l3b">results.</span></p>
+    <!-- his red brush stroke, the one path in the banner that is not the
+         photograph or the form - assets/brand/banner-rule.svg -->
+    <img class="bn-rule" src="../../assets/v2/banner/rule.svg" alt="" aria-hidden="true">
+    <ul class="bn-list">
+      <li><b>Real work.</b> Made properly, with actual thought and craft.</li>
+      <li><b>Local service.</b> Someone here, not a faceless operation.</li>
+      <li><b>Traffic that matters.</b> Built to bring the right people your way.</li>
+    </ul>
+  </div>
+
+  <form class="bn-form" id="banner-form" novalidate
+        data-to="highway19media@gmail.com"
+        data-endpoint="https://api.web3forms.com/submit"
+        data-key="e2f57011-b7df-4b38-9c6d-6ba1bf1c04b7">
+    <h2 class="bn-f-h">Make 2027 your year.</h2>
+    <p class="bn-f-sub">Let&rsquo;s get your business moving.</p>
+
+    <div class="bn-fields">
+      <label class="bn-f"><span class="sr-only">Name</span>
+        <input name="name" type="text" autocomplete="name" placeholder="Name" required></label>
+      <label class="bn-f"><span class="sr-only">Email</span>
+        <input name="email" type="email" autocomplete="email" placeholder="Email" required></label>
+      <label class="bn-f"><span class="sr-only">Website</span>
+        <input name="website" type="text" autocomplete="url" placeholder="Website"></label>
+      <label class="bn-f"><span class="sr-only">Phone Number</span>
+        <input name="phone" type="tel" autocomplete="tel" placeholder="Phone Number"></label>
+      <label class="bn-f bn-f--pick"><span class="sr-only">Interested in</span>
+        <select name="interested">
+          <option value="" selected>Interested In</option>
+          <option>Website</option>
+          <option>Video Production</option>
+          <option>Print &amp; Branding</option>
+          <option>Social &amp; Paid Ads</option>
+          <option>Not sure yet</option>
+        </select></label>
+      <label class="bn-f bn-f--pick"><span class="sr-only">How you heard about us</span>
+        <select name="heard">
+          <option value="" selected>How you Heard About Us</option>
+          <option>Google</option>
+          <option>Facebook or Instagram</option>
+          <option>A friend told me</option>
+          <option>I saw your work</option>
+          <option>Other</option>
+        </select></label>
+      <label class="bn-f"><span class="sr-only">Notes</span>
+        <input name="message" type="text" placeholder="Notes"></label>
+    </div>
+
+    <!-- invisible to a reader, irresistible to a bot; anything that fills it
+         is answered like a success and sent nowhere - see form.js -->
+    <input type="checkbox" name="botcheck" tabindex="-1" aria-hidden="true"
+           style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+
+    <button class="bn-go" type="submit">
+      <span>Let&rsquo;s go Places</span>
+      <svg class="bn-go-a" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="12" fill="#fff"/>
+        <path d="M7 12h9M12.5 8l4 4-4 4" fill="none" stroke="#0067b1"
+              stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <p class="form__status" role="status" aria-live="polite"></p>
+  </form>
+
+</section>
