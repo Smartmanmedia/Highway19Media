@@ -162,13 +162,23 @@
   border-radius:1.78cqw;
   box-shadow:0 1.2cqw 3.2cqw rgba(0,28,56,.30);
 }
+/* THESE TWO LINES HAD NO SLACK AT ALL. Converted straight off the artboard
+   they came out at 99.5% to 99.9% of the panel's content width at every
+   size - his drawing sets them flush to the wall, which is fine in a drawing
+   and is a trap in a layout. Sub-pixel rounding alone was enough to tip the
+   heading onto a second line at 1920 and wider, and a second line is 29px
+   the panel does not have: it ate the auto margin above the button, which is
+   why the button ended up jammed against Notes with no air under it.
+   Four per cent smaller buys a real cushion, and nowrap means the failure
+   can never again be a silent reflow of everything below. */
 .sec0 .bn-f-h{
-  margin:0; align-self:flex-start; font-size:1.70cqw; font-weight:800;
+  margin:0; align-self:flex-start; font-size:1.632cqw; font-weight:800;
   letter-spacing:-.005em; line-height:1.1; color:#fff; text-transform:uppercase;
+  white-space:nowrap;
 }
 .sec0 .bn-f-sub{
-  margin:.22em 0 0; align-self:flex-start; font-size:1.44cqw; font-weight:300;
-  line-height:1.15; color:#fff;
+  margin:.22em 0 0; align-self:flex-start; font-size:1.382cqw; font-weight:300;
+  line-height:1.15; color:#fff; white-space:nowrap;
 }
 
 .sec0 .bn-fields{ width:100%; margin-top:2.07cqw; display:flex; flex-direction:column;
@@ -295,8 +305,10 @@
     -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px);
     border:.18cqw solid rgba(255,255,255,.28);
   }
-  .sec0 .bn-f-h{ font-size:4.82cqw }
-  .sec0 .bn-f-sub{ font-size:4.08cqw; margin:.18em 0 0 }
+  /* the same four per cent of air as the desktop pair - straight off his
+     phone artboard these were at 99.8% and 99.5% of the panel's width */
+  .sec0 .bn-f-h{ font-size:4.627cqw }
+  .sec0 .bn-f-sub{ font-size:3.917cqw; margin:.18em 0 0 }
   .sec0 .bn-fields{ margin-top:4.6cqw; gap:1.43cqw }
   .sec0 .bn-f input, .sec0 .bn-f select{
     height:8.74cqw; line-height:8.74cqw; border-radius:1.41cqw;
