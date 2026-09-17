@@ -689,6 +689,7 @@ section svg.z-copy [fill^="#"],
   --hdr-menu-bg:#000;
   --hdr-menu-ink:#fff;
   --hdr-menu-rule:rgba(255,255,255,.15);
+  --hdr-accent:#ea2127;
   --hdr-cta-bg:#c8161d;
   --hdr-cta-ink:#fff;
   --hdr-cta-cast:0 3px 10px rgba(0,0,0,.55);
@@ -703,6 +704,7 @@ section svg.z-copy [fill^="#"],
   --hdr-menu-bg:#000;
   --hdr-menu-ink:#fff;
   --hdr-menu-rule:rgba(255,255,255,.15);
+    --hdr-accent:#ea2127;
     --hdr-cta-bg:#c8161d;
     --hdr-cta-ink:#fff;
     --hdr-cta-cast:0 3px 10px rgba(0,0,0,.55);
