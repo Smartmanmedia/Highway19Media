@@ -37,7 +37,19 @@
      fold on a 1920 window. These are the header's own tokens, so the two can
      never drift apart. The content inside is capped at 80svh and centred, so
      it simply rides up with the shorter box. */
-  height:calc(100svh - var(--hh) - var(--hbar));
+  /* THE BOX IS THE WHOLE SCREEN; THE CONTENT SITS BELOW THE HEADER. A fixed
+     background is positioned against the viewport, not against its own
+     element, so a section that started below the fixed header had the header
+     eating the top of the cover crop - the sky went with it and the three
+     bullets came down onto the skyline. Spanning the full viewport and
+     insetting the content by the header's own height instead makes the two
+     areas the same box, so the crop is the one the photograph was framed
+     for, and the layout below is unchanged: .sec0 centres its child in the
+     content box, which is still exactly one screen less the header. */
+  height:100svh;
+  margin-top:calc(-1 * (var(--hh) + var(--hbar)));
+  padding-top:calc(var(--hh) + var(--hbar));
+  box-sizing:border-box;
   display:flex; align-items:center; justify-content:center;
   overflow:hidden;
   isolation:isolate;
@@ -57,6 +69,16 @@
   background:#1479d0 var(--bn-photo,
       url("../../assets/v2/banner/road-wide.webp"))
              center/cover no-repeat;
+  /* PINNED TO THE SCREEN, NOT TO THE SECTION. The photograph holds still
+     while his headline, the rule, the three lines and the form ride up over
+     it, so the words stay on open sky right until the banner leaves.
+     It costs one word and no script. Two things it changes: the positioning
+     area becomes the viewport rather than this box, so the cover crop is now
+     computed against the full screen height and the section shows a window
+     into it; and iOS ignores it outright - which is fine, because the phone
+     runs his tall 3.1:1 board where a fixed cover crop would be wrong
+     anyway, and the phone block turns it back off explicitly. */
+  background-attachment:fixed;
   font-family:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
   /* the sky behind the photograph, for the instant before it arrives and for
      the hairline at the edge of a cover crop */
@@ -279,6 +301,10 @@
     height:auto;
     max-height:none;
     background-image:var(--bn-photo-mob,url("../../assets/v2/banner/road-tall.webp"));
+    /* his tall board scrolls with its own section - see the desktop note -
+       and takes no header inset, because aspect-ratio sizes the border box */
+    background-attachment:scroll;
+    margin-top:0; padding-top:0;
   }
   .sec0 .bn-stage{ aspect-ratio:1088.16 / 3411.84; width:100%; height:100% }
   .sec0 .bn-say{ left:13.18%; top:8.82%; width:86%;
