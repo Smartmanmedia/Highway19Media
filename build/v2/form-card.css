@@ -78,6 +78,18 @@
      half the height so the two arcs meet in the middle */
   border-radius:var(--fc-round) 30% 30% var(--fc-round) / var(--fc-round) 50% 50% var(--fc-round);
   padding:clamp(20px,3.4vh,46px) clamp(30px,4.2vw,58px) clamp(20px,3.4vh,46px) clamp(26px,3.4vw,44px);
+  /* AND THE TOP CARRIES THE STATUS LINE'S HEIGHT AS WELL.
+     The status paragraph below the button reserves 1.2em at .88rem plus its
+     .9rem top margin - about 31px - so the card does not jump when it fills
+     with "Sending..." That reserved strip is empty, but justify-content:center
+     has no way to know it, and centres the block INCLUDING it: the heading,
+     the copy and the button all sat half of it - some 16px - high, with the
+     extra falling under the button where it read as a hole. Adding the whole
+     31px at the top moves the centre down by half of it, which puts the part
+     you can actually see in the middle of the panel. Reserved and balanced,
+     rather than one or the other. */
+  --fc-status-space: calc(1.2 * .88rem + .9rem);
+  padding-top: calc(clamp(20px,3.4vh,46px) + var(--fc-status-space));
 }
 .fcard .headline{
   display:flex; align-items:center; justify-content:center;
