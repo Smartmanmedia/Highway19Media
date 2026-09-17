@@ -99,7 +99,17 @@
   line-height:1 }
 .hdr-lock{ display:block; white-space:nowrap; color:#fff;
   font-weight:900; letter-spacing:.005em; font-size:calc(var(--hh) * .265); }
-.hdr-lock i{ font-style:normal; color:#29abe2; font-size:calc(var(--hh) * .313);
+/* THE 19 AND ITS RULE ARE ONE COLOUR, AND IT IS A TOKEN.
+   His cyan is drawn for a blue bar in daylight. On a dark bar - the holding
+   page's, which is dark at all hours, and the home page's after dark - it is
+   the one bright thing on near-black and reads as a link rather than as part
+   of his name. Both take --hdr-accent so the two can never disagree, and the
+   dark bars set it to #ea2127, which is his own red: the one in his road-work
+   and bridge signs, and the one night.css already uses. It clears 3:1 on every
+   dark bar here - 3.24 at the worst of them, against a 19 set well over the
+   large-text size - so the swap costs no legibility. Left alone, the token
+   falls back to the cyan and daylight is untouched. */
+.hdr-lock i{ font-style:normal; color:var(--hdr-accent,#29abe2); font-size:calc(var(--hh) * .313);
   margin:0 .14em }
 /* THE RULE IS AS WIDE AS THE LOCKUP, always. It used to be a fixed slice of
    the window, which meant it fell short of his own title at most widths. The
@@ -107,7 +117,7 @@
    the name above it. */
 .hdr-rule{ display:block; width:100%;
   height:max(1px, calc(var(--hh) * .0126));
-  background:#29abe2; margin:calc(var(--hh) * .075) 0 calc(var(--hh) * .06) }
+  background:var(--hdr-accent,#29abe2); margin:calc(var(--hh) * .075) 0 calc(var(--hh) * .06) }
 .hdr-tag{ display:block; white-space:nowrap; color:#fff;
   font-weight:600; font-size:calc(var(--hh) * .1135); letter-spacing:.055em;
   text-transform:uppercase }
