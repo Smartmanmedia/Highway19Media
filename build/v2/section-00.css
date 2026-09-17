@@ -106,18 +106,29 @@
 
 .sec0 .bn-list{
   list-style:none; margin:.19cqw 0 0 2.70%; padding:0;
-  font-size:.99cqw; line-height:1.47; color:#f2f2f2; font-weight:300;
+  /* HIS PHONE TREATMENT, ON THE DESKTOP TOO. On his artboard this list is
+     19.24pt against a 1937 board - about 13px in a 1920 window, which is
+     smaller than the body text anywhere else on the site and too small to
+     read across a room. His mobile artboard sets the same three lines far
+     larger, with the lead-in half again the size of the sentence, so that is
+     the proportion used here: the sentence at 1.42cqw and the lead-in at
+     1.37em of it. The lines wrap, which his one-line desktop version did not,
+     hence the cap - his form panel starts at 59.68% and this column starts at
+     19.76%, so 86% of a 44% box stops just short of it. */
+  max-width:86%;
+  font-size:1.42cqw; line-height:1.30; color:#f2f2f2; font-weight:600;
   text-shadow:0 .08cqw .35cqw rgba(0,32,64,.30);
 }
-.sec0 .bn-list li{ position:relative; padding-left:2.1em; margin:0 0 .40em }
-.sec0 .bn-list b{ font-weight:800; color:#fff }
-/* his tick: a red disc with a white check, drawn rather than fetched */
+.sec0 .bn-list li{ position:relative; padding-left:1.55em; margin:0 0 .75em }
+.sec0 .bn-list b{ font-size:1.37em; font-weight:800; line-height:1; color:#fff }
+/* HIS OWN MARK, LIFTED OUT OF THE ARTBOARD. What was here before was a red
+   disc with a white check, drawn by hand - at 17px it read as a red blob and
+   the check disappeared. His is the opposite way round and survives the size:
+   a white road-sign disc, a red ring 1.57 units thick, and a black check. */
 .sec0 .bn-list li::before{
-  content:""; position:absolute; left:0; top:.06em;
-  width:1.32em; height:1.32em; border-radius:50%;
-  background:#ef3940 no-repeat center/62% 62%;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.4 8.3l3.5 3.6L13.6 4' fill='none' stroke='%23fff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  box-shadow:0 0 0 .13em #fff inset;
+  content:""; position:absolute; left:0; top:.30em;
+  width:1.05em; height:1.05em;
+  background:url("../../assets/v2/banner/tick.svg") no-repeat center/contain;
 }
 
 /* ---- and what he asks, on the right ------------------------------------- */
@@ -236,6 +247,13 @@
        headline to a third of the size he set it at. The cap is for the wide
        banner, where his 1.54 made a 1039px section on a 1600 window. */
     aspect-ratio:1088.16 / 3411.84;
+    /* AND THE HEIGHT HAS TO GO BACK TO auto FOR THAT RATIO TO MEAN ANYTHING.
+       The desktop rule sets height:100svh; with the width already 100% both
+       axes were determined and aspect-ratio was ignored, so his 3.1:1 phone
+       board was being squeezed into one screen - every top: in this block
+       resolved against 664px instead of 1223, and the form panel came down on
+       top of the three bullets. */
+    height:auto;
     max-height:none;
     background-image:var(--bn-photo-mob,url("../../assets/v2/banner/road-tall.webp"));
   }
@@ -250,11 +268,10 @@
   .sec0 .bn-l3{ order:4; margin:1.05cqw 0 0 .35%; line-height:1.02 }
   .sec0 .bn-l3 span{ display:block; font-size:5.16cqw; font-weight:600 }
   .sec0 .bn-l3b{ font-size:9.78cqw !important; font-weight:800 !important }
-  .sec0 .bn-list{ order:5; margin:12.2cqw 0 0 13.8%; font-size:3.64cqw;
-                  line-height:1.30; font-weight:600 }
-  .sec0 .bn-list b{ font-size:1.37em; font-weight:800; line-height:1 }
-  .sec0 .bn-list li{ padding-left:1.55em; margin:0 0 .75em }
-  .sec0 .bn-list li::before{ width:1.05em; height:1.05em; top:.30em }
+  /* the desktop rules now carry his phone proportions, so all that is left
+     here is the size, the place in the column and the room to use */
+  .sec0 .bn-list{ order:5; margin:12.2cqw 0 0 13.8%; max-width:none;
+                  font-size:3.64cqw }
 
   /* his panel: 100.3, 1581.6, 912.8 x 1335.4 - and translucent, not green */
   .sec0 .bn-form{
