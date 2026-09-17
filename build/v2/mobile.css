@@ -854,7 +854,13 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      share; the 0 floor is what keeps the card inside the page whatever the
      copy turns into later. */
   :root .sec6 .page{ position:static; width:auto; margin:0 3.6vw;
-    display:grid; grid-template-columns:minmax(0,1fr); grid-auto-rows:1fr;
+    display:grid; grid-template-columns:minmax(0,1fr);
+    /* THE TWO EXPLICIT ROWS ARE HIS HEADING AND STRAPLINE, AND THEY SIZE TO
+       THEMSELVES. grid-auto-rows applies to every implicit row, and both bits
+       of copy above the cards are rows of this same grid - so 1fr on its own
+       gave "Pick Your Lane." a row as tall as a card and opened 600px of white
+       under it. Naming the first two auto leaves 1fr to the cards alone. */
+    grid-template-rows:auto auto; grid-auto-rows:1fr;
     gap:4.3vw }
   /* EXCEPT ON A TABLET, WHERE TWO STILL FIT. One to a row is the right answer
      for a phone and the wrong one at 820: the card goes 761 wide, and his tab
@@ -904,6 +910,12 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
        because his tab is 46.7% of the CARD and a padded box made it 42. */
     min-width:0;
     padding:0 0 5.8%; overflow:visible;
+    /* AND AT LEAST FOUR FIFTHS OF THE SCREEN TALL. Going one to a row was
+       never about the width on its own - it was about having the room to set
+       his copy at a size worth reading. A card that fills the screen is what
+       pays for that; svh rather than vh so a collapsing address bar does not
+       change it mid-scroll. */
+    min-height:80vh; min-height:80svh;
     /* AND ALL FOUR ARE STILL THE HEIGHT OF THE LONGEST. One to a row means
        each card is its own row, so matching them is grid-auto-rows:1fr on the
        container above - every row the height of the tallest - and this, which
@@ -912,6 +924,15 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
        buttons would sit at four different heights down the page. */
     align-self:stretch;
   }
+  /* NO SCREEN-HEIGHT FLOOR ONCE THERE ARE TWO SIDE BY SIDE. That floor is
+     what buys the type its size in a single column; a pair of screen-tall
+     cards is just a hole between them. It has to sit AFTER the rule it
+     overrides - the same selector earlier in the file loses, which is how the
+     first attempt left an iPad on 967px cards. */
+  @media (min-width:600px){
+    :root .sec6 .page .card{ min-height:0 }
+  }
+
   :root .sec6 .page .card > *{
     position:static !important; inset:auto !important;
     width:auto !important; height:auto !important;
@@ -968,6 +989,11 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
     transform:translateX(-50%) !important; margin:0 !important;
   }
   :root .sec6 .page .card h3{
+    /* THE SLACK IS SHARED, NOT POOLED. The button already takes margin-top:auto
+       and sits on the card's foot, so every pixel the copy does not use opened
+       as one hole between the two. A second auto margin here splits whatever is
+       left between the tab and the heading and the copy and the button - two
+       modest gaps instead of one that reads as a mistake. */
     font-size:var(--t-card) !important; line-height:1;
     margin:.66em 0 .52em !important; text-align:center;
   }
@@ -1017,3 +1043,46 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
 /* NO GUARD AT THE BOTTOM ANY MORE - see the top of this file. A guard is a
    list of names, and the name that is missing from it is the one that shows
    up on his desktop. The furniture is off by default instead. */
+
+/* ============================================================================
+   ONE CARD TO A ROW, AND THE TYPE THAT PAYS FOR IT
+   ----------------------------------------------------------------------------
+   Below 600 a service card is the only thing in its row and at least four
+   fifths of the screen tall, which is a box roughly twice what his copy needs
+   at the size two-up left room for. Set at 12.3px the card was mostly air; set
+   here his paragraph fills the box it was given. 6vw is 23.4 on a 390 phone
+   and 22.5 on a 375 - against 12.3 before, which is the whole reason for going
+   one to a row.
+
+   IT HAS TO BE SCOPED TO THAT RANGE. From 600 up the cards are two across and
+   363 wide again, and the same tokens would clamp to 26px in them - thirteen
+   characters to a line. The floor at the top of this file is what those keep.
+   ========================================================================= */
+@media (max-width:599px) and (pointer:coarse){
+  :root{
+    --t-card:  clamp(20px, 7.2vw, 36px);    /* card headings */
+    --t-cardp: clamp(14px, 6.0vw, 26px);    /* card copy */
+    /* and the button label with them. At 12.7px under a 23px paragraph it
+       read as a footnote rather than the thing to press; this keeps it
+       clearly subordinate to the copy without being the smallest type on a
+       card that exists to be readable. */
+    /* "Explore This Lane". The label does not wrap and the button is 75.6% of
+       the card, so this was worth measuring rather than guessing: the text is
+       137px inside 251 on a 360 phone, and the widest of the four labels still
+       clears 100px of headroom everywhere. (scrollWidth is no use for that -
+       on a box that fits it equals clientWidth, so the only thing it reports
+       is the border.) */
+    --t-learn: clamp(13px, 4.4vw, 19px);
+  }
+  /* AND WHAT THE COPY STILL DOES NOT USE IS SHARED, NOT POOLED. The button
+     takes margin-top:auto and sits on the card's foot, so every spare pixel
+     opened as one hole above it - 19px under the tab against 222 under the
+     copy. A second auto margin splits it: two modest gaps instead of one that
+     reads as a mistake. It belongs here and not in the rule above, because
+     with two cards to a row there is no spare to share and an auto margin
+     collapses to nothing - which took his .66em off the tab.
+
+     The top margin has to travel IN the shorthand where it is declared beside
+     one; a later `margin:` in the same rule resets a `margin-top` above it. */
+  :root .sec6 .page .card h3{ margin-top:auto !important }
+}
