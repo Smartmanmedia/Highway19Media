@@ -842,12 +842,38 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      his 1080 - a 3.6% margin - and his two headings start at 59, so the copy
      takes a little more. Sharing --mob-pad between them was costing the grid
      twenty pixels and putting "We Handle the Drive." onto a third line. */
+  /* ONE CARD TO A ROW, NOT TWO. Two across gave each card a 173px column, and
+     his longest paragraph wrapped to seven lines in it - the copy was the
+     thing paying for the layout. Full width it is three. The block of four is
+     706px tall stacked two-up and 1396 one-up, so this is twice the scroll
+     bought deliberately: on a phone scrolling is cheap and re-reading a
+     seven-line column at 173px is not.
+
+     minmax(0,1fr) AND NOT 1fr, still. A grid item's automatic minimum is its
+     content, so a long unbroken word can push a 1fr track wider than its
+     share; the 0 floor is what keeps the card inside the page whatever the
+     copy turns into later. */
   :root .sec6 .page{ position:static; width:auto; margin:0 3.6vw;
-    /* minmax(0,1fr) AND NOT 1fr. A grid item's automatic minimum is its
-       content, and a card with an aspect-ratio on it reports a min-content
-       WIDTH tall enough to hold its copy - so two 1fr tracks came out 186 wide
-       inside a 362 box and the cards hung over both edges. */
-    display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:4.3vw }
+    display:grid; grid-template-columns:minmax(0,1fr); grid-auto-rows:1fr;
+    gap:4.3vw }
+  /* EXCEPT ON A TABLET, WHERE TWO STILL FIT. One to a row is the right answer
+     for a phone and the wrong one at 820: the card goes 761 wide, and his tab
+     is 46.7% of it, so the coloured banner arrives at 355px with an icon to
+     match and swamps the card it is labelling. What both sizes actually want
+     is a card around 360 across - that is the measure his copy reads at - and
+     on a tablet TWO of those fit rather than one. At 820 two tracks come out
+     363 apiece, within a pixel of the phone's 362. Same card, more of them.
+
+     600 AND NOT 700, because of the folding phones. Open, one of those is 673
+     across with a coarse pointer, which is nobody's tablet and well past the
+     width one card should be: it was taking a 625px card and a 291px tab. At
+     600 the pair come out 265 apiece, which is narrow but is a card; the run
+     between 430 and 600 keeps one card because almost nothing sits there in
+     portrait. */
+  @media (min-width:600px){
+    :root .sec6 .page{ grid-template-columns:minmax(0,1fr) minmax(0,1fr) }
+  }
+
   /* HIS HEADLINE BREAKS AFTER "Lane.", and there is no width that produces
      that break on its own: "Pick Your Lane. We" fits the column and "We Handle
      the Drive." does not fit what is left over, so any measure narrow enough to
@@ -869,30 +895,22 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
     width:auto !important; height:auto !important; margin:0 !important;
     transform:none !important; font-size:inherit;
     display:flex; flex-direction:column; align-items:center;
-    /* HIS CARD IS A TALL CARD - 475.97 by 832.86, which is 172 by 301 here -
-       and the page was drawing it 173 by 273. That is the whole reason his
-       paragraph looked cramped: he lengthened the card so the copy could be
-       read at his size, and a shorter box made the copy the thing that had to
-       give. The padding comes off the card and goes on the pieces, because his
-       tab is 46.7% of the CARD and a padded box made it 42. */
-    aspect-ratio:475.97 / 832.86; min-width:0;
+    /* AND NO ASPECT-RATIO ON IT ANY MORE. His 475.97 by 832.86 is a portrait
+       card, drawn for a column a quarter of the page wide. Held at full width
+       it asks for 653px of height per card - 2600 for the four, most of it
+       air under the button. The ratio was what made his copy readable in a
+       173px column; at 362 the copy needs no help, so the height comes from
+       the copy itself. The padding stays off the card and on the pieces,
+       because his tab is 46.7% of the CARD and a padded box made it 42. */
+    min-width:0;
     padding:0 0 5.8%; overflow:visible;
-    /* AND ALL FOUR ARE THE HEIGHT OF THE LONGEST. The ratio above is a floor,
-       not a ceiling: three of his four paragraphs run past it and the fourth
-       does not, so the cards came out 330, 317, 330, 330 and the short one sat
-       a row-end high. A grid item stretches to its row by default only while
-       its height is auto, and an aspect-ratio is not auto - so stretch has to
-       be asked for by name. Asked for, every card is the tallest one's height
-       and nothing is truncated to get there.
-
-       AND STRETCHED ON BOTH AXES, which is not belt and braces. An
-       aspect-ratio resolves whichever axis is not already determined - so
-       stretching only the height let the ratio go on to compute the WIDTH from
-       it, and the cards came out 184 in a 173 column: no overflow, because the
-       section clips, but the right-hand margin closed from 14px to 3 and the
-       row sat off-centre. Pinned on both axes the ratio drives neither, and it
-       goes back to being the floor it was meant to be. */
-    align-self:stretch; justify-self:stretch;
+    /* AND ALL FOUR ARE STILL THE HEIGHT OF THE LONGEST. One to a row means
+       each card is its own row, so matching them is grid-auto-rows:1fr on the
+       container above - every row the height of the tallest - and this, which
+       is what makes the card fill the row it was given rather than sitting at
+       the top of it. Their paragraphs differ by about 56px; without both, the
+       buttons would sit at four different heights down the page. */
+    align-self:stretch;
   }
   :root .sec6 .page .card > *{
     position:static !important; inset:auto !important;
