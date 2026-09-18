@@ -300,6 +300,13 @@ wr('_headers',
   Content-Security-Policy: ` + CSP + `
 `);
 
+/* URLs are case sensitive on a static host, and /Community/ is an easy
+ * thing to type or to hand out. Send it to the real one rather than to the
+ * 404, and keep the canonical lower case. */
+wr('_redirects',
+`/Community/* /community/:splat 301
+`);
+
 wr('robots.txt', STAGING
   ? 'User-agent: *\nDisallow: /\n'
   /* THE HOLDING PAGE IS NOT DISALLOWED, deliberately. It carries its own
