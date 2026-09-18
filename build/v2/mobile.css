@@ -227,6 +227,9 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
     font-size:var(--t-bodyb) !important; line-height:1.18;
     margin:0 0 1.4em; font-weight:300;
   }
+  /* the same paragraph he asked to open up on the desktop, at the same
+     leading here - on the phone it reflows, where 1.18 is tighter still */
+  :root .sec4 .body{ line-height:1.32 }
   /* HIS LINE BREAKS ARE SET FOR A 1920 COLUMN and read as ragged holes at 390,
      so they go - and there is no way to say that in CSS alone. A <br> cannot be
      turned into a space: `content` does nothing to it, `display:inline` and
