@@ -37,20 +37,22 @@
      fold on a 1920 window. These are the header's own tokens, so the two can
      never drift apart. The content inside is capped at 80svh and centred, so
      it simply rides up with the shorter box. */
-  /* 140 SCREENS-AND-A-BIT OF SCROLL, WITH THE PICTURE PINNED BEHIND IT. The
-     photograph is fixed, so this height is not a taller picture - it is how
-     long the banner holds the page before the next section arrives. The
-     body already carries a padding-top for the fixed header, so this section
-     needs none of its own - it had one, and the two stacked: the stage began
-     two header-heights down and its bottom sat 114px past the fold, which is
-     the opposite of seeing the whole of it. */
+  /* 140svh OF PICTURE, SCROLLED THROUGH. The photograph is an ordinary cover
+     background on a box 1.4 screens tall - not pinned. That is the whole
+     trick and it is the one I kept missing: the picture MOVES, opening high
+     in the sky and ending on the crosswalk, and what stands still is the
+     words, because they are sticky. Pinning the background did the opposite -
+     the visible slice never changed, so there was nothing to scroll through.
+
+     No padding-top: the body already carries one for the fixed header. */
   height:140svh;
-  /* THE SLACK, SPLIT. His stage is one screen less the header (see below), so
-     a 140svh section leaves 40svh plus the header over. Half the release,
-     capped at the 300px he asked for, and the rest is the hold - the stretch
-     where the words stay put. 216 and 330 at 1080 tall, 166 and 280 at 830,
-     288 and 450 at 1440. */
-  padding-bottom:max(0px, min(300px, calc(40svh / 2)));
+  /* AND THE WORDS LET GO 300px BEFORE THE END. A sticky child stops being
+     sticky at the bottom of its container's CONTENT box, so this padding is
+     the release. His 300 flat, except on a short screen where 300 is most of
+     the slack and the hold all but vanished - 81px at 768 tall. A quarter of
+     the screen is the ceiling there, which keeps both: 192 and 191 at 768,
+     225 and 229 at 900, 300 and 254 at 1080. */
+  padding-bottom:min(300px, 25svh);
   box-sizing:border-box;
   /* AND THE WORDS SIT AT THE TOP OF IT, not in the middle. */
   display:flex; align-items:flex-start; justify-content:center;
@@ -76,17 +78,12 @@
   background:#1479d0 var(--bn-photo,
       image-set(url("../../assets/v2/banner/road-wide.webp") 1x,
                 url("../../assets/v2/banner/road-wide@2x.webp") 2x))
-             center/cover no-repeat;
-  /* PINNED, AND THE CROP IS THE PRICE. His choice, asked and answered. A fixed
-     background is painted against the viewport, so the photograph never moves
-     however far the page scrolls - and cover fills the viewport's shape, not
-     the section's, so a window wider in proportion than his 1.683 plate
-     trims the top and the bottom. About 180px of sky and 180px of crosswalk
-     on a 2000 by 830 window. The section keeps his ratio regardless, because
-     that is what sizes his stage; it is only the crop that the screen decides.
-     iOS ignores this outright, which is fine - the phone runs his tall board
-     and turns it off explicitly. */
-  background-attachment:fixed;
+             left center/cover no-repeat;
+  /* ANCHORED LEFT. A 1.4-screen box is much narrower in proportion than his
+     1.683 plate, so cover fills the height - the whole sky-to-crosswalk
+     travel, which is the point - and takes its crop off the sides. Centred,
+     that crop put his pole at the edge and his shield off the frame; left
+     keeps both and spends it on the palms at the right. */
   font-family:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
   /* the sky behind the photograph, for the instant before it arrives and for
      the hairline at the edge of a cover crop */
@@ -102,7 +99,9 @@
   /* STUCK UNDER THE HEADER, not scrolling with the page. Its own top offset
      is the header's height, which is where it already sits, so nothing jumps
      at the first pixel of scroll. */
-  position:sticky; top:calc(var(--hh) + var(--hbar));
+  /* STICKY, 200px FROM THE TOP - his number. max() keeps it clear of the
+     header on any window where the header is taller than that. */
+  position:sticky; top:max(200px, calc(var(--hh) + var(--hbar)));
   /* THE FULL FRAME, not 80% of a screen. The 80svh cap dates from when the
      banner WAS one screen; now the section is the photograph's own shape and
      the cap was holding his composition a quarter smaller than it should be
@@ -120,7 +119,12 @@
      the guard for a narrow window, where his 1.540 would otherwise run wider
      than the screen; the width is always the derived one, so the ratio holds
      by construction either way. */
-  height:min(calc(100svh - var(--hh) - var(--hbar)), calc(100vw / 1.5400));
+  /* AND SHORT ENOUGH TO BE SEEN WHOLE FROM THERE. 200px down plus this height
+     lands the form's button on the fold, not past it. The second term guards
+     a narrow window where his 1.540 would run wider than the screen; the
+     width is always the derived one, so the ratio holds either way. */
+  height:min(calc(100svh - max(200px, calc(var(--hh) + var(--hbar))) - 8px),
+             calc(100vw / 1.5400));
   aspect-ratio:1937.04 / 1257.84;
   container-type:inline-size;
 }
