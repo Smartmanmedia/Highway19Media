@@ -166,10 +166,15 @@
      read across a room. His mobile artboard sets the same three lines far
      larger, with the lead-in half again the size of the sentence, so that is
      the proportion used here: the sentence at 1.42cqw and the lead-in at
-     1.37em of it. The lines wrap, which his one-line desktop version did not,
-     hence the cap - his form panel starts at 59.68% and this column starts at
-     19.76%, so 86% of a 44% box stops just short of it. */
-  max-width:86%;
+     1.37em of it.
+
+     THE CAP IS HIS COLUMN, NOT THE PANEL'S EDGE. It was set to whatever
+     stopped short of the form, which let the column run to 58.8% of his board
+     - his own is 523.4 units wide and ends at 958.5, or 49.5%. Forty per cent
+     too wide, and it showed: the lines broke in the wrong places and the
+     block was six lines where his is three. 67% of a 44% box ends where his
+     column ends. */
+  max-width:67%;
   font-size:1.42cqw; line-height:1.30; color:#f2f2f2; font-weight:600;
   text-shadow:0 .08cqw .35cqw rgba(0,32,64,.30);
 }
