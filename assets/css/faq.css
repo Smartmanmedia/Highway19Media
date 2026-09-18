@@ -1,0 +1,427 @@
+/* ============================================================================
+   Highway 19 Media — Questions & Answers
+   ----------------------------------------------------------------------------
+   Loads AFTER highway19.css and adds nothing to :root. Every colour, font,
+   radius and rhythm value here is a token already defined there, so a
+   re-sample of the palette moves this page with the rest of the site.
+
+   Why its own namespace instead of reusing .sec / .sec__inner: those carry the
+   road-lane geometry — a reserved corridor on one side of every section and a
+   46px left inset on mobile — and this page has no road layer to fill it. The
+   Q&A sections therefore use .qa-sec and borrow only what is genuinely shared:
+   the type scale, .eyebrow, .btn, .card__icon, the header and the footer.
+
+   COMPONENTS
+     .qa-hero      compact hero: guide-sign eyebrow, headline, asphalt strip
+     .qa-nav       sticky category nav, scrolls horizontally on small screens
+     .qa-sec       one category — intro + accordion + CTA. Two layouts.
+     .qa-list      the accordion
+     .qa-cta       the end-of-category call to action
+     .qa-close     "still have a question" green guide-sign band
+   ========================================================================= */
+
+.qa-page{position:relative;overflow-x:clip}
+
+/* Each section sets its own lane colour the way .card-- modifiers do, and
+   everything inside reads --lane / --lane-ic. One line per category below. */
+.qa-sec{--lane:var(--blue-700);--lane-ic:var(--blue-500)}
+#qa-general    {--lane:var(--blue-700);   --lane-ic:var(--blue-500)}
+#qa-websites   {--lane:var(--svc-web);    --lane-ic:var(--svc-web-ic)}
+#qa-video      {--lane:var(--svc-video);  --lane-ic:var(--svc-video-ic)}
+#qa-advertising{--lane:var(--svc-social); --lane-ic:var(--svc-social-ic)}
+#qa-branding   {--lane:var(--svc-print);  --lane-ic:var(--svc-print-ic)}
+/* Print & promo is the one category with no lane in the banner. It takes the
+   brand red already used by the social marks — road-sign vocabulary, and the
+   only family not yet spoken for. Provisional like the rest of the palette. */
+#qa-print      {--lane:var(--red-600);    --lane-ic:var(--brand-red)}
+/* Guide-sign green: the signs that name destinations, which is what this
+   section is about. Same reasoning as section 6 on the home page. */
+#qa-working    {--lane:var(--green-700);  --lane-ic:var(--green-500)}
+
+/* ============================================================================
+   1. HERO — deliberately short. It is a signpost, not a destination.
+   ========================================================================= */
+
+.qa-hero{
+  position:relative;
+  background:linear-gradient(170deg,var(--blue-800) 0%,var(--blue-900) 78%);
+  color:#fff;
+  overflow:hidden;
+}
+.qa-hero__inner{
+  position:relative;z-index:2;
+  max-width:var(--shell);margin:0 auto;
+  padding:clamp(52px,6vw,88px) var(--gutter) clamp(44px,5vw,72px);
+  display:flex;align-items:flex-start;gap:clamp(20px,4vw,56px);
+}
+/* Wide enough for the headline to break where it wants to — "Questions?" /
+   "We've Got Answers." — rather than being forced onto a third line by the
+   column. The measure the copy actually needs is set on .sub. */
+.qa-hero__copy{max-width:min(56ch,100%);min-width:0}
+.qa-hero h1{font-size:clamp(2.15rem,4.6vw,3.5rem)}
+.qa-hero .sub{color:#dce9f7;max-width:42ch;font-weight:500}
+
+/* The owner's motorway plate, beside the headline exactly as on the home
+   page. Hidden below 720px, where the headline needs the full width. */
+/* Planted at the foot of the copy rather than floating beside its first
+   line, so it reads as a sign standing at the roadside below it. */
+.qa-hero__sign{height:clamp(96px,9vw,150px);width:auto;flex:none;
+  align-self:flex-end;margin-left:auto;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,.4))}
+
+/* His own clouds, used unaltered and held well back so they never compete
+   with the copy. */
+.qa-hero__cloud{position:absolute;z-index:1;pointer-events:none;user-select:none}
+.qa-hero__cloud--a{width:clamp(180px,22vw,330px);top:-6%;right:2%;opacity:.16}
+.qa-hero__cloud--b{width:clamp(120px,14vw,210px);top:46%;right:26%;opacity:.1}
+
+/* Asphalt strip closing the hero: the road surface and the lane colour are
+   the two MEASURED values in the palette, so this is his road, not a stripe
+   that looks like one. */
+.qa-hero__road{
+  position:relative;z-index:2;
+  height:clamp(46px,5.5vw,68px);
+  background:var(--asphalt);
+  border-top:3px solid rgba(255,255,255,.5);
+  display:flex;align-items:center;
+}
+.qa-hero__lane{
+  width:100%;height:5px;
+  background-image:linear-gradient(to right,var(--road-line) 0 62px,transparent 62px 118px);
+  background-size:118px 5px;background-repeat:repeat-x;
+  opacity:.92;
+}
+
+/* ============================================================================
+   2. STICKY CATEGORY NAV — seven exits off the same road
+   ----------------------------------------------------------------------------
+   The site header is already sticky at z-index 50, so this sits below it at
+   --hdr-h, which faq.js measures and writes to the page. The fallback matches
+   the header's own padding + shield height in case the script never runs.
+   ========================================================================= */
+
+.qa-nav{
+  position:sticky;top:var(--hdr-h,74px);z-index:40;
+  background:rgba(255,255,255,.95);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid #dfe5ee;
+  box-shadow:0 1px 0 rgba(5,42,86,.05);
+}
+.qa-nav__inner{
+  position:relative;
+  max-width:var(--shell);margin:0 auto;padding:0 var(--gutter);
+  display:flex;align-items:center;gap:1.1rem;
+}
+.qa-nav__label{
+  flex:none;
+  font-family:var(--font-sign);
+  font-size:.7rem;font-weight:800;letter-spacing:.155em;text-transform:uppercase;
+  color:var(--ink-soft);
+}
+.qa-nav__list{
+  display:flex;align-items:center;gap:.4rem;
+  list-style:none;margin:0;padding:.62rem 0;
+  overflow-x:auto;overscroll-behavior-x:contain;
+  scroll-snap-type:x proximity;
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+.qa-nav__list::-webkit-scrollbar{display:none}
+.qa-nav__list > li{flex:none;scroll-snap-align:center}
+
+/* A small sign plate rather than a generic pill: square colour chip on the
+   left is the lane it leads to, which is the one thing the four service cards
+   already teach a visitor. */
+.qa-nav__link{
+  display:inline-flex;align-items:center;gap:.5em;
+  padding:.5em .85em;
+  border:1.5px solid #d5dde8;border-radius:6px;
+  background:#fff;color:var(--ink);text-decoration:none;
+  font-family:var(--font-sign);
+  font-size:.78rem;font-weight:700;letter-spacing:.035em;
+  line-height:1.25;white-space:nowrap;
+  transition:background .16s ease,border-color .16s ease,color .16s ease;
+}
+.qa-nav__dot{width:9px;height:9px;border-radius:2px;background:var(--lane,var(--blue-700));flex:none}
+.qa-nav__link:hover{border-color:var(--blue-700);background:var(--blue-100)}
+.qa-nav__link:focus-visible{outline:3px solid var(--yellow-500);outline-offset:2px}
+.qa-nav__link[aria-current="true"]{
+  background:var(--blue-900);border-color:var(--blue-900);color:#fff;
+}
+.qa-nav__link[aria-current="true"] .qa-nav__dot{box-shadow:0 0 0 1.5px rgba(255,255,255,.85)}
+
+/* Fade on the right edge says the row keeps going. Removed once every pill
+   fits, so it never sits over a nav that has nothing left to scroll. */
+.qa-nav__inner::after{
+  content:"";position:absolute;right:0;top:0;bottom:0;width:2.75rem;
+  pointer-events:none;
+  background:linear-gradient(to right,rgba(255,255,255,0),rgba(255,255,255,.95));
+}
+.qa-nav.is-complete .qa-nav__inner::after{display:none}
+
+/* ============================================================================
+   3. CATEGORY SECTION
+   ========================================================================= */
+
+.qa-sec{
+  position:relative;
+  padding-block:clamp(60px,7.5vw,108px);
+  background:var(--paper);
+  /* Clears the site header AND the category nav when an anchor is followed. */
+  scroll-margin-top:calc(var(--hdr-h,74px) + var(--qa-nav-h,58px) + 12px);
+}
+.qa-sec--pale{background:var(--blue-100)}
+.qa-sec--concrete{background:var(--concrete)}
+
+/* Dark bands. Everything inside reads these three, so a card, a rule or a
+   piece of body copy added later inherits the right colour instead of being
+   patched one selector at a time — the mistake called out in highway19.css. */
+.qa-sec--deep,
+.qa-sec--navy{
+  color:#fff;
+  --qa-card:rgba(255,255,255,.07);
+  --qa-card-line:rgba(255,255,255,.2);
+  --qa-card-hover:rgba(255,255,255,.11);
+  --qa-body:rgba(255,255,255,.84);
+}
+.qa-sec--deep{background:var(--blue-900)}
+.qa-sec--navy{background:var(--blue-800)}
+.qa-sec--deep h2,.qa-sec--navy h2,
+.qa-sec--deep h3,.qa-sec--navy h3,
+.qa-sec--deep p,.qa-sec--navy p{color:#fff}
+.qa-sec--deep .sub,.qa-sec--navy .sub{color:#dce9f7}
+.qa-sec--deep .body-copy,.qa-sec--navy .body-copy{color:rgba(255,255,255,.84)}
+/* The green eyebrow plate loses its edge on a dark blue ground; the white
+   rim it already carries is what separates it, so it only needs lifting. */
+.qa-sec--deep .eyebrow,.qa-sec--navy .eyebrow{box-shadow:0 0 0 1.5px rgba(255,255,255,.25)}
+
+.qa-sec__inner{max-width:var(--shell);margin:0 auto;padding:0 var(--gutter)}
+
+/* ── Layout A: centred intro over a single column of questions ──────────── */
+.qa-sec--stacked .qa-sec__intro{max-width:46ch;margin:0 auto;text-align:center}
+.qa-sec--stacked .qa-sec__icon{margin-inline:auto}
+.qa-sec--stacked .qa-sec__intro .body-copy{margin-inline:auto}
+.qa-sec--stacked .qa-list,
+.qa-sec--stacked .qa-cta{max-width:830px;margin-inline:auto}
+.qa-sec--stacked .qa-list{margin-top:clamp(34px,4vw,52px)}
+
+/* ── Layout B: intro rail on the left, questions on the right ────────────
+   Alternated with layout A so seven consecutive accordions do not read as one
+   long undifferentiated list. The rail sticks while its own questions scroll,
+   which also keeps the category name in view inside a long section. */
+.qa-sec--split .qa-sec__grid{display:grid;gap:clamp(30px,4vw,56px)}
+@media (min-width:1000px){
+  .qa-sec--split .qa-sec__grid{
+    grid-template-columns:minmax(0,26rem) minmax(0,1fr);
+    gap:clamp(40px,5vw,84px);
+    align-items:start;
+  }
+  .qa-sec--split .qa-sec__intro{
+    position:sticky;
+    top:calc(var(--hdr-h,74px) + var(--qa-nav-h,58px) + 2rem);
+  }
+}
+
+/* The four service cards already pair a bright disc in a white rim with the
+   deeper lane colour. Same device, same sizes. */
+.qa-sec__icon{
+  width:58px;height:58px;border-radius:50%;
+  background:var(--lane-ic);
+  box-shadow:0 0 0 2.5px rgba(255,255,255,.94),0 4px 10px rgba(0,0,0,.28);
+  display:grid;place-items:center;color:#fff;
+  margin-bottom:1.3rem;
+}
+.qa-sec__icon svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round}
+.qa-sec__icon svg .solid{fill:currentColor;stroke:none}
+
+.qa-sec__intro h2{max-width:22ch}
+.qa-sec--stacked .qa-sec__intro h2{margin-inline:auto}
+.qa-sec__intro .body-copy{max-width:50ch}
+
+/* ============================================================================
+   4. THE ACCORDION
+   ----------------------------------------------------------------------------
+   Ships OPEN in the markup and is collapsed by faq.js on load, so with no
+   JavaScript every answer is still on the page and readable. The panel
+   animates on grid-template-rows, which transitions to the real content
+   height without measuring anything.
+   ========================================================================= */
+
+.qa-list{display:grid;gap:.7rem}
+
+.qa-item{
+  background:var(--qa-card,#fff);
+  border:1.5px solid var(--qa-card-line,#dde4ee);
+  border-radius:10px;
+  transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
+}
+.qa-sec--pale .qa-item{border-color:#cfdceb}
+.qa-item:hover{background:var(--qa-card-hover,#fbfcfe)}
+.qa-item.is-open{
+  border-color:var(--lane);
+  background:var(--qa-card,#fff);
+  box-shadow:0 8px 22px rgba(5,42,86,.09);
+}
+.qa-sec--deep .qa-item.is-open,
+.qa-sec--navy .qa-item.is-open{border-color:var(--lane-ic);box-shadow:none}
+
+/* The <h3> is structure only — every visual property is on the button, so the
+   heading level can change without the card changing with it. */
+.qa-item h3{margin:0;font-size:inherit;font-weight:inherit;letter-spacing:normal;line-height:inherit}
+
+.qa-q{
+  width:100%;
+  display:flex;align-items:center;gap:1.1rem;
+  padding:1.05rem clamp(1rem,2vw,1.45rem);
+  background:none;border:0;border-radius:inherit;
+  font-family:var(--font-sign);
+  font-size:clamp(1rem,1.25vw,1.105rem);font-weight:700;
+  letter-spacing:-.008em;line-height:1.42;
+  color:inherit;text-align:left;cursor:pointer;
+}
+.qa-q:focus-visible{outline:3px solid var(--yellow-500);outline-offset:-3px}
+
+/* A plus that turns into a cross — the same 45° rotation the whole way down
+   the page, which is what makes the behaviour learnable after one card. */
+.qa-marker{
+  flex:none;margin-left:auto;
+  width:30px;height:30px;border-radius:50%;
+  background:var(--lane-ic);color:#fff;
+  display:grid;place-items:center;
+  transition:transform .26s ease,background .18s ease;
+}
+.qa-marker svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.3;stroke-linecap:round}
+.qa-item.is-open .qa-marker{transform:rotate(45deg)}
+
+.qa-panel{
+  display:grid;grid-template-rows:1fr;         /* open until faq.js collapses it */
+  transition:grid-template-rows .3s ease;
+}
+.qa-panel > div{overflow:hidden}
+.qa-item:not(.is-open) .qa-panel{grid-template-rows:0fr}
+
+.qa-a{
+  padding:0 clamp(1rem,2vw,1.45rem) 1.25rem;
+  max-width:68ch;
+}
+.qa-a p{
+  margin:0;
+  font-size:1rem;line-height:1.72;font-weight:400;
+  color:var(--qa-body,var(--ink-soft));
+}
+.qa-a p + p{margin-top:.9em}
+/* A short lane marking above the answer: it separates question from answer
+   without a hard rule, and it is the page's quietest road reference. */
+.qa-a::before{
+  content:"";display:block;height:3px;width:52px;margin:0 0 1rem;
+  background:var(--lane-ic);border-radius:2px;opacity:.9;
+}
+
+/* ============================================================================
+   5. CTA CARD — one per category, in that category's lane colour
+   ========================================================================= */
+
+.qa-cta{
+  position:relative;overflow:hidden;
+  margin-top:clamp(30px,3.5vw,46px);
+  padding:clamp(24px,3.2vw,40px) clamp(22px,3vw,42px);
+  border-radius:10px;
+  background:var(--lane);color:#fff;
+  border-bottom:6px solid rgba(0,0,0,.24);
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  gap:clamp(18px,2.5vw,40px);
+}
+.qa-cta__text{position:relative;z-index:2;max-width:46ch}
+.qa-cta h3{
+  font-family:var(--font-sign);font-weight:800;
+  font-size:clamp(1.3rem,2.3vw,1.85rem);line-height:1.1;letter-spacing:-.018em;
+  text-transform:uppercase;color:#fff;
+}
+.qa-cta p{margin:.55em 0 0;font-size:1rem;line-height:1.6;color:rgba(255,255,255,.92)}
+.qa-cta .btn{position:relative;z-index:2;flex:none}
+
+/* Lane markings running under the card, at the same 62/118 rhythm as the
+   hero road so the two read as the same surface. */
+.qa-cta::after{
+  content:"";position:absolute;left:0;right:0;bottom:.9rem;height:5px;
+  background-image:linear-gradient(to right,#fff 0 50px,transparent 50px 96px);
+  background-size:96px 5px;opacity:.14;pointer-events:none;
+}
+
+/* ============================================================================
+   6. CLOSING BAND — guide-sign green, because this one names the destination
+   ========================================================================= */
+
+.qa-close{
+  background:var(--green-700);color:#fff;
+  padding-block:clamp(60px,7vw,100px);
+  scroll-margin-top:calc(var(--hdr-h,74px) + var(--qa-nav-h,58px) + 12px);
+}
+.qa-close .qa-sec__inner{text-align:center}
+/* Centred section, so the sign goes ABOVE the headline — sitting it to one
+   side would pull the block off the section's axis. Same rule the home page
+   applies to #objection, #services and the rest of its centred sections. */
+.qa-close .headline{flex-direction:column;align-items:center;gap:clamp(14px,1.4vw,20px)}
+.qa-close .sign{margin-top:0}
+.qa-close h2{color:#fff;max-width:20ch;margin-inline:auto}
+.qa-close .body-copy{color:#fff;margin-inline:auto;max-width:52ch}
+.qa-close .qa-close__actions{
+  margin-top:2rem;display:flex;gap:.9em;flex-wrap:wrap;justify-content:center;
+}
+.qa-close .sign{height:clamp(64px,6vw,92px)}
+
+/* ============================================================================
+   7. TABLET
+   ========================================================================= */
+
+@media (max-width:1040px){
+  .qa-nav__label{display:none}
+  .qa-nav__inner{gap:0}
+}
+
+/* ============================================================================
+   8. MOBILE — the nav becomes a swipeable row of exits
+   ========================================================================= */
+
+@media (max-width:720px){
+  .qa-hero__inner{display:block;padding-top:clamp(40px,9vw,56px)}
+  .qa-hero__sign{display:none}
+  .qa-hero__cloud--b{display:none}
+  .qa-hero__cloud--a{opacity:.12}
+  .qa-hero h1{max-width:none}
+
+  .qa-nav__list{padding-block:.55rem}
+  .qa-nav__link{font-size:.76rem;padding:.5em .75em}
+
+  .qa-sec{padding-block:clamp(46px,11vw,64px)}
+  .qa-sec--stacked .qa-sec__intro{text-align:left;margin-inline:0}
+  .qa-sec--stacked .qa-sec__icon{margin-inline:0}
+  .qa-sec--stacked .qa-sec__intro h2,
+  .qa-sec--stacked .qa-sec__intro .body-copy{margin-inline:0}
+  .qa-close .qa-sec__inner{text-align:left}
+  .qa-close h2,.qa-close .body-copy{margin-inline:0}
+  .qa-close .headline{align-items:flex-start}
+  .qa-close .qa-close__actions{justify-content:stretch;flex-direction:column}
+  .qa-close .qa-close__actions .btn{justify-content:center}
+
+  .qa-q{gap:.8rem;padding:.95rem 1rem}
+  .qa-marker{width:27px;height:27px}
+  .qa-a{padding:0 1rem 1.15rem}
+
+  .qa-cta{flex-direction:column;align-items:stretch;text-align:left}
+  .qa-cta .btn{justify-content:center;width:100%}
+  .qa-cta::after{display:none}
+}
+
+/* ============================================================================
+   9. MOTION
+   ----------------------------------------------------------------------------
+   highway19.css already turns off smooth scrolling and the button/card
+   transforms. The accordion is this page's own motion, so it is switched off
+   here; faq.js reads the same query and drops its animation frame with it, so
+   the panel snaps rather than transitioning through a half-open state.
+   ========================================================================= */
+
+@media (prefers-reduced-motion:reduce){
+  .qa-panel,.qa-marker,.qa-item,.qa-nav__link{transition:none}
+}

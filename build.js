@@ -1,10 +1,16 @@
-/* Inlines the home page into one self-contained file.
-   Two outputs:
-     dist/highway19-home.html      full standalone document — hand to WPVibe,
-                                   email, or open straight off disk
-     dist/highway19-artifact.html  body-only, for publishing as an Artifact
-                                   (the host supplies doctype/head/body)
-   Source of truth stays the multi-file version; this is generated. */
+/* Inlines each page into one self-contained file.
+   Two outputs per page:
+     dist/highway19-<page>.html          full standalone document — hand to
+                                         WPVibe, email, or open off disk
+     dist/highway19-<page>-artifact.html body-only, for publishing as an
+                                         Artifact (the host supplies
+                                         doctype/head/body)
+   Source of truth stays the multi-file version; this is generated.
+
+   PAGES is the only thing to touch when a page is added. Everything below it
+   is per-page and reads the stylesheet and script lists OUT of that page, so
+   a page with two stylesheets or a different script set needs no special
+   case here. */
 const fs = require('fs');
 const path = require('path');
 const R = __dirname;
@@ -13,8 +19,22 @@ fs.mkdirSync(OUT, { recursive: true });   /* dist/ is gitignored, so a fresh
                                              clone starts without it */
 
 const read = p => fs.readFileSync(path.join(R, p), 'utf8');
-let html = read('index.html');
-const css = read('assets/css/highway19.css');
+
+const PAGES = [
+  { src: 'index.html', out: 'home', title: 'Highway 19 Media' },
+  { src: 'faq.html',   out: 'faq',  title: 'Highway 19 Media — Q&A' },
+];
+
+function build(page) {
+let html = read(page.src);
+
+/* Same reasoning as the script list below: read the stylesheets out of the
+   page in load order rather than naming them here. faq.html loads two. */
+const sheets = [...html.matchAll(/<link rel="stylesheet" href="(assets\/css\/[^"]+)">/gi)]
+  .map(m => m[1]);
+if (!sheets.length) throw new Error('no local stylesheets found in ' + page.src);
+sheets.forEach(f => { if (!fs.existsSync(path.join(R, f))) throw new Error('missing stylesheet: ' + f); });
+const css = sheets.map(f => '/* ==== ' + f + ' ==== */\n' + read(f)).join('\n');
 /* Read the script list OUT of the page, in the order the page loads them,
    rather than keeping a second copy here. A hardcoded list silently drops any
    file added to index.html later: assets/js/scene.js was added, worked on the
@@ -22,10 +42,10 @@ const css = read('assets/css/highway19.css');
    found. A bundler that can omit a file without failing is worse than none. */
 const scripts = [...html.matchAll(/<script src="(assets\/js\/[^"]+)"><\/script>/gi)]
   .map(m => m[1]);
-if (!scripts.length) throw new Error('no local scripts found in index.html');
+if (!scripts.length) throw new Error('no local scripts found in ' + page.src);
 scripts.forEach(f => { if (!fs.existsSync(path.join(R, f))) throw new Error('missing script: ' + f); });
 const js = scripts.map(f => '/* ==== ' + f + ' ==== */\n' + read(f)).join('\n');
-console.log('scripts bundled: ' + scripts.length + '  (' + scripts.map(f => f.split('/').pop()).join(', ') + ')');
+console.log(page.src + ' — scripts bundled: ' + scripts.length + '  (' + scripts.map(f => f.split('/').pop()).join(', ') + ')');
 
 if (/<\/script>/i.test(js)) throw new Error('script payload contains </script>');
 
@@ -69,18 +89,23 @@ html = html.replace(/<!--[\s\S]*?-->/g, m => `\u0000C${comments.push(m) - 1}\u00
 
 html = html.replace(/src="((?!data:|https?:)[^"]+\.(?:png|jpe?g|gif|webp|svg))"/gi, (m, rel) => {
   const file = path.join(R, rel);
-  if (!fs.existsSync(file)) throw new Error('missing image referenced by index.html: ' + rel);
+  if (!fs.existsSync(file)) throw new Error('missing image referenced by ' + page.src + ': ' + rel);
   const mime = MIME[path.extname(rel).toLowerCase()];
   inlined++;
   return 'src="data:' + mime + ';base64,' + fs.readFileSync(file).toString('base64') + '"';
 });
 
+let first = true;
 html = html
-  .replace(/\n?\s*<link rel="stylesheet"[^>]*>/i, '\n<style>\n' + css + '\n</style>')
+  .replace(/\n?\s*<link rel="stylesheet"[^>]*>/gi, () => {
+    if (!first) return '';                 /* the rest are already in `css` */
+    first = false;
+    return '\n<style>\n' + css + '\n</style>';
+  })
   .replace(/\n?\s*<script src="assets\/js\/[^"]*"><\/script>/gi, '')
   .replace(/(\n?<\/body>)/i, '\n<script>\n' + js + '\n</script>\n$1');
 
-fs.writeFileSync(path.join(OUT, 'highway19-home.html'), html);
+fs.writeFileSync(path.join(OUT, 'highway19-' + page.out + '.html'), html);
 
 /* Artifact build: the host wraps the file in its own doctype/head/body, so
    ship only what belongs inside the body — plus the title and styles, which
@@ -88,17 +113,18 @@ fs.writeFileSync(path.join(OUT, 'highway19-home.html'), html);
 const body = html
   .slice(html.indexOf('<body>') + 6, html.lastIndexOf('</body>'))
   .trim();
-/* index.html carries the long SEO title; a hosted preview wants the short
-   name, which is what shows in the browser tab and the artifact gallery. */
-const title = 'Highway 19 Media';
+/* The pages carry long SEO titles; a hosted preview wants the short name,
+   which is what shows in the browser tab and the artifact gallery. */
 const style = (html.match(/<style>[\s\S]*?<\/style>/i) || [''])[0];
 
-fs.writeFileSync(path.join(OUT, 'highway19-artifact.html'),
-  '<title>' + title.trim() + '</title>\n' + style + '\n' + body + '\n');
+fs.writeFileSync(path.join(OUT, 'highway19-' + page.out + '-artifact.html'),
+  '<title>' + page.title.trim() + '</title>\n' + style + '\n' + body + '\n');
 
-html = html.replace(/\u0000C(\d+)\u0000/g, (m, i) => comments[+i]);
-
-console.log('images inlined:', inlined);
-for (const f of ['dist/highway19-home.html', 'dist/highway19-artifact.html']) {
-  console.log(f, (fs.statSync(path.join(R, f)).size / 1024).toFixed(0) + ' KB');
+console.log(page.src + ' — images inlined:', inlined);
+for (const f of ['dist/highway19-' + page.out + '.html',
+                 'dist/highway19-' + page.out + '-artifact.html']) {
+  console.log(' ', f, (fs.statSync(path.join(R, f)).size / 1024).toFixed(0) + ' KB');
 }
+}
+
+PAGES.forEach(build);

@@ -1,24 +1,85 @@
-# Highway 19 Media — home page
+# Highway 19 Media — site
 
 Standalone HTML. Open `index.html` in a browser, or serve the folder
 (`python3 -m http.server`) — no build step, no dependencies, nothing external.
 WordPress conversion happens later, once this is approved.
 
 ```
-index.html                     the page — 9 sections + header + footer
+index.html                     the home page — 9 sections + header + footer
+faq.html                       the Q&A page — GENERATED, see below
 assets/css/highway19.css       palette first, then everything else
+assets/css/faq.css             the Q&A page's own components
 assets/js/cars-sprite.js       the 20 vehicles + gradients, ported verbatim
 assets/js/road.js              the living road, threaded down the whole page
-assets/js/site.js              nav, form, booking links
-build.js                       inlines it all into one file
+assets/js/site.js              nav, form, booking links — both pages
+assets/js/faq.js               accordions, sticky offsets, category nav
+tools/build-faq.py             Q&A content + generator
+tools/faq-template.html        the Q&A page shell the generator fills
+build.js                       inlines each page into one file
 ```
 
-`node build.js` writes two self-contained files to `dist/` (gitignored —
-regenerate rather than commit):
+`node build.js` writes two self-contained files **per page** to `dist/`
+(gitignored — regenerate rather than commit):
 
-- `highway19-home.html` — a full standalone document. Open it off disk, email
-  it, or hand it to WPVibe. Everything inlined, nothing external.
-- `highway19-artifact.html` — body-only, for publishing as a hosted preview.
+- `highway19-home.html` / `highway19-faq.html` — full standalone documents.
+  Open one off disk, email it, or hand it to WPVibe. Everything inlined,
+  nothing external.
+- `highway19-home-artifact.html` / `highway19-faq-artifact.html` — body-only,
+  for publishing as a hosted preview.
+
+Adding a page means one line in `PAGES` at the top of `build.js`; the
+stylesheet and script lists are read out of the page itself.
+
+---
+
+## The Q&A page
+
+**`faq.html` is generated — edit `tools/build-faq.py` and re-run it, not the
+HTML.** `python3 tools/build-faq.py` rewrites the page from the `CONTENT` list
+in that file. The reason it is generated rather than typed is the FAQPage
+structured data in the `<head>`: 35 questions and answers duplicated by hand
+would be wrong within a week. One source, two outputs, no drift.
+
+Seven categories — General, Website Design, Video Production, Social &amp; Paid
+Ads, Branding, Print &amp; Promo, Working With Us — each with the same parts: a
+green sign-plate eyebrow, a short headline, one paragraph of intro, an icon
+disc in that category's lane colour, the accordion, and a CTA card. Two
+layouts alternate down the page (centred intro over the questions, or an intro
+rail beside them) so seven accordions in a row do not read as one list.
+
+**Lane colours.** Four of the seven use the service-card colours from the home
+page, so a category reads as the same lane it does there. `#qa-print` takes
+the brand red already used by the social marks — the one road-sign family not
+yet spoken for — and `#qa-working` takes guide-sign green, following the home
+page's own logic that the green signs are the ones that name a destination.
+Both are as provisional as the rest of the palette and are one line each at
+the top of `faq.css`.
+
+**The accordions ship open.** Every answer is plain HTML text in the markup,
+expanded, and `faq.js` collapses them on load. With no JavaScript — and for
+anything that does not run it — the whole page is still readable. That is also
+why the structured data is a duplicate of the visible copy rather than a
+substitute for it.
+
+**No road engine.** The home page's road measures a lane reserved by every
+section, and this page reserves none: it gets the asphalt strip under the
+hero, his clouds, his motorway plate and the green eyebrow plates, and stops
+there. The two sticky bars (site header, category nav) are measured by
+`faq.js` and written to `--hdr-h` / `--qa-nav-h`, because both change height
+with the breakpoint; the CSS carries fallbacks for the case where the script
+never runs.
+
+### What needs you on this page
+
+- **The CTA buttons all point at `index.html#close`**, the home page's form.
+  If the Q&A page should have its own form, or once a booking link exists, it
+  is one constant — `CONTACT` — at the top of `tools/build-faq.py`.
+- **Headlines are Title Case**, matching the rest of the site; they were
+  supplied in capitals. The CTA headings are uppercased in CSS, as the site's
+  buttons are. Say the word if you want the capitals literal.
+- **`#qa-print`'s red** is the one colour on this page with no artwork behind
+  it. If print and promo should sit in the purple lane with branding, that is
+  one line.
 
 Add `?road=debug` to the URL for the traffic panel: hour scrubber, density,
 speed, car size, weekend toggle, lane paths. It is not shipped to visitors.
