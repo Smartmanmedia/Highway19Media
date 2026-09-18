@@ -89,11 +89,17 @@
   background:#1479d0 var(--bn-photo,
       image-set(url("../../assets/v2/banner/road-wide.webp") 1x,
                 url("../../assets/v2/banner/road-wide@2x.webp") 2x))
-             center top/cover no-repeat;
-  /* NOT PINNED. A fixed background is painted against the viewport, so it
-     would be cropped to the viewport's shape again - the exact problem the
-     height above exists to solve. The words still hold still; they are
-     sticky, which is the part that was doing that work anyway. */
+             center/cover no-repeat;
+  /* PINNED, AND THE CROP IS THE PRICE. His choice, asked and answered. A fixed
+     background is painted against the viewport, so the photograph never moves
+     however far the page scrolls - and cover fills the viewport's shape, not
+     the section's, so a window wider in proportion than his 1.683 plate
+     trims the top and the bottom. About 180px of sky and 180px of crosswalk
+     on a 2000 by 830 window. The section keeps his ratio regardless, because
+     that is what sizes his stage; it is only the crop that the screen decides.
+     iOS ignores this outright, which is fine - the phone runs his tall board
+     and turns it off explicitly. */
+  background-attachment:fixed;
   font-family:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
   /* the sky behind the photograph, for the instant before it arrives and for
      the hairline at the edge of a cover crop */
