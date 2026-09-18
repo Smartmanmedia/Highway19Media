@@ -46,11 +46,18 @@
      areas the same box, so the crop is the one the photograph was framed
      for, and the layout below is unchanged: .sec0 centres its child in the
      content box, which is still exactly one screen less the header. */
-  height:100svh;
+  /* HIS TALLER PLATE, SCROLLED THROUGH RATHER THAN CROPPED. New3 is 1.683
+     where the frame before it was 1.842, and all of the extra is sky and
+     road. At one screen a cover crop threw most of that away; at 1.4 screens
+     the whole vertical frame is on the page, so the visit opens on sky and
+     ends on the crosswalk. */
+  height:140svh;
   margin-top:calc(-1 * (var(--hh) + var(--hbar)));
   padding-top:calc(var(--hh) + var(--hbar));
   box-sizing:border-box;
-  display:flex; align-items:center; justify-content:center;
+  /* AND THE WORDS SIT AT THE TOP OF IT, not in the middle. Centring his
+     stage in a 1.4-screen box would have pushed the headline below the fold. */
+  display:flex; align-items:flex-start; justify-content:center;
   overflow:hidden;
   isolation:isolate;
   /* AND IT CASTS OVER WHAT FOLLOWS. A positioned section later in the document
@@ -69,17 +76,12 @@
   background:#1479d0 var(--bn-photo,
       image-set(url("../../assets/v2/banner/road-wide.webp") 1x,
                 url("../../assets/v2/banner/road-wide@2x.webp") 2x))
-             center/cover no-repeat;
-  /* PINNED TO THE SCREEN, NOT TO THE SECTION. The photograph holds still
-     while his headline, the rule, the three lines and the form ride up over
-     it, so the words stay on open sky right until the banner leaves.
-     It costs one word and no script. Two things it changes: the positioning
-     area becomes the viewport rather than this box, so the cover crop is now
-     computed against the full screen height and the section shows a window
-     into it; and iOS ignores it outright - which is fine, because the phone
-     runs his tall 3.1:1 board where a fixed cover crop would be wrong
-     anyway, and the phone block turns it back off explicitly. */
-  background-attachment:fixed;
+             left center/cover no-repeat;
+  /* NO LONGER PINNED TO THE SCREEN. A fixed background is painted against
+     the viewport, so the visible slice of the photograph never changes however
+     far you scroll - which is the whole point of a 1.4-screen banner. The
+     reason he wanted it pinned still holds anyway: the words stay on open sky
+     right until the banner leaves, because now the sky travels with them. */
   font-family:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
   /* the sky behind the photograph, for the instant before it arrives and for
      the hairline at the edge of a cover crop */
@@ -302,9 +304,8 @@
     height:auto;
     max-height:none;
     background-image:var(--bn-photo-mob,url("../../assets/v2/banner/road-tall.webp"));
-    /* his tall board scrolls with its own section - see the desktop note -
-       and takes no header inset, because aspect-ratio sizes the border box */
-    background-attachment:scroll;
+    /* his tall board takes no header inset - aspect-ratio sizes the border
+       box - and it is its own height, not 1.4 screens */
     margin-top:0; padding-top:0;
   }
   .sec0 .bn-stage{ aspect-ratio:1088.16 / 3411.84; width:100%; height:100% }
