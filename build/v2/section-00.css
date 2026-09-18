@@ -37,33 +37,20 @@
      fold on a 1920 window. These are the header's own tokens, so the two can
      never drift apart. The content inside is capped at 80svh and centred, so
      it simply rides up with the shorter box. */
-  /* THE BANNER IS THE SHAPE OF THE PHOTOGRAPH. This is the thing that kept
-     going wrong. A cover crop fills the box and throws away whichever axis
-     does not fit - and a browser window is far wider in proportion (2.2, 2.4)
-     than his plate (1.683), so cover was filling the width and cutting the
-     sky off the top and the crosswalk off the bottom. Every framing before
-     this one was a different slice of the same mistake.
-
-     Sizing the SECTION to the plate's own ratio instead means cover has
-     nothing to crop: 100vw wide by 100vw/1.6833 tall is exactly his frame,
-     so the whole photograph is on the page, full width, undistorted, from the
-     top of the sky to the near kerb of the crosswalk. On a window shorter
-     than that the banner simply runs past the fold, which is the scroll down
-     to the crosswalk he described.
-
-     The floor is one screen less the header, for a tall narrow window where
-     his ratio would make a banner too short to hold the composition. */
-  height:max(calc(100svh - var(--hh) - var(--hbar)), calc(100vw / 1.6833));
-  /* AND IT STARTS BELOW THE HEADER, not under it. The header is opaque and
-     fixed, so a banner pulled up behind it loses the top of the frame - the
-     one thing this change exists to keep. */
-  /* THE RELEASE, AND WHAT IS LEFT BELOW HIM. This is the strip of photograph
-     under his composition - the road and the crosswalk his stage does not
-     cover. It was also the sticky release; that hold is nought by
-     construction now, because the stage fills the content box and there is no
-     travel left inside it. The two cannot both be had: a hold needs the stage
-     smaller than the box, which is the opposite of what he asked for. */
-  padding-bottom:max(0px, min(300px, calc((100vw / 1.6833 - 80svh) / 2)));
+  /* 140 SCREENS-AND-A-BIT OF SCROLL, WITH THE PICTURE PINNED BEHIND IT. The
+     photograph is fixed, so this height is not a taller picture - it is how
+     long the banner holds the page before the next section arrives. The
+     body already carries a padding-top for the fixed header, so this section
+     needs none of its own - it had one, and the two stacked: the stage began
+     two header-heights down and its bottom sat 114px past the fold, which is
+     the opposite of seeing the whole of it. */
+  height:140svh;
+  /* THE SLACK, SPLIT. His stage is one screen less the header (see below), so
+     a 140svh section leaves 40svh plus the header over. Half the release,
+     capped at the 300px he asked for, and the rest is the hold - the stretch
+     where the words stay put. 216 and 330 at 1080 tall, 166 and 280 at 830,
+     288 and 450 at 1440. */
+  padding-bottom:max(0px, min(300px, calc(40svh / 2)));
   box-sizing:border-box;
   /* AND THE WORDS SIT AT THE TOP OF IT, not in the middle. */
   display:flex; align-items:flex-start; justify-content:center;
@@ -127,7 +114,13 @@
      1.459, squeezed five per cent horizontally. Capping the height against
      the width instead means the width is always the derived one and the ratio
      always holds; the section clips, so the scrollbar costs nothing. */
-  height:min(100%, calc(100vw / 1.5400));
+  /* ONE SCREEN, SO THE WHOLE OF HIM IS ON IT. Stuck at the header's height,
+     a stage this tall has its bottom edge exactly on the fold - the form's
+     button included, which is what "full height" means. The second term is
+     the guard for a narrow window, where his 1.540 would otherwise run wider
+     than the screen; the width is always the derived one, so the ratio holds
+     by construction either way. */
+  height:min(calc(100svh - var(--hh) - var(--hbar)), calc(100vw / 1.5400));
   aspect-ratio:1937.04 / 1257.84;
   container-type:inline-size;
 }
