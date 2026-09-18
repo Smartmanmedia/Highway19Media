@@ -309,11 +309,34 @@ wr('robots.txt', STAGING
    * work. */
   : 'User-agent: *\nAllow: /\n\nSitemap: ' + SITE + '/sitemap.xml\n');
 
+/* the community pages that are meant to be found. A page carrying its own
+ * noindex is left out - listing it tells the one crawler that reads the
+ * sitemap before the meta tag to index a page we asked it not to. */
+const COMMUNITY_URLS = (function () {
+  if (!fs.existsSync(COMMUNITY)) return '';
+  const out = [];
+  (function walk(dir) {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      const from = path.join(dir, e.name);
+      if (e.isDirectory()) { walk(from); continue; }
+      if (!/[.]html$/.test(e.name)) continue;
+      /* comments out first: a page can carry a commented-out noindex as a
+         note to whoever edits it next, and that is not a noindex */
+      const html = fs.readFileSync(from, 'utf8').replace(/<!--[\s\S]*?-->/g, '');
+      if (/<meta[^>]+name="robots"[^>]+noindex/i.test(html)) continue;
+      const m = html.match(/<link rel="canonical" href="([^"]+)"/);
+      if (m) out.push('  <url><loc>' + m[1] + '</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>');
+    }
+  })(COMMUNITY);
+  return out.join(String.fromCharCode(10));
+})();
+
 if (!STAGING) wr('sitemap.xml',
 `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>${SITE}/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
 ${LEGAL.map(L => `  <url><loc>${SITE}/${L.slug}/</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>`).join('\n')}
+${COMMUNITY_URLS}
 </urlset>
 `);
 
