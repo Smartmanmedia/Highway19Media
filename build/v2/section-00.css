@@ -57,14 +57,12 @@
   /* AND IT STARTS BELOW THE HEADER, not under it. The header is opaque and
      fixed, so a banner pulled up behind it loses the top of the frame - the
      one thing this change exists to keep. */
-  /* THE RELEASE, AND WHAT IS LEFT TO SHARE. A sticky child stops being
-     sticky at the bottom of its container's CONTENT box, so this padding is
-     where the words let go. 300px flat no longer fits: the section is now the
-     photograph's own height, and at 1600 wide that is 951px against an 80svh
-     stage of 720 - 231px of slack for the hold AND the release together. A
-     flat 300 took all of it and then squeezed his stage 10% short of the size
-     he drew it. Half the slack each, capped at his 300 where there is room:
-     115 and 115 at 1600, 300 and 592 at 3440. */
+  /* THE RELEASE, AND WHAT IS LEFT BELOW HIM. This is the strip of photograph
+     under his composition - the road and the crosswalk his stage does not
+     cover. It was also the sticky release; that hold is nought by
+     construction now, because the stage fills the content box and there is no
+     travel left inside it. The two cannot both be had: a hold needs the stage
+     smaller than the box, which is the opposite of what he asked for. */
   padding-bottom:max(0px, min(300px, calc((100vw / 1.6833 - 80svh) / 2)));
   box-sizing:border-box;
   /* AND THE WORDS SIT AT THE TOP OF IT, not in the middle. */
@@ -112,7 +110,18 @@
      is the header's height, which is where it already sits, so nothing jumps
      at the first pixel of scroll. */
   position:sticky; top:calc(var(--hh) + var(--hbar));
-  height:min(80svh,100%); max-width:100%;
+  /* THE FULL FRAME, not 80% of a screen. The 80svh cap dates from when the
+     banner WAS one screen; now the section is the photograph's own shape and
+     the cap was holding his composition a quarter smaller than it should be
+     inside it. 100% of the content box, and max-width keeps the ratio from
+     running past the section on a narrow window. */
+  /* HIS RATIO, WHICH MUST NEVER BREAK. height:100% with max-width:100% read
+     right until a window where the width clamp bound - then both axes were
+     determined, aspect-ratio was ignored, and his 1.540 stage came out at
+     1.459, squeezed five per cent horizontally. Capping the height against
+     the width instead means the width is always the derived one and the ratio
+     always holds; the section clips, so the scrollbar costs nothing. */
+  height:min(100%, calc(100vw / 1.5400));
   aspect-ratio:1937.04 / 1257.84;
   container-type:inline-size;
 }
