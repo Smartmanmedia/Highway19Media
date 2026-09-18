@@ -54,11 +54,20 @@
   height:140svh;
   margin-top:calc(-1 * (var(--hh) + var(--hbar)));
   padding-top:calc(var(--hh) + var(--hbar));
+  /* AND THE LAST 300px ARE WHERE THE WORDS LET GO. A sticky child stops
+     being sticky when it reaches the bottom of its container's CONTENT box,
+     so this padding is the release: his stage holds still through the whole
+     scroll and then travels the last 300px out with the page. */
+  padding-bottom:300px;
   box-sizing:border-box;
   /* AND THE WORDS SIT AT THE TOP OF IT, not in the middle. Centring his
      stage in a 1.4-screen box would have pushed the headline below the fold. */
   display:flex; align-items:flex-start; justify-content:center;
-  overflow:hidden;
+  /* clip, NOT hidden. overflow:hidden makes this box a scroll container, and
+     a sticky child sticks to its nearest scroll container - so the stage was
+     sticking to a box that never scrolls, which is to say not at all.
+     overflow:clip clips exactly the same and creates no scroll container. */
+  overflow:clip;
   isolation:isolate;
   /* AND IT CASTS OVER WHAT FOLLOWS. A positioned section later in the document
      paints over an earlier one, so the shadow needs the z-index as much as the
@@ -76,12 +85,12 @@
   background:#1479d0 var(--bn-photo,
       image-set(url("../../assets/v2/banner/road-wide.webp") 1x,
                 url("../../assets/v2/banner/road-wide@2x.webp") 2x))
-             left center/cover no-repeat;
-  /* NO LONGER PINNED TO THE SCREEN. A fixed background is painted against
-     the viewport, so the visible slice of the photograph never changes however
-     far you scroll - which is the whole point of a 1.4-screen banner. The
-     reason he wanted it pinned still holds anyway: the words stay on open sky
-     right until the banner leaves, because now the sky travels with them. */
+             center/cover no-repeat;
+  /* PINNED TO THE SCREEN. The photograph is painted against the viewport and
+     does not move at all; the 1.4 screens above are the length of the hold,
+     not a taller picture. iOS ignores this, which is fine - the phone runs
+     his tall board and turns it off explicitly. */
+  background-attachment:fixed;
   font-family:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
   /* the sky behind the photograph, for the instant before it arrives and for
      the hairline at the edge of a cover crop */
@@ -94,7 +103,11 @@
    never the composition itself. The container lives here for the same reason:
    cqw has to be a share of his artboard, not of the window. */
 .sec0 .bn-stage{
-  position:relative; height:min(80svh,100%); max-width:100%;
+  /* STUCK UNDER THE HEADER, not scrolling with the page. Its own top offset
+     is the header's height, which is where it already sits, so nothing jumps
+     at the first pixel of scroll. */
+  position:sticky; top:calc(var(--hh) + var(--hbar));
+  height:min(80svh,100%); max-width:100%;
   aspect-ratio:1937.04 / 1257.84;
   container-type:inline-size;
 }
@@ -304,11 +317,13 @@
     height:auto;
     max-height:none;
     background-image:var(--bn-photo-mob,url("../../assets/v2/banner/road-tall.webp"));
-    /* his tall board takes no header inset - aspect-ratio sizes the border
-       box - and it is its own height, not 1.4 screens */
-    margin-top:0; padding-top:0;
+    /* his tall board scrolls with its own section, takes no header inset -
+       aspect-ratio sizes the border box - and holds nothing in place */
+    background-attachment:scroll;
+    margin-top:0; padding-top:0; padding-bottom:0;
   }
-  .sec0 .bn-stage{ aspect-ratio:1088.16 / 3411.84; width:100%; height:100% }
+  .sec0 .bn-stage{ position:relative; top:auto;
+                   aspect-ratio:1088.16 / 3411.84; width:100%; height:100% }
   .sec0 .bn-say{ left:13.18%; top:8.82%; width:86%;
                  display:flex; flex-direction:column; align-items:flex-start }
   .sec0 .bn-h1{ display:contents }
