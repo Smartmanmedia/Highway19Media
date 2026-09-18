@@ -130,7 +130,13 @@
 /* top is 212.1 of his 1257.84 PLUS the 43 the headline's scale(.82 1.1) grows
    upward from its baseline - his artboard places the transformed result, and
    a transform does not move the box the browser laid out */
-.sec0 .bn-say{ position:absolute; left:19.76%; top:20.28%; width:44%; z-index:1 }
+/* ONE KNOB FOR THE WHOLE LEFT COLUMN. The stage grew so that his form panel
+   would be the size he wanted, and the words came up with it - correct by his
+   artboard, too big by his eye. --say scales the column and nothing else: the
+   width here, so every per cent inside it follows, and each cqw type size
+   below. The panel is untouched. 1 is his artboard exactly. */
+.sec0 .bn-say{ --say:.86;
+  position:absolute; left:19.76%; top:20.28%; width:calc(44% * var(--say)); z-index:1 }
 
 .sec0 .bn-h1{
   margin:0; font-weight:800; letter-spacing:-.018em; line-height:.96;
@@ -147,16 +153,16 @@
    ran off the edge, which is what sent me looking for the transform in the
    first place. transform-origin is the left baseline because that is where his
    translate() puts the text before any of it is applied. */
-.sec0 .bn-l1{ display:block; font-size:7.60cqw; transform-origin:left bottom;
+.sec0 .bn-l1{ display:block; font-size:calc(7.60cqw * var(--say)); transform-origin:left bottom;
               transform:rotate(-2.39deg) scale(.82,1.1) skewX(-3.24deg) }
 /* his second line is a shade in from the first - 405.3 against 382.8 */
-.sec0 .bn-l2{ display:block; font-size:3.02cqw; font-weight:600; color:#f2f2f2;
+.sec0 .bn-l2{ display:block; font-size:calc(3.02cqw * var(--say)); font-weight:600; color:#f2f2f2;
               margin:.28em 0 0 .38em; letter-spacing:-.01em;
               transform-origin:left bottom;
               transform:rotate(-2.39deg) scale(.83,1) skewX(-2.92deg) }
 
 .sec0 .bn-l3{
-  margin:1.30em 0 0 .65em; font-size:2.10cqw; font-weight:300; color:#f2f2f2;
+  margin:1.30em 0 0 .65em; font-size:calc(2.10cqw * var(--say)); font-weight:300; color:#f2f2f2;
   letter-spacing:.005em; line-height:1.1; text-transform:uppercase;
 }
 
@@ -164,11 +170,11 @@
    12.5KB of path data - so it is one <img> here rather than 47 more nodes in
    every page that carries the banner. preserveAspectRatio:none in the file,
    because he stretches it to the width of the line above it. */
-.sec0 .bn-rule{ display:block; width:66.4%; height:2.8cqw; margin:.55cqw 0 0 1.07%;
+.sec0 .bn-rule{ display:block; width:66.4%; height:calc(2.8cqw * var(--say)); margin:calc(.55cqw * var(--say)) 0 0 1.07%;
                 object-fit:fill }
 
 .sec0 .bn-list{
-  list-style:none; margin:.19cqw 0 0 2.70%; padding:0;
+  list-style:none; margin:calc(.19cqw * var(--say)) 0 0 2.70%; padding:0;
   /* HIS PHONE TREATMENT, ON THE DESKTOP TOO. On his artboard this list is
      19.24pt against a 1937 board - about 13px in a 1920 window, which is
      smaller than the body text anywhere else on the site and too small to
@@ -184,7 +190,7 @@
      block was six lines where his is three. 67% of a 44% box ends where his
      column ends. */
   max-width:67%;
-  font-size:1.42cqw; line-height:1.30; color:#f2f2f2; font-weight:600;
+  font-size:calc(1.42cqw * var(--say)); line-height:1.30; color:#f2f2f2; font-weight:600;
   text-shadow:0 .08cqw .35cqw rgba(0,32,64,.30);
 }
 .sec0 .bn-list li{ position:relative; padding-left:1.55em; margin:0 0 .75em }
@@ -345,7 +351,9 @@
   }
   .sec0 .bn-stage{ position:relative; top:auto;
                    aspect-ratio:1088.16 / 3411.84; width:100%; height:100% }
-  .sec0 .bn-say{ left:13.18%; top:8.82%; width:86%;
+  /* the phone sets every size in this column itself, so the desktop scale
+     has nothing to do here - pinned to 1 so it can never leak in */
+  .sec0 .bn-say{ --say:1; left:13.18%; top:8.82%; width:86%;
                  display:flex; flex-direction:column; align-items:flex-start }
   .sec0 .bn-h1{ display:contents }
   .sec0 .bn-l1{ font-size:17.04cqw; order:1 }
