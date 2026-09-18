@@ -22,7 +22,7 @@ const read = p => fs.readFileSync(path.join(R, p), 'utf8');
 
 const PAGES = [
   { src: 'index.html', out: 'home', title: 'Highway 19 Media' },
-  { src: 'faq.html',   out: 'faq',  title: 'Highway 19 Media — Q&A' },
+  { src: 'faq.html',   out: 'faq',  title: 'Highway 19 Q&A' },
 ];
 
 function build(page) {
@@ -94,6 +94,14 @@ html = html.replace(/src="((?!data:|https?:)[^"]+\.(?:png|jpe?g|gif|webp|svg))"/
   inlined++;
   return 'src="data:' + mime + ';base64,' + fs.readFileSync(file).toString('base64') + '"';
 });
+
+/* Unmask immediately, while the masked form is still confined to the image
+   pass above. The restore used to sit at the very bottom of the file, after
+   both outputs were written — so every published build shipped a NUL
+   placeholder where each HTML comment used to be. Invisible in a browser,
+   which is why it survived; not valid UTF-8 text, which is how it was found. */
+html = html.replace(/\u0000C(\d+)\u0000/g, (m, i) => comments[+i]);
+if (html.includes('\u0000')) throw new Error('NUL survived the comment unmask');
 
 let first = true;
 html = html
