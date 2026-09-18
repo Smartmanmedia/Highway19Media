@@ -294,6 +294,65 @@
   color: var(--orange);
 }
 
+
+/* ---------- Address suggestions -----------------------------------
+   Completes against the real streets in Spring Hill, Brooksville and
+   Hudson (see address-suggest.js). This is new interactive UI rather
+   than part of the artwork, so the type has px floors: a dropdown you
+   have to squint at on a phone is worse than one a shade off scale.
+   ------------------------------------------------------------------ */
+.lead__field--address { position: relative; }
+
+.lead__suggest {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + .7cqw);
+  z-index: 5;
+  max-height: min(46cqw, 40vh);
+  overflow-y: auto;
+  margin: 0;
+  padding: .6cqw 0;
+  list-style: none;
+  text-align: left;
+  background: #fff;
+  border: .224cqw solid var(--orange);
+  border-radius: 1.489cqw;
+  box-shadow: 0 1.4cqw 3.4cqw rgba(0, 0, 0, .5);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.lead__suggest[hidden] { display: none; }
+
+.lead__suggest li {
+  display: flex;
+  align-items: baseline;
+  gap: 1em;
+  padding: max(7px, .95cqw) 5.121cqw;   /* the input’s own text inset */
+  font-size: max(13px, 2.75cqw);
+  line-height: 1.3;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.lead__suggest b { font-weight: 700; }
+
+.lead__suggest span {
+  margin-left: auto;
+  font-size: .84em;
+  font-weight: 400;
+  white-space: nowrap;
+  color: rgba(25, 25, 25, .58);
+}
+
+.lead__suggest li[aria-selected="true"] { background: rgba(255, 167, 41, .26); }
+
+/* Fingers need a bigger target than a mouse pointer does */
+@media (pointer: coarse) {
+  .lead__suggest li { padding-top: 11px; padding-bottom: 11px; font-size: max(15px, 2.75cqw); }
+}
+
 /* ---------- Sent state -------------------------------------------- */
 .lead__done {
   display: none;

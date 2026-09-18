@@ -70,10 +70,15 @@
                  autocomplete="name" required>
         </div>
 
-        <div class="lead__field">
+        <div class="lead__field lead__field--address">
           <label class="vh" for="lead-address">Street address</label>
           <input id="lead-address" name="address" type="text" placeholder="Address"
-                 autocomplete="street-address" required>
+                 autocomplete="street-address" required
+                 role="combobox" aria-autocomplete="list" aria-expanded="false"
+                 aria-controls="lead-address-list" aria-describedby="lead-address-hint">
+          <p class="vh" id="lead-address-hint">Start typing a street in Spring Hill, Brooksville or Hudson to pick it from a list.</p>
+          <ul class="lead__suggest" id="lead-address-list" role="listbox"
+              aria-label="Matching streets nearby" hidden></ul>
         </div>
 
         <div class="lead__field">
@@ -351,6 +356,8 @@
 
 <!-- Analytics for this community page only — its own property, not Highway 19's.
      Paste the tag here when the ID exists. -->
+
+<script src="address-suggest.js" defer></script>
 
 <script src="lead-form.js" defer></script>
 <script src="reveal.js" defer></script>
