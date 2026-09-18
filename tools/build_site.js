@@ -216,6 +216,33 @@ for (const L of LEGAL) {
   wr(L.slug + '/index.html', minifyHtml(page));
 }
 
+/* 4c. THE COMMUNITY PAGES. Landing pages built for local businesses, each
+ *     one carrying its customer's branding and deliberately none of this
+ *     site's - no header, no footer, no Highway 19 lockup. That is why they
+ *     are copied verbatim instead of going through wr(): every page wr()
+ *     writes is held against the chrome check below, and these are the one
+ *     kind of page that must fail it.
+ *
+ *     Each is self-contained - its own css, js, fonts and art sit beside it -
+ *     so a customer page can be added or pulled without touching anything
+ *     else here. */
+const COMMUNITY = path.join(ROOT, 'community');
+if (fs.existsSync(COMMUNITY)) {
+  let files = 0, cbytes = 0;
+  (function walk(dir) {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      const from = path.join(dir, e.name);
+      if (e.isDirectory()) { walk(from); continue; }
+      const rel = path.relative(ROOT, from).split(path.sep).join('/');
+      const to = path.join(OUT, rel);
+      fs.mkdirSync(path.dirname(to), { recursive: true });
+      fs.copyFileSync(from, to);
+      files++; cbytes += fs.statSync(from).size;
+    }
+  })(COMMUNITY);
+  console.log('  community: ' + files + ' files, ' + Math.round(cbytes / 1024) + ' KB');
+}
+
 /* 5. what the host needs to be told.
  *    Cache-Control is the whole point of splitting the files up: the page is
  *    revalidated every visit, his art is not asked for twice. The fonts and
@@ -254,7 +281,11 @@ const CSP = [
 ].join('; ');
 
 wr('_headers',
-`/assets/*
+`/community/shared/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+/community/*/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*
   Cache-Control: public, max-age=31536000, immutable
 /build/v2/*
   Cache-Control: public, max-age=604800

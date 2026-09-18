@@ -1,0 +1,958 @@
+/* =============================================================
+   Carpenter Rick — sections 2..5
+
+   Same method as the hero panel: each section is a container sized
+   to its artboard, and everything inside is placed in cqw, where
+   1cqw = 1% of the section width = 38.20 artboard units (artboards
+   are 3820 wide). So the whole thing scales as one piece and holds
+   the artwork's proportions at any width — text included.
+
+   Sources: assets/Section 2.svg, Section 3.svg, section 5.svg.
+   Photo insets, the section-3/4 rule and the service-area strip
+   aren't in the SVGs; those were measured off the comps.
+   ============================================================= */
+
+:root {
+  --disc-grey: #333;                     /* the resting disc */
+  --ease: cubic-bezier(.22, .61, .36, 1);
+}
+
+.sec {
+  position: relative;
+  width: 100%;
+  container-type: inline-size;
+  font-family: var(--font-body);
+  overflow: hidden;
+}
+
+/* ---------- Hero service-area strip (measured off the comp) ------ */
+.hero__areas {
+  position: absolute;
+  z-index: 1;
+  right: 4.42%;
+  bottom: 3.3%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: .42em;
+  font-size: clamp(11px, 1.87vw, 36px);   /* cap height 51 on the artboard */
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 .06em .18em rgba(0, 0, 0, .55);
+}
+
+.hero__areas i {
+  width: .52em;
+  height: .52em;
+  border-radius: 50%;
+  background: var(--orange);
+}
+
+/* =============================================================
+   SECTION 2 — artboard 3820 x 1823.2
+   ============================================================= */
+.s2 {
+  aspect-ratio: 3820 / 1823.2;
+  background: #191919;
+}
+
+.s2__rule {                              /* 3825.6 x 57.6 at 0,0 */
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1.5079cqw;
+  background: var(--orange);
+}
+
+.s2__shot {                              /* frame 1590 x 1066.46 at 412.8, 413.17 */
+  position: absolute;
+  left: 10.8063cqw;
+  top: 10.8160cqw;
+  width: 41.6230cqw;
+  height: 27.9178cqw;
+  margin: 0;
+  padding: .3141cqw;                     /* 12 — measured off the comp */
+  background: var(--orange);
+}
+
+.s2__shot img { width: 100%; height: 100%; object-fit: cover; }
+
+.s2__kicker {                            /* 49, ExtraBold, baseline 520.32 */
+  position: absolute;
+  left: 60.6382cqw;
+  top: 12.4819cqw;
+  margin: 0;
+  font-size: 1.2827cqw;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #fff;
+  transform: scaleX(1.03);
+  transform-origin: left top;
+}
+
+.s2__title { margin: 0; }
+
+.s2__title span,
+.s2__title em {
+  position: absolute;
+  transform-origin: left top;
+  left: 60.6382cqw;
+  display: block;
+  font-style: normal;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+.s2__title span {                        /* 100.12, scale(1.03, 1.11) */
+  top: 14.3985cqw;
+  font-size: 2.9092cqw;
+  font-weight: 400;
+  transform: scaleX(.9279);
+}
+
+.s2__title em {                          /* 147.23, scale(.95, 1.11) */
+  top: 17.0060cqw;
+  font-size: 4.2783cqw;
+  font-weight: 800;
+  transform: scaleX(.8559);
+}
+
+.s2__body {
+  position: absolute;
+  left: 60.8772cqw;
+  margin: 0;
+  line-height: 1.2;
+  color: #fff;
+  transform: scaleX(1.03);
+  transform-origin: left top;
+}
+
+.s2__body--a { top: 22.8984cqw; font-size: .7531cqw; }   /* 28.77 */
+.s2__body--b { top: 26.6050cqw; font-size: .8178cqw; }   /* 31.24 */
+.s2__body--c {
+  top: 32.4932cqw;
+  font-size: .8178cqw;
+  font-weight: 700;
+  color: var(--orange);
+}
+
+/* =============================================================
+   SECTION 3 — artboard 3820 x 1660.19
+   The #333 panel starts 90.59 down; the photo breaks out above it.
+   ============================================================= */
+/* The artboard has the panel starting 90.59 down with the photo above it.
+   On the page that band is closed up: the section starts at the panel and
+   the photo breaks upward out of it, over section 2. */
+.s3 {
+  aspect-ratio: 3820 / 1569.6;
+  background: #333;
+  overflow: visible;                     /* let the photo overhang */
+}
+
+.s3__shot {                              /* frame 1710.4 x 1294.79 at 1754.4, 0 */
+  position: absolute;
+  left: 45.9267cqw;
+  top: -2.3715cqw;                       /* 90.59 up, over section 2 */
+  width: 44.7749cqw;
+  height: 33.8950cqw;
+  margin: 0;
+  padding: .4974cqw;                     /* 19 — measured off the comp */
+  background: var(--orange);
+}
+
+.s3__shot img { width: 100%; height: 100%; object-fit: cover; }
+
+.s3__kicker {                            /* 61, ExtraBold, baseline 334.12 */
+  position: absolute;
+  left: 17.6644cqw;
+  top: 4.9571cqw;
+  margin: 0;
+  font-size: 1.5969cqw;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #fff;
+  transform: scaleX(1.03);
+  transform-origin: left top;
+}
+
+.s3__title {                             /* 100.12, scale(1.03, 1.11) */
+  position: absolute;
+  left: 17.6644cqw;
+  top: 7.1526cqw;
+  margin: 0;
+  font-size: 2.9092cqw;
+  font-weight: 400;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--orange);
+  transform: scaleX(.9279);
+  transform-origin: left top;
+}
+
+.s3__body {
+  position: absolute;
+  left: 17.6521cqw;
+  top: 10.8778cqw;
+  margin: 0;
+  font-size: .7531cqw;                   /* 28.77 */
+  line-height: 1.2;
+  color: #fff;
+  transform: scaleX(1.03);
+  transform-origin: left top;
+}
+
+/* Spec list — 6 items on a 115.2 pitch, square bullets 51.2 */
+.s3__specs {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.s3__specs li {
+  position: absolute;
+  left: 22.7853cqw;                      /* 870.4 */
+  top: calc(16.7154cqw + var(--i) * 3.0157cqw);
+  font-size: .6283cqw;                   /* 24 */
+  line-height: 1.2;                      /* 28.8 */
+  letter-spacing: -.01em;
+  color: #fff;
+  transform: scaleX(.95);
+  transform-origin: left top;
+}
+
+.s3__specs li::before {                  /* the orange square */
+  content: "";
+  position: absolute;
+  left: -2.2774cqw;
+  top: -.3804cqw;
+  width: 1.3403cqw;
+  height: 1.3403cqw;
+  background: var(--orange);
+}
+
+.s3__specs b { display: block; font-weight: 700; text-transform: uppercase; }
+
+.s3__specs li:nth-child(1) { --i: 0 }
+.s3__specs li:nth-child(2) { --i: 1 }
+.s3__specs li:nth-child(3) { --i: 2 }
+.s3__specs li:nth-child(4) { --i: 3 }
+.s3__specs li:nth-child(5) { --i: 4 }
+.s3__specs li:nth-child(6) { --i: 5 }
+
+.s3__rule {                              /* thin orange rule into section 4 */
+  position: absolute;
+  inset: auto 0 0;
+  height: .5236cqw;                      /* 20 — measured off the comp */
+  background: var(--orange);
+}
+
+/* =============================================================
+   SECTION 4 — full-bleed build photo
+   ============================================================= */
+/* The photo is pinned to the viewport and this section is the window
+   that scrolls over it. clip-path makes the section the containing block
+   for the fixed image, which is what makes it work on iOS too —
+   background-attachment: fixed is ignored there. */
+.s4 {
+  aspect-ratio: 7649 / 3646;             /* the photo's own ratio */
+  line-height: 0;
+  clip-path: inset(0);
+}
+
+.s4 img {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s4 { clip-path: none; }
+  .s4 img { position: static; width: 100%; height: auto; }
+}
+
+/* =============================================================
+   SECTION 5 — artboard 3820 x 1983.78
+   ============================================================= */
+.s5 {
+  aspect-ratio: 3820 / 1983.78;
+  background: #1a1a1a;
+  /* Top edge only. An outline would ring all four sides, and a
+     border-top would shrink the content box — this element is the
+     cqw container for everything inside it — so it is drawn as a
+     gradient band instead. */
+  background-image: linear-gradient(var(--orange), var(--orange));
+  background-size: 100% 3px;
+  background-repeat: no-repeat;
+  background-position: top;
+  /* Falls upward onto the fixed photo above: section 5 paints after
+     section 4, so the shadow lands on the image. Two layers — a tight
+     dark contact edge, then a wide soft one about 3x its size. */
+  box-shadow:
+    0 -3px 5px rgba(0, 0, 0, .8),
+    0 -9px 18px rgba(0, 0, 0, .32);
+}
+
+.s5__title {                             /* 112.12, baseline 445.31 */
+  position: absolute;
+  inset: 9.0511cqw 0 auto;
+  margin: 0;
+  font-size: 2.9351cqw;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--orange);
+  transform: scaleX(.95);
+  transform-origin: center top;
+}
+
+.s5__sub {                               /* 39.39, baseline 537.26 */
+  position: absolute;
+  inset: 13.0458cqw 0 auto;
+  margin: 0;
+  font-size: 1.0311cqw;
+  line-height: 1.2;                      /* 47.27 */
+  text-align: center;
+  color: #fff;
+  transform: scaleX(.95);
+  transform-origin: center top;
+}
+
+.s5__options {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.s5__options li {
+  position: absolute;
+  left: var(--cx);
+  top: 19.6605cqw;                       /* the column box starts at the disc */
+  width: 20cqw;
+  height: 22cqw;                         /* ...and covers disc + label + copy, so it can be hovered */
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+/* Two filled discs stacked: orange behind, grey exactly over it, so
+   at rest you see only the grey one. Hover slides the orange out from
+   behind it, up and to the right. The icons are line art on
+   transparency (their original dark disc was baked in), so the grey
+   fill shows through. */
+.s5__disc {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 12.4497cqw;                     /* 475.58 */
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+}
+
+.s5__pop,
+.s5__face {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.s5__pop  { background: var(--orange); translate: 0 0; transition: translate .6s var(--ease); }
+.s5__face { background: var(--disc-grey); }
+
+.s5__options li:hover .s5__pop,
+.s5__options li:focus-within .s5__pop {
+  translate: .812cqw -.812cqw;           /* 31 up-right */
+}
+
+.s5__disc img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 97.564%;                        /* 464 of 475.58 */
+  height: auto;
+  transform: translate(-50%, -50%);
+}
+
+.s5__options b {                         /* 49.24, baseline 1382.54 */
+  position: absolute;
+  left: 0; right: 0;
+  top: 15.3872cqw;
+  font-size: 1.2890cqw;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--orange);
+  transform: scaleX(.95);
+  transform-origin: center top;
+}
+
+/* Thin rule under the label. On hover it travels down past the copy,
+   uncovering it on the way. */
+.s5__line {
+  position: absolute;
+  left: 50%;
+  top: 16.95cqw;
+  width: 8cqw;
+  height: max(1px, .08cqw);
+  background: var(--orange);
+  transform: translateX(-50%);
+  translate: 0 0;
+  transition: translate .6s var(--ease);
+}
+
+.s5__options li:hover .s5__line,
+.s5__options li:focus-within .s5__line {
+  translate: 0 4.7cqw;
+}
+
+.s5__copy {                              /* 39.39, baseline 1459.76 — revealed on hover */
+  position: absolute;
+  left: 0; right: 0;
+  top: 17.5346cqw;
+  font-size: 1.0311cqw;
+  line-height: 1.2;
+  color: #fff;
+  opacity: 0;
+  translate: 0 -.55cqw;
+  transform: scaleX(.95);
+  transform-origin: center top;
+  transition: opacity .6s ease, translate .6s var(--ease);
+}
+
+.s5__options li:hover .s5__copy,
+.s5__options li:focus-within .s5__copy {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@media (hover: none) {
+  .s5__pop { translate: .812cqw -.812cqw; transition: none; }
+  .s5__line { translate: 0 4.7cqw; transition: none; }
+  .s5__copy { opacity: 1; translate: 0 0; transition: none; }
+}
+
+
+/* =============================================================
+   REVEAL ON SCROLL
+   Opacity + the translate property only: transform is already
+   carrying the artwork's horizontal scaling on most of this text.
+   The .reveal class is set on <html> by an inline script, so with
+   JavaScript off nothing ever hides.
+   ============================================================= */
+.reveal [data-reveal] {
+  opacity: 0;
+  translate: 0 14px;
+  transition: opacity .7s ease, translate .7s var(--ease);
+  transition-delay: calc(var(--i, 0) * 70ms);
+  will-change: opacity;
+}
+
+.reveal [data-reveal].is-in {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* The pinned photo only fades — sliding a fixed, clipped image reads
+   as a jump rather than a rise. */
+.reveal .s4 img { translate: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal [data-reveal] {
+    opacity: 1;
+    translate: none;
+    transition: none;
+  }
+}
+
+/* =============================================================
+   LABEL — the price card straddling sections 4 and 5
+   Artboard: assets/Label Price.svg, 1145.66 x 426.76.
+   It lives in section 5 and hangs above its top edge, so the
+   section's overflow has to stay open.
+   ============================================================= */
+.s5 { overflow: visible; }
+
+.plan {
+  position: absolute;
+  left: 9.03cqw;                         /* measured off the comp */
+  top: -4.14cqw;                         /* card centre lands on the seam */
+  width: 28.25cqw;
+  container-type: inline-size;
+  z-index: 2;
+}
+
+.plan__card {
+  position: relative;
+  z-index: 1;                            /* bottom of the stack: card, logo, tag */
+  margin-left: 22.88%;                   /* card starts at 262.1 of 1145.66 */
+  width: 77.12%;
+  padding: 5.5cqw 4cqw 5cqw 7cqw;
+  background: #fff;
+  border: max(1px, .26cqw) solid #1a1a1a;
+  border-radius: 5.02cqw;                /* 57.51 */
+  color: #1a1a1a;
+  text-align: center;
+}
+
+.plan__card h3 {
+  margin: 0;
+  font-size: 4.08cqw;                    /* 46.7 */
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+}
+
+.plan__card p {
+  margin: 1.2cqw 0 0;
+  font-size: 2.89cqw;                    /* 33.1 */
+  line-height: 1.2;
+  letter-spacing: -.01em;
+}
+
+/* Everything here is in cqw — 1% of the label width. Percentages
+   would resolve against the container height, which is just the
+   card, and that is what threw the tag and logo out of place. */
+.plan__tag {                             /* viewBox is cropped to the tag, so this
+                                            box IS the tag: 310 x 310 at y 117 */
+  position: absolute;
+  left: 0;
+  top: 10.21cqw;
+  width: 27.06cqw;
+  height: auto;
+  z-index: 3;                            /* the price reads over the logo */
+  overflow: visible;
+}
+
+.plan__tag { display: block; cursor: pointer; }
+.plan__tag svg { display: block; width: 100%; height: auto; overflow: visible; }
+.plan__tag text { font-family: var(--font-body); }
+
+.plan__tag:hover svg,
+.plan__tag:focus-visible svg { scale: 1.04; }
+
+.plan__tag svg { transition: scale .25s var(--ease); transform-origin: center; }
+
+/* the breakdown lands clear of the top of the window */
+#pricing { scroll-margin-top: 2vh; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+.plan__logo {
+  position: absolute;
+  /* Raised so the tag only clips the “SINCE 1982” banner at the
+     bottom of the badge, as in the artwork. */
+  left: -12.4cqw;
+  top: -16.1cqw;
+  width: 42cqw;
+  height: auto;
+  z-index: 2;
+  filter: drop-shadow(0 .6cqw 1.2cqw rgba(0, 0, 0, .45));
+}
+
+/* =============================================================
+   SECTION 6 — artboard 3817.6 x 1817.6
+   Photo left, ruled pad right, the whole thing washed with the
+   artwork's warm gradient.
+   ============================================================= */
+.s6 {
+  aspect-ratio: 3817.6 / 1817.6;
+  background: #ffe2bb;
+  color: #1a1a1a;
+}
+
+.s6__shot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 47.02cqw;                       /* 1795 */
+  height: 100%;
+  object-fit: cover;
+}
+
+.s6::after {                             /* the artwork's gradient wash */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg,
+    rgba(198,156,109,0) 26%, rgba(212,174,129,.26) 30%, rgba(225,189,146,.48) 34%,
+    rgba(236,202,161,.67) 37%, rgba(244,212,172,.81) 41%, rgba(250,220,180,.92) 44%,
+    rgba(253,224,185,.98) 47%, #ffe2bb 49%);
+}
+
+.s6__pad {                               /* 1069.12 x 1233.1 at 2066.88, 273.95 */
+  position: absolute;
+  left: 54.14cqw;
+  top: 7.18cqw;
+  width: 28.00cqw;
+  height: 32.30cqw;
+  z-index: 1;
+  border: max(1px, .052cqw) solid #1a1a1a;
+  border-radius: .72cqw;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(26, 26, 26, 0) 0,
+      rgba(26, 26, 26, 0) 1.994cqw,
+      rgba(26, 26, 26, .09) 1.994cqw,
+      rgba(26, 26, 26, .09) 2.058cqw) 0 .225cqw,
+    #fffae5;
+}
+
+.s6__title {                             /* 77.11, baseline 420.98 */
+  position: absolute;
+  left: 2.75cqw;
+  top: 2.058cqw;
+  margin: 0;
+  font-size: 2.020cqw;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--orange);
+  text-shadow: .072cqw .081cqw 0 #1a1a1a;
+  transform: scaleX(.95);
+  transform-origin: left top;
+}
+
+.s6__sub {                               /* 27.09, baseline 501.71 */
+  position: absolute;
+  left: 0; right: 0;
+  top: 5.32cqw;
+  margin: 0;
+  font-size: .710cqw;
+  line-height: 1.32;
+  text-align: center;
+}
+
+.s6__sub b { font-weight: 700; }
+
+.s6__steps {                             /* rows at 0 / 143.04 / 286.09 / 464.89 / 607.94 */
+  position: absolute;
+  left: 7.15cqw;
+  top: 9.64cqw;                          /* first baseline 669.95 */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: .739cqw;                    /* 28.2 */
+  line-height: 1.268;                    /* 35.76 */
+}
+
+.s6__steps li { position: absolute; left: 0; width: 22cqw; text-align: left; }
+
+.s6__steps li::before {                  /* the orange numeral, 75.65 */
+  content: counter(step) ".";
+  counter-increment: step;
+  position: absolute;
+  left: -2.70cqw;
+  top: -.35cqw;
+  font-size: 1.982cqw;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--orange);
+}
+
+.s6__steps { counter-reset: step; }
+
+/* Title line stays one line: bold name, then the amount in caps at
+   regular weight, exactly as the artwork sets it. */
+.s6__steps b { font-weight: 700; text-transform: uppercase; }
+.s6__steps i { font-style: normal; text-transform: uppercase; }
+
+.s6__steps li:nth-child(1) { top: 0; }
+.s6__steps li:nth-child(2) { top: 3.747cqw; }     /* 143.04 */
+.s6__steps li:nth-child(3) { top: 7.494cqw; }     /* 286.09 */
+.s6__steps li:nth-child(4) { top: 12.177cqw; }    /* 464.89 */
+.s6__steps li:nth-child(5) { top: 15.925cqw; }    /* 607.94 */
+
+.s6__cta {                               /* 577.41 x 107.27 at 2312.19, 1448.75 */
+  position: absolute;
+  left: 60.57cqw;
+  top: 37.95cqw;
+  z-index: 2;
+  display: grid;
+  place-content: center;
+  width: 15.13cqw;
+  height: 2.81cqw;
+  border: max(2px, .105cqw) solid #1a1a1a;
+  border-radius: .97cqw;
+  background: var(--orange);
+  font-size: 1.068cqw;                   /* 40.77 */
+  font-weight: 800;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #1a1a1a;
+  transition: filter .2s ease, transform .15s ease;
+}
+
+.s6__cta:hover { filter: brightness(1.06); }
+.s6__cta:active { transform: translateY(1px); }
+
+.s6__note {                              /* 29.15, baseline 1614.31 */
+  position: absolute;
+  left: 61.28cqw;
+  top: 41.61cqw;
+  z-index: 1;
+  margin: 0;
+  font-size: .764cqw;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+/* =============================================================
+   SECTION 7 — full-screen video loop
+   ============================================================= */
+.s7 {
+  height: 100svh;
+  background: #000;
+  line-height: 0;
+}
+
+.s7__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;                     /* 16:9 filling a portrait phone crops hard, by design */
+  object-position: center;
+}
+
+/* Reduced motion: hold the poster frame instead of looping footage. */
+@media (prefers-reduced-motion: reduce) {
+  .s7__video { display: none; }
+  .s7 {
+    background: #000 url('assets/video-poster-1280.webp') center/cover no-repeat;
+  }
+}
+
+/* =============================================================
+   FOOTER — artboard 3820 x 595.29 (assets/Footer.svg)
+   Orange strip 14.4 tall across the top, dark below it, the badge
+   overhanging the top edge as in the comp.
+   ============================================================= */
+.foot {
+  position: relative;
+  container-type: inline-size;
+  aspect-ratio: 3820 / 595.29;
+  background: #1a1a1a;
+  font-family: var(--font-body);
+  color: #fff;
+}
+
+.foot::before {                          /* the orange strip */
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: .377cqw;                       /* 14.4 */
+  background: #f7931e;
+}
+
+.foot__logo {                            /* overhangs the top edge */
+  position: absolute;
+  left: 8.90cqw;
+  top: -2.25cqw;
+  width: 16.36cqw;                       /* 625 */
+  height: auto;
+}
+
+.foot__name {                            /* 77.11, baseline 196.87 */
+  position: absolute;
+  left: 27.78cqw;
+  top: 3.36cqw;
+  margin: 0;
+  font-size: 2.019cqw;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--orange);
+  transform: scaleX(.95);
+  transform-origin: left top;
+}
+
+.foot__trade {                           /* 31.4, baseline 254.09 */
+  position: absolute;
+  left: 27.96cqw;
+  top: 5.92cqw;
+  margin: 0;
+  font-size: .822cqw;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+}
+
+.foot__rule {                            /* 616.8 x 3.9 at 1068.9, 284.99 */
+  position: absolute;
+  left: 27.98cqw;
+  top: 7.46cqw;
+  width: 16.15cqw;
+  height: .102cqw;
+  background: #f7931e;
+}
+
+.foot__blurb {                           /* 30, first baseline 336.9, 42 pitch */
+  position: absolute;
+  left: 28.03cqw;
+  top: 7.97cqw;
+  margin: 0;
+  font-size: .785cqw;
+  line-height: 1.4;
+}
+
+.foot__claim {                           /* 50, baseline 150.87, centred on the buttons */
+  position: absolute;
+  left: 64.51cqw;
+  top: 2.79cqw;
+  width: 22.15cqw;
+  margin: 0;
+  font-size: 1.309cqw;
+  font-weight: 800;
+  line-height: 1.2;                      /* 60 */
+  text-align: center;
+  text-transform: uppercase;
+  transform: scaleX(.95);
+  transform-origin: center top;
+}
+
+.foot__actions {                         /* buttons 399.82 x 81.26 at y 280.05 */
+  position: absolute;
+  left: 64.51cqw;
+  top: 7.33cqw;
+  width: 22.15cqw;
+  display: flex;
+  justify-content: space-between;
+}
+
+.foot__btn {
+  display: grid;
+  place-content: center;
+  width: 10.47cqw;
+  height: 2.13cqw;
+  border-radius: .348cqw;
+  background: var(--orange);
+  border: max(1px, .052cqw) solid #fff;
+  font-size: .804cqw;                    /* 30.71 */
+  font-weight: 700;
+  color: #191919;
+  text-decoration: none;
+  transition: filter .2s ease, transform .15s ease;
+}
+
+.foot__btn--ghost { background: #fff; border-color: var(--orange); }
+
+.foot__btn:hover { filter: brightness(1.06); }
+.foot__btn:active { transform: translateY(1px); }
+
+.foot__areas {                           /* 48.41, baseline 458.38 */
+  position: absolute;
+  /* wider than the button block and centred on it: the line is 913
+     units long in the artwork and was wrapping inside 22.15cqw */
+  left: 62.59cqw;
+  top: 10.87cqw;
+  width: 26cqw;
+  white-space: nowrap;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .62cqw;
+  font-size: 1.267cqw;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.foot__areas i {                         /* dots r 21.65, 2px white stroke */
+  width: 1.134cqw;
+  height: 1.134cqw;
+  border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 0 max(1px, .052cqw) #fff;
+}
+
+
+/* =============================================================
+   HERO ENTRANCE — the panel drops in from above the fold
+   ============================================================= */
+@keyframes offer-drop {
+  from { translate: 0 -100%; }
+  to   { translate: 0 0; }
+}
+
+.reveal .offer {
+  animation: offer-drop .9s var(--ease) .12s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal .offer { animation: none; }
+}
+
+/* =============================================================
+   SECTION 3 GALLERY — auto-advancing slide track inside the
+   existing orange frame. The frame already sets the box; this
+   just makes its contents a row that slides.
+   ============================================================= */
+.s3__shot { overflow: hidden; }
+
+.s3__slides {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  translate: 0 0;
+  transition: translate .85s var(--ease);
+}
+
+.s3__slides img {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Horizontal drags come to the gallery, vertical ones still scroll the page */
+.s3__slides { touch-action: pan-y; cursor: grab; }
+.s3__slides.is-dragging { cursor: grabbing; transition: none; }
+
+.s3__arrow {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  z-index: 2;
+  display: grid;
+  place-content: center;
+  width: 3.2cqw;
+  height: 3.2cqw;
+  min-width: 34px;
+  min-height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(10, 10, 10, .55);
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .35s ease, background-color .2s ease;
+}
+
+.s3__arrow svg { width: 55%; height: 55%; }
+.s3__arrow--prev { left: 1.6cqw; }
+.s3__arrow--next { right: 1.6cqw; }
+.s3__arrow:hover { background: var(--orange); color: #1a1a1a; }
+
+.s3__shot:hover .s3__arrow,
+.s3__shot:focus-within .s3__arrow { opacity: 1; }
+
+/* No hover on touch, so keep them faintly visible */
+@media (hover: none) {
+  .s3__arrow { opacity: .62; transition: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s3__slides { transition: none; }
+}

@@ -1,0 +1,477 @@
+/* =============================================================
+   Carpenter Rick — mobile (≤900px)
+
+   Same elements as the desktop build, restacked to the mobile comps
+   (Mobile 1-100.jpg, artboard 1082 wide; Mobile 2-100.jpg, 1088).
+   Geometry was measured off those two files: 1cqw = 1% of the
+   section width, so an artboard value v becomes v/10.82 (hero) or
+   v/10.88 (sections) in cqw.
+
+   Structure changes from desktop:
+     hero     panel is no longer over the photo — copy block, then
+              the photo full-bleed, then the form
+     s2 / s3  single column, photos full-bleed below the copy,
+              no orange frames
+     s5       four columns become a 2x2 grid
+   ============================================================= */
+
+@media (max-width: 900px) {
+
+  /* ---------- HERO ------------------------------------------------ */
+  .hero {
+    display: block;
+    min-height: 0;
+    padding: 0;
+    background: none;
+  }
+
+  .hero::before { display: none; }
+  .hero__areas { display: none; }          /* desktop strip; mobile uses .offer__areas */
+
+  .offer {
+    --pw: 100%;
+    box-sizing: border-box;
+    position: static;
+    width: 100%;
+    aspect-ratio: auto;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: #191919;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 11cqw;
+  }
+
+  .offer > * { position: static; }
+
+  .offer__badge {                          /* 617 wide at y 88 */
+    order: 1;
+    width: 57.02cqw;
+    margin-top: 8.13cqw;
+    left: auto; top: auto;
+  }
+
+  .offer__head  { order: 2; margin-top: 8.03cqw; }
+  .offer__sub   { order: 3; }
+  .offer__areas { order: 4; }
+  .offer::after { order: 5; }
+  .lead         { order: 6; }
+  .lead__done   { order: 6; }
+  .offer__note  { order: 7; }
+
+  .offer__eyebrow { font-size: 4.48cqw; }  /* cap 35 */
+
+  .offer__title {
+    font-size: 11.26cqw;                   /* cap 90 */
+    margin-top: .41cqw;
+  }
+
+  .offer__sub {
+    width: 64.5cqw;                        /* 698 */
+    margin-top: 2.63cqw;
+    font-size: 2.85cqw;                    /* cap 22 */
+    line-height: 1.234;                    /* 38 pitch */
+  }
+
+  .offer__areas {                          /* Spring Hill / Brooksville / Hudson */
+    display: flex;
+    align-items: center;
+    gap: .42em;
+    margin: 5.57cqw 0 0;
+    font-size: 4.44cqw;
+    font-weight: 700;
+    line-height: 1;                        /* keeps the block a predictable 48 tall */
+    color: #fff;
+  }
+
+  .offer__areas i {
+    width: .52em;
+    height: .52em;
+    border-radius: 50%;
+    background: var(--orange);
+  }
+
+  .offer::after {                          /* the hero photo, full-bleed */
+    content: "";
+    width: 100%;
+    margin-top: 8.74cqw;
+    aspect-ratio: 1082 / 1099;
+    background: url('assets/hero-mobile-1100.webp') center/cover no-repeat;
+  }
+
+  .lead {
+    left: auto; top: auto;
+    width: 74.68cqw;                       /* 808 */
+    margin-top: 14.7cqw;
+    gap: 3.88cqw;                          /* 42 */
+  }
+
+  .lead input {
+    height: 9.61cqw;                       /* 104 */
+    padding: 0 4.53cqw;
+    border-radius: 1.57cqw;
+    font-size: max(16px, 3.14cqw);         /* under 16px and the browser zooms on focus */
+  }
+
+  .lead input::placeholder { font-size: max(12px, 2.9cqw); }
+
+  .lead__error {
+    position: static;
+    margin-top: 2cqw;
+    font-size: 2.6cqw;
+  }
+
+  .lead__submit {
+    position: static;
+    width: 46.2cqw;
+    height: 10.17cqw;
+    margin: 5.5cqw auto 0;
+    font-size: 3.7cqw;
+    border-radius: 1.57cqw;
+  }
+
+  .offer__note { margin-top: 4.6cqw; font-size: 3.14cqw; }
+
+  .lead__done {
+    width: 74.68cqw;
+    margin-top: 14.7cqw;
+    padding: 5cqw 4cqw;
+    left: auto; top: auto;
+  }
+
+  .lead__done h2 { font-size: 6.5cqw; }
+  .lead__done p  { font-size: 3.3cqw; }
+
+  /* ---------- SECTION 2 ------------------------------------------- */
+  .s2 {
+    aspect-ratio: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* No horizontal padding: this element is the query container, and
+       padding would shrink what 1cqw measures. Insets go on the children. */
+    padding: 26.21cqw 0 0;                 /* kicker box top 285 */
+  }
+
+  .s2 > :not(.s2__rule) { position: static; left: auto; top: auto; }
+
+  .s2__kicker { order: 1; font-size: 4.84cqw; margin-left: 12.13cqw; }   /* cap 38, x 132 */
+  .s2__title  { order: 2; display: contents; }
+  .s2__body--a { order: 3; }
+  .s2__body--b { order: 4; }
+  .s2__body--c { order: 5; }
+  .s2__shot    { order: 6; }
+
+  .s2__title span {
+    position: static;
+    order: 2;
+    font-size: 11.32cqw;                   /* cap 88 */
+    margin: 2.27cqw 0 0 12.13cqw;
+  }
+
+  .s2__title em {
+    position: static;
+    order: 2;
+    font-size: 16.05cqw;                   /* cap 129 */
+    margin: -.9cqw 0 0 12.13cqw;
+  }
+
+  .s2__body {
+    width: 87.9cqw;                        /* the comp runs the copy almost to the right edge */
+    margin-left: 12.13cqw;
+    font-size: 3.22cqw;                    /* 35 */
+    line-height: 1.143;                    /* 40 pitch */
+  }
+
+  .s2__body--a { margin-top: 5.96cqw; }
+  .s2__body--b { margin-top: 3.22cqw; }
+  .s2__body--c { margin-top: 7.72cqw; }
+
+  .s2__shot {                              /* full-bleed, no orange frame */
+    width: 100%;
+    height: auto;                          /* drop the desktop fixed height */
+    aspect-ratio: auto;                    /* let the photo keep its own ratio */
+    margin: 21.1cqw 0 0;
+    padding: 0;
+    background: none;
+  }
+
+  .s2__shot img,
+  .s3__shot img { height: auto; }
+
+  /* ---------- SECTION 3 ------------------------------------------- */
+  .s3 {
+    aspect-ratio: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 13cqw 0 0;                    /* insets on the children, see s2 */
+    overflow: hidden;
+  }
+
+  .s3 > :not(.s3__rule) { position: static; left: auto; top: auto; }
+
+  .s3__kicker { order: 1; font-size: 5.86cqw; margin-left: 12.13cqw; }   /* cap 46 */
+  .s3__title  { order: 2; font-size: 11.07cqw; margin: 2.46cqw 0 0 12.13cqw; }  /* cap 89 */
+  .s3__body   { order: 3; margin: 3.21cqw 0 0 12.13cqw; width: 87.9cqw; font-size: 3.22cqw; line-height: 1.143; }
+  .s3__specs  { order: 4; margin: 12.37cqw 0 0 12.13cqw; width: 87.9cqw; }
+  .s3__shot   { order: 5; }
+
+  .s3__specs li {
+    position: relative;                    /* the square is absolute inside it */
+    top: 0; left: 0;                       /* kill the desktop per-item offsets */
+    display: block;
+    margin: 0 0 4.05cqw 6.9cqw;            /* 159.4 pitch, text at x 310 */
+    padding-left: 9.47cqw;
+    font-size: 2.94cqw;
+    line-height: 1.2;
+    transform: none;
+  }
+
+  .s3__specs li::before {                  /* the orange square, 70 */
+    left: 0;
+    top: .2cqw;
+    width: 6.43cqw;
+    height: 6.43cqw;
+  }
+
+  .s3__specs li:last-child { margin-bottom: 0; }
+
+  .s3__shot {
+    width: 100%;
+    height: auto;
+    aspect-ratio: auto;
+    margin: 16.7cqw 0 0;
+    padding: 0;
+    background: none;
+  }
+
+  .s3__rule { display: none; }             /* the rule belongs to the desktop seam */
+
+  /* ---------- SECTION 4 ------------------------------------------- */
+  .s4 { display: none; }                   /* repeats the hero shot on a phone */
+
+  /* ---------- SECTION 5 — 2x2 grid -------------------------------- */
+  .s5 {
+    aspect-ratio: auto;
+    padding: 12cqw 0 14cqw;                /* insets on the children, see s2 */
+  }
+
+  .s5__title { position: static; font-size: 8cqw; }
+  .s5__sub   { position: static; margin-top: 3cqw; font-size: 3.3cqw; }
+
+  .s5__options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10cqw 4cqw;
+    margin: 12cqw 6cqw 0;
+  }
+
+  .s5__options li {
+    position: static;
+    width: auto;
+    height: auto;
+    transform: none;
+  }
+
+  .s5__disc {
+    position: relative;
+    display: block;
+    left: auto;
+    width: 34cqw;
+    margin: 0 auto;
+    transform: none;
+  }
+
+  .s5__options b,
+  .s5__line,
+  .s5__copy { position: static; display: block; }
+
+  .s5__options b { display: block; margin-top: 3.5cqw; font-size: 4.2cqw; }
+
+  .s5__line {
+    width: 22cqw;
+    height: max(1px, .25cqw);
+    margin: 2.2cqw auto 0;
+    transform: none;
+  }
+
+  .s5__copy { display: block; margin-top: 2.2cqw; font-size: 3.3cqw; }
+
+  /* ---------- LABEL — no mobile comp, so: stacked, logo over the
+       card, tag hanging off the bottom-left ---------------------- */
+  .plan {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 88cqw;
+    margin: 16cqw auto 10cqw;
+  }
+
+  .plan__card {
+    margin-left: 0;
+    width: 100%;
+    padding: 13cqw 5cqw 6cqw;
+    border-radius: 4cqw;
+  }
+
+  .plan__card h3 { font-size: 5.6cqw; }
+  .plan__card p  { font-size: 3.6cqw; margin-top: 2cqw; }
+
+  /* Badge and price tag sit side by side, same size, centred as a pair
+     over the card. 2 x 30cqw + a 3cqw gap = 63cqw wide. */
+  .plan__logo {
+    left: 50%;
+    top: -16cqw;
+    width: 30cqw;
+    translate: calc(-50% - 16.5cqw) 0;
+  }
+
+  .plan__tag {
+    left: 50%;
+    top: -16cqw;
+    bottom: auto;
+    width: 30cqw;
+    translate: calc(-50% + 16.5cqw) 0;
+  }
+
+  /* ---------- SECTION 6 — photo on top, pad below --------------- */
+  .s6 {
+    aspect-ratio: auto;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 12cqw;
+  }
+
+  .s6::after { display: none; }          /* the wash only reads on the side-by-side layout */
+
+  .s6__shot {
+    position: static;
+    order: 1;
+    width: 100%;
+    height: auto;
+  }
+
+  .s6__pad {
+    position: static;
+    order: 2;
+    width: 88cqw;
+    height: auto;
+    margin: 9cqw auto 0;
+    padding: 7cqw 5cqw 8cqw;
+    background-position: 0 3cqw;
+  }
+
+  .s6__title {
+    position: static;
+    font-size: 8cqw;
+    text-align: center;
+    transform: none;
+    text-shadow: .25cqw .3cqw 0 #1a1a1a;
+  }
+
+  .s6__sub { position: static; margin-top: 3.5cqw; font-size: 3.9cqw; line-height: 1.45; }
+
+  /* Let the copy reflow to the phone instead of keeping the desktop breaks.
+     The first break in each step stays, so the title keeps its own line. */
+  .s6__sub br { display: none; }
+  .s6__steps br:not(:first-of-type) { display: none; }
+
+  .s6__steps {
+    position: static;
+    margin: 7cqw 0 0 9cqw;
+    font-size: 4cqw;
+    line-height: 1.4;
+  }
+
+  .s6__steps li {
+    position: relative;
+    top: auto !important;
+    width: auto;
+    margin-bottom: 5cqw;
+  }
+
+  .s6__steps li::before { left: -9cqw; top: -.5cqw; font-size: 7cqw; }
+  .s6__steps li:last-child { margin-bottom: 0; }
+
+  .s6__cta {
+    position: static;
+    order: 3;
+    width: 62cqw;
+    height: 12cqw;
+    margin: 8cqw auto 0;
+    font-size: 4.4cqw;
+    border-radius: 3cqw;
+  }
+
+  .s6__note {
+    position: static;
+    order: 4;
+    margin: 3.5cqw auto 0;
+    font-size: 3cqw;
+    text-align: center;
+  }
+
+  /* ---------- FOOTER — stacked, no comp for mobile -------------- */
+  .foot {
+    aspect-ratio: auto;
+    padding: 26cqw 6cqw 10cqw;
+    text-align: center;
+  }
+
+  .foot__logo {
+    position: absolute;
+    left: 50%;
+    top: -12cqw;
+    width: 36cqw;
+    translate: -50% 0;
+  }
+
+  .foot__name,
+  .foot__trade,
+  .foot__rule,
+  .foot__blurb,
+  .foot__claim,
+  .foot__actions,
+  .foot__areas { position: static; left: auto; top: auto; width: auto; transform: none; }
+
+  .foot__name  { font-size: 8cqw; }
+  .foot__trade { margin-top: 1.5cqw; font-size: 3.4cqw; }
+
+  .foot__rule {
+    display: block;
+    width: 46cqw;
+    height: max(1px, .5cqw);
+    margin: 3cqw auto;
+  }
+
+  .foot__blurb { font-size: 3.4cqw; line-height: 1.45; }
+  .foot__blurb br { display: none; }     /* let it wrap to the phone width */
+
+  .foot__claim { margin-top: 8cqw; font-size: 5.4cqw; }
+
+  .foot__actions {
+    display: grid;
+    gap: 3.5cqw;
+    justify-items: center;
+    margin-top: 5cqw;
+  }
+
+  .foot__btn {
+    width: 62cqw;
+    height: 12cqw;
+    font-size: 4cqw;
+    border-radius: 2.4cqw;
+  }
+
+  .foot__areas {
+    margin-top: 7cqw;
+    justify-content: center;
+    gap: 2cqw;
+    font-size: 4.6cqw;
+  }
+
+  .foot__areas i { width: 3.4cqw; height: 3.4cqw; }
+}

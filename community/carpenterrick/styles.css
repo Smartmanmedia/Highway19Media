@@ -1,0 +1,328 @@
+/* =============================================================
+   Carpenter Rick — /community/carpenterrick/
+   Section 1: hero + lead form
+
+   Built to the supplied artwork. Every number below is taken from
+   assets/Form Hero.svg (artboard 891.99 x 1718.37). The panel keeps
+   that artboard's proportions and everything inside it is sized in
+   cqw — 1cqw = 1% of the panel width — so the composition holds at
+   any scale.
+   ============================================================= */
+
+:root {
+  /* Brand — straight off the artwork */
+  --orange:      #ffa729;   /* eyebrow, headline, button, note */
+  --orange-rule: #fbb03b;   /* panel border */
+  --ink:         #191919;   /* text on white / on orange */
+  --ink-deep:    #0a0a0a;   /* headline outline */
+  --panel:       rgba(10, 10, 10, .58);
+  --page-bg:     #000;
+  --text:        #fff;
+  --focus:       #ffc25c;
+
+  /* Small footer (shared/community.css tokens) */
+  --footer-bg:   #0a0a0a;
+  --footer-rule: rgba(251, 176, 59, .28);
+  --footer-text: rgba(255, 255, 255, .58);
+  --footer-link-hover: var(--orange);
+
+  --font-body: 'Open Sans', system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+
+  --hero-image: url('assets/hero-2400.webp');
+}
+
+@media (max-width: 900px) {
+  :root { --hero-image: url('assets/hero-1400.webp'); }
+}
+
+/* ---------- Shell ------------------------------------------------ */
+.page {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero {
+  position: relative;
+  flex: 1 0 auto;
+  min-height: 100svh;                          /* full screen, sections follow */
+  display: flex;
+  align-items: flex-start;                     /* panel runs off the top edge */
+  padding: 0 clamp(16px, 10.25vw, 260px) 16px; /* artwork: panel starts at 10.25% */
+  background-color: #14100c;
+  background-image: var(--hero-image);
+  background-size: cover;
+  background-position: 55% center;
+  isolation: isolate;
+}
+
+/* Keeps the left edge readable where the photo is cropped hard.
+   The panel's own 58% black is what the artwork relies on. */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(100deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.18) 30%, rgba(0,0,0,0) 55%);
+}
+
+/* ---------- The panel -------------------------------------------- */
+.offer {
+  /* as tall as the viewport allows, then capped */
+  --pw: min(calc((100svh - 76px) * .51909), 34vw, 560px);
+  position: relative;
+  z-index: 1;
+  /* Pull up by the full border width so the top edge is always off
+     screen — a flat -2px left a sliver on HiDPI, where that border
+     is ~3 CSS px. The artwork has square top corners for this. */
+  margin-top: calc(var(--pw) * -.00673 - 1px);
+  /* content-box, so the content width IS the artboard width and 1cqw
+     lands on 1% of it. The panel's own border can't use cqw — an
+     element can't query itself, the unit would fall back to the
+     viewport — so it's sized off --pw directly. */
+  box-sizing: content-box;
+  width: var(--pw);
+  aspect-ratio: 891.99 / 1718.37;
+  container-type: inline-size;
+
+  background: var(--panel);
+  border: calc(var(--pw) * .00673) solid var(--orange-rule);   /* 6 */
+  border-radius: 0 0 calc(var(--pw) * .03631) calc(var(--pw) * .03631);  /* 32.38, bottom only */
+  box-shadow: 0 26px 70px rgba(0, 0, 0, .45);
+
+  font-family: var(--font-body);
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .offer { --pw: min(calc(100vw - 28px), 460px); }
+  .hero  { justify-content: center; padding: 0 14px 14px; }
+  .hero::before {
+    background: linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.25) 50%, rgba(0,0,0,.55) 100%);
+  }
+}
+
+/* Children sit on the artboard grid. Absolute positioning is safe
+   here because every unit scales with the panel. */
+.offer > * { position: absolute; }
+
+/* Logo — artwork: 610.08 x 600.72 at (147.07, 66.04) */
+.offer__badge {
+  left: 16.488cqw;
+  top: 7.404cqw;
+  width: 68.395cqw;
+  height: auto;
+  aspect-ratio: 2542 / 2503;
+  object-fit: contain;
+}
+
+.offer__badge-fallback {
+  display: none;
+  left: 16.488cqw;
+  top: 7.404cqw;
+  width: 68.395cqw;
+  aspect-ratio: 1;
+  place-content: center;
+  margin: 0;
+  font-size: 7cqw;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--orange);
+  border: .5cqw solid var(--orange-rule);
+  border-radius: 50%;
+  line-height: 1.1;
+}
+
+.offer[data-logo="missing"] .offer__badge { display: none; }
+.offer[data-logo="missing"] .offer__badge-fallback { display: grid; }
+
+/* ---------- Headline block ---------------------------------------
+   Tops are the artwork's baselines converted with Open Sans metrics
+   (baseline sits at top + 0.888em when line-height is 1).
+   ------------------------------------------------------------------ */
+.offer__head { left: 0; right: 0; top: 76.126cqw; }
+
+.offer__eyebrow {
+  margin: 0;
+  font-size: 4.821cqw;               /* 43 */
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: .005em;
+  text-transform: uppercase;
+  color: var(--orange);
+  transform: scaleX(1.03);           /* artwork: scale(1.03, 1) */
+  /* artwork: a #0a0a0a copy, stroke 4, offset (+3.81, +2.54) behind */
+  text-shadow: .427cqw .285cqw 0 var(--ink-deep);
+}
+
+.offer__title {
+  margin: .296cqw 0 0;
+  /* 91.38 under the artwork's scale(1.03, 1.2) = 109.66 tall.
+     The artwork's cut is narrower than Google's Open Sans, so the
+     width comes from the font's own wdth axis (75%) rather than a
+     squash; the remaining 4% is the scaleX. Measured against the
+     supplied comp: headline ink spans 140.7 -> 757.7 on the artboard. */
+  font-size: 12.293cqw;
+  font-weight: 800;
+  font-stretch: 75%;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--orange);
+  transform: scaleX(.962);
+  text-shadow: .427cqw .285cqw 0 var(--ink-deep);
+}
+
+.offer__sub {
+  left: 0; right: 0;
+  top: 96.462cqw;
+  margin: 0 auto;
+  width: 70.9cqw;
+  font-size: 3.164cqw;               /* 28.22 */
+  font-weight: 400;
+  line-height: 1.2;                  /* 33.86 / 28.22 */
+  letter-spacing: .005em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+/* ---------- Lead form ---------------------------------------------
+   Fields 632.42 x 81.9, r 13.28, at x 132.5, tops 985.12 / 1099.25 /
+   1213.37 / 1327.5. Button 388.56 x 78.97 at (256.83, 1468.16).
+   ------------------------------------------------------------------ */
+.lead {
+  left: 14.854cqw;                   /* 132.5 */
+  top: 110.44cqw;                    /* 985.12 */
+  width: 70.899cqw;                  /* 632.42 */
+  display: grid;
+  gap: 3.613cqw;                     /* 114.13 pitch - 81.9 */
+}
+
+.lead__field { display: block; }
+
+.lead input {
+  width: 100%;
+  height: 9.182cqw;                  /* 81.9 */
+  padding: 0 5.121cqw;               /* text x 178.18 - 132.5 */
+  font-family: inherit;
+  font-size: 3.139cqw;               /* 28 */
+  font-weight: 700;
+  color: var(--ink);
+  background: #fff;
+  border: .224cqw solid transparent;
+  border-radius: 1.489cqw;           /* 13.28 */
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+/* Artwork sets these at 28; dialled back a step on request. The input's
+   own font-size stays put — it's what the typed value uses, and on touch
+   anything under 16px makes the browser zoom in on focus. */
+.lead input::placeholder {
+  font-size: max(11px, 2.65cqw);     /* floor keeps it legible on a phone */
+  font-weight: 700;
+  color: var(--ink);
+  opacity: .85;
+}
+
+.lead input:hover { border-color: rgba(255, 167, 41, .55); }
+
+.lead input:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 .45cqw rgba(255, 167, 41, .3);
+  outline: none;
+}
+
+.lead input[aria-invalid="true"] {
+  border-color: #e0483a;
+  box-shadow: 0 0 0 .45cqw rgba(224, 72, 58, .25);
+}
+
+/* Touch keyboards zoom the page in on anything under 16px */
+@media (pointer: coarse) {
+  .lead input { font-size: max(16px, 3.139cqw); }
+}
+
+/* The button and the error live inside the form, so their coordinates
+   are relative to it: form origin is (132.5, 985.12) on the artboard.
+   cqw still resolves against the panel, so the numbers stay in
+   artboard units. */
+.lead__error {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 48.2cqw;                      /* 1415 */
+  margin: 0;
+  font-size: 2.6cqw;
+  line-height: 1.25;
+  color: #ff9a8f;
+}
+
+.lead__error:empty { display: none; }
+
+.lead__submit {
+  position: absolute;
+  left: 13.938cqw;                   /* 256.83 - 132.5 */
+  top: 54.153cqw;                    /* 1468.16 - 985.12 */
+  width: 43.561cqw;                  /* 388.56 */
+  height: 8.853cqw;                  /* 78.97 */
+  font-family: inherit;
+  font-size: 3.345cqw;               /* 29.84 */
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--orange);
+  border: .224cqw solid #fff;        /* 2 */
+  border-radius: 1.489cqw;
+  cursor: pointer;
+  transition: filter .18s ease, transform .15s ease;
+}
+
+.lead__submit:hover { filter: brightness(1.07); }
+.lead__submit:active { transform: translateY(1px); }
+.lead__submit[disabled] { opacity: .65; cursor: progress; transform: none; }
+
+/* Mobile only: on desktop the service line is .hero__areas, over the photo */
+.offer__areas { display: none; }
+
+.offer__note {
+  left: 0; right: 0;
+  top: 178.897cqw;                   /* baseline 1620.6 */
+  margin: 0;
+  font-size: 3.139cqw;               /* 28 */
+  font-weight: 400;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+/* ---------- Sent state -------------------------------------------- */
+.lead__done {
+  display: none;
+  left: 14.854cqw;
+  top: 110.44cqw;
+  width: 70.899cqw;
+  padding: 4cqw 3cqw;
+  border: .4cqw dashed var(--orange);
+  border-radius: 2cqw;
+  background: rgba(255, 167, 41, .1);
+}
+
+.lead__done h2 {
+  margin: 0 0 .5em;
+  font-size: 5.5cqw;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+.lead__done p {
+  margin: 0;
+  font-size: 3.1cqw;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, .9);
+}
+
+.offer[data-state="sent"] .lead,
+.offer[data-state="sent"] .lead__error,
+.offer[data-state="sent"] .offer__note { display: none; }
+
+.offer[data-state="sent"] .lead__done { display: block; }

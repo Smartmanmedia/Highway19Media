@@ -1,0 +1,110 @@
+/* Self-hosted so the site's CSP (font-src 'self') is satisfied and the page
+   does not wait on a third party. Variable file: carries the width axis the
+   hero headline uses to match the artwork's narrower cut. */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300 800;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  src: url('/community/shared/fonts/OpenSans-Variable-latin.woff2') format('woff2-variations');
+}
+
+/* =============================================================
+   Highway 19 — Community landing pages : shared base
+   Used by every /community/<customer>/ page.
+   Deliberately unbranded: no Highway 19 header, footer or marks.
+   Per-customer colour + type live in that page's own styles.css.
+   ============================================================= */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--page-bg, #000);
+  color: var(--text, #fff);
+  font-family: var(--font-body, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg, video { display: block; max-width: 100%; }
+
+h1, h2, h3, p, figure { margin: 0; }
+
+a { color: inherit; }
+
+/* Screen-reader-only label text (every input keeps a real <label>) */
+.vh {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid var(--focus, #fff);
+  outline-offset: 2px;
+}
+
+/* ---------- Small community footer -------------------------------
+   Intentionally minimal: customer line + legal links only.
+   ---------------------------------------------------------------- */
+.c-footer {
+  background: var(--footer-bg, #0b0b0b);
+  border-top: 1px solid var(--footer-rule, rgba(255, 255, 255, .12));
+  color: var(--footer-text, rgba(255, 255, 255, .62));
+  font-size: .78rem;
+  letter-spacing: .04em;
+  padding: 18px 20px calc(18px + env(safe-area-inset-bottom));
+}
+
+.c-footer__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 22px;
+}
+
+.c-footer__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+
+.c-footer a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color .18s ease, border-color .18s ease;
+}
+
+.c-footer a:hover {
+  color: var(--footer-link-hover, #fff);
+  border-bottom-color: currentColor;
+}
+
+@media (max-width: 560px) {
+  .c-footer__inner { justify-content: center; text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
