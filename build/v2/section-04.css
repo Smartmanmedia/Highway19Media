@@ -86,8 +86,13 @@
   font-weight:400; }
 .sec4 .sign-copy h2{ font-size:2.65cqw; line-height:1.06 }
 .sec4 .sign-copy p { font-size:1.21cqw; line-height:1.2 }
+/* HIS LINE SPACING WAS SET SOLID. 1.076 is what his export carries - the
+   lines almost touching, which reads as a block rather than as sentences.
+   1.32 is ordinary body leading and it is the one number he asked for. Six
+   lines of it are 2.2% of the section taller than before, so the paragraph
+   moves up a little and the button down a little to absorb it. */
 .sec4 .body{
-  font-size:1.347cqw; font-weight:500; line-height:1.076;
+  font-size:1.347cqw; font-weight:500; line-height:1.32;
   text-align:center; color:#fdf6e4;
 }
 .sec4 .body span{ display:block; white-space:nowrap }
