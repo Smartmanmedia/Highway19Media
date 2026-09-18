@@ -123,7 +123,13 @@
   font-family:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
 }
 .sec1 .copy h1,.sec1 .copy h2,.sec1 h2.copy{ margin:0; font-weight:900; line-height:1.06 }
-.sec1 .copy h1 span{ display:block }
+/* HIS THREE LINES ARE THREE LINES. This rule said h1, and the hero stack is
+   an h2 - it was demoted when the banner took the page's only h1 - so the
+   spans stayed inline and his three lines ran together into one paragraph
+   that wrapped wherever it liked: "A Clear / RoadForward for / Your Business".
+   The class is what the rules key on now, so nothing here depends on which
+   heading level the stack happens to carry. */
+.sec1 .copy h1 span,.sec1 .copy .stack span{ display:block }
 .sec1 .l1{ font-size:2.271cqw }                 /* his 43.70 */
 .sec1 .l2{ font-size:3.927cqw }                 /* his 75.56 */
 .sec1 .l3{ font-size:1.621cqw }                 /* his 31.19 */
@@ -170,7 +176,10 @@
    drew, unlit. */
 .sec1 .cta svg.plate [fill="#059236"]{
   fill: var(--cta-plate, #059236);
-  stroke: var(--cta-line, none);
+  /* #fff, NOT none. His rect carries stroke="#fff" in the export and this
+     line was overriding it away in daylight - the night red was the only
+     stroke that ever showed. */
+  stroke: var(--cta-line, #fff);
   stroke-miterlimit:10;
   transition: fill 1s linear, stroke 1s linear;
 }

@@ -181,7 +181,7 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
      three: his hero stack, "Great Work, No Signage" and "You've Been Down
      This Road Before" are 146, 115 and 104 on his artboard, and grouping them
      was the reason none of them was right. */
-  :root .sec1 h1{
+  :root .sec1 h1,:root .sec1 .stack{
     font-size:var(--t-h1b) !important; line-height:.92;
     letter-spacing:-.01em; margin:0 0 .5em; white-space:normal !important;
   }
@@ -194,10 +194,10 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
     letter-spacing:-.01em; margin:0 0 .42em; white-space:normal !important;
   }
   /* his three lines are 84.72, 146.49 and 60.47 against each other */
-  :root .sec1 h1 .l1{ font-size:.578em !important }
-  :root .sec1 h1 .l2{ font-size:1em !important }
-  :root .sec1 h1 .l3{ font-size:.412em !important; line-height:1.24 }
-  :root .sec1 h1 span,:root .sec2 h2 span{ display:block }
+  :root .sec1 .l1{ font-size:.578em !important }
+  :root .sec1 .l2{ font-size:1em !important }
+  :root .sec1 .l3{ font-size:.412em !important; line-height:1.24 }
+  :root .sec1 h1 span,:root .sec1 .stack span,:root .sec2 h2 span{ display:block }
   /* HIS LEAD LINES ARE HIGHWAY GOTHIC AND THEY ARE NOT BOLD. The face ships
      in one weight, so asking for 700 got a browser-drawn fake of it - and his
      own file sets them plain at 61.25 and 55.43. */

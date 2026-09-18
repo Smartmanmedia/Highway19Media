@@ -37,31 +37,37 @@
      fold on a 1920 window. These are the header's own tokens, so the two can
      never drift apart. The content inside is capped at 80svh and centred, so
      it simply rides up with the shorter box. */
-  /* THE BOX IS THE WHOLE SCREEN; THE CONTENT SITS BELOW THE HEADER. A fixed
-     background is positioned against the viewport, not against its own
-     element, so a section that started below the fixed header had the header
-     eating the top of the cover crop - the sky went with it and the three
-     bullets came down onto the skyline. Spanning the full viewport and
-     insetting the content by the header's own height instead makes the two
-     areas the same box, so the crop is the one the photograph was framed
-     for, and the layout below is unchanged: .sec0 centres its child in the
-     content box, which is still exactly one screen less the header. */
-  /* HIS TALLER PLATE, SCROLLED THROUGH RATHER THAN CROPPED. New3 is 1.683
-     where the frame before it was 1.842, and all of the extra is sky and
-     road. At one screen a cover crop threw most of that away; at 1.4 screens
-     the whole vertical frame is on the page, so the visit opens on sky and
-     ends on the crosswalk. */
-  height:140svh;
-  margin-top:calc(-1 * (var(--hh) + var(--hbar)));
-  padding-top:calc(var(--hh) + var(--hbar));
-  /* AND THE LAST 300px ARE WHERE THE WORDS LET GO. A sticky child stops
-     being sticky when it reaches the bottom of its container's CONTENT box,
-     so this padding is the release: his stage holds still through the whole
-     scroll and then travels the last 300px out with the page. */
-  padding-bottom:300px;
+  /* THE BANNER IS THE SHAPE OF THE PHOTOGRAPH. This is the thing that kept
+     going wrong. A cover crop fills the box and throws away whichever axis
+     does not fit - and a browser window is far wider in proportion (2.2, 2.4)
+     than his plate (1.683), so cover was filling the width and cutting the
+     sky off the top and the crosswalk off the bottom. Every framing before
+     this one was a different slice of the same mistake.
+
+     Sizing the SECTION to the plate's own ratio instead means cover has
+     nothing to crop: 100vw wide by 100vw/1.6833 tall is exactly his frame,
+     so the whole photograph is on the page, full width, undistorted, from the
+     top of the sky to the near kerb of the crosswalk. On a window shorter
+     than that the banner simply runs past the fold, which is the scroll down
+     to the crosswalk he described.
+
+     The floor is one screen less the header, for a tall narrow window where
+     his ratio would make a banner too short to hold the composition. */
+  height:max(calc(100svh - var(--hh) - var(--hbar)), calc(100vw / 1.6833));
+  /* AND IT STARTS BELOW THE HEADER, not under it. The header is opaque and
+     fixed, so a banner pulled up behind it loses the top of the frame - the
+     one thing this change exists to keep. */
+  /* THE RELEASE, AND WHAT IS LEFT TO SHARE. A sticky child stops being
+     sticky at the bottom of its container's CONTENT box, so this padding is
+     where the words let go. 300px flat no longer fits: the section is now the
+     photograph's own height, and at 1600 wide that is 951px against an 80svh
+     stage of 720 - 231px of slack for the hold AND the release together. A
+     flat 300 took all of it and then squeezed his stage 10% short of the size
+     he drew it. Half the slack each, capped at his 300 where there is room:
+     115 and 115 at 1600, 300 and 592 at 3440. */
+  padding-bottom:max(0px, min(300px, calc((100vw / 1.6833 - 80svh) / 2)));
   box-sizing:border-box;
-  /* AND THE WORDS SIT AT THE TOP OF IT, not in the middle. Centring his
-     stage in a 1.4-screen box would have pushed the headline below the fold. */
+  /* AND THE WORDS SIT AT THE TOP OF IT, not in the middle. */
   display:flex; align-items:flex-start; justify-content:center;
   /* clip, NOT hidden. overflow:hidden makes this box a scroll container, and
      a sticky child sticks to its nearest scroll container - so the stage was
@@ -85,12 +91,11 @@
   background:#1479d0 var(--bn-photo,
       image-set(url("../../assets/v2/banner/road-wide.webp") 1x,
                 url("../../assets/v2/banner/road-wide@2x.webp") 2x))
-             center/cover no-repeat;
-  /* PINNED TO THE SCREEN. The photograph is painted against the viewport and
-     does not move at all; the 1.4 screens above are the length of the hold,
-     not a taller picture. iOS ignores this, which is fine - the phone runs
-     his tall board and turns it off explicitly. */
-  background-attachment:fixed;
+             center top/cover no-repeat;
+  /* NOT PINNED. A fixed background is painted against the viewport, so it
+     would be cropped to the viewport's shape again - the exact problem the
+     height above exists to solve. The words still hold still; they are
+     sticky, which is the part that was doing that work anyway. */
   font-family:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
   /* the sky behind the photograph, for the instant before it arrives and for
      the hairline at the edge of a cover crop */
@@ -194,7 +199,9 @@
      the same section either way, so these are his numbers with no ambiguity
      about what they are a share of: 83.6, 77.55 and 66.2 of his 1937.04. */
   padding:4.32cqw 4.00cqw 3.42cqw;
-  background:var(--bn-panel,#0c7c00);
+  /* his green at 90% - the photograph reads faintly through the plate, the
+     way his artboard has it. The keyline stays solid. */
+  background:var(--bn-panel,rgba(12,124,0,.9));
   /* his white keyline, stroke-width 3 of a 1937 board */
   border:.155cqw solid #fff;
   border-radius:1.78cqw;
