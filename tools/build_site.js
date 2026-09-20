@@ -180,7 +180,12 @@ const soon = rd('build/v2/soon.html')
   .replace(/\{\{ROOT\}\}/g, '/');
 const soonOut = minifyHtml(soon);
 wr('coming-soon/index.html', soonOut);
-wr('404.html', soonOut);
+/* THE 404 IS THE SAME PAGE WITHOUT THE CANONICAL. The two were byte for byte
+ * identical, which meant every 404 told a crawler "my canonical URL is
+ * /coming-soon/" - a missing page claiming to be the holding page. A 404 has
+ * no canonical URL; that is what makes it a 404. Search Console reads the
+ * pair as a duplicate rather than as a not-found. */
+wr('404.html', soonOut.replace(/<link rel="canonical"[^>]*>/i, ''));
 
 
 /* 4b. THE LEGAL PAGES. One shell, three bodies, the same header and footer as
