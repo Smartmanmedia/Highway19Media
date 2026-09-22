@@ -56,15 +56,19 @@ past it — comes free with them.
 | `DRAW_ROAD` | was a hard `false`, because scene-build.js lays his own road tiles on the home page and a second generated road underneath would double every edge line. It is now `!window.H19_ROAD_PATHS` — that function is his scene's handoff, defined at load time, so its absence is a reliable "no scene on this page, draw it yourself". The road is the same either way: the four stacked strokes are measured from his Illustrator file. |
 | `data-road="wrap"` | the hook that loops the road right around a section — in across the top, down the far side, back along the bottom — was written inline for "Your Success Is Our Destination", which is the first section in its run and is entered from the left edge. It is now a move any section can ask for, entered mid-run heading down. Same four turns, different start. A section too small to hold the loop gets a plain jog instead. |
 
-Two sections use it: **General** (run A) and **Branding** (run B). Both
-reserve the clear air the loop needs — a road width plus a corner radius top
-and bottom, and a lane down the right — the same way `#whyus` does.
+Eight crossings, one after each section, alternating direction. Each is
+straight: the pen only turns in quarter circles, so a lane change is always
+two of them back to back, and across a 1400px straight that reads as a kink
+rather than a lane change. A crossing is a hundred-odd pixels of highway seen
+from above, and the honest shape for that is straight.
 
-Run A enters above the hero, weaves down through the first five sections and
-drives off the right edge. Run B comes back in from the left, hooks around
-Branding, and carries on down into the footer. `data-run` and `data-road` on
-each `<section>` are what set that, and `tools/build-faq.py` holds them in one
-`ROAD` table beside the copy.
+The crossings are deliberately NOT joined to each other down the page
+margins. That would put road beside copy whose height changes, which is the
+whole problem band mode exists to avoid, and there is no margin to put it in
+on a phone. Each one enters off one edge and leaves by the other.
+
+Which way each crossing runs is the `cross` column of the `ROAD` table in
+`tools/build-faq.py`, beside the copy it follows.
 
 **The hero is his gantry.** The `our-plate.svg` sign on a tiled truss, with
 the headline as real HTML laid over it — the device section 7 uses on the home

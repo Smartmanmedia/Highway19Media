@@ -63,7 +63,10 @@
    ------------------------------------------------------------------------- */
 .road-band{
   position:relative;
-  height:clamp(168px,18vw,248px);
+  /* Sized to the road, not to the gap. The crossing is straight now, so a
+     tall band is just empty ground above and below it; this leaves about a
+     third of a road width of clear air either side. */
+  height:clamp(132px,14vw,190px);
   overflow:hidden;          /* the crossing runs off both edges of the screen */
 }
 .road-band__art{position:absolute;inset:0;display:block;width:100%;height:100%}
@@ -71,7 +74,7 @@
 /* Below the tablet break the sections lose their side insets and the page is
    one column, so the crossings carry more of the page's rhythm — but they can
    afford to be shorter, because the road is scaled down with everything else. */
-@media (max-width:900px){ .road-band{height:clamp(132px,22vw,176px)} }
+@media (max-width:900px){ .road-band{height:clamp(104px,17vw,140px)} }
 
 /* ============================================================================
    1. HERO

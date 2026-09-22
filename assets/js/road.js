@@ -561,49 +561,19 @@
     }).filter(function (b) { return b.w > 8 && b.h > 8; });
   }
 
-  /* One crossing, in the band's own pixels. Straight in from off-screen, one
-     lane change, straight out the far side — the same straights and quarter
-     turns the weave is built from, so it is the same road. The sidestep is
-     what stops a crossing reading as a ruled line; its size is whatever the
-     band's height can hold. */
+  /* One crossing, in the band's own pixels. Straight in from off-screen on one
+     side, straight out the other — and nothing in between.
+
+     It had a lane change in the middle. The pen only turns in quarter circles,
+     so an S-bend is always two of them back to back, and across a 1400px
+     straight that reads as a kink in the road rather than a lane change. A
+     crossing is a hundred-odd pixels of a highway seen from above; the honest
+     shape for that is straight. */
   function buildCrossing(b, half, scale) {
-    var margin = half + 14;   /* the road's own clearance inside the band */
-    var yA = margin;
-    var yB = b.h - margin;
-    if (yB - yA < 20) { yA = yB = b.h / 2; }
-
-    var toRight = b.dir !== 'left';
-    var y0 = toRight ? yA : yB;
-    var dy = (toRight ? yB : yA) - y0;
-    var rad = Math.max(20, Math.min(R_MAX * scale, Math.abs(dy) / 2, b.w * 0.17));
-    var run = Math.abs(dy) - 2 * rad;
-    var mid = b.w * 0.5;
-    var p;
-
-    if (toRight) {
-      p = pen(-half - 260, y0, 0);
-      if (rad > 2) {
-        /* Heading right, +1 turns clockwise, which is downwards. The two
-           quarter turns ARE the lane change; the straight between them only
-           appears when the band is tall enough to need one. Gating the whole
-           bend on that straight is what made every crossing a ruled line. */
-        var sr = dy > 0 ? 1 : -1;
-        p.rightTo(mid - rad).turn(sr, rad);
-        if (run > 0.5) p.straight(run);
-        p.turn(-sr, rad);
-      }
-      p.rightTo(b.w + half + 260);
-    } else {
-      p = pen(b.w + half + 260, y0, Math.PI);
-      if (rad > 2) {
-        /* Heading left, the same turn goes the other way on screen. */
-        var sl = dy > 0 ? -1 : 1;
-        p.leftTo(mid + rad).turn(sl, rad);
-        if (run > 0.5) p.straight(run);
-        p.turn(-sl, rad);
-      }
-      p.leftTo(-half - 260);
-    }
+    var y = b.h / 2;
+    var p = b.dir === 'left'
+      ? pen(b.w + half + 260, y, Math.PI).leftTo(-half - 260)
+      : pen(-half - 260, y, 0).rightTo(b.w + half + 260);
     return p.path();
   }
 
