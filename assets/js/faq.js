@@ -33,16 +33,22 @@
      ==================================================================== */
 
   var header = document.querySelector('.site-header');
-  var catnav = document.querySelector('.qa-nav');
+  var catnav = document.querySelector('.qa-exits');   /* the exit gantry */
 
   function measure() {
     var root = document.documentElement;
     if (header) root.style.setProperty('--hdr-h', header.offsetHeight + 'px');
-    if (catnav) root.style.setProperty('--qa-nav-h', catnav.offsetHeight + 'px');
+    if (catnav) root.style.setProperty('--qa-exits-h', catnav.offsetHeight + 'px');
   }
 
   /* ======================================================================
      2. ACCORDION
+     ----------------------------------------------------------------------
+     Opening an answer makes the page taller, which moves every section below
+     it — and the road is measured from those sections. Nothing here has to
+     tell the road: road.js keeps a ResizeObserver on .page and re-fits when
+     the height moves by more than a hair, and its debounce is longer than
+     this transition, so a burst of opens settles into one re-fit.
      ==================================================================== */
 
   function panelOf(item)   { return item.querySelector('.qa-panel'); }
@@ -122,8 +128,8 @@
      3. CATEGORY NAV
      ==================================================================== */
 
-  var navList = document.querySelector('.qa-nav__list');
-  var links = list(document.querySelectorAll('.qa-nav__link'));
+  var navList = document.querySelector('.qa-exits__list');
+  var links = list(document.querySelectorAll('.qa-exits__link'));
 
   function keepInView(link) {
     if (!navList || !link) return;
@@ -176,9 +182,11 @@
     var showing = {};
     var spy = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) { showing[entry.target.id] = entry.isIntersecting; });
-      /* Highest section crossing the band under the two sticky bars wins, so
-         the marked exit is the one you are actually reading. */
-      for (var i = 0; i < sections.length; i++) {
+      /* LAST section crossing the band under the two sticky bars wins. Two
+         sections overlap that band at every boundary, and the lower one is
+         the one being scrolled into — taking the first marked the exit you
+         had just left. */
+      for (var i = sections.length - 1; i >= 0; i--) {
         if (showing[sections[i].id]) {
           var id = sections[i].id;
           links.forEach(function (link) {

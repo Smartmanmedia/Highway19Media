@@ -289,6 +289,26 @@ CONTENT = [
 ]
 
 # --------------------------------------------------------------------------
+# Where each category sits on the road.
+#   road/run  -> read by road.js: which run the section belongs to and
+#                where the road runs inside it. "wrap" loops the road
+#                right around the block.
+#   edge      -> the matching .sec-- class, which reserves the lane the
+#                engine then MEASURES. These two must agree.
+#   band      -> the ground, from the home page's own band vocabulary.
+#   layout    -> centred intro over the questions, or an intro rail
+#                beside them. Alternated so seven accordions in a row
+#                do not read as one list.
+# --------------------------------------------------------------------------
+ROAD = {'qa-general': {'edge': 'sec--edge-left', 'road': 'wrap', 'run': 'a', 'band': 'band-white', 'layout': 'centred', 'wrapped': True},
+        'qa-websites': {'edge': 'sec--edge-right', 'road': 'edge-right', 'run': 'a', 'band': 'band-blue-lt', 'layout': 'split', 'wrapped': False},
+        'qa-video': {'edge': 'sec--edge-left', 'road': 'edge-left', 'run': 'a', 'band': 'band-blue', 'layout': 'centred', 'wrapped': False},
+        'qa-advertising': {'edge': 'sec--edge-right', 'road': 'edge-right', 'run': 'a', 'band': 'band-white', 'layout': 'split', 'wrapped': False},
+        'qa-branding': {'edge': 'sec--edge-left', 'road': 'wrap', 'run': 'b', 'band': 'band-blue-lt', 'layout': 'centred', 'wrapped': True},
+        'qa-print': {'edge': 'sec--edge-right', 'road': 'edge-right', 'run': 'b', 'band': 'band-white', 'layout': 'split', 'wrapped': False},
+        'qa-working': {'edge': 'sec--edge-left', 'road': 'edge-left', 'run': 'b', 'band': 'band-green', 'layout': 'centred', 'wrapped': False}}
+
+# --------------------------------------------------------------------------
 # rendering
 # --------------------------------------------------------------------------
 
@@ -311,25 +331,29 @@ def render():
     schema = []
 
     for sec in CONTENT:
-        band = sec["band"]
-        classes = ["qa-sec", "qa-sec--" + sec["layout"]]
-        if band:
-            classes.append("qa-sec--" + band)
+        m = ROAD[sec["sid"]]
+        classes = ["sec", "qa-sec", "qa-sec--" + m["layout"], m["edge"], m["band"]]
+        if m["wrapped"]:
+            classes.append("qa-sec--wrapped")
 
         w('\n  <!-- ======================================================================\n')
         w('       %s\n' % sec["eyebrow"].upper())
+        if m["road"] == "wrap":
+            w('       The road loops right around this block: in across the top, down\n')
+            w('       the far side, back along the bottom, then away down its own lane.\n')
         w('       ==================================================================== -->\n')
-        w('  <section id="%s" class="%s" aria-labelledby="%s-h">\n'
-          % (sec["sid"], " ".join(classes), sec["sid"]))
-        w('    <div class="qa-sec__inner">\n')
+        w('  <section id="%s" class="%s" data-road="%s" data-run="%s" data-section="%s" aria-labelledby="%s-h">\n'
+          % (sec["sid"], " ".join(classes), m["road"], m["run"], sec["sid"], sec["sid"]))
+        w('    <div class="road-slot" aria-hidden="true"></div>\n')
+        w('    <div class="sec__inner">\n      <div class="sec__body">\n')
 
-        split = sec["layout"] == "split"
+        split = m["layout"] == "split"
         if split:
             w('      <div class="qa-sec__grid">\n')
 
         # -- intro ---------------------------------------------------------
-        w('''      <div class="qa-sec__intro">
-        <span class="qa-sec__icon" aria-hidden="true">
+        w('''      <div class="qa-sec__head">
+        <span class="qa-disc" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             %s
           </svg>
@@ -381,11 +405,11 @@ def render():
 
         if split:
             w('      </div>\n')
-        w('    </div>\n  </section>\n')
+        w('      </div>\n    </div>\n  </section>\n')
 
     nav = "\n".join(
-        '          <li><a class="qa-nav__link" href="#%s" style="--lane:var(%s)">'
-        '<span class="qa-nav__dot" aria-hidden="true"></span>%s</a></li>'
+        '          <li><a class="qa-exits__link" href="#%s" style="--lane:var(%s)">'
+        '<span class="qa-exits__chip" aria-hidden="true"></span>%s</a></li>'
         % (s["sid"], LANE_VAR[s["sid"]], e(s["nav"])) for s in CONTENT)
 
     ld = {

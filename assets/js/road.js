@@ -268,6 +268,7 @@
       var box = {
         el: sec,
         run: sec.getAttribute('data-run') || 'a',
+        wrap: sec.getAttribute('data-road') === 'wrap',
         top: r.top + window.pageYOffset - pageTop,
         bottom: r.bottom + window.pageYOffset - pageTop,
         x: Math.max(-half * 0.9, Math.min(W + half * 0.9, x)),
@@ -287,6 +288,42 @@
     return g.list.filter(function (b) { return b.run === key; });
   }
 
+  /* Hook the road around a whole section: in across the top, down the far
+     side, back along the bottom, then on down its own lane — so the block
+     sits inside the loop instead of beside it.
+
+     This is the move run B already made around "Your Success Is Our
+     Destination"; it was written inline there because that section is the
+     first in its run and the road arrives from the left edge. Entered mid-run
+     the road arrives heading DOWN instead, which is the only difference, so
+     the geometry is the same four turns from a different start. Any section
+     can now ask for it with data-road="wrap".
+
+     A section has to be big enough to hold the loop. When it is not — a short
+     block, or a narrow window — the road jogs past it as usual rather than
+     drawing a hook that grazes the copy. */
+  function hookDown(p, box, g, R) {
+    var inset = g.half + 34;
+    var topY = box.top + inset;
+    var botY = box.bottom - inset;
+    var rightX = g.W - inset - 6;
+    var leftX = box.x;
+    var rad = Math.max(g.half * 1.35,
+      Math.min(R, (botY - topY) / 2 - 8, (rightX - leftX) / 2 - 8));
+
+    if (!(botY - topY > 2 * rad + 40) || !(rightX - leftX > 2 * rad + 40)) {
+      p.jog(leftX, box.top, R);
+      return false;
+    }
+
+    p.jog(leftX, box.top - 40, R);       /* onto this section's own lane     */
+    p.downTo(topY - rad).turn(-1, rad)   /* down the left, right at the top  */
+     .rightTo(rightX - rad).turn(1, rad) /* across, then down the far side   */
+     .downTo(botY - rad).turn(1, rad)    /* down, then back along the bottom */
+     .leftTo(leftX + rad).turn(-1, rad); /* and away down its own lane       */
+    return true;
+  }
+
   /* Run A — in above the hero, out through the right edge at the promise. */
   function buildRunA(g, scale) {
     var list = runSections(g, 'a');
@@ -295,7 +332,8 @@
     var p = pen(list[0].x, -320, Math.PI / 2);
 
     for (var i = 1; i < list.length; i++) {
-      p.jog(list[i].x, list[i - 1].bottom, R);
+      if (!g.narrow && list[i].wrap) hookDown(p, list[i], g, R);
+      else p.jog(list[i].x, list[i - 1].bottom, R);
     }
 
     var last = list[list.length - 1];
@@ -338,8 +376,11 @@
         .leftTo(wrap.x + rad).turn(-1, rad);       /* back left, then down    */
     }
 
-    for (var i = (g.narrow ? 1 : 1); i < list.length; i++) {
+    /* From i = 1: list[0] is the section the run enters around, and the
+       left-edge entry above has already hooked it. */
+    for (var i = 1; i < list.length; i++) {
       var prev = list[i - 1];
+      if (!g.narrow && list[i].wrap) { hookDown(p, list[i], g, R); continue; }
       p.jog(list[i].x, list[i].jogAt != null ? list[i].jogAt : prev.bottom, R);
     }
     p.downTo(g.height + 320);
@@ -487,12 +528,21 @@
   var BIG = { Green_Truck: 1, Semitrailer: 1, Gas_Truck: 1, Blue_bus: 1,
               Brown_Truck: 1, Yellow_truck: 1, Brown_Big_Truck: 1 };
 
-  /* The asphalt belongs to the owner now — his own tiles, laid by
-     scene-build.js from the runs he actually drew. This engine keeps the
-     traffic and the physics. DRAW_ROAD off stops it painting a second
-     road of its own underneath his. The hit target for tap-to-pause has
-     to survive, so that one stroke stays, transparent. */
-  var DRAW_ROAD = false;
+  /* Who paints the asphalt.
+     On the home page it is the owner: scene-build.js lays his own road tiles
+     from the runs he drew, and hands this engine a centreline per run. This
+     engine then keeps only the traffic and the physics — painting a second
+     road of its own underneath his would double every edge line. The hit
+     target for tap-to-pause still has to exist, so that one stroke stays,
+     transparent.
+
+     On a page with no scene of his — the Q&A page — nothing else lays a road,
+     so the engine draws its own from the lane slots the layout reserves. It
+     is the same road either way: the four stacked strokes at the top of this
+     file are measured from his Illustrator artwork, not invented to match it.
+     scene-build.js defines H19_ROAD_PATHS at load time and loads before this
+     file, so its presence is a reliable test for which page we are on. */
+  var DRAW_ROAD = !window.H19_ROAD_PATHS;
 
   var runs = [], pool = [], scaleNow = 1, gmul = 1, carScale = 1;
 

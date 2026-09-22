@@ -12,7 +12,7 @@ assets/css/faq.css             the Q&A page's own components
 assets/js/cars-sprite.js       the 20 vehicles + gradients, ported verbatim
 assets/js/road.js              the living road, threaded down the whole page
 assets/js/site.js              nav, form, booking links — both pages
-assets/js/faq.js               accordions, sticky offsets, category nav
+assets/js/faq.js               accordions, sticky offsets, the exit gantry
 tools/build-faq.py             Q&A content + generator
 tools/faq-template.html        the Q&A page shell the generator fills
 build.js                       inlines each page into one file
@@ -36,38 +36,47 @@ stylesheet and script lists are read out of the page itself.
 
 **`faq.html` is generated — edit `tools/build-faq.py` and re-run it, not the
 HTML.** `python3 tools/build-faq.py` rewrites the page from the `CONTENT` list
-in that file. The reason it is generated rather than typed is the FAQPage
+in that file. It is generated rather than typed because of the FAQPage
 structured data in the `<head>`: 35 questions and answers duplicated by hand
 would be wrong within a week. One source, two outputs, no drift.
 
-Seven categories — General, Website Design, Video Production, Social &amp; Paid
-Ads, Branding, Print &amp; Promo, Working With Us — each with the same parts: a
-green sign-plate eyebrow, a short headline, one paragraph of intro, an icon
-disc in that category's lane colour, the accordion, and a CTA card. Two
-layouts alternate down the page (centred intro over the questions, or an intro
-rail beside them) so seven accordions in a row do not read as one list.
+**It is built on the home page's own sections, not a layout of its own.**
+`.sec`, `.sec__inner`, `.sec__body`, the band classes and the `.road-slot`
+each section reserves — all of it is the home page's. That is what lets the
+road run through the page: road.js measures those slots exactly as it does on
+the home page, and the Q&A ends up inside the same composition rather than
+beside it. The mobile behaviour — road pinned to the left margin, copy inset
+past it — comes free with them.
 
-**Lane colours.** Four of the seven use the service-card colours from the home
-page, so a category reads as the same lane it does there. `#qa-print` takes
-the brand red already used by the social marks — the one road-sign family not
-yet spoken for — and `#qa-working` takes guide-sign green, following the home
-page's own logic that the green signs are the ones that name a destination.
-Both are as provisional as the rest of the palette and are one line each at
-the top of `faq.css`.
+**The road here is drawn by the engine, not by his tiles.** Two changes in
+`road.js` made that possible, and neither touches the home page:
+
+| | |
+|---|---|
+| `DRAW_ROAD` | was a hard `false`, because scene-build.js lays his own road tiles on the home page and a second generated road underneath would double every edge line. It is now `!window.H19_ROAD_PATHS` — that function is his scene's handoff, defined at load time, so its absence is a reliable "no scene on this page, draw it yourself". The road is the same either way: the four stacked strokes are measured from his Illustrator file. |
+| `data-road="wrap"` | the hook that loops the road right around a section — in across the top, down the far side, back along the bottom — was written inline for "Your Success Is Our Destination", which is the first section in its run and is entered from the left edge. It is now a move any section can ask for, entered mid-run heading down. Same four turns, different start. A section too small to hold the loop gets a plain jog instead. |
+
+Two sections use it: **General** (run A) and **Branding** (run B). Both
+reserve the clear air the loop needs — a road width plus a corner radius top
+and bottom, and a lane down the right — the same way `#whyus` does.
+
+Run A enters above the hero, weaves down through the first five sections and
+drives off the right edge. Run B comes back in from the left, hooks around
+Branding, and carries on down into the footer. `data-run` and `data-road` on
+each `<section>` are what set that, and `tools/build-faq.py` holds them in one
+`ROAD` table beside the copy.
+
+**The hero is his gantry.** The `our-plate.svg` sign on a tiled truss, with
+the headline as real HTML laid over it — the device section 7 uses on the home
+page. The plate is capped at 54vw rather than his 49.2%: the headline is sized
+against the *plate*, so shrinking the plate to make room for truss would take
+the H1 down with it.
 
 **The accordions ship open.** Every answer is plain HTML text in the markup,
-expanded, and `faq.js` collapses them on load. With no JavaScript — and for
-anything that does not run it — the whole page is still readable. That is also
-why the structured data is a duplicate of the visible copy rather than a
-substitute for it.
-
-**No road engine.** The home page's road measures a lane reserved by every
-section, and this page reserves none: it gets the asphalt strip under the
-hero, his clouds, his motorway plate and the green eyebrow plates, and stops
-there. The two sticky bars (site header, category nav) are measured by
-`faq.js` and written to `--hdr-h` / `--qa-nav-h`, because both change height
-with the breakpoint; the CSS carries fallbacks for the case where the script
-never runs.
+expanded, and `faq.js` collapses them on load. With no JavaScript the whole
+page is still readable. Opening one makes the page taller and moves every
+section below it — nothing has to tell the road, because road.js already keeps
+a ResizeObserver on `.page`.
 
 ### What needs you on this page
 
@@ -80,6 +89,10 @@ never runs.
 - **`#qa-print`'s red** is the one colour on this page with no artwork behind
   it. If print and promo should sit in the purple lane with branding, that is
   one line.
+- **Which sections the road loops around** is `ROAD` in
+  `tools/build-faq.py` — change a `road` to `"wrap"`, add `qa-sec--wrapped`
+  for the clearance, and the engine does the rest. More than two starts to
+  read as a pattern rather than an emphasis, which is why there are two.
 
 Add `?road=debug` to the URL for the traffic panel: hour scrubber, density,
 speed, car size, weekend toggle, lane paths. It is not shipped to visitors.

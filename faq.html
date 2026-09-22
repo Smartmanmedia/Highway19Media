@@ -14,8 +14,8 @@
 <link rel="stylesheet" href="assets/css/faq.css">
 
 <!-- FAQPage structured data. Generated from the same source as the copy below
-     — see tools/build-faq.py — so the two cannot drift apart. Every question
-     and answer is also present as ordinary HTML text on the page; this is the
+     — see tools/build-faq.py — so the two cannot drift. Every question and
+     answer is also present as ordinary HTML text on the page; this is the
      machine-readable duplicate, not a substitute for it. -->
 <script type="application/ld+json">
 {
@@ -309,11 +309,13 @@
 <body>
 
 <a class="skip-link" href="#main">Skip to content</a>
+<button id="road-pause" type="button" aria-pressed="false">Pause traffic animation</button>
 
-<!-- The two signs this page uses. Both are the owner's, copied from index.html
-     rather than linked: an external <use href="file.svg#id"> is blocked by CORS
-     when the page is opened straight off disk, and opening it off disk is how
-     this site is reviewed. -->
+<!-- The two signs this page uses inline. The rest of his signage is used as
+     supplied files; these two have no standalone export. Copied from
+     index.html rather than linked: an external <use href="file.svg#id"> is
+     blocked by CORS when the page is opened straight off disk, and opening it
+     off disk is how this site is reviewed. -->
 <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
   <defs>
     <symbol id="sg-warning" viewBox="0 0 64 60">
@@ -329,8 +331,8 @@
 </svg>
 
 <!-- ==========================================================================
-     HEADER — the site header, unchanged except that its links now reach back
-     to the home page's sections and Q&A is marked as the current page.
+     HEADER — the site header, unchanged except that its links reach back to
+     the home page's sections and Q&A is marked as the current page.
      ======================================================================= -->
 <header class="site-header">
   <div class="site-header__inner">
@@ -361,49 +363,60 @@
   </div>
 </header>
 
-<main id="main" class="qa-page">
+<main id="main" class="page page--qa">
+
+  <!-- The road and its traffic. road.js measures the .road-slot each section
+       below reserves and threads one continuous road down the page, looping
+       it around the two sections that ask for it with data-road="wrap".
+       There is no #scene-layer here: the scenery is the home page's own
+       composition, so on this page the engine draws the road itself. -->
+  <div id="road-layer" aria-hidden="true"></div>
 
   <!-- ========================================================================
-       HERO — short on purpose. Its whole job is to say what the page is and
-       hand the visitor to the exits below it, so it gets the headline, one
-       line of orientation, the motorway plate and the road, and stops.
+       HERO — short on purpose. His gantry plate carries the headline as real
+       HTML text; the road comes down the lane beside it.
        ===================================================================== -->
-  <section class="qa-hero">
-    <img class="qa-hero__cloud qa-hero__cloud--a" src="assets/brand/clouds/Cloud2.svg" alt="" aria-hidden="true">
-    <img class="qa-hero__cloud qa-hero__cloud--b" src="assets/brand/clouds/Cloud4.svg" alt="" aria-hidden="true">
-
-    <div class="qa-hero__inner">
-      <div class="qa-hero__copy">
+  <section id="qa-hero" class="sec sec--edge-right band-blue" data-road="edge-right" data-run="a" data-section="qa-01-hero">
+    <img class="qa-cloud qa-cloud--a" src="assets/brand/clouds/Cloud2.svg" alt="" aria-hidden="true">
+    <img class="qa-cloud qa-cloud--b" src="assets/brand/clouds/Cloud4.svg" alt="" aria-hidden="true">
+    <div class="sec__inner">
+      <div class="sec__body">
         <span class="eyebrow">Questions &amp; Answers</span>
-        <h1>Questions? We&rsquo;ve Got Answers.</h1>
-        <p class="sub">Straight answers about websites, video, advertising, branding, print
-          and working with Highway 19 Media.</p>
+        <div class="gantry signplate">
+          <span class="gantry__plate">
+            <img class="signplate__art" src="assets/scene/our-plate.svg" alt="" aria-hidden="true">
+            <div class="signplate__copy">
+              <h1>Questions? We&rsquo;ve Got Answers.</h1>
+            </div>
+          </span>
+          <span class="gantry__truss" aria-hidden="true"></span>
+        </div>
+        <p class="body-copy">
+          Straight answers about websites, video, advertising, branding, print and
+          working with Highway 19 Media. Pick an exit below, or just keep driving.
+        </p>
       </div>
-      <img class="qa-hero__sign" src="assets/brand/highway-sign.svg" alt="" aria-hidden="true">
+      <div class="road-slot" aria-hidden="true"></div>
     </div>
-
-    <!-- His asphalt and his lane colour, the two measured values in the
-         palette. The hero ends on the road the rest of the site is built on. -->
-    <div class="qa-hero__road" aria-hidden="true"><div class="qa-hero__lane"></div></div>
   </section>
 
   <!-- ========================================================================
-       CATEGORY NAV — seven exits. Sticky under the site header on desktop,
-       a swipeable row of sign plates on a phone. faq.js marks the one you
-       are currently reading.
+       THE EXIT GANTRY — seven exits, sticky under the site header. Inside
+       .page so it scrolls with the road behind it; .page--qa keeps overflow
+       visible so the sticking still works.
        ===================================================================== -->
-  <div class="qa-nav">
-    <div class="qa-nav__inner">
-      <span class="qa-nav__label" aria-hidden="true">Jump to</span>
+  <div class="qa-exits">
+    <div class="qa-exits__inner">
+      <span class="qa-exits__label" aria-hidden="true">Exits</span>
       <nav aria-label="Question categories">
-        <ul class="qa-nav__list">
-          <li><a class="qa-nav__link" href="#qa-general" style="--lane:var(--blue-700)"><span class="qa-nav__dot" aria-hidden="true"></span>General</a></li>
-          <li><a class="qa-nav__link" href="#qa-websites" style="--lane:var(--svc-web)"><span class="qa-nav__dot" aria-hidden="true"></span>Website Design</a></li>
-          <li><a class="qa-nav__link" href="#qa-video" style="--lane:var(--svc-video)"><span class="qa-nav__dot" aria-hidden="true"></span>Video Production</a></li>
-          <li><a class="qa-nav__link" href="#qa-advertising" style="--lane:var(--svc-social)"><span class="qa-nav__dot" aria-hidden="true"></span>Social Media &amp; Paid Ads</a></li>
-          <li><a class="qa-nav__link" href="#qa-branding" style="--lane:var(--svc-print)"><span class="qa-nav__dot" aria-hidden="true"></span>Branding &amp; Graphic Design</a></li>
-          <li><a class="qa-nav__link" href="#qa-print" style="--lane:var(--red-600)"><span class="qa-nav__dot" aria-hidden="true"></span>Print &amp; Promotional Products</a></li>
-          <li><a class="qa-nav__link" href="#qa-working" style="--lane:var(--green-700)"><span class="qa-nav__dot" aria-hidden="true"></span>Working With Us</a></li>
+        <ul class="qa-exits__list">
+          <li><a class="qa-exits__link" href="#qa-general" style="--lane:var(--blue-700)"><span class="qa-exits__chip" aria-hidden="true"></span>General</a></li>
+          <li><a class="qa-exits__link" href="#qa-websites" style="--lane:var(--svc-web)"><span class="qa-exits__chip" aria-hidden="true"></span>Website Design</a></li>
+          <li><a class="qa-exits__link" href="#qa-video" style="--lane:var(--svc-video)"><span class="qa-exits__chip" aria-hidden="true"></span>Video Production</a></li>
+          <li><a class="qa-exits__link" href="#qa-advertising" style="--lane:var(--svc-social)"><span class="qa-exits__chip" aria-hidden="true"></span>Social Media &amp; Paid Ads</a></li>
+          <li><a class="qa-exits__link" href="#qa-branding" style="--lane:var(--svc-print)"><span class="qa-exits__chip" aria-hidden="true"></span>Branding &amp; Graphic Design</a></li>
+          <li><a class="qa-exits__link" href="#qa-print" style="--lane:var(--red-600)"><span class="qa-exits__chip" aria-hidden="true"></span>Print &amp; Promotional Products</a></li>
+          <li><a class="qa-exits__link" href="#qa-working" style="--lane:var(--green-700)"><span class="qa-exits__chip" aria-hidden="true"></span>Working With Us</a></li>
         </ul>
       </nav>
     </div>
@@ -411,11 +424,15 @@
 
   <!-- ======================================================================
        GENERAL
+       The road loops right around this block: in across the top, down
+       the far side, back along the bottom, then away down its own lane.
        ==================================================================== -->
-  <section id="qa-general" class="qa-sec qa-sec--stacked" aria-labelledby="qa-general-h">
-    <div class="qa-sec__inner">
-      <div class="qa-sec__intro">
-        <span class="qa-sec__icon" aria-hidden="true">
+  <section id="qa-general" class="sec qa-sec qa-sec--centred sec--edge-left band-white qa-sec--wrapped" data-road="wrap" data-run="a" data-section="qa-general" aria-labelledby="qa-general-h">
+    <div class="road-slot" aria-hidden="true"></div>
+    <div class="sec__inner">
+      <div class="sec__body">
+      <div class="qa-sec__head">
+        <span class="qa-disc" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <path d="M9 4.2 3.4 6.5v13.3L9 17.5l6 2.3 5.6-2.3V4.2L15 6.5 9 4.2Z"/>
               <path d="M9 4.2v13.3M15 6.5v13.3"/>
@@ -547,17 +564,20 @@
           <a class="btn btn--primary" href="index.html#close"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Let’s Talk</a>
         </div>
       </div>
+      </div>
     </div>
   </section>
 
   <!-- ======================================================================
        WEBSITE DESIGN & DEVELOPMENT
        ==================================================================== -->
-  <section id="qa-websites" class="qa-sec qa-sec--split qa-sec--pale" aria-labelledby="qa-websites-h">
-    <div class="qa-sec__inner">
+  <section id="qa-websites" class="sec qa-sec qa-sec--split sec--edge-right band-blue-lt" data-road="edge-right" data-run="a" data-section="qa-websites" aria-labelledby="qa-websites-h">
+    <div class="road-slot" aria-hidden="true"></div>
+    <div class="sec__inner">
+      <div class="sec__body">
       <div class="qa-sec__grid">
-      <div class="qa-sec__intro">
-        <span class="qa-sec__icon" aria-hidden="true">
+      <div class="qa-sec__head">
+        <span class="qa-disc" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <rect x="2.6" y="4.4" width="18.8" height="15.2" rx="2.2"/>
               <path d="M2.6 8.7h18.8"/>
@@ -712,16 +732,19 @@
         </div>
       </div>
       </div>
+      </div>
     </div>
   </section>
 
   <!-- ======================================================================
        VIDEO PRODUCTION
        ==================================================================== -->
-  <section id="qa-video" class="qa-sec qa-sec--stacked qa-sec--deep" aria-labelledby="qa-video-h">
-    <div class="qa-sec__inner">
-      <div class="qa-sec__intro">
-        <span class="qa-sec__icon" aria-hidden="true">
+  <section id="qa-video" class="sec qa-sec qa-sec--centred sec--edge-left band-blue" data-road="edge-left" data-run="a" data-section="qa-video" aria-labelledby="qa-video-h">
+    <div class="road-slot" aria-hidden="true"></div>
+    <div class="sec__inner">
+      <div class="sec__body">
+      <div class="qa-sec__head">
+        <span class="qa-disc" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <circle cx="7.7" cy="6" r="2.9"/>
               <circle cx="15.1" cy="6" r="2.9"/>
@@ -838,17 +861,20 @@
           <a class="btn btn--primary" href="index.html#close"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Plan Your Production</a>
         </div>
       </div>
+      </div>
     </div>
   </section>
 
   <!-- ======================================================================
        SOCIAL MEDIA & PAID ADVERTISING
        ==================================================================== -->
-  <section id="qa-advertising" class="qa-sec qa-sec--split" aria-labelledby="qa-advertising-h">
-    <div class="qa-sec__inner">
+  <section id="qa-advertising" class="sec qa-sec qa-sec--split sec--edge-right band-white" data-road="edge-right" data-run="a" data-section="qa-advertising" aria-labelledby="qa-advertising-h">
+    <div class="road-slot" aria-hidden="true"></div>
+    <div class="sec__inner">
+      <div class="sec__body">
       <div class="qa-sec__grid">
-      <div class="qa-sec__intro">
-        <span class="qa-sec__icon" aria-hidden="true">
+      <div class="qa-sec__head">
+        <span class="qa-disc" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <path d="M11.6 3.4H4.2a2.1 2.1 0 0 0-2.1 2.1v5.7a2.1 2.1 0 0 0 2.1 2.1h.6v3.3l3.4-3.3h3.4a2.1 2.1 0 0 0 2.1-2.1V5.5a2.1 2.1 0 0 0-2.1-2.1z"/>
               <path class="solid" d="M7.9 11c-1.6-1.1-3-2.2-3-3.4 0-1.3 1.5-1.8 2.4-.9l.6.6.6-.6c.9-.9 2.4-.4 2.4.9 0 1.2-1.4 2.3-3 3.4z"/>
@@ -1000,16 +1026,21 @@
         </div>
       </div>
       </div>
+      </div>
     </div>
   </section>
 
   <!-- ======================================================================
        BRANDING & GRAPHIC DESIGN
+       The road loops right around this block: in across the top, down
+       the far side, back along the bottom, then away down its own lane.
        ==================================================================== -->
-  <section id="qa-branding" class="qa-sec qa-sec--stacked qa-sec--pale" aria-labelledby="qa-branding-h">
-    <div class="qa-sec__inner">
-      <div class="qa-sec__intro">
-        <span class="qa-sec__icon" aria-hidden="true">
+  <section id="qa-branding" class="sec qa-sec qa-sec--centred sec--edge-left band-blue-lt qa-sec--wrapped" data-road="wrap" data-run="b" data-section="qa-branding" aria-labelledby="qa-branding-h">
+    <div class="road-slot" aria-hidden="true"></div>
+    <div class="sec__inner">
+      <div class="sec__body">
+      <div class="qa-sec__head">
+        <span class="qa-disc" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <path d="M19.6 12.6v5.9a2.2 2.2 0 0 1-2.2 2.2H5.6a2.2 2.2 0 0 1-2.2-2.2V6.7a2.2 2.2 0 0 1 2.2-2.2h6"/>
               <path d="M16.4 3.3l3.9 3.9-8 8-4.4.5.5-4.4z"/>
@@ -1087,17 +1118,20 @@
           <a class="btn btn--primary" href="index.html#close"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Build Your Brand</a>
         </div>
       </div>
+      </div>
     </div>
   </section>
 
   <!-- ======================================================================
        PRINT, SIGNAGE & PROMOTIONAL PRODUCTS
        ==================================================================== -->
-  <section id="qa-print" class="qa-sec qa-sec--split" aria-labelledby="qa-print-h">
-    <div class="qa-sec__inner">
+  <section id="qa-print" class="sec qa-sec qa-sec--split sec--edge-right band-white" data-road="edge-right" data-run="b" data-section="qa-print" aria-labelledby="qa-print-h">
+    <div class="road-slot" aria-hidden="true"></div>
+    <div class="sec__inner">
+      <div class="sec__body">
       <div class="qa-sec__grid">
-      <div class="qa-sec__intro">
-        <span class="qa-sec__icon" aria-hidden="true">
+      <div class="qa-sec__head">
+        <span class="qa-disc" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <path d="M6.9 8.4V3.5h10.2v4.9"/>
               <path d="M4.6 8.4h14.8a1.8 1.8 0 0 1 1.8 1.8v4a1.8 1.8 0 0 1-1.8 1.8h-1.5"/>
@@ -1179,16 +1213,19 @@
         </div>
       </div>
       </div>
+      </div>
     </div>
   </section>
 
   <!-- ======================================================================
        WORKING WITH HIGHWAY 19 MEDIA
        ==================================================================== -->
-  <section id="qa-working" class="qa-sec qa-sec--stacked qa-sec--navy" aria-labelledby="qa-working-h">
-    <div class="qa-sec__inner">
-      <div class="qa-sec__intro">
-        <span class="qa-sec__icon" aria-hidden="true">
+  <section id="qa-working" class="sec qa-sec qa-sec--centred sec--edge-left band-green" data-road="edge-left" data-run="b" data-section="qa-working" aria-labelledby="qa-working-h">
+    <div class="road-slot" aria-hidden="true"></div>
+    <div class="sec__inner">
+      <div class="sec__body">
+      <div class="qa-sec__head">
+        <span class="qa-disc" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="8.8"/>
               <circle cx="12" cy="12" r="2.9"/>
@@ -1287,27 +1324,33 @@
           <a class="btn btn--primary" href="index.html#close"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Let’s Talk</a>
         </div>
       </div>
+      </div>
     </div>
   </section>
 
   <!-- ========================================================================
-       CLOSING BAND — guide-sign green, following the home page's own logic:
-       the green signs are the ones that name a destination.
+       CLOSING BAND — following the home page's own logic: the green signs are
+       the ones that name a destination.
        ===================================================================== -->
-  <section class="qa-close" aria-labelledby="qa-close-h">
-    <div class="qa-sec__inner">
-      <div class="headline">
-        <svg class="sign" viewBox="0 0 52 64" aria-hidden="true" focusable="false"><use href="#sg-ahead"/></svg>
-        <div>
-          <h2 id="qa-close-h">Still Have a Question?</h2>
+  <section id="qa-close" class="sec sec--edge-right band-navy" data-road="edge-right" data-run="b" data-section="qa-09-close">
+    <div class="road-slot" aria-hidden="true"></div>
+    <div class="sec__inner">
+      <div class="sec__body">
+        <div class="headline">
+          <svg class="sign" viewBox="0 0 52 64" aria-hidden="true" focusable="false"><use href="#sg-ahead"/></svg>
+          <div>
+            <h2>Still Have a Question?</h2>
+            <p class="sub">Ask us directly — no obligation, no pressure.</p>
+          </div>
         </div>
-      </div>
-      <p class="body-copy">If we didn&rsquo;t answer it here, ask us directly. Send us your website,
-        your Facebook page or whatever you&rsquo;re working with, and we&rsquo;ll come back within
-        24 hours &mdash; no obligation, no pressure.</p>
-      <div class="qa-close__actions">
-        <a class="btn btn--primary" href="index.html#close"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Ask Us Directly</a>
-        <a class="btn btn--ghost" href="index.html#services">See What We Do</a>
+        <p class="body-copy">
+          Send us your website, your Facebook page or whatever you&rsquo;re working with,
+          and we&rsquo;ll come back within 24 hours.
+        </p>
+        <div class="sec__cta">
+          <a class="btn btn--primary" href="index.html#close"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Ask Us Directly</a>
+          <a class="btn btn--ghost" href="index.html#services">See What We Do</a>
+        </div>
       </div>
     </div>
   </section>
@@ -1405,9 +1448,15 @@
 
 </main>
 
-<!-- site.js runs the mobile nav, the copyright year and the booking links.
-     The road engine is not loaded here: it is the home page's composition,
-     and this page reserves no lane for it. -->
+<div id="road-toast" role="status" aria-live="polite"></div>
+<div id="road-dev"></div>
+
+<!-- The traffic engine and his twenty vehicles. The scene scripts are the
+     home page's composition and are deliberately not here: with no
+     H19_ROAD_PATHS to defer to, road.js draws the road itself from the lane
+     slots this page reserves. -->
+<script src="assets/js/cars-sprite.js"></script>
+<script src="assets/js/road.js"></script>
 <script src="assets/js/site.js"></script>
 <script src="assets/js/faq.js"></script>
 </body>
