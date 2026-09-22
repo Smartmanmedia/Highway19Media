@@ -63,6 +63,12 @@
   var layer = document.getElementById('road-layer');
   if (!page || !layer || !window.H19_SPRITE) return;
 
+  /* Two ways to lay a road down a page — see section 4b for why the second
+     one exists. A page that declares bands gets crossings; everything else
+     gets the weave. */
+  var BANDS = Array.prototype.slice.call(page.querySelectorAll('[data-road-band]'));
+  var BAND_MODE = BANDS.length > 0;
+
   /* ==========================================================================
      1. Mount the artwork once.
      Parsed through DOMParser rather than innerHTML so the SVG namespace and
@@ -517,6 +523,164 @@
   }
 
   /* ==========================================================================
+     6b. BAND MODE — the road as a set of crossings between the sections
+     --------------------------------------------------------------------------
+     The weave above threads one road down the whole page, behind the copy.
+     That is right for the home page, where the copy is fixed and the road is
+     part of the composition. It is wrong for a page whose copy expands.
+
+     Everything above is measured in PAGE coordinates. Open an accordion and
+     every section below it moves, so the entire road has to be rebuilt —
+     re-sampled, re-tiled, traffic re-seeded — in the middle of the animation.
+     That is a visible stall, and while it happens the road is under the text
+     that just moved.
+
+     So a page can hand the engine BANDS instead: strips that contain nothing
+     but road. Each band is its own coordinate space, its own SVG and its own
+     traffic, and the road is clipped to it. Three things follow:
+
+       * the road cannot overlap the copy, whatever the copy does
+       * a band moving down the page carries its road with it. The geometry is
+         local, so there is nothing to re-measure — no rebuild, no stall. Only
+         a change of WIDTH re-fits.
+       * every crossing enters off one edge of the screen and leaves by the
+         other, so the loop point where a vehicle wraps is never visible
+
+     Declared per band with data-road-band="right" (enters left, leaves right)
+     or "left".
+     ====================================================================== */
+
+  function bandBoxes() {
+    return BANDS.map(function (elm) {
+      return {
+        el: elm,
+        dir: elm.getAttribute('data-road-band') === 'left' ? 'left' : 'right',
+        w: elm.clientWidth,
+        h: elm.clientHeight
+      };
+    }).filter(function (b) { return b.w > 8 && b.h > 8; });
+  }
+
+  /* One crossing, in the band's own pixels. Straight in from off-screen, one
+     lane change, straight out the far side — the same straights and quarter
+     turns the weave is built from, so it is the same road. The sidestep is
+     what stops a crossing reading as a ruled line; its size is whatever the
+     band's height can hold. */
+  function buildCrossing(b, half, scale) {
+    var margin = half + 14;   /* the road's own clearance inside the band */
+    var yA = margin;
+    var yB = b.h - margin;
+    if (yB - yA < 20) { yA = yB = b.h / 2; }
+
+    var toRight = b.dir !== 'left';
+    var y0 = toRight ? yA : yB;
+    var dy = (toRight ? yB : yA) - y0;
+    var rad = Math.max(20, Math.min(R_MAX * scale, Math.abs(dy) / 2, b.w * 0.17));
+    var run = Math.abs(dy) - 2 * rad;
+    var mid = b.w * 0.5;
+    var p;
+
+    if (toRight) {
+      p = pen(-half - 260, y0, 0);
+      if (rad > 2) {
+        /* Heading right, +1 turns clockwise, which is downwards. The two
+           quarter turns ARE the lane change; the straight between them only
+           appears when the band is tall enough to need one. Gating the whole
+           bend on that straight is what made every crossing a ruled line. */
+        var sr = dy > 0 ? 1 : -1;
+        p.rightTo(mid - rad).turn(sr, rad);
+        if (run > 0.5) p.straight(run);
+        p.turn(-sr, rad);
+      }
+      p.rightTo(b.w + half + 260);
+    } else {
+      p = pen(b.w + half + 260, y0, Math.PI);
+      if (rad > 2) {
+        /* Heading left, the same turn goes the other way on screen. */
+        var sl = dy > 0 ? -1 : 1;
+        p.leftTo(mid + rad).turn(sl, rad);
+        if (run > 0.5) p.straight(run);
+        p.turn(-sl, rad);
+      }
+      p.leftTo(-half - 260);
+    }
+    return p.path();
+  }
+
+  /* The band's own SVG: his four stacked strokes, the two lane centrelines
+     the traffic drives, and a fleet layer above them. Replaced wholesale on a
+     re-fit, which only a width change can cause. */
+  function makeBandArt(b, pathFn, scale) {
+    var old = b.el.querySelector('.road-band__art');
+    if (old) old.remove();
+
+    var svg = el('svg', {
+      'class': 'road-band__art',
+      viewBox: '0 0 ' + b.w + ' ' + b.h,
+      preserveAspectRatio: 'none',
+      'aria-hidden': 'true', focusable: 'false'
+    });
+
+    var d = pathFn(0);
+    var dash = DASH.split(' ').map(function (v) { return (+v * scale).toFixed(2); }).join(' ');
+
+    var road = el('g', {});
+    road.appendChild(el('path', { 'class': 'road-hit', d: d, fill: 'none',
+                                  stroke: ASPHALT, 'stroke-width': W_ROAD * scale }));
+    road.appendChild(el('path', { d: d, fill: 'none', stroke: LINE, 'stroke-width': EDGE_OUT * 2 * scale }));
+    road.appendChild(el('path', { d: d, fill: 'none', stroke: ASPHALT, 'stroke-width': EDGE_IN * 2 * scale }));
+    road.appendChild(el('path', { d: d, fill: 'none', stroke: LINE, 'stroke-width': DASH_W * scale,
+                                  'stroke-dasharray': dash }));
+    svg.appendChild(road);
+
+    var gA = el('path', { 'class': 'lane-guide', d: pathFn(-LANE * scale) });
+    var gB = el('path', { 'class': 'lane-guide', d: pathFn(LANE * scale) });
+    svg.appendChild(gA);
+    svg.appendChild(gB);
+
+    var fleet = el('g', {});
+    svg.appendChild(fleet);
+    b.el.appendChild(svg);
+    return { guides: [gA, gB], fleet: fleet };
+  }
+
+  function fitBands(W) {
+    scaleNow = W <= MOBILE_W ? 0.62 : (W <= NARROW_W ? 0.82 : 1);
+    carScale = (CAR_H * scaleNow) / MEDH;
+    var half = (W_ROAD * scaleNow) / 2;
+
+    var boxes = bandBoxes();
+    if (!boxes.length) return;
+
+    /* Vehicles are rebuilt against the new geometry; nodes go back to the pool. */
+    runs.forEach(function (r) {
+      r.cars.forEach(function (c) { if (c.node) unbind(c.node); });
+    });
+    pool.forEach(function (p) { p.id = null; });
+    incidents.length = 0;
+
+    runs = boxes.map(function (b) {
+      var pathFn = buildCrossing(b, half, scaleNow);
+      var art = makeBandArt(b, pathFn, scaleNow);
+      /* Lane A follows the centreline at -31 (the driver's right); lane B is
+         the reversed sample at +31 — correct right-hand traffic, same as the
+         weave. */
+      return {
+        lanes: [sample(art.guides[0], false), sample(art.guides[1], true)],
+        cars: [], byLane: [[], []], capacity: 40,
+        host: b.el, fleet: art.fleet, onScreen: true
+      };
+    });
+
+    sizePool();
+    runs.forEach(function (r) {
+      r.capacity = Math.max(4, Math.min(110,
+        Math.round(TRAFFIC * (r.lanes[0].L * 2) / (SPACING * scaleNow))));
+    });
+    if (auto) applyAuto(); else applyManual();
+  }
+
+  /* ==========================================================================
      7. The fleet.
      Vehicles are logical objects belonging to a run. DOM nodes are a recycled
      pool handed only to the vehicles currently near the viewport, so a
@@ -671,8 +835,15 @@
     for (var ri = 0; ri < runs.length; ri++) {
       var lanes = runs[ri].lanes;
       for (var li = 0; li < lanes.length; li++) {
-        var y = lanes[li].y, hit = [];
-        for (var i = 0; i <= lanes[li].n; i++) if (y[i] > top && y[i] < bot) hit.push(i);
+        var y = lanes[li].y, hit = [], i;
+        /* Band mode: the lane's y is band-local, and render() has already
+           worked out whether that band is in view this frame. */
+        if (BAND_MODE) {
+          if (!runs[ri].onScreen) continue;
+          for (i = 0; i <= lanes[li].n; i++) hit.push(i);
+        } else {
+          for (i = 0; i <= lanes[li].n; i++) if (y[i] > top && y[i] < bot) hit.push(i);
+        }
         if (hit.length) spots.push({ run: ri, lane: li, idx: hit });
       }
     }
@@ -835,19 +1006,31 @@
 
   /* Hand DOM nodes to whoever is on screen, and only transform those. */
   function render() {
-    var pageTop = page.getBoundingClientRect().top + window.pageYOffset;
-    var top = window.pageYOffset - pageTop - CULL_MARGIN;
-    var bot = top + window.innerHeight + CULL_MARGIN * 2;
-    var free = [], ri, i, c;
+    var free = [], ri, i, c, top = 0, bot = 0;
+    if (!BAND_MODE) {
+      var pageTop = page.getBoundingClientRect().top + window.pageYOffset;
+      top = window.pageYOffset - pageTop - CULL_MARGIN;
+      bot = top + window.innerHeight + CULL_MARGIN * 2;
+    }
 
     for (ri = 0; ri < runs.length; ri++) {
       var run = runs[ri];
+      /* In band mode a whole band is on screen or off it: a band is never
+         taller than a screen, so one rect read per band beats page arithmetic
+         per vehicle — and the band's own rect is the only thing that knows
+         where it ended up after the copy moved. */
+      var bandOn = true;
+      if (BAND_MODE) {
+        var r = run.host.getBoundingClientRect();
+        bandOn = r.bottom > -CULL_MARGIN && r.top < window.innerHeight + CULL_MARGIN;
+        run.onScreen = bandOn;
+      }
       for (i = 0; i < run.cars.length; i++) {
         c = run.cars[i];
         var ln = run.lanes[c.lane];
         var idx = Math.min(ln.n, Math.max(0, Math.round(c.d / STEP)));
         c.x = ln.x[idx]; c.y = ln.y[idx]; c.a = ln.a[idx];
-        c.on = c.y > top && c.y < bot;
+        c.on = BAND_MODE ? bandOn : (c.y > top && c.y < bot);
         if (!c.on && c.node) unbind(c.node);
       }
     }
@@ -861,7 +1044,7 @@
         if (!c.node) {
           if (!free.length) continue;               /* pool exhausted: skip */
           bind(free.pop(), c);
-          fleetG.appendChild(c.node.g);
+          (runs[ri].fleet || fleetG).appendChild(c.node.g);
         }
         c.node.g.setAttribute('transform',
           'translate(' + c.x.toFixed(1) + ',' + c.y.toFixed(1) + ') rotate(' +
@@ -879,6 +1062,18 @@
   function fit(force) {
     var W = page.clientWidth || window.innerWidth;
     var H = page.offsetHeight;
+
+    /* Band mode ignores height entirely. The page grows every time an answer
+       opens and none of it moves a band's own geometry, so re-fitting on
+       height would rebuild the whole road for nothing — which is the stall
+       this mode exists to remove. */
+    if (BAND_MODE) {
+      if (!force && Math.abs(W - lastW) < 2) return;
+      lastW = W; lastH = H;
+      fitBands(W);
+      return;
+    }
+
     if (!force && Math.abs(W - lastW) < 2 && Math.abs(H - lastH) < 24) return;
     lastW = W; lastH = H;
 
@@ -1028,7 +1223,8 @@
     var ro = new ResizeObserver(function () {
       clearTimeout(rt); rt = setTimeout(function () { fit(false); }, 140);
     });
-    ro.observe(page);
+    if (BAND_MODE) BANDS.forEach(function (b) { ro.observe(b); });
+    else ro.observe(page);
   }
   window.addEventListener('load', function () { fit(true); });
   /* The scenery is laid from the owner's canvas and re-laid whenever the copy
@@ -1062,7 +1258,7 @@
     }
   }
   function togglePaused() { setPaused(!paused); }
-  layer.addEventListener('click', function (e) {
+  (BAND_MODE ? page : layer).addEventListener('click', function (e) {
     if (e.target && e.target.classList && e.target.classList.contains('road-hit')) togglePaused();
   });
   (function () {

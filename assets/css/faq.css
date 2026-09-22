@@ -53,6 +53,26 @@
 .page--qa .band-blue .sub,.page--qa .band-navy .sub,
 .page--qa .band-green .sub{color:#dce9f7}
 
+/* ----------------------------------------------------------------------------
+   0b. ROAD BANDS
+   A strip between two sections that holds nothing but road. road.js draws one
+   crossing per band in the BAND'S OWN pixels, so the road can never reach the
+   copy — and when an answer opens and everything below it moves, the band
+   carries its road down with it with nothing to re-measure. The engine only
+   re-fits on a change of width.
+   ------------------------------------------------------------------------- */
+.road-band{
+  position:relative;
+  height:clamp(168px,18vw,248px);
+  overflow:hidden;          /* the crossing runs off both edges of the screen */
+}
+.road-band__art{position:absolute;inset:0;display:block;width:100%;height:100%}
+
+/* Below the tablet break the sections lose their side insets and the page is
+   one column, so the crossings carry more of the page's rhythm — but they can
+   afford to be shorter, because the road is scaled down with everything else. */
+@media (max-width:900px){ .road-band{height:clamp(132px,22vw,176px)} }
+
 /* ============================================================================
    1. HERO
    ----------------------------------------------------------------------------
@@ -70,13 +90,18 @@
 }
 #qa-hero .sec__inner{align-items:center}
 
-/* His plate, with the truss revealing more of itself as the page widens —
-   the rule the home page's two gantries already follow. The cap is 54vw, not
-   his 49.2%: the plate has to leave the truss something to reveal, and the
-   headline is sized against the PLATE, so a plate shrunk to make room would
-   take the H1 down with it. 54vw is the widest that still shows truss inside
-   this column. */
-#qa-hero .gantry{--plate-w:min(946px,54vw); --truss-ratio:.1898}
+/* Truss on BOTH sides, running off both edges of the screen — the way his
+   home-page hero is built, not the one-sided section-7 sign. Full-bleed is
+   what gives the truss something to reveal: boxed in the copy column the
+   plate filled it and there was no gantry left, only a sign.
+   The bleed is his own .hero-banner trick: 100vw pulled back by half the
+   difference. .sec__body is centred in the viewport, so it lands true. */
+#qa-hero .gantry{
+  --plate-w:min(946px,46vw); --truss-ratio:.1898;
+  width:100vw;
+  margin:clamp(20px,2.6vw,36px) 0 clamp(26px,3.4vw,46px) calc(50% - 50vw);
+  justify-content:center;
+}
 #qa-hero .gantry__plate{width:var(--plate-w)}
 #qa-hero .signplate{max-width:none}
 
@@ -89,7 +114,11 @@
   margin:0;
   color:#fff;
 }
-#qa-hero .body-copy{color:rgba(255,255,255,.87);max-width:46ch}
+/* The hero is one centred column under the gantry: with the sign spanning the
+   screen, copy pushed to one side reads as a caption that fell off it. */
+#qa-hero .sec__body{text-align:center}
+#qa-hero .eyebrow{margin-bottom:0}
+#qa-hero .body-copy{color:rgba(255,255,255,.87);max-width:52ch;margin-inline:auto;text-wrap:pretty}
 
 /* His clouds, used unaltered and held well back so they never compete with
    the copy or the road. */
@@ -108,10 +137,16 @@
 
 .qa-exits{
   position:sticky;top:var(--hdr-h,74px);z-index:45;
-  background:var(--blue-800);
-  border-top:2px solid rgba(255,255,255,.18);
-  border-bottom:3px solid var(--yellow-500);
-  box-shadow:0 10px 24px -18px rgba(3,20,42,.9);
+  /* A lit sign panel rather than a flat bar: a white rule along the top edge,
+     his yellow along the bottom, and a gradient between them. The crossings
+     pass underneath it as the page scrolls, which is what an overhead gantry
+     is for — but only if it reads as a solid panel with air under it, which
+     is what the shadow is doing. Flat and shadowless, the road looked cut
+     off at the edge rather than passing beneath. */
+  background:linear-gradient(180deg,var(--blue-700) 0%,var(--blue-800) 55%,var(--blue-900) 100%);
+  border-top:3px solid rgba(255,255,255,.6);
+  border-bottom:4px solid var(--yellow-500);
+  box-shadow:0 16px 26px -16px rgba(3,20,42,.85);
 }
 .qa-exits__inner{
   position:relative;
@@ -165,14 +200,15 @@
 }
 .qa-exits__link[aria-current="true"] .qa-exits__chip{box-shadow:0 0 0 1.5px var(--yellow-500)}
 
-/* Fade on the right edge says the row keeps going; removed once every exit
-   fits, so it never sits over the last one for no reason. */
-.qa-exits__inner::after{
-  content:"";position:absolute;right:0;top:0;bottom:0;width:2.5rem;
-  pointer-events:none;
-  background:linear-gradient(to right,rgba(10,63,125,0),var(--blue-800));
+/* Fade on the right edge says the row keeps going. Masked rather than
+   painted over: the bar is a gradient now, so a solid overlay in one of its
+   colours left a visible notch at the end of the panel. A mask fades whatever
+   is actually there. Removed once every exit fits. */
+.qa-exits__list{
+  -webkit-mask-image:linear-gradient(to right,#000 calc(100% - 2.5rem),transparent);
+  mask-image:linear-gradient(to right,#000 calc(100% - 2.5rem),transparent);
 }
-.qa-exits.is-complete .qa-exits__inner::after{display:none}
+.qa-exits.is-complete .qa-exits__list{-webkit-mask-image:none;mask-image:none}
 
 /* ============================================================================
    3. CATEGORY SECTIONS
@@ -206,16 +242,19 @@
   scroll-margin-top:calc(var(--hdr-h,74px) + var(--qa-exits-h,56px) + 12px);
 }
 
-/* The two sections the road loops around need clear air on three sides — a
-   road width plus a corner radius top and bottom, and a lane down the right.
-   Exactly what #whyus reserves on the home page; road.js falls back to a
-   plain jog if a section turns out too small to hold the loop. */
-.qa-sec--wrapped{padding-block:clamp(200px,19vw,290px)}
-@media (min-width:901px){
-  .qa-sec--wrapped .sec__inner{padding-right:calc(var(--gutter) + 160px)}
-}
+/* No section on this page reserves a road lane, so none of them needs the
+   corridor .sec insets for one. The road bands between them carry it, and the
+   copy gets the full column at every width.
+   Specificity, not order: the tablet and mobile rules in highway19.css both
+   set .sec .sec__inner padding to clear a road that is not here. */
+/* Asymmetric on purpose: a crossing follows every section, so the air below
+   the copy is the band's to provide. Equal padding left a dead white gap
+   between the last CTA and the road. */
+.page--qa .sec{padding-block:clamp(60px,7vw,104px) clamp(26px,3.2vw,48px)}
+.page--qa .sec .sec__inner{padding-left:var(--gutter);padding-right:var(--gutter)}
 
 .qa-sec__head{margin-bottom:clamp(26px,3.4vw,44px)}
+.qa-sec--split .qa-sec__head h2{max-width:14ch}
 .qa-sec__head .body-copy{max-width:52ch}
 
 /* His icon disc: bright tone, white rim, soft drop — the four service cards'
@@ -237,7 +276,7 @@
 @media (min-width:1180px){
   .qa-sec--split .qa-sec__grid{
     display:grid;
-    grid-template-columns:minmax(0,23rem) minmax(0,1fr);
+    grid-template-columns:minmax(0,26rem) minmax(0,1fr);
     gap:clamp(36px,4vw,72px);
     align-items:start;
   }
@@ -401,8 +440,11 @@
 @media (max-width:900px){
   /* Same rule his own two gantries follow at this width: the plate IS its
      container. The truss has nothing to reveal because there is no room for
-     it, and a percentage width collapses it to nothing, which is correct. */
-  #qa-hero .gantry{--plate-w:100%}
+     it, and a percentage width collapses it to nothing, which is correct.
+     The full-bleed goes with it, exactly as #hero .hero-banner drops its own
+     at this width — bled AND full-width, the plate ran edge to edge with no
+     gutter left on either side. */
+  #qa-hero .gantry{--plate-w:100%;width:100%;margin-left:0}
 
   /* The road drops to one lane down the left margin below here and .sec
      insets every section past it, so the hooked sections' extra clearance has

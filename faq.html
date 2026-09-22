@@ -365,24 +365,32 @@
 
 <main id="main" class="page page--qa">
 
-  <!-- The road and its traffic. road.js measures the .road-slot each section
-       below reserves and threads one continuous road down the page, looping
-       it around the two sections that ask for it with data-road="wrap".
-       There is no #scene-layer here: the scenery is the home page's own
-       composition, so on this page the engine draws the road itself. -->
+  <!-- The road lives in the .road-band strips between the sections, never
+       inside one. Each band is its own coordinate space, so the road can
+       never reach the copy, and an answer opening moves the band without
+       moving anything the engine would have to re-measure.
+       This layer stays because road.js watches it to know whether the page is
+       on screen at all; in band mode nothing is drawn into it. There is no
+       #scene-layer: the scenery is the home page's composition, so here the
+       engine draws the road itself. -->
   <div id="road-layer" aria-hidden="true"></div>
 
   <!-- ========================================================================
        HERO — short on purpose. His gantry plate carries the headline as real
        HTML text; the road comes down the lane beside it.
        ===================================================================== -->
-  <section id="qa-hero" class="sec sec--edge-right band-blue" data-road="edge-right" data-run="a" data-section="qa-01-hero">
+  <section id="qa-hero" class="sec band-blue" data-section="qa-01-hero">
     <img class="qa-cloud qa-cloud--a" src="assets/brand/clouds/Cloud2.svg" alt="" aria-hidden="true">
     <img class="qa-cloud qa-cloud--b" src="assets/brand/clouds/Cloud4.svg" alt="" aria-hidden="true">
     <div class="sec__inner">
       <div class="sec__body">
         <span class="eyebrow">Questions &amp; Answers</span>
+        <!-- His gantry: truss on both sides of the plate, running off both
+             edges of the screen, with the headline as real HTML laid over the
+             artwork so it stays selectable, searchable and readable by a
+             screen reader. -->
         <div class="gantry signplate">
+          <span class="gantry__truss" aria-hidden="true"></span>
           <span class="gantry__plate">
             <img class="signplate__art" src="assets/scene/our-plate.svg" alt="" aria-hidden="true">
             <div class="signplate__copy">
@@ -396,9 +404,10 @@
           working with Highway 19 Media. Pick an exit below, or just keep driving.
         </p>
       </div>
-      <div class="road-slot" aria-hidden="true"></div>
     </div>
   </section>
+
+  <div class="road-band band-blue" data-road-band="right" aria-hidden="true"></div>
 
   <!-- ========================================================================
        THE EXIT GANTRY — seven exits, sticky under the site header. Inside
@@ -424,11 +433,8 @@
 
   <!-- ======================================================================
        GENERAL
-       The road loops right around this block: in across the top, down
-       the far side, back along the bottom, then away down its own lane.
        ==================================================================== -->
-  <section id="qa-general" class="sec qa-sec qa-sec--centred sec--edge-left band-white qa-sec--wrapped" data-road="wrap" data-run="a" data-section="qa-general" aria-labelledby="qa-general-h">
-    <div class="road-slot" aria-hidden="true"></div>
+  <section id="qa-general" class="sec qa-sec qa-sec--centred band-white" data-section="qa-general" aria-labelledby="qa-general-h">
     <div class="sec__inner">
       <div class="sec__body">
       <div class="qa-sec__head">
@@ -568,11 +574,12 @@
     </div>
   </section>
 
+  <div class="road-band band-white" data-road-band="left" aria-hidden="true"></div>
+
   <!-- ======================================================================
        WEBSITE DESIGN & DEVELOPMENT
        ==================================================================== -->
-  <section id="qa-websites" class="sec qa-sec qa-sec--split sec--edge-right band-blue-lt" data-road="edge-right" data-run="a" data-section="qa-websites" aria-labelledby="qa-websites-h">
-    <div class="road-slot" aria-hidden="true"></div>
+  <section id="qa-websites" class="sec qa-sec qa-sec--split band-blue-lt" data-section="qa-websites" aria-labelledby="qa-websites-h">
     <div class="sec__inner">
       <div class="sec__body">
       <div class="qa-sec__grid">
@@ -736,11 +743,12 @@
     </div>
   </section>
 
+  <div class="road-band band-blue-lt" data-road-band="right" aria-hidden="true"></div>
+
   <!-- ======================================================================
        VIDEO PRODUCTION
        ==================================================================== -->
-  <section id="qa-video" class="sec qa-sec qa-sec--centred sec--edge-left band-blue" data-road="edge-left" data-run="a" data-section="qa-video" aria-labelledby="qa-video-h">
-    <div class="road-slot" aria-hidden="true"></div>
+  <section id="qa-video" class="sec qa-sec qa-sec--centred band-blue" data-section="qa-video" aria-labelledby="qa-video-h">
     <div class="sec__inner">
       <div class="sec__body">
       <div class="qa-sec__head">
@@ -865,11 +873,12 @@
     </div>
   </section>
 
+  <div class="road-band band-blue" data-road-band="left" aria-hidden="true"></div>
+
   <!-- ======================================================================
        SOCIAL MEDIA & PAID ADVERTISING
        ==================================================================== -->
-  <section id="qa-advertising" class="sec qa-sec qa-sec--split sec--edge-right band-white" data-road="edge-right" data-run="a" data-section="qa-advertising" aria-labelledby="qa-advertising-h">
-    <div class="road-slot" aria-hidden="true"></div>
+  <section id="qa-advertising" class="sec qa-sec qa-sec--split band-white" data-section="qa-advertising" aria-labelledby="qa-advertising-h">
     <div class="sec__inner">
       <div class="sec__body">
       <div class="qa-sec__grid">
@@ -1030,13 +1039,12 @@
     </div>
   </section>
 
+  <div class="road-band band-white" data-road-band="right" aria-hidden="true"></div>
+
   <!-- ======================================================================
        BRANDING & GRAPHIC DESIGN
-       The road loops right around this block: in across the top, down
-       the far side, back along the bottom, then away down its own lane.
        ==================================================================== -->
-  <section id="qa-branding" class="sec qa-sec qa-sec--centred sec--edge-left band-blue-lt qa-sec--wrapped" data-road="wrap" data-run="b" data-section="qa-branding" aria-labelledby="qa-branding-h">
-    <div class="road-slot" aria-hidden="true"></div>
+  <section id="qa-branding" class="sec qa-sec qa-sec--centred band-blue-lt" data-section="qa-branding" aria-labelledby="qa-branding-h">
     <div class="sec__inner">
       <div class="sec__body">
       <div class="qa-sec__head">
@@ -1122,11 +1130,12 @@
     </div>
   </section>
 
+  <div class="road-band band-blue-lt" data-road-band="left" aria-hidden="true"></div>
+
   <!-- ======================================================================
        PRINT, SIGNAGE & PROMOTIONAL PRODUCTS
        ==================================================================== -->
-  <section id="qa-print" class="sec qa-sec qa-sec--split sec--edge-right band-white" data-road="edge-right" data-run="b" data-section="qa-print" aria-labelledby="qa-print-h">
-    <div class="road-slot" aria-hidden="true"></div>
+  <section id="qa-print" class="sec qa-sec qa-sec--split band-white" data-section="qa-print" aria-labelledby="qa-print-h">
     <div class="sec__inner">
       <div class="sec__body">
       <div class="qa-sec__grid">
@@ -1217,11 +1226,12 @@
     </div>
   </section>
 
+  <div class="road-band band-white" data-road-band="right" aria-hidden="true"></div>
+
   <!-- ======================================================================
        WORKING WITH HIGHWAY 19 MEDIA
        ==================================================================== -->
-  <section id="qa-working" class="sec qa-sec qa-sec--centred sec--edge-left band-green" data-road="edge-left" data-run="b" data-section="qa-working" aria-labelledby="qa-working-h">
-    <div class="road-slot" aria-hidden="true"></div>
+  <section id="qa-working" class="sec qa-sec qa-sec--centred band-green" data-section="qa-working" aria-labelledby="qa-working-h">
     <div class="sec__inner">
       <div class="sec__body">
       <div class="qa-sec__head">
@@ -1328,12 +1338,13 @@
     </div>
   </section>
 
+  <div class="road-band band-green" data-road-band="left" aria-hidden="true"></div>
+
   <!-- ========================================================================
        CLOSING BAND — following the home page's own logic: the green signs are
        the ones that name a destination.
        ===================================================================== -->
-  <section id="qa-close" class="sec sec--edge-right band-navy" data-road="edge-right" data-run="b" data-section="qa-09-close">
-    <div class="road-slot" aria-hidden="true"></div>
+  <section id="qa-close" class="sec band-navy" data-section="qa-09-close">
     <div class="sec__inner">
       <div class="sec__body">
         <div class="headline">
