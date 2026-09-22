@@ -54,27 +54,63 @@
 .page--qa .band-green .sub{color:#dce9f7}
 
 /* ----------------------------------------------------------------------------
-   0b. ROAD BANDS
-   A strip between two sections that holds nothing but road. road.js draws one
-   crossing per band in the BAND'S OWN pixels, so the road can never reach the
-   copy — and when an answer opens and everything below it moves, the band
-   carries its road down with it with nothing to re-measure. The engine only
-   re-fits on a change of width.
-   ------------------------------------------------------------------------- */
-.road-band{
-  position:relative;
-  /* Sized to the road, not to the gap. The crossing is straight now, so a
-     tall band is just empty ground above and below it; this leaves about a
-     third of a road width of clear air either side. */
-  height:clamp(132px,14vw,190px);
-  overflow:hidden;          /* the crossing runs off both edges of the screen */
-}
-.road-band__art{position:absolute;inset:0;display:block;width:100%;height:100%}
+   0b. THE ROUTE
+   One road down the page, cut into routes. A route is a box; the road inside
+   it is drawn in THAT box's own pixels, so a route that grows is the only one
+   rebuilt and everything below it just moves. Each route starts and ends off
+   canvas, which is also where it is cut — the break is already invisible.
 
-/* Below the tablet break the sections lose their side insets and the page is
-   one column, so the crossings carry more of the page's rhythm — but they can
-   afford to be shorter, because the road is scaled down with everything else. */
-@media (max-width:900px){ .road-band{height:clamp(104px,17vw,140px)} }
+   .road-run     a route. Its [data-road] children each contribute one move.
+   .road-gap     a strip between sections that holds a turn and nothing else.
+   .road-track   a route on its own, in the opposite margin: in off the edge,
+                 down, back out. Fixed height, anchored to the top of the
+                 section it sits in, so it never needs rebuilding at all.
+   ------------------------------------------------------------------------- */
+.page--qa{
+  /* Where the rails run, measured in from the page edge to the road's centre.
+     road.js reads this, and takes its corner radius from it. Viewport-relative
+     so the road keeps its margin as the window changes: the copy column below
+     is fixed at 940, so the margin either side is (100vw - 940) / 2 and the
+     rail has to fit inside it with half a road to spare. */
+  --rail-inset:clamp(96px,9.5vw,190px);
+}
+
+.road-run{position:relative}
+.road-run__art{
+  position:absolute;inset:0;z-index:1;
+  display:block;width:100%;height:100%;
+}
+/* The asphalt is the tap target for pause; nothing else in the artwork should
+   take a click away from the copy it sits over. */
+.road-run__art path{pointer-events:none}
+.road-run__art .road-hit{pointer-events:stroke;cursor:pointer}
+
+.road-gap{position:relative;height:clamp(150px,15vw,210px)}
+
+.road-track{
+  position:absolute;z-index:1;
+  top:var(--t,120px);height:var(--h,460px);
+  /* Wide enough to hold the rail plus a full corner beside it, or the entry
+     curve is cut off at the page edge. */
+  width:calc(var(--rail-inset) * 2 + 60px);
+  pointer-events:none;
+}
+.road-track--left{left:0}
+.road-track--right{right:0}
+
+/* The copy has to leave the rails room: a rail needs its inset plus half a
+   road width of margin, which at 1320px is 188 of the 190 available. Hence
+   940 rather than the site's 1200 shell. */
+.page--qa .sec__inner{max-width:940px}
+
+/* Below this the margin can no longer hold a road, so it comes off the page
+   entirely and the copy takes its width back. Same rule the home page follows
+   when its weave stops. Mobile is a separate pass. */
+@media (max-width:1320px){
+  .page--qa .road-run__art{display:none}
+  .road-gap{display:none}
+  .page--qa .sec__inner{max-width:var(--shell)}
+}
 
 /* ============================================================================
    1. HERO
@@ -257,7 +293,7 @@
 .page--qa .sec .sec__inner{padding-left:var(--gutter);padding-right:var(--gutter)}
 
 .qa-sec__head{margin-bottom:clamp(26px,3.4vw,44px)}
-.qa-sec--split .qa-sec__head h2{max-width:14ch}
+.qa-sec--split .qa-sec__head h2{max-width:13ch}
 .qa-sec__head .body-copy{max-width:52ch}
 
 /* His icon disc: bright tone, white rim, soft drop — the four service cards'
@@ -276,11 +312,15 @@
 /* Alternate arrangement: the intro holds a rail on the left and the questions
    run beside it. Only above 1180px — below that the road corridor has already
    taken 170px out of the line length and two columns stop being readable. */
-@media (min-width:1180px){
+/* Only where the rails run: below that the copy takes its full width back and
+   two columns out of 1200 read fine, but two columns out of 940 with the road
+   beside them put every question on three lines. The rail column is narrower
+   than it was for the same reason. */
+@media (min-width:1321px){
   .qa-sec--split .qa-sec__grid{
     display:grid;
-    grid-template-columns:minmax(0,26rem) minmax(0,1fr);
-    gap:clamp(36px,4vw,72px);
+    grid-template-columns:minmax(0,20rem) minmax(0,1fr);
+    gap:clamp(30px,3vw,52px);
     align-items:start;
   }
   .qa-sec--split .qa-sec__head{

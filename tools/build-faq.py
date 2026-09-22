@@ -289,27 +289,81 @@ CONTENT = [
 ]
 
 # --------------------------------------------------------------------------
-# Where each category sits, and which way the road crosses after it.
-#   band   -> the section's ground, from the home page's band vocabulary.
-#   layout -> centred intro over the questions, or an intro rail beside them.
-#             Alternated so seven accordions in a row do not read as one list.
-#   cross  -> the direction of the road band that FOLLOWS this section:
-#             "right" enters off the left edge and leaves by the right,
-#             "left" the other way. Alternating is what keeps eight crossings
-#             from reading as one repeated graphic.
-#
-# No section carries road. The road is only ever in the bands between them, so
-# it cannot be under an answer when that answer opens — see 6b in road.js.
+# Each category's ground and intro layout.
 # --------------------------------------------------------------------------
-ROAD = {
-    "qa-general":     dict(band="band-white",   layout="centred", cross="left"),
-    "qa-websites":    dict(band="band-blue-lt", layout="split",   cross="right"),
-    "qa-video":       dict(band="band-blue",    layout="centred", cross="left"),
-    "qa-advertising": dict(band="band-white",   layout="split",   cross="right"),
-    "qa-branding":    dict(band="band-blue-lt", layout="centred", cross="left"),
-    "qa-print":       dict(band="band-white",   layout="split",   cross="right"),
-    "qa-working":     dict(band="band-green",   layout="centred", cross="left"),
+LOOK = {
+    "qa-general":     dict(band="band-white",   layout="centred"),
+    "qa-websites":    dict(band="band-blue-lt", layout="split"),
+    "qa-video":       dict(band="band-blue",    layout="centred"),
+    "qa-advertising": dict(band="band-white",   layout="split"),
+    "qa-branding":    dict(band="band-blue-lt", layout="centred"),
+    "qa-print":       dict(band="band-white",   layout="split"),
+    "qa-working":     dict(band="band-green",   layout="centred"),
 }
+
+# --------------------------------------------------------------------------
+# THE ROUTE
+# One road down the page, cut into routes wherever it leaves the screen —
+# the break is already invisible there, and it keeps each rebuild short.
+# road.js reads the data-road attributes; see section 6b in that file.
+#
+#   ("gap",  move, band)              a strip holding a turn and nothing else
+#   ("sec",  id,   move [, track])    a section the road runs down beside
+#   ("plain", id)                     a section with no road at all
+#   track = (move, top px, height px) an independent stub in the OTHER margin,
+#                                     anchored to the section's top at a fixed
+#                                     height, so it never needs rebuilding
+#
+# Each route must start and end off canvas: arrive-* / rail-* off the top at
+# the start, leave-* at the end.
+# --------------------------------------------------------------------------
+PAGE = [
+    ("route", [
+        ("gap", "arrive-left", "band-white"),
+        ("sec", "qa-general",  "rail-left"),
+        ("sec", "qa-websites", "rail-left"),
+        ("gap", "leave-left",  "band-blue-lt"),
+    ]),
+    ("route", [
+        ("gap", "arrive-left",  "band-blue"),
+        ("sec", "qa-video",     "rail-left",  ("track-right", 96, 470)),
+        ("gap", "cross-right",  "band-white"),
+        ("sec", "qa-advertising", "rail-right", ("track-left", 130, 560)),
+        ("sec", "qa-branding",  "rail-right"),
+        ("gap", "leave-right",  "band-blue-lt"),
+    ]),
+    ("plain", "qa-print"),
+    ("route", [
+        ("gap", "arrive-left", "band-green"),
+        ("sec", "qa-working",  "rail-left"),
+        ("gap", "cross-right", "band-navy"),
+        ("close", "rail-right"),
+        ("gap", "leave-right", "band-navy"),
+    ]),
+]
+
+CLOSING = '''  <section id="qa-close" class="sec band-navy" data-section="qa-09-close"%s>
+    <div class="sec__inner">
+      <div class="sec__body">
+        <div class="headline">
+          <svg class="sign" viewBox="0 0 52 64" aria-hidden="true" focusable="false"><use href="#sg-ahead"/></svg>
+          <div>
+            <h2>Still Have a Question?</h2>
+            <p class="sub">Ask us directly &mdash; no obligation, no pressure.</p>
+          </div>
+        </div>
+        <p class="body-copy">
+          Send us your website, your Facebook page or whatever you&rsquo;re working with,
+          and we&rsquo;ll come back within 24 hours.
+        </p>
+        <div class="sec__cta">
+          <a class="btn btn--primary" href="index.html#close"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Ask Us Directly</a>
+          <a class="btn btn--ghost" href="index.html#services">See What We Do</a>
+        </div>
+      </div>
+    </div>
+  </section>
+'''
 
 # --------------------------------------------------------------------------
 # rendering
@@ -333,23 +387,35 @@ def render():
     taken = set()
     schema = []
 
-    for sec in CONTENT:
-        m = ROAD[sec["sid"]]
-        classes = ["sec", "qa-sec", "qa-sec--" + m["layout"], m["band"]]
+    by_id = dict((c["sid"], c) for c in CONTENT)
 
-        w('\n  <!-- ======================================================================\n')
-        w('       %s\n' % sec["eyebrow"].upper())
-        w('       ==================================================================== -->\n')
-        w('  <section id="%s" class="%s" data-section="%s" aria-labelledby="%s-h">\n'
-          % (sec["sid"], " ".join(classes), sec["sid"], sec["sid"]))
-        w('    <div class="sec__inner">\n      <div class="sec__body">\n')
+    def section(sid, road=None, track=None):
+        sec = by_id[sid]
+        m = LOOK[sid]
+        classes = ["sec", "qa-sec", "qa-sec--" + m["layout"], m["band"]]
+        b = []
+        b.append('\n  <!-- ======================================================================\n')
+        b.append('       %s\n' % sec["eyebrow"].upper())
+        b.append('       ==================================================================== -->\n')
+        b.append('  <section id="%s" class="%s" data-section="%s" aria-labelledby="%s-h"%s>\n'
+                 % (sid, " ".join(classes), sid, sid,
+                    '' if not road else ' data-road="%s"' % road))
+        if track:
+            kind, top, high = track
+            side = kind.split("-")[1]
+            b.append('    <!-- A track of its own in the far margin: in off the edge, down,\n'
+                     '         back out. Fixed height, anchored here, so opening an answer\n'
+                     '         below it never touches it. -->\n')
+            b.append('    <div class="road-run road-track road-track--%s" data-road-run '
+                     'data-road="%s" style="--t:%dpx;--h:%dpx" aria-hidden="true"></div>\n'
+                     % (side, kind, top, high))
+        b.append('    <div class="sec__inner">\n      <div class="sec__body">\n')
 
         split = m["layout"] == "split"
         if split:
-            w('      <div class="qa-sec__grid">\n')
+            b.append('      <div class="qa-sec__grid">\n')
 
-        # -- intro ---------------------------------------------------------
-        w('''      <div class="qa-sec__head">
+        b.append('''      <div class="qa-sec__head">
         <span class="qa-disc" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             %s
@@ -359,15 +425,13 @@ def render():
         <h2 id="%s-h">%s</h2>
         <p class="body-copy">%s</p>
       </div>\n''' % (ICONS[sec["icon"]].strip(), e(sec["eyebrow"]),
-                     sec["sid"], e(sec["heading"]), e(sec["lead"])))
+                       sid, e(sec["heading"]), e(sec["lead"])))
 
-        # -- questions -----------------------------------------------------
-        w('\n      <div class="qa-faq">\n')
-        w('        <div class="qa-list">\n')
+        b.append('\n      <div class="qa-faq">\n        <div class="qa-list">\n')
         for q, paras in sec["faqs"]:
             qid = "q-" + slug(q, taken)
             schema.append((q, " ".join(paras)))
-            w('''
+            b.append('''
           <div class="qa-item" id="%s">
             <h3>
               <button class="qa-q" type="button" id="%s-q" aria-expanded="true" aria-controls="%s-a">
@@ -385,12 +449,11 @@ def render():
               </div>
             </div>
           </div>\n''' % (qid, qid, qid, e(q), qid, qid,
-                         "\n".join("                  <p>%s</p>" % e(p) for p in paras)))
-        w('\n        </div>\n')
+                           "\n".join("                  <p>%s</p>" % e(pp) for pp in paras)))
+        b.append('\n        </div>\n')
 
-        # -- CTA -----------------------------------------------------------
         h, copy, button = sec["cta"]
-        w('''
+        b.append('''
         <div class="qa-cta">
           <div class="qa-cta__text">
             <h3>%s</h3>
@@ -401,12 +464,24 @@ def render():
       </div>\n''' % (e(h), e(copy), CONTACT, e(button)))
 
         if split:
-            w('      </div>\n')
-        w('      </div>\n    </div>\n  </section>\n')
+            b.append('      </div>\n')
+        b.append('      </div>\n    </div>\n  </section>\n')
+        return "".join(b)
 
-        # -- the crossing that carries you to the next one ------------------
-        w('\n  <div class="road-band %s" data-road-band="%s" aria-hidden="true"></div>\n'
-          % (m["band"], m["cross"]))
+    for kind, payload in PAGE:
+        if kind == "plain":
+            w(section(payload))
+            continue
+        w('\n  <div class="road-run" data-road-run>\n')
+        for item in payload:
+            if item[0] == "gap":
+                w('    <div class="road-gap %s" data-road="%s" aria-hidden="true"></div>\n'
+                  % (item[2], item[1]))
+            elif item[0] == "close":
+                w(CLOSING % (' data-road="%s"' % item[1]))
+            else:
+                w(section(item[1], item[2], item[3] if len(item) > 3 else None))
+        w('  </div>\n')
 
     nav = "\n".join(
         '          <li><a class="qa-exits__link" href="#%s" style="--lane:var(%s)">'

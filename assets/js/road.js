@@ -63,11 +63,11 @@
   var layer = document.getElementById('road-layer');
   if (!page || !layer || !window.H19_SPRITE) return;
 
-  /* Two ways to lay a road down a page — see section 4b for why the second
-     one exists. A page that declares bands gets crossings; everything else
+  /* Two ways to lay a road down a page — see section 6b for why the second
+     one exists. A page that declares road runs gets those; everything else
      gets the weave. */
-  var BANDS = Array.prototype.slice.call(page.querySelectorAll('[data-road-band]'));
-  var BAND_MODE = BANDS.length > 0;
+  var ROUTES = Array.prototype.slice.call(page.querySelectorAll('[data-road-run]'));
+  var BAND_MODE = ROUTES.length > 0;
 
   /* ==========================================================================
      1. Mount the artwork once.
@@ -523,130 +523,203 @@
   }
 
   /* ==========================================================================
-     6b. BAND MODE — the road as a set of crossings between the sections
+     6b. RUN MODE — the road as a route assembled from the page's own boxes
      --------------------------------------------------------------------------
-     The weave above threads one road down the whole page, behind the copy.
-     That is right for the home page, where the copy is fixed and the road is
-     part of the composition. It is wrong for a page whose copy expands.
+     The weave above threads one road down the whole page in PAGE coordinates.
+     That is right for the home page, where the copy is fixed. It is wrong for
+     a page whose copy expands: open an accordion and every section below it
+     moves, so the entire road — both runs, every tile — has to be rebuilt mid
+     animation. Measured at 64ms of sampling alone, before the tiles.
 
-     Everything above is measured in PAGE coordinates. Open an accordion and
-     every section below it moves, so the entire road has to be rebuilt —
-     re-sampled, re-tiled, traffic re-seeded — in the middle of the animation.
-     That is a visible stall, and while it happens the road is under the text
-     that just moved.
+     Here the page is divided into ROUTES. A route is an ordinary element with
+     data-road-run on it, and the road inside it is drawn in THAT ELEMENT'S own
+     coordinates, into one SVG pinned to its box. Two things follow:
 
-     So a page can hand the engine BANDS instead: strips that contain nothing
-     but road. Each band is its own coordinate space, its own SVG and its own
-     traffic, and the road is clipped to it. Three things follow:
+       * a route that grows is the only thing that gets rebuilt. Everything
+         below it just moves, because its geometry is local — measured at
+         ~15ms for a route spanning two sections, against 64ms for the page.
+       * a route that has not changed size is never touched at all, however
+         much the page above it moved.
 
-       * the road cannot overlap the copy, whatever the copy does
-       * a band moving down the page carries its road with it. The geometry is
-         local, so there is nothing to re-measure — no rebuild, no stall. Only
-         a change of WIDTH re-fits.
-       * every crossing enters off one edge of the screen and leaves by the
-         other, so the loop point where a vehicle wraps is never visible
+     A route's shape comes from its children: each child carrying data-road
+     contributes one move, in document order, using its own box. Rails run
+     down a margin and can carry on past several sections; the moves between
+     them cross to the other margin, or leave and re-enter at a page edge.
 
-     Declared per band with data-road-band="right" (enters left, leaves right)
-     or "left".
+     The one rule the engine needs: EVERY ROUTE STARTS AND ENDS OFF CANVAS.
+     A vehicle that reaches the end of a route reappears at its start, and
+     that has to happen where nobody can see it. It is also why the route is
+     cut wherever the road leaves the page — the break is already invisible,
+     so it costs nothing and buys a shorter rebuild.
      ====================================================================== */
 
-  function bandBoxes() {
-    return BANDS.map(function (elm) {
-      return {
-        el: elm,
-        dir: elm.getAttribute('data-road-band') === 'left' ? 'left' : 'right',
-        w: elm.clientWidth,
-        h: elm.clientHeight
-      };
-    }).filter(function (b) { return b.w > 8 && b.h > 8; });
-  }
+  var OFF = 340;                       /* how far past the edge a stub runs */
 
-  /* One crossing, in the band's own pixels. Straight in from off-screen on one
-     side, straight out the other — and nothing in between.
+  function railX(side, g) { return side === 'left' ? g.inset : g.W - g.inset; }
 
-     It had a lane change in the middle. The pen only turns in quarter circles,
-     so an S-bend is always two of them back to back, and across a 1400px
-     straight that reads as a kink in the road rather than a lane change. A
-     crossing is a hundred-odd pixels of a highway seen from above; the honest
-     shape for that is straight. */
-  function buildCrossing(b, half, scale) {
-    var y = b.h / 2;
-    var p = b.dir === 'left'
-      ? pen(b.w + half + 260, y, Math.PI).leftTo(-half - 260)
-      : pen(-half - 260, y, 0).rightTo(b.w + half + 260);
+  /* The moves. Each is handed the pen already heading down at its side's rail,
+     and walks it to the bottom of its own box. */
+  var MOVES = {
+    /* Straight down a margin, for as long as this box is tall. */
+    rail: function (p, m) { p.downTo(m.b); },
+
+    /* Over to the other margin, turning in this box's middle. */
+    cross: function (p, m, g) {
+      var a = p.at().x, x = railX(m.to, g), mid = (m.t + m.b) / 2, R = g.R;
+      var dx = x - a, s = dx < 0 ? 1 : -1;      /* heading down, +1 turns left */
+      var run = Math.abs(dx) - 2 * R;
+      p.downTo(mid - R).turn(s, R);
+      if (run > 0.5) p.straight(run);
+      p.turn(-s, R).downTo(m.b);
+    },
+
+    /* Off the nearest page edge. Always the last move of its route. */
+    leave: function (p, m, g) {
+      var y = m.t + (m.b - m.t) * 0.55, R = g.R;
+      p.downTo(y - R).turn(m.side === 'left' ? 1 : -1, R).straight(g.W + OFF);
+    }
+  };
+
+  /* Assemble one route's centreline from its children. */
+  function buildRoute(g) {
+    var list = g.moves;
+    if (!list.length) return null;
+    var first = list[0], p, i;
+
+    if (first.kind === 'arrive') {
+      /* In off a page edge, then down. The pen has to be created out there. */
+      var x = railX(first.side, g), y = first.t + (first.b - first.t) * 0.45;
+      var s = first.side === 'left' ? 1 : -1;
+      p = first.side === 'left' ? pen(-OFF, y, 0) : pen(g.W + OFF, y, Math.PI);
+      if (first.side === 'left') p.rightTo(x - g.R); else p.leftTo(x + g.R);
+      p.turn(s, g.R).downTo(first.b);
+      i = 1;
+    } else if (first.kind === 'track') {
+      /* A track is a route on its own: in off an edge, down, back out the
+         same edge. Both ends off canvas, so it loops unseen. */
+      var tx = railX(first.side, g);
+      var t1 = first.t + Math.min((first.b - first.t) * 0.2, 110);
+      var t2 = first.b - Math.min((first.b - first.t) * 0.2, 110);
+      var ts = first.side === 'left' ? 1 : -1;
+      p = first.side === 'left' ? pen(-OFF, t1, 0) : pen(g.W + OFF, t1, Math.PI);
+      if (first.side === 'left') p.rightTo(tx - g.R); else p.leftTo(tx + g.R);
+      p.turn(ts, g.R).downTo(t2 - g.R).turn(ts, g.R).straight(g.W + OFF);
+      return p.path();
+    } else {
+      /* In off the top of the page. */
+      p = pen(railX(first.side, g), first.t - OFF, Math.PI / 2);
+      i = 0;
+    }
+
+    for (; i < list.length; i++) {
+      var m = list[i];
+      (MOVES[m.kind] || MOVES.rail)(p, m, g);
+    }
+    /* A route that does not leave by an edge leaves by the bottom. */
+    if (list[list.length - 1].kind !== 'leave') p.straight(OFF);
     return p.path();
   }
 
-  /* The band's own SVG: his four stacked strokes, the two lane centrelines
-     the traffic drives, and a fleet layer above them. Replaced wholesale on a
-     re-fit, which only a width change can cause. */
-  function makeBandArt(b, pathFn, scale) {
-    var old = b.el.querySelector('.road-band__art');
+  /* Read one route's boxes. Local coordinates: the wrapper's own top is 0, so
+     nothing here changes when the page above it moves. */
+  function measureRoute(el) {
+    var box = el.getBoundingClientRect();
+    var inset = parseFloat(getComputedStyle(page).getPropertyValue('--rail-inset')) || 130;
+    var g = { el: el, W: Math.round(box.width), H: Math.round(box.height),
+              /* The turns between a page edge and a rail have only the margin
+                 to complete in, so the radius cannot exceed the inset — at
+                 150 against a 118 inset the apex of every entry curve sat off
+                 the screen and the road appeared to start mid-bend. The inset
+                 is already viewport-relative in CSS, so it is not scaled
+                 again here. */
+              inset: inset, R: Math.min(150, inset), moves: [] };
+    var kids = el.hasAttribute('data-road')
+      ? [el]
+      : Array.prototype.slice.call(el.children).filter(function (k) {
+          return k.hasAttribute('data-road');
+        });
+    kids.forEach(function (k) {
+      var r = k.getBoundingClientRect();
+      var spec = k.getAttribute('data-road').split('-');
+      g.moves.push({
+        kind: spec[0], side: spec[1] || 'left', to: spec[1] || 'left',
+        t: r.top - box.top, b: r.bottom - box.top
+      });
+    });
+    return g;
+  }
+
+  /* One route's SVG: his four stacked strokes, the two lane centrelines the
+     traffic drives, and a fleet layer above them. */
+  function drawRoute(g, d) {
+    var old = g.el.querySelector(':scope > .road-run__art');
     if (old) old.remove();
 
     var svg = el('svg', {
-      'class': 'road-band__art',
-      viewBox: '0 0 ' + b.w + ' ' + b.h,
+      'class': 'road-run__art',
+      viewBox: '0 0 ' + g.W + ' ' + g.H,
       preserveAspectRatio: 'none',
       'aria-hidden': 'true', focusable: 'false'
     });
-
-    var d = pathFn(0);
-    var dash = DASH.split(' ').map(function (v) { return (+v * scale).toFixed(2); }).join(' ');
-
+    var dash = DASH.split(' ').map(function (v) { return (+v * scaleNow).toFixed(2); }).join(' ');
     var road = el('g', {});
-    road.appendChild(el('path', { 'class': 'road-hit', d: d, fill: 'none',
-                                  stroke: ASPHALT, 'stroke-width': W_ROAD * scale }));
-    road.appendChild(el('path', { d: d, fill: 'none', stroke: LINE, 'stroke-width': EDGE_OUT * 2 * scale }));
-    road.appendChild(el('path', { d: d, fill: 'none', stroke: ASPHALT, 'stroke-width': EDGE_IN * 2 * scale }));
-    road.appendChild(el('path', { d: d, fill: 'none', stroke: LINE, 'stroke-width': DASH_W * scale,
+    road.appendChild(el('path', { 'class': 'road-hit', d: d(0), fill: 'none',
+                                  stroke: ASPHALT, 'stroke-width': W_ROAD * scaleNow }));
+    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: LINE, 'stroke-width': EDGE_OUT * 2 * scaleNow }));
+    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: ASPHALT, 'stroke-width': EDGE_IN * 2 * scaleNow }));
+    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: LINE, 'stroke-width': DASH_W * scaleNow,
                                   'stroke-dasharray': dash }));
     svg.appendChild(road);
-
-    var gA = el('path', { 'class': 'lane-guide', d: pathFn(-LANE * scale) });
-    var gB = el('path', { 'class': 'lane-guide', d: pathFn(LANE * scale) });
-    svg.appendChild(gA);
-    svg.appendChild(gB);
-
+    var gA = el('path', { 'class': 'lane-guide', d: d(-LANE * scaleNow) });
+    var gB = el('path', { 'class': 'lane-guide', d: d(LANE * scaleNow) });
+    svg.appendChild(gA); svg.appendChild(gB);
     var fleet = el('g', {});
     svg.appendChild(fleet);
-    b.el.appendChild(svg);
+    g.el.appendChild(svg);
     return { guides: [gA, gB], fleet: fleet };
   }
 
-  function fitBands(W) {
+  /* Build or rebuild one route. Vehicles keep their position ALONG the road as
+     a fraction, so a rebuild slides them rather than scattering them. */
+  function fitRoute(run) {
+    var g = measureRoute(run.el);
+    if (!g.W || !g.H || !g.moves.length) return;
+    var d = buildRoute(g);
+    if (!d) return;
+
+    var keep = run.cars.map(function (c) {
+      if (c.node) unbind(c.node);
+      return { c: c, f: run.lanes.length ? c.d / run.lanes[c.lane].L : 0 };
+    });
+
+    var art = drawRoute(g, d);
+    run.lanes = [sample(art.guides[0], false), sample(art.guides[1], true)];
+    run.fleet = art.fleet;
+    run.h = g.H; run.w = g.W;
+    run.capacity = Math.max(4, Math.min(110,
+      Math.round(TRAFFIC * (run.lanes[0].L * 2) / (SPACING * scaleNow))));
+
+    keep.forEach(function (k) { k.c.d = k.f * run.lanes[k.c.lane].L; });
+  }
+
+  function fitRoutes(W) {
     scaleNow = W <= MOBILE_W ? 0.62 : (W <= NARROW_W ? 0.82 : 1);
     carScale = (CAR_H * scaleNow) / MEDH;
-    var half = (W_ROAD * scaleNow) / 2;
 
-    var boxes = bandBoxes();
-    if (!boxes.length) return;
-
-    /* Vehicles are rebuilt against the new geometry; nodes go back to the pool. */
     runs.forEach(function (r) {
       r.cars.forEach(function (c) { if (c.node) unbind(c.node); });
     });
     pool.forEach(function (p) { p.id = null; });
     incidents.length = 0;
 
-    runs = boxes.map(function (b) {
-      var pathFn = buildCrossing(b, half, scaleNow);
-      var art = makeBandArt(b, pathFn, scaleNow);
-      /* Lane A follows the centreline at -31 (the driver's right); lane B is
-         the reversed sample at +31 — correct right-hand traffic, same as the
-         weave. */
-      return {
-        lanes: [sample(art.guides[0], false), sample(art.guides[1], true)],
-        cars: [], byLane: [[], []], capacity: 40,
-        host: b.el, fleet: art.fleet, onScreen: true
-      };
+    runs = ROUTES.map(function (el) {
+      return { el: el, host: el, lanes: [], cars: [], byLane: [[], []],
+               capacity: 40, fleet: null, onScreen: true, w: 0, h: 0 };
     });
+    runs.forEach(fitRoute);
+    runs = runs.filter(function (r) { return r.lanes.length === 2; });
 
     sizePool();
-    runs.forEach(function (r) {
-      r.capacity = Math.max(4, Math.min(110,
-        Math.round(TRAFFIC * (r.lanes[0].L * 2) / (SPACING * scaleNow))));
-    });
     if (auto) applyAuto(); else applyManual();
   }
 
@@ -1035,12 +1108,12 @@
 
     /* Band mode ignores height entirely. The page grows every time an answer
        opens and none of it moves a band's own geometry, so re-fitting on
-       height would rebuild the whole road for nothing — which is the stall
-       this mode exists to remove. */
+       height would rebuild every route for nothing. A route that DID change
+       height is rebuilt on its own, by the observer below. */
     if (BAND_MODE) {
       if (!force && Math.abs(W - lastW) < 2) return;
       lastW = W; lastH = H;
-      fitBands(W);
+      fitRoutes(W);
       return;
     }
 
@@ -1190,11 +1263,36 @@
     clearTimeout(rt); rt = setTimeout(function () { fit(false); }, 140);
   });
   if ('ResizeObserver' in window) {
-    var ro = new ResizeObserver(function () {
-      clearTimeout(rt); rt = setTimeout(function () { fit(false); }, 140);
-    });
-    if (BAND_MODE) BANDS.forEach(function (b) { ro.observe(b); });
-    else ro.observe(page);
+    if (BAND_MODE) {
+      /* One observer, one route per entry: an answer opening changes the
+         height of exactly one route, and that is the only one rebuilt. The
+         rest have not changed shape, only position, and their geometry is
+         their own — so there is nothing to do for them. */
+      var dirty = [], rrt;
+      var rro = new ResizeObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (dirty.indexOf(e.target) < 0) dirty.push(e.target);
+        });
+        clearTimeout(rrt);
+        rrt = setTimeout(function () {
+          var W = page.clientWidth || window.innerWidth;
+          if (Math.abs(W - lastW) >= 2) { dirty.length = 0; fit(false); return; }
+          dirty.forEach(function (elm) {
+            for (var i = 0; i < runs.length; i++) {
+              if (runs[i].el === elm) { fitRoute(runs[i]); break; }
+            }
+          });
+          dirty.length = 0;
+          if (auto) applyAuto(); else applyManual();
+        }, 120);
+      });
+      ROUTES.forEach(function (r) { rro.observe(r); });
+    } else {
+      var ro = new ResizeObserver(function () {
+        clearTimeout(rt); rt = setTimeout(function () { fit(false); }, 140);
+      });
+      ro.observe(page);
+    }
   }
   window.addEventListener('load', function () { fit(true); });
   /* The scenery is laid from the owner's canvas and re-laid whenever the copy

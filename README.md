@@ -41,34 +41,51 @@ structured data in the `<head>`: 35 questions and answers duplicated by hand
 would be wrong within a week. One source, two outputs, no drift.
 
 **It is built on the home page's own sections, not a layout of its own.**
-`.sec`, `.sec__inner`, `.sec__body`, the band classes and the `.road-slot`
-each section reserves — all of it is the home page's. That is what lets the
-road run through the page: road.js measures those slots exactly as it does on
-the home page, and the Q&A ends up inside the same composition rather than
-beside it. The mobile behaviour — road pinned to the left margin, copy inset
-past it — comes free with them.
+`.sec`, `.sec__inner`, `.sec__body`, the band classes — all of it is the home
+page's, which is what lets the road engine measure this page the way it
+measures that one.
 
-**The road here is drawn by the engine, not by his tiles.** Two changes in
-`road.js` made that possible, and neither touches the home page:
+**The road runs in the margins, never over the copy.** Verified by walking the
+real centreline of every road and testing each sample against every copy box
+at 1330 / 1366 / 1440 / 1600 / 1920: ~10,000 samples, zero overlap. That is
+what the 940px copy column on this page buys — a rail needs its inset plus
+half a road width of margin, which at 1320 is 188 of the 190 there are. Below
+1320 the margin cannot hold a road, so it comes off the page and the copy
+takes its width back.
 
-| | |
+**Run mode, new in `road.js` section 6b.** The weave above it measures the
+whole page, so opening an answer moved every section below and the entire road
+had to be rebuilt mid-animation — 64ms of sampling alone, before the tiles.
+Here the page is divided into ROUTES: an element with `data-road-run`, whose
+road is drawn in *that element's* coordinates into one SVG pinned to its box.
+A route that grows is the only thing rebuilt; everything below it just moves.
+Measured: opening an answer rebuilds 1 route of 6, at ~15ms.
+
+A route's shape comes from its children. Each child carrying `data-road`
+contributes one move, in document order, from its own box:
+
+| move | |
 |---|---|
-| `DRAW_ROAD` | was a hard `false`, because scene-build.js lays his own road tiles on the home page and a second generated road underneath would double every edge line. It is now `!window.H19_ROAD_PATHS` — that function is his scene's handoff, defined at load time, so its absence is a reliable "no scene on this page, draw it yourself". The road is the same either way: the four stacked strokes are measured from his Illustrator file. |
-| `data-road="wrap"` | the hook that loops the road right around a section — in across the top, down the far side, back along the bottom — was written inline for "Your Success Is Our Destination", which is the first section in its run and is entered from the left edge. It is now a move any section can ask for, entered mid-run heading down. Same four turns, different start. A section too small to hold the loop gets a plain jog instead. |
+| `rail-left` / `rail-right` | straight down that margin, for as long as the box is tall — so a rail can carry on past two sections |
+| `cross-left` / `cross-right` | over to the other margin, turning in the box's middle |
+| `leave-left` / `leave-right` | off the nearest page edge. Always a route's last move |
+| `arrive-left` / `arrive-right` | in off a page edge. Always a route's first move |
+| `track-left` / `track-right` | a route on its own: in off an edge, down, back out. Fixed height, anchored to the top of the section it sits in, so it is never rebuilt at all |
 
-Eight crossings, one after each section, alternating direction. Each is
-straight: the pen only turns in quarter circles, so a lane change is always
-two of them back to back, and across a 1400px straight that reads as a kink
-rather than a lane change. A crossing is a hundred-odd pixels of highway seen
-from above, and the honest shape for that is straight.
+The one rule the engine needs: **every route starts and ends off canvas.** A
+vehicle reaching the end of a route reappears at its start, and that has to
+happen where nobody can see it. It is also why the route is cut wherever the
+road leaves the page — the break is invisible already, so it costs nothing and
+buys a shorter rebuild.
 
-The crossings are deliberately NOT joined to each other down the page
-margins. That would put road beside copy whose height changes, which is the
-whole problem band mode exists to avoid, and there is no margin to put it in
-on a phone. Each one enters off one edge and leaves by the other.
-
-Which way each crossing runs is the `cross` column of the `ROAD` table in
-`tools/build-faq.py`, beside the copy it follows.
+The route itself is the `PAGE` list at the top of `tools/build-faq.py`, beside
+the copy. As it stands: in off the top beside the hero and out the right edge
+before the exits bar (so the road never passes under a sticky panel), in off
+the left and straight down past General and Website Design, out left and back
+in, down past Video, across to the right margin, down past Social and
+Branding, off the right edge, **no road at all past Print**, back in off the
+left, down past Working With Us, across, and away. Two independent tracks
+poke in from the opposite margin beside Video and Social.
 
 **The hero is his gantry.** The `our-plate.svg` sign on a tiled truss, with
 the headline as real HTML laid over it — the device section 7 uses on the home

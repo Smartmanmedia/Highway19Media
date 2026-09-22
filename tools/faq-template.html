@@ -80,21 +80,26 @@
 
 <main id="main" class="page page--qa">
 
-  <!-- The road lives in the .road-band strips between the sections, never
-       inside one. Each band is its own coordinate space, so the road can
-       never reach the copy, and an answer opening moves the band without
-       moving anything the engine would have to re-measure.
+  <!-- The road runs down the page as a route split into .road-run boxes, each
+       drawn in its own coordinates so only the one that grows is ever rebuilt.
+       It runs in the margins beside the copy and never over it, and it is cut
+       wherever it leaves the screen.
        This layer stays because road.js watches it to know whether the page is
-       on screen at all; in band mode nothing is drawn into it. There is no
-       #scene-layer: the scenery is the home page's composition, so here the
-       engine draws the road itself. -->
+       on screen at all; nothing is drawn into it here. There is no
+       #scene-layer: the scenery is the home page's composition, so on this
+       page the engine draws the road itself. -->
   <div id="road-layer" aria-hidden="true"></div>
 
   <!-- ========================================================================
        HERO — short on purpose. His gantry plate carries the headline as real
        HTML text; the road comes down the lane beside it.
        ===================================================================== -->
-  <section id="qa-hero" class="sec band-blue" data-section="qa-01-hero">
+  <!-- Route 1. The road enters off the top of the page, runs down the right
+       margin beside the hero and leaves by the right edge before the exits
+       bar — so it never has to pass beneath a sticky panel, and both ends of
+       the route's loop sit off canvas. -->
+  <div class="road-run" data-road-run>
+  <section id="qa-hero" class="sec band-blue" data-road="rail-right" data-section="qa-01-hero">
     <img class="qa-cloud qa-cloud--a" src="assets/brand/clouds/Cloud2.svg" alt="" aria-hidden="true">
     <img class="qa-cloud qa-cloud--b" src="assets/brand/clouds/Cloud4.svg" alt="" aria-hidden="true">
     <div class="sec__inner">
@@ -121,8 +126,8 @@
       </div>
     </div>
   </section>
-
-  <div class="road-band band-blue" data-road-band="right" aria-hidden="true"></div>
+    <div class="road-gap band-blue" data-road="leave-right" aria-hidden="true"></div>
+  </div>
 
   <!-- ========================================================================
        THE EXIT GANTRY — seven exits, sticky under the site header. Inside
@@ -140,32 +145,6 @@
     </div>
   </div>
 <!--SECTIONS-->
-  <!-- ========================================================================
-       CLOSING BAND — following the home page's own logic: the green signs are
-       the ones that name a destination.
-       ===================================================================== -->
-  <section id="qa-close" class="sec band-navy" data-section="qa-09-close">
-    <div class="sec__inner">
-      <div class="sec__body">
-        <div class="headline">
-          <svg class="sign" viewBox="0 0 52 64" aria-hidden="true" focusable="false"><use href="#sg-ahead"/></svg>
-          <div>
-            <h2>Still Have a Question?</h2>
-            <p class="sub">Ask us directly — no obligation, no pressure.</p>
-          </div>
-        </div>
-        <p class="body-copy">
-          Send us your website, your Facebook page or whatever you&rsquo;re working with,
-          and we&rsquo;ll come back within 24 hours.
-        </p>
-        <div class="sec__cta">
-          <a class="btn btn--primary" href="index.html#close"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Ask Us Directly</a>
-          <a class="btn btn--ghost" href="index.html#services">See What We Do</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ========================================================================
        FOOTER — the site footer, with Q&A added to the quick links.
        ===================================================================== -->
