@@ -143,7 +143,12 @@ const FACES = [
       const s = getComputedStyle(el);
       if (s.display === 'none' || s.visibility === 'hidden' || +s.opacity === 0) return false;
       const r = el.getBoundingClientRect();
-      return r.width > 0.5 && r.height > 0.5;
+      if (!(r.width > 0.5 && r.height > 0.5)) return false;
+      /* Parked off canvas: the skip link and the pause control both live at
+         left:-9999px until focused. They are real and they matter, but they
+         are not part of the drawing, and in Illustrator they arrive as objects
+         ten thousand points to the left of the artboard. */
+      return r.right > -40 && r.left < out.w + 40 && r.bottom + SY() > -40;
     }
 
     function collectBoxes(el) {
