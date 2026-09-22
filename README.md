@@ -15,6 +15,7 @@ assets/js/site.js              nav, form, booking links — both pages
 assets/js/faq.js               accordions, sticky offsets, the exit gantry
 tools/build-faq.py             Q&A content + generator
 tools/faq-template.html        the Q&A page shell the generator fills
+tools/export-svg.js            the Q&A page as an editable SVG for Illustrator
 build.js                       inlines each page into one file
 ```
 
@@ -98,6 +99,28 @@ expanded, and `faq.js` collapses them on load. With no JavaScript the whole
 page is still readable. Opening one makes the page taller and moves every
 section below it — nothing has to tell the road, because road.js already keeps
 a ResizeObserver on `.page`.
+
+### Taking it into Illustrator
+
+`node tools/export-svg.js` writes `dist/highway19-qa-artboard.svg` — the Q&A
+page as editable objects, for redesigning and handing back.
+
+It walks the RENDERED page, not the markup, so what comes out is what the
+browser actually laid out. Type is `<text>`, one line per rendered line,
+still editable. Boxes are `<rect>` with their own fill, stroke and corner
+radius. The road is the four stacked strokes as paths. His SVG artwork — the
+plate, the truss, the clouds, the signs — is inlined as vectors rather than a
+picture of vectors; the shield and the social marks are raster so they are
+embedded. Five top-level groups, which Illustrator reads as named layers:
+Background · Roads · Artwork · Boxes · Text.
+
+Two deliberate choices: every accordion is exported OPEN, so no copy is
+missing from the file, and there are no vehicles — they are generated, they
+move, and they are not design.
+
+Be Vietnam Pro is loaded off `assets/fonts/` before anything is measured. The
+page itself pulls that font from Google, and measuring against a fallback
+would bake the wrong line breaks into every paragraph.
 
 ### What needs you on this page
 
