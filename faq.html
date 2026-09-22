@@ -334,27 +334,36 @@
      HEADER — the site header, unchanged except that its links reach back to
      the home page's sections and Q&A is marked as the current page.
      ======================================================================= -->
-<header class="site-header">
+<header class="site-header site-header--hwy">
   <div class="site-header__inner">
 
+    <img class="brand__orb" src="assets/brand/Moon.svg" alt="" aria-hidden="true">
+
     <a class="brand" href="index.html" aria-label="Highway 19 Media — home">
-      <img class="brand__shield" src="assets/brand/shield.png" alt="">
       <span class="brand__name">
-        <b>HIGHWAY 19</b>
-        <span>Media</span>
+        <b>HIGHWAY <i>19</i> MEDIA</b>
+        <span>Creative marketing for Tampa Bay businesses</span>
       </span>
     </a>
 
+    <!-- The shield hangs off the header bar and breaks below it, the way it
+         breaks out of the guide sign on the home page. -->
+    <img class="site-header__shield" src="assets/brand/shield.png" alt="" aria-hidden="true">
+
     <nav class="nav" id="nav" aria-label="Main">
       <a href="index.html#services">Services</a>
-      <a href="index.html#promise">How We Work</a>
-      <a href="index.html#payoff">Results</a>
+      <a href="index.html#promise">The Road Map</a>
       <a href="faq.html" aria-current="page">Q&amp;A</a>
-      <a href="index.html#close">Contact</a>
-      <a class="btn btn--primary" href="index.html#close"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Your Road Map</a>
+      <a class="btn btn--contact" href="index.html#close">
+        <span class="btn__chip" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M5.6 4.8h12.8a1.6 1.6 0 0 1 1.6 1.6v8.8a1.6 1.6 0 0 1-1.6 1.6H9.2L5.2 20V4.8z"/></svg>
+        </span>Contact Us</a>
     </nav>
 
-    <a class="btn btn--primary" href="index.html#close"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Your Road Map</a>
+    <a class="btn btn--contact" href="index.html#close">
+      <span class="btn__chip" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M5.6 4.8h12.8a1.6 1.6 0 0 1 1.6 1.6v8.8a1.6 1.6 0 0 1-1.6 1.6H9.2L5.2 20V4.8z"/></svg>
+      </span>Contact Us</a>
 
     <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -386,24 +395,32 @@
   <div class="road-run" data-road-run>
   <section id="qa-hero" class="sec band-blue" data-road="rail-right" data-section="qa-01-hero">
     <img class="qa-cloud qa-cloud--a" src="assets/brand/clouds/Cloud2.svg" alt="" aria-hidden="true">
-    <img class="qa-cloud qa-cloud--b" src="assets/brand/clouds/Cloud4.svg" alt="" aria-hidden="true">
     <div class="sec__inner">
       <div class="sec__body">
-        <span class="eyebrow">Questions &amp; Answers</span>
-        <!-- His gantry: truss on both sides of the plate, running off both
-             edges of the screen, with the headline as real HTML laid over the
-             artwork so it stays selectable, searchable and readable by a
-             screen reader. -->
-        <div class="gantry signplate">
-          <span class="gantry__truss" aria-hidden="true"></span>
-          <span class="gantry__plate">
-            <img class="signplate__art" src="assets/scene/our-plate.svg" alt="" aria-hidden="true">
-            <div class="signplate__copy">
+        <!-- His guide sign, rebuilt from the parts of the one on the home
+             page: the green plate, the yellow route tab across its top, the
+             shield breaking out of the corner, the mounting brackets, the
+             lane arrows and the truss running off to the right. The headline
+             is real HTML over the artwork, not a picture of itself. -->
+        <div class="hwy-sign">
+          <div class="hwy-sign__panel">
+            <img class="hwy-sign__shield" src="assets/brand/shield.png" alt="" aria-hidden="true">
+            <span class="hwy-sign__tab">Questions &amp; Answers</span>
+            <div class="hwy-sign__plate">
+              <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"></span>
               <h1>Questions? We&rsquo;ve Got Answers.</h1>
+              <div class="hwy-sign__arrows" aria-hidden="true">
+                <svg viewBox="0 0 48 64"><path d="M24 62 4 34h12V2h16v32h12z"/></svg>
+                <svg viewBox="0 0 48 64"><path d="M24 62 4 34h12V2h16v32h12z"/></svg>
+                <svg viewBox="0 0 48 64"><path d="M24 62 4 34h12V2h16v32h12z"/></svg>
+                <svg viewBox="0 0 48 64"><path d="M24 62 4 34h12V2h16v32h12z"/></svg>
+              </div>
+              <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"></span>
             </div>
-          </span>
-          <span class="gantry__truss" aria-hidden="true"></span>
+          </div>
+          <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
         </div>
+
         <p class="body-copy">
           Straight answers about websites, video, advertising, branding, print and
           working with Highway 19 Media. Pick an exit below, or just keep driving.
@@ -411,7 +428,12 @@
       </div>
     </div>
   </section>
-    <div class="road-gap band-blue" data-road="leave-right" aria-hidden="true"></div>
+    <!-- Down the right, then the whole width of the page and off the left
+         edge — his drawing. leave-left from a right-hand rail already does
+         exactly that: it turns away from the near edge and keeps going. -->
+    <div class="road-gap band-blue" data-road="leave-left" aria-hidden="true">
+      <img class="qa-cloud qa-cloud--turn" src="assets/brand/clouds/Cloud2.svg" alt="" aria-hidden="true">
+    </div>
   </div>
 
   <!-- ========================================================================
