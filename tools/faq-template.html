@@ -102,6 +102,7 @@
        custom property, because a custom property comes back as its raw token
        and never as a length. -->
   <div id="road-rail-probe" aria-hidden="true"></div>
+  <div id="road-rail-probe-out" aria-hidden="true"></div>
 
   <!-- ========================================================================
        HERO — short on purpose. His gantry plate carries the headline as real
@@ -147,13 +148,14 @@
       </div>
     </div>
   </section>
-    <!-- Down the right, then the whole width of the page and off the left
-         edge — his drawing. leave-left from a right-hand rail already does
-         exactly that: it turns away from the near edge and keeps going. -->
     <!-- Down the right, across the page, and DOWN the left — one road, the
          way he drew it. It carries on past the exit gantry and all the way
-         down beside General, so the route does not close here. -->
-    <div class="road-gap" data-road="cross-left" style="--gap:#0249a8" aria-hidden="true">
+         down beside General, so the route does not close here.
+         The crossing lands on the OUTER left rail, because the gantry plate
+         reaches further into the margin than the inner one does. The gap is
+         as deep as he drew the turn: the crossing has to clear the sub-copy
+         above it and the gantry below it with blue either side. -->
+    <div class="road-gap" data-road="cross-left-out" style="--gap:#0249a8;--gap-h:clamp(150px,22vw,330px)" aria-hidden="true">
       <img class="qa-cloud qa-cloud--turn" src="assets/brand/clouds/Cloud2.svg" alt="" aria-hidden="true">
     </div>
 

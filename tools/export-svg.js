@@ -271,10 +271,42 @@ const FACES = [
       if (r.width < 2 || r.height < 2) return;
       const s = getComputedStyle(el);
       const op = +s.opacity;                  /* the clouds are held right back */
-      const base = { x: R(r.left), y: R(r.top + SY()), w: R(r.width), h: R(r.height), op };
+      /* The layers are painted Background, Roads, Artwork, Boxes, Text — so a
+         box paints over the artwork beneath it. An icon that sits INSIDE a
+         painted panel (the lane arrows on a sign, the disc on a route plate)
+         therefore vanished under its own sign. Anything whose ancestors give
+         it a panel to sit on goes into a layer above the boxes instead. */
+      let over = false;
+      for (let a = el.parentElement; a && a !== document.body; a = a.parentElement) {
+        const as = getComputedStyle(a);
+        const bg = as.backgroundColor;
+        if (bg && bg !== 'transparent' && !/rgba\(0, 0, 0, 0\)/.test(bg)) { over = true; break; }
+      }
+      const base = { x: R(r.left), y: R(r.top + SY()), w: R(r.width), h: R(r.height), op, over };
 
       if (el.tagName.toLowerCase() === 'svg') {
-        out.art.push(Object.assign({ kind: 'svg', markup: el.outerHTML,
+        /* An inline icon on this page gets its colour from the stylesheet, not
+           from a fill attribute — the lane arrows are a bare <path> that the
+           CSS paints white. Lift it out of the page and the stylesheet is gone,
+           so every one of them came out black on a green sign. Bake the
+           computed paint onto the copy before it leaves. */
+        const clone = el.cloneNode(true);
+        const src = [el, ...el.querySelectorAll('*')];
+        const dst = [clone, ...clone.querySelectorAll('*')];
+        const PAINT = ['fill', 'stroke', 'stroke-width', 'stroke-linecap',
+                       'stroke-linejoin', 'stroke-dasharray', 'opacity'];
+        for (let i = 0; i < src.length; i++) {
+          const cs = getComputedStyle(src[i]);
+          PAINT.forEach(k => {
+            if (dst[i].hasAttribute(k)) return;
+            const v = cs.getPropertyValue(k);
+            if (!v || v === 'none' && k === 'stroke') return;
+            if (k === 'opacity' && v === '1') return;
+            if (k === 'stroke-dasharray' && v === 'none') return;
+            dst[i].setAttribute(k, v);
+          });
+        }
+        out.art.push(Object.assign({ kind: 'svg', markup: clone.outerHTML,
                                      vb: el.getAttribute('viewBox') }, base));
       } else if (el.tagName.toLowerCase() === 'img') {
         out.art.push(Object.assign({ kind: 'img', src: el.currentSrc || el.src }, base));
@@ -308,6 +340,12 @@ const FACES = [
     cache[src] = v;
     return v;
   }
+
+  /* Illustrator artwork carries a <metadata> block with a C2PA manifest under an
+     unbound c2pa: prefix. Inlined verbatim it makes the whole artboard invalid XML,
+     which some readers reject outright. The manifest describes the source file, not
+     the drawing, so it goes. */
+  const strip = s => String(s).replace(/<metadata\b[\s\S]*?<\/metadata>/gi, '');
 
   const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const O = [];
@@ -347,16 +385,17 @@ const FACES = [
   });
   O.push(`</g>`);
 
-  O.push(`<g id="Artwork">`);
   let clipN = 0;
   const clips = [];
-  for (const a of doc.art) {
+  const ART = { under: [], over: [] };
+    for (const a of doc.art) {
+    const O = a.over ? ART.over : ART.under;
     const fade = a.op != null && a.op < 1 ? ` opacity="${a.op}"` : '';
     if (a.kind === 'svg') {
       const vb = (a.vb || '').split(/[ ,]+/).map(Number);
       const sx = vb.length === 4 && vb[2] ? a.w / vb[2] : 1;
       const sy = vb.length === 4 && vb[3] ? a.h / vb[3] : 1;
-      const inner = a.markup.replace(/^<svg[^>]*>/i, '').replace(/<\/svg>\s*$/i, '');
+      const inner = strip(a.markup.replace(/^<svg[^>]*>/i, '').replace(/<\/svg>\s*$/i, ''));
       const off = vb.length === 4 ? ` translate(${-vb[0]} ${-vb[1]})` : '';
       O.push(`<g${fade} transform="translate(${a.x} ${a.y}) scale(${sx.toFixed(4)} ${sy.toFixed(4)})${off}">${inner}</g>`);
     } else {
@@ -365,11 +404,11 @@ const FACES = [
       if (asset.type === 'svg') {
         const vbm = asset.body.match(/viewBox="([^"]+)"/);
         const vb = vbm ? vbm[1].split(/[ ,]+/).map(Number) : null;
-        const inner = asset.body
+        const inner = strip(asset.body
           .replace(/<\?xml[\s\S]*?\?>/i, '')
           .replace(/<!DOCTYPE[\s\S]*?>/i, '')
           .replace(/^[\s\S]*?<svg[^>]*>/i, '')
-          .replace(/<\/svg>\s*$/i, '');
+          .replace(/<\/svg>\s*$/i, ''));
         if (a.kind === 'tile') {
           /* repeat-x, clipped to the element's own box — a tile that overruns
              is a tile drawn across whatever stands next to it. */
@@ -395,11 +434,19 @@ const FACES = [
       }
     }
   }
-  O.push(`</g>`);
   if (clips.length) O.push(`<defs>${clips.join('')}</defs>`);
+
+  O.push(`<g id="Artwork">`);
+  ART.under.forEach(l => O.push(l));
+  O.push(`</g>`);
 
   O.push(`<g id="Boxes">`);
   doc.boxes.forEach(b => O.push(rect(b)));
+  O.push(`</g>`);
+
+  /* The icons that ride on a panel, above the panels and below the words. */
+  O.push(`<g id="Icons">`);
+  ART.over.forEach(l => O.push(l));
   O.push(`</g>`);
 
   O.push(`<g id="Text">`);

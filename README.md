@@ -48,10 +48,20 @@ measures that one.
 
 **The road runs in the margins, never over the copy.** Verified by walking the
 real centreline of every road and testing each sample against every copy box
-at 1330 / 1366 / 1440 / 1600 / 1920: ~10,000 samples, zero overlap. That is
-what the 940px copy column on this page buys — a rail needs its inset plus
-half a road width of margin, which at 1320 is 188 of the 190 there are. Below
-1320 the margin cannot hold a road, so it comes off the page and the copy
+at 1330 / 1366 / 1440 / 1600 / 1920: ~36,000 samples, zero overlap, and no
+horizontal overflow at 390 / 768 / 834 / 1024 / 1200 / 1280 / 1440 / 1920 on
+either page.
+
+**Everything here is measured off his returned Illustrator file, not guessed.**
+`incoming/QA-Part1.svg` is the artboard he redesigned and sent back, and the
+numbers in the stylesheet come out of it: asphalt 95 across, the copy column
+840 wide, its left edge at 416 of 1440 and its right at 1256, and the panels
+of the exit gantry 95 deep. He draws TWO rails a side — an inner one at 226
+where the margin is empty, an outer one at 124 where a sign plate reaches into
+the margin and the road has to pass outside it. The copy column is not centred
+either: it moves away from whichever side the road is on, which is what leaves
+the margin free. Both rails and the shift only exist above 1280; below that
+the margin cannot hold a road, so the road comes off the page and the copy
 takes its width back.
 
 **Run mode, new in `road.js` section 6b.** The weave above it measures the
@@ -67,11 +77,18 @@ contributes one move, in document order, from its own box:
 
 | move | |
 |---|---|
-| `rail-left` / `rail-right` | straight down that margin, for as long as the box is tall — so a rail can carry on past two sections |
+| `rail-left` / `rail-right` | straight down that margin, for as long as the box is tall — so a rail can carry on past two sections. If the box asks for the *other* rail on the same side, it steps across to it first |
 | `cross-left` / `cross-right` | over to the other margin, turning in the box's middle |
 | `leave-left` / `leave-right` | off the nearest page edge. Always a route's last move |
 | `arrive-left` / `arrive-right` | in off a page edge. Always a route's first move |
 | `track-left` / `track-right` | a route on its own: in off an edge, down, back out. Fixed height, anchored to the top of the section it sits in, so it is never rebuilt at all |
+
+Two suffixes stack onto any of those, after the side:
+
+| suffix | |
+|---|---|
+| `-out` | take the OUTER rail on that side — `rail-left-out`, `cross-right-out`. Used wherever a sign plate reaches into the margin, as it does beside the exit gantry |
+| `-far` | enter or leave by the OPPOSITE edge, crossing the whole page on the way — `arrive-right-out-far` comes in off the left edge and settles on the outer right rail |
 
 The one rule the engine needs: **every route starts and ends off canvas.** A
 vehicle reaching the end of a route reappears at its start, and that has to
@@ -111,8 +128,16 @@ still editable. Boxes are `<rect>` with their own fill, stroke and corner
 radius. The road is the four stacked strokes as paths. His SVG artwork — the
 plate, the truss, the clouds, the signs — is inlined as vectors rather than a
 picture of vectors; the shield and the social marks are raster so they are
-embedded. Five top-level groups, which Illustrator reads as named layers:
-Background · Roads · Artwork · Boxes · Text.
+embedded. Six top-level groups, which Illustrator reads as named layers:
+Background · Roads · Artwork · Boxes · Icons · Text.
+
+Icons is a layer for a reason. Boxes paint over Artwork, so anything sitting
+INSIDE a painted panel — the lane arrows on a sign, the disc on a route plate
+— disappeared under its own sign. Art whose ancestors give it a panel to sit
+on goes into Icons, above the boxes and below the words. Inline icons also get
+their computed paint baked onto them on the way out: on the page a lane arrow
+is a bare `<path>` the stylesheet colours white, and with the stylesheet gone
+every one of them came out black.
 
 Two deliberate choices: every accordion is exported OPEN, so no copy is
 missing from the file, and there are no vehicles — they are generated, they

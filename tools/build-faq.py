@@ -44,6 +44,24 @@ CONTACT = "index.html#close"
 
 # His signs each carry a lane arrow — down for a section you drop into, a
 # diagonal or a turn for one the road is about to bend towards.
+SECTION_SIGN = """      <div class="hwy-sign hwy-sign--section%s">
+        <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
+        <div class="hwy-sign__panel">
+          <div class="hwy-sign__plate">
+            <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"></span>
+            <span class="qa-disc" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                %s
+              </svg>
+            </span>
+            <span class="hwy-sign__label">%s</span>
+            <svg class="hwy-sign__arrow" viewBox="0 0 64 64" aria-hidden="true">%s</svg>
+            <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+"""
+
 ARROWS = {
     "down":  '<path d="M32 60 8 34h12V4h24v30h12z"/>',
     "dnr":   '<path d="M58 56 24 50l8-8-24-24 12-12 24 24 8-8z"/>',
@@ -329,33 +347,42 @@ LOOK = {
 # the start, leave-* at the end.
 # --------------------------------------------------------------------------
 PAGE = [
-    # Route 1 is opened in the template, at the hero. It crosses the page and
-    # runs on down the left past the exit gantry and General before leaving —
-    # which is why this first entry only closes it.
+    # Route 1 opens in the template: in off the top on the inner right rail
+    # beside the hero, across on his big turn, then down the OUTER left rail
+    # so it passes outside the exit gantry, and off the left edge under the
+    # first card. Nothing of it ever crosses the copy column.
     ("tail", [
-        ("sec", "qa-general",  "rail-left"),
-        ("gap", "leave-left",  "#000000"),
+        ("sec", "qa-general",  "rail-left-out"),
+        ("gap", "leave-left-out", "#000000"),
     ]),
+    # Route 2 — his second road: in off the LEFT edge, the full width of the
+    # page, then down the outer right rail beside Websites and out the right.
+    # Right-hand runs take the outer rail because the copy column sits right
+    # of centre and the inner one would run under it.
     ("route", [
-        ("gap", "arrive-left", "#001853"),
-        ("sec", "qa-websites", "rail-left"),
-        ("gap", "leave-left",  "#000000"),
+        ("gap", "arrive-right-out-far", "#001853"),
+        ("sec", "qa-websites", "rail-right-out"),
+        ("gap", "leave-right-out", "#000000"),
     ]),
+    # Route 3 — in off the left, down the inner left rail beside Video, over
+    # to the right for Advertising and Branding, and away. Two short tracks
+    # run on the opposite margins at the same time, as he drew them.
     ("route", [
-        ("gap", "arrive-left",  "#000000"),
-        ("sec", "qa-video",     "rail-left",  ("track-right", 96, 470)),
-        ("gap", "cross-right",  "#003b5f"),
-        ("sec", "qa-advertising", "rail-right", ("track-left", 130, 560)),
-        ("sec", "qa-branding",  "rail-right"),
-        ("gap", "leave-right",  "#013f8e"),
+        ("gap", "arrive-left", "#000000"),
+        ("sec", "qa-video", "rail-left", ("track-right-out", 120, 900)),
+        ("gap", "cross-right-out", "#003b5f"),
+        ("sec", "qa-advertising", "rail-right-out", ("track-left-out", 150, 980)),
+        ("sec", "qa-branding", "rail-right-out"),
+        ("gap", "leave-right-out", "#013f8e"),
     ]),
+    # Print runs on its own, with no road at all — the break is the point.
     ("plain", "qa-print"),
     ("route", [
         ("gap", "arrive-left", "#002274"),
-        ("sec", "qa-working",  "rail-left"),
-        ("gap", "cross-right", "#0b5a3a"),
-        ("close", "rail-right"),
-        ("gap", "leave-right", "#062f5e"),
+        ("sec", "qa-working", "rail-left"),
+        ("gap", "cross-right-out", "#0b5a3a"),
+        ("close", "rail-right-out"),
+        ("gap", "leave-right-out", "#062f5e"),
     ]),
 ]
 
@@ -429,10 +456,20 @@ def render():
         b.append('    <div class="sec__inner">\n      <div class="sec__body">\n')
 
         split = m["layout"] == "split"
+        head_sign = m.get("sign", True)
+
+        # His guide sign sits ABOVE the body of the section, hard against the
+        # side its truss runs off, with the copy and the answers below it. It
+        # is not a column beside them: in his file the split sections put the
+        # sign across the top and only then break into two columns.
+        if head_sign:
+            b.append(SECTION_SIGN % (
+                " is-mirrored" if m["truss"] == "left" else "",
+                ICONS[sec["icon"]].strip(), e(sec["eyebrow"]), ARROWS[m["arrow"]]))
+
         if split:
             b.append('      <div class="qa-sec__grid">\n')
 
-        head_sign = m.get("sign", True)
         b.append('''      <div class="qa-sec__head%s">
         <!-- His guide sign carries the category: icon disc, the name, and a
              lane arrow, with the truss running off whichever side this one
@@ -443,29 +480,11 @@ def render():
           </svg>
         </span>
         <span class="eyebrow eyebrow--plain">%s</span>
-        <div class="hwy-sign hwy-sign--section%s">
-          <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
-          <div class="hwy-sign__panel">
-            <div class="hwy-sign__plate">
-              <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"></span>
-              <span class="qa-disc" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  %s
-                </svg>
-              </span>
-              <span class="hwy-sign__label">%s</span>
-              <svg class="hwy-sign__arrow" viewBox="0 0 64 64" aria-hidden="true">%s</svg>
-              <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"></span>
-            </div>
-          </div>
-        </div>
         <h2 id="%s-h">%s</h2>
         <p class="body-copy">%s</p>
       </div>\n''' % ("" if head_sign else " qa-sec__head--plain",
                        ICONS[sec["icon"]].strip(), e(sec["eyebrow"]),
-                       " is-mirrored" if m["truss"] == "left" else "",
-                       ICONS[sec["icon"]].strip(), e(sec["eyebrow"]),
-                       ARROWS[m["arrow"]], sid, e(sec["heading"]), e(sec["lead"])))
+                       sid, e(sec["heading"]), e(sec["lead"])))
 
         b.append('\n      <div class="qa-faq">\n        <div class="qa-list">\n')
         for q, paras in sec["faqs"]:
@@ -533,12 +552,12 @@ def render():
         w('  </div>\n')
 
     EXIT_ORDER = [
-        ("qa-websites",    "Website Design",              "down"),
-        ("qa-video",       "Video Production",            "down"),
-        ("qa-advertising", "Social Media &amp; Paid Ads", "right"),
-        ("qa-print",       "Print &amp; Promotional Products", "left"),
-        ("qa-working",     "Working With Us",             "right"),
-        ("qa-branding",    "Branding &amp; Graphic Design",    "down"),
+        ("qa-websites",    "Website Design",                          "down"),
+        ("qa-video",       "Video Production",                        "down"),
+        ("qa-advertising", "Social Media<br>&amp; Paid Ads",          "right"),
+        ("qa-print",       "Print &amp;<br>Promotional Products",     "left"),
+        ("qa-working",     "Working With Us",                         "right"),
+        ("qa-branding",    "Branding &amp;<br>Graphic Design",        "down"),
     ]
     nav = "\n".join(
         '          <a class="hwy-exit qa-exits__link" href="#%s">'

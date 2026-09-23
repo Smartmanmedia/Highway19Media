@@ -555,17 +555,34 @@
 
   var OFF = 340;                       /* how far past the edge a stub runs */
 
-  function railX(side, g) { return side === 'left' ? g.inset : g.W - g.inset; }
+  /* Two rails a side, as he drew them: the inner one where the margin is
+     empty, the outer one where a sign plate reaches into the margin and the
+     road has to pass outside it. A move asks for the outer rail by name —
+     "rail-left-out". */
+  function railX(side, g, out) {
+    var i = out ? g.insetOut : g.inset;
+    return side === 'left' ? i : g.W - i;
+  }
 
   /* The moves. Each is handed the pen already heading down at its side's rail,
      and walks it to the bottom of its own box. */
   var MOVES = {
-    /* Straight down a margin, for as long as this box is tall. */
-    rail: function (p, m) { p.downTo(m.b); },
+    /* Straight down a margin, for as long as this box is tall — but if this
+       box asks for the other rail on the same side, step across to it first.
+       That is how his road gets outside the exit gantry without a crossing. */
+    rail: function (p, m, g) {
+      var a = p.at().x, x = railX(m.side, g, m.out), dx = x - a, R = g.R;
+      if (Math.abs(dx) < 1) { p.downTo(m.b); return; }
+      var s = dx < 0 ? 1 : -1, r = Math.min(R, Math.abs(dx) / 2, (m.b - m.t) / 2);
+      var run = Math.abs(dx) - 2 * r;
+      p.downTo(m.t + r).turn(s, r);
+      if (run > 0.5) p.straight(run);
+      p.turn(-s, r).downTo(m.b);
+    },
 
     /* Over to the other margin, turning in this box's middle. */
     cross: function (p, m, g) {
-      var a = p.at().x, x = railX(m.to, g), mid = (m.t + m.b) / 2, R = g.R;
+      var a = p.at().x, x = railX(m.to, g, m.out), mid = (m.t + m.b) / 2, R = g.R;
       var dx = x - a, s = dx < 0 ? 1 : -1;      /* heading down, +1 turns left */
       var run = Math.abs(dx) - 2 * R;
       p.downTo(mid - R).turn(s, R);
@@ -573,10 +590,13 @@
       p.turn(-s, R).downTo(m.b);
     },
 
-    /* Off the nearest page edge. Always the last move of its route. */
+    /* Off a page edge. Always the last move of its route. The near edge by
+       default; "far" turns the other way and crosses the page first, which is
+       the long horizontal run he draws at the foot of a section. */
     leave: function (p, m, g) {
       var y = m.t + (m.b - m.t) * 0.55, R = g.R;
-      p.downTo(y - R).turn(m.side === 'left' ? 1 : -1, R).straight(g.W + OFF);
+      var near = m.side === 'left' ? 1 : -1;
+      p.downTo(y - R).turn(m.far ? -near : near, R).straight(g.W + OFF);
     }
   };
 
@@ -587,27 +607,34 @@
     var first = list[0], p, i;
 
     if (first.kind === 'arrive') {
-      /* In off a page edge, then down. The pen has to be created out there. */
-      var x = railX(first.side, g), y = first.t + (first.b - first.t) * 0.45;
-      var s = first.side === 'left' ? 1 : -1;
-      p = first.side === 'left' ? pen(-OFF, y, 0) : pen(g.W + OFF, y, Math.PI);
-      if (first.side === 'left') p.rightTo(x - g.R); else p.leftTo(x + g.R);
+      /* In off a page edge, then down. The pen has to be created out there.
+         "far" comes in off the OPPOSITE edge and runs the width of the page
+         before it turns — his long entry across the top of a section. */
+      var x = railX(first.side, g, first.out), y = first.t + (first.b - first.t) * 0.45;
+      var from = first.far ? (first.side === 'left' ? 'right' : 'left') : first.side;
+      var s = from === 'left' ? 1 : -1;
+      p = from === 'left' ? pen(-OFF, y, 0) : pen(g.W + OFF, y, Math.PI);
+      if (from === 'left') p.rightTo(x - g.R); else p.leftTo(x + g.R);
       p.turn(s, g.R).downTo(first.b);
       i = 1;
     } else if (first.kind === 'track') {
       /* A track is a route on its own: in off an edge, down, back out the
          same edge. Both ends off canvas, so it loops unseen. */
-      var tx = railX(first.side, g);
+      var tx = railX(first.side, g, first.out);
       var t1 = first.t + Math.min((first.b - first.t) * 0.2, 110);
       var t2 = first.b - Math.min((first.b - first.t) * 0.2, 110);
+      /* The two turns of a bracket must not eat the whole run between them,
+         or the shape closes into a ring instead of reading as a road going
+         down the margin and back out. */
+      var tR = Math.min(g.R, (t2 - t1) / 3.2);
       var ts = first.side === 'left' ? 1 : -1;
       p = first.side === 'left' ? pen(-OFF, t1, 0) : pen(g.W + OFF, t1, Math.PI);
-      if (first.side === 'left') p.rightTo(tx - g.R); else p.leftTo(tx + g.R);
-      p.turn(ts, g.R).downTo(t2 - g.R).turn(ts, g.R).straight(g.W + OFF);
+      if (first.side === 'left') p.rightTo(tx - tR); else p.leftTo(tx + tR);
+      p.turn(ts, tR).downTo(t2 - tR).turn(ts, tR).straight(g.W + OFF);
       return p.path();
     } else {
       /* In off the top of the page. */
-      p = pen(railX(first.side, g), first.t - OFF, Math.PI / 2);
+      p = pen(railX(first.side, g, first.out), first.t - OFF, Math.PI / 2);
       i = 0;
     }
 
@@ -631,8 +658,11 @@
        to the default while the stylesheet said something else entirely. The
        probe carries width:var(--rail-inset), so the browser resolves it. */
     var probe = document.getElementById('road-rail-probe');
+    var probeOut = document.getElementById('road-rail-probe-out');
     var inset = probe ? probe.offsetWidth : 0;
-    if (!inset) inset = 130;
+    var insetOut = probeOut ? probeOut.offsetWidth : 0;
+    if (!inset) inset = 226;
+    if (!insetOut) insetOut = Math.round(inset * 0.55);
     var g = { el: el, W: Math.round(box.width), H: Math.round(box.height),
               /* The turns between a page edge and a rail have only the margin
                  to complete in, so the radius cannot exceed the inset — at
@@ -640,7 +670,8 @@
                  the screen and the road appeared to start mid-bend. The inset
                  is already viewport-relative in CSS, so it is not scaled
                  again here. */
-              inset: inset, R: Math.min(150, inset), moves: [] };
+              inset: inset, insetOut: insetOut,
+              R: Math.min(150, insetOut), moves: [] };
     var kids = el.hasAttribute('data-road')
       ? [el]
       : Array.prototype.slice.call(el.children).filter(function (k) {
@@ -651,6 +682,7 @@
       var spec = k.getAttribute('data-road').split('-');
       g.moves.push({
         kind: spec[0], side: spec[1] || 'left', to: spec[1] || 'left',
+        out: spec.indexOf('out') > 1, far: spec.indexOf('far') > 1,
         t: r.top - box.top, b: r.bottom - box.top
       });
     });
@@ -710,8 +742,13 @@
     keep.forEach(function (k) { k.c.d = k.f * run.lanes[k.c.lane].L; });
   }
 
+  /* He redrew the asphalt at 95 across where the home page runs 125.88. The
+     whole run-mode drawing takes that ratio, traffic included, so the cars
+     stay the size of the lane they are in. */
+  var HIS_ROAD = 95 / W_ROAD;
+
   function fitRoutes(W) {
-    scaleNow = W <= MOBILE_W ? 0.62 : (W <= NARROW_W ? 0.82 : 1);
+    scaleNow = (W <= MOBILE_W ? 0.62 : (W <= NARROW_W ? 0.82 : 1)) * HIS_ROAD;
     carScale = (CAR_H * scaleNow) / MEDH;
 
     runs.forEach(function (r) {

@@ -66,18 +66,22 @@
      so the road keeps its margin as the window changes: the copy column below
      is fixed at 940, so the margin either side is (100vw - 940) / 2 and the
      rail has to fit inside it with half a road to spare. */
-  /* Measured off his file. The rail sits about 400 of 1915 in from the edge —
-     21% — which is only clear of the copy because his column is 44% of the
-     canvas, not the 65% mine was using. Both are expressed as a share of the
-     viewport here so the relationship holds as the window changes. */
-  --rail-inset:min(400px,21vw);
+  /* Measured off the asphalt in his returned file, not off the canvas. He
+     draws TWO rails a side: an inner one his road uses where the margin is
+     empty, and an outer one it swings out to where a sign plate reaches into
+     the margin — beside the exit gantry, for one. Centres at 1440: inner 226,
+     outer 124, road 95 wide. Both are a share of the viewport so the road
+     keeps its margin as the window changes. */
+  --rail-inset:min(226px,15.7vw);
+  --rail-inset-out:min(124px,8.6vw);
 }
 
-#road-rail-probe{
+#road-rail-probe,#road-rail-probe-out{
   position:absolute;top:0;left:0;
-  width:var(--rail-inset);height:0;
-  visibility:hidden;pointer-events:none;
+  height:0;visibility:hidden;pointer-events:none;
 }
+#road-rail-probe{width:var(--rail-inset)}
+#road-rail-probe-out{width:var(--rail-inset-out)}
 .road-run{position:relative}
 .road-run__art{
   position:absolute;inset:0;z-index:1;
@@ -88,7 +92,7 @@
 .road-run__art path{pointer-events:none}
 .road-run__art .road-hit{pointer-events:stroke;cursor:pointer}
 
-.road-gap{position:relative;height:clamp(120px,11vw,170px)}
+.road-gap{position:relative;height:var(--gap-h,clamp(120px,11vw,170px))}
 
 .road-track{
   position:absolute;z-index:1;
@@ -105,6 +109,21 @@
    which is what leaves the rail its 21% and still clears it. Capped so it
    stops growing on a very wide screen, as his artboard does. */
 .page--qa .sec__inner{max-width:min(900px,48vw)}
+/* His copy column, measured off the cards in his file: 840 across, its left
+   edge at 416 of 1440 and its right at 1256. That is not centred — he moves
+   the whole column 116 to the right, which is what leaves the left margin
+   free for the road to run down it at the inner rail and still clear the
+   copy. The rails only exist above 1280, so neither does the shift. */
+@media (min-width:1281px){
+  .page--qa .qa-sec > .sec__inner,
+  .page--qa #qa-close > .sec__inner{max-width:min(936px,65vw)}
+  /* Away from the road, never towards it. */
+  .page--qa .qa-sec[data-road^="rail-left"]  > .sec__inner > .sec__body > :not(.hwy-sign),
+  .page--qa .qa-sec[data-road^="cross-left"] > .sec__inner > .sec__body > :not(.hwy-sign){translate:8.05vw 0}
+  .page--qa .qa-sec[data-road^="rail-right"]  > .sec__inner > .sec__body > :not(.hwy-sign),
+  .page--qa .qa-sec[data-road^="cross-right"] > .sec__inner > .sec__body > :not(.hwy-sign),
+  .page--qa #qa-close > .sec__inner > .sec__body > :not(.hwy-sign){translate:-5.4vw 0}
+}
 
 /* Below this the margin can no longer hold a road — 21vw plus half a road
    stops clearing a 48vw column — so it comes off the page and the copy takes
@@ -632,7 +651,7 @@
 .page--qa #qa-hero,
 .page--qa #qa-hero.band-blue{
   background:linear-gradient(180deg,#00287d 0%,#013e99 62%,#0153ae 100%);
-  padding-top:clamp(40px,4.4vw,74px);
+  padding-top:clamp(56px,8.2vw,124px);
   padding-bottom:clamp(30px,3.2vw,52px);
 }
 
@@ -645,10 +664,10 @@
    the plate wherever the truss leaves it. The empty first column is the
    mirror of the truss, so the sign lands centred whatever the width. */
 .hwy-sign{
-  --plate:min(660px,46vw);
+  --plate:min(650px,45.1vw);
   display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
   width:100vw;margin-left:calc(50% - 50vw);
-  margin-block:clamp(30px,3.2vw,52px) clamp(26px,2.8vw,44px);
+  margin-block:clamp(30px,3.2vw,52px) clamp(44px,7vw,108px);
 }
 /* Both on row one, explicitly. The truss comes first in the markup on the
    section signs and carries grid-column:3, and sparse auto-placement will not
@@ -657,8 +676,8 @@
 .hwy-sign > *{grid-row:1}
 .hwy-sign__panel{position:relative;grid-column:2;width:var(--plate)}
 /* His hero sign carries truss on the right only — the left of it is open
-   blue. The home page's hero has both; this one does not. */
-#qa-hero .hwy-sign > .gantry__truss:first-of-type{visibility:hidden}
+   blue — and the markup gives it exactly one. :first-of-type therefore
+   matched the RIGHT truss and hid the only one on the page. */
 .hwy-sign__truss{grid-column:3;min-width:0;align-self:center;height:calc(var(--plate) * .1898)}
 
 .hwy-sign__plate{
@@ -683,21 +702,24 @@
    two sit side by side on the sign's top edge, both breaking above it. */
 .hwy-sign__tab{
   position:absolute;z-index:2;
-  left:30%;top:calc(-1 * clamp(20px,2.2vw,34px));
+  left:32.5%;top:calc(-1 * clamp(28px,3.1vw,45px));
   display:inline-block;
-  padding:.62em 1.05em;
+  padding:.66em 1.05em;
   background:var(--yellow-500);
   border-radius:7px 7px 0 0;
   font-family:var(--font-sign);
-  font-size:clamp(.72rem,1.05vw,.92rem);font-weight:800;
+  font-size:clamp(.84rem,1.26vw,1.1rem);font-weight:800;
   letter-spacing:.1em;text-transform:uppercase;
   color:var(--ink);
   box-shadow:0 2px 0 rgba(0,0,0,.25);
 }
+/* Only the hero's tab carries the shield on its end; the section signs put it
+   elsewhere, so the clearance is scoped to the hero. */
+#qa-hero .hwy-sign__tab{padding-left:3.4em}
 .hwy-sign__shield{
   position:absolute;z-index:3;
-  left:12%;top:calc(-1 * clamp(62px,6.8vw,96px));
-  height:clamp(76px,8.2vw,116px);width:auto;
+  left:15%;top:calc(-1 * clamp(58px,6.3vw,92px));
+  height:clamp(88px,9.8vw,142px);width:auto;
   filter:drop-shadow(0 5px 10px rgba(0,0,0,.45));
 }
 
@@ -857,19 +879,30 @@
    Every category gets his green sign on a gantry: the icon in a blue disc,
    the category, and a lane arrow. The truss runs off one side and the sides
    alternate down the page, as they do in his file. */
+/* His section signs are not centred: each one hugs the edge its truss runs
+   off, with a fixed run of truss between the plate and the page edge, and the
+   whole thing sits across the top of the section with the copy beneath. The
+   plate measures 616 of 1440 in his file. */
 .hwy-sign--section{
-  --plate:min(660px,52vw);
-  margin-block:0 clamp(26px,3vw,44px);
+  --plate:min(616px,42.8vw);
+  /* The run of truss between the plate and the page edge is what keeps the
+     plate clear of the road in that margin: at 1440 the outer rail's asphalt
+     starts at 1268, and 190 of truss stops the plate at 1250. */
+  grid-template-columns:1fr auto min(190px,13.2vw);
+  margin-block:0 clamp(30px,3.6vw,56px);
 }
+.hwy-sign--section.is-mirrored{grid-template-columns:min(190px,13.2vw) auto 1fr}
 .hwy-sign--section .hwy-sign__plate{
   display:flex;align-items:center;gap:clamp(14px,2vw,28px);
   padding:clamp(16px,1.8vw,26px) clamp(18px,2.2vw,32px);
   border-radius:14px;
   text-align:left;
 }
-.hwy-sign--section.is-mirrored .hwy-sign__panel{grid-column:2}
+.hwy-sign--section .hwy-sign__panel{grid-column:2}
 .hwy-sign--section.is-mirrored .hwy-sign__truss{grid-column:1}
-.hwy-sign--section.is-mirrored .hwy-sign__plate{flex-direction:row-reverse}
+/* Icon nearest the truss, arrow pointing away from it — his order, which is
+   the markup order on the mirrored side and reversed on the other. */
+.hwy-sign--section:not(.is-mirrored) .hwy-sign__plate{flex-direction:row-reverse}
 
 .hwy-sign__label{
   flex:1;
@@ -886,11 +919,13 @@
   box-shadow:0 0 0 2px #fff;
 }
 
-/* The intro copy sits under the sign, not centred under an eyebrow. */
-.page--qa .qa-sec__head{text-align:left}
-.page--qa .qa-sec--centred .qa-sec__head{max-width:none;margin-inline:0;text-align:left}
-.page--qa .qa-sec--centred .qa-sec__head h2,
-.page--qa .qa-sec--centred .qa-sec__head .body-copy{margin-inline:0}
+/* The intro copy sits under the sign. In a split section it runs down the
+   left column, left-aligned beside the answers; in a centred one his heading
+   and intro sit on the column's centre, with the sign above them. These rules
+   pre-date the sign moving out of the head and used to left-align both. */
+.page--qa .qa-sec--split .qa-sec__head{max-width:none;margin-inline:0;text-align:left}
+.page--qa .qa-sec--split .qa-sec__head h2,
+.page--qa .qa-sec--split .qa-sec__head .body-copy{margin-inline:0}
 .page--qa .qa-sec__head .eyebrow{display:none}
 .page--qa .qa-sec__head > .qa-disc{display:none}
 
@@ -904,7 +939,7 @@
    ========================================================================= */
 
 .hwy-exits{
-  --plate:min(1050px,72vw);
+  --plate:min(1062px,73.8vw);
   position:relative;
   display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
   width:100vw;margin-left:calc(50% - 50vw);
@@ -912,11 +947,12 @@
 }
 .hwy-exits > *{grid-row:1}
 .hwy-exits__truss{min-width:0;align-self:center;height:calc(var(--plate) * .148)}
-.hwy-exits__panel{position:relative;grid-column:2;width:var(--plate)}
+.hwy-exits__panel{position:relative;z-index:3;grid-column:2;width:var(--plate)}
 
 .hwy-exits__grid{
   position:relative;
   display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-auto-rows:1fr;
   gap:2px;
   background:#fff;                    /* shows through the gaps as the dividers */
   border:3px solid #fff;
@@ -926,30 +962,30 @@
 }
 .hwy-exit{
   display:flex;align-items:center;justify-content:space-between;gap:.8em;
-  min-height:clamp(52px,4.4vw,70px);
-  padding:clamp(12px,1.4vw,18px) clamp(14px,1.7vw,24px);
+  min-height:clamp(58px,6.6vw,95px);
+  padding:clamp(10px,1.2vw,16px) clamp(10px,1.1vw,16px);
   background:var(--sign-green);
   color:#fff;text-decoration:none;
   font-family:var(--font-sign);
-  font-size:clamp(.72rem,1.02vw,.92rem);font-weight:700;
-  line-height:1.18;letter-spacing:.005em;
+  font-size:clamp(.82rem,1.3vw,1.15rem);font-weight:700;
+  line-height:1.2;letter-spacing:.005em;
   text-align:center;
   transition:background .16s ease;
 }
-.hwy-exit > span{flex:1;text-wrap:balance;max-width:11ch;margin-inline:auto}
+.hwy-exit > span{flex:1;text-wrap:balance;margin-inline:auto}
 .hwy-exit:hover{background:#23a82b}
 .hwy-exit:focus-visible{outline:3px solid var(--yellow-500);outline-offset:-4px}
-.hwy-exit__arrow{width:clamp(18px,1.9vw,28px);height:auto;fill:#fff;flex:none}
+.hwy-exit__arrow{width:clamp(22px,2.9vw,44px);height:auto;fill:#fff;flex:none}
 
 /* The route tab and the shield, riding the top edge as they do on the sign. */
 .hwy-exits__tab{
   position:absolute;z-index:2;
-  left:11%;top:calc(-1 * clamp(15px,1.7vw,24px));
-  padding:.5em .95em;
+  left:12%;top:calc(-1 * clamp(30px,3.4vw,49px));
+  padding:.62em 1.1em;
   background:var(--yellow-500);
-  border-radius:6px 6px 0 0;
+  border-radius:7px 7px 0 0;
   font-family:var(--font-sign);
-  font-size:clamp(.66rem,.95vw,.82rem);font-weight:800;
+  font-size:clamp(.84rem,1.26vw,1.1rem);font-weight:800;
   letter-spacing:.11em;text-transform:uppercase;color:var(--ink);
   box-shadow:0 2px 0 rgba(0,0,0,.25);
 }
@@ -964,8 +1000,8 @@
 
 /* His cloud bank, sitting under the gantry on the left. */
 .qa-cloud--exits{
-  position:absolute;left:-2%;z-index:2;
-  margin-top:calc(-1 * clamp(40px,5vw,80px));
+  position:absolute;left:-4%;z-index:1;
+  margin-top:clamp(6px,1vw,16px);
   width:clamp(220px,24vw,360px);
   opacity:1;
   filter:drop-shadow(0 10px 20px rgba(0,20,60,.35));

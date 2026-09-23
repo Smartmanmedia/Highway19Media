@@ -387,6 +387,7 @@
        custom property, because a custom property comes back as its raw token
        and never as a length. -->
   <div id="road-rail-probe" aria-hidden="true"></div>
+  <div id="road-rail-probe-out" aria-hidden="true"></div>
 
   <!-- ========================================================================
        HERO — short on purpose. His gantry plate carries the headline as real
@@ -432,13 +433,14 @@
       </div>
     </div>
   </section>
-    <!-- Down the right, then the whole width of the page and off the left
-         edge — his drawing. leave-left from a right-hand rail already does
-         exactly that: it turns away from the near edge and keeps going. -->
     <!-- Down the right, across the page, and DOWN the left — one road, the
          way he drew it. It carries on past the exit gantry and all the way
-         down beside General, so the route does not close here. -->
-    <div class="road-gap" data-road="cross-left" style="--gap:#0249a8" aria-hidden="true">
+         down beside General, so the route does not close here.
+         The crossing lands on the OUTER left rail, because the gantry plate
+         reaches further into the margin than the inner one does. The gap is
+         as deep as he drew the turn: the crossing has to clear the sub-copy
+         above it and the gantry below it with blue either side. -->
+    <div class="road-gap" data-road="cross-left-out" style="--gap:#0249a8;--gap-h:clamp(150px,22vw,330px)" aria-hidden="true">
       <img class="qa-cloud qa-cloud--turn" src="assets/brand/clouds/Cloud2.svg" alt="" aria-hidden="true">
     </div>
 
@@ -456,10 +458,10 @@
       <nav class="hwy-exits__grid" aria-label="Question categories">
           <a class="hwy-exit qa-exits__link" href="#qa-websites"><span>Website Design</span><svg class="hwy-exit__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 60 8 34h12V4h24v30h12z"/></svg></a>
           <a class="hwy-exit qa-exits__link" href="#qa-video"><span>Video Production</span><svg class="hwy-exit__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 60 8 34h12V4h24v30h12z"/></svg></a>
-          <a class="hwy-exit qa-exits__link" href="#qa-advertising"><span>Social Media &amp; Paid Ads</span><svg class="hwy-exit__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M60 32 34 58V44H6V20h28V6z"/></svg></a>
-          <a class="hwy-exit qa-exits__link" href="#qa-print"><span>Print &amp; Promotional Products</span><svg class="hwy-exit__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M4 32 30 6v14h28v24H30v14z"/></svg></a>
+          <a class="hwy-exit qa-exits__link" href="#qa-advertising"><span>Social Media<br>&amp; Paid Ads</span><svg class="hwy-exit__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M60 32 34 58V44H6V20h28V6z"/></svg></a>
+          <a class="hwy-exit qa-exits__link" href="#qa-print"><span>Print &amp;<br>Promotional Products</span><svg class="hwy-exit__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M4 32 30 6v14h28v24H30v14z"/></svg></a>
           <a class="hwy-exit qa-exits__link" href="#qa-working"><span>Working With Us</span><svg class="hwy-exit__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M60 32 34 58V44H6V20h28V6z"/></svg></a>
-          <a class="hwy-exit qa-exits__link" href="#qa-branding"><span>Branding &amp; Graphic Design</span><svg class="hwy-exit__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 60 8 34h12V4h24v30h12z"/></svg></a>
+          <a class="hwy-exit qa-exits__link" href="#qa-branding"><span>Branding &amp;<br>Graphic Design</span><svg class="hwy-exit__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 60 8 34h12V4h24v30h12z"/></svg></a>
       </nav>
     </div>
     <span class="gantry__truss hwy-exits__truss" aria-hidden="true"></span>
@@ -471,7 +473,7 @@
   <!-- ======================================================================
        GENERAL
        ==================================================================== -->
-  <section id="qa-general" class="sec qa-sec qa-sec--centred band-white" data-section="qa-general" aria-labelledby="qa-general-h" data-road="rail-left">
+  <section id="qa-general" class="sec qa-sec qa-sec--centred band-white" data-section="qa-general" aria-labelledby="qa-general-h" data-road="rail-left-out">
     <div class="sec__inner">
       <div class="sec__body">
       <div class="qa-sec__head qa-sec__head--plain">
@@ -485,23 +487,6 @@
           </svg>
         </span>
         <span class="eyebrow eyebrow--plain">General</span>
-        <div class="hwy-sign hwy-sign--section">
-          <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
-          <div class="hwy-sign__panel">
-            <div class="hwy-sign__plate">
-              <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"></span>
-              <span class="qa-disc" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M9 4.2 3.4 6.5v13.3L9 17.5l6 2.3 5.6-2.3V4.2L15 6.5 9 4.2Z"/>
-              <path d="M9 4.2v13.3M15 6.5v13.3"/>
-                </svg>
-              </span>
-              <span class="hwy-sign__label">General</span>
-              <svg class="hwy-sign__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 60 8 34h12V4h24v30h12z"/></svg>
-              <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"></span>
-            </div>
-          </div>
-        </div>
         <h2 id="qa-general-h">Start Here.</h2>
         <p class="body-copy">The questions we get asked most — who we are, how we work, and what it takes to get your marketing pointed in one direction.</p>
       </div>
@@ -630,18 +615,39 @@
       </div>
     </div>
   </section>
-    <div class="road-gap" data-road="leave-left" style="--gap:#000000" aria-hidden="true"></div>
+    <div class="road-gap" data-road="leave-left-out" style="--gap:#000000" aria-hidden="true"></div>
   </div>
 
   <div class="road-run" data-road-run>
-    <div class="road-gap" data-road="arrive-left" style="--gap:#001853" aria-hidden="true"></div>
+    <div class="road-gap" data-road="arrive-right-out-far" style="--gap:#001853" aria-hidden="true"></div>
 
   <!-- ======================================================================
        WEBSITE DESIGN & DEVELOPMENT
        ==================================================================== -->
-  <section id="qa-websites" class="sec qa-sec qa-sec--split band-blue-lt" data-section="qa-websites" aria-labelledby="qa-websites-h" data-road="rail-left">
+  <section id="qa-websites" class="sec qa-sec qa-sec--split band-blue-lt" data-section="qa-websites" aria-labelledby="qa-websites-h" data-road="rail-right-out">
     <div class="sec__inner">
       <div class="sec__body">
+      <div class="hwy-sign hwy-sign--section is-mirrored">
+        <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
+        <div class="hwy-sign__panel">
+          <div class="hwy-sign__plate">
+            <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"></span>
+            <span class="qa-disc" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <rect x="2.6" y="4.4" width="18.8" height="15.2" rx="2.2"/>
+              <path d="M2.6 8.7h18.8"/>
+              <circle class="solid" cx="5.4" cy="6.6" r=".85"/>
+              <circle class="solid" cx="8.1" cy="6.6" r=".85"/>
+              <circle class="solid" cx="10.8" cy="6.6" r=".85"/>
+              <path d="M10 11.9L7.6 14.3l2.4 2.4M14 11.9l2.4 2.4-2.4 2.4M12.9 11.4l-1.8 5.8"/>
+              </svg>
+            </span>
+            <span class="hwy-sign__label">Website Design &amp; Development</span>
+            <svg class="hwy-sign__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M58 56 24 50l8-8-24-24 12-12 24 24 8-8z"/></svg>
+            <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
       <div class="qa-sec__grid">
       <div class="qa-sec__head">
         <!-- His guide sign carries the category: icon disc, the name, and a
@@ -658,27 +664,6 @@
           </svg>
         </span>
         <span class="eyebrow eyebrow--plain">Website Design &amp; Development</span>
-        <div class="hwy-sign hwy-sign--section is-mirrored">
-          <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
-          <div class="hwy-sign__panel">
-            <div class="hwy-sign__plate">
-              <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"></span>
-              <span class="qa-disc" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <rect x="2.6" y="4.4" width="18.8" height="15.2" rx="2.2"/>
-              <path d="M2.6 8.7h18.8"/>
-              <circle class="solid" cx="5.4" cy="6.6" r=".85"/>
-              <circle class="solid" cx="8.1" cy="6.6" r=".85"/>
-              <circle class="solid" cx="10.8" cy="6.6" r=".85"/>
-              <path d="M10 11.9L7.6 14.3l2.4 2.4M14 11.9l2.4 2.4-2.4 2.4M12.9 11.4l-1.8 5.8"/>
-                </svg>
-              </span>
-              <span class="hwy-sign__label">Website Design &amp; Development</span>
-              <svg class="hwy-sign__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M58 56 24 50l8-8-24-24 12-12 24 24 8-8z"/></svg>
-              <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"></span>
-            </div>
-          </div>
-        </div>
         <h2 id="qa-websites-h">Your Business, Open 24/7.</h2>
         <p class="body-copy">From a simple landing page to a full custom build — how local businesses get online, and how they keep growing once they are.</p>
       </div>
@@ -826,7 +811,7 @@
       </div>
     </div>
   </section>
-    <div class="road-gap" data-road="leave-left" style="--gap:#000000" aria-hidden="true"></div>
+    <div class="road-gap" data-road="leave-right-out" style="--gap:#000000" aria-hidden="true"></div>
   </div>
 
   <div class="road-run" data-road-run>
@@ -839,9 +824,29 @@
     <!-- A track of its own in the far margin: in off the edge, down,
          back out. Fixed height, anchored here, so opening an answer
          below it never touches it. -->
-    <div class="road-run road-track road-track--right" data-road-run data-road="track-right" style="--t:96px;--h:470px" aria-hidden="true"></div>
+    <div class="road-run road-track road-track--right" data-road-run data-road="track-right-out" style="--t:120px;--h:900px" aria-hidden="true"></div>
     <div class="sec__inner">
       <div class="sec__body">
+      <div class="hwy-sign hwy-sign--section">
+        <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
+        <div class="hwy-sign__panel">
+          <div class="hwy-sign__plate">
+            <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"></span>
+            <span class="qa-disc" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <circle cx="7.7" cy="6" r="2.9"/>
+              <circle cx="15.1" cy="6" r="2.9"/>
+              <rect x="2.6" y="10.4" width="12.9" height="7" rx="1.6"/>
+              <path d="M15.5 12.4l5.9-2.4v7.8l-5.9-2.4z"/>
+              <path d="M7.3 17.4L5.6 21M10.8 17.4L12.5 21"/>
+              </svg>
+            </span>
+            <span class="hwy-sign__label">Video Production</span>
+            <svg class="hwy-sign__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M6 56l6-34 8 8 24-24 12 12-24 24 8 8z"/></svg>
+            <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
       <div class="qa-sec__head">
         <!-- His guide sign carries the category: icon disc, the name, and a
              lane arrow, with the truss running off whichever side this one
@@ -856,26 +861,6 @@
           </svg>
         </span>
         <span class="eyebrow eyebrow--plain">Video Production</span>
-        <div class="hwy-sign hwy-sign--section">
-          <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
-          <div class="hwy-sign__panel">
-            <div class="hwy-sign__plate">
-              <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"></span>
-              <span class="qa-disc" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <circle cx="7.7" cy="6" r="2.9"/>
-              <circle cx="15.1" cy="6" r="2.9"/>
-              <rect x="2.6" y="10.4" width="12.9" height="7" rx="1.6"/>
-              <path d="M15.5 12.4l5.9-2.4v7.8l-5.9-2.4z"/>
-              <path d="M7.3 17.4L5.6 21M10.8 17.4L12.5 21"/>
-                </svg>
-              </span>
-              <span class="hwy-sign__label">Video Production</span>
-              <svg class="hwy-sign__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M6 56l6-34 8 8 24-24 12 12-24 24 8 8z"/></svg>
-              <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"></span>
-            </div>
-          </div>
-        </div>
         <h2 id="qa-video-h">Put Your Business in Motion.</h2>
         <p class="body-copy">Commercials, social content, interviews and everything between — produced at the scale your goals and your budget actually call for.</p>
       </div>
@@ -986,18 +971,36 @@
       </div>
     </div>
   </section>
-    <div class="road-gap" data-road="cross-right" style="--gap:#003b5f" aria-hidden="true"></div>
+    <div class="road-gap" data-road="cross-right-out" style="--gap:#003b5f" aria-hidden="true"></div>
 
   <!-- ======================================================================
        SOCIAL MEDIA & PAID ADVERTISING
        ==================================================================== -->
-  <section id="qa-advertising" class="sec qa-sec qa-sec--split band-white" data-section="qa-advertising" aria-labelledby="qa-advertising-h" data-road="rail-right">
+  <section id="qa-advertising" class="sec qa-sec qa-sec--split band-white" data-section="qa-advertising" aria-labelledby="qa-advertising-h" data-road="rail-right-out">
     <!-- A track of its own in the far margin: in off the edge, down,
          back out. Fixed height, anchored here, so opening an answer
          below it never touches it. -->
-    <div class="road-run road-track road-track--left" data-road-run data-road="track-left" style="--t:130px;--h:560px" aria-hidden="true"></div>
+    <div class="road-run road-track road-track--left" data-road-run data-road="track-left-out" style="--t:150px;--h:980px" aria-hidden="true"></div>
     <div class="sec__inner">
       <div class="sec__body">
+      <div class="hwy-sign hwy-sign--section is-mirrored">
+        <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
+        <div class="hwy-sign__panel">
+          <div class="hwy-sign__plate">
+            <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"></span>
+            <span class="qa-disc" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M11.6 3.4H4.2a2.1 2.1 0 0 0-2.1 2.1v5.7a2.1 2.1 0 0 0 2.1 2.1h.6v3.3l3.4-3.3h3.4a2.1 2.1 0 0 0 2.1-2.1V5.5a2.1 2.1 0 0 0-2.1-2.1z"/>
+              <path class="solid" d="M7.9 11c-1.6-1.1-3-2.2-3-3.4 0-1.3 1.5-1.8 2.4-.9l.6.6.6-.6c.9-.9 2.4-.4 2.4.9 0 1.2-1.4 2.3-3 3.4z"/>
+              <path d="M16 10.6v9.9M16 12.3l2.1-3.4c1.1.3 1.6 1.2 1.4 2.3l-.3 1.5h2.2c1 0 1.7.9 1.5 1.9l-.8 4.1c-.2.9-1 1.6-2 1.6H16"/>
+              </svg>
+            </span>
+            <span class="hwy-sign__label">Social Media &amp; Paid Advertising</span>
+            <svg class="hwy-sign__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M60 32 34 58V44H6V20h28V6z"/></svg>
+            <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
       <div class="qa-sec__grid">
       <div class="qa-sec__head">
         <!-- His guide sign carries the category: icon disc, the name, and a
@@ -1011,24 +1014,6 @@
           </svg>
         </span>
         <span class="eyebrow eyebrow--plain">Social Media &amp; Paid Advertising</span>
-        <div class="hwy-sign hwy-sign--section is-mirrored">
-          <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
-          <div class="hwy-sign__panel">
-            <div class="hwy-sign__plate">
-              <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"></span>
-              <span class="qa-disc" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M11.6 3.4H4.2a2.1 2.1 0 0 0-2.1 2.1v5.7a2.1 2.1 0 0 0 2.1 2.1h.6v3.3l3.4-3.3h3.4a2.1 2.1 0 0 0 2.1-2.1V5.5a2.1 2.1 0 0 0-2.1-2.1z"/>
-              <path class="solid" d="M7.9 11c-1.6-1.1-3-2.2-3-3.4 0-1.3 1.5-1.8 2.4-.9l.6.6.6-.6c.9-.9 2.4-.4 2.4.9 0 1.2-1.4 2.3-3 3.4z"/>
-              <path d="M16 10.6v9.9M16 12.3l2.1-3.4c1.1.3 1.6 1.2 1.4 2.3l-.3 1.5h2.2c1 0 1.7.9 1.5 1.9l-.8 4.1c-.2.9-1 1.6-2 1.6H16"/>
-                </svg>
-              </span>
-              <span class="hwy-sign__label">Social Media &amp; Paid Advertising</span>
-              <svg class="hwy-sign__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M60 32 34 58V44H6V20h28V6z"/></svg>
-              <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"></span>
-            </div>
-          </div>
-        </div>
         <h2 id="qa-advertising-h">Send the Right Traffic Your Way.</h2>
         <p class="body-copy">Content, campaigns and ad spend aimed at the people most likely to actually need what your business does.</p>
       </div>
@@ -1180,9 +1165,26 @@
   <!-- ======================================================================
        BRANDING & GRAPHIC DESIGN
        ==================================================================== -->
-  <section id="qa-branding" class="sec qa-sec qa-sec--centred band-blue-lt" data-section="qa-branding" aria-labelledby="qa-branding-h" data-road="rail-right">
+  <section id="qa-branding" class="sec qa-sec qa-sec--centred band-blue-lt" data-section="qa-branding" aria-labelledby="qa-branding-h" data-road="rail-right-out">
     <div class="sec__inner">
       <div class="sec__body">
+      <div class="hwy-sign hwy-sign--section">
+        <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
+        <div class="hwy-sign__panel">
+          <div class="hwy-sign__plate">
+            <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"></span>
+            <span class="qa-disc" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M19.6 12.6v5.9a2.2 2.2 0 0 1-2.2 2.2H5.6a2.2 2.2 0 0 1-2.2-2.2V6.7a2.2 2.2 0 0 1 2.2-2.2h6"/>
+              <path d="M16.4 3.3l3.9 3.9-8 8-4.4.5.5-4.4z"/>
+              </svg>
+            </span>
+            <span class="hwy-sign__label">Branding &amp; Graphic Design</span>
+            <svg class="hwy-sign__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 60 8 34h12V4h24v30h12z"/></svg>
+            <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
       <div class="qa-sec__head">
         <!-- His guide sign carries the category: icon disc, the name, and a
              lane arrow, with the truss running off whichever side this one
@@ -1194,23 +1196,6 @@
           </svg>
         </span>
         <span class="eyebrow eyebrow--plain">Branding &amp; Graphic Design</span>
-        <div class="hwy-sign hwy-sign--section">
-          <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
-          <div class="hwy-sign__panel">
-            <div class="hwy-sign__plate">
-              <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"></span>
-              <span class="qa-disc" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M19.6 12.6v5.9a2.2 2.2 0 0 1-2.2 2.2H5.6a2.2 2.2 0 0 1-2.2-2.2V6.7a2.2 2.2 0 0 1 2.2-2.2h6"/>
-              <path d="M16.4 3.3l3.9 3.9-8 8-4.4.5.5-4.4z"/>
-                </svg>
-              </span>
-              <span class="hwy-sign__label">Branding &amp; Graphic Design</span>
-              <svg class="hwy-sign__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 60 8 34h12V4h24v30h12z"/></svg>
-              <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"></span>
-            </div>
-          </div>
-        </div>
         <h2 id="qa-branding-h">One Look, Every Road You Take.</h2>
         <p class="body-copy">Logos, colours, type and production-ready files that keep your business recognisable everywhere it shows up.</p>
       </div>
@@ -1285,7 +1270,7 @@
       </div>
     </div>
   </section>
-    <div class="road-gap" data-road="leave-right" style="--gap:#013f8e" aria-hidden="true"></div>
+    <div class="road-gap" data-road="leave-right-out" style="--gap:#013f8e" aria-hidden="true"></div>
   </div>
 
   <!-- ======================================================================
@@ -1294,6 +1279,26 @@
   <section id="qa-print" class="sec qa-sec qa-sec--split band-white" data-section="qa-print" aria-labelledby="qa-print-h">
     <div class="sec__inner">
       <div class="sec__body">
+      <div class="hwy-sign hwy-sign--section is-mirrored">
+        <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
+        <div class="hwy-sign__panel">
+          <div class="hwy-sign__plate">
+            <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"></span>
+            <span class="qa-disc" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M6.9 8.4V3.5h10.2v4.9"/>
+              <path d="M4.6 8.4h14.8a1.8 1.8 0 0 1 1.8 1.8v4a1.8 1.8 0 0 1-1.8 1.8h-1.5"/>
+              <path d="M6.9 16h-1.5a1.8 1.8 0 0 1-1.8-1.8v-4a1.8 1.8 0 0 1 1.8-1.8"/>
+              <path d="M6.9 13.2h10.2v7.3H6.9z"/>
+              <circle class="solid" cx="18" cy="11" r=".9"/>
+              </svg>
+            </span>
+            <span class="hwy-sign__label">Print, Signage &amp; Promotional Products</span>
+            <svg class="hwy-sign__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M4 32 30 6v14h28v24H30v14z"/></svg>
+            <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
       <div class="qa-sec__grid">
       <div class="qa-sec__head">
         <!-- His guide sign carries the category: icon disc, the name, and a
@@ -1309,26 +1314,6 @@
           </svg>
         </span>
         <span class="eyebrow eyebrow--plain">Print, Signage &amp; Promotional Products</span>
-        <div class="hwy-sign hwy-sign--section is-mirrored">
-          <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
-          <div class="hwy-sign__panel">
-            <div class="hwy-sign__plate">
-              <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"></span>
-              <span class="qa-disc" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M6.9 8.4V3.5h10.2v4.9"/>
-              <path d="M4.6 8.4h14.8a1.8 1.8 0 0 1 1.8 1.8v4a1.8 1.8 0 0 1-1.8 1.8h-1.5"/>
-              <path d="M6.9 16h-1.5a1.8 1.8 0 0 1-1.8-1.8v-4a1.8 1.8 0 0 1 1.8-1.8"/>
-              <path d="M6.9 13.2h10.2v7.3H6.9z"/>
-              <circle class="solid" cx="18" cy="11" r=".9"/>
-                </svg>
-              </span>
-              <span class="hwy-sign__label">Print, Signage &amp; Promotional Products</span>
-              <svg class="hwy-sign__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M4 32 30 6v14h28v24H30v14z"/></svg>
-              <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"></span>
-            </div>
-          </div>
-        </div>
         <h2 id="qa-print-h">Brand You Can Hold.</h2>
         <p class="body-copy">Business cards, signs, shirts, merchandise and fully custom products — sourced, printed and delivered without you chasing suppliers.</p>
       </div>
@@ -1414,6 +1399,24 @@
   <section id="qa-working" class="sec qa-sec qa-sec--centred band-green" data-section="qa-working" aria-labelledby="qa-working-h" data-road="rail-left">
     <div class="sec__inner">
       <div class="sec__body">
+      <div class="hwy-sign hwy-sign--section">
+        <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
+        <div class="hwy-sign__panel">
+          <div class="hwy-sign__plate">
+            <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"></span>
+            <span class="qa-disc" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="8.8"/>
+              <circle cx="12" cy="12" r="2.9"/>
+              <path d="M12 3.2v5.9M4.5 16.3l5-2.9M19.5 16.3l-5-2.9"/>
+              </svg>
+            </span>
+            <span class="hwy-sign__label">Working With Highway 19 Media</span>
+            <svg class="hwy-sign__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M60 32 34 58V44H6V20h28V6z"/></svg>
+            <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
       <div class="qa-sec__head">
         <!-- His guide sign carries the category: icon disc, the name, and a
              lane arrow, with the truss running off whichever side this one
@@ -1426,24 +1429,6 @@
           </svg>
         </span>
         <span class="eyebrow eyebrow--plain">Working With Highway 19 Media</span>
-        <div class="hwy-sign hwy-sign--section">
-          <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
-          <div class="hwy-sign__panel">
-            <div class="hwy-sign__plate">
-              <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"></span>
-              <span class="qa-disc" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="8.8"/>
-              <circle cx="12" cy="12" r="2.9"/>
-              <path d="M12 3.2v5.9M4.5 16.3l5-2.9M19.5 16.3l-5-2.9"/>
-                </svg>
-              </span>
-              <span class="hwy-sign__label">Working With Highway 19 Media</span>
-              <svg class="hwy-sign__arrow" viewBox="0 0 64 64" aria-hidden="true"><path d="M60 32 34 58V44H6V20h28V6z"/></svg>
-              <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"></span>
-            </div>
-          </div>
-        </div>
         <h2 id="qa-working-h">What It’s Actually Like.</h2>
         <p class="body-copy">Who you’ll talk to, how involved you need to be, who owns what at the end, and how the first conversation goes.</p>
       </div>
@@ -1538,8 +1523,8 @@
       </div>
     </div>
   </section>
-    <div class="road-gap" data-road="cross-right" style="--gap:#0b5a3a" aria-hidden="true"></div>
-  <section id="qa-close" class="sec band-navy" data-section="qa-09-close" data-road="rail-right">
+    <div class="road-gap" data-road="cross-right-out" style="--gap:#0b5a3a" aria-hidden="true"></div>
+  <section id="qa-close" class="sec band-navy" data-section="qa-09-close" data-road="rail-right-out">
     <div class="sec__inner">
       <div class="sec__body">
         <div class="headline">
@@ -1560,7 +1545,7 @@
       </div>
     </div>
   </section>
-    <div class="road-gap" data-road="leave-right" style="--gap:#062f5e" aria-hidden="true"></div>
+    <div class="road-gap" data-road="leave-right-out" style="--gap:#062f5e" aria-hidden="true"></div>
   </div>
 
   <!-- ========================================================================
