@@ -356,7 +356,6 @@ LOOK = {
 # #161616 through the night sections, and out on the sand a warm #534d45 with
 # a yellow line down it. road.js builds one gradient per route from these.
 PAINT = {
-    "qa-general":    ' data-verge',
     # The open water the Print section sits on: his container ship crosses it
     # at a fifth of the way down, bow first, with its own shadow under it.
     "qa-print":      ' data-sea=".18"',
@@ -396,10 +395,15 @@ PAGE = [
     # beside the hero, across on his big turn, then down the OUTER left rail
     # so it passes outside the exit gantry, and off the left edge under the
     # first card. Nothing of it ever crosses the copy column.
+    # ...and it STOPS where his stops. In QA-Part3 the left-hand run is
+    # Stright-2 at 1279..1604 and Curve-9 at 1601..2025 — it is gone before
+    # the first question card. Running it the whole length of General, with
+    # his shoulder and his trees beside it, was most of why this stretch read
+    # as a different page: he leaves the questions on open blue.
     ("tail", [
-        ("sec", "qa-general",  "rail-left-out"),
-        ("gap", "leave-left-out", "#001e6a", "#002375", "", ' data-verge'),
+        ("gap", "leave-left-out", "#002375", "#0455b8", "", ' data-verge'),
     ]),
+    ("plain", "qa-general"),
     # Route 2 — his second road: in off the LEFT edge, the full width of the
     # page, then down the outer right rail beside Websites and out the right.
     # Right-hand runs take the outer rail because the copy column sits right
@@ -425,35 +429,43 @@ PAGE = [
         ("gap", "leave-left-far", "#2b2f47", "#202337", "",
          ' data-asphalt="#161616"'),
     ]),
-    # The desert's own road runs down its right and leaves there — his Part 3
-    # starts Branding with a road on the LEFT instead, with his forest planted
-    # down both sides of it, so the two are separate runs and not one rail
-    # that would have had to cross the question column to get there.
+    # The desert carries only the road he draws ACROSS it, behind the sign —
+    # no rail down either margin. In QA-Part3 there is no vertical road
+    # anywhere between the foot of Video and the S-bend at 7597, and a rail
+    # through the sand is most of what made this stretch read as somebody
+    # else's page.
     ("route", [
-        ("sec", "qa-advertising", "rail-right-out", ("pass-right", 173, 150)),
-        ("gap", "leave-right-out", "#297a2b", "#fac67e"),
+        ("sec", "qa-advertising", None, ("pass-right", 173, 150)),
     ]),
+    # His road comes back in off the LEFT at the desert's foot, bends twice,
+    # and runs down the left through the forest with his trees beside it —
+    # Curve-6, Curve-7 and the three 167-wide Stright runs, all on the left.
+    ("route", [
+        ("gap", "arrive-left", "#297a2b", "#fac67e"),
+        ("sec", "qa-branding", "rail-left-out"),
+        ("gap", "leave-left-out", "#297a2b", "#297a2b"),
+    ]),
+    # Working With Us and Still Have a Question are not on his artboard yet,
+    # so they go where they cost his drawing nothing: before Print, which is
+    # the last section he did draw. That is what lets the page still END the
+    # way he ends it — water, coast, highway, forest — instead of carrying on
+    # for two more sections after his last frame.
     ("route", [
         ("gap", "arrive-left", "#297a2b", "#297a2b"),
-        ("sec", "qa-branding", "rail-left-out"),
-        ("gap", "leave-left-out", "#00386d", "#297a2b"),
+        ("sec", "qa-working", "rail-left"),
+        ("gap", "cross-right-out", "#002374", "#002374"),
+        ("close", "rail-right-out"),
+        ("gap", "leave-right-out", "#00386d", "#00386d"),
     ]),
-    # Print sits on open water with the container ship crossing it, and the
-    # coast below: beach, airport, city. Then his highway — 148 across with
-    # three lanes each way, where every other road on the page is 95 with one.
+    # Print sits on his open water with the container ship crossing it, and
+    # the coast below: beach, airport, city, then the six-lane highway and
+    # his forest. That is where his page stops, so it is where ours stops.
     ("plain", "qa-print"),
     ("scene", COAST),
     ("route", [
         ("gap", "pass-right", "#1a1a1a", "#6d6e72"),
     ], ' data-lanes="6" data-road-w="148"'),
     ("scene", FOREST),
-    ("route", [
-        ("gap", "arrive-left", "#002374", "#002374"),
-        ("sec", "qa-working", "rail-left"),
-        ("gap", "cross-right-out", "#0a5a3b", "#0a5b39"),
-        ("close", "rail-right-out"),
-        ("gap", "leave-right-out", "#062e5e", "#062e5e"),
-    ]),
 ]
 
 CLOSING = '''  <section id="qa-close" class="sec band-navy" data-section="qa-09-close"%s>

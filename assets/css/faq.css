@@ -965,7 +965,7 @@
    the ground the highway hands it. */
 .qa-coast__forest{
   position:relative;width:100vw;margin-left:calc(50% - 50vw);
-  height:20.8vw;max-height:300px;
+  height:22.2vw;max-height:320px;
   /* His trees over his own ground. Two layers, not one shorthand: a gradient
      and a url cannot share a background layer, and the whole declaration is
      thrown away if they try. */
@@ -980,6 +980,13 @@
    has to be at least as deep as the road is wide or the route has nowhere to
    draw. 148 of 1441.5, and the six lanes are on the route itself. */
 .page--qa [data-lanes="6"] .road-gap{--gap-h:10.27vw;min-height:148px}
+/* The run below the gantry: his straight is 325 deep and the turn that takes
+   it off the left edge is 424, and then the questions have the page to
+   themselves. */
+/* The turn that takes his road off the left edge below the gantry, with his
+   shoulder and his trees on it — and then the questions have the page to
+   themselves, the way he leaves them. */
+.page--qa .road-run > .road-gap[data-road="leave-left-out"]{--gap-h:20.8vw;min-height:170px;max-height:300px}
 
 /* ── The ship and the planes ─────────────────────────────────────────────
    One SVG per band, behind the copy and out of the way of every pointer. */
@@ -998,8 +1005,10 @@
                  transform:translate(10px,16px)}
 .qa-plane__shadow{filter:brightness(0) saturate(0) opacity(.55) blur(1px)}
 
-.page--qa #qa-working    {background:linear-gradient(180deg,#002374 0%,#012876 42%,#05435e 78%,#0a5b39 100%)}
-.page--qa #qa-close      {background:linear-gradient(180deg,#0a5a3b 0%,#074b4d 28%,#053b5d 58%,#062e5e 100%)}
+/* These two sit between his forest and his ocean now, so they carry the
+   page from one to the other instead of going back to green in between. */
+.page--qa #qa-working    {background:linear-gradient(180deg,#297a2b 0%,#1c6338 38%,#0d4a55 72%,#002374 100%)}
+.page--qa #qa-close      {background:linear-gradient(180deg,#002374 0%,#012a72 45%,#00386d 100%)}
 /* A crossing strip takes the colour of the join it sits on — the generator
    passes it, because only the route table knows which two grounds meet
    there. Without it every crossing showed as a flat band between two
