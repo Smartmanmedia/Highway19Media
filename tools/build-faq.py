@@ -42,6 +42,16 @@ ICONS = {
 
 CONTACT = "index.html#close"
 
+# His signs each carry a lane arrow — down for a section you drop into, a
+# diagonal or a turn for one the road is about to bend towards.
+ARROWS = {
+    "down":  '<path d="M32 60 8 34h12V4h24v30h12z"/>',
+    "dnr":   '<path d="M58 56 24 50l8-8-24-24 12-12 24 24 8-8z"/>',
+    "dnl":   '<path d="M6 56l6-34 8 8 24-24 12 12-24 24 8 8z"/>',
+    "right": '<path d="M60 32 34 58V44H6V20h28V6z"/>',
+    "left":  '<path d="M4 32 30 6v14h28v24H30v14z"/>',
+}
+
 CONTENT = [
  dict(sid="qa-general", nav="General", icon="map",
       layout="stacked", band="",
@@ -292,13 +302,13 @@ CONTENT = [
 # Each category's ground and intro layout.
 # --------------------------------------------------------------------------
 LOOK = {
-    "qa-general":     dict(band="band-white",   layout="centred"),
-    "qa-websites":    dict(band="band-blue-lt", layout="split"),
-    "qa-video":       dict(band="band-blue",    layout="centred"),
-    "qa-advertising": dict(band="band-white",   layout="split"),
-    "qa-branding":    dict(band="band-blue-lt", layout="centred"),
-    "qa-print":       dict(band="band-white",   layout="split"),
-    "qa-working":     dict(band="band-green",   layout="centred"),
+    "qa-general":     dict(band="band-white",   layout="centred", arrow="down",  truss="right"),
+    "qa-websites":    dict(band="band-blue-lt", layout="split",   arrow="dnr",   truss="left"),
+    "qa-video":       dict(band="band-blue",    layout="centred", arrow="dnl",   truss="right"),
+    "qa-advertising": dict(band="band-white",   layout="split",   arrow="right", truss="left"),
+    "qa-branding":    dict(band="band-blue-lt", layout="centred", arrow="down",  truss="right"),
+    "qa-print":       dict(band="band-white",   layout="split",   arrow="left",  truss="left"),
+    "qa-working":     dict(band="band-green",   layout="centred", arrow="right", truss="right"),
 }
 
 # --------------------------------------------------------------------------
@@ -307,7 +317,8 @@ LOOK = {
 # the break is already invisible there, and it keeps each rebuild short.
 # road.js reads the data-road attributes; see section 6b in that file.
 #
-#   ("gap",  move, band)              a strip holding a turn and nothing else
+#   ("gap",  move, colour)            a strip holding a turn and nothing else;
+#                                     the colour is the join it sits on
 #   ("sec",  id,   move [, track])    a section the road runs down beside
 #   ("plain", id)                     a section with no road at all
 #   track = (move, top px, height px) an independent stub in the OTHER margin,
@@ -319,26 +330,26 @@ LOOK = {
 # --------------------------------------------------------------------------
 PAGE = [
     ("route", [
-        ("gap", "arrive-left", "band-white"),
+        ("gap", "arrive-left", "#035cc1"),
         ("sec", "qa-general",  "rail-left"),
         ("sec", "qa-websites", "rail-left"),
-        ("gap", "leave-left",  "band-blue-lt"),
+        ("gap", "leave-left",  "#000000"),
     ]),
     ("route", [
-        ("gap", "arrive-left",  "band-blue"),
+        ("gap", "arrive-left",  "#000000"),
         ("sec", "qa-video",     "rail-left",  ("track-right", 96, 470)),
-        ("gap", "cross-right",  "band-white"),
+        ("gap", "cross-right",  "#003b5f"),
         ("sec", "qa-advertising", "rail-right", ("track-left", 130, 560)),
         ("sec", "qa-branding",  "rail-right"),
-        ("gap", "leave-right",  "band-blue-lt"),
+        ("gap", "leave-right",  "#013f8e"),
     ]),
     ("plain", "qa-print"),
     ("route", [
-        ("gap", "arrive-left", "band-green"),
+        ("gap", "arrive-left", "#002274"),
         ("sec", "qa-working",  "rail-left"),
-        ("gap", "cross-right", "band-navy"),
+        ("gap", "cross-right", "#0b5a3a"),
         ("close", "rail-right"),
-        ("gap", "leave-right", "band-navy"),
+        ("gap", "leave-right", "#062f5e"),
     ]),
 ]
 
@@ -416,16 +427,30 @@ def render():
             b.append('      <div class="qa-sec__grid">\n')
 
         b.append('''      <div class="qa-sec__head">
-        <span class="qa-disc" aria-hidden="true">
-          <svg viewBox="0 0 24 24">
-            %s
-          </svg>
-        </span>
-        <span class="eyebrow">%s</span>
+        <!-- His guide sign carries the category: icon disc, the name, and a
+             lane arrow, with the truss running off whichever side this one
+             takes. The sides alternate down the page, as they do in his file. -->
+        <div class="hwy-sign hwy-sign--section%s">
+          <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
+          <div class="hwy-sign__panel">
+            <div class="hwy-sign__plate">
+              <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"></span>
+              <span class="qa-disc" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  %s
+                </svg>
+              </span>
+              <span class="hwy-sign__label">%s</span>
+              <svg class="hwy-sign__arrow" viewBox="0 0 64 64" aria-hidden="true">%s</svg>
+              <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"></span>
+            </div>
+          </div>
+        </div>
         <h2 id="%s-h">%s</h2>
         <p class="body-copy">%s</p>
-      </div>\n''' % (ICONS[sec["icon"]].strip(), e(sec["eyebrow"]),
-                       sid, e(sec["heading"]), e(sec["lead"])))
+      </div>\n''' % (" is-mirrored" if m["truss"] == "left" else "",
+                       ICONS[sec["icon"]].strip(), e(sec["eyebrow"]),
+                       ARROWS[m["arrow"]], sid, e(sec["heading"]), e(sec["lead"])))
 
         b.append('\n      <div class="qa-faq">\n        <div class="qa-list">\n')
         for q, paras in sec["faqs"]:
@@ -475,8 +500,8 @@ def render():
         w('\n  <div class="road-run" data-road-run>\n')
         for item in payload:
             if item[0] == "gap":
-                w('    <div class="road-gap %s" data-road="%s" aria-hidden="true"></div>\n'
-                  % (item[2], item[1]))
+                w('    <div class="road-gap" data-road="%s" style="--gap:%s" aria-hidden="true"></div>\n'
+                  % (item[1], item[2]))
             elif item[0] == "close":
                 w(CLOSING % (' data-road="%s"' % item[1]))
             else:

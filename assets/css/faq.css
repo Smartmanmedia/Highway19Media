@@ -35,12 +35,6 @@
   background:var(--paper);
 }
 
-.page--qa .band-white   {background:var(--paper)}
-.page--qa .band-concrete{background:var(--concrete)}
-.page--qa .band-blue-lt {background:var(--blue-100)}
-.page--qa .band-blue    {background:var(--blue-900); color:#fff}
-.page--qa .band-navy    {background:var(--blue-800); color:#fff}
-.page--qa .band-green   {background:var(--green-700); color:#fff}
 
 /* Copy on a dark band. Named per band rather than patched per element, for
    the reason highway19.css gives: the next card added to a dark band would
@@ -647,6 +641,11 @@
   width:100vw;margin-left:calc(50% - 50vw);
   margin-block:clamp(40px,4.6vw,72px) clamp(30px,3.6vw,54px);
 }
+/* Both on row one, explicitly. The truss comes first in the markup on the
+   section signs and carries grid-column:3, and sparse auto-placement will not
+   go back up the row to fill column 2 — so the plate dropped to a second row
+   and the truss floated above it. */
+.hwy-sign > *{grid-row:1}
 .hwy-sign__panel{position:relative;grid-column:2;width:var(--plate)}
 .hwy-sign__truss{grid-column:3;min-width:0;align-self:center;height:calc(var(--plate) * .1898)}
 
@@ -737,14 +736,6 @@
    the bar, #5491d6 three hundred pixels later. The sections carry it as one
    continuous run rather than a gradient restarting in every band. */
 .page--qa{background:linear-gradient(180deg,#045dc3 0%,#5491d6 46%,#7fb0e4 100%)}
-.page--qa .band-white,
-.page--qa .band-blue-lt,
-.page--qa .band-concrete,
-.page--qa .band-navy,
-.page--qa .band-green,
-.page--qa .road-gap.band-blue{background:transparent}
-/* Only the hero keeps a ground of its own; everything else sits on the run. */
-.page--qa .qa-sec.band-blue:not(#qa-hero){background:transparent}
 .page--qa .qa-sec:not(#qa-hero){color:#fff}
 .page--qa .qa-sec:not(#qa-hero) h2,
 .page--qa .qa-sec:not(#qa-hero) .sub{color:#fff}
@@ -756,3 +747,137 @@
   box-shadow:0 0 0 2px rgba(255,255,255,.85);
   color:#fff;
 }
+
+/* ============================================================================
+   11. HIS PART 1 — the returned artboard, measured
+   ----------------------------------------------------------------------------
+   Everything below is read out of incoming/QA-Part1.svg rather than chosen.
+   The grounds are his four gradients; each one ends on the exact colour the
+   next begins with, which is how his home page joins its bands too. The cards,
+   the markers, the CTAs and the signs are his fills, radii and strokes.
+   ========================================================================= */
+
+/* ── The journey down the page ────────────────────────────────────────────
+   Bright blue at the exits, darkening through the General questions, into
+   night over Website Design, and opening again on teal at Video Production.
+   His numbers; the sections after Part 1 carry the sequence on. */
+/* A base under everything, so a strip that has not been given a colour can
+   never show white through. */
+.page--qa{background:#002274}
+.page--qa #qa-general    {background:linear-gradient(180deg,#035cc1 0%,#01368f 33%,#002b80 50%,#002274 100%)}
+.page--qa #qa-websites   {background:linear-gradient(180deg,#001853 0%,#000f35 10%,#00081d 15%,#000003 27%,#000 100%)}
+.page--qa #qa-video      {background:linear-gradient(180deg,#000 0%,#00111b 16%,#002339 38%,#00304e 59%,#003b5f 100%)}
+.page--qa #qa-advertising{background:linear-gradient(180deg,#003b5f 0%,#00466f 45%,#00527f 100%)}
+.page--qa #qa-branding   {background:linear-gradient(180deg,#00527f 0%,#014a86 50%,#013f8e 100%)}
+.page--qa #qa-print      {background:linear-gradient(180deg,#013f8e 0%,#012f7f 55%,#002274 100%)}
+.page--qa #qa-working    {background:linear-gradient(180deg,#002274 0%,#013178 55%,#0b5a3a 100%)}
+.page--qa #qa-close      {background:linear-gradient(180deg,#0b5a3a 0%,#073f5f 50%,#062f5e 100%)}
+/* A crossing strip takes the colour of the join it sits on — the generator
+   passes it, because only the route table knows which two grounds meet
+   there. Without it every crossing showed as a flat band between two
+   gradients. */
+.page--qa .road-gap{position:relative;background:var(--gap,#002274)}
+
+/* ── The question cards ───────────────────────────────────────────────────
+   On the blue: his white card, #00287e hairline, 10px corner, opening onto
+   #deefff. On the night sections the card is the ground with a #cad9ea
+   hairline, opening onto #0f1c28. The marker is his #00aa56 disc. */
+.page--qa .qa-item{
+  background:#fff;
+  border:1px solid #00287e;
+  border-bottom:1px solid #00287e;
+  border-radius:10px;
+  box-shadow:none;
+}
+.page--qa .qa-item.is-open{background:#deefff;border-color:#00287e;box-shadow:none}
+.page--qa .qa-q{color:var(--ink)}
+.page--qa .qa-a p{color:#454c57}
+.page--qa .qa-a::before{display:none}
+
+/* Night sections — Website Design onward, where his ground goes black. */
+.page--qa #qa-websites .qa-item,
+.page--qa #qa-video .qa-item,
+.page--qa #qa-advertising .qa-item{
+  background:transparent;border-color:#cad9ea;
+}
+.page--qa #qa-websites .qa-item.is-open,
+.page--qa #qa-video .qa-item.is-open,
+.page--qa #qa-advertising .qa-item.is-open{background:#0f1c28;border-color:#cad9ea}
+.page--qa #qa-websites .qa-q,
+.page--qa #qa-video .qa-q,
+.page--qa #qa-advertising .qa-q{color:#fff}
+.page--qa #qa-websites .qa-a p,
+.page--qa #qa-video .qa-a p,
+.page--qa #qa-advertising .qa-a p{color:rgba(255,255,255,.88)}
+
+.page--qa .qa-marker{
+  background:#00aa56;
+  box-shadow:none;
+  width:26px;height:26px;
+}
+.page--qa .qa-marker svg{width:12px;height:12px;stroke-width:2.6}
+
+/* ── The call to action ──────────────────────────────────────────────────
+   His card: the lane colour, a white hairline, a 10px corner, and a plain
+   yellow button — no warning triangle on this page. */
+.page--qa .qa-cta{
+  border-radius:10px;
+  border:1px solid #fff;
+  border-bottom:1px solid #fff;
+  box-shadow:none;
+  display:block;
+}
+.page--qa #qa-general .qa-cta{background:#1562b7}
+.page--qa .qa-cta::after{display:none}
+.page--qa .qa-cta h3{font-size:clamp(1.25rem,2vw,1.6rem)}
+.page--qa .qa-cta p{max-width:46ch}
+.page--qa .qa-cta .btn{
+  margin-top:1.3rem;
+  background:var(--yellow-500);color:var(--ink);
+  border:0;border-radius:7px;
+  box-shadow:none;
+  font-size:.82rem;letter-spacing:.06em;
+  padding:.85em 1.4em;
+}
+.page--qa .qa-cta .btn__sign{display:none}
+
+/* ── The section heading is a guide sign ─────────────────────────────────
+   Every category gets his green sign on a gantry: the icon in a blue disc,
+   the category, and a lane arrow. The truss runs off one side and the sides
+   alternate down the page, as they do in his file. */
+.hwy-sign--section{
+  --plate:min(660px,52vw);
+  margin-block:0 clamp(26px,3vw,44px);
+}
+.hwy-sign--section .hwy-sign__plate{
+  display:flex;align-items:center;gap:clamp(14px,2vw,28px);
+  padding:clamp(16px,1.8vw,26px) clamp(18px,2.2vw,32px);
+  border-radius:14px;
+  text-align:left;
+}
+.hwy-sign--section.is-mirrored .hwy-sign__panel{grid-column:2}
+.hwy-sign--section.is-mirrored .hwy-sign__truss{grid-column:1}
+.hwy-sign--section.is-mirrored .hwy-sign__plate{flex-direction:row-reverse}
+
+.hwy-sign__label{
+  flex:1;
+  font-family:var(--font-sign);
+  font-size:clamp(1.05rem,1.9vw,1.6rem);font-weight:800;
+  line-height:1.08;letter-spacing:-.01em;color:#fff;
+  text-wrap:balance;
+}
+.hwy-sign__arrow{width:clamp(30px,3.4vw,50px);height:auto;fill:#fff;flex:none}
+.hwy-sign--section .qa-disc{
+  margin:0;flex:none;
+  width:clamp(40px,4vw,56px);height:clamp(40px,4vw,56px);
+  background:var(--lane-ic);
+  box-shadow:0 0 0 2px #fff;
+}
+
+/* The intro copy sits under the sign, not centred under an eyebrow. */
+.page--qa .qa-sec__head{text-align:left}
+.page--qa .qa-sec--centred .qa-sec__head{max-width:none;margin-inline:0;text-align:left}
+.page--qa .qa-sec--centred .qa-sec__head h2,
+.page--qa .qa-sec--centred .qa-sec__head .body-copy{margin-inline:0}
+.page--qa .qa-sec__head .eyebrow{display:none}
+.page--qa .qa-sec__head > .qa-disc{display:none}
