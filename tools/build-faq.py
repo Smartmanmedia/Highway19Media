@@ -201,7 +201,7 @@ CONTENT = [
 
  dict(sid="qa-advertising", nav="Social Media & Paid Ads", icon="social",
       layout="split", band="",
-      eyebrow="Social Media & Paid Advertising",
+      eyebrow="Social Media & Paid Ads",
       heading="Send the Right Traffic Your Way.",
       lead="Content, campaigns and ad spend aimed at the people most likely to actually need "
            "what your business does.",

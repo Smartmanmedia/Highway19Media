@@ -147,6 +147,24 @@
   .page--qa #qa-close > .sec__inner > .sec__body > :not(.hwy-sign){translate:-5.4vw 0}
 }
 
+/* The two split bands, off his card rects rather than off one shared column.
+   The grid box starts at 300 of 1440 before it is moved, so the offset below
+   is what carries it onto his left edge; the widths are his, in vw so they
+   hold the same proportion of the page he drew them on (1441.5).
+
+     websites     copy 162.3  questions 561.7 .. 1113.5
+     advertising  copy 309.1  questions 690.1 .. 1175.5                     */
+@media (min-width:1321px){
+  .page--qa .qa-sec#qa-websites > .sec__inner > .sec__body > .qa-sec__grid{
+    --split-w:66.06vw; --split-c1:24.12vw; --split-gap:3.61vw;
+    translate:-9.5625vw 0;
+  }
+  .page--qa .qa-sec#qa-advertising > .sec__inner > .sec__body > .qa-sec__grid{
+    --split-w:60.17vw; --split-c1:22.85vw; --split-gap:3.61vw;
+    translate:.632vw 0;
+  }
+}
+
 /* Below this the margin can no longer hold a road — 21vw plus half a road
    stops clearing a 48vw column — so it comes off the page and the copy takes
    its width back. Mobile is a separate pass. */
@@ -370,8 +388,12 @@
 @media (min-width:1321px){
   .qa-sec--split .qa-sec__grid{
     display:grid;
-    grid-template-columns:minmax(0,20rem) minmax(0,1fr);
-    gap:clamp(30px,3vw,52px);
+    /* Each split section gets its own two-column measure, because his do:
+       the rail column, the gap and the question column are set per band off
+       the card rects in QA-Part2.svg rather than from one shared rule. */
+    width:var(--split-w,auto);
+    grid-template-columns:var(--split-c1,minmax(0,20rem)) minmax(0,1fr);
+    gap:var(--split-gap,clamp(30px,3vw,52px));
     align-items:start;
   }
   .qa-sec--split .qa-sec__head{
@@ -851,25 +873,26 @@
 }
 /* His ridge is 370 deep on a 1441.5 page at the top and 270 at the foot. */
 .page--qa #qa-advertising::before{
-  top:0;height:25.7vw;max-height:370px;transform:translateY(-62%);
+  top:0;height:25.7vw;max-height:370px;transform:translateY(-22%);
   background-image:url("../scene/qa-rocks-top.svg");
 }
 .page--qa #qa-advertising::after{
-  bottom:0;height:18.7vw;max-height:270px;transform:translateY(38%);
+  bottom:0;height:18.7vw;max-height:270px;transform:translateY(36.8%);
   background-image:url("../scene/qa-rocks-bottom.svg");
 }
 .page--qa #qa-advertising > .sec__inner{position:relative;z-index:3}
-/* His scrub on the sand, rasterised off the artboard at 2x — 5KB against the
-   150KB the live polygons cost, for specks a few pixels across. Laid at four
-   depths so it does not read as a repeat. */
+/* His scrub on the sand: every cluster he scattered across the 1441.5 x 1969.5
+   band, taken off the artboard in place and flattened to one layer, so each
+   one keeps the spot he put it in. It was four offset copies of a strip
+   before, and the strip turned out to hold one shrub clipped at its own left
+   edge — which is what those specks stuck to the left margin were. */
 .page--qa #qa-advertising{
   background-image:
-    url("../scene/qa-shrubs.png"),url("../scene/qa-shrubs.png"),
-    url("../scene/qa-shrubs.png"),url("../scene/qa-shrubs.png"),
+    url("../scene/qa-shrubs.png"),
     linear-gradient(180deg,#ffdb96 0%,#ffd486 18%,#fac67e 34%,#ffd486 52%,#ffdb96 68%,#ffd486 84%,#fac67e 100%);
-  background-repeat:no-repeat,no-repeat,no-repeat,no-repeat,no-repeat;
-  background-size:100% auto,100% auto,100% auto,100% auto,auto;
-  background-position:-18% 16%,32% 38%,-40% 63%,26% 88%,0 0;
+  background-repeat:no-repeat,no-repeat;
+  background-size:100% 100%,auto;
+  background-position:0 0,0 0;
 }
 .page--qa .qa-sec#qa-advertising,
 .page--qa .qa-sec#qa-advertising h2,
@@ -990,7 +1013,11 @@
 }
 .hwy-sign--section.is-mirrored{grid-template-columns:min(144px,10vw) auto 1fr}
 .hwy-sign--section .hwy-sign__plate{
-  display:flex;align-items:center;gap:clamp(14px,2vw,28px);
+  /* His plate is tight: the arrow sits 34 in from the near edge, the disc 20
+     from the far one, and only about ten separates either from the wording.
+     It matters — at the gap this used to carry, VIDEO PRODUCTION broke over
+     two lines where his runs on one. */
+  display:flex;align-items:center;gap:clamp(6px,.9vw,13px);
   /* Every plate of his is 197.39 deep, whether its wording runs to one line
      or two — the sign is a fixed object, not a box around some type. */
   min-height:min(197.4px,13.7vw);
@@ -1020,6 +1047,9 @@
   text-wrap:balance;
 }
 .hwy-sign__arrow{width:clamp(48px,6.1vw,88px);height:auto;fill:#fff;flex:none}
+/* 137 of his 616 stands between the near edge and the wording, and 80 between
+   the wording and the far edge — which leaves 392 for the words themselves. */
+.hwy-sign--section .hwy-sign__plate{padding-inline:min(34px,2.36vw) min(20px,1.39vw)}
 
 /* The lamps on his night plates: three cones spilling down from the top
    brackets, widening as they fall. Only where the ground is dark — in
