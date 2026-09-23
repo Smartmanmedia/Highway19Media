@@ -652,7 +652,11 @@
    His vertical gradient: deepest at the header, opening up towards the road. */
 .page--qa #qa-hero,
 .page--qa #qa-hero.band-blue{
-  background:linear-gradient(180deg,#00287d 0%,#013e99 62%,#0153ae 100%);
+  /* Every colour below is read off his Part 2 ground at the y where this
+     block sits: one ramp from #00297e under the header up to #045dc3 at the
+     exit gantry, back down through #002375 by the foot of General, into the
+     night over Website Design, and out of it to #2b2f47 before the desert. */
+  background:linear-gradient(180deg,#00297e 0%,#013c98 100%);
   padding-top:clamp(56px,8.2vw,124px);
   padding-bottom:clamp(30px,3.2vw,52px);
 }
@@ -678,6 +682,9 @@
 .hwy-sign > *{grid-row:1}
 .hwy-sign__panel{position:relative;grid-column:2;width:var(--plate)}
 #qa-hero .hwy-sign__panel{translate:min(14px,.97vw) 0}
+/* Part 2: he repainted the hero plate blue. The slice of his gradient that
+   falls across it runs #005ca8 to #003788. */
+#qa-hero .hwy-sign__plate{--plate-face:linear-gradient(180deg,#005ca8 0%,#003788 100%)}
 /* His hero sign carries truss on the right only — the left of it is open
    blue — and the markup gives it exactly one. :first-of-type therefore
    matched the RIGHT truss and hid the only one on the page. */
@@ -691,7 +698,7 @@
   /* His plate, traced: #1c9022 with a 1.4 WHITE HAIRLINE rim and an 18.49
      corner on a 649-wide sign — not a 3px band and not a 16px corner. No
      drop shadow either; there is none in his file. */
-  background:var(--sign-green);
+  background:var(--plate-face,var(--sign-green));
   border:1.5px solid #fff;
   border-radius:clamp(12px,1.3vw,18.5px);
   box-shadow:3px 4px 0 -1.5px rgba(0,0,0,.9);
@@ -820,10 +827,16 @@
 .page--qa .qa-sec:not(#qa-hero) .sub{color:#fff}
 .page--qa .qa-sec:not(#qa-hero) > .sec__inner .qa-sec__head .body-copy{color:rgba(255,255,255,.92)}
 
-/* The icon disc becomes an outlined mark on the open ground. */
-.page--qa .qa-sec:not(#qa-hero) .qa-disc{
+/* The icon disc becomes an outlined mark where it sits on open ground —
+   but NOT on a sign plate, where his is a solid disc in the lane colour. */
+.page--qa .qa-sec:not(#qa-hero) .qa-sec__head .qa-disc{
   background:transparent;
   box-shadow:0 0 0 2px rgba(255,255,255,.85);
+  color:#fff;
+}
+.page--qa .hwy-sign--section .qa-disc{
+  background:var(--lane-ic);
+  box-shadow:none;
   color:#fff;
 }
 
@@ -843,16 +856,38 @@
 /* A base under everything, so a strip that has not been given a colour can
    never show white through. */
 .page--qa{background:#002274}
-.page--qa #qa-general    {background:linear-gradient(180deg,#035cc1 0%,#01368f 33%,#002b80 50%,#002274 100%)}
-.page--qa #qa-websites   {background:linear-gradient(180deg,#001853 0%,#000f35 10%,#00081d 15%,#000003 27%,#000 100%)}
-.page--qa #qa-video      {background:linear-gradient(180deg,#000 0%,#00111b 16%,#002339 38%,#00304e 59%,#003b5f 100%)}
+.page--qa #qa-general    {background:linear-gradient(180deg,#045dc3 0%,#0358bb 8%,#034eaf 16%,#0246a3 24%,#013c98 38%,#002e84 60%,#002375 100%)}
+.page--qa #qa-websites   {background:linear-gradient(180deg,#001549 0%,#000c2d 26%,#00020b 45%,#000001 60%,#000 100%)}
+.page--qa #qa-video      {background:linear-gradient(180deg,#000 0%,#020203 22%,#060609 40%,#0d0e15 62%,#141521 82%,#202337 100%)}
 /* ── The desert band ─────────────────────────────────────────────────────
    Part 2: the road comes up out of the night onto sand, and Social Media &
    Paid Ads stands on it. His own sand, off scene-data.js, and with it the
    whole band turns over — black copy on the ground, white cards, an amber
    marker, and a yellow call to action with a blue button. The rock ridges
    and the dunes are his artwork and wait on the Part 2 vector. */
-.page--qa #qa-advertising{background:linear-gradient(180deg,#fdf6e4 0%,#fec361 100%)}
+/* His sand: #ffd486 with the dune bands he draws across it, and his own rock
+   ridge closing the band top and bottom — both sliced straight out of
+   QA-Part2.svg rather than approximated. */
+.page--qa #qa-advertising{
+  position:relative;
+  background:linear-gradient(180deg,#ffdb96 0%,#ffd486 18%,#fac67e 34%,#ffd486 52%,#ffdb96 68%,#ffd486 84%,#fac67e 100%);
+}
+.page--qa #qa-advertising::before,
+.page--qa #qa-advertising::after{
+  content:"";position:absolute;left:0;right:0;z-index:2;
+  background-repeat:no-repeat;background-position:center;background-size:100% 100%;
+  pointer-events:none;
+}
+/* His ridge is 370 deep on a 1441.5 page at the top and 270 at the foot. */
+.page--qa #qa-advertising::before{
+  top:0;height:25.7vw;max-height:370px;transform:translateY(-62%);
+  background-image:url("../scene/qa-rocks-top.svg");
+}
+.page--qa #qa-advertising::after{
+  bottom:0;height:18.7vw;max-height:270px;transform:translateY(38%);
+  background-image:url("../scene/qa-rocks-bottom.svg");
+}
+.page--qa #qa-advertising > .sec__inner{position:relative;z-index:3}
 .page--qa .qa-sec#qa-advertising,
 .page--qa .qa-sec#qa-advertising h2,
 .page--qa .qa-sec#qa-advertising .sub{color:var(--ink)}
@@ -861,12 +896,12 @@
 .page--qa #qa-advertising .qa-item.is-open{background:#fff;border-color:#c9a86a}
 .page--qa #qa-advertising .qa-q{color:var(--ink)}
 .page--qa #qa-advertising .qa-a p{color:#454c57}
-.page--qa #qa-advertising .qa-marker{background:#f2a01e}
-.page--qa #qa-advertising .qa-cta{background:var(--yellow-500);border-color:#d79f12}
+.page--qa #qa-advertising .qa-marker{background:#f7a01b}
+.page--qa #qa-advertising .qa-cta{background:#ffce00;border-color:#000}
 .page--qa .qa-sec#qa-advertising .qa-cta h2,
 .page--qa .qa-sec#qa-advertising .qa-cta p{color:var(--ink)}
 
-.page--qa #qa-advertising .qa-cta .btn{background:#1068b6;color:#fff;border-color:#1068b6;box-shadow:none}
+.page--qa #qa-advertising .qa-cta .btn{background:#1082ff;color:#fff;border-color:#fff;box-shadow:none}
 .page--qa #qa-branding   {background:linear-gradient(180deg,#00527f 0%,#014a86 50%,#013f8e 100%)}
 .page--qa #qa-print      {background:linear-gradient(180deg,#013f8e 0%,#012f7f 55%,#002274 100%)}
 .page--qa #qa-working    {background:linear-gradient(180deg,#002274 0%,#013178 55%,#0b5a3a 100%)}
@@ -909,13 +944,16 @@
 }
 .page--qa #qa-websites .qa-item.is-open,
 .page--qa #qa-video .qa-item.is-open{background:#0f1c28;border-color:#cad9ea}
+/* On a night card his marker turns blue the moment it opens. */
+.page--qa #qa-websites .qa-item.is-open .qa-marker,
+.page--qa #qa-video .qa-item.is-open .qa-marker{background:#1068b6}
 .page--qa #qa-websites .qa-q,
 .page--qa #qa-video .qa-q{color:#fff}
 .page--qa #qa-websites .qa-a p,
 .page--qa #qa-video .qa-a p{color:rgba(255,255,255,.88)}
 
 .page--qa .qa-marker{
-  background:#00aa56;
+  background:var(--marker,#00aa56);
   box-shadow:none;
   width:26px;height:26px;
 }
@@ -931,14 +969,19 @@
   box-shadow:none;
   display:block;
 }
-.page--qa #qa-general .qa-cta{background:#1562b7}
+/* His call to action per band, off the Part 2 rects. */
+.page--qa #qa-general .qa-cta{background:#1562b7;border-color:#fff}
+.page--qa #qa-websites .qa-cta{background:#164f96;border-color:#fff}
+.page--qa #qa-video .qa-cta{background:#12605c;border-color:transparent}
 .page--qa .qa-cta::after{display:none}
 .page--qa .qa-cta h3{font-size:clamp(1.25rem,2vw,1.6rem)}
 .page--qa .qa-cta p{max-width:46ch}
 .page--qa .qa-cta .btn{
+  /* Every button on his page is outlined — yellow on ink through the blue
+     and the night, and his blue on white out on the sand. */
   margin-top:1.3rem;
   background:var(--yellow-500);color:var(--ink);
-  border:0;border-radius:7px;
+  border:2px solid #12161c;border-radius:7px;
   box-shadow:none;
   font-size:.82rem;letter-spacing:.06em;
   padding:.85em 1.4em;
@@ -971,6 +1014,12 @@
   padding:clamp(16px,1.8vw,26px) clamp(18px,2.2vw,32px);
   text-align:left;
 }
+/* His night plates are #006802; the one standing on the desert is #1c9022. */
+#qa-websites .hwy-sign__plate,
+#qa-video .hwy-sign__plate,
+#qa-branding .hwy-sign__plate,
+#qa-print .hwy-sign__plate,
+#qa-working .hwy-sign__plate{--plate-face:#006802}
 .hwy-sign--section .hwy-sign__panel{grid-column:2}
 .hwy-sign--section.is-mirrored .hwy-sign__truss{grid-column:1}
 /* Icon nearest the truss, arrow pointing away from it — his order, which is
@@ -1020,7 +1069,7 @@
      its band — the page's own dark ground showed through as a stripe with a
      hard edge top and bottom. It bridges the crossing above (#0249a8) and
      General below (#035cc1), which is one unbroken blue in his file. */
-  background:linear-gradient(180deg,#0249a8 0%,#035cc1 100%);
+  background:linear-gradient(180deg,#0455b8 0%,#045dc3 100%);
   position:relative;
   display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
   width:100vw;margin-left:calc(50% - 50vw);
@@ -1045,7 +1094,10 @@
   background:#fff;
   border:1.5px solid #fff;
   border-radius:clamp(12px,1.3vw,18.5px);
-  box-shadow:3px 4px 0 -1.5px rgba(0,0,0,.9);
+  /* His offset outline, and behind it the plate again in black at 37 per
+     cent, 64 down and 64 left — measured off the shadow rect in his file. */
+  box-shadow:3px 4px 0 -1.5px rgba(0,0,0,.9),
+             min(-64px,-4.4vw) min(64px,4.4vw) 0 rgba(0,0,0,.37);
   overflow:hidden;
 }
 .hwy-exit{

@@ -358,16 +358,16 @@ PAGE = [
     # first card. Nothing of it ever crosses the copy column.
     ("tail", [
         ("sec", "qa-general",  "rail-left-out"),
-        ("gap", "leave-left-out", "#001853", "#002274"),
+        ("gap", "leave-left-out", "#001e6a", "#002375"),
     ]),
     # Route 2 — his second road: in off the LEFT edge, the full width of the
     # page, then down the outer right rail beside Websites and out the right.
     # Right-hand runs take the outer rail because the copy column sits right
     # of centre and the inner one would run under it.
     ("route", [
-        ("gap", "arrive-right-out-far", "#001853", "#001853"),
+        ("gap", "arrive-right-out-far", "#001549", "#001e6a"),
         ("sec", "qa-websites", "rail-right-out"),
-        ("gap", "leave-right-out", "#000000"),
+        ("gap", "leave-right-out", "#000000", "#000000"),
     ]),
     # Route 3 — in off the left, down the inner left rail beside Video, over
     # to the right for Advertising and Branding, and away. Two short tracks
@@ -375,7 +375,7 @@ PAGE = [
     ("route", [
         ("gap", "arrive-left", "#000000"),
         ("sec", "qa-video", "rail-left", ("track-right-out", 120, 900)),
-        ("gap", "cross-right-out", "#003b5f"),
+        ("gap", "cross-right-out", "#2b2f47", "#202337"),
         ("sec", "qa-advertising", "rail-right-out", ("track-left-out", 150, 980)),
         ("sec", "qa-branding", "rail-right-out"),
         ("gap", "leave-right-out", "#013f8e"),
