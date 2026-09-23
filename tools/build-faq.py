@@ -329,9 +329,15 @@ LOOK = {
 # the start, leave-* at the end.
 # --------------------------------------------------------------------------
 PAGE = [
-    ("route", [
-        ("gap", "arrive-left", "#035cc1"),
+    # Route 1 is opened in the template, at the hero. It crosses the page and
+    # runs on down the left past the exit gantry and General before leaving —
+    # which is why this first entry only closes it.
+    ("tail", [
         ("sec", "qa-general",  "rail-left"),
+        ("gap", "leave-left",  "#000000"),
+    ]),
+    ("route", [
+        ("gap", "arrive-left", "#001853"),
         ("sec", "qa-websites", "rail-left"),
         ("gap", "leave-left",  "#000000"),
     ]),
@@ -503,6 +509,15 @@ def render():
         return "".join(b)
 
     for kind, payload in PAGE:
+        if kind == "tail":
+            for item in payload:
+                if item[0] == "gap":
+                    w('    <div class="road-gap" data-road="%s" style="--gap:%s" aria-hidden="true"></div>\n'
+                      % (item[1], item[2]))
+                else:
+                    w(section(item[1], item[2], item[3] if len(item) > 3 else None))
+            w('  </div>\n')
+            continue
         if kind == "plain":
             w(section(payload))
             continue

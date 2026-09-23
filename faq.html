@@ -383,6 +383,10 @@
        #scene-layer: the scenery is the home page's composition, so on this
        page the engine draws the road itself. -->
   <div id="road-layer" aria-hidden="true"></div>
+  <!-- Where the rails run. road.js measures this rather than reading the
+       custom property, because a custom property comes back as its raw token
+       and never as a length. -->
+  <div id="road-rail-probe" aria-hidden="true"></div>
 
   <!-- ========================================================================
        HERO — short on purpose. His gantry plate carries the headline as real
@@ -431,10 +435,12 @@
     <!-- Down the right, then the whole width of the page and off the left
          edge — his drawing. leave-left from a right-hand rail already does
          exactly that: it turns away from the near edge and keeps going. -->
-    <div class="road-gap" data-road="leave-left" style="--gap:#0249a8" aria-hidden="true">
+    <!-- Down the right, across the page, and DOWN the left — one road, the
+         way he drew it. It carries on past the exit gantry and all the way
+         down beside General, so the route does not close here. -->
+    <div class="road-gap" data-road="cross-left" style="--gap:#0249a8" aria-hidden="true">
       <img class="qa-cloud qa-cloud--turn" src="assets/brand/clouds/Cloud2.svg" alt="" aria-hidden="true">
     </div>
-  </div>
 
   <!-- ========================================================================
        THE EXIT GANTRY — his sign grid, not a sticky bar. Six green panels on
@@ -461,9 +467,6 @@
 
   <img class="qa-cloud qa-cloud--exits" src="assets/brand/clouds/Cloud3.svg" alt="" aria-hidden="true">
 
-
-  <div class="road-run" data-road-run>
-    <div class="road-gap" data-road="arrive-left" style="--gap:#035cc1" aria-hidden="true"></div>
 
   <!-- ======================================================================
        GENERAL
@@ -627,6 +630,11 @@
       </div>
     </div>
   </section>
+    <div class="road-gap" data-road="leave-left" style="--gap:#000000" aria-hidden="true"></div>
+  </div>
+
+  <div class="road-run" data-road-run>
+    <div class="road-gap" data-road="arrive-left" style="--gap:#001853" aria-hidden="true"></div>
 
   <!-- ======================================================================
        WEBSITE DESIGN & DEVELOPMENT

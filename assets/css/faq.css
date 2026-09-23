@@ -66,9 +66,18 @@
      so the road keeps its margin as the window changes: the copy column below
      is fixed at 940, so the margin either side is (100vw - 940) / 2 and the
      rail has to fit inside it with half a road to spare. */
-  --rail-inset:clamp(96px,9.5vw,190px);
+  /* Measured off his file. The rail sits about 400 of 1915 in from the edge —
+     21% — which is only clear of the copy because his column is 44% of the
+     canvas, not the 65% mine was using. Both are expressed as a share of the
+     viewport here so the relationship holds as the window changes. */
+  --rail-inset:min(400px,21vw);
 }
 
+#road-rail-probe{
+  position:absolute;top:0;left:0;
+  width:var(--rail-inset);height:0;
+  visibility:hidden;pointer-events:none;
+}
 .road-run{position:relative}
 .road-run__art{
   position:absolute;inset:0;z-index:1;
@@ -79,7 +88,7 @@
 .road-run__art path{pointer-events:none}
 .road-run__art .road-hit{pointer-events:stroke;cursor:pointer}
 
-.road-gap{position:relative;height:clamp(150px,15vw,210px)}
+.road-gap{position:relative;height:clamp(120px,11vw,170px)}
 
 .road-track{
   position:absolute;z-index:1;
@@ -92,15 +101,15 @@
 .road-track--left{left:0}
 .road-track--right{right:0}
 
-/* The copy has to leave the rails room: a rail needs its inset plus half a
-   road width of margin, which at 1320px is 188 of the 190 available. Hence
-   940 rather than the site's 1200 shell. */
-.page--qa .sec__inner{max-width:940px}
+/* His column: 840 of a 1915 canvas. As a share of the viewport that is 44%,
+   which is what leaves the rail its 21% and still clears it. Capped so it
+   stops growing on a very wide screen, as his artboard does. */
+.page--qa .sec__inner{max-width:min(900px,48vw)}
 
-/* Below this the margin can no longer hold a road, so it comes off the page
-   entirely and the copy takes its width back. Same rule the home page follows
-   when its weave stops. Mobile is a separate pass. */
-@media (max-width:1320px){
+/* Below this the margin can no longer hold a road — 21vw plus half a road
+   stops clearing a 48vw column — so it comes off the page and the copy takes
+   its width back. Mobile is a separate pass. */
+@media (max-width:1280px){
   .page--qa .road-run__art{display:none}
   .road-gap{display:none}
   .page--qa .sec__inner{max-width:var(--shell)}
@@ -283,7 +292,7 @@
 /* Asymmetric on purpose: a crossing follows every section, so the air below
    the copy is the band's to provide. Equal padding left a dead white gap
    between the last CTA and the road. */
-.page--qa .sec{padding-block:clamp(60px,7vw,104px) clamp(26px,3.2vw,48px)}
+.page--qa .sec{padding-block:clamp(34px,4vw,64px) clamp(22px,2.6vw,40px)}
 .page--qa .sec .sec__inner{padding-left:var(--gutter);padding-right:var(--gutter)}
 
 .qa-sec__head{margin-bottom:clamp(26px,3.4vw,44px)}
@@ -623,8 +632,8 @@
 .page--qa #qa-hero,
 .page--qa #qa-hero.band-blue{
   background:linear-gradient(180deg,#00287d 0%,#013e99 62%,#0153ae 100%);
-  padding-top:clamp(52px,5.5vw,84px);
-  padding-bottom:clamp(60px,7vw,110px);
+  padding-top:clamp(40px,4.4vw,74px);
+  padding-bottom:clamp(30px,3.2vw,52px);
 }
 
 /* ── The guide sign ──────────────────────────────────────────────────────
@@ -639,7 +648,7 @@
   --plate:min(660px,46vw);
   display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
   width:100vw;margin-left:calc(50% - 50vw);
-  margin-block:clamp(40px,4.6vw,72px) clamp(30px,3.6vw,54px);
+  margin-block:clamp(30px,3.2vw,52px) clamp(26px,2.8vw,44px);
 }
 /* Both on row one, explicitly. The truss comes first in the markup on the
    section signs and carries grid-column:3, and sparse auto-placement will not
@@ -647,6 +656,9 @@
    and the truss floated above it. */
 .hwy-sign > *{grid-row:1}
 .hwy-sign__panel{position:relative;grid-column:2;width:var(--plate)}
+/* His hero sign carries truss on the right only — the left of it is open
+   blue. The home page's hero has both; this one does not. */
+#qa-hero .hwy-sign > .gantry__truss:first-of-type{visibility:hidden}
 .hwy-sign__truss{grid-column:3;min-width:0;align-self:center;height:calc(var(--plate) * .1898)}
 
 .hwy-sign__plate{
@@ -892,11 +904,11 @@
    ========================================================================= */
 
 .hwy-exits{
-  --plate:min(880px,64vw);
+  --plate:min(1050px,72vw);
   position:relative;
   display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
   width:100vw;margin-left:calc(50% - 50vw);
-  padding-block:clamp(30px,4vw,60px) 0;
+  padding-block:clamp(26px,3vw,46px) 0;
 }
 .hwy-exits > *{grid-row:1}
 .hwy-exits__truss{min-width:0;align-self:center;height:calc(var(--plate) * .148)}
@@ -914,7 +926,8 @@
 }
 .hwy-exit{
   display:flex;align-items:center;justify-content:space-between;gap:.8em;
-  padding:clamp(12px,1.5vw,20px) clamp(12px,1.5vw,20px);
+  min-height:clamp(52px,4.4vw,70px);
+  padding:clamp(12px,1.4vw,18px) clamp(14px,1.7vw,24px);
   background:var(--sign-green);
   color:#fff;text-decoration:none;
   font-family:var(--font-sign);
@@ -923,7 +936,7 @@
   text-align:center;
   transition:background .16s ease;
 }
-.hwy-exit > span{flex:1;text-wrap:balance}
+.hwy-exit > span{flex:1;text-wrap:balance;max-width:11ch;margin-inline:auto}
 .hwy-exit:hover{background:#23a82b}
 .hwy-exit:focus-visible{outline:3px solid var(--yellow-500);outline-offset:-4px}
 .hwy-exit__arrow{width:clamp(18px,1.9vw,28px);height:auto;fill:#fff;flex:none}
@@ -943,8 +956,8 @@
 .hwy-exits__tab b{font-weight:800;margin-left:.7em}
 .hwy-exits__shield{
   position:absolute;z-index:3;
-  left:2%;top:calc(-1 * clamp(42px,4.6vw,64px));
-  height:clamp(52px,5.6vw,78px);width:auto;
+  left:1%;top:calc(-1 * clamp(48px,5.4vw,76px));
+  height:clamp(60px,6.6vw,92px);width:auto;
   filter:drop-shadow(0 4px 8px rgba(0,0,0,.45));
 }
 .hwy-exits__panel .hwy-sign__bolts{left:6%;right:6%}

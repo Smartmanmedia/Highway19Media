@@ -624,7 +624,15 @@
      nothing here changes when the page above it moves. */
   function measureRoute(el) {
     var box = el.getBoundingClientRect();
-    var inset = parseFloat(getComputedStyle(page).getPropertyValue('--rail-inset')) || 130;
+    /* Measured off a probe element, not read off the custom property.
+       getPropertyValue on a custom property hands back the RAW TOKEN — for
+       min(400px,21vw) that is the string "min(400px,21vw)", which parseFloat
+       turns into NaN. Every rail on this page had been silently falling back
+       to the default while the stylesheet said something else entirely. The
+       probe carries width:var(--rail-inset), so the browser resolves it. */
+    var probe = document.getElementById('road-rail-probe');
+    var inset = probe ? probe.offsetWidth : 0;
+    if (!inset) inset = 130;
     var g = { el: el, W: Math.round(box.width), H: Math.round(box.height),
               /* The turns between a page edge and a rail have only the margin
                  to complete in, so the radius cannot exceed the inset — at
