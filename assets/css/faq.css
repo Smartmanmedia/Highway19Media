@@ -169,7 +169,7 @@
    ========================================================================= */
 
 .qa-exits{
-  position:sticky;top:var(--hdr-h,74px);z-index:45;
+  position:static;z-index:45;
   /* A lit sign panel rather than a flat bar: a white rule along the top edge,
      his yellow along the bottom, and a gradient between them. The crossings
      pass underneath it as the page scrolls, which is what an overhead gantry
@@ -881,3 +881,115 @@
 .page--qa .qa-sec--centred .qa-sec__head .body-copy{margin-inline:0}
 .page--qa .qa-sec__head .eyebrow{display:none}
 .page--qa .qa-sec__head > .qa-disc{display:none}
+
+/* ============================================================================
+   12. THE EXIT GANTRY — his sign grid
+   ----------------------------------------------------------------------------
+   Six green panels in three columns on one plate, white dividers between them,
+   the truss running off both edges and the shield breaking out of the route
+   tab at the left. It is a sign, not a toolbar: it does not follow you down
+   the page, which is also why the road no longer has to pass under anything.
+   ========================================================================= */
+
+.hwy-exits{
+  --plate:min(880px,64vw);
+  position:relative;
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  width:100vw;margin-left:calc(50% - 50vw);
+  padding-block:clamp(30px,4vw,60px) 0;
+}
+.hwy-exits > *{grid-row:1}
+.hwy-exits__truss{min-width:0;align-self:center;height:calc(var(--plate) * .148)}
+.hwy-exits__panel{position:relative;grid-column:2;width:var(--plate)}
+
+.hwy-exits__grid{
+  position:relative;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:2px;
+  background:#fff;                    /* shows through the gaps as the dividers */
+  border:3px solid #fff;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 10px 26px -14px rgba(0,0,0,.55);
+}
+.hwy-exit{
+  display:flex;align-items:center;justify-content:space-between;gap:.8em;
+  padding:clamp(12px,1.5vw,20px) clamp(12px,1.5vw,20px);
+  background:var(--sign-green);
+  color:#fff;text-decoration:none;
+  font-family:var(--font-sign);
+  font-size:clamp(.72rem,1.02vw,.92rem);font-weight:700;
+  line-height:1.18;letter-spacing:.005em;
+  text-align:center;
+  transition:background .16s ease;
+}
+.hwy-exit > span{flex:1;text-wrap:balance}
+.hwy-exit:hover{background:#23a82b}
+.hwy-exit:focus-visible{outline:3px solid var(--yellow-500);outline-offset:-4px}
+.hwy-exit__arrow{width:clamp(18px,1.9vw,28px);height:auto;fill:#fff;flex:none}
+
+/* The route tab and the shield, riding the top edge as they do on the sign. */
+.hwy-exits__tab{
+  position:absolute;z-index:2;
+  left:11%;top:calc(-1 * clamp(15px,1.7vw,24px));
+  padding:.5em .95em;
+  background:var(--yellow-500);
+  border-radius:6px 6px 0 0;
+  font-family:var(--font-sign);
+  font-size:clamp(.66rem,.95vw,.82rem);font-weight:800;
+  letter-spacing:.11em;text-transform:uppercase;color:var(--ink);
+  box-shadow:0 2px 0 rgba(0,0,0,.25);
+}
+.hwy-exits__tab b{font-weight:800;margin-left:.7em}
+.hwy-exits__shield{
+  position:absolute;z-index:3;
+  left:2%;top:calc(-1 * clamp(42px,4.6vw,64px));
+  height:clamp(52px,5.6vw,78px);width:auto;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,.45));
+}
+.hwy-exits__panel .hwy-sign__bolts{left:6%;right:6%}
+
+/* His cloud bank, sitting under the gantry on the left. */
+.qa-cloud--exits{
+  position:absolute;left:-2%;z-index:2;
+  margin-top:calc(-1 * clamp(40px,5vw,80px));
+  width:clamp(220px,24vw,360px);
+  opacity:1;
+  filter:drop-shadow(0 10px 20px rgba(0,20,60,.35));
+}
+
+/* ── General keeps the centred treatment he drew: the outlined mark, the
+   small green pill, then the headline. No guide sign on this one.
+   The selector has to carry .qa-sec--centred as well: block 11 left-aligns
+   every head through .page--qa .qa-sec--centred .qa-sec__head, which outranks
+   a two-class rule here and was leaving the pill against the left edge while
+   the headline centred itself through its own text-align. ───────────────── */
+.qa-sec__head--plain{text-align:center}
+.page--qa .qa-sec--centred .qa-sec__head--plain{text-align:center}
+.qa-sec__head--plain .hwy-sign{display:none}
+.qa-sec__head--plain .qa-disc--plain{
+  display:grid;margin:0 auto 1rem;
+  background:transparent;
+  box-shadow:0 0 0 2px rgba(255,255,255,.85);
+  color:#fff;
+}
+.qa-sec__head--plain .eyebrow--plain{display:inline-flex;margin:0 auto 1.1rem}
+.page--qa .qa-sec__head--plain .eyebrow{display:inline-flex}
+.page--qa .qa-sec__head--plain > .qa-disc{display:grid}
+.qa-sec__head--plain h2,
+.qa-sec__head--plain .body-copy{margin-inline:auto;text-align:center}
+.qa-sec__head--plain .body-copy{max-width:54ch}
+
+/* His pill is a plain green tag — no route arrow on this page. */
+.page--qa .eyebrow{
+  background:var(--sign-green);
+  border:0;border-radius:5px;
+  box-shadow:none;
+  font-size:.66rem;letter-spacing:.14em;
+  padding:.45em .9em;
+}
+.page--qa .eyebrow::before{display:none}
+
+/* The sticky bar is gone; nothing needs to clear it any more. */
+.page--qa .qa-sec,
+.page--qa #qa-close{scroll-margin-top:calc(var(--hdr-h,84px) + 20px)}

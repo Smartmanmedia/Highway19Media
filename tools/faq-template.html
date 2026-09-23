@@ -152,20 +152,25 @@
   </div>
 
   <!-- ========================================================================
-       THE EXIT GANTRY — seven exits, sticky under the site header. Inside
-       .page so it scrolls with the road behind it; .page--qa keeps overflow
-       visible so the sticking still works.
+       THE EXIT GANTRY — his sign grid, not a sticky bar. Six green panels on
+       a truss that runs off both edges, the shield breaking out of the route
+       tab at its left. General is not among them on purpose: it is the
+       section directly below.
        ===================================================================== -->
-  <div class="qa-exits">
-    <div class="qa-exits__inner">
-      <span class="qa-exits__label" aria-hidden="true">Exits</span>
-      <nav aria-label="Question categories">
-        <ul class="qa-exits__list">
+  <div class="hwy-exits">
+    <span class="gantry__truss hwy-exits__truss" aria-hidden="true"></span>
+    <div class="hwy-exits__panel">
+      <img class="hwy-exits__shield" src="assets/brand/shield.png" alt="" aria-hidden="true">
+      <span class="hwy-exits__tab">General <b>Exits</b></span>
+      <nav class="hwy-exits__grid" aria-label="Question categories">
 <!--NAV-->
-        </ul>
       </nav>
     </div>
+    <span class="gantry__truss hwy-exits__truss" aria-hidden="true"></span>
   </div>
+
+  <img class="qa-cloud qa-cloud--exits" src="assets/brand/clouds/Cloud3.svg" alt="" aria-hidden="true">
+
 <!--SECTIONS-->
   <!-- ========================================================================
        FOOTER — the site footer, with Q&A added to the quick links.

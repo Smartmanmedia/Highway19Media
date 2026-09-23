@@ -302,7 +302,7 @@ CONTENT = [
 # Each category's ground and intro layout.
 # --------------------------------------------------------------------------
 LOOK = {
-    "qa-general":     dict(band="band-white",   layout="centred", arrow="down",  truss="right"),
+    "qa-general":     dict(band="band-white",   layout="centred", arrow="down",  truss="right", sign=False),
     "qa-websites":    dict(band="band-blue-lt", layout="split",   arrow="dnr",   truss="left"),
     "qa-video":       dict(band="band-blue",    layout="centred", arrow="dnl",   truss="right"),
     "qa-advertising": dict(band="band-white",   layout="split",   arrow="right", truss="left"),
@@ -426,10 +426,17 @@ def render():
         if split:
             b.append('      <div class="qa-sec__grid">\n')
 
-        b.append('''      <div class="qa-sec__head">
+        head_sign = m.get("sign", True)
+        b.append('''      <div class="qa-sec__head%s">
         <!-- His guide sign carries the category: icon disc, the name, and a
              lane arrow, with the truss running off whichever side this one
              takes. The sides alternate down the page, as they do in his file. -->
+        <span class="qa-disc qa-disc--plain" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            %s
+          </svg>
+        </span>
+        <span class="eyebrow eyebrow--plain">%s</span>
         <div class="hwy-sign hwy-sign--section%s">
           <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
           <div class="hwy-sign__panel">
@@ -448,7 +455,9 @@ def render():
         </div>
         <h2 id="%s-h">%s</h2>
         <p class="body-copy">%s</p>
-      </div>\n''' % (" is-mirrored" if m["truss"] == "left" else "",
+      </div>\n''' % ("" if head_sign else " qa-sec__head--plain",
+                       ICONS[sec["icon"]].strip(), e(sec["eyebrow"]),
+                       " is-mirrored" if m["truss"] == "left" else "",
                        ICONS[sec["icon"]].strip(), e(sec["eyebrow"]),
                        ARROWS[m["arrow"]], sid, e(sec["heading"]), e(sec["lead"])))
 
@@ -508,7 +517,21 @@ def render():
                 w(section(item[1], item[2], item[3] if len(item) > 3 else None))
         w('  </div>\n')
 
+    EXIT_ORDER = [
+        ("qa-websites",    "Website Design",              "down"),
+        ("qa-video",       "Video Production",            "down"),
+        ("qa-advertising", "Social Media &amp; Paid Ads", "right"),
+        ("qa-print",       "Print &amp; Promotional Products", "left"),
+        ("qa-working",     "Working With Us",             "right"),
+        ("qa-branding",    "Branding &amp; Graphic Design",    "down"),
+    ]
     nav = "\n".join(
+        '          <a class="hwy-exit qa-exits__link" href="#%s">'
+        '<span>%s</span>'
+        '<svg class="hwy-exit__arrow" viewBox="0 0 64 64" aria-hidden="true">%s</svg></a>'
+        % (sid, label, ARROWS[arrow]) for sid, label, arrow in EXIT_ORDER)
+
+    _old_nav = "\n".join(
         '          <li><a class="qa-exits__link" href="#%s" style="--lane:var(%s)">'
         '<span class="qa-exits__chip" aria-hidden="true"></span>%s</a></li>'
         % (s["sid"], LANE_VAR[s["sid"]], e(s["nav"])) for s in CONTENT)
