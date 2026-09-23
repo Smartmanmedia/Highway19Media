@@ -163,6 +163,19 @@
     --split-w:60.17vw; --split-c1:22.85vw; --split-gap:3.61vw;
     translate:.632vw 0;
   }
+  /* Print, off QA-Part3: copy at 383.1, questions 723.9 .. 1204.7. */
+  .page--qa .qa-sec#qa-print > .sec__inner > .sec__body > .qa-sec__grid{
+    --split-w:57.0vw; --split-c1:20.2vw; --split-gap:3.61vw;
+    translate:5.77vw 0;
+  }
+}
+
+/* Branding is a centred band like General, but he sets the whole block right
+   of the page's middle: his cards run 483.1 .. 1323.1 of 1441.5. */
+@media (min-width:1281px){
+  .page--qa .qa-sec#qa-branding > .sec__inner > .sec__body > :not(.hwy-sign){
+    translate:12.715vw 0;
+  }
 }
 
 /* Below this the margin can no longer hold a road — 21vw plus half a road
@@ -908,8 +921,83 @@
 .page--qa .qa-sec#qa-advertising .qa-cta p{color:var(--ink)}
 
 .page--qa #qa-advertising .qa-cta .btn{background:#1082ff;color:#fff;border-color:#fff;box-shadow:none}
-.page--qa #qa-branding   {background:linear-gradient(180deg,#00517e 0%,#014a86 50%,#013f8e 100%)}
-.page--qa #qa-print      {background:linear-gradient(180deg,#013f8e 0%,#012f7f 55%,#002374 100%)}
+/* ── Part 3, off QA-Part3.svg ────────────────────────────────────────────
+   Branding stands in his forest: one flat green, #297a2b, the whole 1652 of
+   it. Print sits on open water, which is his own gradient read bottom-up —
+   deep #00386d out at the top of the band, turquoise #46b0b9 where it
+   shallows into the beach. */
+.page--qa #qa-branding   {background:#297a2b}
+.page--qa #qa-print      {
+  background:linear-gradient(180deg,#00386d 0%,#1c5674 60%,#1d5876 71%,
+                            #21627d 79%,#287189 86%,#33879a 92%,#40a3af 98%,#46b0b9 100%);
+}
+
+/* ── The coast ───────────────────────────────────────────────────────────
+   Beach, airport, city, highway, forest — the stack he draws under the Print
+   copy. Every band is a share of the 1441.5 page he drew it on, so the whole
+   coast holds its proportions at any width. The artwork is his, cut off the
+   artboard; only the ship, the planes and the traffic are ours. */
+.qa-coast{position:relative;width:100vw;margin-left:calc(50% - 50vw)}
+.qa-coast > *{position:relative;width:100%}
+/* 78 of 1441.5 between his water and his grass. */
+.qa-coast__beach{
+  height:5.41vw;max-height:78px;
+  background:linear-gradient(180deg,#46b0b9 0%,#cfe3b0 42%,#eadfae 62%,#b3c46f 100%);
+}
+/* His grass under the runways: 282 of 1441.5, #b3c46f down to #8fb44f. The
+   airport itself is 248 of it, laid on the bottom. */
+.qa-coast__air{
+  height:19.56vw;max-height:282px;
+  background:linear-gradient(180deg,#b3c46f 0%,#9dbc5e 55%,#8fb44f 100%);
+}
+.qa-coast__air::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;z-index:0;
+  height:17.2vw;max-height:248px;
+  background:url("../scene/qa-airport.png") no-repeat center bottom/100% 100%;
+  pointer-events:none;
+}
+/* His city: 399 of 1441.5 on his own #6d6e72. */
+.qa-coast__city{
+  height:27.68vw;max-height:399px;
+  background:#6d6e72 url("../scene/qa-city.png") no-repeat center bottom/100% 100%;
+}
+/* And his forest on the far side of the highway: 300 of 1441.5, standing on
+   the ground the highway hands it. */
+.qa-coast__forest{
+  position:relative;width:100vw;margin-left:calc(50% - 50vw);
+  height:20.8vw;max-height:300px;
+  /* His trees over his own ground. Two layers, not one shorthand: a gradient
+     and a url cannot share a background layer, and the whole declaration is
+     thrown away if they try. */
+  background-image:url("../scene/qa-forest.png"),
+    linear-gradient(180deg,#1a1a1a 0%,#290a00 28%,#293114 54%,#29471f 76%,#295929 100%);
+  background-repeat:no-repeat,no-repeat;
+  background-size:100% 100%,auto;
+  background-position:center top,0 0;
+}
+
+/* His highway is a band of asphalt, not a strip with a turn in it: the gap
+   has to be at least as deep as the road is wide or the route has nowhere to
+   draw. 148 of 1441.5, and the six lanes are on the route itself. */
+.page--qa [data-lanes="6"] .road-gap{--gap-h:10.27vw;min-height:148px}
+
+/* ── The ship and the planes ─────────────────────────────────────────────
+   One SVG per band, behind the copy and out of the way of every pointer. */
+.qa-scene__art{
+  /* Above his runway, below his copy: a plane rolling out has to be on the
+     asphalt, not under it, and the ship has to stay behind the questions. */
+  position:absolute;inset:0;z-index:1;
+  display:block;width:100%;height:100%;
+  pointer-events:none;overflow:visible;
+}
+.qa-coast__air{overflow:hidden}
+.qa-scene__art image{image-rendering:auto}
+/* His shadows are all black at a low opacity, thrown down and to the left.
+   A plane's own is set from its height off the ground, frame by frame. */
+.qa-ship__shadow{opacity:.22;filter:brightness(0) blur(3px);
+                 transform:translate(10px,16px)}
+.qa-plane__shadow{filter:brightness(0) saturate(0) opacity(.55) blur(1px)}
+
 .page--qa #qa-working    {background:linear-gradient(180deg,#002374 0%,#012876 42%,#05435e 78%,#0a5b39 100%)}
 .page--qa #qa-close      {background:linear-gradient(180deg,#0a5a3b 0%,#074b4d 28%,#053b5d 58%,#062e5e 100%)}
 /* A crossing strip takes the colour of the join it sits on — the generator
@@ -979,6 +1067,9 @@
 .page--qa #qa-general .qa-cta{background:#1562b7;border-color:#fff}
 .page--qa #qa-websites .qa-cta{background:#164f96;border-color:#fff}
 .page--qa #qa-video .qa-cta{background:#12605c;border-color:transparent}
+/* Part 3's two: his blue on the forest, his green on the water. */
+.page--qa #qa-branding .qa-cta{background:#004abd;border-color:#fff}
+.page--qa #qa-print .qa-cta{background:#007a29;border-color:#fff}
 .page--qa .qa-cta::after{display:none}
 .page--qa .qa-cta h3{font-size:clamp(1.25rem,2vw,1.6rem)}
 .page--qa .qa-cta p{max-width:46ch}

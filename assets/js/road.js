@@ -46,7 +46,10 @@
       ASPHALT = '#575757',
       LINE = '#ffffff',
       R_MAX = 190,               /* source art is ~270; 190 reads better here */
-      LANE = 31;                 /* lane centres at +/-31 from the centreline */
+      LANE = 31,                 /* lane centres at +/-31 from the centreline */
+      /* He redrew the asphalt at 95 across for the section roads on the
+         questions page; a route may say otherwise — see measureRoute. */
+      HIS_W = 95;
 
   /* -- Simulation constants, carried over unchanged. ----------------------- */
   var STEP = 5,                  /* path sample spacing, px                   */
@@ -677,7 +680,21 @@
                  is already viewport-relative in CSS, so it is not scaled
                  again here. */
               inset: inset, insetOut: insetOut,
-              R: Math.min(150, insetOut), moves: [] };
+              R: Math.min(150, insetOut), moves: [],
+              /* His page does not run one road. The section roads are 95
+                 across with a lane each way; the highway past the port is 148
+                 across with three each way, and the vehicles on it are the
+                 size of ITS lane, not of the other one's. Both numbers come
+                 off the route in the markup, so the engine never has to know
+                 which road it is drawing. */
+              roadW: parseFloat(el.getAttribute('data-road-w')) || HIS_W,
+              lanes: Math.max(2, parseInt(el.getAttribute('data-lanes'), 10) || 2) };
+    g.rs = viewScale * (g.roadW / W_ROAD);
+    /* A vehicle is the size of its LANE, not of the road. Six lanes in 148
+       are 24.7 apiece against the 62.9 a two-lane 125.88 gives, so the cars
+       out on the highway come down to two fifths — which is exactly how he
+       draws them: a wide road full of small traffic. */
+    g.cs = (CAR_H * viewScale * ((g.roadW / g.lanes) / (W_ROAD / 2))) / MEDH;
     var kids = el.hasAttribute('data-road')
       ? [el]
       : Array.prototype.slice.call(el.children).filter(function (k) {
@@ -706,6 +723,7 @@
   /* One route's SVG: his four stacked strokes, the two lane centrelines the
      traffic drives, and a fleet layer above them. */
   function drawRoute(g, d) {
+    var rs = g.rs;
     var old = g.el.querySelector(':scope > .road-run__art');
     if (old) old.remove();
 
@@ -715,7 +733,7 @@
       preserveAspectRatio: 'none',
       'aria-hidden': 'true', focusable: 'false'
     });
-    var dash = DASH.split(' ').map(function (v) { return (+v * scaleNow).toFixed(2); }).join(' ');
+    var dash = DASH.split(' ').map(function (v) { return (+v * rs).toFixed(2); }).join(' ');
 
     /* One vertical gradient per route, built from whatever its blocks say the
        asphalt and the line are along the way. Where nothing says otherwise it
@@ -759,21 +777,31 @@
       defs.appendChild(cp);
       var verge = el('g', { 'clip-path': 'url(#' + cid + ')' });
       verge.appendChild(el('path', { d: d(0), fill: 'none', stroke: '#9b9b9b',
-                                     'stroke-width': 255 * scaleNow }));
+                                     'stroke-width': 255 * rs }));
       verge.appendChild(el('path', { d: d(0), fill: 'none', stroke: '#fff',
-                                     'stroke-width': 187 * scaleNow }));
+                                     'stroke-width': 187 * rs }));
       verge.appendChild(el('path', { d: d(0), fill: 'none', stroke: '#1c9022',
-                                     'stroke-width': 183 * scaleNow }));
+                                     'stroke-width': 183 * rs }));
       svg.appendChild(verge);
     }
 
     var road = el('g', {});
     road.appendChild(el('path', { 'class': 'road-hit', d: d(0), fill: 'none',
-                                  stroke: ASPH, 'stroke-width': W_ROAD * scaleNow }));
-    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: LN, 'stroke-width': EDGE_OUT * 2 * scaleNow }));
-    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: ASPH, 'stroke-width': EDGE_IN * 2 * scaleNow }));
-    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: LN, 'stroke-width': DASH_W * scaleNow,
-                                  'stroke-dasharray': dash }));
+                                  stroke: ASPH, 'stroke-width': W_ROAD * rs }));
+    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: LN, 'stroke-width': EDGE_OUT * 2 * rs }));
+    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: ASPH, 'stroke-width': EDGE_IN * 2 * rs }));
+    /* The lines BETWEEN the lanes. One lane each way is his single dashed
+       centreline; on the six-lane highway past the port he alternates — the
+       outermost pair dashed, the next pair solid, the middle dashed again.
+       Counting from the outside and dashing the odd ones gives his pattern on
+       the highway and his old centreline on a two-lane road, from one rule. */
+    var nL = g.lanes, laneW = (W_ROAD / nL) * rs;
+    for (var j = 1; j < nL; j++) {
+      var a = { d: d((j - nL / 2) * laneW), fill: 'none', stroke: LN,
+                'stroke-width': DASH_W * rs };
+      if (j % 2) a['stroke-dasharray'] = dash;
+      road.appendChild(el('path', a));
+    }
     svg.appendChild(road);
     /* His trees, planted down both sides of the grass wherever the verge
        runs. Placed once per route build, off the centreline itself, so they
@@ -781,7 +809,7 @@
     if (vRanges.length) {
       var probe = el('path', { d: d(0), fill: 'none' });
       svg.appendChild(probe);
-      var L = probe.getTotalLength(), step = 86 * scaleNow, off = 70 * scaleNow;
+      var L = probe.getTotalLength(), step = 86 * rs, off = 70 * rs;
       var trees = el('g', {});
       for (var q = step * 0.5; q < L; q += step) {
         var a = probe.getPointAtLength(q - 1), c2 = probe.getPointAtLength(q + 1);
@@ -794,7 +822,7 @@
         var nx = -dy / len, ny = dx / len;
         for (var sgn = -1; sgn <= 1; sgn += 2) {
           var which = ((q / step) | 0) % 2 ? TREE_B : TREE_A;
-          var tw = which.w * scaleNow, th = which.h * scaleNow;
+          var tw = which.w * rs, th = which.h * rs;
           trees.appendChild(el('image', {
             href: which.src, 'xlink:href': which.src,
             x: (mid.x + nx * off * sgn - tw / 2).toFixed(1),
@@ -807,13 +835,19 @@
       svg.appendChild(trees);
     }
 
-    var gA = el('path', { 'class': 'lane-guide', d: d(-LANE * scaleNow) });
-    var gB = el('path', { 'class': 'lane-guide', d: d(LANE * scaleNow) });
-    svg.appendChild(gA); svg.appendChild(gB);
+    /* One centreline per lane, spread across the asphalt. The near half
+       drives down the page, the far half drives back up it, so six lanes
+       read as three each way rather than as one very wide road. */
+    var guides = [];
+    for (var q = 0; q < nL; q++) {
+      var gp = el('path', { 'class': 'lane-guide', d: d((q - (nL - 1) / 2) * laneW) });
+      svg.appendChild(gp);
+      guides.push(gp);
+    }
     var fleet = el('g', {});
     svg.appendChild(fleet);
     g.el.appendChild(svg);
-    return { guides: [gA, gB], fleet: fleet };
+    return { guides: guides, fleet: fleet };
   }
 
   /* Build or rebuild one route. Vehicles keep their position ALONG the road as
@@ -830,22 +864,34 @@
     });
 
     var art = drawRoute(g, d);
-    run.lanes = [sample(art.guides[0], false), sample(art.guides[1], true)];
+    /* The near half of the lanes runs down the page, the far half back up. */
+    run.lanes = art.guides.map(function (p, i) {
+      return sample(p, i >= art.guides.length / 2);
+    });
+    run.rs = g.rs; run.cs = g.cs;
     run.fleet = art.fleet;
     run.h = g.H; run.w = g.W;
-    run.capacity = Math.max(4, Math.min(110,
-      Math.round(TRAFFIC * (run.lanes[0].L * 2) / (SPACING * scaleNow))));
+    run.road = run.lanes.reduce(function (a, l) { return a + l.L; }, 0);
+    run.capacity = Math.max(4, Math.min(160,
+      Math.round(TRAFFIC * run.road / (SPACING * g.rs))));
 
-    keep.forEach(function (k) { k.c.d = k.f * run.lanes[k.c.lane].L; });
+    keep.forEach(function (k) {
+      var ln = run.lanes[k.c.lane] || run.lanes[0];
+      k.c.lane = run.lanes[k.c.lane] ? k.c.lane : 0;
+      k.c.d = k.f * ln.L;
+      k.c.rs = run.rs; k.c.cs = run.cs; metrics(k.c);
+    });
   }
 
-  /* He redrew the asphalt at 95 across where the home page runs 125.88. The
-     whole run-mode drawing takes that ratio, traffic included, so the cars
-     stay the size of the lane they are in. */
-  var HIS_ROAD = 95 / W_ROAD;
+  /* He redrew the asphalt at 95 across where the home page runs 125.88, and
+     the highway past the port wider again. viewScale is what the VIEWPORT
+     does to a road; each route multiplies it by its own width, so the cars
+     stay the size of the lane they are in whichever road that is. */
+  var HIS_ROAD = HIS_W / W_ROAD;
 
   function fitRoutes(W) {
-    scaleNow = (W <= MOBILE_W ? 0.62 : (W <= NARROW_W ? 0.82 : 1)) * HIS_ROAD;
+    viewScale = (W <= MOBILE_W ? 0.62 : (W <= NARROW_W ? 0.82 : 1));
+    scaleNow = viewScale * HIS_ROAD;
     carScale = (CAR_H * scaleNow) / MEDH;
 
     runs.forEach(function (r) {
@@ -855,7 +901,8 @@
     incidents.length = 0;
 
     runs = ROUTES.map(function (el) {
-      return { el: el, host: el, lanes: [], cars: [], byLane: [[], []],
+      return { el: el, host: el, lanes: [], cars: [], byLane: [],
+               rs: scaleNow, cs: carScale, road: 0,
                capacity: 40, fleet: null, onScreen: true, w: 0, h: 0 };
     });
     /* Where his ground is black. Read once per fit, in page coordinates, so
@@ -872,7 +919,13 @@
       r.pageTop = rr.top + window.pageYOffset - pTop;
     });
     runs.forEach(fitRoute);
-    runs = runs.filter(function (r) { return r.lanes.length === 2; });
+    runs = runs.filter(function (r) { return r.lanes.length >= 2; });
+
+    /* The bands that are not road: the water the ship crosses and the sky
+       over his runways. Rebuilt with the routes, for the same reason — they
+       are sized to a band whose height an answer opening can change. */
+    buildSea();
+    buildAir();
 
     sizePool();
     if (auto) applyAuto(); else applyManual();
@@ -906,7 +959,7 @@
      file, so its presence is a reliable test for which page we are on. */
   var DRAW_ROAD = !window.H19_ROAD_PATHS;
 
-  var runs = [], pool = [], scaleNow = 1, gmul = 1, carScale = 1, rampN = 0;
+  var runs = [], pool = [], scaleNow = 1, viewScale = 1, gmul = 1, carScale = 1, rampN = 0;
   /* Which way a sprite faces in its own box. Flip this if the beams come out
      of the boot. */
   var HL_DIR = 1;
@@ -926,24 +979,29 @@
      Once everything has actually stopped the simulation idles. */
   var paused = false, settled = false;
 
+  /* Every length here is a length of ROAD, so they all take the scale of the
+     road this vehicle is driving on — which is not the same road everywhere
+     on the page any more. A car on the six-lane highway is the size of ITS
+     lane and keeps the gaps and the acceleration that go with it. */
   function metrics(c) {
-    var len = c.base.w * carScale;
-    c.len = len + 12 * scaleNow;
-    var byLen = Math.min(1, Math.max(0, (len - 72 * scaleNow) / (92 * scaleNow)));
+    var rs = c.rs || scaleNow, len = c.base.w * (c.cs || carScale);
+    c.len = len + 12 * rs;
+    var byLen = Math.min(1, Math.max(0, (len - 72 * rs) / (92 * rs)));
     var byType = BIG[c.id] ? 1 : (VAN[c.id] ? 0.5 : 0);
     var big = Math.max(byLen, byType);            /* 0 = small car, 1 = semi */
-    c.gapMin = (24 + big * 22) * scaleNow + len * 0.34;   /* standing gap    */
+    c.gapMin = (24 + big * 22) * rs + len * 0.34;         /* standing gap    */
     c.headTime = 0.42 + big * 0.62;                       /* seconds headway */
-    c.acc = (108 - big * 58) * scaleNow;                  /* heavy pulls away slowly */
-    c.dec = (310 - big * 140) * scaleNow;                 /* and stops slowly, so it hangs back */
+    c.acc = (108 - big * 58) * rs;                        /* heavy pulls away slowly */
+    c.dec = (310 - big * 140) * rs;                       /* and stops slowly, so it hangs back */
     c.top = c.topRaw * (1 - big * 0.24);
   }
 
-  function makeCar(lane) {
+  function makeCar(lane, rs, cs) {
     var id = NAMES[(Math.random() * NAMES.length) | 0];
+    rs = rs || scaleNow; cs = cs || carScale;
     var c = {
-      id: id, lane: lane, base: BOX[id], node: null,
-      topRaw: BASE * scaleNow * (0.88 + Math.random() * 0.26), d: 0, v: 0
+      id: id, lane: lane, base: BOX[id], node: null, rs: rs, cs: cs,
+      topRaw: BASE * rs * (0.88 + Math.random() * 0.26), d: 0, v: 0
     };
     metrics(c);
     c.v = c.top * 0.8;
@@ -982,18 +1040,19 @@
     var u = useOf(NAMES[0]);
     inner.appendChild(u);
     g.appendChild(inner);
-    return { g: g, inner: inner, hl: hl, use: u, id: null, car: null };
+    return { g: g, inner: inner, hl: hl, use: u, id: null, cs: null, car: null };
   }
 
   function bind(node, c) {
-    if (node.id !== c.id) {
+    var cs = c.cs || carScale;
+    if (node.id !== c.id || node.cs !== cs) {
       node.use.setAttributeNS(XLINK, 'xlink:href', '#' + c.id);
       node.use.setAttribute('href', '#' + c.id);
       var b = c.base;
       node.inner.setAttribute('transform',
-        'scale(' + carScale.toFixed(4) + ') translate(' +
+        'scale(' + cs.toFixed(4) + ') translate(' +
         (-(b.x + b.w / 2)).toFixed(2) + ',' + (-(b.y + b.h / 2)).toFixed(2) + ')');
-      node.id = c.id;
+      node.id = c.id; node.cs = cs;
     }
     /* The beam is thrown from the car's nose and scales with it. */
     if (node.hl) node.hl.setAttribute('transform',
@@ -1009,14 +1068,17 @@
   }
 
   function setRunCount(run, n) {
-    if (!run.lanes.length) return;
-    n = Math.max(4, n | 0);
-    while (run.cars.length < n) run.cars.push(makeCar(run.cars.length % 2));
+    var nL = run.lanes.length;
+    if (!nL) return;
+    n = Math.max(nL * 2, n | 0);
+    while (run.cars.length < n)
+      run.cars.push(makeCar(run.cars.length % nL, run.rs, run.cs));
     while (run.cars.length > n) {
       var c = run.cars.pop();
       if (c.node) unbind(c.node);
     }
-    run.byLane = [[], []];
+    run.byLane = [];
+    for (var q = 0; q < nL; q++) run.byLane.push([]);
     run.cars.forEach(function (c) { run.byLane[c.lane].push(c); });
     run.byLane.forEach(function (list, li) {
       var L = run.lanes[li].L;
@@ -1024,9 +1086,10 @@
     });
   }
 
-  /* Split a total vehicle count between the runs by how much road each has. */
+  /* Split a total vehicle count between the runs by how much road each has —
+     every lane of it, so a six-lane band gets its share of the traffic. */
   function spread(total) {
-    var lens = runs.map(function (r) { return r.lanes.length ? r.lanes[0].L : 0; });
+    var lens = runs.map(function (r) { return r.road || (r.lanes.length ? r.lanes[0].L : 0); });
     var sum = lens.reduce(function (a, b) { return a + b; }, 0) || 1;
     runs.forEach(function (r, i) {
       setRunCount(r, Math.max(4, Math.round(total * lens[i] / sum)));
@@ -1213,20 +1276,20 @@
     var slowed = incidents.length > 0;
     for (var ri = 0; ri < runs.length; ri++) {
       var run = runs[ri];
-      for (var li = 0; li < 2; li++) {
-        var lane = run.lanes[li], L = lane.L, list = run.byLane[li];
+      for (var li = 0; li < run.lanes.length; li++) {
+        var lane = run.lanes[li], L = lane.L, list = run.byLane[li] || [];
         if (!list.length) continue;
         list.sort(function (p, q) { return p.d - q.d; });
         for (var i = 0; i < list.length; i++) {
           var c = list[i], lead = list[(i + 1) % list.length];
           var gap = (lead.d - c.d + L) % L - lead.len; if (gap < 0) gap = 0;
           var idx = Math.min(lane.n, Math.max(0, Math.round(c.d / STEP)));
-          var t = Math.min(c.top, lane.lim[idx] * scaleNow);
+          var t = Math.min(c.top, lane.lim[idx] * (c.rs || scaleNow));
           if (slowed) t *= capFor(c, ri, li);
           var safe = c.gapMin + c.v * c.headTime;
           if (gap < safe) {
             var f = gap / safe;
-            t = Math.min(t, Math.max(0, lead.v * 0.94) * (0.3 + 0.7 * f) + f * f * 45 * scaleNow);
+            t = Math.min(t, Math.max(0, lead.v * 0.94) * (0.3 + 0.7 * f) + f * f * 45 * (c.rs || scaleNow));
           }
           if (paused) t = 0;
           var acc = t > c.v ? c.acc : -c.dec, nv = c.v + acc * dt;
@@ -1444,11 +1507,174 @@
   var last = performance.now(), running = true;
   var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ==========================================================================
+     10b. His sea and his sky.
+     --------------------------------------------------------------------------
+     Below the port his page has open water and an airport, and neither is
+     road: the ship crosses on one long line with its own shadow under it and
+     its wake behind, and the planes work the two runways — one rolling out
+     and lifting off to the right, one coming down the approach and running
+     on to the far end.
+
+     Altitude is the whole trick. A plane is drawn once and its height off the
+     ground is a number from 0 to 1, which moves three things at once: the
+     sprite grows, the shadow slides away from it down and left (his light
+     comes off the top right — every shadow in his file falls that way), and
+     the shadow fades. Nothing else has to change for a plane to leave the
+     ground, so takeoff and landing are the same code run in opposite
+     directions.
+     ====================================================================== */
+
+  var PLANES = {
+    a: { src: 'assets/scene/qa-plane-a.png', w: 52, h: 58 },
+    b: { src: 'assets/scene/qa-plane-b.png', w: 72, h: 77 }
+  };
+  var SHIP = { src: 'assets/scene/qa-ship.png', w: 468, h: 88 };
+  var flights = [], vessels = [], airT = 0;
+
+  function imageAt(src, w, h) {
+    return el('image', { href: src, 'xlink:href': src,
+                         x: (-w / 2).toFixed(2), y: (-h / 2).toFixed(2),
+                         width: w.toFixed(2), height: h.toFixed(2) });
+  }
+
+  /* One SVG per band, sized to the band, so a plane's coordinates are the
+     band's own and nothing has to be recomputed when the copy above it
+     moves. */
+  function bandArt(host) {
+    var old = host.querySelector(':scope > .qa-scene__art');
+    if (old) old.remove();
+    var r = host.getBoundingClientRect();
+    var svg = el('svg', { 'class': 'qa-scene__art',
+                          viewBox: '0 0 ' + Math.round(r.width) + ' ' + Math.round(r.height),
+                          preserveAspectRatio: 'none',
+                          'aria-hidden': 'true', focusable: 'false' });
+    host.appendChild(svg);
+    return { svg: svg, W: r.width, H: r.height };
+  }
+
+  function buildAir() {
+    flights = [];
+    Array.prototype.forEach.call(page.querySelectorAll('[data-air]'), function (host) {
+      var art = bandArt(host);
+      if (!art.W || !art.H) return;
+      var sc = Math.min(1, art.W / 1440);
+      /* The two runways, as fractions of the band, and which way each works:
+         the near one departs to the right, the far one lands from the right. */
+      var strips = (host.getAttribute('data-air') || '.30 out,.62 in')
+        .split(',').map(function (t) { return t.trim().split(/\s+/); });
+      strips.forEach(function (sp, i) {
+        var y = parseFloat(sp[0]) * art.H;
+        var out = sp[1] !== 'in';
+        var kind = i % 2 ? PLANES.b : PLANES.a;
+        var g = el('g', {});
+        var sh = el('g', { 'class': 'qa-plane__shadow' });
+        sh.appendChild(imageAt(kind.src, kind.w * sc, kind.h * sc));
+        var pl = el('g', { 'class': 'qa-plane' });
+        pl.appendChild(imageAt(kind.src, kind.w * sc, kind.h * sc));
+        g.appendChild(sh); g.appendChild(pl);
+        art.svg.appendChild(g);
+        flights.push({ g: g, sh: sh, pl: pl, y: y, W: art.W, out: out, sc: sc,
+                       host: host, period: 13 + (i % 2) * 3, t: (i * 0.37) % 1 });
+      });
+    });
+  }
+
+  function buildSea() {
+    vessels = [];
+    Array.prototype.forEach.call(page.querySelectorAll('[data-sea]'), function (host) {
+      var art = bandArt(host);
+      if (!art.W || !art.H) return;
+      var sc = Math.min(1, art.W / 1440);
+      (host.getAttribute('data-sea') || '.22').split(',').forEach(function (t, i) {
+        var g = el('g', { 'class': 'qa-ship' });
+        var sh = el('g', { 'class': 'qa-ship__shadow' });
+        sh.appendChild(imageAt(SHIP.src, SHIP.w * sc, SHIP.h * sc));
+        var bo = el('g', {});
+        bo.appendChild(imageAt(SHIP.src, SHIP.w * sc, SHIP.h * sc));
+        g.appendChild(sh); g.appendChild(bo);
+        art.svg.appendChild(g);
+        /* Started part-way across so there is a ship on the water the first
+           time the band comes into view, not forty seconds of empty sea. */
+        vessels.push({ g: g, y: parseFloat(t) * art.H, W: art.W, sc: sc,
+                       host: host, period: 62 + i * 11, t: (0.34 + i * 0.4) % 1 });
+      });
+    });
+  }
+
+  /* A plane's height off the ground across its cycle. Departing: it holds the
+     runway, rotates, then climbs away. Arriving: the same shape backwards. */
+  function altitude(f, t) {
+    var k = f.out ? t : 1 - t;
+    if (k < 0.34) return 0;                       /* on the ground           */
+    if (k > 0.70) return 1;                       /* away                    */
+    var u = (k - 0.34) / 0.36;
+    return u * u * (3 - 2 * u);                   /* smooth rotation + climb */
+  }
+
+  function stepAir(dt) {
+    var i, f, v;
+    for (i = 0; i < flights.length; i++) {
+      f = flights[i];
+      f.t = (f.t + dt / f.period) % 1;
+    }
+    for (i = 0; i < vessels.length; i++) {
+      v = vessels[i];
+      v.t = (v.t + dt / v.period) % 1;
+    }
+  }
+
+  function renderAir() {
+    var i, f, v, on;
+    for (i = 0; i < flights.length; i++) {
+      f = flights[i];
+      var r = f.host.getBoundingClientRect();
+      on = r.bottom > -CULL_MARGIN && r.top < window.innerHeight + CULL_MARGIN;
+      f.g.style.display = on ? '' : 'none';
+      if (!on) continue;
+      var a = altitude(f, f.t);
+      /* Across the band and away, and up the page as it climbs — a plane that
+         has left the ground does not stay on the runway's line. */
+      var span = f.W + 420 * f.sc;
+      var x = f.out ? (-210 * f.sc + span * f.t) : (f.W + 210 * f.sc - span * f.t);
+      /* It rises, but it stays in his band: the grass is only 282 deep and a
+         plane that climbed out of it would simply be clipped away. The height
+         reads off the shadow pulling away underneath, not off the distance
+         travelled up the page. */
+      var y = f.y - a * 30 * f.sc;
+      var grow = 1 + a * 0.30;
+      f.g.setAttribute('transform', 'translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ')');
+      f.pl.setAttribute('transform', 'scale(' + grow.toFixed(3) + ')' +
+                        (f.out ? '' : ' scale(-1 1)'));
+      /* His light is off the top right, so the shadow goes down and left, and
+         the further up the plane is the further it falls behind. */
+      f.sh.setAttribute('transform',
+        'translate(' + (-a * 30 * f.sc).toFixed(1) + ',' + (a * 48 * f.sc).toFixed(1) + ')' +
+        (f.out ? '' : ' scale(-1 1)'));
+      f.sh.setAttribute('opacity', (0.42 - a * 0.16).toFixed(3));
+    }
+    for (i = 0; i < vessels.length; i++) {
+      v = vessels[i];
+      var vr = v.host.getBoundingClientRect();
+      on = vr.bottom > -CULL_MARGIN && vr.top < window.innerHeight + CULL_MARGIN;
+      v.g.style.display = on ? '' : 'none';
+      if (!on) continue;
+      /* Bow first, which on his drawing is to the left. */
+      var vs = v.W + SHIP.w * v.sc * 2;
+      v.g.setAttribute('transform', 'translate(' +
+        (v.W + SHIP.w * v.sc - vs * v.t).toFixed(1) + ',' + v.y.toFixed(1) + ')');
+    }
+  }
+
   function frame(now) {
     var dt = Math.min(0.05, (now - last) / 1000); last = now;
-    if (running && runs.length) {
-      if (!reduced && !settled) step(dt * gmul, dt);
-      render();
+    if (running) {
+      if (runs.length) {
+        if (!reduced && !settled) step(dt * gmul, dt);
+        render();
+      }
+      if (!reduced && !paused) stepAir(dt * gmul);
+      if (flights.length || vessels.length) renderAir();
     }
     requestAnimationFrame(frame);
   }

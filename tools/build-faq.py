@@ -357,10 +357,39 @@ LOOK = {
 # a yellow line down it. road.js builds one gradient per route from these.
 PAINT = {
     "qa-general":    ' data-verge',
+    # The open water the Print section sits on: his container ship crosses it
+    # at a fifth of the way down, bow first, with its own shadow under it.
+    "qa-print":      ' data-sea=".18"',
     "qa-websites":   ' data-asphalt="#161616"',
     "qa-video":      ' data-asphalt="#161616"',
     "qa-advertising":' data-asphalt="#534d45" data-line="#ffc72c"',
+    # His road through the forest carries the shoulder and the trees, the way
+    # the General section's does.
+    "qa-branding":   ' data-verge',
 }
+
+# --------------------------------------------------------------------------
+# THE COAST
+# Below the Print section his page stops being road for a while: open water
+# with the container ship on it, the beach, the airport, the city, and only
+# then the six-lane highway back out through the forest. Every band here is
+# his own artwork off QA-Part3.svg; the ship, the planes and the traffic are
+# the only things that move, and each says so in its own attribute.
+#
+#   data-sea   fractions of the band the ships cross at
+#   data-air   "<fraction> out" departs to the right, "<fraction> in" lands
+# --------------------------------------------------------------------------
+COAST = """
+  <div class="qa-coast" aria-hidden="true">
+    <div class="qa-coast__beach"></div>
+    <div class="qa-coast__air" data-air=".273 out,.518 in,.273 out,.518 in"></div>
+    <div class="qa-coast__city"></div>
+  </div>
+"""
+
+FOREST = """
+  <div class="qa-coast__forest" aria-hidden="true"></div>
+"""
 
 PAGE = [
     # Route 1 opens in the template: in off the top on the inner right rail
@@ -396,13 +425,28 @@ PAGE = [
         ("gap", "leave-left-far", "#2b2f47", "#202337", "",
          ' data-asphalt="#161616"'),
     ]),
+    # The desert's own road runs down its right and leaves there — his Part 3
+    # starts Branding with a road on the LEFT instead, with his forest planted
+    # down both sides of it, so the two are separate runs and not one rail
+    # that would have had to cross the question column to get there.
     ("route", [
-        ("sec", "qa-advertising", None, ("pass-right", 173, 150)),
-        ("sec", "qa-branding", "rail-right-out"),
-        ("gap", "leave-right-out", "#013f8e", "#013f8e"),
+        ("sec", "qa-advertising", "rail-right-out", ("pass-right", 173, 150)),
+        ("gap", "leave-right-out", "#297a2b", "#fac67e"),
     ]),
-    # Print runs on its own, with no road at all — the break is the point.
+    ("route", [
+        ("gap", "arrive-left", "#297a2b", "#297a2b"),
+        ("sec", "qa-branding", "rail-left-out"),
+        ("gap", "leave-left-out", "#00386d", "#297a2b"),
+    ]),
+    # Print sits on open water with the container ship crossing it, and the
+    # coast below: beach, airport, city. Then his highway — 148 across with
+    # three lanes each way, where every other road on the page is 95 with one.
     ("plain", "qa-print"),
+    ("scene", COAST),
+    ("route", [
+        ("gap", "pass-right", "#1a1a1a", "#6d6e72"),
+    ], ' data-lanes="6" data-road-w="148"'),
+    ("scene", FOREST),
     ("route", [
         ("gap", "arrive-left", "#002374", "#002374"),
         ("sec", "qa-working", "rail-left"),
@@ -554,7 +598,11 @@ def render():
         b.append('      </div>\n    </div>\n  </section>\n')
         return "".join(b)
 
-    for kind, payload in PAGE:
+    PAGE_ATTRS = {}
+    for _row in PAGE:
+        if len(_row) > 2:
+            PAGE_ATTRS[id(_row[1])] = _row[2]
+    for kind, payload in [(r[0], r[1]) for r in PAGE]:
         if kind == "tail":
             for item in payload:
                 if item[0] == "gap":
@@ -569,7 +617,11 @@ def render():
         if kind == "plain":
             w(section(payload))
             continue
-        w('\n  <div class="road-run" data-road-run>\n')
+        if kind == "scene":
+            w(payload)
+            continue
+        attrs = PAGE_ATTRS.get(id(payload), '')
+        w('\n  <div class="road-run" data-road-run%s>\n' % attrs)
         for item in payload:
             if item[0] == "gap":
                 w('    <div class="road-gap" data-road="%s"%s style="--gap:%s%s" aria-hidden="true">%s</div>\n'
