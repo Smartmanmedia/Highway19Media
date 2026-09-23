@@ -65,9 +65,19 @@ each way on a section sign. The route tabs are one fixed plate, 310.43 x 45.17
 whatever the wording, yellow with a 2px ink outline and a pair of his smaller
 brackets on the top edge. Every arrow on the page is one shape — a 17.25 x
 26.07 shaft over a 43.6 x 34.57 head — turned for the direction it points.
-The exit gantry is ONE green plate split by two white 2.4 rules and nothing
-else: no rule between the rows, and its three columns are 37.2 / 28.3 / 34.0
-of the plate rather than thirds.
+The exit gantry is ONE green plate ruled into six panels in white at 2.4,
+across and down, with its three columns at 37.2 / 28.3 / 34.0 of the plate
+rather than thirds. The truss a sign hangs from is 123.2 deep at the hero and
+83.83 at the gantry and on a section sign — one ratio for all three was near
+enough double what he drew over the gantry.
+
+**Nothing down the page has an edge.** Every full-width block hands its colour
+to the next: a section ends on the colour its crossing starts with, the
+crossing ends on the colour the next section starts with, and `--gap-from` on
+a `.road-gap` is what carries it. The gantry is neither a section nor a
+crossing, so it was painting nothing at all and the page's own dark ground
+showed through it as a stripe; it now bridges the crossing above and General
+below.
 
 **Everything here is measured off his returned Illustrator file, not guessed.**
 `incoming/QA-Part1.svg` is the artboard he redesigned and sent back, and the

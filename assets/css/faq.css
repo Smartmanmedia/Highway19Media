@@ -682,6 +682,9 @@
    blue — and the markup gives it exactly one. :first-of-type therefore
    matched the RIGHT truss and hid the only one on the page. */
 .hwy-sign__truss{grid-column:3;min-width:0;align-self:center;height:calc(var(--plate) * .1898)}
+/* 83.83 of truss on a 614.8 plate — a section sign hangs from a lighter
+   beam than the hero's 123.2 on 649.1. */
+.hwy-sign--section .hwy-sign__truss{height:calc(var(--plate) * .1363)}
 
 .hwy-sign__plate{
   position:relative;
@@ -691,6 +694,7 @@
   background:var(--sign-green);
   border:1.5px solid #fff;
   border-radius:clamp(12px,1.3vw,18.5px);
+  box-shadow:3px 4px 0 -1.5px rgba(0,0,0,.9);
   /* Solved back from his plate: 290.4 deep, the headline's first baseline
      108.1 down, the arrows drawn from 213.4 and 20.35 of green under them. */
   padding:clamp(40px,4.72vw,68px) clamp(22px,3vw,40px) clamp(10px,1.06vw,15.2px);
@@ -851,7 +855,14 @@
    passes it, because only the route table knows which two grounds meet
    there. Without it every crossing showed as a flat band between two
    gradients. */
-.page--qa .road-gap{position:relative;background:var(--gap,#002274)}
+/* A crossing hands the colour on: it starts on whatever the block above it
+   ended on and arrives at the colour the block below starts with, so there is
+   no edge anywhere down the page. --gap-from defaults to --gap, which makes a
+   flat band where the two match. */
+.page--qa .road-gap{
+  position:relative;
+  background:linear-gradient(180deg,var(--gap-from,var(--gap,#002274)) 0%,var(--gap,#002274) 100%);
+}
 
 /* ── The question cards ───────────────────────────────────────────────────
    On the blue: his white card, #00287e hairline, 10px corner, opening onto
@@ -987,33 +998,36 @@
 
 .hwy-exits{
   --plate:min(1062px,73.8vw);
+  /* The gantry is not a section and not a road gap, so nothing was painting
+     its band — the page's own dark ground showed through as a stripe with a
+     hard edge top and bottom. It bridges the crossing above (#0249a8) and
+     General below (#035cc1), which is one unbroken blue in his file. */
+  background:linear-gradient(180deg,#0249a8 0%,#035cc1 100%);
   position:relative;
   display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
   width:100vw;margin-left:calc(50% - 50vw);
   padding-block:clamp(26px,3vw,46px) 0;
 }
 .hwy-exits > *{grid-row:1}
-.hwy-exits__truss{min-width:0;align-self:center;height:calc(var(--plate) * .148)}
+.hwy-exits__truss{min-width:0;align-self:center;height:calc(var(--plate) * .0789)}
 .hwy-exits__panel{position:relative;z-index:3;grid-column:2;width:var(--plate);
   translate:min(18.5px,1.28vw) 0}
 
 /* His gantry is ONE green plate with the same hairline rim and corner as
-   every other sign, split by TWO white 2.4 rules and nothing else — there is
-   no rule between the rows, and his three columns are not thirds: they are
-   37.2 / 28.3 / 34.0 of the plate, sized to what each one has to say. Mine
-   was six green tiles floating on a white plate, which is a table, not a
-   sign. */
+   every other sign, ruled into six panels in white at 2.4 — across AND down.
+   His three columns are not thirds but 37.2 / 28.3 / 34.0 of the plate,
+   sized to what each one has to say. */
 .hwy-exits__grid{
   position:relative;
   display:grid;grid-template-columns:37.2fr 28.3fr 34fr;
   grid-auto-rows:1fr;
-  /* The white rules ARE the column gaps: the plate under them is white and
-     each panel paints his green over it. row-gap 0 is why there is no rule
-     between the rows — he does not draw one. */
-  column-gap:2.4px;row-gap:0;
+  /* The white rules ARE the gaps: the plate under them is white and each
+     panel paints his green over it. */
+  gap:2.4px;
   background:#fff;
   border:1.5px solid #fff;
   border-radius:clamp(12px,1.3vw,18.5px);
+  box-shadow:3px 4px 0 -1.5px rgba(0,0,0,.9);
   overflow:hidden;
 }
 .hwy-exit{
@@ -1021,11 +1035,6 @@
   min-height:clamp(58px,6.75vw,97px);
   padding:clamp(10px,1.2vw,16px) clamp(10px,1.1vw,16px);
   background:var(--sign-green);
-  /* The plate under the panels is white so the column gaps read as his two
-     rules. Sub-pixel rounding between the two ROWS let that white through as
-     a hairline, and he draws no rule there — so each panel paints a sliver of
-     green above and below itself. */
-  box-shadow:0 .75px 0 var(--sign-green), 0 -.75px 0 var(--sign-green);
   color:#fff;text-decoration:none;
   font-family:var(--font-sign);
   font-size:clamp(.82rem,1.3vw,1.15rem);font-weight:700;

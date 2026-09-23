@@ -358,14 +358,14 @@ PAGE = [
     # first card. Nothing of it ever crosses the copy column.
     ("tail", [
         ("sec", "qa-general",  "rail-left-out"),
-        ("gap", "leave-left-out", "#000000"),
+        ("gap", "leave-left-out", "#001853", "#002274"),
     ]),
     # Route 2 — his second road: in off the LEFT edge, the full width of the
     # page, then down the outer right rail beside Websites and out the right.
     # Right-hand runs take the outer rail because the copy column sits right
     # of centre and the inner one would run under it.
     ("route", [
-        ("gap", "arrive-right-out-far", "#001853"),
+        ("gap", "arrive-right-out-far", "#001853", "#001853"),
         ("sec", "qa-websites", "rail-right-out"),
         ("gap", "leave-right-out", "#000000"),
     ]),
@@ -536,8 +536,8 @@ def render():
         if kind == "tail":
             for item in payload:
                 if item[0] == "gap":
-                    w('    <div class="road-gap" data-road="%s" style="--gap:%s" aria-hidden="true"></div>\n'
-                      % (item[1], item[2]))
+                    w('    <div class="road-gap" data-road="%s" style="--gap:%s%s" aria-hidden="true"></div>\n'
+                      % (item[1], item[2], (';--gap-from:%s' % item[3]) if len(item) > 3 else ''))
                 else:
                     w(section(item[1], item[2], item[3] if len(item) > 3 else None))
             w('  </div>\n')
@@ -548,8 +548,8 @@ def render():
         w('\n  <div class="road-run" data-road-run>\n')
         for item in payload:
             if item[0] == "gap":
-                w('    <div class="road-gap" data-road="%s" style="--gap:%s" aria-hidden="true"></div>\n'
-                  % (item[1], item[2]))
+                w('    <div class="road-gap" data-road="%s" style="--gap:%s%s" aria-hidden="true"></div>\n'
+                  % (item[1], item[2], (';--gap-from:%s' % item[3]) if len(item) > 3 else ''))
             elif item[0] == "close":
                 w(CLOSING % (' data-road="%s"' % item[1]))
             else:
