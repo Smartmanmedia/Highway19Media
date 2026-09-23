@@ -846,7 +846,27 @@
 .page--qa #qa-general    {background:linear-gradient(180deg,#035cc1 0%,#01368f 33%,#002b80 50%,#002274 100%)}
 .page--qa #qa-websites   {background:linear-gradient(180deg,#001853 0%,#000f35 10%,#00081d 15%,#000003 27%,#000 100%)}
 .page--qa #qa-video      {background:linear-gradient(180deg,#000 0%,#00111b 16%,#002339 38%,#00304e 59%,#003b5f 100%)}
-.page--qa #qa-advertising{background:linear-gradient(180deg,#003b5f 0%,#00466f 45%,#00527f 100%)}
+/* ── The desert band ─────────────────────────────────────────────────────
+   Part 2: the road comes up out of the night onto sand, and Social Media &
+   Paid Ads stands on it. His own sand, off scene-data.js, and with it the
+   whole band turns over — black copy on the ground, white cards, an amber
+   marker, and a yellow call to action with a blue button. The rock ridges
+   and the dunes are his artwork and wait on the Part 2 vector. */
+.page--qa #qa-advertising{background:linear-gradient(180deg,#fdf6e4 0%,#fec361 100%)}
+.page--qa .qa-sec#qa-advertising,
+.page--qa .qa-sec#qa-advertising h2,
+.page--qa .qa-sec#qa-advertising .sub{color:var(--ink)}
+.page--qa .qa-sec#qa-advertising > .sec__inner .qa-sec__head .body-copy{color:#454c57}
+.page--qa #qa-advertising .qa-item{background:#fff;border-color:#c9a86a}
+.page--qa #qa-advertising .qa-item.is-open{background:#fff;border-color:#c9a86a}
+.page--qa #qa-advertising .qa-q{color:var(--ink)}
+.page--qa #qa-advertising .qa-a p{color:#454c57}
+.page--qa #qa-advertising .qa-marker{background:#f2a01e}
+.page--qa #qa-advertising .qa-cta{background:var(--yellow-500);border-color:#d79f12}
+.page--qa .qa-sec#qa-advertising .qa-cta h2,
+.page--qa .qa-sec#qa-advertising .qa-cta p{color:var(--ink)}
+
+.page--qa #qa-advertising .qa-cta .btn{background:#1068b6;color:#fff;border-color:#1068b6;box-shadow:none}
 .page--qa #qa-branding   {background:linear-gradient(180deg,#00527f 0%,#014a86 50%,#013f8e 100%)}
 .page--qa #qa-print      {background:linear-gradient(180deg,#013f8e 0%,#012f7f 55%,#002274 100%)}
 .page--qa #qa-working    {background:linear-gradient(180deg,#002274 0%,#013178 55%,#0b5a3a 100%)}
@@ -880,21 +900,19 @@
 .page--qa .qa-a p{color:#454c57}
 .page--qa .qa-a::before{display:none}
 
-/* Night sections — Website Design onward, where his ground goes black. */
+/* Night sections — Website Design and Video Production, where his ground
+   goes black. Advertising used to be one of them; in his Part 2 the road has
+   come out of the night onto the desert by then, so it is a light band now. */
 .page--qa #qa-websites .qa-item,
-.page--qa #qa-video .qa-item,
-.page--qa #qa-advertising .qa-item{
+.page--qa #qa-video .qa-item{
   background:transparent;border-color:#cad9ea;
 }
 .page--qa #qa-websites .qa-item.is-open,
-.page--qa #qa-video .qa-item.is-open,
-.page--qa #qa-advertising .qa-item.is-open{background:#0f1c28;border-color:#cad9ea}
+.page--qa #qa-video .qa-item.is-open{background:#0f1c28;border-color:#cad9ea}
 .page--qa #qa-websites .qa-q,
-.page--qa #qa-video .qa-q,
-.page--qa #qa-advertising .qa-q{color:#fff}
+.page--qa #qa-video .qa-q{color:#fff}
 .page--qa #qa-websites .qa-a p,
-.page--qa #qa-video .qa-a p,
-.page--qa #qa-advertising .qa-a p{color:rgba(255,255,255,.88)}
+.page--qa #qa-video .qa-a p{color:rgba(255,255,255,.88)}
 
 .page--qa .qa-marker{
   background:#00aa56;
