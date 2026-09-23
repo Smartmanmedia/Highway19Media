@@ -90,6 +90,11 @@
 /* The asphalt is the tap target for pause; nothing else in the artwork should
    take a click away from the copy it sits over. */
 .road-run__art path{pointer-events:none}
+
+/* A car out on his night stretch: beams on, paint knocked back. */
+.road-run__art .car-hl{opacity:0;transition:opacity .3s ease}
+.road-run__art .is-night .car-hl{opacity:1}
+.road-run__art .is-night .car-body{filter:brightness(.52) saturate(.68)}
 .road-run__art .road-hit{pointer-events:stroke;cursor:pointer}
 
 .road-gap{position:relative;height:var(--gap-h,clamp(120px,11vw,170px))}
@@ -107,19 +112,7 @@
 }
 @media (max-width:1280px){ .qa-bridge{display:none} }
 
-/* His verge — the grey shoulder, the grass and the trees — drawn as one block
-   around the turn where the road leaves past General, and lifted whole out of
-   his file. It carries its own asphalt, so it lands on the road the engine
-   draws. Its own road centreline sits 73.3 per cent across the block and 74.9
-   per cent down it, which is what pins it to the rail and to the turn. */
-.qa-verge{
-  position:absolute;
-  width:min(497px,34.5vw);height:auto;
-  left:max(-240.3px,-16.68vw);
-  top:calc(55% - .749 * min(497px,34.5vw));
-  z-index:1;pointer-events:none;
-}
-@media (max-width:1280px){ .qa-verge{display:none} }
+
 
 .road-track{
   position:absolute;z-index:1;
@@ -212,7 +205,12 @@
 
 /* His clouds, used unaltered and held well back so they never compete with
    the copy or the road. */
-.qa-cloud{position:absolute;z-index:0;pointer-events:none;user-select:none}
+/* His clouds pass in FRONT of everything — sign, road, copy — and the shadow
+   under them is black at 20 per cent, not a tinted navy. */
+.qa-cloud{
+  position:absolute;z-index:20;pointer-events:none;user-select:none;
+  filter:drop-shadow(0 12px 20px rgba(0,0,0,.2));
+}
 .qa-cloud--a{width:clamp(190px,24vw,360px);top:4%;right:4%;opacity:.15}
 .qa-cloud--b{width:clamp(130px,15vw,230px);top:52%;right:30%;opacity:.09}
 
@@ -610,72 +608,17 @@
    ========================================================================= */
 
 /* ── Header ──────────────────────────────────────────────────────────────
-   Flat interstate blue with a hairline top and bottom, the orb at the left,
-   the wordmark and its line of positioning, sentence-case navigation, and the
-   shield hanging off the bar and breaking below it. */
-.site-header--hwy{
-  background:#002b82;
-  border-bottom:0;
-  box-shadow:inset 0 2px 0 rgba(0,0,0,.55), 0 2px 0 rgba(0,0,0,.55);
+   His own, straight off the home page — the same bar, the same wordmark, the
+   same caps navigation and the same road-map button. The one thing this page
+   adds is a night: it is sticky, and the ground under it goes black for two
+   sections, so the bar goes with it and comes back at the desert. */
+.page--qa .site-header{transition:background .45s ease,border-color .45s ease}
+.site-header.is-night{
+  background:#05070d;
+  border-bottom-color:#8a6a12;
 }
-.site-header--hwy .site-header__inner{
-  position:relative;
-  min-height:84px;
-  padding-block:0;
-  gap:clamp(12px,2vw,28px);
-  align-items:center;
-}
-
-.brand__orb{
-  width:clamp(30px,2.6vw,38px);height:auto;flex:none;
-  filter:drop-shadow(0 0 10px rgba(120,190,255,.45));
-}
-.site-header--hwy .brand{gap:0;margin-right:auto}
-.site-header--hwy .brand__name{align-items:flex-start;line-height:1.05}
-.site-header--hwy .brand__name b{
-  font-size:clamp(1.15rem,1.55vw,1.5rem);font-weight:800;letter-spacing:.02em;
-  padding-bottom:.18em;border-bottom:1.5px solid rgba(255,255,255,.8);
-}
-.site-header--hwy .brand__name b i{font-style:normal;color:#4cc3f0}
-.site-header--hwy .brand__name span{
-  margin-top:.42em;font-size:.6rem;font-weight:700;letter-spacing:.055em;
-  text-transform:uppercase;color:#fff;
-}
-
-/* Breaks out of the bar, like the shield on his guide sign. */
-.site-header__shield{
-  position:absolute;left:50%;top:6px;
-  transform:translateX(-50%);
-  height:clamp(58px,5.2vw,74px);width:auto;
-  z-index:2;pointer-events:none;
-  filter:drop-shadow(0 4px 8px rgba(0,0,0,.45));
-}
-
-.site-header--hwy .nav{gap:clamp(1rem,2.4vw,2.4rem)}
-.site-header--hwy .nav a{
-  font-family:var(--font-body);
-  font-size:.98rem;font-weight:500;letter-spacing:0;text-transform:none;
-  border-bottom-color:transparent;
-}
-.site-header--hwy .nav a:hover,
-.site-header--hwy .nav a:focus-visible{border-bottom-color:var(--yellow-500)}
-
-.btn--contact{
-  background:var(--yellow-500);color:var(--ink);
-  border:2px solid rgba(0,0,0,.85);border-radius:7px;
-  padding:.52em .95em .52em .55em;
-  font-size:.86rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
-  box-shadow:0 3px 0 0 #c99500;
-}
-.btn--contact:hover{background:#ffd45a}
-.btn__chip{
-  width:1.55em;height:1.55em;flex:none;
-  display:grid;place-items:center;
-  border-radius:4px;background:var(--blue-700);
-  box-shadow:0 0 0 1.5px #fff;
-}
-.btn__chip svg{width:.95em;height:.95em;fill:#fff}
-.site-header--hwy .nav > .btn--contact{display:none}
+.site-header.is-night .brand__name span{color:#7f92ad}
+.site-header.is-night .nav a{color:#d7dee8}
 
 /* ── Hero ────────────────────────────────────────────────────────────────
    His vertical gradient: deepest at the header, opening up towards the road. */
@@ -830,11 +773,10 @@
 
 /* ── The cloud at the turn ───────────────────────────────────────────── */
 .qa-cloud--turn{
-  position:absolute;z-index:3;
+  position:absolute;
   right:2%;bottom:-8%;
   width:clamp(150px,15vw,215px);
   opacity:1;
-  filter:drop-shadow(0 10px 18px rgba(0,20,60,.35));
 }
 
 /* ── The exits gantry, in his blue ──────────────────────────────────────── */
@@ -1105,7 +1047,7 @@
 #qa-video .gantry__truss,
 #qa-branding .gantry__truss,
 #qa-print .gantry__truss,
-#qa-working .gantry__truss{filter:brightness(.45)}
+#qa-working .gantry__truss{filter:brightness(.62)}
 .hwy-sign--section .qa-disc{
   margin:0;flex:none;
   width:clamp(44px,4.65vw,67px);height:clamp(44px,4.65vw,67px);
@@ -1215,11 +1157,10 @@
 
 /* His cloud bank, sitting under the gantry on the left. */
 .qa-cloud--exits{
-  position:absolute;left:-4%;z-index:1;
+  position:absolute;left:-4%;
   margin-top:clamp(6px,1vw,16px);
   width:clamp(220px,24vw,360px);
   opacity:1;
-  filter:drop-shadow(0 10px 20px rgba(0,20,60,.35));
 }
 
 /* ── General keeps the centred treatment he drew: the outlined mark, the

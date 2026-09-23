@@ -356,6 +356,7 @@ LOOK = {
 # #161616 through the night sections, and out on the sand a warm #534d45 with
 # a yellow line down it. road.js builds one gradient per route from these.
 PAINT = {
+    "qa-general":    ' data-verge',
     "qa-websites":   ' data-asphalt="#161616"',
     "qa-video":      ' data-asphalt="#161616"',
     "qa-advertising":' data-asphalt="#534d45" data-line="#ffc72c"',
@@ -368,8 +369,7 @@ PAGE = [
     # first card. Nothing of it ever crosses the copy column.
     ("tail", [
         ("sec", "qa-general",  "rail-left-out"),
-        ("gap", "leave-left-out", "#001e6a", "#002375",
-         '<img class="qa-verge" src="assets/scene/qa-verge.svg" alt="" aria-hidden="true">'),
+        ("gap", "leave-left-out", "#001e6a", "#002375", "", ' data-verge'),
     ]),
     # Route 2 — his second road: in off the LEFT edge, the full width of the
     # page, then down the outer right rail beside Websites and out the right.

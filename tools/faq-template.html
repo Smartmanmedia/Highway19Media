@@ -49,36 +49,27 @@
      HEADER — the site header, unchanged except that its links reach back to
      the home page's sections and Q&A is marked as the current page.
      ======================================================================= -->
-<header class="site-header site-header--hwy">
+<header class="site-header" id="site-header">
   <div class="site-header__inner">
 
-    <img class="brand__orb" src="assets/brand/Moon.svg" alt="" aria-hidden="true">
-
     <a class="brand" href="index.html" aria-label="Highway 19 Media — home">
+      <img class="brand__shield" src="assets/brand/shield.png" alt="">
       <span class="brand__name">
-        <b>HIGHWAY <i>19</i> MEDIA</b>
-        <span>Creative marketing for Tampa Bay businesses</span>
+        <b>HIGHWAY 19</b>
+        <span>Media</span>
       </span>
     </a>
 
-    <!-- The shield hangs off the header bar and breaks below it, the way it
-         breaks out of the guide sign on the home page. -->
-    <img class="site-header__shield" src="assets/brand/shield.png" alt="" aria-hidden="true">
-
     <nav class="nav" id="nav" aria-label="Main">
       <a href="index.html#services">Services</a>
-      <a href="index.html#promise">The Road Map</a>
+      <a href="index.html#promise">How We Work</a>
+      <a href="index.html#payoff">Results</a>
       <a href="faq.html" aria-current="page">Q&amp;A</a>
-      <a class="btn btn--contact" href="index.html#close">
-        <span class="btn__chip" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M5.6 4.8h12.8a1.6 1.6 0 0 1 1.6 1.6v8.8a1.6 1.6 0 0 1-1.6 1.6H9.2L5.2 20V4.8z"/></svg>
-        </span>Contact Us</a>
+      <a href="index.html#close">Contact</a>
+      <a class="btn btn--primary" href="index.html#close"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Your Road Map</a>
     </nav>
 
-    <a class="btn btn--contact" href="index.html#close">
-      <span class="btn__chip" aria-hidden="true">
-        <svg viewBox="0 0 24 24"><path d="M5.6 4.8h12.8a1.6 1.6 0 0 1 1.6 1.6v8.8a1.6 1.6 0 0 1-1.6 1.6H9.2L5.2 20V4.8z"/></svg>
-      </span>Contact Us</a>
+    <a class="btn btn--primary" href="index.html#close"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Your Road Map</a>
 
     <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav" aria-label="Menu">
       <span></span><span></span><span></span>

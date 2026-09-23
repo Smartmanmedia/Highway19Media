@@ -694,6 +694,9 @@
            A block says what it is and the route builds a gradient from it. */
         asphalt: k.getAttribute('data-asphalt') || null,
         line: k.getAttribute('data-line') || null,
+        /* A block that says it has a verge gets his shoulder, his grass and
+           his trees drawn along the road for exactly its own height. */
+        verge: k.hasAttribute('data-verge'),
         t: r.top - box.top, b: r.bottom - box.top
       });
     });
@@ -740,6 +743,30 @@
     svg.appendChild(defs);
     var ASPH = ramp('asphalt', ASPHALT), LN = ramp('line', LINE);
 
+    /* ── His verge ──────────────────────────────────────────────────────
+       Grey shoulder 255 across and grass 185 across, both laid along the
+       road's own centreline so they follow every turn it makes, and clipped
+       to the blocks that asked for them. Drawn under the asphalt; the trees
+       go on top of the grass further down. */
+    var vRanges = g.moves.filter(function (m) { return m.verge; });
+    if (vRanges.length) {
+      var cid = 'vc-' + (++rampN);
+      var cp = el('clipPath', { id: cid });
+      vRanges.forEach(function (m) {
+        cp.appendChild(el('rect', { x: '-500', y: String(m.t),
+                                    width: String(g.W + 1000), height: String(m.b - m.t) }));
+      });
+      defs.appendChild(cp);
+      var verge = el('g', { 'clip-path': 'url(#' + cid + ')' });
+      verge.appendChild(el('path', { d: d(0), fill: 'none', stroke: '#9b9b9b',
+                                     'stroke-width': 255 * scaleNow }));
+      verge.appendChild(el('path', { d: d(0), fill: 'none', stroke: '#fff',
+                                     'stroke-width': 187 * scaleNow }));
+      verge.appendChild(el('path', { d: d(0), fill: 'none', stroke: '#1c9022',
+                                     'stroke-width': 183 * scaleNow }));
+      svg.appendChild(verge);
+    }
+
     var road = el('g', {});
     road.appendChild(el('path', { 'class': 'road-hit', d: d(0), fill: 'none',
                                   stroke: ASPH, 'stroke-width': W_ROAD * scaleNow }));
@@ -748,6 +775,38 @@
     road.appendChild(el('path', { d: d(0), fill: 'none', stroke: LN, 'stroke-width': DASH_W * scaleNow,
                                   'stroke-dasharray': dash }));
     svg.appendChild(road);
+    /* His trees, planted down both sides of the grass wherever the verge
+       runs. Placed once per route build, off the centreline itself, so they
+       sit where the road actually goes. */
+    if (vRanges.length) {
+      var probe = el('path', { d: d(0), fill: 'none' });
+      svg.appendChild(probe);
+      var L = probe.getTotalLength(), step = 86 * scaleNow, off = 70 * scaleNow;
+      var trees = el('g', {});
+      for (var q = step * 0.5; q < L; q += step) {
+        var a = probe.getPointAtLength(q - 1), c2 = probe.getPointAtLength(q + 1);
+        var mid = probe.getPointAtLength(q);
+        var inAny = false;
+        for (var vi = 0; vi < vRanges.length; vi++)
+          if (mid.y > vRanges[vi].t && mid.y < vRanges[vi].b) { inAny = true; break; }
+        if (!inAny) continue;
+        var dx = c2.x - a.x, dy = c2.y - a.y, len = Math.hypot(dx, dy) || 1;
+        var nx = -dy / len, ny = dx / len;
+        for (var sgn = -1; sgn <= 1; sgn += 2) {
+          var which = ((q / step) | 0) % 2 ? TREE_B : TREE_A;
+          var tw = which.w * scaleNow, th = which.h * scaleNow;
+          trees.appendChild(el('image', {
+            href: which.src, 'xlink:href': which.src,
+            x: (mid.x + nx * off * sgn - tw / 2).toFixed(1),
+            y: (mid.y + ny * off * sgn - th / 2).toFixed(1),
+            width: tw.toFixed(1), height: th.toFixed(1)
+          }));
+        }
+      }
+      probe.remove();
+      svg.appendChild(trees);
+    }
+
     var gA = el('path', { 'class': 'lane-guide', d: d(-LANE * scaleNow) });
     var gB = el('path', { 'class': 'lane-guide', d: d(LANE * scaleNow) });
     svg.appendChild(gA); svg.appendChild(gB);
@@ -799,6 +858,19 @@
       return { el: el, host: el, lanes: [], cars: [], byLane: [[], []],
                capacity: 40, fleet: null, onScreen: true, w: 0, h: 0 };
     });
+    /* Where his ground is black. Read once per fit, in page coordinates, so
+       a car can be asked whether it is out there without touching the DOM. */
+    var pTop = page.getBoundingClientRect().top + window.pageYOffset;
+    NIGHT = Array.prototype.map.call(
+      page.querySelectorAll('[data-asphalt="#161616"]'), function (n) {
+        var r = n.getBoundingClientRect();
+        return [r.top + window.pageYOffset - pTop, r.bottom + window.pageYOffset - pTop];
+      });
+
+    runs.forEach(function (r) {
+      var rr = r.el.getBoundingClientRect();
+      r.pageTop = rr.top + window.pageYOffset - pTop;
+    });
     runs.forEach(fitRoute);
     runs = runs.filter(function (r) { return r.lanes.length === 2; });
 
@@ -835,6 +907,17 @@
   var DRAW_ROAD = !window.H19_ROAD_PATHS;
 
   var runs = [], pool = [], scaleNow = 1, gmul = 1, carScale = 1, rampN = 0;
+  /* Which way a sprite faces in its own box. Flip this if the beams come out
+     of the boot. */
+  var HL_DIR = 1;
+  var NIGHT = [];
+  function inNight(y) {
+    for (var i = 0; i < NIGHT.length; i++)
+      if (y >= NIGHT[i][0] && y <= NIGHT[i][1]) return true;
+    return false;
+  }
+  var TREE_A = { src: 'assets/scene/qa-tree-a.png', w: 55, h: 50 },
+      TREE_B = { src: 'assets/scene/qa-tree-b.png', w: 71, h: 62 };
 
   /* Tap the road to pull the traffic up, tap again to let it go. Nothing is
      frozen: paused just sets every vehicle's target speed to zero and lets the
@@ -867,15 +950,39 @@
     return c;
   }
 
+  /* The beam's own gradient, parked in a hidden host so every car can point
+     at it whichever route it is driving. */
+  function beamDefs() {
+    if (beamDefs._done) return;
+    beamDefs._done = true;
+    var host = el('svg', { width: '0', height: '0',
+                           style: 'position:absolute;visibility:hidden' });
+    var defs = el('defs', {});
+    var lg = el('linearGradient', { id: 'car-beam', x1: '0', y1: '0', x2: '1', y2: '0' });
+    lg.appendChild(el('stop', { offset: '0',   'stop-color': '#ffeec2', 'stop-opacity': '.55' }));
+    lg.appendChild(el('stop', { offset: '.45', 'stop-color': '#ffe9ae', 'stop-opacity': '.20' }));
+    lg.appendChild(el('stop', { offset: '1',   'stop-color': '#ffe4a0', 'stop-opacity': '0' }));
+    defs.appendChild(lg);
+    host.appendChild(defs);
+    document.body.appendChild(host);
+  }
+
   function makeNode() {
+    beamDefs();
     var g = el('g', { style: 'isolation:isolate' });   /* keeps multiply/screen
                                                           layers off the road
                                                           and off neighbours */
-    var inner = el('g', {});
+    /* The beams a car throws once it is out on the night stretch. Drawn under
+       the car and shown only where the ground is black; in daylight they cost
+       nothing but an element that never paints. */
+    var hl = el('g', { 'class': 'car-hl' });
+    hl.appendChild(el('path', { d: 'M0,-11 L150,-46 L150,46 L0,11 Z', fill: 'url(#car-beam)' }));
+    g.appendChild(hl);
+    var inner = el('g', { 'class': 'car-body' });
     var u = useOf(NAMES[0]);
     inner.appendChild(u);
     g.appendChild(inner);
-    return { g: g, inner: inner, use: u, id: null, car: null };
+    return { g: g, inner: inner, hl: hl, use: u, id: null, car: null };
   }
 
   function bind(node, c) {
@@ -888,6 +995,11 @@
         (-(b.x + b.w / 2)).toFixed(2) + ',' + (-(b.y + b.h / 2)).toFixed(2) + ')');
       node.id = c.id;
     }
+    /* The beam is thrown from the car's nose and scales with it. */
+    if (node.hl) node.hl.setAttribute('transform',
+      'translate(' + (c.len * HL_DIR * 0.46).toFixed(1) + ' 0)' +
+      (HL_DIR < 0 ? ' scale(-1 1)' : '') +
+      ' scale(' + (c.len / 92).toFixed(3) + ')');
     node.car = c; c.node = node;
   }
   function unbind(node) {
@@ -1175,6 +1287,14 @@
         c.node.g.setAttribute('transform',
           'translate(' + c.x.toFixed(1) + ',' + c.y.toFixed(1) + ') rotate(' +
           (c.a * 57.2958).toFixed(1) + ')');
+        /* Headlights on and the paint knocked back once a car is on his night
+           stretch. Only written when it changes, so it costs nothing a frame. */
+        var isNight = inNight(c.y + (runs[ri].pageTop || 0));
+        if (isNight !== c.night) {
+          c.night = isNight;
+          if (isNight) c.node.g.setAttribute('class', 'is-night');
+          else c.node.g.removeAttribute('class');
+        }
       }
     }
   }

@@ -217,4 +217,40 @@
   });
   if (navList) navList.addEventListener('scroll', fade, { passive: true });
   window.addEventListener('hashchange', openFromHash);
+
+
+  /* ── Day and night on the bar ───────────────────────────────────────────
+     The header is sticky and the ground under it goes black for two sections,
+     so it goes with it. The night stretches are the blocks that already tell
+     road.js his asphalt turns black there, read once and on resize. */
+  (function () {
+    var header = document.getElementById('site-header');
+    if (!header) return;
+    var bands = [];
+    function measure() {
+      bands = Array.prototype.map.call(
+        document.querySelectorAll('[data-asphalt="#161616"]'), function (n) {
+          var r = n.getBoundingClientRect();
+          return [r.top + window.pageYOffset, r.bottom + window.pageYOffset];
+        });
+      paint();
+    }
+    var on = false;
+    function paint() {
+      var y = window.pageYOffset + header.offsetHeight * 0.6, night = false, i;
+      for (i = 0; i < bands.length; i++)
+        if (y >= bands[i][0] && y <= bands[i][1]) { night = true; break; }
+      if (night === on) return;
+      on = night;
+      header.classList.toggle('is-night', night);
+    }
+    measure();
+    window.addEventListener('scroll', paint, { passive: true });
+    window.addEventListener('resize', measure);
+    /* Opening an answer moves everything below it. */
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('.qa-q')) setTimeout(measure, 420);
+    });
+  })();
+
 })();

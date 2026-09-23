@@ -34,7 +34,7 @@ const sheets = [...html.matchAll(/<link rel="stylesheet" href="(assets\/css\/[^"
   .map(m => m[1]);
 if (!sheets.length) throw new Error('no local stylesheets found in ' + page.src);
 sheets.forEach(f => { if (!fs.existsSync(path.join(R, f))) throw new Error('missing stylesheet: ' + f); });
-const css = sheets.map(f => '/* ==== ' + f + ' ==== */\n' + read(f)).join('\n');
+let css = sheets.map(f => '/* ==== ' + f + ' ==== */\n' + read(f)).join('\n');
 /* Read the script list OUT of the page, in the order the page loads them,
    rather than keeping a second copy here. A hardcoded list silently drops any
    file added to index.html later: assets/js/scene.js was added, worked on the
@@ -44,7 +44,7 @@ const scripts = [...html.matchAll(/<script src="(assets\/js\/[^"]+)"><\/script>/
   .map(m => m[1]);
 if (!scripts.length) throw new Error('no local scripts found in ' + page.src);
 scripts.forEach(f => { if (!fs.existsSync(path.join(R, f))) throw new Error('missing script: ' + f); });
-const js = scripts.map(f => '/* ==== ' + f + ' ==== */\n' + read(f)).join('\n');
+let js = scripts.map(f => '/* ==== ' + f + ' ==== */\n' + read(f)).join('\n');
 console.log(page.src + ' — scripts bundled: ' + scripts.length + '  (' + scripts.map(f => f.split('/').pop()).join(', ') + ')');
 
 if (/<\/script>/i.test(js)) throw new Error('script payload contains </script>');
@@ -86,6 +86,22 @@ let inlined = 0;
    never meant to exist yet. */
 const comments = [];
 html = html.replace(/<!--[\s\S]*?-->/g, m => `\u0000C${comments.push(m) - 1}\u0000`);
+
+/* The same for anything the stylesheet or the engine reaches for. A url() in
+   the CSS and a sprite path inside road.js are references too, and the hosted
+   build has no files to fetch — his rock, his scrub and his trees were the
+   first three to arrive as nothing at all. */
+const dataURI = rel => {
+  const file = path.join(R, rel.replace(/^\.\.\//, 'assets/'));
+  if (!fs.existsSync(file)) throw new Error('missing asset referenced by ' + page.src + ': ' + rel);
+  inlined++;
+  return 'data:' + MIME[path.extname(rel).toLowerCase()] + ';base64,' +
+         fs.readFileSync(file).toString('base64');
+};
+css = css.replace(/url\((["']?)((?!data:|https?:)[^"')]+\.(?:png|jpe?g|gif|webp|svg))\1\)/gi,
+                  (m, q, rel) => 'url("' + dataURI(rel) + '")');
+js = js.replace(/(["'])(assets\/[^"']+\.(?:png|jpe?g|gif|webp|svg))\1/gi,
+                (m, q, rel) => q + dataURI(rel) + q);
 
 html = html.replace(/src="((?!data:|https?:)[^"]+\.(?:png|jpe?g|gif|webp|svg))"/gi, (m, rel) => {
   const file = path.join(R, rel);
