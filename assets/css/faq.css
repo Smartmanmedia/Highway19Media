@@ -94,6 +94,33 @@
 
 .road-gap{position:relative;height:var(--gap-h,clamp(120px,11vw,170px))}
 
+/* His viaduct. The deck's centreline sits 30.4 per cent down the drawing, so
+   that is the point pinned to the crossing's own centreline — the road the
+   engine draws then lands exactly on the deck, and the trusses, piers and
+   shadow show above and below it. 792 across on his 1441.5 page, and 20 right
+   of centre, which is where he puts it. */
+.qa-bridge{
+  position:absolute;left:calc(50% + 20px);top:50%;
+  width:min(792px,55vw);height:auto;
+  transform:translate(-50%,-30.4%);
+  z-index:1;pointer-events:none;
+}
+@media (max-width:1280px){ .qa-bridge{display:none} }
+
+/* His verge — the grey shoulder, the grass and the trees — drawn as one block
+   around the turn where the road leaves past General, and lifted whole out of
+   his file. It carries its own asphalt, so it lands on the road the engine
+   draws. Its own road centreline sits 73.3 per cent across the block and 74.9
+   per cent down it, which is what pins it to the rail and to the turn. */
+.qa-verge{
+  position:absolute;
+  width:min(497px,34.5vw);height:auto;
+  left:max(-240.3px,-16.68vw);
+  top:calc(55% - .749 * min(497px,34.5vw));
+  z-index:1;pointer-events:none;
+}
+@media (max-width:1280px){ .qa-verge{display:none} }
+
 .road-track{
   position:absolute;z-index:1;
   top:var(--t,120px);height:var(--h,460px);
@@ -102,6 +129,8 @@
   width:calc(var(--rail-inset) * 2 + 60px);
   pointer-events:none;
 }
+/* A pass runs the width of the page, not down a margin. */
+.road-track--pass{left:0;right:0;width:auto}
 .road-track--left{left:0}
 .road-track--right{right:0}
 
@@ -888,6 +917,18 @@
   background-image:url("../scene/qa-rocks-bottom.svg");
 }
 .page--qa #qa-advertising > .sec__inner{position:relative;z-index:3}
+/* His scrub on the sand, rasterised off the artboard at 2x — 5KB against the
+   150KB the live polygons cost, for specks a few pixels across. Laid at four
+   depths so it does not read as a repeat. */
+.page--qa #qa-advertising{
+  background-image:
+    url("../scene/qa-shrubs.png"),url("../scene/qa-shrubs.png"),
+    url("../scene/qa-shrubs.png"),url("../scene/qa-shrubs.png"),
+    linear-gradient(180deg,#ffdb96 0%,#ffd486 18%,#fac67e 34%,#ffd486 52%,#ffdb96 68%,#ffd486 84%,#fac67e 100%);
+  background-repeat:no-repeat,no-repeat,no-repeat,no-repeat,no-repeat;
+  background-size:100% auto,100% auto,100% auto,100% auto,auto;
+  background-position:-18% 16%,32% 38%,-40% 63%,26% 88%,0 0;
+}
 .page--qa .qa-sec#qa-advertising,
 .page--qa .qa-sec#qa-advertising h2,
 .page--qa .qa-sec#qa-advertising .sub{color:var(--ink)}
@@ -1037,6 +1078,34 @@
   text-wrap:balance;
 }
 .hwy-sign__arrow{width:clamp(48px,6.1vw,88px);height:auto;fill:#fff;flex:none}
+
+/* The lamps on his night plates: three cones spilling down from the top
+   brackets, widening as they fall. Only where the ground is dark — in
+   daylight he does not light the sign. */
+.hwy-sign__lights{
+  position:absolute;inset:0;overflow:hidden;
+  border-radius:inherit;pointer-events:none;opacity:0;
+}
+.hwy-sign__lights i{
+  position:absolute;top:0;bottom:0;width:26%;
+  background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.02));
+  clip-path:polygon(41% 0,59% 0,100% 100%,0 100%);
+}
+.hwy-sign__lights i:nth-child(1){left:1%}
+.hwy-sign__lights i:nth-child(2){left:37%}
+.hwy-sign__lights i:nth-child(3){left:73%}
+#qa-websites .hwy-sign__lights,
+#qa-video .hwy-sign__lights,
+#qa-branding .hwy-sign__lights,
+#qa-print .hwy-sign__lights,
+#qa-working .hwy-sign__lights{opacity:1}
+
+/* And his truss goes dark with the ground it stands on. */
+#qa-websites .gantry__truss,
+#qa-video .gantry__truss,
+#qa-branding .gantry__truss,
+#qa-print .gantry__truss,
+#qa-working .gantry__truss{filter:brightness(.45)}
 .hwy-sign--section .qa-disc{
   margin:0;flex:none;
   width:clamp(44px,4.65vw,67px);height:clamp(44px,4.65vw,67px);

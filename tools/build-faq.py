@@ -49,6 +49,7 @@ SECTION_SIGN = """      <div class="hwy-sign hwy-sign--section%s">
         <div class="hwy-sign__panel">
           <div class="hwy-sign__plate">
             <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i></span>
+            <span class="hwy-sign__lights" aria-hidden="true"><i></i><i></i><i></i></span>
             <span class="qa-disc" aria-hidden="true">
               <svg viewBox="0 0 24 24">
                 %s
@@ -351,6 +352,15 @@ LOOK = {
 # Each route must start and end off canvas: arrive-* / rail-* off the top at
 # the start, leave-* at the end.
 # --------------------------------------------------------------------------
+# His asphalt changes with the ground it crosses: #575757 in daylight,
+# #161616 through the night sections, and out on the sand a warm #534d45 with
+# a yellow line down it. road.js builds one gradient per route from these.
+PAINT = {
+    "qa-websites":   ' data-asphalt="#161616"',
+    "qa-video":      ' data-asphalt="#161616"',
+    "qa-advertising":' data-asphalt="#534d45" data-line="#ffc72c"',
+}
+
 PAGE = [
     # Route 1 opens in the template: in off the top on the inner right rail
     # beside the hero, across on his big turn, then down the OUTER left rail
@@ -358,25 +368,36 @@ PAGE = [
     # first card. Nothing of it ever crosses the copy column.
     ("tail", [
         ("sec", "qa-general",  "rail-left-out"),
-        ("gap", "leave-left-out", "#001e6a", "#002375"),
+        ("gap", "leave-left-out", "#001e6a", "#002375",
+         '<img class="qa-verge" src="assets/scene/qa-verge.svg" alt="" aria-hidden="true">'),
     ]),
     # Route 2 — his second road: in off the LEFT edge, the full width of the
     # page, then down the outer right rail beside Websites and out the right.
     # Right-hand runs take the outer rail because the copy column sits right
     # of centre and the inner one would run under it.
     ("route", [
-        ("gap", "arrive-right-out-far", "#001549", "#001e6a"),
+        ("gap", "arrive-right-out-far", "#001549", "#001e6a", "",
+         ' data-asphalt="#161616"'),
         ("sec", "qa-websites", "rail-right-out"),
-        ("gap", "leave-right-out", "#000000", "#000000"),
+        ("gap", "leave-right-out", "#000000", "#000000", "",
+         ' data-asphalt="#161616"'),
     ]),
     # Route 3 — in off the left, down the inner left rail beside Video, over
     # to the right for Advertising and Branding, and away. Two short tracks
     # run on the opposite margins at the same time, as he drew them.
+    # His road comes down the night on the left, turns at the foot of Video and
+    # runs the width of the page to leave by the right — and the desert below
+    # it gets a road of its own: dead straight across, both ends off canvas,
+    # warm asphalt with a yellow line, which is how he draws it.
     ("route", [
-        ("gap", "arrive-left", "#000000"),
+        ("gap", "arrive-left", "#000000", "#000000", "",
+         ' data-asphalt="#161616"'),
         ("sec", "qa-video", "rail-left", ("track-right-out", 120, 900)),
-        ("gap", "cross-right-out", "#2b2f47", "#202337"),
-        ("sec", "qa-advertising", "rail-right-out", ("track-left-out", 150, 980)),
+        ("gap", "leave-left-far", "#2b2f47", "#202337", "",
+         ' data-asphalt="#161616"'),
+    ]),
+    ("route", [
+        ("sec", "qa-advertising", None, ("pass-right", 173, 150)),
         ("sec", "qa-branding", "rail-right-out"),
         ("gap", "leave-right-out", "#013f8e"),
     ]),
@@ -446,18 +467,19 @@ def render():
         b.append('\n  <!-- ======================================================================\n')
         b.append('       %s\n' % sec["eyebrow"].upper())
         b.append('       ==================================================================== -->\n')
-        b.append('  <section id="%s" class="%s" data-section="%s" aria-labelledby="%s-h"%s>\n'
+        b.append('  <section id="%s" class="%s" data-section="%s" aria-labelledby="%s-h"%s%s>\n'
                  % (sid, " ".join(classes), sid, sid,
-                    '' if not road else ' data-road="%s"' % road))
+                    '' if not road else ' data-road="%s"' % road,
+                    PAINT.get(sid, '')))
         if track:
             kind, top, high = track
-            side = kind.split("-")[1]
+            side = "pass" if kind.startswith("pass") else kind.split("-")[1]
             b.append('    <!-- A track of its own in the far margin: in off the edge, down,\n'
                      '         back out. Fixed height, anchored here, so opening an answer\n'
                      '         below it never touches it. -->\n')
             b.append('    <div class="road-run road-track road-track--%s" data-road-run '
-                     'data-road="%s" style="--t:%dpx;--h:%dpx" aria-hidden="true"></div>\n'
-                     % (side, kind, top, high))
+                     'data-road="%s"%s style="--t:%dpx;--h:%dpx" aria-hidden="true"></div>\n'
+                     % (side, kind, PAINT.get(sid, ''), top, high))
         b.append('    <div class="sec__inner">\n      <div class="sec__body">\n')
 
         split = m["layout"] == "split"
@@ -536,8 +558,10 @@ def render():
         if kind == "tail":
             for item in payload:
                 if item[0] == "gap":
-                    w('    <div class="road-gap" data-road="%s" style="--gap:%s%s" aria-hidden="true"></div>\n'
-                      % (item[1], item[2], (';--gap-from:%s' % item[3]) if len(item) > 3 else ''))
+                    w('    <div class="road-gap" data-road="%s"%s style="--gap:%s%s" aria-hidden="true">%s</div>\n'
+                      % (item[1], item[5] if len(item) > 5 else '', item[2],
+                         (';--gap-from:%s' % item[3]) if len(item) > 3 else '',
+                         item[4] if len(item) > 4 else ''))
                 else:
                     w(section(item[1], item[2], item[3] if len(item) > 3 else None))
             w('  </div>\n')
@@ -548,8 +572,10 @@ def render():
         w('\n  <div class="road-run" data-road-run>\n')
         for item in payload:
             if item[0] == "gap":
-                w('    <div class="road-gap" data-road="%s" style="--gap:%s%s" aria-hidden="true"></div>\n'
-                  % (item[1], item[2], (';--gap-from:%s' % item[3]) if len(item) > 3 else ''))
+                w('    <div class="road-gap" data-road="%s"%s style="--gap:%s%s" aria-hidden="true">%s</div>\n'
+                  % (item[1], item[5] if len(item) > 5 else '', item[2],
+                     (';--gap-from:%s' % item[3]) if len(item) > 3 else '',
+                     item[4] if len(item) > 4 else ''))
             elif item[0] == "close":
                 w(CLOSING % (' data-road="%s"' % item[1]))
             else:

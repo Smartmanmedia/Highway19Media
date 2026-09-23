@@ -617,6 +617,12 @@
       if (from === 'left') p.rightTo(x - g.R); else p.leftTo(x + g.R);
       p.turn(s, g.R).downTo(first.b);
       i = 1;
+    } else if (first.kind === 'pass') {
+      /* Straight across and out the far side, at this box's middle. His
+         desert road: no turn in it anywhere, both ends off canvas. */
+      p = pen(-OFF, (first.t + first.b) / 2, 0);
+      p.straight(g.W + OFF * 2);
+      return p.path();
     } else if (first.kind === 'track') {
       /* A track is a route on its own: in off an edge, down, back out the
          same edge. Both ends off canvas, so it loops unseen. */
@@ -683,6 +689,11 @@
       g.moves.push({
         kind: spec[0], side: spec[1] || 'left', to: spec[1] || 'left',
         out: spec.indexOf('out') > 1, far: spec.indexOf('far') > 1,
+        /* His asphalt is not one grey: it goes black through the night and
+           warm through the desert, and the line on it turns yellow out there.
+           A block says what it is and the route builds a gradient from it. */
+        asphalt: k.getAttribute('data-asphalt') || null,
+        line: k.getAttribute('data-line') || null,
         t: r.top - box.top, b: r.bottom - box.top
       });
     });
@@ -702,12 +713,39 @@
       'aria-hidden': 'true', focusable: 'false'
     });
     var dash = DASH.split(' ').map(function (v) { return (+v * scaleNow).toFixed(2); }).join(' ');
+
+    /* One vertical gradient per route, built from whatever its blocks say the
+       asphalt and the line are along the way. Where nothing says otherwise it
+       is his ordinary grey on white, and the gradient is not emitted at all. */
+    function ramp(prop, base) {
+      var any = false, i, m;
+      for (i = 0; i < g.moves.length; i++) if (g.moves[i][prop]) { any = true; break; }
+      if (!any) return base;
+      var id = 'rd-' + prop + '-' + (++rampN);
+      var lg = el('linearGradient', { id: id, gradientUnits: 'userSpaceOnUse',
+                                      x1: '0', y1: '0', x2: '0', y2: String(g.H) });
+      var at = base;
+      for (i = 0; i < g.moves.length; i++) {
+        m = g.moves[i];
+        var col = m[prop] || base;
+        lg.appendChild(el('stop', { offset: (Math.max(0, m.t) / g.H).toFixed(4), 'stop-color': at }));
+        lg.appendChild(el('stop', { offset: (Math.max(0, m.t) / g.H).toFixed(4), 'stop-color': col }));
+        at = col;
+      }
+      lg.appendChild(el('stop', { offset: '1', 'stop-color': at }));
+      defs.appendChild(lg);
+      return 'url(#' + id + ')';
+    }
+    var defs = el('defs', {});
+    svg.appendChild(defs);
+    var ASPH = ramp('asphalt', ASPHALT), LN = ramp('line', LINE);
+
     var road = el('g', {});
     road.appendChild(el('path', { 'class': 'road-hit', d: d(0), fill: 'none',
-                                  stroke: ASPHALT, 'stroke-width': W_ROAD * scaleNow }));
-    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: LINE, 'stroke-width': EDGE_OUT * 2 * scaleNow }));
-    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: ASPHALT, 'stroke-width': EDGE_IN * 2 * scaleNow }));
-    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: LINE, 'stroke-width': DASH_W * scaleNow,
+                                  stroke: ASPH, 'stroke-width': W_ROAD * scaleNow }));
+    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: LN, 'stroke-width': EDGE_OUT * 2 * scaleNow }));
+    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: ASPH, 'stroke-width': EDGE_IN * 2 * scaleNow }));
+    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: LN, 'stroke-width': DASH_W * scaleNow,
                                   'stroke-dasharray': dash }));
     svg.appendChild(road);
     var gA = el('path', { 'class': 'lane-guide', d: d(-LANE * scaleNow) });
@@ -796,7 +834,7 @@
      file, so its presence is a reliable test for which page we are on. */
   var DRAW_ROAD = !window.H19_ROAD_PATHS;
 
-  var runs = [], pool = [], scaleNow = 1, gmul = 1, carScale = 1;
+  var runs = [], pool = [], scaleNow = 1, gmul = 1, carScale = 1, rampN = 0;
 
   /* Tap the road to pull the traffic up, tap again to let it go. Nothing is
      frozen: paused just sets every vehicle's target speed to zero and lets the
