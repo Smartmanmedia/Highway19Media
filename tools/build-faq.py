@@ -399,16 +399,16 @@ PAGE = [
     ("route", [
         ("sec", "qa-advertising", None, ("pass-right", 173, 150)),
         ("sec", "qa-branding", "rail-right-out"),
-        ("gap", "leave-right-out", "#013f8e"),
+        ("gap", "leave-right-out", "#013f8e", "#013f8e"),
     ]),
     # Print runs on its own, with no road at all — the break is the point.
     ("plain", "qa-print"),
     ("route", [
-        ("gap", "arrive-left", "#002274"),
+        ("gap", "arrive-left", "#002374", "#002374"),
         ("sec", "qa-working", "rail-left"),
-        ("gap", "cross-right-out", "#0b5a3a"),
+        ("gap", "cross-right-out", "#0a5a3b", "#0a5b39"),
         ("close", "rail-right-out"),
-        ("gap", "leave-right-out", "#062f5e"),
+        ("gap", "leave-right-out", "#062e5e", "#062e5e"),
     ]),
 ]
 

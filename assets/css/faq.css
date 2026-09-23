@@ -943,10 +943,10 @@
 .page--qa .qa-sec#qa-advertising .qa-cta p{color:var(--ink)}
 
 .page--qa #qa-advertising .qa-cta .btn{background:#1082ff;color:#fff;border-color:#fff;box-shadow:none}
-.page--qa #qa-branding   {background:linear-gradient(180deg,#00527f 0%,#014a86 50%,#013f8e 100%)}
-.page--qa #qa-print      {background:linear-gradient(180deg,#013f8e 0%,#012f7f 55%,#002274 100%)}
-.page--qa #qa-working    {background:linear-gradient(180deg,#002274 0%,#013178 55%,#0b5a3a 100%)}
-.page--qa #qa-close      {background:linear-gradient(180deg,#0b5a3a 0%,#073f5f 50%,#062f5e 100%)}
+.page--qa #qa-branding   {background:linear-gradient(180deg,#00517e 0%,#014a86 50%,#013f8e 100%)}
+.page--qa #qa-print      {background:linear-gradient(180deg,#013f8e 0%,#012f7f 55%,#002374 100%)}
+.page--qa #qa-working    {background:linear-gradient(180deg,#002374 0%,#012876 42%,#05435e 78%,#0a5b39 100%)}
+.page--qa #qa-close      {background:linear-gradient(180deg,#0a5a3b 0%,#074b4d 28%,#053b5d 58%,#062e5e 100%)}
 /* A crossing strip takes the colour of the join it sits on — the generator
    passes it, because only the route table knows which two grounds meet
    there. Without it every crossing showed as a flat band between two
