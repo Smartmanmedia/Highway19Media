@@ -311,7 +311,9 @@
 /* Asymmetric on purpose: a crossing follows every section, so the air below
    the copy is the band's to provide. Equal padding left a dead white gap
    between the last CTA and the road. */
-.page--qa .sec{padding-block:clamp(34px,4vw,64px) clamp(22px,2.6vw,40px)}
+/* His own air above a section's head, measured off the gap between the
+   gantry and the General pill in his file. */
+.page--qa .sec{padding-block:clamp(48px,6.3vw,96px) clamp(22px,2.6vw,40px)}
 .page--qa .sec .sec__inner{padding-left:var(--gutter);padding-right:var(--gutter)}
 
 .qa-sec__head{margin-bottom:clamp(26px,3.4vw,44px)}
@@ -675,6 +677,7 @@
    and the truss floated above it. */
 .hwy-sign > *{grid-row:1}
 .hwy-sign__panel{position:relative;grid-column:2;width:var(--plate)}
+#qa-hero .hwy-sign__panel{translate:min(14px,.97vw) 0}
 /* His hero sign carries truss on the right only — the left of it is open
    blue — and the markup gives it exactly one. :first-of-type therefore
    matched the RIGHT truss and hid the only one on the page. */
@@ -682,17 +685,23 @@
 
 .hwy-sign__plate{
   position:relative;
+  /* His plate, traced: #1c9022 with a 1.4 WHITE HAIRLINE rim and an 18.49
+     corner on a 649-wide sign — not a 3px band and not a 16px corner. No
+     drop shadow either; there is none in his file. */
   background:var(--sign-green);
-  border:3px solid #fff;
-  border-radius:16px;
-  padding:clamp(34px,4vw,54px) clamp(22px,3vw,40px) clamp(26px,3vw,42px);
-  box-shadow:0 10px 26px -14px rgba(0,0,0,.55);
+  border:1.5px solid #fff;
+  border-radius:clamp(12px,1.3vw,18.5px);
+  /* Solved back from his plate: 290.4 deep, the headline's first baseline
+     108.1 down, the arrows drawn from 213.4 and 20.35 of green under them. */
+  padding:clamp(40px,4.72vw,68px) clamp(22px,3vw,40px) clamp(10px,1.06vw,15.2px);
   text-align:center;
 }
 .hwy-sign__plate h1{
   color:#fff;
-  font-size:clamp(2rem,4.2vw,3.35rem);
-  line-height:1.03;
+  /* His headline sets two lines 63.8 apart on the plate, which is 62.4 of
+     type — mine was capped at 53.6 and reading a size small. */
+  font-size:clamp(2rem,4.34vw,3.9rem);
+  line-height:1.022;
   letter-spacing:-.02em;
   text-wrap:balance;
 }
@@ -702,20 +711,22 @@
    two sit side by side on the sign's top edge, both breaking above it. */
 .hwy-sign__tab{
   position:absolute;z-index:2;
-  left:32.5%;top:calc(-1 * clamp(28px,3.1vw,45px));
-  display:inline-block;
-  padding:.66em 1.05em;
+  left:32.6%;top:calc(-1 * clamp(24px,2.65vw,38px));
+  display:flex;align-items:center;
+  width:min(310px,21.6vw);height:min(45px,3.14vw);
+  padding-left:min(40px,2.8vw);
+  white-space:nowrap;
   background:var(--yellow-500);
-  border-radius:7px 7px 0 0;
+  border:2px solid #12161c;
+  border-radius:5px;
   font-family:var(--font-sign);
-  font-size:clamp(.84rem,1.26vw,1.1rem);font-weight:800;
+  font-size:clamp(.62rem,.92vw,.83rem);font-weight:800;
   letter-spacing:.1em;text-transform:uppercase;
   color:var(--ink);
-  box-shadow:0 2px 0 rgba(0,0,0,.25);
 }
 /* Only the hero's tab carries the shield on its end; the section signs put it
    elsewhere, so the clearance is scoped to the hero. */
-#qa-hero .hwy-sign__tab{padding-left:3.4em}
+
 .hwy-sign__shield{
   position:absolute;z-index:3;
   left:15%;top:calc(-1 * clamp(58px,6.3vw,92px));
@@ -724,27 +735,57 @@
 }
 
 /* The brackets that hold a sign to its gantry. */
+/* His mounting bracket, measured off the file: a 34.41 x 9.96 cap with a 3
+   corner sitting across the plate's edge, and a 4.32 x 14.94 stem running
+   away from the sign behind it. Black, not slate. The old version was a
+   plain slab cloned sideways by box-shadow at a fixed 110px, which neither
+   looked like his nor moved with the sign. */
 .hwy-sign__bolts{
-  position:absolute;left:8%;right:8%;height:11px;
+  --cap-w:clamp(22px,2.4vw,34.4px);
+  --cap-h:clamp(7px,.7vw,10px);
+  --stem-w:clamp(3px,.3vw,4.3px);
+  --stem-h:clamp(10px,1.05vw,15px);
+  position:absolute;left:7%;right:7%;height:var(--cap-h);
   display:flex;justify-content:space-between;
-  pointer-events:none;
+  pointer-events:none;z-index:1;
 }
-.hwy-sign__bolts--top{top:-11px}
-.hwy-sign__bolts--bottom{bottom:-11px}
-.hwy-sign__bolts::before,.hwy-sign__bolts::after{
-  content:"";width:30px;height:11px;border-radius:2px;background:#2b3440;
-  box-shadow:110px 0 0 #2b3440, 220px 0 0 #2b3440;
+.hwy-sign__bolts i{
+  position:relative;display:block;
+  width:var(--cap-w);height:var(--cap-h);
+  border-radius:3px;background:#000;
 }
-.hwy-sign__bolts::after{box-shadow:-110px 0 0 #2b3440, -220px 0 0 #2b3440}
+/* A real element, not a ::before: the Illustrator export walks the DOM, and
+   a pseudo-element is not in it — the stems went missing from the artboard. */
+.hwy-sign__bolts i b{
+  position:absolute;left:50%;translate:-50% 0;
+  width:var(--stem-w);height:var(--stem-h);background:#000;
+}
+.hwy-sign__bolts--top{top:calc(var(--cap-h) / -2)}
+.hwy-sign__bolts--top i b{bottom:100%}
+.hwy-sign__bolts--bottom{bottom:calc(var(--cap-h) / -2)}
+.hwy-sign__bolts--bottom i b{top:100%}
+/* The pair on a route tab is his smaller bracket: 27.36 x 7.92 on a
+   3.44 x 11.88 stem. */
+.hwy-sign__bolts--tab{
+  --cap-w:clamp(18px,1.9vw,27.4px);
+  --cap-h:clamp(6px,.55vw,8px);
+  --stem-w:clamp(2.4px,.24vw,3.4px);
+  --stem-h:clamp(8px,.83vw,11.9px);
+  left:10%;right:30%;top:calc(var(--cap-h) / -2);bottom:auto;
+}
+.hwy-sign__bolts--tab i b{bottom:100%}
 
 .hwy-sign__arrows{
   display:flex;justify-content:center;
-  gap:clamp(22px,4.4vw,66px);
-  margin-top:clamp(20px,2.6vw,36px);
+  /* His four arrows sit 134.6 apart on a 649 plate and are 43.6 across, so
+     the air between them is 91. No shadow — there is none in his file. */
+  /* 134.6 centre to centre on his plate. The arrow is 43.6 across inside a
+     square 64 box, so the box is 64 and the air between boxes is 70.6. */
+  gap:clamp(30px,4.9vw,70.6px);
+  margin-top:clamp(8px,.88vw,12.7px);
 }
 .hwy-sign__arrows svg{
-  width:clamp(26px,3vw,44px);height:auto;fill:#fff;
-  filter:drop-shadow(0 2px 3px rgba(0,0,0,.25));
+  width:clamp(38px,4.45vw,64px);height:auto;fill:#fff;
 }
 
 /* ── The cloud at the turn ───────────────────────────────────────────── */
@@ -885,17 +926,20 @@
    plate measures 616 of 1440 in his file. */
 .hwy-sign--section{
   --plate:min(616px,42.8vw);
-  /* The run of truss between the plate and the page edge is what keeps the
-     plate clear of the road in that margin: at 1440 the outer rail's asphalt
-     starts at 1268, and 190 of truss stops the plate at 1250. */
-  grid-template-columns:1fr auto min(190px,13.2vw);
+  /* His run of truss between the plate and the page edge: 141.6 on the left
+     of one sign, 146.6 on the right of the next. He lets the plate's far
+     corner tuck into the road there — the sign paints over the asphalt, as it
+     does in his file, and a sign is fixed height so nothing rebuilds. */
+  grid-template-columns:1fr auto min(144px,10vw);
   margin-block:0 clamp(30px,3.6vw,56px);
 }
-.hwy-sign--section.is-mirrored{grid-template-columns:min(190px,13.2vw) auto 1fr}
+.hwy-sign--section.is-mirrored{grid-template-columns:min(144px,10vw) auto 1fr}
 .hwy-sign--section .hwy-sign__plate{
   display:flex;align-items:center;gap:clamp(14px,2vw,28px);
+  /* Every plate of his is 197.39 deep, whether its wording runs to one line
+     or two — the sign is a fixed object, not a box around some type. */
+  min-height:min(197.4px,13.7vw);
   padding:clamp(16px,1.8vw,26px) clamp(18px,2.2vw,32px);
-  border-radius:14px;
   text-align:left;
 }
 .hwy-sign--section .hwy-sign__panel{grid-column:2}
@@ -907,14 +951,17 @@
 .hwy-sign__label{
   flex:1;
   font-family:var(--font-sign);
-  font-size:clamp(1.05rem,1.9vw,1.6rem);font-weight:800;
-  line-height:1.08;letter-spacing:-.01em;color:#fff;
+  /* Set in caps on his plates, and left-aligned against the disc. His
+     "WEBSITE DESIGN" runs 324 of the 616 plate, which is 37 of type. */
+  font-size:clamp(1.25rem,2.56vw,2.3rem);font-weight:800;
+  line-height:1.14;letter-spacing:.005em;color:#fff;
+  text-transform:uppercase;
   text-wrap:balance;
 }
-.hwy-sign__arrow{width:clamp(30px,3.4vw,50px);height:auto;fill:#fff;flex:none}
+.hwy-sign__arrow{width:clamp(48px,6.1vw,88px);height:auto;fill:#fff;flex:none}
 .hwy-sign--section .qa-disc{
   margin:0;flex:none;
-  width:clamp(40px,4vw,56px);height:clamp(40px,4vw,56px);
+  width:clamp(44px,4.65vw,67px);height:clamp(44px,4.65vw,67px);
   background:var(--lane-ic);
   box-shadow:0 0 0 2px #fff;
 }
@@ -947,24 +994,38 @@
 }
 .hwy-exits > *{grid-row:1}
 .hwy-exits__truss{min-width:0;align-self:center;height:calc(var(--plate) * .148)}
-.hwy-exits__panel{position:relative;z-index:3;grid-column:2;width:var(--plate)}
+.hwy-exits__panel{position:relative;z-index:3;grid-column:2;width:var(--plate);
+  translate:min(18.5px,1.28vw) 0}
 
+/* His gantry is ONE green plate with the same hairline rim and corner as
+   every other sign, split by TWO white 2.4 rules and nothing else — there is
+   no rule between the rows, and his three columns are not thirds: they are
+   37.2 / 28.3 / 34.0 of the plate, sized to what each one has to say. Mine
+   was six green tiles floating on a white plate, which is a table, not a
+   sign. */
 .hwy-exits__grid{
   position:relative;
-  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  display:grid;grid-template-columns:37.2fr 28.3fr 34fr;
   grid-auto-rows:1fr;
-  gap:2px;
-  background:#fff;                    /* shows through the gaps as the dividers */
-  border:3px solid #fff;
-  border-radius:14px;
+  /* The white rules ARE the column gaps: the plate under them is white and
+     each panel paints his green over it. row-gap 0 is why there is no rule
+     between the rows — he does not draw one. */
+  column-gap:2.4px;row-gap:0;
+  background:#fff;
+  border:1.5px solid #fff;
+  border-radius:clamp(12px,1.3vw,18.5px);
   overflow:hidden;
-  box-shadow:0 10px 26px -14px rgba(0,0,0,.55);
 }
 .hwy-exit{
   display:flex;align-items:center;justify-content:space-between;gap:.8em;
-  min-height:clamp(58px,6.6vw,95px);
+  min-height:clamp(58px,6.75vw,97px);
   padding:clamp(10px,1.2vw,16px) clamp(10px,1.1vw,16px);
   background:var(--sign-green);
+  /* The plate under the panels is white so the column gaps read as his two
+     rules. Sub-pixel rounding between the two ROWS let that white through as
+     a hairline, and he draws no rule there — so each panel paints a sliver of
+     green above and below itself. */
+  box-shadow:0 .75px 0 var(--sign-green), 0 -.75px 0 var(--sign-green);
   color:#fff;text-decoration:none;
   font-family:var(--font-sign);
   font-size:clamp(.82rem,1.3vw,1.15rem);font-weight:700;
@@ -975,28 +1036,34 @@
 .hwy-exit > span{flex:1;text-wrap:balance;margin-inline:auto}
 .hwy-exit:hover{background:#23a82b}
 .hwy-exit:focus-visible{outline:3px solid var(--yellow-500);outline-offset:-4px}
-.hwy-exit__arrow{width:clamp(22px,2.9vw,44px);height:auto;fill:#fff;flex:none}
+/* His gantry arrow is the same shape as the rest and 37.2 across, which
+   is a 54.6 box around a 43.6-wide arrow in a square viewBox. */
+.hwy-exit__arrow{width:clamp(32px,3.8vw,54.6px);height:auto;fill:#fff;flex:none}
 
 /* The route tab and the shield, riding the top edge as they do on the sign. */
 .hwy-exits__tab{
   position:absolute;z-index:2;
-  left:12%;top:calc(-1 * clamp(30px,3.4vw,49px));
-  padding:.62em 1.1em;
+  left:5.1%;top:calc(-1 * clamp(26px,3.04vw,43.7px));
+  display:flex;align-items:center;
+  width:min(310px,21.6vw);height:min(45px,3.14vw);
+  padding-left:min(88px,6.1vw);
+  white-space:nowrap;
   background:var(--yellow-500);
-  border-radius:7px 7px 0 0;
+  border:2px solid #12161c;
+  border-radius:5px;
   font-family:var(--font-sign);
-  font-size:clamp(.84rem,1.26vw,1.1rem);font-weight:800;
+  font-size:clamp(.62rem,.92vw,.83rem);font-weight:800;
   letter-spacing:.11em;text-transform:uppercase;color:var(--ink);
-  box-shadow:0 2px 0 rgba(0,0,0,.25);
 }
 .hwy-exits__tab b{font-weight:800;margin-left:.7em}
 .hwy-exits__shield{
   position:absolute;z-index:3;
-  left:1%;top:calc(-1 * clamp(48px,5.4vw,76px));
+  left:4%;top:calc(-1 * clamp(36px,4.1vw,58px));
   height:clamp(60px,6.6vw,92px);width:auto;
   filter:drop-shadow(0 4px 8px rgba(0,0,0,.45));
 }
-.hwy-exits__panel .hwy-sign__bolts{left:6%;right:6%}
+.hwy-exits__panel > .hwy-sign__bolts--top{left:52%;right:18.5%}
+.hwy-exits__panel > .hwy-sign__bolts--bottom{left:16.8%;right:18.6%}
 
 /* His cloud bank, sitting under the gantry on the left. */
 .qa-cloud--exits{

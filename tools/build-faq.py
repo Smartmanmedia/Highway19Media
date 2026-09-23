@@ -48,7 +48,7 @@ SECTION_SIGN = """      <div class="hwy-sign hwy-sign--section%s">
         <span class="gantry__truss hwy-sign__truss" aria-hidden="true"></span>
         <div class="hwy-sign__panel">
           <div class="hwy-sign__plate">
-            <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"></span>
+            <span class="hwy-sign__bolts hwy-sign__bolts--top" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i></span>
             <span class="qa-disc" aria-hidden="true">
               <svg viewBox="0 0 24 24">
                 %s
@@ -56,18 +56,23 @@ SECTION_SIGN = """      <div class="hwy-sign hwy-sign--section%s">
             </span>
             <span class="hwy-sign__label">%s</span>
             <svg class="hwy-sign__arrow" viewBox="0 0 64 64" aria-hidden="true">%s</svg>
-            <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"></span>
+            <span class="hwy-sign__bolts hwy-sign__bolts--bottom" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i></span>
           </div>
         </div>
       </div>
 """
 
+_ARROW = 'M23.56 3.68H40.81V25.76H53.8L32.35 60.33 10.2 25.76H23.56Z'
+def _a(deg):
+    p = '<path d="%s"' % _ARROW
+    return p + (' transform="rotate(%s 32 32)"/>' % deg if deg else '/>')
+
 ARROWS = {
-    "down":  '<path d="M32 60 8 34h12V4h24v30h12z"/>',
-    "dnr":   '<path d="M58 56 24 50l8-8-24-24 12-12 24 24 8-8z"/>',
-    "dnl":   '<path d="M6 56l6-34 8 8 24-24 12 12-24 24 8 8z"/>',
-    "right": '<path d="M60 32 34 58V44H6V20h28V6z"/>',
-    "left":  '<path d="M4 32 30 6v14h28v24H30v14z"/>',
+    "down":  _a(0),
+    "left":  _a(90),
+    "right": _a(-90),
+    "dnr":   _a(-45),
+    "dnl":   _a(45),
 }
 
 CONTENT = [

@@ -50,7 +50,24 @@ measures that one.
 real centreline of every road and testing each sample against every copy box
 at 1330 / 1366 / 1440 / 1600 / 1920: ~36,000 samples, zero overlap, and no
 horizontal overflow at 390 / 768 / 834 / 1024 / 1200 / 1280 / 1440 / 1920 on
-either page.
+either page. One thing DOES overlap on purpose: a section sign's far corner
+reaches about 34 into the asphalt beside it, because his does (his Video plate
+ends at 1294.9 with the road starting at 1261.4). The sign paints over the
+road, and a sign is a fixed height, so nothing there can trigger a rebuild.
+
+**The signs are his, part for part.** Every plate on this page — the hero, the
+exit gantry, the six section signs — is the same object traced out of
+`incoming/QA-Part1.svg`: #1c9022 with a 1.4 white hairline rim and an 18.49
+corner, no drop shadow. The mounting brackets are his: a 34.41 x 9.96 cap with
+a 3 corner riding across the plate's edge and a 4.32 x 14.94 stem running away
+from the sign behind it, in black, two over the hero and four under it, three
+each way on a section sign. The route tabs are one fixed plate, 310.43 x 45.17
+whatever the wording, yellow with a 2px ink outline and a pair of his smaller
+brackets on the top edge. Every arrow on the page is one shape — a 17.25 x
+26.07 shaft over a 43.6 x 34.57 head — turned for the direction it points.
+The exit gantry is ONE green plate split by two white 2.4 rules and nothing
+else: no rule between the rows, and its three columns are 37.2 / 28.3 / 34.0
+of the plate rather than thirds.
 
 **Everything here is measured off his returned Illustrator file, not guessed.**
 `incoming/QA-Part1.svg` is the artboard he redesigned and sent back, and the
