@@ -69,7 +69,10 @@
   signs.forEach(function (g) {
     g.style.willChange = 'transform';
     g.__sec = g.closest('.sec');
-    g.__amt = parseFloat(g.getAttribute('data-sign-travel') || '54');
+    g.__amt = parseFloat(g.getAttribute('data-sign-travel') || '190');
+    try { var bb = g.getBBox(); g.__cx = (bb.x + bb.width / 2).toFixed(1);
+          g.__cy = (bb.y + bb.height / 2).toFixed(1); }
+    catch (e) { g.__cx = 1064; g.__cy = 0; }
   });
 
   var queued = false;
@@ -80,7 +83,13 @@
       var g = signs[i], r = g.__sec.getBoundingClientRect();
       if (r.bottom < -400 || r.top > vh + 400) continue;
       var p = (vh - r.top) / (vh + r.height);          /* 0 entering → 1 leaving */
-      g.setAttribute('transform', 'translate(0 ' + ((p - 0.5) * g.__amt).toFixed(2) + ')');
+      /* the sign rides well above the ground it is bolted over, and leans in
+         a little as it passes, so it reads as the nearest thing on the page */
+      var off = (p - 0.5) * g.__amt;
+      var sc = 1 + (0.5 - Math.abs(p - 0.5)) * 0.055;
+      g.setAttribute('transform',
+        'translate(0 ' + off.toFixed(2) + ') translate(' + g.__cx + ' ' + g.__cy +
+        ') scale(' + sc.toFixed(4) + ') translate(' + (-g.__cx) + ' ' + (-g.__cy) + ')');
     }
   }
   function onScroll() { if (!queued) { queued = true; requestAnimationFrame(frame); } }

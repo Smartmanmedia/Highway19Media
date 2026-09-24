@@ -296,7 +296,12 @@ ld={"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
    "acceptedAnswer":{"@type":"Answer","text":' '.join(c['ans'] or [])}}
   for d in SEC for c in d['cards'] if c.get('ans')]}
 parts.append('<script type="application/ld+json">'+json.dumps(ld,ensure_ascii=False)+'</script>')
-parts.append('</div>\n<script src="assets/js/qa.js"></script>\n</body>\n</html>')
+parts.append('</div>')
+parts.append('<script src="assets/js/cars-sprite.js"></script>')
+parts.append('<script src="assets/js/qa-lanes.js"></script>')
+parts.append('<script src="assets/js/qa.js"></script>')
+parts.append('<script src="assets/js/qa-traffic.js"></script>')
+parts.append('</body>\n</html>')
 open(f'{ROOT}/faq.html','w',encoding='utf-8').write('\n'.join(parts))
 print('faq.html', round(os.path.getsize(f'{ROOT}/faq.html')/1024),'KB')
 for d in SEC:

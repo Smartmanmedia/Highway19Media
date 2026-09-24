@@ -135,8 +135,24 @@ for(const [k,H] of SEC){
       const face=plates.find(el=>/^#(1c9022|006802|007a29)$/i.test(el.getAttribute('fill')||''))||plates[0];
       let g=face.parentNode;
       while(g&&g.tagName==='g'&&g.parentNode&&g.parentNode.tagName==='g'&&g.children.length<3) g=g.parentNode;
-      if(g&&g.tagName==='g'){ g.setAttribute('data-sign','1'); }
-      else { face.setAttribute('data-sign','1'); }
+      const plate=g&&g.tagName==='g'?g:face;
+      /* the whole assembly moves together - the plate, its bolts, the truss it
+         hangs off and the shadow it throws. A plate that floats off its own
+         gantry reads as broken, not as parallax. */
+      const pa=abs(plate);
+      const host2=plate.parentNode;
+      const wrap=doc.createElementNS('http://www.w3.org/2000/svg','g');
+      wrap.setAttribute('data-sign','1');
+      host2.insertBefore(wrap,plate);
+      const band=[...host2.children].filter(e=>{
+        if(e===wrap) return false;
+        const b2=abs(e); if(!b2||!pa) return false;
+        if(b2.h>pa.h*2.4) return false;
+        const ov=Math.min(pa.y+pa.h,b2.y+b2.h)-Math.max(pa.y,b2.y);
+        return ov>Math.min(pa.h,b2.h)*0.45;
+      });
+      band.forEach(e=>wrap.appendChild(e));
+      if(!wrap.children.length) wrap.appendChild(plate);
       const a=abs(face); if(a) signBox={x:+a.x.toFixed(1),y:+a.y.toFixed(1),w:+Math.abs(a.w).toFixed(1),h:+Math.abs(a.h).toFixed(1)};
     }
     /* every remaining label, so link hotspots can be dropped on his buttons */

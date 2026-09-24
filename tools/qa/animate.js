@@ -14,7 +14,7 @@ const KS=['05','06','07','01','02','03','04','08'];  /* his vehicles first, so e
 const b=await chromium.launch({executablePath:process.env.CHROME_PATH});
 const p=await b.newPage({viewport:{width:1200,height:900}});
 await p.goto('http://localhost:8777/assets/scene/_r.html');
-const report={}; const sprites={};
+const report={}; const sprites={}; const lanes={};
 /* a first pass over the sections that carry his vehicles, so every road on
    the page can put his own artwork on it */
 for(const k of KS){
@@ -66,11 +66,6 @@ for(const k of KS){
   const src=fs.readFileSync(file,'utf8');
   const cfg=CFG[k]||{};
   cfg._sprites={};
-  for(const L of (cfg.lanes||[])){
-    const [sk,si]=L.src.split(':');
-    if(!sprites[L.src]) throw new Error('sprite '+L.src+' not lifted yet (order sections so the source runs first)');
-    cfg._sprites[L.src]=sprites[L.src];
-  }
   const routes=ROUTES[k]||[];
   const bleedart=BLEEDART[k]||[];
   const r=await p.evaluate(([src,cfg,k,routes,sprites,bleedart])=>{
@@ -183,124 +178,49 @@ for(const k of KS){
       });
     }
 
-    /* ---- his roads, running ---------------------------------------------
+    /* ---- the slot his traffic drives in ----------------------------------
+       Everything he drew OVER the road - his signs, his clouds, his rock
+       lines, his forest - moves after it, so the cars run under them. */
+    const slot=doc.createElementNS(NS,'g');
+    slot.setAttribute('data-fleetslot','1');
+    svg.appendChild(slot);
+    const rank=e=> e.hasAttribute('data-sign') ? 0
+                 : /^(Mountains|Forest|Grass_BG)/i.test(e.id||'') ? 1
+                 : /^Cloud/i.test(e.id||'') ? 2 : -1;
+    const above=[...svg.children].filter(e=>e!==slot && rank(e)>=0);
+    above.sort((a,b)=>rank(a)-rank(b));
+    above.forEach(e=>svg.appendChild(e));
+
+    /* ---- his roads, measured into lanes ---------------------------------
        Each route is his road's centreline. The lanes are offset from it
-       numerically, so a curve carries its vehicles round it properly, and
-       every vehicle is one of his own, lifted out of his artboard. */
-    const fleetOut=[];
+       numerically so a curve carries its vehicles round it properly. The
+       polylines go out to the runtime, which drives his own traffic engine
+       along them. */
+    const lanesOut=[];
     if(routes.length){
-      const pool=Object.keys(sprites).map(key=>sprites[key]);
-      if(pool.length){
-        /* one copy of each of his vehicles in defs; every instance is a <use> */
-        let defs=svg.querySelector('defs');
-        if(!defs){ defs=doc.createElementNS(NS,'defs'); svg.insertBefore(defs,svg.firstChild); }
-        const ids=new Map();
-        const idOf=sp=>{
-          if(ids.has(sp)) return ids.get(sp);
-          const id='vsp-'+k+'-'+ids.size;
-          const g0=doc.createElementNS(NS,'g');
-          g0.setAttribute('id',id);
-          g0.setAttribute('transform',(sp.up? 'rotate(-90) ':'')+
-            'translate('+(-(sp.x+sp.w/2)).toFixed(2)+','+(-(sp.y+sp.h/2)).toFixed(2)+')');
-          g0.innerHTML=sp.markup;
-          defs.appendChild(g0);
-          ids.set(sp,id); return id;
-        };
-        const holder=doc.createElementNS(NS,'g');
-        holder.setAttribute('data-fleet','1');
-        svg.appendChild(holder);
-        const probe=doc.createElementNS(NS,'path'); svg.appendChild(probe);
-        const laneOf=(d,dist)=>{
-          probe.setAttribute('d',d);
+      const probe=doc.createElementNS(NS,'path'); svg.appendChild(probe);
+      routes.forEach((R,ri)=>{
+        const offs = R.lanes===2 ? [-R.w/4, R.w/4] : [0];
+        offs.forEach((off,li)=>{
+          probe.setAttribute('d',R.d);
           const L=probe.getTotalLength(), N=Math.max(24,Math.round(L/9));
-          const pts=[];
+          let pts=[];
           for(let i=0;i<=N;i++){
             const s2=L*i/N;
-            const a=probe.getPointAtLength(Math.max(0,s2-1.2));
-            const c=probe.getPointAtLength(Math.min(L,s2+1.2));
+            const a2=probe.getPointAtLength(Math.max(0,s2-1.2));
+            const c2=probe.getPointAtLength(Math.min(L,s2+1.2));
             const o2=probe.getPointAtLength(s2);
-            const dx=c.x-a.x, dy=c.y-a.y, m=Math.hypot(dx,dy)||1;
-            pts.push([o2.x-dy/m*dist, o2.y+dx/m*dist]);
+            const dx=c2.x-a2.x, dy=c2.y-a2.y, m=Math.hypot(dx,dy)||1;
+            pts.push([+(o2.x-dy/m*off).toFixed(1), +(o2.y+dx/m*off).toFixed(1)]);
           }
-          return {pts, len:L};
-        };
-        let seed=k.charCodeAt(0)*131+k.charCodeAt(1)*17;
-        const rnd=()=>{ seed=(seed*1103515245+12345)&0x7fffffff; return seed/0x7fffffff; };
-        routes.forEach((R,ri)=>{
-          const offs = R.lanes===2 ? [-R.w/4, R.w/4] : [0];
-          offs.forEach((off,li)=>{
-            const lane=laneOf(R.d,off);
-            let pts=lane.pts;
-            if(R.lanes===2 && li===0) pts=pts.slice().reverse();     /* the other way round */
-            const d='M'+pts.map(q=>q[0].toFixed(1)+','+q[1].toFixed(1)).join(' L');
-            const n=Math.min(14,Math.max(3,Math.round(lane.len/(R.gap||480))));
-            const base=R.dur || Math.max(14,Math.round(lane.len/95));
-            const laneW=R.w/(R.lanes||1);
-            const target=laneW*0.82;
-            /* his vehicles are drawn to the road they sit on, so pick the one
-               nearest this lane and trim it to fit rather than stretching one */
-            const ranked=pool.slice().sort((u,v)=>
-              Math.abs(Math.min(u.w,u.h)-target)-Math.abs(Math.min(v.w,v.h)-target));
-            const near=ranked.filter(sp=>{
-              const sh=Math.min(sp.w,sp.h);
-              return sh>target*0.55 && sh<target*1.8;
-            });
-            const usable=near.length?near:[ranked[0]];
-            for(let i=0;i<n;i++){
-              const sp=usable[Math.floor(rnd()*usable.length)];
-              const fit=(target/Math.min(sp.w,sp.h));
-              const dur=+(base*(0.82+rnd()*0.42)).toFixed(1);
-              const g=doc.createElementNS(NS,'g');
-              g.setAttribute('class','roll');
-              const inner=doc.createElementNS(NS,'g');
-              inner.setAttribute('transform','scale('+fit.toFixed(4)+')');
-              const u=doc.createElementNS(NS,'use');
-              u.setAttribute('href','#'+idOf(sp));
-              inner.appendChild(u);
-              g.appendChild(inner);
-              const mo=doc.createElementNS(NS,'animateMotion');
-              mo.setAttribute('path',d);
-              mo.setAttribute('dur',dur+'s');
-              mo.setAttribute('begin',(-dur*(i+rnd()*0.55)/n).toFixed(2)+'s');
-              mo.setAttribute('repeatCount','indefinite');
-              mo.setAttribute('rotate','auto');
-              mo.setAttribute('calcMode','linear');
-              g.appendChild(mo);
-              holder.appendChild(g);
-            }
-            fleetOut.push('r'+ri+'l'+li+'x'+n);
-          });
+          if(R.lanes===2 && li===0) pts=pts.reverse();
+          lanesOut.push({w:R.w/(R.lanes||1), pts});
         });
-        probe.remove();
-      }
+      });
+      probe.remove();
     }
 
     /* the lanes he drew and left empty */
-    const lanesOut=[];
-    (cfg.lanes||[]).forEach((L,li)=>{
-      const sp=(cfg._sprites||{})[L.src];
-      if(!sp) { lanesOut.push('no sprite '+L.src); return; }
-      const holder=doc.createElementNS(NS,'g');
-      holder.setAttribute('data-lane',String(li));
-      svg.appendChild(holder);
-      for(let i=0;i<L.n;i++){
-        const wrap=doc.createElementNS(NS,'g');
-        wrap.innerHTML=sp.markup;
-        const inner=doc.createElementNS(NS,'g');
-        while(wrap.firstChild) inner.appendChild(wrap.firstChild);
-        const off=doc.createElementNS(NS,'g');
-        off.setAttribute('transform','translate(0 '+(L.y-sp.y).toFixed(2)+')');
-        off.appendChild(inner);
-        const run=doc.createElementNS(NS,'g');
-        run.setAttribute('class','run'); run.setAttribute('data-axis','x');
-        run.setAttribute('style','--a:'+(L.from-sp.x).toFixed(1)+'px;--b:'+(L.to-sp.x).toFixed(1)+
-          'px;--dur:'+L.dur+'s;--dly:'+(-L.dur*i/L.n).toFixed(2)+'s');
-        run.appendChild(off);
-        holder.appendChild(run);
-      }
-      lanesOut.push('lane '+li+' x'+L.n);
-    });
-
     /* his aircraft, flown along a path off his own runway */
     const flightOut=[];
     (cfg.flights||[]).forEach(f=>{
@@ -313,6 +233,10 @@ for(const k of KS){
       });
       if(!best||bd>14){flightOut.push(f.name+' MISS '+bd.toFixed(1));return}
       const a=abs(best);
+      if(f.shadow){
+        best.setAttribute('fill','#000'); best.setAttribute('opacity','0.26');
+        best.querySelectorAll&&best.querySelectorAll('[fill]').forEach(e2=>e2.setAttribute('fill','#000'));
+      }
       const outer=doc.createElementNS(NS,'g');
       const scaler=doc.createElementNS(NS,'g');
       const centre=doc.createElementNS(NS,'g');
@@ -343,45 +267,60 @@ for(const k of KS){
       flightOut.push(f.name+' ok '+bd.toFixed(1));
     });
 
-    /* his ship, his boat, his plane and its shadow */
+    /* his ship, his boat, his plane - each moved with its own shadow, and
+       the shadow made a shadow: black, and see-through. */
     const moversOut=[];
-    (cfg.movers||[]).forEach(mv=>{
+    const findBox=box=>{
       let best=null,bd=1e9;
       svg.querySelectorAll('g,path').forEach(el=>{
-        const a=abs(el); if(!a) return;
-        const dd=Math.abs(a.x-mv.box[0])+Math.abs(a.y-mv.box[1])+
-                 Math.abs(a.w-mv.box[2])+Math.abs(a.h-mv.box[3]);
+        const a2=abs(el); if(!a2) return;
+        const dd=Math.abs(a2.x-box[0])+Math.abs(a2.y-box[1])+
+                 Math.abs(a2.w-box[2])+Math.abs(a2.h-box[3]);
         if(dd<bd){bd=dd;best=el;}
       });
-      if(!best||bd>18){moversOut.push(mv.name+' MISS '+bd.toFixed(1));return}
-      const a=abs(best);
-      best.setAttribute('data-mover',mv.name);
-      const run=doc.createElementNS(NS,'g');
-      run.setAttribute('class','run'+(mv.fade?' run--fade':''));
-      run.setAttribute('data-axis',mv.axis);
-      if(mv.axis==='xy'){
-        run.setAttribute('style','--ax:'+mv.from[0]+'px;--ay:'+mv.from[1]+'px;--bx:'+mv.to[0]+
-          'px;--by:'+mv.to[1]+'px;--dur:'+mv.dur+'s;--dly:'+(mv.dly||0)+'s');
-      } else {
-        const at = mv.axis==='x'? a.x : a.y;
-        run.setAttribute('style','--a:'+(mv.from-at).toFixed(1)+'px;--b:'+(mv.to-at).toFixed(1)+
-          'px;--dur:'+mv.dur+'s;--dly:'+(mv.dly||0)+'s');
-      }
-      best.parentNode.insertBefore(run,best); run.appendChild(best);
-      moversOut.push(mv.name+' ok '+bd.toFixed(1));
+      return {el:best,err:bd};
+    };
+    (cfg.movers||[]).forEach(mv=>{
+      const parts=mv.parts.map(findBox);
+      if(parts.some(q=>!q.el||q.err>18)){
+        moversOut.push(mv.name+' MISS '+parts.map(q=>q.err.toFixed(0)).join('/')); return; }
+      const a0=abs(parts[0].el);
+      const outer=doc.createElementNS(NS,'g');
+      const centre=doc.createElementNS(NS,'g');
+      centre.setAttribute('transform','translate('+(-(a0.x+a0.w/2)).toFixed(2)+','+
+        (-(a0.y+a0.h/2)).toFixed(2)+')');
+      parts[0].el.parentNode.insertBefore(outer,parts[0].el);
+      parts.forEach((q,qi)=>{
+        if((mv.shadow||[]).includes(qi)){
+          q.el.setAttribute('fill','#000');
+          q.el.setAttribute('opacity','0.26');
+          q.el.querySelectorAll('[fill]').forEach(e2=>{e2.setAttribute('fill','#000');});
+        }
+        centre.appendChild(q.el);
+      });
+      outer.appendChild(centre);
+      const mo=doc.createElementNS(NS,'animateMotion');
+      mo.setAttribute('path',mv.path); mo.setAttribute('dur',mv.dur+'s');
+      mo.setAttribute('begin',(mv.dly||0)+'s');
+      mo.setAttribute('repeatCount','indefinite');
+      mo.setAttribute('calcMode','linear');
+      outer.appendChild(mo);
+      outer.setAttribute('data-mover',mv.name);
+      moversOut.push(mv.name+' ok');
     });
 
-    const mySprites=made.map((m,i)=>({i,x:m.a.x,y:m.a.y,w:m.a.w,h:m.a.h,
-      up:m.a.h>m.a.w, markup:m.g.innerHTML}));
-    if(cfg.lift) made.forEach(m=>m.g.remove());   /* they drive now, not park */
-    return {found, sprites:mySprites, fleet:fleetOut, flights:flightOut, lanes:lanesOut, movers:moversOut,
+    return {found, roadLanes:lanesOut, flights:flightOut, movers:moversOut,
             svg:new XMLSerializer().serializeToString(svg)};
   },[src,cfg,k,routes,sprites,bleedart]);
   fs.writeFileSync(file, r.svg);
   report[k]=r.found;
 
-  console.log('==',k,r.found.length,'his vehicles | fleet',(r.fleet||[]).join(' '),
-    '|',(r.flights||[]).join(', '),(r.movers||[]).join(', '));
+  lanes[k]=r.roadLanes||[];
+  console.log('==',k,r.found.length,'his vehicles |',(r.roadLanes||[]).length,'lanes |',
+    (r.flights||[]).join(', '),(r.movers||[]).join(', '));
 }
 fs.writeFileSync(path.join(__dirname,'vehicles.json'),JSON.stringify(report,null,1));
+fs.writeFileSync(`${ROOT}/assets/js/qa-lanes.js`,
+  'window.H19_QA_LANES='+JSON.stringify(lanes)+';');
+console.log('lanes ->', Object.keys(lanes).map(k=>k+':'+lanes[k].length).join(' '));
 await b.close();})();
