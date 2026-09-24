@@ -42,7 +42,7 @@
       EDGE_OUT = 55.18,          /* 110.36 / 2 */
       EDGE_IN = 50.82,           /* 101.64 / 2 */
       DASH_W = 4.68,
-      DASH = '37.43 25.21',
+      DASH = '36.24 24.42',   /* 27.35 on, 18.43 off on his 95 road */
       ASPHALT = '#575757',
       LINE = '#ffffff',
       R_MAX = 190,               /* source art is ~270; 190 reads better here */
@@ -696,8 +696,20 @@
                  size of ITS lane, not of the other one's. Both numbers come
                  off the route in the markup, so the engine never has to know
                  which road it is drawing. */
-              roadW: parseFloat(el.getAttribute('data-road-w')) || HIS_W,
-              lanes: Math.max(2, parseInt(el.getAttribute('data-lanes'), 10) || 2) };
+              /* data-road-w is ONE carriageway; data-units is how many he
+                 stacks. Both come off the route in the markup, so the engine
+                 never has to know which road it is drawing. */
+              unitW: parseFloat(el.getAttribute('data-road-w')) || HIS_W,
+              units: Math.max(1, parseInt(el.getAttribute('data-units'), 10) || 1) };
+    /* CircleRoad.svg: the section road is 95.02 across. 3 roads.svg: the
+       highway is that same road redrawn at 57.85 and stacked three deep,
+       each carriageway overlapping the next so the asphalt reads as one
+       band and the kerb lines meet as his double centre lines. His three
+       asphalt rects sit at y 0, 49.67 and 100.87 in a 158.72 strip, so the
+       pitch is 50.435 -- 0.8718 of a carriageway. */
+    g.pitch  = g.unitW * (parseFloat(el.getAttribute('data-unit-pitch')) || 0.8718);
+    g.roadW  = g.unitW + (g.units - 1) * g.pitch;
+    g.lanes  = parseInt(el.getAttribute('data-lanes'), 10) || g.units * 2;
     /* The markings do NOT scale with the road. On his 95 section roads the
        edge lines are 3.2 across, 5.7 in from the kerb, and the centreline the
        same; on the 148 highway every line is 2.0 and sits 2 in. A wider road
@@ -705,16 +717,17 @@
        scaling them with the asphalt is what made the highway look like a
        three-lane cartoon. Page units, so they take the viewport scale and
        nothing else. */
-    var hw = g.roadW / W_ROAD;
+    var hw = g.unitW / W_ROAD;
     g.lineW  = parseFloat(el.getAttribute('data-line-w')) || DASH_W * hw;
     g.edgeW  = parseFloat(el.getAttribute('data-edge-w')) || (EDGE_OUT - EDGE_IN) * hw;
     g.edgeIn = parseFloat(el.getAttribute('data-edge-in')) || (W_ROAD / 2 - EDGE_OUT) * hw;
     g.rs = viewScale * (g.roadW / W_ROAD);
+    g.us = viewScale * (g.unitW / W_ROAD);
     /* A vehicle is the size of its LANE, not of the road. Six lanes in 148
        are 24.7 apiece against the 62.9 a two-lane 125.88 gives, so the cars
        out on the highway come down to two fifths — which is exactly how he
        draws them: a wide road full of small traffic. */
-    g.cs = (CAR_H * viewScale * ((g.roadW / g.lanes) / (W_ROAD / 2))) / MEDH;
+    g.cs = (CAR_H * viewScale * ((g.unitW / 2) / (W_ROAD / 2))) / MEDH;
     var kids = el.hasAttribute('data-road')
       ? [el]
       : Array.prototype.slice.call(el.children).filter(function (k) {
@@ -753,7 +766,9 @@
       preserveAspectRatio: 'none',
       'aria-hidden': 'true', focusable: 'false'
     });
-    var dash = DASH.split(' ').map(function (v) { return (+v * rs).toFixed(2); }).join(' ');
+    /* The dash is a marking on ONE carriageway, so it takes that
+       carriageway's scale, not the width of the whole band. */
+    var dash = DASH.split(' ').map(function (v) { return (+v * g.us).toFixed(2); }).join(' ');
 
     /* One vertical gradient per route, built from whatever its blocks say the
        asphalt and the line are along the way. Where nothing says otherwise it
@@ -809,21 +824,23 @@
     road.appendChild(el('path', { 'class': 'road-hit', d: d(0), fill: 'none',
                                   stroke: ASPH, 'stroke-width': W_ROAD * rs }));
     var vs = viewScale;
-    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: LN,
-      'stroke-width': W_ROAD * rs - 2 * g.edgeIn * vs }));
-    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: ASPH,
-      'stroke-width': W_ROAD * rs - 2 * (g.edgeIn + g.edgeW) * vs }));
-    /* The lines BETWEEN the lanes. One lane each way is his single dashed
-       centreline; on the six-lane highway past the port he alternates — the
-       outermost pair dashed, the next pair solid, the middle dashed again.
-       Counting from the outside and dashing the odd ones gives his pattern on
-       the highway and his old centreline on a two-lane road, from one rule. */
-    var nL = g.lanes, laneW = (W_ROAD / nL) * rs;
-    for (var j = 1; j < nL; j++) {
-      var a = { d: d((j - nL / 2) * laneW), fill: 'none', stroke: LN,
-                'stroke-width': g.lineW * vs };
-      if (j % 2) a['stroke-dasharray'] = dash;
-      road.appendChild(el('path', a));
+    /* Every line he paints belongs to ONE carriageway: two solid kerb lines
+       and a dashed centre, exactly as CircleRoad.svg draws them. Stack three
+       of those carriageways and the touching kerb lines become the double
+       centre lines of 3 roads.svg — so there is no separate highway rule and
+       no alternation to guess at. */
+    var uC = W_ROAD * g.us,                          /* one carriageway, px */
+        uP = (g.pitch / g.unitW) * uC,               /* centre to centre    */
+        uE = uC / 2 - (g.edgeIn + g.edgeW / 2) * vs; /* kerb line offset    */
+    for (var u = 0; u < g.units; u++) {
+      var uc = (u - (g.units - 1) / 2) * uP;
+      road.appendChild(el('path', { d: d(uc - uE), fill: 'none', stroke: LN,
+                                    'stroke-width': g.edgeW * vs }));
+      road.appendChild(el('path', { d: d(uc + uE), fill: 'none', stroke: LN,
+                                    'stroke-width': g.edgeW * vs }));
+      road.appendChild(el('path', { d: d(uc), fill: 'none', stroke: LN,
+                                    'stroke-width': g.lineW * vs,
+                                    'stroke-dasharray': dash }));
     }
     svg.appendChild(road);
     /* His trees, planted down both sides of the grass wherever the verge
@@ -862,10 +879,13 @@
        drives down the page, the far half drives back up it, so six lanes
        read as three each way rather than as one very wide road. */
     var guides = [];
-    for (var q = 0; q < nL; q++) {
-      var gp = el('path', { 'class': 'lane-guide', d: d((q - (nL - 1) / 2) * laneW) });
-      svg.appendChild(gp);
-      guides.push(gp);
+    for (var u2 = 0; u2 < g.units; u2++) {
+      var gc = (u2 - (g.units - 1) / 2) * uP;
+      for (var sd = -1; sd <= 1; sd += 2) {
+        var gp = el('path', { 'class': 'lane-guide', d: d(gc + sd * uC / 4) });
+        svg.appendChild(gp);
+        guides.push(gp);
+      }
     }
     var fleet = el('g', {});
     svg.appendChild(fleet);

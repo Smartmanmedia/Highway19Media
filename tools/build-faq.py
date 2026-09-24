@@ -473,7 +473,9 @@ PAGE = [
     ("scene", COAST),
     ("route", [
         ("gap", "pass-right", "#1a1a1a", "#6d6e72"),
-    ], ' data-lanes="6" data-road-w="148" data-line-w="2" data-edge-w="2" data-edge-in="2"'),
+    # 3 roads.svg: his carriageway redrawn at 57.85 and stacked three deep.
+    # Every marking falls out of that one number, so nothing is overridden.
+    ], ' data-units="3" data-road-w="57.85"'),
     ("scene", FOREST),
 ]
 
