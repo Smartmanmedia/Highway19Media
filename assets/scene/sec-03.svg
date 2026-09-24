@@ -407,7 +407,9 @@
   </g>
   <g>
     
-    <g data-sign="1"><g>
+    
+  </g>
+<g data-fleetslot="1"/><g data-sign="1" transform="matrix(0.99999,0.00000,0.00000,0.99999,0.00710,0.00000) "><g>
       <polygon points="464.77 385.45 398.91 322.53 394.44 326.81 460.3 389.72 464.77 385.45" fill="url(#linear-gradient-4)"/>
       <polygon points="398.21 389.72 464.06 326.8 459.59 322.53 393.73 385.44 398.21 389.72" fill="url(#linear-gradient-5)"/>
       <polygon points="400.6 385.44 334.74 322.53 330.27 326.81 396.13 389.72 400.6 385.44" fill="url(#linear-gradient-6)"/>
@@ -489,6 +491,4 @@
         <circle cx="344.39" cy="341.9" r="1.95" fill="none" stroke="#fff" stroke-miterlimit="10"/>
         <path d="M342.55,354.08l-5.51,5.51,5.51,5.51M351.74,354.08l5.51,5.51-5.51,5.51M349.22,352.93l-4.14,13.33" fill="none" stroke="#fff" stroke-miterlimit="10"/>
       </g>
-    </g></g>
-  </g>
-<g data-fleetslot="1"/></svg>
+    </g></g></svg>

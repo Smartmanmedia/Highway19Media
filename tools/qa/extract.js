@@ -147,7 +147,10 @@ for(const [k,H] of SEC){
       const band=[...host2.children].filter(e=>{
         if(e===wrap) return false;
         const b2=abs(e); if(!b2||!pa) return false;
-        if(b2.h>pa.h*2.4) return false;
+        /* only what hangs with the sign: no taller than the plate and inside
+           its band. A road that merely crosses the band is not part of it. */
+        if(b2.h>pa.h*1.1) return false;
+        if(b2.y<pa.y-pa.h*0.6||b2.y+b2.h>pa.y+pa.h*1.7) return false;
         const ov=Math.min(pa.y+pa.h,b2.y+b2.h)-Math.max(pa.y,b2.y);
         return ov>Math.min(pa.h,b2.h)*0.45;
       });

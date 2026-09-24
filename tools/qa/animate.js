@@ -7,6 +7,7 @@ const fs=require('fs'), path=require('path');
 const ROOT='/home/user/highway19media';
 const CFG=JSON.parse(fs.readFileSync(path.join(__dirname,'traffic.json'),'utf8'));
 const ROUTES=JSON.parse(fs.readFileSync(path.join(__dirname,'routes.json'),'utf8'));
+const CHAINS=ROUTES._chains||[]; delete ROUTES._chains;
 const BLEEDART=JSON.parse(fs.readFileSync(path.join(__dirname,'bleedart.json'),'utf8'));
 const KS=['05','06','07','01','02','03','04','08'];  /* his vehicles first, so every road can borrow them */
 
@@ -183,25 +184,64 @@ for(const k of KS){
        lines, his forest - moves after it, so the cars run under them. */
     const slot=doc.createElementNS(NS,'g');
     slot.setAttribute('data-fleetslot','1');
+    if(cfg.clipTop){
+      let defs0=svg.querySelector('defs');
+      if(!defs0){ defs0=doc.createElementNS(NS,'defs'); svg.insertBefore(defs0,svg.firstChild); }
+      const cp=doc.createElementNS(NS,'clipPath');
+      cp.setAttribute('id','fleetclip-'+k);
+      const rr=doc.createElementNS(NS,'rect');
+      rr.setAttribute('x','-600'); rr.setAttribute('y',String(cfg.clipTop));
+      rr.setAttribute('width','3400'); rr.setAttribute('height','9000');
+      cp.appendChild(rr); defs0.appendChild(cp);
+      slot.setAttribute('clip-path','url(#fleetclip-'+k+')');
+    }
     svg.appendChild(slot);
-    const rank=e=> e.hasAttribute('data-sign') ? 0
+    /* His clouds and rock lines sit several groups deep, so lifting only the
+       root's own children moved nothing and the traffic drew over them. Each
+       one is lifted to the root with its ancestors' matrix baked in, so it
+       lands exactly where he drew it - and anything under a clip or a filter
+       is left alone rather than risked. */
+    let raisedOut=''; const wanted=[];
+    const cands=[...svg.children,...svg.querySelectorAll('[data-sign],[id]')];
+    cands.forEach(e=>{
+      if(!e||!e.parentNode) return;
+      if(wanted.some(w=>w.el===e)) return;
+      const rank = e.hasAttribute('data-sign') ? 0
                  : /^(Mountains|Forest|Grass_BG)/i.test(e.id||'') ? 1
                  : /^Cloud/i.test(e.id||'') ? 2 : -1;
-    const above=[...svg.children].filter(e=>e!==slot && rank(e)>=0);
-    above.sort((a,b)=>rank(a)-rank(b));
-    above.forEach(e=>svg.appendChild(e));
+      if(rank<0) return;
+      for(let a=e.parentNode; a && a!==svg; a=a.parentNode){
+        if(a.getAttribute('clip-path')||a.getAttribute('mask')||
+           a.getAttribute('filter')||a.getAttribute('opacity')) return;
+        if(wanted.some(w=>w.el===a)) return;      /* an ancestor already goes */
+      }
+      wanted.push({el:e,rank});
+    });
+    wanted.sort((a,b)=>a.rank-b.rank);
+    raisedOut=wanted.length+' raised';
+    wanted.forEach(w=>{
+      const par=w.el.parentNode;
+      if(!par||par===svg){ if(par) svg.appendChild(w.el); return; }
+      const m=par.getCTM? par.getCTM() : null;
+      if(m){
+        const own=w.el.getAttribute('transform')||'';
+        w.el.setAttribute('transform',
+          'matrix('+[m.a,m.b,m.c,m.d,m.e,m.f].map(v=>(+v).toFixed(5)).join(',')+') '+own);
+      }
+      svg.appendChild(w.el);
+    });
 
     /* ---- his roads, measured into lanes ---------------------------------
-       Each route is his road's centreline. The lanes are offset from it
-       numerically so a curve carries its vehicles round it properly. The
-       polylines go out to the runtime, which drives his own traffic engine
-       along them. */
+       Each route is a centreline measured off his own art; the lanes are
+       offset from it on his own lane pitch, so a curve carries its vehicles
+       round it properly and every lane lands where his road actually is. */
     const lanesOut=[];
     if(routes.length){
       const probe=doc.createElementNS(NS,'path'); svg.appendChild(probe);
-      routes.forEach((R,ri)=>{
-        const offs = R.lanes===2 ? [-R.w/4, R.w/4] : [0];
-        offs.forEach((off,li)=>{
+      routes.forEach(R=>{
+        const n=R.lanes||1;
+        for(let li=0; li<n; li++){
+          const off=(li-(n-1)/2)*R.pitch;
           probe.setAttribute('d',R.d);
           const L=probe.getTotalLength(), N=Math.max(24,Math.round(L/9));
           let pts=[];
@@ -213,14 +253,14 @@ for(const k of KS){
             const dx=c2.x-a2.x, dy=c2.y-a2.y, m=Math.hypot(dx,dy)||1;
             pts.push([+(o2.x-dy/m*off).toFixed(1), +(o2.y+dx/m*off).toFixed(1)]);
           }
-          if(R.lanes===2 && li===0) pts=pts.reverse();
-          lanesOut.push({w:R.w/(R.lanes||1), pts});
-        });
+          /* the outer half of the lanes runs the other way */
+          if(li < n/2) pts=pts.reverse();
+          lanesOut.push({road:R.id, lane:li, pitch:R.pitch, pts});
+        }
       });
       probe.remove();
     }
 
-    /* the lanes he drew and left empty */
     /* his aircraft, flown along a path off his own runway */
     const flightOut=[];
     (cfg.flights||[]).forEach(f=>{
@@ -309,18 +349,40 @@ for(const k of KS){
       moversOut.push(mv.name+' ok');
     });
 
-    return {found, roadLanes:lanesOut, flights:flightOut, movers:moversOut,
+    return {found, raised:raisedOut, roadLanes:lanesOut, flights:flightOut, movers:moversOut,
             svg:new XMLSerializer().serializeToString(svg)};
   },[src,cfg,k,routes,sprites,bleedart]);
   fs.writeFileSync(file, r.svg);
   report[k]=r.found;
 
   lanes[k]=r.roadLanes||[];
-  console.log('==',k,r.found.length,'his vehicles |',(r.roadLanes||[]).length,'lanes |',
+  console.log('==',k,r.found.length,'his vehicles |',(r.roadLanes||[]).length,'lanes |',r.raised,'|',
     (r.flights||[]).join(', '),(r.movers||[]).join(', '));
 }
 fs.writeFileSync(path.join(__dirname,'vehicles.json'),JSON.stringify(report,null,1));
+/* stitch the lanes his roads carry across a section seam into one run, so a
+   vehicle leaving the bottom of a section is the same vehicle arriving at the
+   top of the next instead of vanishing and a stranger appearing */
+const runs=[]; const used=new Set();
+for(const chain of CHAINS){
+  const first=chain[0].split(':');
+  const nL=(lanes[first[0]]||[]).filter(l=>l.road===first[1]).length;
+  for(let li=0; li<nL; li++){
+    const segs=[];
+    chain.forEach(step=>{
+      const [k2,rid]=step.split(':');
+      const l=(lanes[k2]||[]).find(q=>q.road===rid&&q.lane===li);
+      if(l){ segs.push({k:k2,pitch:l.pitch,pts:l.pts}); used.add(k2+':'+rid+':'+li); }
+    });
+    if(segs.length) runs.push(segs);
+  }
+}
+Object.keys(lanes).forEach(k2=>lanes[k2].forEach(l=>{
+  if(used.has(k2+':'+l.road+':'+l.lane)) return;
+  runs.push([{k:k2,pitch:l.pitch,pts:l.pts}]);
+}));
 fs.writeFileSync(`${ROOT}/assets/js/qa-lanes.js`,
-  'window.H19_QA_LANES='+JSON.stringify(lanes)+';');
-console.log('lanes ->', Object.keys(lanes).map(k=>k+':'+lanes[k].length).join(' '));
+  'window.H19_QA_RUNS='+JSON.stringify(runs)+';');
+console.log('runs',runs.length,'| chained',runs.filter(r2=>r2.length>1).length);
+
 await b.close();})();

@@ -601,7 +601,10 @@
     </g>
   </g>
   <g>
-    <g data-sign="1"><g>
+    
+    
+  </g>
+<g data-fleetslot="1"/><g data-sign="1" transform="matrix(1.00000,0.00000,0.00000,1.00000,0.00339,0.00000) "><g>
       <g>
         <rect x="1878.37" y="209.68" width="111.32" height="7.56" transform="translate(415.5248 1430.0857) rotate(-45)" fill="url(#linear-gradient-4)"/>
         <rect x="1931.09" y="157.8" width="7.56" height="111.32" transform="translate(415.774 1430.6809) rotate(-45)" fill="url(#linear-gradient-5)"/>
@@ -665,7 +668,4 @@
       <polygon points="1818.73 90.25 1864.06 90.25 1921.63 322.53 1751.8 322.53 1818.73 90.25" fill="url(#linear-gradient-19)"/>
       <polygon points="1543.41 89.24 1588.13 89.24 1644.93 321.51 1477.39 321.51 1543.41 89.24" fill="url(#linear-gradient-20)"/>
       <polygon points="1282.19 87.71 1326.92 87.71 1383.71 319.99 1216.17 319.99 1282.19 87.71" fill="url(#linear-gradient-21)"/>
-    </g></g>
-    
-  </g>
-<g data-fleetslot="1"/></svg>
+    </g></g></svg>
