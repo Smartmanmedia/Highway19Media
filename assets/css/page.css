@@ -274,6 +274,17 @@ img{display:block;max-width:100%}
 }
 .qa-hot:focus-visible{outline:calc(3 * var(--u)) solid #ffc72c;outline-offset:calc(2 * var(--u))}
 
+/* His traffic, laid exactly like the band's art so it crops with it. */
+.qa-traffic{
+  position:absolute;z-index:2;left:50%;top:0;transform:translateX(-50%);
+  width:var(--art);max-width:none;height:auto;
+  pointer-events:none;overflow:visible;
+}
+#road-pause{position:fixed;left:-9999px;top:auto;z-index:80;
+  background:#ffc72c;color:#12161c;border:0;border-radius:4px;
+  padding:.6em 1em;font:700 13px/1 inherit;cursor:pointer}
+#road-pause:focus-visible{left:12px;bottom:12px}
+
 .qa-foot{
   background:#04203f;color:#cbd8e8;padding:calc(48 * var(--u)) calc(40 * var(--u));
   font-size:calc(15 * var(--u));

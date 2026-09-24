@@ -135,7 +135,11 @@ def base(name):
        background. Each band's bottom is the next band's top, so the chain
        is seamless."""
     b = band(name)
-    if b.get("tile") or not b.get("top"):
+    if b.get("tile"):
+        # A tiled band paints itself, but his forest floor runs out before
+        # the band does — this is his own #275522 under it, not the page's.
+        return "background:#275522;"
+    if not b.get("top"):
         return ""
     return (f'background:linear-gradient(180deg,{b["top"]} 0%,{b["bot"]} 100%);')
 
@@ -191,7 +195,9 @@ def render():
         hb, zb = band(s["head"]), band(s["zone"])
         out.append(f'  <section class="qa-sec" id="{sid}">\n')
         out.append(f'    <h2 class="vh">{e(c["heading"])}</h2>\n')
-        out.append(f'    <div class="qa-band" style="{base(s["head"])}">\n')
+        hb0, hb1 = hb["y0"], hb["y1"]
+        out.append(f'    <div class="qa-band" data-y0="{hb0}" data-y1="{hb1}" '
+                   f'style="{base(s["head"])}">\n')
         out.append(fill(s["head"]))
         out.append(art(s["head"]))
         if sid == "qa-general":
@@ -202,7 +208,8 @@ def render():
         zh = round(zb["y1"] - zb["y0"], 2)
         n = len(c["faqs"])
         zmin = round(n * s["ch"] + (n - 1) * s["gap"] + 30, 1)
-        out.append(f'    <div class="qa-zone" style="--zh:{zh};--zmin:{zmin};'
+        out.append(f'    <div class="qa-zone" data-y0="{zb["y0"]}" '
+                   f'data-y1="{zb["y1"]}" style="--zh:{zh};--zmin:{zmin};'
                    f'--zx:{s["x"]};--zw:{s["w"]};--zgap:{s["gap"]};'
                    f'{base(s["zone"])}">\n')
         out.append(fill(s["zone"]))
@@ -211,7 +218,9 @@ def render():
         out.append('    </div>\n  </section>\n')
 
     for name in TAIL:
-        out.append(f'  <div class="qa-band qa-band--tail" style="{base(name)}">\n')
+        tb = band(name)
+        out.append(f'  <div class="qa-band qa-band--tail" data-y0="{tb["y0"]}" '
+                   f'data-y1="{tb["y1"]}" style="{base(name)}">\n')
         out.append(fill(name))
         out.append(art(name))
         out += spots(band(name))
@@ -263,7 +272,12 @@ jsonld = json.dumps({"@context": "https://schema.org",
                      "@type": "FAQPage", "mainEntity": FAQ},
                     ensure_ascii=False, separators=(",", ":"))
 
+ROUTES = json.load(open(os.path.join(HERE, "routes.json")))
+routes_js = ("window.H19_ROUTES=" +
+             json.dumps(ROUTES, separators=(",", ":")) + ";")
+
 doc = (TEMPLATE
+       .replace("<!--ROUTES-->", routes_js)
        .replace("<!--SECTIONS-->", SECTIONS)
        .replace("<!--NAV-->", navhtml)
        .replace("<!--JSONLD-->", jsonld))
