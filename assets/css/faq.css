@@ -991,12 +991,18 @@
    before, and the strip turned out to hold one shrub clipped at its own left
    edge — which is what those specks stuck to the left margin were. */
 .page--qa #qa-advertising{
+  /* Desert Sand.svg is his ground itself, not a gradient standing in for it:
+     a 2037.85 artboard inked from 51.5 to 1498.6 across and 3.2 to 1974.5
+     down, which is his 1441.5 page by 1971 of desert. It goes under the
+     scrub, and the gradient stays behind both for any band deeper than the
+     1971 he drew. */
   background-image:
     url("../scene/qa-shrubs.png"),
+    url("../scene/qa-sand.svg"),
     linear-gradient(180deg,#ffdb96 0%,#ffd486 18%,#fac67e 34%,#ffd486 52%,#ffdb96 68%,#ffd486 84%,#fac67e 100%);
-  background-repeat:no-repeat,no-repeat;
-  background-size:100% 100%,auto;
-  background-position:0 0,0 0;
+  background-repeat:no-repeat,no-repeat,no-repeat;
+  background-size:100% 100%,calc(var(--stage) * 1.41369) auto,auto;
+  background-position:0 0,calc(var(--stage-x) - min(3.573vw,51.5px)) calc(0px - min(0.222vw,3.2px)),0 0;
 }
 .page--qa .qa-sec#qa-advertising,
 .page--qa .qa-sec#qa-advertising h2,
@@ -1036,16 +1042,30 @@
    ridges swallow the desert on a 2000-wide window while the type stayed the
    same size. One variable, read by every band below: his art is laid at the
    size he drew it, centred, and capped there.                              */
-.page--qa{--stage:min(100%,1441.5px)}
+.page--qa{
+  --stage:min(100%,1441.5px);
+  /* Where the left edge of that stage falls inside a full-bleed band. A
+     percentage inside background-POSITION is a share of (container - image),
+     not of the container, so --stage cannot be used to place art — only to
+     size it. Every offset below is a vw capped at the px he drew. */
+  --stage-x:max(0px,calc((100vw - 1441.5px) / 2));
+}
 
+/* Mountains dark.svg, his own artboard, placed rather than cut: 1818.31
+   across with the rock itself inked from 127.3 to 1670.8 and from 226.3 to
+   616.2 down. That ink is 1543.5 x 389.9, so the band is 390 deep and the
+   art is laid 1.26141 of his page wide with its ink centred — which puts
+   rock past both edges, the way he draws it, instead of a raster tiled to
+   the page and going soft. */
 .qa-coastline{
   position:relative;width:100vw;margin-left:calc(50% - 50vw);
-  height:min(23.24vw,335px);
-  background-image:url("../scene/qa-coastline.png"),
+  height:min(27.06vw,390px);
+  background-image:url("../scene/qa-headland.svg"),
     linear-gradient(180deg,#002374 0%,#012a6f 30%,#00306c 60%,#00386d 100%);
-  background-repeat:repeat-x,no-repeat;
-  background-size:var(--stage) 100%,auto;
-  background-position:center top,0 0;
+  background-repeat:no-repeat,no-repeat;
+  background-size:calc(var(--stage) * 1.26141) auto,auto;
+  background-position:calc(var(--stage-x) - min(12.369vw,178.3px))
+                      calc(0px - min(15.699vw,226.3px)),0 0;
 }
 
 /* ── The coast ───────────────────────────────────────────────────────────
@@ -1062,13 +1082,17 @@
    water read as a smear: none of that was his. The band paints the tail of
    his ocean behind the art so the two meet on the same colour. */
 .qa-coast__harbour{
-  height:min(25.67vw,370px);
-  background-image:url("../scene/qa-harbour.png"),
+  /* Port.svg is 582.34 x 632.15 and he stands it hard against the left of
+     the page with open water to the right of it, not stretched across the
+     whole width. 582.34 is 0.40398 of his page; the band is the artboard's
+     own depth. */
+  height:min(43.86vw,632px);
+  background-image:url("../scene/qa-port.svg"),
     linear-gradient(180deg,#24687f 0%,#2a7488 22%,#3a98a9 48%,#46b0b9 64%,
                     #f0dcae 82%,#ffd486 100%);
   background-repeat:no-repeat,no-repeat;
-  background-size:var(--stage) 100%,auto;
-  background-position:center top,0 0;
+  background-size:calc(var(--stage) * 0.40398) auto,auto;
+  background-position:var(--stage-x) bottom,0 0;
 }
 /* His grass under the runways: 282 of 1441.5, #b3c46f down to #8fb44f. The
    airport itself is 248 of it, laid on the bottom. */
@@ -1077,38 +1101,63 @@
   background:linear-gradient(180deg,#b3c46f 0%,#9dbc5e 55%,#8fb44f 100%);
 }
 .qa-coast__air::after{
+  /* airport.svg: 1380.48 x 269.94, terminal and apron against the left edge
+     and the two runways running off to the right. 0.95768 of his page. */
   content:"";position:absolute;left:0;right:0;bottom:0;z-index:0;
-  height:min(17.22vw,248px);
-  background:url("../scene/qa-airport.png") no-repeat center bottom/var(--stage) 100%;
+  height:min(18.73vw,270px);
+  background:url("../scene/qa-airfield.svg") no-repeat
+             var(--stage-x) bottom / calc(var(--stage) * 0.95768) auto;
   pointer-events:none;
 }
 /* His city: 399 of 1441.5 on his own #6d6e72. */
 .qa-coast__city{
-  height:min(27.5vw,396px);
-  background:#6d6e72 url("../scene/qa-city.png") no-repeat center bottom/var(--stage) 100%;
+  /* Industrial Area.svg: 1563.16 x 477.2, his own artboard. The cut I was
+     using had dropped #6d6e72 — his ground AND every building shadow — so
+     the whole block read flat. Placed, it keeps the shadows, the trees, the
+     red factory and the blue-roofed sheds. 1563.16 is 1.0844 of his page,
+     so it bleeds a little either side, which is how he drew it. */
+  height:min(33.11vw,477px);
+  background:#6d6e72 url("../scene/qa-industrial.svg") no-repeat center bottom
+             / calc(var(--stage) * 1.0844) auto;
 }
 /* And his forest on the far side of the highway: 300 of 1441.5, standing on
    the ground the highway hands it. */
 .qa-coast__forest{
   position:relative;width:100vw;margin-left:calc(50% - 50vw);
-  height:min(13.25vw,191px);
+  height:min(24.28vw,350px);
   /* His canopy at half the size he drew it, tiled. It was one 893-wide raster
      blown up to the full width, which is why it came out pixelated: the tile
      is cut straight from his 8780-wide source and rendered at 2x the size it
      is shown at, so nothing is ever upscaled.
      Two layers, not one shorthand: a gradient and a url cannot share a
      background layer, and the whole declaration is thrown away if they try. */
-  background-image:url("../scene/qa-forest.png"),
-    linear-gradient(180deg,#1a1a1a 0%,#290a00 28%,#293114 54%,#29471f 76%,#295929 100%);
-  background-repeat:repeat-x,no-repeat;
-  background-size:calc(var(--stage) / 2) auto,auto;
-  background-position:center top,0 0;
+  /* Trees.svg, his own cluster, in vector. One stamp repeated reads as a
+     stamp, so it is laid three times at three sizes and three offsets — the
+     way his forest is a mass of the same trees at different sizes, not a
+     row. Nothing is upscaled from a raster any more, so it stays sharp at
+     any width. */
+  background-image:
+    url("../scene/qa-canopy.svg"),
+    url("../scene/qa-canopy.svg"),
+    url("../scene/qa-canopy.svg"),
+    linear-gradient(180deg,#1a1a1a 0%,#290a00 22%,#293114 46%,#29471f 72%,#295929 100%);
+  background-repeat:repeat-x,repeat-x,repeat-x,no-repeat;
+  background-size:
+    calc(var(--stage) * 0.2237) auto,
+    calc(var(--stage) * 0.1417) auto,
+    calc(var(--stage) * 0.18636) auto,
+    auto;
+  background-position:
+    calc(var(--stage-x) - min(5.1vw,73px)) bottom,
+    calc(var(--stage-x) + min(7.9vw,114px)) calc(0px - min(1.2vw,17px)),
+    var(--stage-x) calc(0px - min(4.4vw,63px)),
+    0 0;
 }
 
 /* His highway is a band of asphalt, not a strip with a turn in it: the gap
    has to be at least as deep as the road is wide or the route has nowhere to
    draw. 148 of 1441.5, and the six lanes are on the route itself. */
-.page--qa [data-lanes="6"] .road-gap{--gap-h:10.27vw;min-height:148px}
+.page--qa [data-units="3"] .road-gap{--gap-h:11.01vw;min-height:159px}
 /* The run below the gantry: his straight is 325 deep and the turn that takes
    it off the left edge is 424, and then the questions have the page to
    themselves. */
