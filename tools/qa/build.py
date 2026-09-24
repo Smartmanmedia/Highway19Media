@@ -116,6 +116,11 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
 #page{overflow:hidden}
 
 .sec{position:relative;width:100%;height:var(--h);overflow:hidden}
+/* HIS ARTBOARDS ARE FRACTIONAL HEIGHTS, so two of them stacked leave a
+   sub-pixel row where the page shows through and his road grows a hairline.
+   Each section is pulled up onto the one above by a pixel; the art runs
+   straight across the join, so the pixel it covers is the same pixel. */
+.sec + .sec{margin-top:-2px}
 .art{position:absolute;top:0;left:50%;width:var(--wide);height:var(--h);margin-left:calc(0px - var(--wide)/2);z-index:1}
 .art>svg{display:block;width:var(--wide);height:var(--h)}
 

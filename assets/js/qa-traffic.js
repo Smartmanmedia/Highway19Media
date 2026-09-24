@@ -119,9 +119,17 @@
         }
         lim[j] = BASE * sc * Math.max(0.42, 1 - worst / 15);
       }
+      var vb = svg.viewBox && svg.viewBox.baseVal;
       segs.push({ k: raw[i].k, sec: sec, svg: svg, slot: slot, night: !!NIGHT[raw[i].k],
+                  h: vb ? vb.height : 0,
                   x: rs.xs, y: rs.ys, a: ang, lim: lim, n: n, L: n * STEP, d0: total });
       total += n * STEP;
+    }
+    /* who is above and who is below, so a car crossing his seam can be drawn
+       on both sides of it at once */
+    for (var s3 = 0; s3 < segs.length; s3++) {
+      segs[s3].prev = segs[s3 - 1] || null;
+      segs[s3].next = segs[s3 + 1] || null;
     }
     if (segs.length) runs.push({ segs: segs, L: total, pitch: pitch, sc: pitch / LANE_REF, cars: [] });
   });
@@ -158,53 +166,110 @@
     run.nodes = [];
   });
 
-  /* -- 4. A node per on-screen car ---------------------------------------- */
-  function makeNode(night) {
-    var g = el('g', { style: 'isolation:isolate' });
-    var beam = null;
-    if (night) {
-      beam = el('path', { d: 'M0,-3 L150,-38 L150,38 L0,3 Z',
-                          fill: 'url(#h19beam)', opacity: '1' });
-      g.appendChild(beam);
+  /* -- 4. His headlamps and tail lamps ------------------------------------
+     The drive's own geometry, to the digit (build/v2/traffic.js): two beams
+     forward off the nose and two short red glows off the tail, every number a
+     proportion of that vehicle's own measured box, so a semi throws a longer
+     beam than a hatchback with no special case. One set per vehicle type,
+     referenced by <use> like the cars themselves. */
+  var LAMP = { inset: 0.02, headSep: 0.55, tailSep: 0.60,
+               headLen: 0.70, tailLen: 0.12,
+               headBase: 0.06, headTip: 0.20, tailBase: 0.09, tailTip: 0.15 };
+  (function buildLamps() {
+    var defs = el('defs', {});
+    var hg = el('linearGradient', { id: 'h19-beam', x1: '0', y1: '0', x2: '1', y2: '0' });
+    hg.appendChild(el('stop', { offset: '0', 'stop-color': '#fff6d2', 'stop-opacity': '.95' }));
+    hg.appendChild(el('stop', { offset: '.42', 'stop-color': '#ffeaa6', 'stop-opacity': '.45' }));
+    hg.appendChild(el('stop', { offset: '1', 'stop-color': '#ffe294', 'stop-opacity': '0' }));
+    var tg = el('linearGradient', { id: 'h19-tail', x1: '1', y1: '0', x2: '0', y2: '0' });
+    tg.appendChild(el('stop', { offset: '0', 'stop-color': '#ff4436', 'stop-opacity': '.95' }));
+    tg.appendChild(el('stop', { offset: '1', 'stop-color': '#ff2a1c', 'stop-opacity': '0' }));
+    defs.appendChild(hg); defs.appendChild(tg);
+    NAMES.forEach(function (n) {
+      var b = BOX[n], L = b.w, A = b.h, mid = b.y + A / 2, ins = LAMP.inset * L;
+      var g = el('g', { id: n + '_beams' });
+      var hx = b.x + L - ins, hl = LAMP.headLen * L;
+      [-1, 1].forEach(function (side) {
+        var y = mid + side * LAMP.headSep / 2 * A;
+        g.appendChild(el('polygon', { fill: 'url(#h19-beam)', points:
+          [hx, y - LAMP.headBase * A, hx, y + LAMP.headBase * A,
+           hx + hl, y + LAMP.headTip * A, hx + hl, y - LAMP.headTip * A]
+          .map(function (v) { return v.toFixed(2); }).join(' ') }));
+      });
+      var tx = b.x + ins, tl = LAMP.tailLen * L;
+      [-1, 1].forEach(function (side) {
+        var y = mid + side * LAMP.tailSep / 2 * A;
+        g.appendChild(el('polygon', { fill: 'url(#h19-tail)', points:
+          [tx, y - LAMP.tailBase * A, tx, y + LAMP.tailBase * A,
+           tx - tl, y + LAMP.tailTip * A, tx - tl, y - LAMP.tailTip * A]
+          .map(function (v) { return v.toFixed(2); }).join(' ') }));
+      });
+      defs.appendChild(g);
+    });
+    host.appendChild(defs);
+  })();
+
+  /* -- 5. A node per on-screen car ----------------------------------------
+     THE BEAMS ARE THEIR OWN LAYER, under every car: that is what stops a
+     queueing car's beams washing over the car in front of it. His cars go
+     dark after sunset as one group, one filter, not a filter per sprite. */
+  function lanes(seg) {
+    if (seg.beamLayer) return;
+    var b = el('g', { 'data-beams': '1' });
+    var c = el('g', { 'data-cars': '1' });
+    if (seg.night) {
+      b.setAttribute('style', 'opacity:1');
+      c.setAttribute('style', 'filter:brightness(.10) saturate(.20)');
     }
+    seg.slot.appendChild(b); seg.slot.appendChild(c);
+    seg.beamLayer = b; seg.carLayer = c;
+  }
+  function makeNode(seg) {
+    lanes(seg);
+    var bg = null, bu = null;
+    if (seg.night) {
+      bg = el('g', {});
+      bu = el('use', {});
+      bg.appendChild(bu);
+    }
+    var g = el('g', { style: 'isolation:isolate' });
     var inner = el('g', {});
     var u = el('use', {});
     inner.appendChild(u); g.appendChild(inner);
-    return { g: g, inner: inner, use: u, id: null, car: null, beam: beam };
+    return { g: g, bg: bg, bu: bu, inner: inner, use: u, id: null, car: null };
   }
   function bind(node, c) {
-    if (node.beam) {
-      var b0 = BOX[c.id];
-      node.beam.setAttribute('transform',
-        'translate(' + (b0.w * c.scale * 0.46).toFixed(1) + ',0) scale(' +
-        (c.scale * b0.h / 42).toFixed(3) + ')');
-    }
     if (node.id !== c.id) {
+      var b = BOX[c.id];
       node.use.setAttributeNS(XLINK, 'xlink:href', '#' + c.id);
       node.use.setAttribute('href', '#' + c.id);
-      var b = BOX[c.id];
-      node.inner.setAttribute('transform', 'scale(' + c.scale.toFixed(4) + ') translate(' +
-        (-(b.x + b.w / 2)).toFixed(2) + ',' + (-(b.y + b.h / 2)).toFixed(2) + ')');
+      var t = 'scale(' + c.scale.toFixed(4) + ') translate(' +
+        (-(b.x + b.w / 2)).toFixed(2) + ',' + (-(b.y + b.h / 2)).toFixed(2) + ')';
+      node.inner.setAttribute('transform', t);
+      node.carT = t;
+      if (node.bu) {
+        node.bu.setAttributeNS(XLINK, 'xlink:href', '#' + c.id + '_beams');
+        node.bu.setAttribute('href', '#' + c.id + '_beams');
+      }
       node.id = c.id;
     }
     node.car = c; c.node = node;
   }
 
-  /* the headlight gradient, once */
-  (function () {
-    var lg = el('linearGradient', { id: 'h19beam', x1: '0', y1: '0', x2: '1', y2: '0' });
-    lg.appendChild(el('stop', { offset: '0', 'stop-color': '#fff6cc', 'stop-opacity': '.72' }));
-    lg.appendChild(el('stop', { offset: '.45', 'stop-color': '#fff2b8', 'stop-opacity': '.3' }));
-    lg.appendChild(el('stop', { offset: '1', 'stop-color': '#fff6cc', 'stop-opacity': '0' }));
-    var done = {};
-    runs.forEach(function (run) { run.segs.forEach(function (s2) {
-      if (!s2.night || done[s2.k]) return;
-      done[s2.k] = 1;
-      var defs = s2.svg.querySelector('defs');
-      if (!defs) { defs = el('defs', {}); s2.svg.insertBefore(defs, s2.svg.firstChild); }
-      defs.appendChild(lg.cloneNode(true));
-    }); });
-  })();
+  function bindGhost(n, c) {
+    if (n.id === c.id) return;
+    var b = BOX[c.id];
+    n.use.setAttributeNS(XLINK, 'xlink:href', '#' + c.id);
+    n.use.setAttribute('href', '#' + c.id);
+    n.carT = 'scale(' + c.scale.toFixed(4) + ') translate(' +
+      (-(b.x + b.w / 2)).toFixed(2) + ',' + (-(b.y + b.h / 2)).toFixed(2) + ')';
+    n.inner.setAttribute('transform', n.carT);
+    if (n.bu) {
+      n.bu.setAttributeNS(XLINK, 'xlink:href', '#' + c.id + '_beams');
+      n.bu.setAttribute('href', '#' + c.id + '_beams');
+    }
+    n.id = c.id;
+  }
 
   /* -- 5. Physics --------------------------------------------------------- */
   function step(dt) {
@@ -240,23 +305,42 @@
     return segs[0];
   }
 
+  /* EVERY LANE OF HIS SIX-LANE HIGHWAY IS ITS OWN RUN, and they all live in
+     the same section: measuring that section once a frame instead of once a
+     run is the difference between one layout pass and eighteen. */
+  var measured = {};
+  function measure(sy) {
+    measured = {};
+    for (var ri = 0; ri < runs.length; ri++)
+      for (var i = 0; i < runs[ri].segs.length; i++) {
+        var s2 = runs[ri].segs[i];
+        if (measured[s2.k]) { s2.top = measured[s2.k][0]; s2.u = measured[s2.k][1]; continue; }
+        s2.top = s2.sec.getBoundingClientRect().top + sy;
+        s2.u = s2.svg.getBoundingClientRect().width / 3088;
+        measured[s2.k] = [s2.top, s2.u];
+      }
+  }
   function render() {
     var vh = window.innerHeight, sy = window.pageYOffset;
+    measure(sy);
     for (var ri = 0; ri < runs.length; ri++) {
       var run = runs[ri];
       var free = [], i, c;
-      for (i = 0; i < run.segs.length; i++) {
-        var s2 = run.segs[i];
-        var r2 = s2.sec.getBoundingClientRect();
-        s2.top = r2.top + sy;
-        s2.u = s2.svg.getBoundingClientRect().width / 3088;
-      }
       for (i = 0; i < run.cars.length; i++) {
         c = run.cars[i];
         var seg = segAt(run, c.d);
-        var idx = Math.min(seg.n, Math.max(0, Math.round((c.d - seg.d0) / STEP)));
+        /* BETWEEN the samples, not snapped to them. His six-lane highway is
+           drawn at a quarter of the hero's scale, so a car landing on the
+           nearest 5-unit sample moved in visible steps. */
+        var f = (c.d - seg.d0) / STEP;
+        if (f < 0) f = 0; else if (f > seg.n) f = seg.n;
+        var i0 = f | 0, i1 = Math.min(seg.n, i0 + 1), fr = f - i0;
         c.seg = seg;
-        c.x = seg.x[idx]; c.y = seg.y[idx]; c.ang = seg.a[idx];
+        c.x = seg.x[i0] + (seg.x[i1] - seg.x[i0]) * fr;
+        c.y = seg.y[i0] + (seg.y[i1] - seg.y[i0]) * fr;
+        var a0 = seg.a[i0], a1 = seg.a[i1];
+        var da = ((a1 - a0 + 540) % 360) - 180;
+        c.ang = a0 + da * fr;
         var py = seg.top + c.y * seg.u - sy;
         c.on = py > -CULL && py < vh + CULL;
         if (c.node && (!c.on || c.node.seg !== seg)) {
@@ -269,17 +353,55 @@
         var node = null;
         for (var q = 0; q < free.length; q++)
           if (free[q].seg === c.seg) { node = free.splice(q, 1)[0]; break; }
-        if (!node) { node = makeNode(c.seg.night); run.nodes.push(node); }
-        if (node.g.parentNode !== c.seg.slot) c.seg.slot.appendChild(node.g);
+        if (!node) { node = makeNode(c.seg); run.nodes.push(node); }
+        if (node.g.parentNode !== c.seg.carLayer) c.seg.carLayer.appendChild(node.g);
+        if (node.bg && node.bg.parentNode !== c.seg.beamLayer) c.seg.beamLayer.appendChild(node.bg);
         node.seg = c.seg;
         bind(node, c);
       }
-      for (i = 0; i < free.length; i++) if (free[i].g.parentNode) free[i].g.parentNode.removeChild(free[i].g);
+      for (i = 0; i < free.length; i++) {
+        if (free[i].g.parentNode) free[i].g.parentNode.removeChild(free[i].g);
+        if (free[i].bg && free[i].bg.parentNode) free[i].bg.parentNode.removeChild(free[i].bg);
+        if (free[i].gh) {
+          if (free[i].gh.g.parentNode) free[i].gh.g.parentNode.removeChild(free[i].gh.g);
+          if (free[i].gh.bg && free[i].gh.bg.parentNode)
+            free[i].gh.bg.parentNode.removeChild(free[i].gh.bg);
+          free[i].gh = null;
+        }
+      }
       for (i = 0; i < run.cars.length; i++) {
         c = run.cars[i];
         if (!c.node) continue;
-        c.node.g.setAttribute('transform',
-          'translate(' + c.x.toFixed(1) + ',' + c.y.toFixed(1) + ') rotate(' + c.ang.toFixed(1) + ')');
+        var tf = 'translate(' + c.x.toFixed(2) + ',' + c.y.toFixed(2) +
+                 ') rotate(' + c.ang.toFixed(2) + ')';
+        c.node.g.setAttribute('transform', tf);
+        /* EACH SECTION CLIPS ITS OWN ART, so a car halfway over the join was
+           losing whichever half was on the other side of it. While it
+           straddles, the same car is drawn in the next section too, a whole
+           artboard further up - it is one road. */
+        var sg = c.seg, gh = null, gy = 0;
+        if (sg.next && c.y > sg.h - 150) { gh = sg.next; gy = c.y - sg.h; }
+        else if (sg.prev && c.y < 150 && sg.prev.h) { gh = sg.prev; gy = c.y + sg.prev.h; }
+        if (gh) {
+          if (!c.node.gh) c.node.gh = makeNode(gh);
+          lanes(gh);
+          var gn = c.node.gh;
+          if (gn.g.parentNode !== gh.carLayer) gh.carLayer.appendChild(gn.g);
+          if (gn.bg && gn.bg.parentNode !== gh.beamLayer) gh.beamLayer.appendChild(gn.bg);
+          bindGhost(gn, c);
+          var gt = 'translate(' + c.x.toFixed(2) + ',' + gy.toFixed(2) +
+                   ') rotate(' + c.ang.toFixed(2) + ')';
+          gn.g.setAttribute('transform', gt);
+          if (gn.bg) gn.bg.setAttribute('transform', gt + ' ' + gn.carT);
+        } else if (c.node.gh && c.node.gh.g.parentNode) {
+          c.node.gh.g.parentNode.removeChild(c.node.gh.g);
+          if (c.node.gh.bg && c.node.gh.bg.parentNode)
+            c.node.gh.bg.parentNode.removeChild(c.node.gh.bg);
+        }
+        /* the beams ride in their own layer, so they carry the car's place
+           AND the car's own scale */
+        if (c.node.bg)
+          c.node.bg.setAttribute('transform', tf + ' ' + c.node.carT);
       }
     }
   }

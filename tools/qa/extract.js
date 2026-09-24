@@ -155,18 +155,19 @@ for(const [k,H] of SEC){
       const first=plates.find(el=>/^#(1c9022|006802|007a29)$/i.test(el.getAttribute('fill')||''))
               || byArea.find(el=>el.getAttribute('fill'))
               || byArea[0];
-      faces.push(first);
+      faces.push({el:first,seam:false});
       /* plus any seam strip that is a different sign from the one above */
       byArea.forEach(el=>{
-        if(faces.indexOf(el)>=0) return;
+        if(faces.some(f=>f.el===el)) return;
         const a2=nbox(el); if(!a2) return;
         if(!(a2.y<26 || a2.y+a2.h>H-26)) return;
-        if(faces.some(f=>{const b3=nbox(f); return b3 &&
+        if(faces.some(f=>{const b3=nbox(f.el); return b3 &&
           Math.min(b3.y+b3.h,a2.y+a2.h)-Math.max(b3.y,a2.y) > -2; })) return;
-        faces.push(el);
+        faces.push({el,seam:true});
       });
     }
-    for(const face of faces){
+    for(const F of faces){
+      const face=F.el;
       let g=face.parentNode;
       while(g&&g.tagName==='g'&&g.parentNode&&g.parentNode.tagName==='g'&&g.children.length<3) g=g.parentNode;
       let plate=g&&g.tagName==='g'?g:face;
@@ -209,9 +210,18 @@ for(const [k,H] of SEC){
           return o<0.7;
         });
       };
-      const band=[...host2.children].filter(e=>{
+      /* A see-through piece drawn square over the plate is the light his
+         fittings throw ON the sign, and it travels with it. One that is
+         offset off the plate is the shadow the sign throws on the ground,
+         and that stays where it lands. */
+      const offPlate=e=>{
+        const b3=nbox(e); if(!b3||!pa) return true;
+        return Math.abs((b3.x+b3.w/2)-(pa.x+pa.w/2))>pa.w*0.05 ||
+               Math.abs((b3.y+b3.h/2)-(pa.y+pa.h/2))>pa.h*0.05;
+      };
+      const band=F.seam?[]:[...host2.children].filter(e=>{
         if(e===wrap) return false;
-        if(e!==plate&&seeThrough(e)) return false;
+        if(e!==plate&&seeThrough(e)&&offPlate(e)) return false;
         if(NOTSIGN.test(e.id||'')) return false;
         if(e.querySelector&&[...e.querySelectorAll('[id]')].some(q=>NOTSIGN.test(q.id))) return false;
         const b2=nbox(e); if(!b2||!pa) return false;
@@ -226,24 +236,71 @@ for(const [k,H] of SEC){
       band.forEach(e=>wrap.appendChild(e));
       /* his bolts and hangers sit a few groups deeper than the plate, so the
          sibling sweep misses them and the board lifts off its own fixings */
-      if(pa){
+      if(pa&&!F.seam){
         const hang=[];
         const inWrap=n=>{ for(let a=n; a; a=a.parentNode) if(a===wrap) return true; return false; };
         svg.querySelectorAll('g,rect,path,polygon').forEach(e=>{
           if(inWrap(e)||e===wrap||e.contains(wrap)) return;
-          if(NOTSIGN.test(e.id||'')) return;
+          /* his rocks and his treeline are never a sign's fixings, however
+             close they happen to fall to the plate */
+          for(let a=e; a && a!==svg; a=a.parentNode)
+            if(NOTSIGN.test(a.id||'')) return;
           if(hang.some(h=>h.contains(e))) return;
           const b2=nbox(e); if(!b2) return;
           if(b2.w<3||b2.h<3) return;
           if(b2.w>pa.w*0.15||b2.h>pa.h*0.25) return;
           if(b2.x<pa.x-15||b2.x+b2.w>pa.x+pa.w+15) return;
           if(b2.y<pa.y-26||b2.y+b2.h>pa.y+pa.h+46) return;
-          if(seeThrough(e)) return;
+          if(seeThrough(e)&&offPlate(e)) return;
           hang.push(e);
         });
         hang.forEach(e=>wrap.appendChild(e));
       }
       if(!wrap.children.length) wrap.appendChild(plate);
+      /* A SEAM STRIP CARRIES NOTHING BUT ITS OWN BOARD. His exporter drops
+         whatever else he drew near the sign into the same group, and those
+         fragments then ride over the face. Earth and foliage are not signage. */
+      /* EARTH AND FOLIAGE ARE NOT SIGNAGE. Rocks and treetops he drew near a
+         board land inside its box, get swept up with its fixings and then
+         paint over the face. His own signage colours - the green, the gold
+         banner, white, black, the blue badge - all stay. */
+      {
+        const SIGNGREEN=/^#(1c9022|006802|007a29)$/i;
+        const scenery=f=>{
+          if(!f||f.indexOf('url(')===0) return false;
+          const m=/^#([0-9a-fA-F]{6})$/.exec(f); if(!m) return false;
+          if(SIGNGREEN.test(f)) return false;
+          const r=parseInt(m[1].slice(0,2),16),g=parseInt(m[1].slice(2,4),16),
+                b2=parseInt(m[1].slice(4,6),16);
+          if(r>b2+18&&b2>=100) return true;                 /* rock, sand, stone */
+          if(r>b2+30&&r<200&&g<r&&g>b2) return true;        /* timber, dirt */
+          if(g>r+18&&g>b2+18) return true;                  /* leaves */
+          return false;
+        };
+        [...wrap.querySelectorAll('[fill]')].forEach(q=>{
+          if(scenery(q.getAttribute('fill'))&&q.parentNode) q.parentNode.removeChild(q);
+        });
+        [...wrap.children].forEach(q=>{
+          if(!q.querySelector||q.querySelector('*')||q.getAttribute('fill')) return;
+        });
+      }
+      /* keeps the half honest: nothing outside the board it belongs to. His exporter puts the
+         whole sign into both artboards and lets each viewBox cut it; the half
+         in the section above comes with fragments of whatever else he drew
+         near it, which then ride over the sign. Clipped to the board itself. */
+      if(F.seam&&pa){
+        let defs2=svg.querySelector('defs');
+        if(!defs2){ defs2=doc.createElementNS('http://www.w3.org/2000/svg','defs');
+          svg.insertBefore(defs2,svg.firstChild); }
+        const cid='signclip-'+Math.round(pa.x)+'-'+Math.round(pa.y);
+        const cp=doc.createElementNS('http://www.w3.org/2000/svg','clipPath');
+        cp.setAttribute('id',cid);
+        const rr=doc.createElementNS('http://www.w3.org/2000/svg','rect');
+        rr.setAttribute('x',(pa.x-10).toFixed(1)); rr.setAttribute('y',(pa.y-10).toFixed(1));
+        rr.setAttribute('width',(pa.w+20).toFixed(1)); rr.setAttribute('height',(pa.h+20).toFixed(1));
+        cp.appendChild(rr); defs2.appendChild(cp);
+        wrap.setAttribute('clip-path','url(#'+cid+')');
+      }
       const a=abs(face);
       if(a&&!signBox) signBox={x:+a.x.toFixed(1),y:+a.y.toFixed(1),w:+Math.abs(a.w).toFixed(1),h:+Math.abs(a.h).toFixed(1)};
     }

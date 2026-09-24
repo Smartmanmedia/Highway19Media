@@ -117,9 +117,9 @@
     <rect x="1990.66" y="-119.23" width="3.29" height="324.7" fill="#fff"/>
     <rect x="1910.4" y="-119.23" width="3.3" height="324.7" fill="#fff"/>
     <g>
-      
-      
-      
+      <rect x="1951.07" y="164.62" width="3.53" height="28.26" fill="#fff"/>
+      <rect x="1951.07" y="117.31" width="3.53" height="28.26" fill="#fff"/>
+      <rect x="1951.07" y="70" width="3.53" height="28.26" fill="#fff"/>
       <rect x="1951.07" y="22.7" width="3.53" height="28.26" fill="#fff"/>
       <rect x="1951.07" y="-24.61" width="3.53" height="28.27" fill="#fff"/>
     </g>
@@ -201,7 +201,7 @@
       <path d="M1910.34,333.25c2,134.37,111.04,243.22,245.47,244.99v-3.25c-132.63-1.77-240.21-109.16-242.21-241.73h-3.26Z" fill="#fff"/>
       <path d="M1990.61,333.25c1.99,90.12,75.02,163.01,165.2,164.76v-3.26c-88.39-1.75-159.95-73.18-161.94-161.51h-3.26Z" fill="#fff"/>
       <g>
-        
+        <path d="M1950.46,327.63c.19,7.74.62,15.41,1.28,22.97,1.04-.12,2.12-.25,3.22-.42-.64-7.43-1.07-14.94-1.25-22.54h-3.25Z" fill="#fff"/>
         <path d="M1952.55,364.45l3.23-.35c.87,6.98,2.12,13.81,3.66,20.52-1.09.25-2.15.47-3.17.68-1.56-6.8-2.83-13.76-3.72-20.84Z" fill="#fff"/>
         <path d="M1959.71,399.14l3.1-.95c2.19,6.68,4.73,13.16,7.53,19.45-1.02.45-2.02.86-2.98,1.26-2.84-6.38-5.42-12.97-7.64-19.76Z" fill="#fff"/>
         <path d="M1973.7,431.66l2.81-1.61c3.62,6.05,7.53,11.81,11.65,17.34-.89.66-1.78,1.29-2.62,1.88-4.19-5.59-8.16-11.48-11.84-17.6Z" fill="#fff"/>
@@ -214,9 +214,9 @@
     </g>
     <rect x="1910.34" y="184.13" width="3.28" height="149.23" fill="#fff"/>
     <rect x="1990.61" y="184.13" width="3.29" height="149.23" fill="#fff"/>
-    
-    
-    
+    <rect x="1950.25" y="193.62" width="3.53" height="27.35" fill="#fff"/>
+    <rect x="1950.25" y="239.4" width="3.53" height="27.35" fill="#fff"/>
+    <rect x="1950.25" y="285.18" width="3.53" height="27.35" fill="#fff"/>
   </g>
   <g id="Stright-7" data-name="Stright">
     <rect x="326.32" y="61.35" width="95.06" height="324.7" fill="#161616"/>
@@ -611,7 +611,7 @@
       <polygon points="1282.19 87.71 1326.92 87.71 1383.71 319.99 1216.17 319.99 1282.19 87.71" fill="url(#linear-gradient-21)"/>
     </g>
   </g>
-<g data-fleetslot="1"/><g data-sign="1" transform="matrix(1.00000,0.00000,0.00000,1.00000,0.00339,0.00000) "><g>
+<rect x="331" y="56" width="86" height="7" fill="#161616" data-patch="1"/><rect x="331.5" y="56" width="4" height="7" fill="#ffffff" data-patch="1"/><rect x="411.5" y="56" width="4" height="7" fill="#ffffff" data-patch="1"/><g data-fleetslot="1"/><g data-sign="1" transform="matrix(1.00000,0.00000,0.00000,1.00000,0.00339,0.00000) "><g>
       <g>
         <rect x="1878.37" y="209.68" width="111.32" height="7.56" transform="translate(415.5248 1430.0857) rotate(-45)" fill="url(#linear-gradient-4)"/>
         <rect x="1931.09" y="157.8" width="7.56" height="111.32" transform="translate(415.774 1430.6809) rotate(-45)" fill="url(#linear-gradient-5)"/>
@@ -668,4 +668,4 @@
         <path d="M1885.2,196.74l13.59-5.53v17.97l-13.59-5.53v-6.91Z" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="2"/>
         <path d="M1866.31,208.26l-3.92,8.29M1874.38,208.26l3.92,8.29" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="2"/>
       </g>
-    </g><rect x="1951.07" y="164.62" width="3.53" height="28.26" fill="#fff"/><rect x="1951.07" y="117.31" width="3.53" height="28.26" fill="#fff"/><rect x="1951.07" y="70" width="3.53" height="28.26" fill="#fff"/><path d="M1950.46,327.63c.19,7.74.62,15.41,1.28,22.97,1.04-.12,2.12-.25,3.22-.42-.64-7.43-1.07-14.94-1.25-22.54h-3.25Z" fill="#fff"/><rect x="1950.25" y="193.62" width="3.53" height="27.35" fill="#fff"/><rect x="1950.25" y="239.4" width="3.53" height="27.35" fill="#fff"/><rect x="1950.25" y="285.18" width="3.53" height="27.35" fill="#fff"/></g></svg>
+    </g></g></svg>

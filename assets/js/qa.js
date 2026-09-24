@@ -126,11 +126,11 @@
       }
       /* the sign rides well above the ground it is bolted over, and leans in
          a little as it passes, so it reads as the nearest thing on the page */
-      var off = (0.5 - p) * g.__amt;   /* near things overtake, they don't lag */
-      var sc = 1 + (0.5 - Math.abs(p - 0.5)) * 0.10;
-      g.setAttribute('transform',
-        'translate(0 ' + off.toFixed(2) + ') translate(' + g.__cx + ' ' + g.__cy +
-        ') scale(' + sc.toFixed(4) + ') translate(' + (-g.__cx) + ' ' + (-g.__cy) + ')');
+      /* it starts below where he drew it, sits exactly on it halfway up the
+         screen and carries on above it - and it TRAVELS. Nothing swells: a
+         sign that grows reads as a zoom, not as something close by. */
+      var off = (0.5 - p) * g.__amt;
+      g.setAttribute('transform', 'translate(0 ' + off.toFixed(2) + ')');
     }
   }
   function onScroll() { if (!queued) { queued = true; requestAnimationFrame(frame); } }
