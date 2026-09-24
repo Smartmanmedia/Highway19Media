@@ -1,0 +1,1182 @@
+[
+ {
+  "name": "00-general-cards",
+  "x": 419.1,
+  "w": 840,
+  "cards": [
+   {
+    "y": 1775.4,
+    "h": 282.6,
+    "rect": {
+     "fill": "#deefff",
+     "stroke": "#00287e",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#00aa56",
+     "r": "14.55",
+     "cx": 800.9,
+     "cy": 32.6
+    },
+    "texts": [
+     {
+      "t": "What does Highway 19 Media do?",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 24.1,
+      "y": 22.7
+     },
+     {
+      "t": "Highway 19 Media helps local Tampa Bay businesses ",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 89.6
+     },
+     {
+      "t": "social media, paid advertising, graphic design, br",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 117.1
+     },
+     {
+      "t": "products. Instead of coordinating multiple vendors",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 144.7
+     },
+     {
+      "t": "who can manage as much or as little as you need wh",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 172.2
+     },
+     {
+      "t": "the same direction.",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 25.7,
+      "y": 198.9
+     }
+    ]
+   },
+   {
+    "y": 2067.2,
+    "h": 64.5,
+    "rect": {
+     "fill": "#fff",
+     "stroke": "#00287e",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#00aa56",
+     "r": "14.55",
+     "cx": 803.9,
+     "cy": 32
+    },
+    "texts": [
+     {
+      "t": "Are you really local?",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 24.1,
+      "y": 21.7
+     }
+    ]
+   },
+   {
+    "y": 2141.3,
+    "h": 64.5,
+    "rect": {
+     "fill": "#fff",
+     "stroke": "#00287e",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#00aa56",
+     "r": "14.55",
+     "cx": 803.9,
+     "cy": 32.3
+    },
+    "texts": [
+     {
+      "t": "What makes Highway 19 Media different from a freel",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 24.1,
+      "y": 22.1
+     }
+    ]
+   },
+   {
+    "y": 2215.4,
+    "h": 64.5,
+    "rect": {
+     "fill": "#fff",
+     "stroke": "#00287e",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#00aa56",
+     "r": "14.55",
+     "cx": 803.9,
+     "cy": 29.4
+    },
+    "texts": [
+     {
+      "t": "What if I don’t know exactly what marketing I need",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 24.1,
+      "y": 22.5
+     }
+    ]
+   },
+   {
+    "y": 2289.5,
+    "h": 64.5,
+    "rect": {
+     "fill": "#fff",
+     "stroke": "#00287e",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#00aa56",
+     "r": "14.55",
+     "cx": 803.9,
+     "cy": 30.5
+    },
+    "texts": [
+     {
+      "t": "Can you work with my budget?",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 24.1,
+      "y": 23
+     }
+    ]
+   },
+   {
+    "y": 2363.6,
+    "h": 64.5,
+    "rect": {
+     "fill": "#fff",
+     "stroke": "#00287e",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#00aa56",
+     "r": "14.55",
+     "cx": 803.9,
+     "cy": 34
+    },
+    "texts": [
+     {
+      "t": "Do I have to sign a long-term contract?",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 24.1,
+      "y": 23.4
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "01-websites-cards",
+  "x": 566.3,
+  "w": 548.4,
+  "cards": [
+   {
+    "y": 3366.8,
+    "h": 322.4,
+    "rect": {
+     "fill": "#0f1c28",
+     "stroke": "#cad9ea",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": null,
+    "texts": [
+     {
+      "t": "I’m a small business. Do",
+      "size": "17.28",
+      "fill": "#fff",
+      "fam": "Arial-BoldMT",
+      "x": 24.1,
+      "y": 19.8
+     },
+     {
+      "t": "I really need a website?",
+      "size": "17.28",
+      "fill": "#fff",
+      "fam": "Arial-BoldMT",
+      "x": 24.1,
+      "y": 44
+     },
+     {
+      "t": "Not necessarily a full website. Some local busines",
+      "size": "16",
+      "fill": "#fff",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 108
+     },
+     {
+      "t": "simply need a professional place online where",
+      "size": "16",
+      "fill": "#fff",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 135.5
+     },
+     {
+      "t": "customers can see what they do, contact them and",
+      "size": "16",
+      "fill": "#fff",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 163.1
+     },
+     {
+      "t": "find their social media. That’s why we offer a Hig",
+      "size": "16",
+      "fill": "#fff",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 190.6
+     },
+     {
+      "t": "19 Media landing-page option starting at $699. It",
+      "size": "16",
+      "fill": "#fff",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 218.1
+     },
+     {
+      "t": "gives your business an affordable entrance ramp to",
+      "size": "16",
+      "fill": "#fff",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 245.6
+     },
+     {
+      "t": "getting online.",
+      "size": "16",
+      "fill": "#fff",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 273.1
+     }
+    ]
+   },
+   {
+    "y": 3700.4,
+    "h": 64.5,
+    "rect": {
+     "fill": null,
+     "stroke": "#cad9ea",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#00aa56",
+     "r": "14.55",
+     "cx": 515.7,
+     "cy": 32
+    },
+    "texts": [
+     {
+      "t": "Are you really local?",
+      "size": "17.28",
+      "fill": "#fff",
+      "fam": "Arial-BoldMT",
+      "x": 26.5,
+      "y": 21.7
+     }
+    ]
+   },
+   {
+    "y": 3774.5,
+    "h": 64.5,
+    "rect": {
+     "fill": null,
+     "stroke": "#cad9ea",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#00aa56",
+     "r": "14.55",
+     "cx": 515.7,
+     "cy": 32.3
+    },
+    "texts": [
+     {
+      "t": "When should I get my own website instead?",
+      "size": "17.28",
+      "fill": "#fff",
+      "fam": "Arial-BoldMT",
+      "x": 26.5,
+      "y": 22.5
+     }
+    ]
+   },
+   {
+    "y": 3848.6,
+    "h": 64.5,
+    "rect": {
+     "fill": null,
+     "stroke": "#cad9ea",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#00aa56",
+     "r": "14.55",
+     "cx": 515.7,
+     "cy": 29.4
+    },
+    "texts": [
+     {
+      "t": "How much does a full website cost?",
+      "size": "17.28",
+      "fill": "#fff",
+      "fam": "Arial-BoldMT",
+      "x": 26.5,
+      "y": 23.4
+     }
+    ]
+   },
+   {
+    "y": 3922.7,
+    "h": 64.5,
+    "rect": {
+     "fill": null,
+     "stroke": "#cad9ea",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#00aa56",
+     "r": "14.55",
+     "cx": 515.7,
+     "cy": 30.5
+    },
+    "texts": [
+     {
+      "t": "What platforms can you build on?",
+      "size": "17.28",
+      "fill": "#fff",
+      "fam": "Arial-BoldMT",
+      "x": 26.5,
+      "y": 24.2
+     }
+    ]
+   },
+   {
+    "y": 3996.8,
+    "h": 64.5,
+    "rect": {
+     "fill": null,
+     "stroke": "#cad9ea",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#00aa56",
+     "r": "14.55",
+     "cx": 515.7,
+     "cy": 34
+    },
+    "texts": [
+     {
+      "t": "How long does a website take?",
+      "size": "17.28",
+      "fill": "#fff",
+      "fam": "Arial-BoldMT",
+      "x": 26.5,
+      "y": 25.1
+     }
+    ]
+   },
+   {
+    "y": 4072.4,
+    "h": 64.5,
+    "rect": {
+     "fill": null,
+     "stroke": "#cad9ea",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#00aa56",
+     "r": "14.55",
+     "cx": 515.7,
+     "cy": 35.3
+    },
+    "texts": [
+     {
+      "t": "What do I need to provide?",
+      "size": "17.28",
+      "fill": "#fff",
+      "fam": "Arial-BoldMT",
+      "x": 26.5,
+      "y": 24.4
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "02-video-cards",
+  "x": 413.2,
+  "w": 833.5,
+  "cards": [
+   {
+    "y": 5116.2,
+    "h": 182.5,
+    "rect": {
+     "fill": "none",
+     "stroke": "#cad9ea",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": null,
+    "texts": [
+     {
+      "t": "What kind of videos do you produce?",
+      "size": "17.28",
+      "fill": "#fff",
+      "fam": "Arial-BoldMT",
+      "x": 35.2,
+      "y": 22.6
+     },
+     {
+      "t": "Everything from quick social content to profession",
+      "size": "16",
+      "fill": "#fff",
+      "fam": "BeVietnamPro-Light",
+      "x": 35.2,
+      "y": 89.5
+     },
+     {
+      "t": "produce website hero videos, commercials, intervie",
+      "size": "16",
+      "fill": "#fff",
+      "fam": "BeVietnamPro-Light",
+      "x": 35.2,
+      "y": 117
+     },
+     {
+      "t": "media content, drone footage, educational videos a",
+      "size": "16",
+      "fill": "#fff",
+      "fam": "BeVietnamPro-Light",
+      "x": 35.2,
+      "y": 144.5
+     }
+    ]
+   },
+   {
+    "y": 5319,
+    "h": 64.5,
+    "rect": {
+     "fill": "none",
+     "stroke": "#cad9ea",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": null,
+    "texts": [
+     {
+      "t": "Do I need an expensive video production?",
+      "size": "17.28",
+      "fill": "#fff",
+      "fam": "Arial-BoldMT",
+      "x": 35.2,
+      "y": 20.1
+     }
+    ]
+   },
+   {
+    "y": 5398.2,
+    "h": 64.5,
+    "rect": {
+     "fill": "none",
+     "stroke": "#cad9ea",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": null,
+    "texts": [
+     {
+      "t": "What happens when you produce a professional comme",
+      "size": "17.28",
+      "fill": "#fff",
+      "fam": "Arial-BoldMT",
+      "x": 35.2,
+      "y": 20
+     }
+    ]
+   },
+   {
+    "y": 5481,
+    "h": 64.5,
+    "rect": {
+     "fill": "none",
+     "stroke": "#cad9ea",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": null,
+    "texts": [
+     {
+      "t": "Can you create ongoing social media videos?",
+      "size": "17.28",
+      "fill": "#fff",
+      "fam": "Arial-BoldMT",
+      "x": 35.2,
+      "y": 19.8
+     }
+    ]
+   },
+   {
+    "y": 5563.8,
+    "h": 64.5,
+    "rect": {
+     "fill": "none",
+     "stroke": "#cad9ea",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": null,
+    "texts": [
+     {
+      "t": "Do you have a studio?",
+      "size": "17.28",
+      "fill": "#fff",
+      "fam": "Arial-BoldMT",
+      "x": 35.2,
+      "y": 22.1
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "03-advertising-cards",
+  "x": 692.7,
+  "w": 480.8,
+  "cards": [
+   {
+    "y": 7147.9,
+    "h": 221.4,
+    "rect": {
+     "fill": "#fff",
+     "stroke": "#00287e",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#fa0",
+     "r": "14.55",
+     "cx": 446.7,
+     "cy": 28.6
+    },
+    "texts": [
+     {
+      "t": "Can you manage my social media?",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 24.1,
+      "y": 22.7
+     },
+     {
+      "t": "Yes. We can create content, design posts, produce",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 89.6
+     },
+     {
+      "t": "videos, organize messaging and manage ongoing",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 117.1
+     },
+     {
+      "t": "social media activity. You can stay heavily involv",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 144.6
+     },
+     {
+      "t": "let us handle more of the work.",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 172.1
+     }
+    ]
+   },
+   {
+    "y": 7381.7,
+    "h": 64.5,
+    "rect": {
+     "fill": "#fff",
+     "stroke": "#00287e",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#fa0",
+     "r": "14.55",
+     "cx": 449.3,
+     "cy": 34
+    },
+    "texts": [
+     {
+      "t": "Can you run my paid advertising?",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 26.7,
+      "y": 21.5
+     }
+    ]
+   },
+   {
+    "y": 7455,
+    "h": 64.5,
+    "rect": {
+     "fill": "#fff",
+     "stroke": "#00287e",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#fa0",
+     "r": "14.55",
+     "cx": 449.3,
+     "cy": 34
+    },
+    "texts": [
+     {
+      "t": "What do you look at before",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 26.7,
+      "y": 12
+     },
+     {
+      "t": "launching an advertising campaign?",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 26.7,
+      "y": 31.4
+     }
+    ]
+   },
+   {
+    "y": 7528.2,
+    "h": 64.5,
+    "rect": {
+     "fill": "#fff",
+     "stroke": "#00287e",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#fa0",
+     "r": "14.55",
+     "cx": 449.3,
+     "cy": 34.1
+    },
+    "texts": [
+     {
+      "t": "Should a new business start",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 26.7,
+      "y": 12.9
+     },
+     {
+      "t": "with awareness advertising?",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 25.7,
+      "y": 32.3
+     }
+    ]
+   },
+   {
+    "y": 7601.5,
+    "h": 64.5,
+    "rect": {
+     "fill": "#fff",
+     "stroke": "#00287e",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#fa0",
+     "r": "14.55",
+     "cx": 449.3,
+     "cy": 34
+    },
+    "texts": [
+     {
+      "t": "How quickly will advertising",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 26.7,
+      "y": 10.9
+     },
+     {
+      "t": "produce results?",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 26.7,
+      "y": 31.1
+     }
+    ]
+   },
+   {
+    "y": 7674.8,
+    "h": 64.5,
+    "rect": {
+     "fill": "#fff",
+     "stroke": "#00287e",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#fa0",
+     "r": "14.55",
+     "cx": 449.3,
+     "cy": 34
+    },
+    "texts": [
+     {
+      "t": "Is your management fee included",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 26.7,
+      "y": 10.1
+     },
+     {
+      "t": "in my advertising budget?",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 26.7,
+      "y": 27.8
+     }
+    ]
+   },
+   {
+    "y": 7748.1,
+    "h": 64.5,
+    "rect": {
+     "fill": "#fff",
+     "stroke": "#00287e",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": {
+     "fill": "#fa0",
+     "r": "14.55",
+     "cx": 449.3,
+     "cy": 34
+    },
+    "texts": [
+     {
+      "t": "What if I only have $500 for marketing?",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 26.7,
+      "y": 23.5
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "04-branding-cards",
+  "x": 483.1,
+  "w": 840,
+  "cards": [
+   {
+    "y": 8972.8,
+    "h": 193.9,
+    "rect": {
+     "fill": "#fff",
+     "stroke": "#cad9ea",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": null,
+    "texts": [
+     {
+      "t": "Can you create or refresh my brand?",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 24.1,
+      "y": 22.7
+     },
+     {
+      "t": "Yes. Branding can include your logo, colors, typog",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 89.6
+     },
+     {
+      "t": "professional vector files needed to reproduce your",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 117.1
+     },
+     {
+      "t": "websites, video, social media, print, signs and ad",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 144.6
+     }
+    ]
+   },
+   {
+    "y": 9177.9,
+    "h": 193.9,
+    "rect": {
+     "fill": "#fff",
+     "stroke": "#cad9ea",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": null,
+    "texts": [
+     {
+      "t": "Do you offer graphic design without a complete bra",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 24.1,
+      "y": 22.7
+     },
+     {
+      "t": "Absolutely. You can hire us for individual graphic",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 89.6
+     },
+     {
+      "t": "ongoing graphic-design retainer. This can include ",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 117.1
+     },
+     {
+      "t": "graphics, signage, marketing materials and other c",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 144.7
+     }
+    ]
+   },
+   {
+    "y": 9383.1,
+    "h": 221.4,
+    "rect": {
+     "fill": "#fff",
+     "stroke": "#cad9ea",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": null,
+    "texts": [
+     {
+      "t": "Why use one agency for all of it?",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 24.1,
+      "y": 22.7
+     },
+     {
+      "t": "Consistency. When the same creative direction runs",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 89.6
+     },
+     {
+      "t": "video, print and social media, everything looks li",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 117.1
+     },
+     {
+      "t": "created by unrelated vendors. One contact knows th",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 144.6
+     },
+     {
+      "t": "work.",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 172.1
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "05-print-cards",
+  "x": 723.9,
+  "w": 480.8,
+  "cards": [
+   {
+    "y": 10686.9,
+    "h": 221.4,
+    "rect": {
+     "fill": "#fff",
+     "stroke": "#dbe3ee",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": null,
+    "texts": [
+     {
+      "t": "What can you print?",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 24.1,
+      "y": 22.7
+     },
+     {
+      "t": "Business cards, flyers, catalogs, posters, signs,",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 89.6
+     },
+     {
+      "t": "letterheads, shirts, mugs, pens, mouse pads,",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 117.1
+     },
+     {
+      "t": "notebooks, promotional products, vehicle graphics",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 144.6
+     },
+     {
+      "t": "and many other branded materials.",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 172.1
+     }
+    ]
+   },
+   {
+    "y": 10919.5,
+    "h": 221.4,
+    "rect": {
+     "fill": "#fff",
+     "stroke": "#dbe3ee",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": null,
+    "texts": [
+     {
+      "t": "Can you help me find promotional products?",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 24.1,
+      "y": 22.7
+     },
+     {
+      "t": "Yes. We can research vendors, compare pricing,",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 89.6
+     },
+     {
+      "t": "prepare the artwork and manage production. You",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 117.1
+     },
+     {
+      "t": "don’t have to spend your day calling printers and",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 144.7
+     },
+     {
+      "t": "suppliers.",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 172.2
+     }
+    ]
+   },
+   {
+    "y": 11152.2,
+    "h": 294.9,
+    "rect": {
+     "fill": "#fff",
+     "stroke": "#dbe3ee",
+     "sw": null,
+     "rx": "10"
+    },
+    "marker": null,
+    "texts": [
+     {
+      "t": "Can you manufacture completely",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 24.1,
+      "y": 19.8
+     },
+     {
+      "t": "custom promotional products?",
+      "size": "17.28",
+      "fill": "#12161c",
+      "fam": "Arial-BoldMT",
+      "x": 24.1,
+      "y": 44
+     },
+     {
+      "t": "Yes. We have experience with international sourcin",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 107.9
+     },
+     {
+      "t": "and can work directly with manufacturers, includin",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 135.5
+     },
+     {
+      "t": "manufacturers in China. This opens the door to",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 163
+     },
+     {
+      "t": "completely custom promotional products, branded",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 190.5
+     },
+     {
+      "t": "merchandise, custom plush products, packaging and",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 218
+     },
+     {
+      "t": "products beyond standard promotional catalogs.",
+      "size": "16",
+      "fill": "#454c57",
+      "fam": "BeVietnamPro-SemiBold",
+      "x": 24.1,
+      "y": 245.5
+     }
+    ]
+   }
+  ]
+ }
+]

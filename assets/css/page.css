@@ -1,0 +1,258 @@
+/* ============================================================================
+   HIS PAGE.
+   ----------------------------------------------------------------------------
+   Nothing below draws his artwork. Every band of scenery is a slice of
+   QA part 3.svg — his own paths, gradients and type, with a viewBox over that
+   band and whatever misses it removed. This file only places those slices and
+   the Q&A cards, which have to open and close and so could not stay as art.
+
+   ONE UNIT. He drew the page 1441.5 across, so --u is one of his pixels on
+   screen: it grows with the window and stops at 1:1 once the window is as
+   wide as his page. Every number in this file is therefore read straight off
+   the artboard and needs no conversion.
+
+   His artboard is 2077.52 wide with the page inset at 320.3, so a band is
+   laid at --art and centred: the scenery either side of his page is still
+   there and bleeds off a wide window instead of stopping at a margin.
+   ========================================================================= */
+:root{
+  --u:min(0.0693702vw,1px);      /* 1 / 1441.5 */
+  --stage:calc(1441.5 * var(--u));
+  --art:calc(2077.52 * var(--u));
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body.body--qa{
+  margin:0;background:#00287e;color:#12161c;
+  font-family:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{display:block;max-width:100%}
+.vh{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;
+    overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+.skip-link{position:absolute;left:-9999px;top:0;z-index:99;background:#ffc72c;
+  color:#12161c;padding:.7em 1.2em;font-weight:800;text-decoration:none}
+.skip-link:focus{left:0}
+#road-pause{position:absolute;left:-9999px}
+
+/* ── Header ──────────────────────────────────────────────────────────────
+   His, off QA-Part3.svg. Every number here is a share of the 1441.5 page he
+   drew it on, so the bar holds its proportions at any width and caps at the
+   size he drew:
+
+     bar        1441.5 x 85.7, gradient right-to-left, black rule under it
+     moon       49.4 at 60, 21.8
+     wordmark   Black 29.01 at 267.4, baseline 42.5, the 19 in #6cd9ff
+     line       SemiBold 9.73 at 258.6, baseline 66.3
+     shield     99.5 at 661.7, 16.2 — hanging 30 below the bar
+     nav        Medium 15.84 at 817.2, baseline 47.5
+     button     143.9 x 39.3 at 1155.4, 23.6, #ffda00, corner 7.34         */
+.site-header--qa{
+  position:sticky;top:0;z-index:60;
+  background:none;border:0;
+}
+.site-header--qa .site-header__bar{
+  position:relative;
+  height:min(85.7px,5.945vw);
+  /* His own stops, read off linear-gradient-210. It is drawn right to left,
+     so they are reversed here: dark at both ends, his brightest blue a little
+     left of the middle. */
+  background:linear-gradient(90deg,#00287d 0%,#0459bd 45%,#0358bc 45.01%,
+                             #02459e 60%,#013887 74%,#002f7a 88%,#002d76 100%);
+  border-bottom:min(5px,.35vw) solid #000;
+  transition:background .45s ease,border-color .45s ease;
+}
+.hdr-moon{
+  position:absolute;left:min(60px,4.163vw);top:min(21.8px,1.512vw);
+  width:min(49.4px,3.427vw);height:min(49.4px,3.427vw);border-radius:50%;
+  background:radial-gradient(circle at 38% 34%,#3b3f46 0%,#23262b 46%,#111316 100%);
+  box-shadow:inset 0 0 0 min(3px,.21vw) rgba(255,255,255,.07);
+}
+.hdr-brand{
+  position:absolute;left:min(258.6px,17.94vw);top:0;
+  display:block;text-decoration:none;white-space:nowrap;
+}
+.hdr-brand__name{
+  display:block;
+  margin-left:min(8.8px,.61vw);            /* his wordmark starts at 267.4 */
+  font-family:var(--font-sign);font-weight:800;
+  font-size:min(29.01px,2.013vw);line-height:1;
+  color:#fff;letter-spacing:.005em;
+  padding-top:min(31.4px,2.178vw);         /* baseline 42.5 off the bar top */
+}
+.hdr-brand__name i{font-style:normal;color:#6cd9ff}
+.hdr-brand__line{
+  display:block;
+  margin-top:min(9.6px,.666vw);
+  font-family:var(--font-sign);font-weight:600;
+  font-size:min(9.73px,.675vw);line-height:1;
+  letter-spacing:.055em;text-transform:uppercase;color:#fff;
+}
+/* The shield is bigger than the bar and hangs below it — his does, and it is
+   the one thing on this header that breaks the rule. */
+.hdr-shield{
+  position:absolute;left:min(661.7px,45.9vw);top:min(16.2px,1.124vw);
+  width:min(99.5px,6.902vw);line-height:0;z-index:2;
+}
+.hdr-shield img{width:100%;height:auto;display:block;
+  filter:drop-shadow(0 min(3px,.21vw) min(6px,.42vw) rgba(0,0,0,.45))}
+.hdr-nav{
+  position:absolute;left:min(817.2px,56.69vw);top:min(33.5px,2.324vw);
+  display:flex;align-items:flex-start;
+  gap:min(41px,2.84vw);
+  font-family:var(--font-sign);font-weight:500;
+  font-size:min(15.84px,1.099vw);line-height:1;
+}
+.hdr-nav a{color:#fff;text-decoration:none;white-space:nowrap}
+.hdr-nav a:hover{color:#ffda00}
+.hdr-cta{
+  position:absolute;left:min(1155.4px,80.15vw);top:min(23.6px,1.637vw);
+  display:inline-flex;align-items:center;justify-content:center;
+  gap:min(9px,.62vw);
+  width:min(143.9px,9.983vw);height:min(39.3px,2.726vw);
+  border-radius:min(7.34px,.509vw);
+  background:#ffda00;color:#000;text-decoration:none;
+  font-family:var(--font-sign);font-weight:800;
+  font-size:min(12.1px,.839vw);line-height:1;
+  letter-spacing:.03em;text-transform:uppercase;
+}
+.hdr-cta svg{width:min(15px,1.04vw);height:auto;flex:none}
+.hdr-cta:hover{background:#ffe45a}
+.site-header--qa .nav-toggle{display:none}
+
+/* Night: the ground under the bar goes black for two sections, so the bar
+   goes with it and comes back at the desert. */
+.site-header--qa.is-night .site-header__bar{
+  background:#05070d;
+  border-bottom-color:#8a6a12;
+}
+.site-header--qa.is-night .hdr-nav a,
+.site-header--qa.is-night .hdr-brand__line{color:#d7dee8}
+
+
+/* ── A band of his scenery ───────────────────────────────────────────────
+   Full bleed, clipped, with his artboard centred inside it. The image keeps
+   its own aspect ratio, so a band is exactly as deep as he drew it.        */
+.page--qa{position:relative}
+.qa-band,.qa-zone{
+  position:relative;width:100vw;margin-left:calc(50% - 50vw);overflow:hidden;
+}
+.qa-art{
+  /* His artboard is WIDER than the band, so auto margins resolve to zero and
+     would pin it left. Centred off the middle instead, which is where his
+     page sits inside it. */
+  position:relative;left:50%;transform:translateX(-50%);
+  width:var(--art);max-width:none;height:auto;
+  pointer-events:none;user-select:none;
+}
+
+/* ── The strip his cards stand on ────────────────────────────────────────
+   His art at the depth he drew it, and never less. Open enough answers to
+   pass that depth and the band carries on with a repeat of its own last
+   inch, so his ground and his road continue instead of the scenery
+   stretching. The repeat is anchored ON the art's bottom edge, so the tile
+   that starts there is the one his art just finished with.                */
+.qa-zone{
+  min-height:calc(var(--zh) * var(--u));
+  padding-bottom:calc(8 * var(--u));
+}
+.qa-zone__art{
+  position:absolute;left:50%;top:0;transform:translateX(-50%);
+  width:var(--art);max-width:none;height:auto;z-index:0;
+  pointer-events:none;user-select:none;
+}
+.qa-zone--plain{
+  background:linear-gradient(180deg,#04203f 0%,#062f5e 100%);
+  min-height:0;padding-block:calc(70 * var(--u))
+}
+
+/* ── His cards ───────────────────────────────────────────────────────────
+   The one thing on this page that is not his artwork, because his drawn
+   cards cannot open. Every measurement is off the ones they replace: the
+   column where he puts them, 64.5 deep shut, his corner of 10, his rule,
+   his Arial Bold 17.28 question and his Be Vietnam Pro 16 answer on a 27.5
+   line. The markers are the discs he paints, 29.1 across, 36 in from the
+   right edge.                                                             */
+.qa-list{
+  position:relative;z-index:2;list-style:none;padding:0;
+  margin:0 0 0 calc(50% - var(--stage) / 2 + var(--zx) * var(--u));
+  width:calc(var(--zw) * var(--u));
+}
+.qa-item{margin:0 0 calc(var(--zgap) * var(--u))}
+.qa-item:last-child{margin-bottom:0}
+.qa-item h3{margin:0;font:inherit}
+.qa-q{
+  appearance:none;-webkit-appearance:none;
+  display:flex;align-items:center;justify-content:space-between;gap:calc(16 * var(--u));
+  width:100%;min-height:calc(64.5 * var(--u));
+  padding:calc(14 * var(--u)) calc(24.1 * var(--u));
+  background:var(--face,#fff);
+  border:calc(1 * var(--u)) solid var(--edge,#00287e);
+  border-radius:calc(10 * var(--u));
+  font-family:Arial,Helvetica,sans-serif;font-weight:700;
+  font-size:calc(17.28 * var(--u));line-height:1.4;
+  color:var(--ink,#12161c);text-align:left;cursor:pointer;
+}
+.qa-q:focus-visible{outline:calc(3 * var(--u)) solid #ffc72c;outline-offset:calc(2 * var(--u))}
+.qa-marker{
+  flex:none;position:relative;
+  width:calc(29.1 * var(--u));height:calc(29.1 * var(--u));border-radius:50%;
+  background:var(--mark,#00aa56);margin-right:calc(12 * var(--u));
+}
+.qa-marker::before,.qa-marker::after{
+  content:"";position:absolute;left:50%;top:50%;translate:-50% -50%;
+  background:var(--markink,#fff);border-radius:calc(1 * var(--u));
+}
+.qa-marker::before{width:calc(13 * var(--u));height:calc(2.6 * var(--u))}
+.qa-marker::after {width:calc(2.6 * var(--u));height:calc(13 * var(--u))}
+.qa-item.is-open .qa-marker::after{display:none}
+.qa-item.is-open .qa-q{
+  background:var(--open-face,var(--face,#fff));
+  border-bottom-left-radius:0;border-bottom-right-radius:0;
+  border-bottom-color:transparent;
+}
+.qa-panel{
+  background:var(--open-face,var(--face,#fff));
+  border:calc(1 * var(--u)) solid var(--edge,#00287e);border-top:0;
+  border-radius:0 0 calc(10 * var(--u)) calc(10 * var(--u));
+  padding:0 calc(24.1 * var(--u)) calc(24 * var(--u));
+}
+.qa-panel[hidden]{display:none}
+.qa-a p{
+  margin:0 0 calc(12 * var(--u));
+  font-family:"Be Vietnam Pro",Helvetica,Arial,sans-serif;font-weight:600;
+  font-size:calc(16 * var(--u));line-height:calc(27.5 * var(--u));
+  color:var(--sub,#454c57);
+}
+.qa-a p:last-child{margin-bottom:0}
+
+/* The six lanes he paints them in. */
+#qa-general    .qa-list{--face:#fff;--open-face:#deefff;--edge:#00287e;--ink:#12161c;--sub:#454c57;--mark:#00aa56}
+#qa-websites   .qa-list{--face:transparent;--open-face:#0f1c28;--edge:#cad9ea;--ink:#fff;--sub:#fff;--mark:#00aa56}
+#qa-video      .qa-list{--face:transparent;--open-face:transparent;--edge:#cad9ea;--ink:#fff;--sub:#fff;--mark:#00aa56}
+#qa-advertising .qa-list{--face:#fff;--open-face:#fff;--edge:#00287e;--ink:#12161c;--sub:#454c57;--mark:#ffaa00}
+#qa-branding   .qa-list{--face:#fff;--open-face:#fff;--edge:#cad9ea;--ink:#12161c;--sub:#454c57;--mark:#00aa56}
+#qa-print      .qa-list{--face:#fff;--open-face:#fff;--edge:#dbe3ee;--ink:#12161c;--sub:#454c57;--mark:#00aa56}
+#qa-working    .qa-list{--face:#fff;--open-face:#fff;--edge:#dbe3ee;--ink:#12161c;--sub:#454c57;--mark:#00aa56}
+
+/* ── His buttons, made clickable without being redrawn ───────────────────
+   Every box is his own, found on the artboard by its colour and size. The
+   link sits over the art he already painted; nothing here paints a button. */
+.qa-hot{
+  position:absolute;z-index:3;display:block;
+  left:calc(50% - var(--stage) / 2 + var(--hx) * var(--u));
+  top:calc(var(--hy) * var(--u));
+  width:calc(var(--hw) * var(--u));height:calc(var(--hh) * var(--u));
+  border-radius:calc(6 * var(--u));
+}
+.qa-hot:focus-visible{outline:calc(3 * var(--u)) solid #ffc72c;outline-offset:calc(2 * var(--u))}
+
+.qa-foot{
+  background:#04203f;color:#cbd8e8;padding:calc(48 * var(--u)) calc(40 * var(--u));
+  font-size:calc(15 * var(--u));
+}
+.qa-foot ul{list-style:none;display:flex;flex-wrap:wrap;gap:calc(22 * var(--u));
+  padding:0;margin:calc(14 * var(--u)) 0 0}
+.qa-foot a{color:#cbd8e8}
