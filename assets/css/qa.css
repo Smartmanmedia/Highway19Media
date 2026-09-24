@@ -1,0 +1,156 @@
+/* Highway 19 Media — Q&A. His artboards, placed. Live cards only. */
+@font-face{font-family:'Be Vietnam Pro';src:url(../fonts/bvp-300.woff2) format('woff2');font-weight:300;font-display:block}
+@font-face{font-family:'Be Vietnam Pro';src:url(../fonts/bvp-500.woff2) format('woff2');font-weight:500;font-display:block}
+@font-face{font-family:'Be Vietnam Pro';src:url(../fonts/bvp-600.woff2) format('woff2');font-weight:600;font-display:block}
+@font-face{font-family:'Be Vietnam Pro';src:url(../fonts/bvp-800.woff2) format('woff2');font-weight:800;font-display:block}
+@font-face{font-family:'Be Vietnam Pro';src:url(../fonts/bvp-900.woff2) format('woff2');font-weight:900;font-display:block}
+@font-face{font-family:'Arimo';src:url(../fonts/arimo-700.woff2) format('woff2');font-weight:700;font-display:block}
+/* his Illustrator PostScript names, so his own <text> resolves */
+@font-face{font-family:'BeVietnamPro-Light';src:url(../fonts/bvp-300.woff2) format('woff2');font-display:block}
+@font-face{font-family:'BeVietnamPro-Medium';src:url(../fonts/bvp-500.woff2) format('woff2');font-display:block}
+@font-face{font-family:'BeVietnamPro-SemiBold';src:url(../fonts/bvp-600.woff2) format('woff2');font-display:block}
+@font-face{font-family:'BeVietnamPro-ExtraBold';src:url(../fonts/bvp-800.woff2) format('woff2');font-display:block}
+@font-face{font-family:'BeVietnamPro-Black';src:url(../fonts/bvp-900.woff2) format('woff2');font-display:block}
+@font-face{font-family:'Arial-BoldMT';src:local('Arial Bold'),local('Arial-BoldMT'),url(../fonts/arimo-700.woff2) format('woff2');font-display:block}
+
+*{box-sizing:border-box}
+html{background:#00287e}
+body{margin:0;background:#00287e;-webkit-font-smoothing:antialiased}
+#page{overflow:hidden}
+
+.sec{position:relative;width:100%;height:var(--h);overflow:hidden}
+.art{position:absolute;top:0;left:50%;width:2128px;height:var(--h);margin-left:-1064px}
+.art>svg{display:block;width:2128px;height:var(--h)}
+
+.col{position:absolute;top:var(--y);left:50%;width:var(--w);
+     margin-left:calc(-1064px + var(--x))}
+
+.qa{background:var(--fill);border-radius:10px;margin-bottom:var(--gap);
+    border:1px solid var(--stroke);overflow:hidden;
+    transition:background-color .28s ease}
+.qa[data-nostroke]{border-color:transparent}
+.qa.is-open{background:var(--fill-open)}
+
+.qa-q{display:flex;align-items:center;width:100%;min-height:var(--shut);
+      margin:0;background:none;border:0;cursor:pointer;text-align:left;
+      padding:0 var(--qpr) 0 var(--pad);position:relative;
+      font-family:var(--qfam);font-weight:700;font-size:var(--qsize);
+      line-height:var(--qlead);color:var(--qfill);letter-spacing:0}
+.qa-q::-moz-focus-inner{border:0}
+.qa-q:focus-visible{outline:2px solid #ffce00;outline-offset:-3px}
+
+.qa.is-open .qa-q{min-height:0;align-items:flex-start;
+      padding-top:var(--qtop);padding-bottom:0}
+.qa-m{position:absolute;right:var(--minset);top:calc(var(--shut)/2);
+      width:var(--mw);height:var(--mw);margin-top:calc(var(--mw)/-2);
+      border-radius:50%;background:var(--mfill);border:var(--msw) solid var(--mstroke);
+      pointer-events:none}
+.qa-m::before,.qa-m::after{content:'';position:absolute;left:50%;top:50%;
+      background:var(--gcol);transition:transform .28s ease,opacity .28s ease}
+.qa-m::before{width:var(--gw);height:var(--gsw);margin:calc(var(--gsw)/-2) 0 0 calc(var(--gw)/-2)}
+.qa-m::after{width:var(--gsw);height:var(--gw);margin:calc(var(--gw)/-2) 0 0 calc(var(--gsw)/-2)}
+.qa.is-open .qa-m::after{transform:scaleY(0);opacity:0}
+
+.qa-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+.qa.is-open .qa-a{grid-template-rows:1fr}
+.qa-ai{overflow:hidden}
+.qa-a p{margin:0;padding:0 var(--pad);
+    font-family:var(--bfam);font-weight:var(--bwgt);font-size:var(--bsize);
+    line-height:var(--blead);color:var(--bfill)}
+.qa.is-open .qa-m{top:calc(var(--qtop) + var(--qlead)/2)}
+.qa-a p:first-child{padding-top:var(--atop)}
+.qa-a p:last-child{padding-bottom:var(--abot)}
+.qa-a p+p{padding-top:var(--blead)}
+
+.sec[data-flex]{height:calc(var(--h) + var(--flex,0px));transition:height .3s ease}
+.art-a{position:absolute;top:0;left:50%;width:2128px;margin-left:-1064px;overflow:hidden}
+.art-b{position:absolute;left:50%;width:2128px;margin-left:-1064px;
+       top:calc(var(--seam) + var(--flex,0px));transition:top .3s ease}
+.art-a>svg,.art-b>svg{display:block;width:2128px}
+.hot{position:absolute;display:block;border-radius:6px}
+.hot:focus-visible{outline:2px solid #ffce00;outline-offset:2px}
+
+.col--02{
+ --x:666.2px; --y:732.31px; --w:839.99px; --gap:9.63px; --shut:64.47px;
+ --pad:24.19px; --qpr:53.29px;
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:17.28px; --qlead:19px; --qfill:#12161c;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:600; --bsize:16px;
+ --blead:27.52px; --bfill:#454c57;
+ --qtop:22.7px; --atop:47.89px; --abot:43.42px;
+ --fill:#fff; --fill-open:#deefff; --stroke:#00287e;
+ --mw:29.1px; --minset:33.65px;
+ --mfill:#00aa56; --mstroke:transparent;
+ --msw:0px; --gcol:#fff; --gw:11.55px; --gsw:3px;
+}
+.col--03{
+ --x:825.4px; --y:755.33px; --w:809.79px; --gap:9.63px; --shut:64.47px;
+ --pad:24.19px; --qpr:53.29px;
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:17.28px; --qlead:19px; --qfill:#fff;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:300; --bsize:16px;
+ --blead:27.52px; --bfill:#fff;
+ --qtop:19.79px; --atop:20.83px; --abot:36.24px;
+ --fill:rgb(0, 0, 0); --fill-open:#0f1c28; --stroke:#cad9ea;
+ --mw:29.1px; --minset:36.05px;
+ --mfill:#00aa56; --mstroke:transparent;
+ --msw:0px; --gcol:#fff; --gw:11.55px; --gsw:3px;
+}
+.col--04{
+ --x:686.5px; --y:688.28px; --w:833.5px; --gap:18.33px; --shut:64.47px;
+ --pad:35.29px; --qpr:57.23px;
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:17.28px; --qlead:19px; --qfill:#fff;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:300; --bsize:16px;
+ --blead:27.51px; --bfill:#fff;
+ --qtop:22.61px; --atop:47.89px; --abot:19.99px;
+ --fill:none; --fill-open:none; --stroke:#cad9ea;
+ --mw:21.95px; --minset:42.2px;
+ --mfill:transparent; --mstroke:transparent;
+ --msw:0px; --gcol:#fff; --gw:11.55px; --gsw:3px;
+}
+.col--05{
+ --x:1030.6px; --y:692.36px; --w:647.4px; --gap:8.81px; --shut:64.47px;
+ --pad:24.19px; --qpr:53.29px;
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:17.28px; --qlead:19px; --qfill:#12161c;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:600; --bsize:16px;
+ --blead:27.52px; --bfill:#454c57;
+ --qtop:22.7px; --atop:47.89px; --abot:32.31px;
+ --fill:#fff; --fill-open:#fff; --stroke:#00287e;
+ --mw:29.1px; --minset:36.05px;
+ --mfill:#ffaa00; --mstroke:transparent;
+ --msw:0px; --gcol:#fff; --gw:11.55px; --gsw:3px;
+}
+.col--06{
+ --x:949.7px; --y:622.51px; --w:840.3px; --gap:13.57px; --shut:64.47px;
+ --pad:24.19px; --qpr:57.79px;
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:17.28px; --qlead:19px; --qfill:#12161c;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:300; --bsize:16px;
+ --blead:27.52px; --bfill:#454c57;
+ --qtop:22.7px; --atop:28.69px; --abot:50.52px;
+ --fill:#fff; --fill-open:#fff; --stroke:#cad9ea;
+ --mw:33.6px; --minset:38.4px;
+ --mfill:#004abd; --mstroke:#fff;
+ --msw:2px; --gcol:#fff; --gw:13.59px; --gsw:2px;
+}
+.col--07{
+ --x:1075.19px; --y:454.98px; --w:702.01px; --gap:13.07px; --shut:65.97px;
+ --pad:24.19px; --qpr:46.14px;
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:17.28px; --qlead:19px; --qfill:#12161c;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:600; --bsize:16px;
+ --blead:27.51px; --bfill:#454c57;
+ --qtop:22.71px; --atop:47.89px; --abot:31.3px;
+ --fill:#fff; --fill-open:#fff; --stroke:#dbe3ee;
+ --mw:21.95px; --minset:36.05px;
+ --mfill:transparent; --mstroke:transparent;
+ --msw:0px; --gcol:#12161c; --gw:11.55px; --gsw:3px;
+}
+.col--08{
+ --x:640px; --y:481.94px; --w:840px; --gap:11.19px; --shut:64.5px;
+ --pad:24.19px; --qpr:66.59px;
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:17.28px; --qlead:19px; --qfill:#fff;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:600; --bsize:16px;
+ --blead:27.51px; --bfill:#fff;
+ --qtop:22.71px; --atop:47.89px; --abot:31.31px;
+ --fill:none; --fill-open:none; --stroke:#fff;
+ --mw:42.4px; --minset:37.6px;
+ --mfill:#059236; --mstroke:transparent;
+ --msw:0px; --gcol:#fff; --gw:11.55px; --gsw:3px;
+}
