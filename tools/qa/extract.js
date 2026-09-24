@@ -23,6 +23,12 @@ for(const [k,H] of SEC){
     const abs=el=>{ let bb; try{bb=el.getBBox()}catch(e){return null}
       const c=el.getCTM(); if(!c) return null;
       return {x:c.a*bb.x+c.c*bb.y+c.e, y:c.b*bb.x+c.d*bb.y+c.f, w:bb.width*c.a, h:bb.height*c.d}; };
+    /* some of his groups come through flipped, so abs() can hand back a
+       negative width or height; work from a box that is always the right
+       way up */
+    const nbox=el=>{ const a2=abs(el); if(!a2) return null;
+      return {x:Math.min(a2.x,a2.x+a2.w), y:Math.min(a2.y,a2.y+a2.h),
+              w:Math.abs(a2.w), h:Math.abs(a2.h)}; };
     const fam=el=>(el.getAttribute('font-family')||'').split(',')[0];
 
     /* externalise the embedded rasters */
@@ -128,18 +134,56 @@ for(const [k,H] of SEC){
     const plates=[...svg.querySelectorAll('rect')].filter(el=>{
       const rx=parseFloat(el.getAttribute('rx')||0);
       if(rx<15||rx>22) return false;
-      const bb=el.getBBox(); return bb.width>300&&bb.height>120;
+      /* the shadow he throws off a rounded board is a rounded board too;
+         the face is the solid one */
+      for(let a=el; a && a!==svg; a=a.parentNode)
+        if(parseFloat(a.getAttribute('opacity')||'1')<0.7) return false;
+      const bb=el.getBBox(); if(bb.width<=300) return false;
+      if(bb.height>120) return true;
+      /* a sign he drew across a seam arrives as a short clipped strip at the
+         top or the foot of the artboard; that strip is a sign too */
+      const a2=nbox(el); if(!a2) return false;
+      return bb.height>26 && (a2.y<26 || a2.y+a2.h>H-26);
     });
+    const faces=[];
     if(plates.length){
       // the plate that carries his green face wins; else the first
-      const face=plates.find(el=>/^#(1c9022|006802|007a29)$/i.test(el.getAttribute('fill')||''))||plates[0];
+      /* the face he painted, not the panel behind it: his green if there is
+         one, else the biggest plate that actually carries a fill */
+      const area=el=>{const b=el.getBBox();return b.width*b.height;};
+      const byArea=[...plates].sort((a,b)=>area(b)-area(a));
+      const first=plates.find(el=>/^#(1c9022|006802|007a29)$/i.test(el.getAttribute('fill')||''))
+              || byArea.find(el=>el.getAttribute('fill'))
+              || byArea[0];
+      faces.push(first);
+      /* plus any seam strip that is a different sign from the one above */
+      byArea.forEach(el=>{
+        if(faces.indexOf(el)>=0) return;
+        const a2=nbox(el); if(!a2) return;
+        if(!(a2.y<26 || a2.y+a2.h>H-26)) return;
+        if(faces.some(f=>{const b3=nbox(f); return b3 &&
+          Math.min(b3.y+b3.h,a2.y+a2.h)-Math.max(b3.y,a2.y) > -2; })) return;
+        faces.push(el);
+      });
+    }
+    for(const face of faces){
       let g=face.parentNode;
       while(g&&g.tagName==='g'&&g.parentNode&&g.parentNode.tagName==='g'&&g.children.length<3) g=g.parentNode;
-      const plate=g&&g.tagName==='g'?g:face;
+      let plate=g&&g.tagName==='g'?g:face;
+      /* if that group is only the face itself, its bolts and hangers are one
+         level further out; a board that lifts off its own bolts reads broken */
+      const fb=nbox(face), pb0=nbox(plate);
+      if(fb&&pb0&&Math.abs(pb0.w-fb.w)<fb.w*0.06&&Math.abs(pb0.h-fb.h)<fb.h*0.06&&
+         plate.parentNode&&plate.parentNode!==svg&&plate.parentNode.tagName==='g'&&
+         plate.parentNode.parentNode&&plate.parentNode.parentNode!==svg){
+        const up=nbox(plate.parentNode);
+        /* only if that level is still a sign, not half his artboard */
+        if(up&&up.w<fb.w*2.6&&up.h<fb.h*2.2) plate=plate.parentNode;
+      }
       /* the whole assembly moves together - the plate, its bolts, the truss it
          hangs off and the shadow it throws. A plate that floats off its own
          gantry reads as broken, not as parallax. */
-      const pa=abs(plate);
+      const pa=nbox(plate);
       const host2=plate.parentNode;
       const wrap=doc.createElementNS('http://www.w3.org/2000/svg','g');
       wrap.setAttribute('data-sign','1');
@@ -148,11 +192,29 @@ for(const [k,H] of SEC){
          however much they overlap it - a stretch of his road lifted onto the
          sign layer paints over the traffic driving along it */
       const NOTSIGN=/^(\d\d_)?(Stright|Curve|ocean|Grass|Mountains|Forest|Cloud)/i;
+      /* his sign's own cast shadow stays on the ground, and so does anything
+         else he drew see-through in that band - his container ship among them.
+         The plate riding over a shadow that stays put is what makes it read
+         as the nearest thing on the page. */
+      const seeThrough=e=>{
+        if(parseFloat(e.getAttribute('opacity')||'1')<0.7) return true;
+        const shapes=[...e.querySelectorAll(
+          'path,rect,polygon,circle,ellipse,line,polyline,image,text')];
+        if(!shapes.length) return false;
+        /* see-through only when everything it actually paints is */
+        return shapes.every(q=>{
+          let o=1;
+          for(let a=q; a && a!==e.parentNode; a=a.parentNode)
+            o*=parseFloat(a.getAttribute('opacity')||'1');
+          return o<0.7;
+        });
+      };
       const band=[...host2.children].filter(e=>{
         if(e===wrap) return false;
+        if(e!==plate&&seeThrough(e)) return false;
         if(NOTSIGN.test(e.id||'')) return false;
         if(e.querySelector&&[...e.querySelectorAll('[id]')].some(q=>NOTSIGN.test(q.id))) return false;
-        const b2=abs(e); if(!b2||!pa) return false;
+        const b2=nbox(e); if(!b2||!pa) return false;
         /* only what hangs with the sign: no taller than the plate and inside
            its band. A road that merely crosses the band is not part of it. */
         if(b2.w>pa.w*1.8) return false;
@@ -162,8 +224,28 @@ for(const [k,H] of SEC){
         return ov>Math.min(pa.h,b2.h)*0.45;
       });
       band.forEach(e=>wrap.appendChild(e));
+      /* his bolts and hangers sit a few groups deeper than the plate, so the
+         sibling sweep misses them and the board lifts off its own fixings */
+      if(pa){
+        const hang=[];
+        const inWrap=n=>{ for(let a=n; a; a=a.parentNode) if(a===wrap) return true; return false; };
+        svg.querySelectorAll('g,rect,path,polygon').forEach(e=>{
+          if(inWrap(e)||e===wrap||e.contains(wrap)) return;
+          if(NOTSIGN.test(e.id||'')) return;
+          if(hang.some(h=>h.contains(e))) return;
+          const b2=nbox(e); if(!b2) return;
+          if(b2.w<3||b2.h<3) return;
+          if(b2.w>pa.w*0.15||b2.h>pa.h*0.25) return;
+          if(b2.x<pa.x-15||b2.x+b2.w>pa.x+pa.w+15) return;
+          if(b2.y<pa.y-26||b2.y+b2.h>pa.y+pa.h+46) return;
+          if(seeThrough(e)) return;
+          hang.push(e);
+        });
+        hang.forEach(e=>wrap.appendChild(e));
+      }
       if(!wrap.children.length) wrap.appendChild(plate);
-      const a=abs(face); if(a) signBox={x:+a.x.toFixed(1),y:+a.y.toFixed(1),w:+Math.abs(a.w).toFixed(1),h:+Math.abs(a.h).toFixed(1)};
+      const a=abs(face);
+      if(a&&!signBox) signBox={x:+a.x.toFixed(1),y:+a.y.toFixed(1),w:+Math.abs(a.w).toFixed(1),h:+Math.abs(a.h).toFixed(1)};
     }
     /* every remaining label, so link hotspots can be dropped on his buttons */
     const labels=[...svg.querySelectorAll('text')].filter(t=>!kill.has(t)).map(t=>{

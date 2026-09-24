@@ -131,6 +131,10 @@
   ]
  },
  "01": {
-  "clipTop": 97
+  "clipTop": 97,
+  "signTravel": 120
+ },
+ "02": {
+  "signTravel": 190
  }
 }

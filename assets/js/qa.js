@@ -64,16 +64,49 @@
     cols.forEach(function (c) { if (c.__fit) c.__fit(); });
   });
 
-  /* ---------- his signs, on parallax ---------- */
+  /* ---------- his signs, on parallax ----------
+     Driven by where the sign itself is on screen, not by how far through his
+     section we are: he drew one sign across the 05/06 seam, and two halves
+     each riding their own section's progress tore it in half. */
   var signs = [].slice.call(document.querySelectorAll('[data-sign]'));
   signs.forEach(function (g) {
     g.style.willChange = 'transform';
     g.__sec = g.closest('.sec');
-    g.__amt = parseFloat(g.getAttribute('data-sign-travel') || '190');
-    try { var bb = g.getBBox(); g.__cx = (bb.x + bb.width / 2).toFixed(1);
-          g.__cy = (bb.y + bb.height / 2).toFixed(1); }
-    catch (e) { g.__cx = 1064; g.__cy = 0; }
+    g.__amt = parseFloat(g.getAttribute('data-sign-travel') || '300');
+    try {
+      var bb = g.getBBox();
+      g.__cx = (bb.x + bb.width / 2).toFixed(1);
+      g.__cy = (bb.y + bb.height / 2).toFixed(1);
+      var sr = g.__sec.getBoundingClientRect(), gr = g.getBoundingClientRect();
+      /* its middle, as a fraction of his section, so it survives any resize */
+      g.__frac = sr.height ? ((gr.top - sr.top) + gr.height / 2) / sr.height : 0.5;
+    } catch (e) { g.__cx = 1064; g.__cy = 0; g.__frac = 0.5; }
+    var sr2 = g.__sec.getBoundingClientRect();
+    g.__secTop = sr2.top + scrollY;
+    g.__secH = sr2.height || 1;
+    g.__page = g.__secTop + g.__frac * g.__secH;     /* his sign on the page */
   });
+
+  /* a sign he drew across a seam arrives as two halves in two sections; they
+     share one anchor so they move as the single sign he drew */
+  signs.slice().sort(function (a, b) { return a.__page - b.__page; })
+    .forEach(function (g, i, list) {
+      var prev = list[i - 1];
+      if (!prev || g.__page - prev.__page > 220) return;
+      var mid = (prev.__anchor || prev.__page + g.__page) / (prev.__anchor ? 1 : 2);
+      prev.__anchor = mid; g.__anchor = mid;
+      var cx = (parseFloat(prev.__cx) + parseFloat(g.__cx)) / 2;
+      [prev, g].forEach(function (h) {
+        h.__frac = (h.__anchor - h.__secTop) / h.__secH;
+        /* both halves swell about the one point, or the scale slides them
+           apart and his sign shows a step where he drew none */
+        var a = h.__sec.querySelector('.art, .art-a');
+        var u = a ? a.getBoundingClientRect().width / 3088 : 1;
+        h.__cx = cx.toFixed(1);
+        h.__cy = (u ? (h.__anchor - h.__secTop) / u : 0).toFixed(1);
+      });
+      g.__leader = prev.__leader || prev;
+    });
 
   var queued = false;
   function frame() {
@@ -81,12 +114,20 @@
     var vh = innerHeight;
     for (var i = 0; i < signs.length; i++) {
       var g = signs[i], r = g.__sec.getBoundingClientRect();
-      if (r.bottom < -400 || r.top > vh + 400) continue;
-      var p = (vh - r.top) / (vh + r.height);          /* 0 entering → 1 leaving */
+      if (r.bottom < -700 || r.top > vh + 700) continue;
+      var lead = g.__leader;
+      var p;
+      if (lead && lead.__p != null) { p = lead.__p; }
+      else {
+        var mid = r.top + r.height * g.__frac;      /* the sign's own middle */
+        p = (vh - mid) / vh;                        /* 1 at the top, 0 at the foot */
+        if (p < -0.4) p = -0.4; else if (p > 1.4) p = 1.4;
+        g.__p = p;
+      }
       /* the sign rides well above the ground it is bolted over, and leans in
          a little as it passes, so it reads as the nearest thing on the page */
-      var off = (p - 0.5) * g.__amt;
-      var sc = 1 + (0.5 - Math.abs(p - 0.5)) * 0.055;
+      var off = (0.5 - p) * g.__amt;   /* near things overtake, they don't lag */
+      var sc = 1 + (0.5 - Math.abs(p - 0.5)) * 0.10;
       g.setAttribute('transform',
         'translate(0 ' + off.toFixed(2) + ') translate(' + g.__cx + ' ' + g.__cy +
         ') scale(' + sc.toFixed(4) + ') translate(' + (-g.__cx) + ' ' + (-g.__cy) + ')');

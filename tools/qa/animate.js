@@ -208,6 +208,13 @@ for(const k of KS){
        one is lifted to the root with its ancestors' matrix baked in, so it
        lands exactly where he drew it - and anything under a clip or a filter
        is left alone rather than risked. */
+    /* how far his sign rides against the ground. A board that hangs on its
+       own posts can float; the hero's gantry is bolted across his ramp, so
+       that one moves only a little or it tears off the road. */
+    if(cfg.signTravel!=null)
+      svg.querySelectorAll('[data-sign]').forEach(g=>
+        g.setAttribute('data-sign-travel',String(cfg.signTravel)));
+
     let raisedOut=''; const wanted=[];
     const cands=[...svg.children,...svg.querySelectorAll('[data-sign],[id]')];
     cands.forEach(e=>{
