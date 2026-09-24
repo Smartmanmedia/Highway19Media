@@ -85,6 +85,19 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
 .art-b{position:absolute;left:50%;width:var(--wide);margin-left:calc(0px - var(--wide)/2);
        top:calc(var(--seam) + var(--flex,0px));transition:top .3s ease;z-index:1}
 .art-a>svg,.art-b>svg{display:block;width:var(--wide)}
+/* his traffic, his ship, his planes - his own artwork, set moving */
+.run{transform-box:view-box;will-change:transform}
+.run[data-axis="x"]{animation:h19x var(--dur) linear var(--dly) infinite}
+.run[data-axis="y"]{animation:h19y var(--dur) linear var(--dly) infinite}
+.run[data-axis="xy"]{animation:h19xy var(--dur) linear var(--dly) infinite}
+.run--fade{animation-name:h19xy,h19fade;animation-duration:var(--dur),var(--dur)}
+@keyframes h19x{from{transform:translateX(var(--a))}to{transform:translateX(var(--b))}}
+@keyframes h19y{from{transform:translateY(var(--a))}to{transform:translateY(var(--b))}}
+@keyframes h19xy{from{transform:translate(var(--ax),var(--ay))}
+                 to{transform:translate(var(--bx),var(--by))}}
+@keyframes h19fade{0%{opacity:0}8%{opacity:1}62%{opacity:1}88%{opacity:0}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.run{animation:none!important}}
+
 .hot{position:absolute;z-index:3;display:block;border-radius:6px}
 .hot:focus-visible{outline:2px solid #ffce00;outline-offset:2px}
 
