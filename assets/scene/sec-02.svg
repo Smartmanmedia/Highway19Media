@@ -149,8 +149,34 @@
       <rect x="462.33" y="28.97" width="3.53" height="30.96" stroke="#000" stroke-miterlimit="10"/>
     </g>
   </g>
-  
-  
+  <g id="Stright-2" data-name="Stright">
+    <rect x="417.69" y="204.88" width="95.06" height="324.7" stroke="#000" stroke-miterlimit="10"/>
+    <rect x="503.59" y="204.88" width="3.29" height="324.7" stroke="#000" stroke-miterlimit="10"/>
+    <rect x="423.34" y="204.88" width="3.3" height="324.7" stroke="#000" stroke-miterlimit="10"/>
+    <g>
+      <rect x="464" y="488.72" width="3.53" height="28.26" stroke="#000" stroke-miterlimit="10"/>
+      <rect x="464" y="441.41" width="3.53" height="28.26" stroke="#000" stroke-miterlimit="10"/>
+      <rect x="464" y="394.1" width="3.53" height="28.26" stroke="#000" stroke-miterlimit="10"/>
+      <rect x="464" y="346.8" width="3.53" height="28.26" stroke="#000" stroke-miterlimit="10"/>
+      <rect x="464" y="299.49" width="3.53" height="28.27" stroke="#000" stroke-miterlimit="10"/>
+      <rect x="464" y="252.19" width="3.53" height="28.26" stroke="#000" stroke-miterlimit="10"/>
+      <rect x="464" y="204.88" width="3.53" height="28.26" stroke="#000" stroke-miterlimit="10"/>
+    </g>
+  </g>
+  <g id="Stright-3" data-name="Stright">
+    <rect x="412.89" y="206.48" width="95.06" height="324.7" fill="#575757"/>
+    <rect x="498.79" y="206.48" width="3.29" height="324.7" fill="#fff"/>
+    <rect x="418.54" y="206.48" width="3.3" height="324.7" fill="#fff"/>
+    <g>
+      <rect x="459.2" y="490.32" width="3.53" height="28.26" fill="#fff"/>
+      <rect x="459.2" y="443.01" width="3.53" height="28.26" fill="#fff"/>
+      <rect x="459.2" y="395.7" width="3.53" height="28.26" fill="#fff"/>
+      <rect x="459.2" y="348.4" width="3.53" height="28.26" fill="#fff"/>
+      <rect x="459.2" y="301.09" width="3.53" height="28.27" fill="#fff"/>
+      <rect x="459.2" y="253.79" width="3.53" height="28.26" fill="#fff"/>
+      <rect x="459.2" y="206.48" width="3.53" height="28.26" fill="#fff"/>
+    </g>
+  </g>
   <g id="Curve-2" data-name="Curve">
     <g>
       <path d="M664.87-217.2c-73.71,2.14-133.78,30.15-179.28,77.28-44.88,46.48-71.58,109.47-71.58,174.1h95.02c0-38.14,17.37-76.95,45.43-107.04,26.53-28.44,62.07-46.59,110.41-49.23v-95.1Z" fill="#575757"/>
@@ -1756,33 +1782,7 @@
   
   
   
-<g data-fleetslot="1"/><g data-sign="1"><g id="Stright-2" data-name="Stright">
-    <rect x="417.69" y="204.88" width="95.06" height="324.7" stroke="#000" stroke-miterlimit="10"/>
-    <rect x="503.59" y="204.88" width="3.29" height="324.7" stroke="#000" stroke-miterlimit="10"/>
-    <rect x="423.34" y="204.88" width="3.3" height="324.7" stroke="#000" stroke-miterlimit="10"/>
-    <g>
-      <rect x="464" y="488.72" width="3.53" height="28.26" stroke="#000" stroke-miterlimit="10"/>
-      <rect x="464" y="441.41" width="3.53" height="28.26" stroke="#000" stroke-miterlimit="10"/>
-      <rect x="464" y="394.1" width="3.53" height="28.26" stroke="#000" stroke-miterlimit="10"/>
-      <rect x="464" y="346.8" width="3.53" height="28.26" stroke="#000" stroke-miterlimit="10"/>
-      <rect x="464" y="299.49" width="3.53" height="28.27" stroke="#000" stroke-miterlimit="10"/>
-      <rect x="464" y="252.19" width="3.53" height="28.26" stroke="#000" stroke-miterlimit="10"/>
-      <rect x="464" y="204.88" width="3.53" height="28.26" stroke="#000" stroke-miterlimit="10"/>
-    </g>
-  </g><g id="Stright-3" data-name="Stright">
-    <rect x="412.89" y="206.48" width="95.06" height="324.7" fill="#575757"/>
-    <rect x="498.79" y="206.48" width="3.29" height="324.7" fill="#fff"/>
-    <rect x="418.54" y="206.48" width="3.3" height="324.7" fill="#fff"/>
-    <g>
-      <rect x="459.2" y="490.32" width="3.53" height="28.26" fill="#fff"/>
-      <rect x="459.2" y="443.01" width="3.53" height="28.26" fill="#fff"/>
-      <rect x="459.2" y="395.7" width="3.53" height="28.26" fill="#fff"/>
-      <rect x="459.2" y="348.4" width="3.53" height="28.26" fill="#fff"/>
-      <rect x="459.2" y="301.09" width="3.53" height="28.27" fill="#fff"/>
-      <rect x="459.2" y="253.79" width="3.53" height="28.26" fill="#fff"/>
-      <rect x="459.2" y="206.48" width="3.53" height="28.26" fill="#fff"/>
-    </g>
-  </g><g>
+<g data-fleetslot="1"/><g data-sign="1"><g>
     <rect x="399.59" y="189.07" width="1213.59" height="229.66" rx="18.49" ry="18.49" opacity=".37"/>
     <g>
       <g>

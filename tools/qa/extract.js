@@ -144,11 +144,18 @@ for(const [k,H] of SEC){
       const wrap=doc.createElementNS('http://www.w3.org/2000/svg','g');
       wrap.setAttribute('data-sign','1');
       host2.insertBefore(wrap,plate);
+      /* his road, his sea, his ground and his sky never travel with a sign,
+         however much they overlap it - a stretch of his road lifted onto the
+         sign layer paints over the traffic driving along it */
+      const NOTSIGN=/^(\d\d_)?(Stright|Curve|ocean|Grass|Mountains|Forest|Cloud)/i;
       const band=[...host2.children].filter(e=>{
         if(e===wrap) return false;
+        if(NOTSIGN.test(e.id||'')) return false;
+        if(e.querySelector&&[...e.querySelectorAll('[id]')].some(q=>NOTSIGN.test(q.id))) return false;
         const b2=abs(e); if(!b2||!pa) return false;
         /* only what hangs with the sign: no taller than the plate and inside
            its band. A road that merely crosses the band is not part of it. */
+        if(b2.w>pa.w*1.8) return false;
         if(b2.h>pa.h*1.1) return false;
         if(b2.y<pa.y-pa.h*0.6||b2.y+b2.h>pa.y+pa.h*1.7) return false;
         const ov=Math.min(pa.y+pa.h,b2.y+b2.h)-Math.max(pa.y,b2.y);

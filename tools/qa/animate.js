@@ -210,25 +210,45 @@ for(const k of KS){
                  : /^(Mountains|Forest|Grass_BG)/i.test(e.id||'') ? 1
                  : /^Cloud/i.test(e.id||'') ? 2 : -1;
       if(rank<0) return;
+      /* his rock lines sit inside a clipped group, which used to stop them
+         being raised at all - so the cars drove over the rocks. The clip is
+         carried up with them instead. */
+      let clipAnc=null;
       for(let a=e.parentNode; a && a!==svg; a=a.parentNode){
-        if(a.getAttribute('clip-path')||a.getAttribute('mask')||
-           a.getAttribute('filter')||a.getAttribute('opacity')) return;
+        if(a.getAttribute('mask')||a.getAttribute('filter')||
+           a.getAttribute('opacity')) return;
+        if(a.getAttribute('clip-path')){ if(clipAnc) return; clipAnc=a; }
         if(wanted.some(w=>w.el===a)) return;      /* an ancestor already goes */
       }
-      wanted.push({el:e,rank});
+      wanted.push({el:e,rank,clipAnc});
     });
     wanted.sort((a,b)=>a.rank-b.rank);
     raisedOut=wanted.length+' raised';
+    const mstr=m=>'matrix('+[m.a,m.b,m.c,m.d,m.e,m.f].map(v=>(+v).toFixed(5)).join(',')+')';
+    const wraps=new Map();
     wanted.forEach(w=>{
       const par=w.el.parentNode;
-      if(!par||par===svg){ if(par) svg.appendChild(w.el); return; }
+      if(!par) return;
+      if(par===svg && !w.clipAnc){ svg.appendChild(w.el); return; }
+      let host=svg, base=null;
+      if(w.clipAnc){
+        base=w.clipAnc.getCTM();
+        let wr=wraps.get(w.clipAnc);
+        if(!wr){
+          wr=doc.createElementNS(NS,'g');
+          wr.setAttribute('transform',mstr(base));
+          wr.setAttribute('clip-path',w.clipAnc.getAttribute('clip-path'));
+          svg.appendChild(wr); wraps.set(w.clipAnc,wr);
+        }
+        host=wr;
+      }
       const m=par.getCTM? par.getCTM() : null;
       if(m){
+        const rel = base ? base.inverse().multiply(m) : m;
         const own=w.el.getAttribute('transform')||'';
-        w.el.setAttribute('transform',
-          'matrix('+[m.a,m.b,m.c,m.d,m.e,m.f].map(v=>(+v).toFixed(5)).join(',')+') '+own);
+        w.el.setAttribute('transform',mstr(rel)+' '+own);
       }
-      svg.appendChild(w.el);
+      host.appendChild(w.el);
     });
 
     /* ---- his roads, measured into lanes ---------------------------------
@@ -345,6 +365,17 @@ for(const k of KS){
       mo.setAttribute('repeatCount','indefinite');
       mo.setAttribute('calcMode','linear');
       outer.appendChild(mo);
+      if(mv.fade){
+        const op=doc.createElementNS(NS,'animate');
+        op.setAttribute('attributeName','opacity');
+        op.setAttribute('values','0;1;1;0;0');
+        const kt=mv.fade.map(v=>(v/100).toFixed(3));
+        op.setAttribute('keyTimes','0;'+kt[1]+';'+kt[2]+';'+kt[3]+';1');
+        op.setAttribute('dur',mv.dur+'s');
+        op.setAttribute('begin',(mv.dly||0)+'s');
+        op.setAttribute('repeatCount','indefinite');
+        outer.appendChild(op);
+      }
       outer.setAttribute('data-mover',mv.name);
       moversOut.push(mv.name+' ok');
     });
