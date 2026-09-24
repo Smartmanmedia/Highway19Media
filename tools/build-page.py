@@ -68,7 +68,7 @@ SEC = {
 }
 ORDER = ["qa-general", "qa-websites", "qa-video",
          "qa-advertising", "qa-branding", "qa-print"]
-TAIL  = "06-tail"
+TAIL  = ["06-coast-head", "07-coast-tile"]
 
 # ── His buttons and exits, so the art is clickable without being redrawn ────
 #   Every box is his own, found by colour and size on the artboard.
@@ -109,10 +109,43 @@ def band(name):
 
 
 def art(name, cls="qa-art"):
+    """His band. A band whose own art tiles side to side is a div with that
+       art repeated across the full width at his scale — which is what puts
+       his industry, his highway and his trees out to both edges. Every other
+       band is his artboard centred, with a strip off his page edge repeated
+       behind it so the ground reaches the edges too."""
     b = band(name)
     h = round(b["y1"] - b["y0"], 2)
+    if b.get("tile"):
+        # The url() goes in the declaration itself, not through a custom
+        # property: Chrome resolves a url() held in a custom property against
+        # the STYLESHEET that reads it, not the document, so every one of
+        # these 404'd as assets/css/assets/art/...
+        return (f'      <div class="{cls} {cls}--tile" role="presentation" '
+                f'style="--aw:{PAGE_W};--ah:{h};'
+                f'background-image:url(assets/art/{name}.svg)"></div>\n')
     return (f'      <img class="{cls}" src="assets/art/{name}.svg" alt="" '
             f'width="{ART_W}" height="{h}" decoding="async">\n')
+
+
+def base(name):
+    """His ground colour down the MARGINS of his own page, sampled top and
+       bottom of each band. It sits under the band as its base, so anything
+       the edge strip misses falls back on his colour and not on the page
+       background. Each band's bottom is the next band's top, so the chain
+       is seamless."""
+    b = band(name)
+    if b.get("tile") or not b.get("top"):
+        return ""
+    return (f'background:linear-gradient(180deg,{b["top"]} 0%,{b["bot"]} 100%);')
+
+
+def fill(name):
+    b = band(name)
+    if b.get("tile"):
+        return ""
+    return (f'      <span class="qa-fill" aria-hidden="true" '
+            f'style="background-image:url(assets/art/{name}-fill.svg)"></span>\n')
 
 
 def hotspot(box, href, label, cls="qa-hot"):
@@ -158,7 +191,8 @@ def render():
         hb, zb = band(s["head"]), band(s["zone"])
         out.append(f'  <section class="qa-sec" id="{sid}">\n')
         out.append(f'    <h2 class="vh">{e(c["heading"])}</h2>\n')
-        out.append('    <div class="qa-band">\n')
+        out.append(f'    <div class="qa-band" style="{base(s["head"])}">\n')
+        out.append(fill(s["head"]))
         out.append(art(s["head"]))
         if sid == "qa-general":
             out += exits
@@ -166,16 +200,22 @@ def render():
         out.append('    </div>\n')
 
         zh = round(zb["y1"] - zb["y0"], 2)
-        out.append(f'    <div class="qa-zone" style="--zh:{zh};--zx:{s["x"]};'
-                   f'--zw:{s["w"]};--zgap:{s["gap"]}">\n')
+        n = len(c["faqs"])
+        zmin = round(n * s["ch"] + (n - 1) * s["gap"] + 30, 1)
+        out.append(f'    <div class="qa-zone" style="--zh:{zh};--zmin:{zmin};'
+                   f'--zx:{s["x"]};--zw:{s["w"]};--zgap:{s["gap"]};'
+                   f'{base(s["zone"])}">\n')
+        out.append(fill(s["zone"]))
         out.append(art(s["zone"], "qa-zone__art"))
         out.append(cards(c, s, taken, faqjson))
         out.append('    </div>\n  </section>\n')
 
-    out.append('  <div class="qa-band qa-band--tail">\n')
-    out.append(art(TAIL))
-    out += spots(band(TAIL))
-    out.append('  </div>\n')
+    for name in TAIL:
+        out.append(f'  <div class="qa-band qa-band--tail" style="{base(name)}">\n')
+        out.append(fill(name))
+        out.append(art(name))
+        out += spots(band(name))
+        out.append('  </div>\n')
 
     # He has an exit for Working With Us but never drew the section, so it
     # goes after his page ends, on his own colours, rather than on art he

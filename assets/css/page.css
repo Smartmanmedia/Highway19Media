@@ -143,9 +143,29 @@ img{display:block;max-width:100%}
   /* His artboard is WIDER than the band, so auto margins resolve to zero and
      would pin it left. Centred off the middle instead, which is where his
      page sits inside it. */
-  position:relative;left:50%;transform:translateX(-50%);
+  position:relative;z-index:1;left:50%;transform:translateX(-50%);
   width:var(--art);max-width:none;height:auto;
   pointer-events:none;user-select:none;
+}
+/* The band whose art TILES: his industry, his highway and his trees all
+   repeat on his page width, so the band is that art laid side to side at
+   the size he drew it, out to both edges of any window. Nothing is scaled
+   up to reach the edge — it is the same tile, more of it. */
+.qa-art--tile{
+  position:relative;z-index:1;width:100%;
+  height:calc(var(--ah) * var(--u));
+  background-repeat:repeat-x;background-position:center top;
+  background-size:calc(var(--aw) * var(--u)) 100%;
+}
+/* Everywhere else his artboard stops before the edge of a wide window —
+   in places he only painted his page — so a 56-wide strip off HIS PAGE
+   EDGE runs out to both sides behind it, at his scale. That is his own
+   ground continuing, not a colour picked to match it. */
+.qa-fill{
+  position:absolute;z-index:0;inset:0;display:block;
+  background-repeat:repeat-x;background-position:center top;
+  background-size:auto 100%;
+  pointer-events:none;
 }
 
 /* ── The strip his cards stand on ────────────────────────────────────────
@@ -155,12 +175,17 @@ img{display:block;max-width:100%}
    stretching. The repeat is anchored ON the art's bottom edge, so the tile
    that starts there is the one his art just finished with.                */
 .qa-zone{
-  min-height:calc(var(--zh) * var(--u));
-  padding-bottom:calc(8 * var(--u));
+  /* His drawn depth is the CAP, not the floor. Shut, the cards need less
+     than he drew — the gap closes up towards the CTA instead of being held
+     open — so the strip is as deep as its cards, and his art is pinned to
+     the top and cropped at the bottom where the ground is uniform. Open the
+     answers past his depth and it keeps going on the repeat below. */
+  min-height:calc(var(--zmin,0) * var(--u));
+  padding-bottom:calc(18 * var(--u));
 }
 .qa-zone__art{
   position:absolute;left:50%;top:0;transform:translateX(-50%);
-  width:var(--art);max-width:none;height:auto;z-index:0;
+  width:var(--art);max-width:none;height:auto;z-index:1;
   pointer-events:none;user-select:none;
 }
 .qa-zone--plain{

@@ -103,6 +103,12 @@ css = css.replace(/url\((["']?)((?!data:|https?:)[^"')]+\.(?:png|jpe?g|gif|webp|
 js = js.replace(/(["'])(assets\/[^"']+\.(?:png|jpe?g|gif|webp|svg))\1/gi,
                 (m, q, rel) => q + dataURI(rel) + q);
 
+/* A url() inside an HTML style attribute is a reference too — the bands of
+   his artwork that tile are laid that way — and it was going out as a path
+   to a file the hosted build does not carry. */
+html = html.replace(/url\((["']?)((?!data:|https?:)[^"')]+\.(?:png|jpe?g|gif|webp|svg))\1\)/gi,
+                    (m, q, rel) => 'url("' + dataURI(rel) + '")');
+
 html = html.replace(/src="((?!data:|https?:)[^"]+\.(?:png|jpe?g|gif|webp|svg))"/gi, (m, rel) => {
   const file = path.join(R, rel);
   if (!fs.existsSync(file)) throw new Error('missing image referenced by ' + page.src + ': ' + rel);
