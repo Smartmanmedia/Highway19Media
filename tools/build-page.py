@@ -68,6 +68,20 @@ SEC = {
 }
 ORDER = ["qa-general", "qa-websites", "qa-video",
          "qa-advertising", "qa-branding", "qa-print"]
+
+# How short a card strip may go. Only where his ground is solid ALL THE WAY
+# ACROSS below the cards: flat black on the two night sections, open water
+# under General once his turn has finished at 2103. The other three keep his
+# full depth — the advertising strip has a turn in it, branding has the tree
+# row and the road, and print has the port. Cropping those cut his port in
+# half and chopped the trees mid-trunk.
+FLOOR = {"qa-general": 560.0, "qa-websites": 150.0, "qa-video": 470.0}
+
+# His own colour AT the line the crop falls on, sampled down his page margins.
+# The base under a cropped strip holds his colour to that point and only then
+# ramps to whatever the next band opens on, so the fade has nothing to show.
+CROP_COL = {"qa-general": "#002a7e", "qa-websites": "#000000",
+            "qa-video": "#1a1d2d"}
 TAIL  = ["06-coast-head", "07-coast-tile"]
 
 # ── His buttons and exits, so the art is clickable without being redrawn ────
@@ -148,8 +162,10 @@ def fill(name):
     b = band(name)
     if b.get("tile"):
         return ""
-    return (f'      <span class="qa-fill" aria-hidden="true" '
-            f'style="background-image:url(assets/art/{name}-fill.svg)"></span>\n')
+    return (f'      <span class="qa-fill qa-fill--l" aria-hidden="true" '
+            f'style="background-image:url(assets/art/{name}-fillL.svg)"></span>\n'
+            f'      <span class="qa-fill qa-fill--r" aria-hidden="true" '
+            f'style="background-image:url(assets/art/{name}-fillR.svg)"></span>\n')
 
 
 def hotspot(box, href, label, cls="qa-hot"):
@@ -207,11 +223,15 @@ def render():
 
         zh = round(zb["y1"] - zb["y0"], 2)
         n = len(c["faqs"])
-        zmin = round(n * s["ch"] + (n - 1) * s["gap"] + 30, 1)
-        out.append(f'    <div class="qa-zone" data-y0="{zb["y0"]}" '
+        zmin = round(max(FLOOR.get(sid, zh),
+                         n * s["ch"] + (n - 1) * s["gap"] + 30), 1)
+        crop = " qa-zone--crop" if sid in FLOOR else ""
+        zbase = base(s["zone"])
+
+        out.append(f'    <div class="qa-zone{crop}" data-y0="{zb["y0"]}" '
                    f'data-y1="{zb["y1"]}" style="--zh:{zh};--zmin:{zmin};'
                    f'--zx:{s["x"]};--zw:{s["w"]};--zgap:{s["gap"]};'
-                   f'{base(s["zone"])}">\n')
+                   f'{zbase}">\n')
         out.append(fill(s["zone"]))
         out.append(art(s["zone"], "qa-zone__art"))
         out.append(cards(c, s, taken, faqjson))
@@ -226,17 +246,27 @@ def render():
         out += spots(band(name))
         out.append('  </div>\n')
 
-    # He has an exit for Working With Us but never drew the section, so it
-    # goes after his page ends, on his own colours, rather than on art he
-    # did not make.
+    # He has an exit for Working With Us but never drew the section. Rather
+    # than a bare block of cards after his page ends, it is set on his own
+    # forest green in his own type, with his heading size, his card column
+    # and a CTA panel built to the one he draws for every other section.
     c = next(x for x in CONTENT if x["sid"] == "qa-working")
     nav.append(("qa-working", c["nav"]))
-    s = SEC["qa-print"]
-    out.append('  <section class="qa-sec" id="qa-working">\n')
-    out.append(f'    <h2 class="vh">{e(c["heading"])}</h2>\n')
-    out.append(f'    <div class="qa-zone qa-zone--plain" style="--zh:0;'
+    s = SEC["qa-branding"]          # his 840 column, centred like the others
+    head, lead, btn = c["cta"]
+    out.append('  <section class="qa-sec qa-sec--own" id="qa-working">\n')
+    out.append('    <div class="qa-own">\n')
+    out.append(f'      <p class="qa-own__eyebrow">{e(c["eyebrow"])}</p>\n')
+    out.append(f'      <h2 class="qa-own__h">{e(c["heading"])}</h2>\n')
+    out.append(f'      <p class="qa-own__lead">{e(c["lead"])}</p>\n')
+    out.append(f'      <div class="qa-zone qa-zone--plain" style="--zh:0;'
                f'--zx:{s["x"]};--zw:{s["w"]};--zgap:{s["gap"]}">\n')
     out.append(cards(c, s, taken, faqjson))
+    out.append('      </div>\n')
+    out.append('      <div class="qa-own__cta">\n'
+               f'        <div><h3>{e(head)}</h3><p>{e(lead)}</p></div>\n'
+               f'        <a class="qa-own__btn" href="{e(CONTACT)}">{e(btn)}</a>\n'
+               '      </div>\n')
     out.append('    </div>\n  </section>\n')
 
     return "".join(out), nav, faqjson

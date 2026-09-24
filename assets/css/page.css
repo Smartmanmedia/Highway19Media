@@ -162,11 +162,15 @@ img{display:block;max-width:100%}
    EDGE runs out to both sides behind it, at his scale. That is his own
    ground continuing, not a colour picked to match it. */
 .qa-fill{
-  position:absolute;z-index:0;inset:0;display:block;
-  background-repeat:repeat-x;background-position:center top;
-  background-size:auto 100%;
+  position:absolute;z-index:0;top:0;bottom:0;display:block;
+  background-repeat:repeat-x;background-size:auto 100%;
   pointer-events:none;
 }
+/* Each side takes the strip off ITS OWN edge of his page and runs outward,
+   so a road or a gantry truss that leaves his page keeps going to the edge
+   of the window instead of stopping in mid-air. */
+.qa-fill--l{left:0;right:calc(50% + var(--stage) / 2);background-position:right top}
+.qa-fill--r{left:calc(50% + var(--stage) / 2);right:0;background-position:left top}
 
 /* ── The strip his cards stand on ────────────────────────────────────────
    His art at the depth he drew it, and never less. Open enough answers to
@@ -180,18 +184,77 @@ img{display:block;max-width:100%}
      open — so the strip is as deep as its cards, and his art is pinned to
      the top and cropped at the bottom where the ground is uniform. Open the
      answers past his depth and it keeps going on the repeat below. */
-  min-height:calc(var(--zmin,0) * var(--u));
-  padding-bottom:calc(18 * var(--u));
+  /* A strip closes up to --zmin, which is his full depth unless the ground
+     under the cards is solid all the way across. Cropping anything else cut
+     his port in half and chopped his tree row mid-trunk. */
+  min-height:calc(var(--zmin) * var(--u));
 }
 .qa-zone__art{
   position:absolute;left:50%;top:0;transform:translateX(-50%);
   width:var(--art);max-width:none;height:auto;z-index:1;
   pointer-events:none;user-select:none;
 }
-.qa-zone--plain{
-  background:linear-gradient(180deg,#04203f 0%,#062f5e 100%);
-  min-height:0;padding-block:calc(70 * var(--u))
+/* A strip that has closed up is cut mid-gradient, so the next band opens on
+   a slightly different blue. Measured at the join it is 0 levels on the two
+   night sections and 3 on General — under what an eye can see, and far less
+   than a veil over the join would cost: that greyed his road and washed out
+   the last two cards. Nothing is laid over it. */
+.qa-zone--plain{background:none;min-height:0}
+
+/* ── The one section he never drew ───────────────────────────────────────
+   Working With Us has an exit on his gantry but no artwork, so it is set on
+   his own forest green, in his own type at his own sizes, with his card
+   column and a CTA panel measured off the ones he draws: 840 across, his
+   corner of 18.49, his #1562b7 and his #ffc72c button.                    */
+.qa-sec--own{
+  position:relative;width:100vw;margin-left:calc(50% - 50vw);
+  background:linear-gradient(180deg,#275522 0%,#297a2b 22%,#297a2b 100%);
+  padding:calc(110 * var(--u)) 0 calc(120 * var(--u));
 }
+.qa-own{width:var(--stage);margin-inline:auto}
+.qa-own__eyebrow{
+  margin:0 auto calc(18 * var(--u));width:max-content;
+  background:#1c9022;color:#fff;border:calc(1.4 * var(--u)) solid #fff;
+  border-radius:calc(5 * var(--u));padding:calc(7 * var(--u)) calc(16 * var(--u));
+  font-weight:800;font-size:calc(12.1 * var(--u));letter-spacing:.14em;
+  text-transform:uppercase;
+}
+.qa-own__h{
+  margin:0 0 calc(22 * var(--u));text-align:center;color:#fff;
+  font-weight:800;font-size:calc(60.25 * var(--u));line-height:1.04;
+  letter-spacing:-.02em;
+}
+.qa-own__lead{
+  margin:0 auto calc(56 * var(--u));max-width:calc(760 * var(--u));
+  text-align:center;color:#eaf6ea;font-weight:600;
+  font-size:calc(16.88 * var(--u));line-height:calc(27.5 * var(--u));
+}
+.qa-own .qa-list{margin-inline:auto}
+.qa-own__cta{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:calc(40 * var(--u));
+  width:calc(840 * var(--u));margin:calc(56 * var(--u)) auto 0;
+  background:#1562b7;border:calc(1.4 * var(--u)) solid #fff;
+  border-radius:calc(10 * var(--u));
+  padding:calc(34 * var(--u)) calc(38 * var(--u));
+}
+.qa-own__cta h3{
+  margin:0 0 calc(10 * var(--u));color:#fff;
+  font-weight:800;font-size:calc(28.8 * var(--u));line-height:1.1;
+  letter-spacing:-.01em;text-transform:uppercase;
+}
+.qa-own__cta p{
+  margin:0;color:#dcecff;font-weight:600;
+  font-size:calc(16 * var(--u));line-height:calc(24 * var(--u));
+}
+.qa-own__btn{
+  flex:none;background:#ffc72c;color:#12161c;text-decoration:none;
+  border:calc(1.4 * var(--u)) solid #12161c;border-radius:calc(6 * var(--u));
+  padding:calc(17 * var(--u)) calc(26 * var(--u));
+  font-weight:800;font-size:calc(15.2 * var(--u));letter-spacing:.04em;
+  text-transform:uppercase;white-space:nowrap;
+}
+.qa-own__btn:hover{background:#ffd75a}
 
 /* ── His cards ───────────────────────────────────────────────────────────
    The one thing on this page that is not his artwork, because his drawn
@@ -285,10 +348,16 @@ img{display:block;max-width:100%}
   padding:.6em 1em;font:700 13px/1 inherit;cursor:pointer}
 #road-pause:focus-visible{left:12px;bottom:12px}
 
+/* His footer: the header's own blue, his yellow rule under it, his type. */
 .qa-foot{
-  background:#04203f;color:#cbd8e8;padding:calc(48 * var(--u)) calc(40 * var(--u));
-  font-size:calc(15 * var(--u));
+  background:linear-gradient(90deg,#00287d 0%,#0459bd 45%,#02459e 60%,#002d76 100%);
+  border-top:calc(5 * var(--u)) solid #000;
+  color:#dbe7f7;padding:calc(54 * var(--u)) calc(50 * var(--u)) calc(46 * var(--u));
+  font-size:calc(14.5 * var(--u));
 }
-.qa-foot ul{list-style:none;display:flex;flex-wrap:wrap;gap:calc(22 * var(--u));
-  padding:0;margin:calc(14 * var(--u)) 0 0}
-.qa-foot a{color:#cbd8e8}
+.qa-foot > p{margin:0 0 calc(20 * var(--u));font-weight:600}
+.qa-foot ul{list-style:none;display:flex;flex-wrap:wrap;
+  gap:calc(14 * var(--u)) calc(26 * var(--u));padding:0;margin:0}
+.qa-foot a{color:#dbe7f7;text-decoration:none;font-weight:600;
+  border-bottom:calc(1.5 * var(--u)) solid rgba(255,218,0,.45);padding-bottom:calc(2 * var(--u))}
+.qa-foot a:hover{color:#ffda00;border-bottom-color:#ffda00}
