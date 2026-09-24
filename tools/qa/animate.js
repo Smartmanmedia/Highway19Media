@@ -145,22 +145,28 @@ for(const k of KS){
        His own pieces carried into the flank: the industrial strip on its own
        rhythm, and his tree clump scattered. Drawn first, so everything he
        actually drew still paints over it inside his artboard. */
+    let frontArt=null, front=null;
     if(bleedart.length){
       const back=doc.createElementNS(NS,'g');
       back.setAttribute('data-bleedart','1');
       svg.insertBefore(back, svg.firstElementChild&&svg.firstElementChild.tagName==='defs'
         ? svg.firstElementChild.nextSibling : svg.firstChild);
-      const put=(href,x,y,w,h,extra)=>{
+      const put=(href,x,y,w,h,extra,over)=>{
         const im=doc.createElementNS(NS,'image');
         im.setAttribute('href','assets/img/'+href);
         im.setAttribute('x',x.toFixed(1)); im.setAttribute('y',y.toFixed(1));
         im.setAttribute('width',w.toFixed(1));
         if(h) im.setAttribute('height',h.toFixed(1));
         if(extra) im.setAttribute('transform',extra);
-        back.appendChild(im);
+        (over?front:back).appendChild(im);
       };
       const RATIO={'industrial.webp':909/4034,'trees.webp':454/269,
                    'treerow.webp':1699/299,'forestclump.webp':667/1446};
+      /* a few of his own tree clumps also go in FRONT, to close the hard
+         vertical joint his forest export leaves where one clump abuts the
+         next - he gave the clump for exactly this */
+      front=doc.createElementNS(NS,'g');
+      front.setAttribute('data-bleedart','front');
       bleedart.forEach(a=>{
         if(a.scatter){
           let sd=a.seed||1;
@@ -171,12 +177,13 @@ for(const k of KS){
             const h=w*RATIO[a.scatter];
             put(a.scatter, bx+rnd()*(bw-w*0.4)-w*0.3, by+rnd()*(bh-h*0.4)-h*0.3, w, h,
                 'rotate('+Math.round(rnd()*360)+' '+
-                (bx+bw/2).toFixed(0)+' '+(by+bh/2).toFixed(0)+')');
+                (bx+bw/2).toFixed(0)+' '+(by+bh/2).toFixed(0)+')', a.over);
           }
         } else {
-          put(a.img, a.x, a.y, a.w, a.w*RATIO[a.img]);
+          put(a.img, a.x, a.y, a.w, a.w*RATIO[a.img], null, a.over);
         }
       });
+      if(front.children.length) frontArt=front;
     }
 
     /* ---- the slot his traffic drives in ----------------------------------
@@ -250,6 +257,10 @@ for(const k of KS){
       }
       host.appendChild(w.el);
     });
+
+    /* his clumps go on last of all, so they close the joint rather than
+       sitting under the forest they are there to mend */
+    if(frontArt) svg.appendChild(frontArt);
 
     /* ---- his roads, measured into lanes ---------------------------------
        Each route is a centreline measured off his own art; the lanes are
