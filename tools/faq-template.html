@@ -49,27 +49,44 @@
      HEADER — the site header, unchanged except that its links reach back to
      the home page's sections and Q&A is marked as the current page.
      ======================================================================= -->
-<header class="site-header" id="site-header">
-  <div class="site-header__inner">
+<!-- ==========================================================================
+     HIS HEADER, off QA-Part3.svg and nothing else.
+     The bar is 85.7 deep on his 1441.5 page and carries a gradient that runs
+     RIGHT to LEFT — #002d76 at the right edge, brightening to #0459bd at 45%
+     across, dark #00287d at the left — with a black rule under it. The moon
+     sits at 60, the wordmark at 267.4, the shield at 661.7 where it hangs 30
+     below the bar, the nav at 817.2 and his CONTACT US at 1155.4. Type is Be
+     Vietnam Pro throughout: Black 29.01 for the wordmark with the 19 in
+     #6cd9ff, SemiBold 9.73 for the line under it, Medium 15.84 for the nav,
+     Black 12.1 on the button.
+     ======================================================================= -->
+<header class="site-header site-header--qa" id="site-header">
+  <div class="site-header__bar">
 
-    <a class="brand" href="index.html" aria-label="Highway 19 Media — home">
-      <img class="brand__shield" src="assets/brand/shield.png" alt="">
-      <span class="brand__name">
-        <b>HIGHWAY 19</b>
-        <span>Media</span>
-      </span>
+    <span class="hdr-moon" aria-hidden="true"></span>
+
+    <a class="hdr-brand" href="index.html" aria-label="Highway 19 Media — home">
+      <span class="hdr-brand__name">HIGHWAY <i>19</i> MEDIA</span>
+      <span class="hdr-brand__line">Creative Marketing for Tampa Bay Businesses</span>
     </a>
 
-    <nav class="nav" id="nav" aria-label="Main">
+    <a class="hdr-shield" href="index.html" aria-label="Highway 19 Media — home">
+      <img src="assets/brand/qa-shield.png" alt="" aria-hidden="true">
+    </a>
+
+    <nav class="hdr-nav" id="nav" aria-label="Main">
       <a href="index.html#services">Services</a>
-      <a href="index.html#promise">How We Work</a>
-      <a href="index.html#payoff">Results</a>
+      <a href="index.html#promise">The Road Map</a>
       <a href="faq.html" aria-current="page">Q&amp;A</a>
-      <a href="index.html#close">Contact</a>
-      <a class="btn btn--primary" href="index.html#close"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Your Road Map</a>
     </nav>
 
-    <a class="btn btn--primary" href="index.html#close"><svg class="btn__sign" viewBox="0 0 64 60" aria-hidden="true" focusable="false"><use href="#sg-warning"/></svg>Your Road Map</a>
+    <a class="hdr-cta" href="index.html#close">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <rect x="6.5" y="2.5" width="11" height="19" rx="2.2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="12" cy="18" r="1.1" fill="currentColor"/>
+      </svg>
+      Contact Us
+    </a>
 
     <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav" aria-label="Menu">
       <span></span><span></span><span></span>

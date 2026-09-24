@@ -643,17 +643,98 @@
    ========================================================================= */
 
 /* ── Header ──────────────────────────────────────────────────────────────
-   His own, straight off the home page — the same bar, the same wordmark, the
-   same caps navigation and the same road-map button. The one thing this page
-   adds is a night: it is sticky, and the ground under it goes black for two
-   sections, so the bar goes with it and comes back at the desert. */
-.page--qa .site-header{transition:background .45s ease,border-color .45s ease}
-.site-header.is-night{
+   His, off QA-Part3.svg. Every number here is a share of the 1441.5 page he
+   drew it on, so the bar holds its proportions at any width and caps at the
+   size he drew:
+
+     bar        1441.5 x 85.7, gradient right-to-left, black rule under it
+     moon       49.4 at 60, 21.8
+     wordmark   Black 29.01 at 267.4, baseline 42.5, the 19 in #6cd9ff
+     line       SemiBold 9.73 at 258.6, baseline 66.3
+     shield     99.5 at 661.7, 16.2 — hanging 30 below the bar
+     nav        Medium 15.84 at 817.2, baseline 47.5
+     button     143.9 x 39.3 at 1155.4, 23.6, #ffda00, corner 7.34         */
+.site-header--qa{
+  position:sticky;top:0;z-index:60;
+  background:none;border:0;
+}
+.site-header--qa .site-header__bar{
+  position:relative;
+  height:min(85.7px,5.945vw);
+  /* His own stops, read off linear-gradient-210. It is drawn right to left,
+     so they are reversed here: dark at both ends, his brightest blue a little
+     left of the middle. */
+  background:linear-gradient(90deg,#00287d 0%,#0459bd 45%,#0358bc 45.01%,
+                             #02459e 60%,#013887 74%,#002f7a 88%,#002d76 100%);
+  border-bottom:min(5px,.35vw) solid #000;
+  transition:background .45s ease,border-color .45s ease;
+}
+.hdr-moon{
+  position:absolute;left:min(60px,4.163vw);top:min(21.8px,1.512vw);
+  width:min(49.4px,3.427vw);height:min(49.4px,3.427vw);border-radius:50%;
+  background:radial-gradient(circle at 38% 34%,#3b3f46 0%,#23262b 46%,#111316 100%);
+  box-shadow:inset 0 0 0 min(3px,.21vw) rgba(255,255,255,.07);
+}
+.hdr-brand{
+  position:absolute;left:min(258.6px,17.94vw);top:0;
+  display:block;text-decoration:none;white-space:nowrap;
+}
+.hdr-brand__name{
+  display:block;
+  margin-left:min(8.8px,.61vw);            /* his wordmark starts at 267.4 */
+  font-family:var(--font-sign);font-weight:800;
+  font-size:min(29.01px,2.013vw);line-height:1;
+  color:#fff;letter-spacing:.005em;
+  padding-top:min(31.4px,2.178vw);         /* baseline 42.5 off the bar top */
+}
+.hdr-brand__name i{font-style:normal;color:#6cd9ff}
+.hdr-brand__line{
+  display:block;
+  margin-top:min(9.6px,.666vw);
+  font-family:var(--font-sign);font-weight:600;
+  font-size:min(9.73px,.675vw);line-height:1;
+  letter-spacing:.055em;text-transform:uppercase;color:#fff;
+}
+/* The shield is bigger than the bar and hangs below it — his does, and it is
+   the one thing on this header that breaks the rule. */
+.hdr-shield{
+  position:absolute;left:min(661.7px,45.9vw);top:min(16.2px,1.124vw);
+  width:min(99.5px,6.902vw);line-height:0;z-index:2;
+}
+.hdr-shield img{width:100%;height:auto;display:block;
+  filter:drop-shadow(0 min(3px,.21vw) min(6px,.42vw) rgba(0,0,0,.45))}
+.hdr-nav{
+  position:absolute;left:min(817.2px,56.69vw);top:min(33.5px,2.324vw);
+  display:flex;align-items:flex-start;
+  gap:min(41px,2.84vw);
+  font-family:var(--font-sign);font-weight:500;
+  font-size:min(15.84px,1.099vw);line-height:1;
+}
+.hdr-nav a{color:#fff;text-decoration:none;white-space:nowrap}
+.hdr-nav a:hover{color:#ffda00}
+.hdr-cta{
+  position:absolute;left:min(1155.4px,80.15vw);top:min(23.6px,1.637vw);
+  display:inline-flex;align-items:center;justify-content:center;
+  gap:min(9px,.62vw);
+  width:min(143.9px,9.983vw);height:min(39.3px,2.726vw);
+  border-radius:min(7.34px,.509vw);
+  background:#ffda00;color:#000;text-decoration:none;
+  font-family:var(--font-sign);font-weight:800;
+  font-size:min(12.1px,.839vw);line-height:1;
+  letter-spacing:.03em;text-transform:uppercase;
+}
+.hdr-cta svg{width:min(15px,1.04vw);height:auto;flex:none}
+.hdr-cta:hover{background:#ffe45a}
+.site-header--qa .nav-toggle{display:none}
+
+/* Night: the ground under the bar goes black for two sections, so the bar
+   goes with it and comes back at the desert. */
+.site-header--qa.is-night .site-header__bar{
   background:#05070d;
   border-bottom-color:#8a6a12;
 }
-.site-header.is-night .brand__name span{color:#7f92ad}
-.site-header.is-night .nav a{color:#d7dee8}
+.site-header--qa.is-night .hdr-nav a,
+.site-header--qa.is-night .hdr-brand__line{color:#d7dee8}
 
 /* ── Hero ────────────────────────────────────────────────────────────────
    His vertical gradient: deepest at the header, opening up towards the road. */
@@ -886,11 +967,11 @@
 }
 /* His ridge is 370 deep on a 1441.5 page at the top and 270 at the foot. */
 .page--qa #qa-advertising::before{
-  top:0;height:25.7vw;max-height:370px;transform:translateY(-22%);
+  top:0;height:25.7vw;transform:translateY(-22%);
   background-image:url("../scene/qa-rocks-top.svg");
 }
 .page--qa #qa-advertising::after{
-  bottom:0;height:18.7vw;max-height:270px;transform:translateY(36.8%);
+  bottom:0;height:18.7vw;transform:translateY(36.8%);
   background-image:url("../scene/qa-rocks-bottom.svg");
 }
 .page--qa #qa-advertising > .sec__inner{position:relative;z-index:3}
@@ -928,8 +1009,11 @@
    shallows into the beach. */
 .page--qa #qa-branding   {background:#297a2b}
 .page--qa #qa-print      {
-  background:linear-gradient(180deg,#00386d 0%,#1c5674 60%,#1d5876 71%,
-                            #21627d 79%,#287189 86%,#33879a 92%,#40a3af 98%,#46b0b9 100%);
+  /* His ocean rect is 1352 deep and the harbour band below picks it up at
+     81% of that, so this carries his stops only as far as they go here and
+     hands over on the exact colour the harbour starts on. */
+  background:linear-gradient(180deg,#00386d 0%,#1c5674 74%,#1d5876 87%,
+                            #21627d 97%,#24687f 100%);
 }
 
 /* ── The coast ───────────────────────────────────────────────────────────
@@ -939,33 +1023,47 @@
    artboard; only the ship, the planes and the traffic are ours. */
 .qa-coast{position:relative;width:100vw;margin-left:calc(50% - 50vw)}
 .qa-coast > *{position:relative;width:100%}
-/* 78 of 1441.5 between his water and his grass. */
-.qa-coast__beach{
-  height:5.41vw;max-height:78px;
-  background:linear-gradient(180deg,#46b0b9 0%,#cfe3b0 42%,#eadfae 62%,#b3c46f 100%);
+/* His harbour: the container terminal, the berths, the cranes and the ships
+   tied up in them, and his own surf bands running out from it to the sand —
+   370 of his 1441.5, cut in place off the artboard. It was a four-stop CSS
+   gradient standing in for all of it, which is why the port had gone and the
+   water read as a smear: none of that was his. The band paints the tail of
+   his ocean behind the art so the two meet on the same colour. */
+.qa-coast__harbour{
+  height:25.67vw;
+  background-image:url("../scene/qa-harbour.png"),
+    linear-gradient(180deg,#24687f 0%,#2a7488 22%,#3a98a9 48%,#46b0b9 64%,
+                    #f0dcae 82%,#ffd486 100%);
+  background-repeat:no-repeat,no-repeat;
+  background-size:100% 100%,auto;
+  background-position:center top,0 0;
 }
 /* His grass under the runways: 282 of 1441.5, #b3c46f down to #8fb44f. The
    airport itself is 248 of it, laid on the bottom. */
+/* NO height cap on any of these. His art is drawn to a 1441.5 page and it is
+   laid at that aspect or not at all: capping the height while the width kept
+   growing is what was stretching the airport, the city and the forest
+   sideways on anything wider than his page. */
 .qa-coast__air{
-  height:19.56vw;max-height:282px;
+  height:19.56vw;
   background:linear-gradient(180deg,#b3c46f 0%,#9dbc5e 55%,#8fb44f 100%);
 }
 .qa-coast__air::after{
   content:"";position:absolute;left:0;right:0;bottom:0;z-index:0;
-  height:17.2vw;max-height:248px;
+  height:17.22vw;
   background:url("../scene/qa-airport.png") no-repeat center bottom/100% 100%;
   pointer-events:none;
 }
 /* His city: 399 of 1441.5 on his own #6d6e72. */
 .qa-coast__city{
-  height:27.68vw;max-height:399px;
+  height:27.5vw;
   background:#6d6e72 url("../scene/qa-city.png") no-repeat center bottom/100% 100%;
 }
 /* And his forest on the far side of the highway: 300 of 1441.5, standing on
    the ground the highway hands it. */
 .qa-coast__forest{
   position:relative;width:100vw;margin-left:calc(50% - 50vw);
-  height:22.2vw;max-height:320px;
+  height:22.2vw;
   /* His trees over his own ground. Two layers, not one shorthand: a gradient
      and a url cannot share a background layer, and the whole declaration is
      thrown away if they try. */
@@ -1102,6 +1200,15 @@
    off, with a fixed run of truss between the plate and the page edge, and the
    whole thing sits across the top of the section with the copy beneath. The
    plate measures 616 of 1440 in his file. */
+/* The parallax lift faq.js writes. The sign moves as one object — plate,
+   truss, bolts and lamps — and its shadow opens up as it lifts, because a
+   sign further off the ground throws a longer one. */
+.hwy-sign--section,
+.hwy-exits__panel,
+#qa-hero .hwy-sign{
+  translate:0 var(--sign-lift,0px);
+  will-change:translate;
+}
 .hwy-sign--section{
   --plate:min(616px,42.8vw);
   /* His run of truss between the plate and the page edge: 141.6 on the left
@@ -1219,7 +1326,7 @@
 .hwy-exits > *{grid-row:1}
 .hwy-exits__truss{min-width:0;align-self:center;height:calc(var(--plate) * .0789)}
 .hwy-exits__panel{position:relative;z-index:3;grid-column:2;width:var(--plate);
-  translate:min(18.5px,1.28vw) 0}
+  translate:min(18.5px,1.28vw) var(--sign-lift,0px)}
 
 /* His gantry is ONE green plate with the same hairline rim and corner as
    every other sign, ruled into six panels in white at 2.4 — across AND down.

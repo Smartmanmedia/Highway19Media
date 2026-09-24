@@ -265,3 +265,67 @@
   })();
 
 })();
+
+/* ============================================================================
+   HIS SIGNS, ON THE PARALLAX
+   ----------------------------------------------------------------------------
+   A sign on a gantry stands closer to the camera than the ground behind it, so
+   it should not travel with the ground. Each one drifts against the scroll by a
+   fraction of its own distance through the viewport — the plate and the truss
+   together, because they are one object — and the shadow it throws opens up as
+   it does. Nothing here runs per frame: the position is written on scroll,
+   through one rAF, and only for the signs actually on screen.
+   ========================================================================== */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia &&
+               window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;
+
+  var signs = [].slice.call(document.querySelectorAll(
+    '.hwy-sign--section, .hwy-exits__panel, #qa-hero .hwy-sign'));
+  if (!signs.length) return;
+
+  /* How far each kind of sign lags the ground, as a fraction of the distance
+     it travels through the viewport. The gantry is the nearest object on the
+     page and moves most; a section sign hangs a little further back. */
+  function depthOf(el) {
+    if (el.classList.contains('hwy-exits__panel')) return 0.085;
+    if (el.closest('#qa-hero')) return 0.10;
+    return 0.055;
+  }
+
+  var items = signs.map(function (el) {
+    return { el: el, depth: depthOf(el), on: false, last: null };
+  });
+  var ticking = false, vh = window.innerHeight;
+
+  function place() {
+    ticking = false;
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i], r = it.el.getBoundingClientRect();
+      it.on = r.bottom > -240 && r.top < vh + 240;
+      if (!it.on) continue;
+      /* -1 at the bottom of the screen, +1 at the top. */
+      var t = 1 - 2 * ((r.top + r.height / 2) / vh);
+      var y = (t * vh * 0.5 * it.depth).toFixed(1);
+      if (y === it.last) continue;
+      it.last = y;
+      it.el.style.setProperty('--sign-lift', y + 'px');
+    }
+  }
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(place);
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', function () { vh = window.innerHeight; onScroll(); });
+  /* Answers opening move every sign below them, so re-place on that too. */
+  document.addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('.qa-q')) setTimeout(onScroll, 360);
+  });
+  window.addEventListener('load', place);
+  place();
+})();

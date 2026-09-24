@@ -380,7 +380,7 @@ PAINT = {
 # --------------------------------------------------------------------------
 COAST = """
   <div class="qa-coast" aria-hidden="true">
-    <div class="qa-coast__beach"></div>
+    <div class="qa-coast__harbour"></div>
     <div class="qa-coast__air" data-air=".273 out,.518 in,.273 out,.518 in"></div>
     <div class="qa-coast__city"></div>
   </div>
@@ -464,7 +464,7 @@ PAGE = [
     ("scene", COAST),
     ("route", [
         ("gap", "pass-right", "#1a1a1a", "#6d6e72"),
-    ], ' data-lanes="6" data-road-w="148"'),
+    ], ' data-lanes="6" data-road-w="148" data-line-w="2" data-edge-w="2" data-edge-in="2"'),
     ("scene", FOREST),
 ]
 

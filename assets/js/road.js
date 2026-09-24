@@ -689,6 +689,17 @@
                  which road it is drawing. */
               roadW: parseFloat(el.getAttribute('data-road-w')) || HIS_W,
               lanes: Math.max(2, parseInt(el.getAttribute('data-lanes'), 10) || 2) };
+    /* The markings do NOT scale with the road. On his 95 section roads the
+       edge lines are 3.2 across, 5.7 in from the kerb, and the centreline the
+       same; on the 148 highway every line is 2.0 and sits 2 in. A wider road
+       seen from the same height has FINER markings, not heavier ones, and
+       scaling them with the asphalt is what made the highway look like a
+       three-lane cartoon. Page units, so they take the viewport scale and
+       nothing else. */
+    var hw = g.roadW / W_ROAD;
+    g.lineW  = parseFloat(el.getAttribute('data-line-w')) || DASH_W * hw;
+    g.edgeW  = parseFloat(el.getAttribute('data-edge-w')) || (EDGE_OUT - EDGE_IN) * hw;
+    g.edgeIn = parseFloat(el.getAttribute('data-edge-in')) || (W_ROAD / 2 - EDGE_OUT) * hw;
     g.rs = viewScale * (g.roadW / W_ROAD);
     /* A vehicle is the size of its LANE, not of the road. Six lanes in 148
        are 24.7 apiece against the 62.9 a two-lane 125.88 gives, so the cars
@@ -788,8 +799,11 @@
     var road = el('g', {});
     road.appendChild(el('path', { 'class': 'road-hit', d: d(0), fill: 'none',
                                   stroke: ASPH, 'stroke-width': W_ROAD * rs }));
-    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: LN, 'stroke-width': EDGE_OUT * 2 * rs }));
-    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: ASPH, 'stroke-width': EDGE_IN * 2 * rs }));
+    var vs = viewScale;
+    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: LN,
+      'stroke-width': W_ROAD * rs - 2 * g.edgeIn * vs }));
+    road.appendChild(el('path', { d: d(0), fill: 'none', stroke: ASPH,
+      'stroke-width': W_ROAD * rs - 2 * (g.edgeIn + g.edgeW) * vs }));
     /* The lines BETWEEN the lanes. One lane each way is his single dashed
        centreline; on the six-lane highway past the port he alternates — the
        outermost pair dashed, the next pair solid, the middle dashed again.
@@ -798,7 +812,7 @@
     var nL = g.lanes, laneW = (W_ROAD / nL) * rs;
     for (var j = 1; j < nL; j++) {
       var a = { d: d((j - nL / 2) * laneW), fill: 'none', stroke: LN,
-                'stroke-width': DASH_W * rs };
+                'stroke-width': g.lineW * vs };
       if (j % 2) a['stroke-dasharray'] = dash;
       road.appendChild(el('path', a));
     }
