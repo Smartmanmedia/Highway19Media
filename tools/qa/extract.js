@@ -41,6 +41,31 @@ for(const [k,H] of SEC){
       imgs.push(imgmap[key].file);
     });
 
+    /* his wide strip elements (the forest) are tiles: carry them past his
+       artboard on his own pitch so the page can run full width */
+    const strips=[...svg.querySelectorAll('image')].filter(im=>parseFloat(im.getAttribute('width'))>1500);
+    if(strips.length>=2){
+      const xs=strips.map(im=>{
+        const t=(im.getAttribute('transform')||'').match(/translate\(([-\d.]+)[ ,]+([-\d.]+)\)/);
+        return t?{x:parseFloat(t[1]),y:parseFloat(t[2])}:null;}).filter(Boolean);
+      const pitch=Math.abs(xs[1].x-xs[0].x)||1;
+      const wid=parseFloat(strips[0].getAttribute('width'));
+      const host=strips[0].closest('g')?strips[0].closest('g').parentNode:svg;
+      const first=strips[0].closest('g')||strips[0];
+      const add=[];
+      for(let i=1;i<=Math.ceil((480+pitch)/pitch);i++){
+        add.push({im:strips[0],x:xs[0].x-i*pitch,y:xs[0].y});
+        add.push({im:strips[1],x:xs[1].x+i*pitch,y:xs[1].y});
+      }
+      for(const a of add){
+        if(a.x+wid < -520 || a.x > 2128+520) continue;
+        const c=a.im.cloneNode(false);
+        c.setAttribute('transform','translate('+a.x.toFixed(2)+' '+a.y.toFixed(2)+')');
+        c.setAttribute('data-tile','1');
+        host.insertBefore(c, first);          /* behind his own copies */
+      }
+    }
+
     const texts=[...svg.querySelectorAll('text')].map(el=>({el,a:abs(el),f:fam(el),
       s:parseFloat(el.getAttribute('font-size')||0)}));
     const rects=[...svg.querySelectorAll('rect')].map(el=>({el,a:abs(el),

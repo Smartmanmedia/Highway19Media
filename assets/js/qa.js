@@ -13,20 +13,26 @@
     var items = [].slice.call(col.querySelectorAll('.qa'));
     var isFlex = sec.hasAttribute('data-flex');
 
-    /* his drawn room: from the first card down to the top of his CTA panel */
+    /* his drawn room: from the first card down to the top of his CTA panel,
+       in his own artboard pixels - converted through the page unit */
     var room = parseFloat(col.dataset.room || '0');
     var drawn = parseFloat(col.dataset.drawn || '0');
+    function unit() {
+      var a = sec.querySelector('.art, .art-a');
+      return a ? a.getBoundingClientRect().width / 3088 : 1;
+    }
 
     function fit() {
-      var h = col.getBoundingClientRect().height;
+      var u = unit();
+      var h = col.getBoundingClientRect().height / u;
       if (isFlex) {
         /* open or close his flat band so the CTA keeps the gap he drew */
-        sec.style.setProperty('--flex', (h - drawn).toFixed(1) + 'px');
+        sec.style.setProperty('--flex', 'calc(' + (h - drawn).toFixed(1) + '*var(--u))');
         col.style.transform = '';
       } else if (room) {
         /* fixed height: never let the column reach his CTA */
         var over = h - room;
-        col.style.transform = over > 0 ? 'translateY(' + (-over).toFixed(1) + 'px)' : '';
+        col.style.transform = over > 0 ? 'translateY(' + (-over * u).toFixed(1) + 'px)' : '';
       }
     }
 

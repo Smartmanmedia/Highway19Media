@@ -13,17 +13,35 @@
 @font-face{font-family:'BeVietnamPro-Black';src:url(../fonts/bvp-900.woff2) format('woff2');font-display:block}
 @font-face{font-family:'Arial-BoldMT';src:local('Arial Bold'),local('Arial-BoldMT'),url(../fonts/arimo-700.woff2) format('woff2');font-display:block}
 
+/* one unit is one of his artboard pixels. Never larger than a screen pixel,
+   so his art is only ever shown at his scale or smaller - never enlarged. */
+:root{--u:min(1px, 100vw / 1810);--art:calc(2128*var(--u));--half:calc(1064*var(--u));
+      --wide:calc(3088*var(--u))}
+
 *{box-sizing:border-box}
 html{background:#00287e}
-body{margin:0;background:#00287e;-webkit-font-smoothing:antialiased}
+body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 #page{overflow:hidden}
 
 .sec{position:relative;width:100%;height:var(--h);overflow:hidden}
-.art{position:absolute;top:0;left:50%;width:2128px;height:var(--h);margin-left:-1064px}
-.art>svg{display:block;width:2128px;height:var(--h)}
+.art{position:absolute;top:0;left:50%;width:var(--wide);height:var(--h);margin-left:calc(0px - var(--wide)/2);z-index:1}
+.art>svg{display:block;width:var(--wide);height:var(--h)}
 
-.col{position:absolute;top:var(--y);left:50%;width:var(--w);
-     margin-left:calc(-1064px + var(--x))}
+/* the flanks: every row of his own edge carried outward on its own rhythm */
+.bleed{position:absolute;top:0;height:var(--h);width:calc(50vw - var(--half) + 8*var(--u));z-index:0;
+       pointer-events:none;background-repeat:repeat-x;
+       background-size:calc(480*var(--u)) calc(var(--hraw)*var(--u))}
+.bleed--l{right:calc(50% + var(--half) - 4*var(--u));background-position:right top}
+.bleed--r{left:calc(50% + var(--half) - 4*var(--u));background-position:left top}
+/* flex sections split their flank the same way they split his art */
+.bleed--a{height:var(--seam);overflow:hidden}
+.bleed--b{top:calc(var(--seam) + var(--flex,0px));height:calc(var(--hraw)*var(--u) - var(--seam));
+          background-position-y:calc(0px - var(--seam));transition:top .3s ease}
+.bleed--b.bleed--l{background-position-x:right}
+.bleed--b.bleed--r{background-position-x:left}
+
+.col{position:absolute;z-index:2;top:var(--y);left:50%;width:var(--w);
+     margin-left:calc(0px - var(--half) + var(--x))}
 
 .qa{background:var(--fill);border-radius:10px;margin-bottom:var(--gap);
     border:1px solid var(--stroke);overflow:hidden;
@@ -63,94 +81,94 @@ body{margin:0;background:#00287e;-webkit-font-smoothing:antialiased}
 .qa-a p+p{padding-top:var(--blead)}
 
 .sec[data-flex]{height:calc(var(--h) + var(--flex,0px));transition:height .3s ease}
-.art-a{position:absolute;top:0;left:50%;width:2128px;margin-left:-1064px;overflow:hidden}
-.art-b{position:absolute;left:50%;width:2128px;margin-left:-1064px;
-       top:calc(var(--seam) + var(--flex,0px));transition:top .3s ease}
-.art-a>svg,.art-b>svg{display:block;width:2128px}
-.hot{position:absolute;display:block;border-radius:6px}
+.art-a{position:absolute;top:0;left:50%;width:var(--wide);margin-left:calc(0px - var(--wide)/2);overflow:hidden;z-index:1}
+.art-b{position:absolute;left:50%;width:var(--wide);margin-left:calc(0px - var(--wide)/2);
+       top:calc(var(--seam) + var(--flex,0px));transition:top .3s ease;z-index:1}
+.art-a>svg,.art-b>svg{display:block;width:var(--wide)}
+.hot{position:absolute;z-index:3;display:block;border-radius:6px}
 .hot:focus-visible{outline:2px solid #ffce00;outline-offset:2px}
 
 .col--02{
- --x:666.2px; --y:732.31px; --w:839.99px; --gap:9.63px; --shut:64.47px;
- --pad:24.19px; --qpr:53.29px;
- --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:17.28px; --qlead:19px; --qfill:#12161c;
- --bfam:'Be Vietnam Pro',sans-serif; --bwgt:600; --bsize:16px;
- --blead:27.52px; --bfill:#454c57;
- --qtop:22.7px; --atop:47.89px; --abot:43.42px;
+ --x:calc(666.2*var(--u)); --y:calc(732.31*var(--u)); --w:calc(839.99*var(--u)); --gap:calc(9.63*var(--u)); --shut:calc(64.47*var(--u));
+ --pad:calc(24.19*var(--u)); --qpr:calc(53.29*var(--u));
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:calc(17.28*var(--u)); --qlead:calc(19*var(--u)); --qfill:#12161c;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:600; --bsize:calc(16*var(--u));
+ --blead:calc(27.52*var(--u)); --bfill:#454c57;
+ --qtop:calc(22.7*var(--u)); --atop:calc(47.89*var(--u)); --abot:calc(43.42*var(--u));
  --fill:#fff; --fill-open:#deefff; --stroke:#00287e;
- --mw:29.1px; --minset:33.65px;
+ --mw:calc(29.1*var(--u)); --minset:calc(33.65*var(--u));
  --mfill:#00aa56; --mstroke:transparent;
- --msw:0px; --gcol:#fff; --gw:11.55px; --gsw:3px;
+ --msw:calc(0*var(--u)); --gcol:#fff; --gw:calc(11.55*var(--u)); --gsw:calc(3*var(--u));
 }
 .col--03{
- --x:825.4px; --y:755.33px; --w:809.79px; --gap:9.63px; --shut:64.47px;
- --pad:24.19px; --qpr:53.29px;
- --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:17.28px; --qlead:19px; --qfill:#fff;
- --bfam:'Be Vietnam Pro',sans-serif; --bwgt:300; --bsize:16px;
- --blead:27.52px; --bfill:#fff;
- --qtop:19.79px; --atop:20.83px; --abot:36.24px;
+ --x:calc(825.4*var(--u)); --y:calc(755.33*var(--u)); --w:calc(809.79*var(--u)); --gap:calc(9.63*var(--u)); --shut:calc(64.47*var(--u));
+ --pad:calc(24.19*var(--u)); --qpr:calc(53.29*var(--u));
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:calc(17.28*var(--u)); --qlead:calc(19*var(--u)); --qfill:#fff;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:300; --bsize:calc(16*var(--u));
+ --blead:calc(27.52*var(--u)); --bfill:#fff;
+ --qtop:calc(19.79*var(--u)); --atop:calc(20.83*var(--u)); --abot:calc(36.24*var(--u));
  --fill:rgb(0, 0, 0); --fill-open:#0f1c28; --stroke:#cad9ea;
- --mw:29.1px; --minset:36.05px;
+ --mw:calc(29.1*var(--u)); --minset:calc(36.05*var(--u));
  --mfill:#00aa56; --mstroke:transparent;
- --msw:0px; --gcol:#fff; --gw:11.55px; --gsw:3px;
+ --msw:calc(0*var(--u)); --gcol:#fff; --gw:calc(11.55*var(--u)); --gsw:calc(3*var(--u));
 }
 .col--04{
- --x:686.5px; --y:688.28px; --w:833.5px; --gap:18.33px; --shut:64.47px;
- --pad:35.29px; --qpr:57.23px;
- --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:17.28px; --qlead:19px; --qfill:#fff;
- --bfam:'Be Vietnam Pro',sans-serif; --bwgt:300; --bsize:16px;
- --blead:27.51px; --bfill:#fff;
- --qtop:22.61px; --atop:47.89px; --abot:19.99px;
+ --x:calc(686.5*var(--u)); --y:calc(688.28*var(--u)); --w:calc(833.5*var(--u)); --gap:calc(18.33*var(--u)); --shut:calc(64.47*var(--u));
+ --pad:calc(35.29*var(--u)); --qpr:calc(57.23*var(--u));
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:calc(17.28*var(--u)); --qlead:calc(19*var(--u)); --qfill:#fff;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:300; --bsize:calc(16*var(--u));
+ --blead:calc(27.51*var(--u)); --bfill:#fff;
+ --qtop:calc(22.61*var(--u)); --atop:calc(47.89*var(--u)); --abot:calc(19.99*var(--u));
  --fill:none; --fill-open:none; --stroke:#cad9ea;
- --mw:21.95px; --minset:42.2px;
+ --mw:calc(21.95*var(--u)); --minset:calc(42.2*var(--u));
  --mfill:transparent; --mstroke:transparent;
- --msw:0px; --gcol:#fff; --gw:11.55px; --gsw:3px;
+ --msw:calc(0*var(--u)); --gcol:#fff; --gw:calc(11.55*var(--u)); --gsw:calc(3*var(--u));
 }
 .col--05{
- --x:1030.6px; --y:692.36px; --w:647.4px; --gap:8.81px; --shut:64.47px;
- --pad:24.19px; --qpr:53.29px;
- --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:17.28px; --qlead:19px; --qfill:#12161c;
- --bfam:'Be Vietnam Pro',sans-serif; --bwgt:600; --bsize:16px;
- --blead:27.52px; --bfill:#454c57;
- --qtop:22.7px; --atop:47.89px; --abot:32.31px;
+ --x:calc(1030.6*var(--u)); --y:calc(692.36*var(--u)); --w:calc(647.4*var(--u)); --gap:calc(8.81*var(--u)); --shut:calc(64.47*var(--u));
+ --pad:calc(24.19*var(--u)); --qpr:calc(53.29*var(--u));
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:calc(17.28*var(--u)); --qlead:calc(19*var(--u)); --qfill:#12161c;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:600; --bsize:calc(16*var(--u));
+ --blead:calc(27.52*var(--u)); --bfill:#454c57;
+ --qtop:calc(22.7*var(--u)); --atop:calc(47.89*var(--u)); --abot:calc(32.31*var(--u));
  --fill:#fff; --fill-open:#fff; --stroke:#00287e;
- --mw:29.1px; --minset:36.05px;
+ --mw:calc(29.1*var(--u)); --minset:calc(36.05*var(--u));
  --mfill:#ffaa00; --mstroke:transparent;
- --msw:0px; --gcol:#fff; --gw:11.55px; --gsw:3px;
+ --msw:calc(0*var(--u)); --gcol:#fff; --gw:calc(11.55*var(--u)); --gsw:calc(3*var(--u));
 }
 .col--06{
- --x:949.7px; --y:622.51px; --w:840.3px; --gap:13.57px; --shut:64.47px;
- --pad:24.19px; --qpr:57.79px;
- --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:17.28px; --qlead:19px; --qfill:#12161c;
- --bfam:'Be Vietnam Pro',sans-serif; --bwgt:300; --bsize:16px;
- --blead:27.52px; --bfill:#454c57;
- --qtop:22.7px; --atop:28.69px; --abot:50.52px;
+ --x:calc(949.7*var(--u)); --y:calc(622.51*var(--u)); --w:calc(840.3*var(--u)); --gap:calc(13.57*var(--u)); --shut:calc(64.47*var(--u));
+ --pad:calc(24.19*var(--u)); --qpr:calc(57.79*var(--u));
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:calc(17.28*var(--u)); --qlead:calc(19*var(--u)); --qfill:#12161c;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:300; --bsize:calc(16*var(--u));
+ --blead:calc(27.52*var(--u)); --bfill:#454c57;
+ --qtop:calc(22.7*var(--u)); --atop:calc(28.69*var(--u)); --abot:calc(50.52*var(--u));
  --fill:#fff; --fill-open:#fff; --stroke:#cad9ea;
- --mw:33.6px; --minset:38.4px;
+ --mw:calc(33.6*var(--u)); --minset:calc(38.4*var(--u));
  --mfill:#004abd; --mstroke:#fff;
- --msw:2px; --gcol:#fff; --gw:13.59px; --gsw:2px;
+ --msw:calc(2*var(--u)); --gcol:#fff; --gw:calc(13.59*var(--u)); --gsw:calc(2*var(--u));
 }
 .col--07{
- --x:1075.19px; --y:454.98px; --w:702.01px; --gap:13.07px; --shut:65.97px;
- --pad:24.19px; --qpr:46.14px;
- --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:17.28px; --qlead:19px; --qfill:#12161c;
- --bfam:'Be Vietnam Pro',sans-serif; --bwgt:600; --bsize:16px;
- --blead:27.51px; --bfill:#454c57;
- --qtop:22.71px; --atop:47.89px; --abot:31.3px;
+ --x:calc(1075.19*var(--u)); --y:calc(454.98*var(--u)); --w:calc(702.01*var(--u)); --gap:calc(13.07*var(--u)); --shut:calc(65.97*var(--u));
+ --pad:calc(24.19*var(--u)); --qpr:calc(46.14*var(--u));
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:calc(17.28*var(--u)); --qlead:calc(19*var(--u)); --qfill:#12161c;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:600; --bsize:calc(16*var(--u));
+ --blead:calc(27.51*var(--u)); --bfill:#454c57;
+ --qtop:calc(22.71*var(--u)); --atop:calc(47.89*var(--u)); --abot:calc(31.3*var(--u));
  --fill:#fff; --fill-open:#fff; --stroke:#dbe3ee;
- --mw:21.95px; --minset:36.05px;
+ --mw:calc(21.95*var(--u)); --minset:calc(36.05*var(--u));
  --mfill:transparent; --mstroke:transparent;
- --msw:0px; --gcol:#12161c; --gw:11.55px; --gsw:3px;
+ --msw:calc(0*var(--u)); --gcol:#12161c; --gw:calc(11.55*var(--u)); --gsw:calc(3*var(--u));
 }
 .col--08{
- --x:640px; --y:481.94px; --w:840px; --gap:11.19px; --shut:64.5px;
- --pad:24.19px; --qpr:66.59px;
- --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:17.28px; --qlead:19px; --qfill:#fff;
- --bfam:'Be Vietnam Pro',sans-serif; --bwgt:600; --bsize:16px;
- --blead:27.51px; --bfill:#fff;
- --qtop:22.71px; --atop:47.89px; --abot:31.31px;
+ --x:calc(640*var(--u)); --y:calc(481.94*var(--u)); --w:calc(840*var(--u)); --gap:calc(11.19*var(--u)); --shut:calc(64.5*var(--u));
+ --pad:calc(24.19*var(--u)); --qpr:calc(66.59*var(--u));
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:calc(17.28*var(--u)); --qlead:calc(19*var(--u)); --qfill:#fff;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:600; --bsize:calc(16*var(--u));
+ --blead:calc(27.51*var(--u)); --bfill:#fff;
+ --qtop:calc(22.71*var(--u)); --atop:calc(47.89*var(--u)); --abot:calc(31.31*var(--u));
  --fill:none; --fill-open:none; --stroke:#fff;
- --mw:42.4px; --minset:37.6px;
+ --mw:calc(42.4*var(--u)); --minset:calc(37.6*var(--u));
  --mfill:#059236; --mstroke:transparent;
- --msw:0px; --gcol:#fff; --gw:11.55px; --gsw:3px;
+ --msw:calc(0*var(--u)); --gcol:#fff; --gw:calc(11.55*var(--u)); --gsw:calc(3*var(--u));
 }

@@ -20,6 +20,7 @@ def med(v):
     v=sorted(v); return v[len(v)//2]
 
 def esc(s): return html.escape(s,quote=False)
+def U(n): return f'calc({n}*var(--u))'
 
 def span(lab, sub):
     """x-range of a substring inside one of his kerned <text> runs"""
@@ -55,9 +56,9 @@ def hotspots(d):
         else:
             x0,x1,y0,y1=lab['x'],lab['x']+lab['w'],lab['y'],lab['y']+lab['h']
         px=spec.get('padx',14); py=spec.get('pady',10)
-        out.append('<a class="hot" href="%s" aria-label="%s" style="left:calc(50%% - 1064px + %.1fpx);top:%.1fpx;width:%.1fpx;height:%.1fpx"></a>'
+        out.append('<a class="hot" href="%s" aria-label="%s" style="left:calc(50%% - var(--half) + %s);top:%s;width:%s;height:%s"></a>'
                    %(spec['href'], esc(spec.get('label') or spec.get('find') or spec['text']),
-                     x0-px, y0-py, (x1-x0)+2*px, (y1-y0)+2*py))
+                     U(round(x0-px,1)), U(round(y0-py,1)), U(round((x1-x0)+2*px,1)), U(round((y1-y0)+2*py,1))))
     return out
 
 SEC=[]
@@ -104,17 +105,35 @@ css=["""/* Highway 19 Media — Q&A. His artboards, placed. Live cards only. */
 @font-face{font-family:'BeVietnamPro-Black';src:url(../fonts/bvp-900.woff2) format('woff2');font-display:block}
 @font-face{font-family:'Arial-BoldMT';src:local('Arial Bold'),local('Arial-BoldMT'),url(../fonts/arimo-700.woff2) format('woff2');font-display:block}
 
+/* one unit is one of his artboard pixels. Never larger than a screen pixel,
+   so his art is only ever shown at his scale or smaller - never enlarged. */
+:root{--u:min(1px, 100vw / 1810);--art:calc(2128*var(--u));--half:calc(1064*var(--u));
+      --wide:calc(3088*var(--u))}
+
 *{box-sizing:border-box}
 html{background:#00287e}
-body{margin:0;background:#00287e;-webkit-font-smoothing:antialiased}
+body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 #page{overflow:hidden}
 
 .sec{position:relative;width:100%;height:var(--h);overflow:hidden}
-.art{position:absolute;top:0;left:50%;width:2128px;height:var(--h);margin-left:-1064px}
-.art>svg{display:block;width:2128px;height:var(--h)}
+.art{position:absolute;top:0;left:50%;width:var(--wide);height:var(--h);margin-left:calc(0px - var(--wide)/2);z-index:1}
+.art>svg{display:block;width:var(--wide);height:var(--h)}
 
-.col{position:absolute;top:var(--y);left:50%;width:var(--w);
-     margin-left:calc(-1064px + var(--x))}
+/* the flanks: every row of his own edge carried outward on its own rhythm */
+.bleed{position:absolute;top:0;height:var(--h);width:calc(50vw - var(--half) + 8*var(--u));z-index:0;
+       pointer-events:none;background-repeat:repeat-x;
+       background-size:calc(480*var(--u)) calc(var(--hraw)*var(--u))}
+.bleed--l{right:calc(50% + var(--half) - 4*var(--u));background-position:right top}
+.bleed--r{left:calc(50% + var(--half) - 4*var(--u));background-position:left top}
+/* flex sections split their flank the same way they split his art */
+.bleed--a{height:var(--seam);overflow:hidden}
+.bleed--b{top:calc(var(--seam) + var(--flex,0px));height:calc(var(--hraw)*var(--u) - var(--seam));
+          background-position-y:calc(0px - var(--seam));transition:top .3s ease}
+.bleed--b.bleed--l{background-position-x:right}
+.bleed--b.bleed--r{background-position-x:left}
+
+.col{position:absolute;z-index:2;top:var(--y);left:50%;width:var(--w);
+     margin-left:calc(0px - var(--half) + var(--x))}
 
 .qa{background:var(--fill);border-radius:10px;margin-bottom:var(--gap);
     border:1px solid var(--stroke);overflow:hidden;
@@ -154,11 +173,11 @@ body{margin:0;background:#00287e;-webkit-font-smoothing:antialiased}
 .qa-a p+p{padding-top:var(--blead)}
 
 .sec[data-flex]{height:calc(var(--h) + var(--flex,0px));transition:height .3s ease}
-.art-a{position:absolute;top:0;left:50%;width:2128px;margin-left:-1064px;overflow:hidden}
-.art-b{position:absolute;left:50%;width:2128px;margin-left:-1064px;
-       top:calc(var(--seam) + var(--flex,0px));transition:top .3s ease}
-.art-a>svg,.art-b>svg{display:block;width:2128px}
-.hot{position:absolute;display:block;border-radius:6px}
+.art-a{position:absolute;top:0;left:50%;width:var(--wide);margin-left:calc(0px - var(--wide)/2);overflow:hidden;z-index:1}
+.art-b{position:absolute;left:50%;width:var(--wide);margin-left:calc(0px - var(--wide)/2);
+       top:calc(var(--seam) + var(--flex,0px));transition:top .3s ease;z-index:1}
+.art-a>svg,.art-b>svg{display:block;width:var(--wide)}
+.hot{position:absolute;z-index:3;display:block;border-radius:6px}
 .hot:focus-visible{outline:2px solid #ffce00;outline-offset:2px}
 """]
 
@@ -167,20 +186,21 @@ for d in SEC:
     m=d['m']
     mw=m['disc'] or m['glyph']*1.9
     css.append(f""".col--{d['k']}{{
- --x:{d['x']}px; --y:{d['y']}px; --w:{d['w']}px; --gap:{d['gap']}px; --shut:{d['shut']}px;
- --pad:{d['pad']}px; --qpr:{round(d['pad']+mw,2)}px;
- --qfam:{FAM[d['qfam']]}; --qsize:{d['qsize']}px; --qlead:19px; --qfill:{d['qfill']};
- --bfam:{FAM[d['bfam']]}; --bwgt:{WGT[d['bfam']]}; --bsize:{d['bsize']}px;
- --blead:{d['blead']}px; --bfill:{d['bfill']};
- --qtop:{d['qtop']}px; --atop:{round(d['bodytop']-d['qtop']-19,2)}px; --abot:{d['botpad']}px;
+ --x:{U(d['x'])}; --y:{U(d['y'])}; --w:{U(d['w'])}; --gap:{U(d['gap'])}; --shut:{U(d['shut'])};
+ --pad:{U(d['pad'])}; --qpr:{U(round(d['pad']+mw,2))};
+ --qfam:{FAM[d['qfam']]}; --qsize:{U(d['qsize'])}; --qlead:{U(19)}; --qfill:{d['qfill']};
+ --bfam:{FAM[d['bfam']]}; --bwgt:{WGT[d['bfam']]}; --bsize:{U(d['bsize'])};
+ --blead:{U(d['blead'])}; --bfill:{d['bfill']};
+ --qtop:{U(d['qtop'])}; --atop:{U(round(d['bodytop']-d['qtop']-19,2))}; --abot:{U(d['botpad'])};
  --fill:{d['fill']}; --fill-open:{d['fillopen']}; --stroke:{d['stroke'] or 'transparent'};
- --mw:{round(mw,2)}px; --minset:{m['inset']}px;
+ --mw:{U(round(mw,2))}; --minset:{U(m['inset'])};
  --mfill:{m['discFill'] or 'transparent'}; --mstroke:{m['discStroke'] or 'transparent'};
- --msw:{m['discSW']}px; --gcol:{m['glyphCol']}; --gw:{m['glyph']}px; --gsw:{m['glyphSW']}px;
+ --msw:{U(m['discSW'])}; --gcol:{m['glyphCol']}; --gw:{U(m['glyph'])}; --gsw:{U(m['glyphSW'])};
 }}""")
 open(f'{ROOT}/assets/css/qa.css','w',encoding='utf-8').write('\n'.join(css))
 
 # ---------- HTML ----------
+BLEED=480          # units of his art shown either side of the artboard
 def svg_of(k):
     s=open(f'{ROOT}/assets/scene/sec-{k}.svg',encoding='utf-8').read()
     s=re.sub(r'^<\?xml[^>]*\?>\s*','',s)
@@ -209,23 +229,33 @@ parts=["""<!doctype html>
 
 for d in SEC:
     k=d['k']
-    fx=(' data-flex="1" style="--h:%spx;--seam:%spx;--flex:0px"'%(d['h'],flex[k]['seam'])) if k in flex \
-       else (' style="--h:%spx"'%d['h'])
+    fx=(' data-flex="1" style="--h:%s;--hraw:%s;--seam:%s;--flex:0px"'%(U(d['h']),d['h'],U(flex[k]['seam']))) if k in flex \
+       else (' style="--h:%s;--hraw:%s"'%(U(d['h']),d['h']))
     parts.append(f'<section class="sec sec--{k}" id="s{k}"{fx}>')
     art=svg_of(k)
+    H0=d['h']
+    art=re.sub(r'viewBox="0 0 2128 ([\d.]+)"',
+               lambda m: f'viewBox="{-BLEED} 0 {2128+2*BLEED} {m.group(1)}"', art, count=1)
     if k in flex:
         seam=flex[k]['seam']; H=d['h']
-        top=re.sub(r'viewBox="[^"]*"', f'viewBox="0 0 2128 {seam}"', art, count=1)
+        top=re.sub(r'viewBox="[^"]*"', f'viewBox="{-BLEED} 0 {2128+2*BLEED} {seam}"', art, count=1)
         top=re.sub(r'\sheight="[\d.]+"', f' height="{seam}"', top, count=1)
-        bot=re.sub(r'viewBox="[^"]*"', f'viewBox="0 {seam} 2128 {round(H-seam,2)}"', art, count=1)
+        bot=re.sub(r'viewBox="[^"]*"', f'viewBox="{-BLEED} {seam} {2128+2*BLEED} {round(H-seam,2)}"', art, count=1)
         bot=re.sub(r'\sheight="[\d.]+"', f' height="{round(H-seam,2)}"', bot, count=1)
         bot=bot.replace(f'id="art-{k}"', f'id="artb-{k}"')
         bot=re.sub(r'(\sid=")'+k+r'_', r'\g<1>'+k+'b_', bot)
         bot=bot.replace(f'url(#{k}_', f'url(#{k}b_').replace(f'href="#{k}_', f'href="#{k}b_')
-        parts.append(f'<div class="art-a" style="height:{seam}px">{top}</div>')
+        parts.append(f'<div class="art-a" style="height:{U(seam)}">{top}</div>')
         parts.append(f'<div class="art-b">{bot}</div>')
     else:
         parts.append(f'<div class="art">{art}</div>')
+    for side in ('l','r'):
+        bg=f'background-image:url(assets/img/bleed-{k}-{side}.webp)'
+        if k in flex:
+            parts.append(f'<div class="bleed bleed--{side} bleed--a" style="{bg}"></div>')
+            parts.append(f'<div class="bleed bleed--{side} bleed--b" style="{bg}"></div>')
+        else:
+            parts.append(f'<div class="bleed bleed--{side}" style="{bg}"></div>')
     for h in hotspots(d):
         parts.append(h)
     if d['cards']:

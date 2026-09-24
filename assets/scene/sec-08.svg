@@ -72,7 +72,7 @@
   <text transform="translate(872.6453 2072.6744)" fill="#12161c" font-family="BeVietnamPro-ExtraBold, 'Be Vietnam Pro'" font-size="15.2" font-weight="700" isolation="isolate"><tspan x="0" y="0" letter-spacing=".03em">A</tspan><tspan x="12.33" y="0" letter-spacing=".06em">SK US DIR</tspan><tspan x="96.9" y="0" letter-spacing=".04em">E</tspan><tspan x="107.36" y="0" letter-spacing=".02em">C</tspan><tspan x="119.49" y="0" letter-spacing=".06em">T</tspan><tspan x="130.93" y="0" letter-spacing="-.1em">L</tspan><tspan x="139.25" y="0" letter-spacing=".05em">Y</tspan></text>
   <text transform="translate(1093.8572 2072.6744)" fill="#fff" font-family="BeVietnamPro-ExtraBold, 'Be Vietnam Pro'" font-size="15.2" font-weight="700" isolation="isolate"><tspan x="0" y="0" letter-spacing=".05em">SEE WH</tspan><tspan x="66.1" y="0" letter-spacing="-.05em">A</tspan><tspan x="77.18" y="0" letter-spacing=".06em">T WE DO</tspan></text>
   <g id="Forest">
-    <g clip-path="url(#clippath)">
+    <image width="2107.680" height="382.560" transform="translate(-946.64 -319.28)" href="assets/img/f2f072a9e3.webp" data-tile="1"/><image width="2107.680" height="382.560" transform="translate(1105.36 -298.48)" href="assets/img/fb29136d5a.webp" data-tile="1"/><image width="2107.680" height="382.560" transform="translate(-1630.64 -319.28)" href="assets/img/f2f072a9e3.webp" data-tile="1"/><image width="2107.680" height="382.560" transform="translate(1789.36 -298.48)" href="assets/img/fb29136d5a.webp" data-tile="1"/><g clip-path="url(#clippath)">
       <image width="2107.680" height="382.560" transform="translate(-262.64 -319.28)" href="assets/img/f2f072a9e3.webp"/>
     </g>
   </g>
