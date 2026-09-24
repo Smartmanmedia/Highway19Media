@@ -97,7 +97,10 @@
 .road-run__art .is-night .car-body{filter:brightness(.52) saturate(.68)}
 .road-run__art .road-hit{pointer-events:stroke;cursor:pointer}
 
-.road-gap{position:relative;height:var(--gap-h,clamp(120px,11vw,170px))}
+/* A gap has to be deep enough to hold one of his turns: a quarter of a
+   203.5 centreline with a 95 road on it reaches 251 from the tangent. At 170
+   every entry and exit was being squeezed into two thirds of its sweep. */
+.road-gap{position:relative;height:var(--gap-h,clamp(180px,17.7vw,255px))}
 
 /* His viaduct. The deck's centreline sits 30.4 per cent down the drawing, so
    that is the point pinned to the crossing's own centreline — the road the
@@ -234,16 +237,24 @@
 #qa-hero .eyebrow{margin-bottom:0}
 #qa-hero .body-copy{color:rgba(255,255,255,.87);max-width:52ch;margin-inline:auto;text-wrap:pretty}
 
-/* His clouds, used unaltered and held well back so they never compete with
-   the copy or the road. */
-/* His clouds pass in FRONT of everything — sign, road, copy — and the shadow
-   under them is black at 20 per cent, not a tinted navy. */
+/* His clouds pass in FRONT of everything — sign, road, copy — and they are
+   SOLID. Two of them were sitting at .15 and .09 opacity, which is what made
+   them read as smears of nothing.
+
+   The shadow is his, not a blur: every cast shadow on his page is the shape
+   itself, offset, filled black at .37 — the sign plates, the gantry and the
+   clouds all use the same value. Measured off Cloud5-2 and its shadow in
+   QA-Part3: the cloud is 459.2 across, the shadow 446.3, offset 46 LEFT and
+   77 DOWN — about a tenth of the width across and a sixth down, falling the
+   same way as every other shadow on the page. */
 .qa-cloud{
+  --cw:220px;
   position:absolute;z-index:20;pointer-events:none;user-select:none;
-  filter:drop-shadow(0 12px 20px rgba(0,0,0,.2));
+  opacity:1;
+  filter:drop-shadow(calc(var(--cw) * -0.10) calc(var(--cw) * 0.17) 0 rgba(0,0,0,.37));
 }
-.qa-cloud--a{width:clamp(190px,24vw,360px);top:4%;right:4%;opacity:.15}
-.qa-cloud--b{width:clamp(130px,15vw,230px);top:52%;right:30%;opacity:.09}
+.qa-cloud--a{--cw:clamp(190px,24vw,360px);width:var(--cw);top:4%;right:4%}
+.qa-cloud--b{--cw:clamp(130px,15vw,230px);width:var(--cw);top:52%;right:30%}
 
 /* ============================================================================
    2. THE EXIT GANTRY — sticky category navigation
@@ -597,7 +608,6 @@
   #qa-hero .signplate__copy{left:20%;right:8%}
   #qa-hero .signplate__copy h1{font-size:7.2cqi}
   .qa-cloud--b{display:none}
-  .qa-cloud--a{opacity:.11}
 
   .qa-exits__list{padding-block:.45rem}
   .qa-exits__link{font-size:.75rem;padding:.55em .7em}
@@ -891,8 +901,8 @@
 .qa-cloud--turn{
   position:absolute;
   right:2%;bottom:-8%;
-  width:clamp(150px,15vw,215px);
-  opacity:1;
+  --cw:clamp(150px,15vw,215px);
+  width:var(--cw);
 }
 
 /* ── The exits gantry, in his blue ──────────────────────────────────────── */
@@ -1016,6 +1026,19 @@
                             #21627d 97%,#24687f 100%);
 }
 
+/* His coastline — the rock headland where the forest runs out into the
+   water, with the shadow layer he draws under it. 335 of his 1441.5, cut in
+   place. This join was a gradient from green to navy; his is drawn. */
+.qa-coastline{
+  position:relative;width:100vw;margin-left:calc(50% - 50vw);
+  height:23.24vw;
+  background-image:url("../scene/qa-coastline.png"),
+    linear-gradient(180deg,#002374 0%,#012a6f 30%,#00306c 60%,#00386d 100%);
+  background-repeat:no-repeat,no-repeat;
+  background-size:100% 100%,auto;
+  background-position:center top,0 0;
+}
+
 /* ── The coast ───────────────────────────────────────────────────────────
    Beach, airport, city, highway, forest — the stack he draws under the Print
    copy. Every band is a share of the 1441.5 page he drew it on, so the whole
@@ -1063,14 +1086,17 @@
    the ground the highway hands it. */
 .qa-coast__forest{
   position:relative;width:100vw;margin-left:calc(50% - 50vw);
-  height:22.2vw;
-  /* His trees over his own ground. Two layers, not one shorthand: a gradient
-     and a url cannot share a background layer, and the whole declaration is
-     thrown away if they try. */
+  height:13.25vw;
+  /* His canopy at half the size he drew it, tiled. It was one 893-wide raster
+     blown up to the full width, which is why it came out pixelated: the tile
+     is cut straight from his 8780-wide source and rendered at 2x the size it
+     is shown at, so nothing is ever upscaled.
+     Two layers, not one shorthand: a gradient and a url cannot share a
+     background layer, and the whole declaration is thrown away if they try. */
   background-image:url("../scene/qa-forest.png"),
     linear-gradient(180deg,#1a1a1a 0%,#290a00 28%,#293114 54%,#29471f 76%,#295929 100%);
-  background-repeat:no-repeat,no-repeat;
-  background-size:100% 100%,auto;
+  background-repeat:repeat-x,no-repeat;
+  background-size:50% auto,auto;
   background-position:center top,0 0;
 }
 
@@ -1418,8 +1444,8 @@
 .qa-cloud--exits{
   position:absolute;left:-4%;
   margin-top:clamp(6px,1vw,16px);
-  width:clamp(220px,24vw,360px);
-  opacity:1;
+  --cw:clamp(220px,24vw,360px);
+  width:var(--cw);
 }
 
 /* ── General keeps the centred treatment he drew: the outlined mark, the

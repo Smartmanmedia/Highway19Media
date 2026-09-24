@@ -49,7 +49,9 @@
       LANE = 31,                 /* lane centres at +/-31 from the centreline */
       /* He redrew the asphalt at 95 across for the section roads on the
          questions page; a route may say otherwise — see measureRoute. */
-      HIS_W = 95;
+      HIS_W = 95,
+      /* And every corner he draws turns on a 203.5 centreline. */
+      HIS_R = 203.5;
 
   /* -- Simulation constants, carried over unchanged. ----------------------- */
   var STEP = 5,                  /* path sample spacing, px                   */
@@ -673,14 +675,21 @@
     if (!inset) inset = 226;
     if (!insetOut) insetOut = Math.round(inset * 0.55);
     var g = { el: el, W: Math.round(box.width), H: Math.round(box.height),
-              /* The turns between a page edge and a rail have only the margin
-                 to complete in, so the radius cannot exceed the inset — at
-                 150 against a 118 inset the apex of every entry curve sat off
-                 the screen and the road appeared to start mid-bend. The inset
-                 is already viewport-relative in CSS, so it is not scaled
-                 again here. */
+              /* HIS turn, measured off the asphalt of Curve-2 in QA-Part3:
+
+                   M1444.29,1358.76 c73.71,-2.14 133.78,-30.15 179.28,-77.28
+                                    c44.88,-46.48 71.58,-109.47 71.58,-174.1
+                                    h-95.02 ...
+
+                 centre (1444.29, 1107.38), outer edge 251.1 out, inner 155.8,
+                 so the road is 95.3 across and the CENTRELINE RADIUS IS 203.5.
+                 This engine was turning at 124 — sixty per cent of his sweep —
+                 and because every entry, exit and crossing on the page hangs
+                 off that one number, nothing downstream of a corner landed
+                 where he drew it. It is a page-scale length, so it takes the
+                 viewport scale and nothing else. */
               inset: inset, insetOut: insetOut,
-              R: Math.min(150, insetOut), moves: [],
+              R: HIS_R * viewScale, moves: [],
               /* His page does not run one road. The section roads are 95
                  across with a lane each way; the highway past the port is 148
                  across with three each way, and the vehicles on it are the

@@ -390,6 +390,14 @@ FOREST = """
   <div class="qa-coast__forest" aria-hidden="true"></div>
 """
 
+# His coastline: the rock headland where the forest meets the water, with the
+# shadow layer he draws under it. This is the Branding-to-Print transition in
+# his file — not a gradient, a drawn edge, the way the desert closes with his
+# rock ridges.
+COASTLINE = """
+  <div class="qa-coastline" aria-hidden="true"></div>
+"""
+
 PAGE = [
     # Route 1 opens in the template: in off the top on the inner right rail
     # beside the hero, across on his big turn, then down the OUTER left rail
@@ -460,6 +468,7 @@ PAGE = [
     # Print sits on his open water with the container ship crossing it, and
     # the coast below: beach, airport, city, then the six-lane highway and
     # his forest. That is where his page stops, so it is where ours stops.
+    ("scene", COASTLINE),
     ("plain", "qa-print"),
     ("scene", COAST),
     ("route", [
