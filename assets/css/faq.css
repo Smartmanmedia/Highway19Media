@@ -1100,7 +1100,7 @@
                     #f0dcae 82%,#ffd486 100%);
   background-repeat:no-repeat,no-repeat;
   background-size:calc(var(--stage) * 0.40398) auto,auto;
-  background-position:var(--stage-x) bottom,0 0;
+  background-position:left bottom,0 0;
 }
 /* His grass under the runways: 282 of 1441.5, #b3c46f down to #8fb44f. The
    airport itself is 248 of it, laid on the bottom. */
@@ -1114,7 +1114,7 @@
   content:"";position:absolute;left:0;right:0;bottom:0;z-index:0;
   height:min(18.73vw,270px);
   background:url("../scene/qa-airfield.svg") no-repeat
-             var(--stage-x) bottom / calc(var(--stage) * 0.95768) auto;
+             left bottom / calc(var(--stage) * 0.95768) auto;
   pointer-events:none;
 }
 /* His city: 399 of 1441.5 on his own #6d6e72. */
@@ -1122,11 +1122,22 @@
   /* Industrial Area.svg: 1563.16 x 477.2, his own artboard. The cut I was
      using had dropped #6d6e72 — his ground AND every building shadow — so
      the whole block read flat. Placed, it keeps the shadows, the trees, the
-     red factory and the blue-roofed sheds. 1563.16 is 1.0844 of his page,
-     so it bleeds a little either side, which is how he drew it. */
-  height:min(33.11vw,477px);
-  background:#6d6e72 url("../scene/qa-industrial.svg") no-repeat center bottom
-             / calc(var(--stage) * 1.0844) auto;
+     red factory and the blue-roofed sheds.
+
+     It TILES side to side, on the ground's width and not the artboard's.
+     His artboard is 1563.16 across but the ground itself — #6d6e72, with
+     the white kerb line on it — runs x 66 to 1509, which is 1443: his page.
+     Everything outside that is buildings and trees OVERHANGING the ground
+     at each end, which is how his blocks overlap where they meet. Repeating
+     the artboard left a 121-wide gutter at every seam and cut his kerb line
+     into segments, so qa-industrial-tile.svg is the ground width with the
+     block drawn once in place and once to each side, bringing the
+     neighbours' overhangs back in over this tile's edges. Anchored to the
+     left of his stage, so at his own page width it lands exactly where he
+     drew it and a wider window gets more industry, not more empty grey. */
+  height:min(33.07vw,477px);
+  background:#6d6e72 url("../scene/qa-industrial-tile.svg") repeat-x var(--stage-x) bottom
+             / calc(var(--stage) * 1.00104) auto;
 }
 /* And his forest on the far side of the highway: 300 of 1441.5, standing on
    the ground the highway hands it. */

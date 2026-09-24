@@ -103,21 +103,13 @@
     var trigger = triggerOf(item), panel = panelOf(item);
     if (!trigger || !panel) return;
 
-    /* His artboard shows the first question of every list already open, and
-       it is what gives each band the depth he draws it at — a section whose
-       answers are all shut is a third shorter than the one in his file. The
-       first one stays open; the rest collapse without animating, because this
-       is the first paint and not an interaction. */
-    var first = item.parentNode && item === item.parentNode.querySelector('.qa-item');
-    if (first) {
-      item.classList.add('is-open');
-      trigger.setAttribute('aria-expanded', 'true');
-      panel.hidden = false;
-    } else {
-      item.classList.remove('is-open');
-      trigger.setAttribute('aria-expanded', 'false');
-      panel.hidden = true;
-    }
+    /* Every answer starts SHUT. The first one of each list was open here
+       because his artboard draws it that way — but he drew it open to show
+       what an answer looks like inside, not to say the page loads like that.
+       Closed is the default; a question opens when someone asks it. */
+    item.classList.remove('is-open');
+    trigger.setAttribute('aria-expanded', 'false');
+    panel.hidden = true;
 
     trigger.addEventListener('click', function () { toggle(item); });
   });

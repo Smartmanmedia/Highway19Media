@@ -849,7 +849,7 @@
     if (vRanges.length) {
       var probe = el('path', { d: d(0), fill: 'none' });
       svg.appendChild(probe);
-      var L = probe.getTotalLength(), step = 86 * rs, off = 70 * rs;
+      var L = probe.getTotalLength(), step = 132 * rs, off = 150 * rs;
       var trees = el('g', {});
       for (var q = step * 0.5; q < L; q += step) {
         var a = probe.getPointAtLength(q - 1), c2 = probe.getPointAtLength(q + 1);
@@ -1012,8 +1012,13 @@
       if (y >= NIGHT[i][0] && y <= NIGHT[i][1]) return true;
     return false;
   }
-  var TREE_A = { src: 'assets/scene/qa-tree-a.png', w: 55, h: 50 },
-      TREE_B = { src: 'assets/scene/qa-tree-b.png', w: 71, h: 62 };
+  /* His own cluster, Trees.svg, 268.64 x 453.15. The verge was two little
+     55 and 71 wide sprites dotted every 86px, which gave a thin line of
+     lollipops; his planting is a MASS — on the branding stretch it runs 265
+     across off the kerb, which is this cluster at close to the size he drew
+     it, overlapping down the road. Vector, so it stays sharp at any width. */
+  var TREE_A = { src: 'assets/scene/qa-canopy.svg', w: 215, h: 363 },
+      TREE_B = { src: 'assets/scene/qa-canopy.svg', w: 188, h: 317 };
 
   /* Tap the road to pull the traffic up, tap again to let it go. Nothing is
      frozen: paused just sets every vehicle's target speed to zero and lets the
