@@ -1,0 +1,9 @@
+{
+ "07":[{"img":"industrial.webp","x":-2010,"y":1467,"w":2017},
+       {"img":"industrial.webp","x":2121,"y":1467,"w":2017}],
+ "06":[{"scatter":"trees.webp","n":9,"w":150,"box":[-520,180,520,1320],"seed":7},
+       {"scatter":"trees.webp","n":9,"w":150,"box":[2128,180,520,1320],"seed":11}],
+ "02":[{"scatter":"trees.webp","n":5,"w":130,"box":[-520,900,520,700],"seed":3}],
+ "08":[{"scatter":"trees.webp","n":6,"w":150,"box":[-520,0,520,90],"seed":5},
+       {"scatter":"trees.webp","n":6,"w":150,"box":[2128,0,520,90],"seed":9}]
+}
