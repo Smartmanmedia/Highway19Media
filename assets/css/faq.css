@@ -247,11 +247,19 @@
    QA-Part3: the cloud is 459.2 across, the shadow 446.3, offset 46 LEFT and
    77 DOWN — about a tenth of the width across and a sixth down, falling the
    same way as every other shadow on the page. */
+/* His clouds each carry their own shadow as a separate path — no fill, so
+   black, at opacity .37, and offset -0.0995 of the cloud's width across and
+   +0.1684 down (Cloud5 at 459.1 wide, shadow bbox 801,1930 against the body
+   at 846.7,1852.7). The files shipped here had a #666 shape baked in on the
+   OTHER side, up and to the right, set to mix-blend-mode:multiply — which
+   never multiplies across an <img> boundary, so it painted as flat grey on
+   the wrong side of every cloud. Those shapes are gone; this is his shadow,
+   thrown off the cloud's own silhouette. */
 .qa-cloud{
   --cw:220px;
   position:absolute;z-index:20;pointer-events:none;user-select:none;
   opacity:1;
-  filter:drop-shadow(calc(var(--cw) * -0.10) calc(var(--cw) * 0.17) 0 rgba(0,0,0,.37));
+  filter:drop-shadow(calc(var(--cw) * -0.0995) calc(var(--cw) * 0.1684) 0 rgba(0,0,0,.37));
 }
 .qa-cloud--a{--cw:clamp(190px,24vw,360px);width:var(--cw);top:4%;right:4%}
 .qa-cloud--b{--cw:clamp(130px,15vw,230px);width:var(--cw);top:52%;right:30%}
@@ -1333,12 +1341,31 @@
   --plate-cast: min(-33px,-2.29vw);
 }
 
-/* His night plates are #006802; the one standing on the desert is #1c9022. */
+/* Every plate on his page, read straight off QA part 3.png by finding the
+   runs of plate green and sampling the face and the disc inside each one.
+   All six are 612 x 194 — his 614.8 x 197.39 artboard — and they alternate
+   left and right down the page:
+
+     exits gantry   y 1146  x  209  #1c9022  disc #004ba0
+     websites       y 2996  x  143  #006802  disc #1068b6
+     video          y 4582  x  682  #006802  disc #1068b6
+     advertising    y 6828  x  148  #1c9022  disc #ffbc00
+     branding       y 8434  x  682  #1c9022  disc #1c6eb7
+     print          y 10348 x  160  #1c9022  disc #1068b6
+
+   Only the two night plates are the dark green. Branding and print were
+   carrying it too, which is why they read almost black against his forest
+   and his water instead of the green he actually paints there. */
 #qa-websites .hwy-sign__plate,
 #qa-video .hwy-sign__plate,
-#qa-branding .hwy-sign__plate,
-#qa-print .hwy-sign__plate,
 #qa-working .hwy-sign__plate{--plate-face:#006802}
+/* His disc on each plate, measured the same way. These are the Q&A page's
+   signs only — the service colours the home page runs on are untouched. */
+.page--qa #qa-websites    .hwy-sign--section .qa-disc{background:#1068b6}
+.page--qa #qa-video       .hwy-sign--section .qa-disc{background:#1068b6}
+.page--qa #qa-advertising .hwy-sign--section .qa-disc{background:#ffbc00}
+.page--qa #qa-branding    .hwy-sign--section .qa-disc{background:#1c6eb7}
+.page--qa #qa-print       .hwy-sign--section .qa-disc{background:#1068b6}
 .hwy-sign--section .hwy-sign__panel{grid-column:2}
 .hwy-sign--section.is-mirrored .hwy-sign__truss{grid-column:1}
 /* Icon nearest the truss, arrow pointing away from it — his order, which is
