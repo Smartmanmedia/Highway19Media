@@ -1231,6 +1231,28 @@
   padding:clamp(16px,1.8vw,26px) clamp(18px,2.2vw,32px);
   text-align:left;
 }
+/* The shadow each plate throws on the ground behind it. His section signs
+   all have one and mine had only the small hard outline, which is most of
+   what was missing from the shadows. Measured off QA-Part3, plate to shadow:
+
+     exits gantry   64.4 left, 63.6 down
+     social media   27.4 left, 75.4 down    (truss left)
+     print          39.0 left, 61.0 down    (truss left)
+     branding       36.6 RIGHT, 57.0 down   (truss right)
+
+   It falls away from the middle of the page — outward, on the side the truss
+   runs off — and about twice as far down as sideways. Drawn as a second box
+   shadow on the plate so it turns with the sign and rides the parallax with
+   it; the hard offset outline his plates also carry stays where it was. */
+.hwy-sign--section .hwy-sign__plate{
+  --plate-cast: min(33px,2.29vw);
+  box-shadow:3px 4px 0 -1.5px rgba(0,0,0,.9),
+             var(--plate-cast) min(66px,4.58vw) 0 rgba(0,0,0,.37);
+}
+.hwy-sign--section.is-mirrored .hwy-sign__plate{
+  --plate-cast: min(-33px,-2.29vw);
+}
+
 /* His night plates are #006802; the one standing on the desert is #1c9022. */
 #qa-websites .hwy-sign__plate,
 #qa-video .hwy-sign__plate,
