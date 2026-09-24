@@ -52,6 +52,10 @@
       });
     });
 
+    /* the column's height animates as an answer opens, so follow it frame by
+       frame rather than reading it once and landing on the stale number */
+    if (window.ResizeObserver) new ResizeObserver(fit).observe(col);
+
     col.__fit = fit;
     fit();
   });

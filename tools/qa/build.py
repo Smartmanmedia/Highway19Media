@@ -107,7 +107,7 @@ css=["""/* Highway 19 Media — Q&A. His artboards, placed. Live cards only. */
 
 /* one unit is one of his artboard pixels. Never larger than a screen pixel,
    so his art is only ever shown at his scale or smaller - never enlarged. */
-:root{--u:min(1px, 100vw / 1810);--art:calc(2128*var(--u));--half:calc(1064*var(--u));
+:root{--u:min(1px, 100vw / 1960);--art:calc(2128*var(--u));--half:calc(1064*var(--u));
       --wide:calc(3088*var(--u))}
 
 *{box-sizing:border-box}
@@ -128,7 +128,7 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
 /* flex sections split their flank the same way they split his art */
 .bleed--a{height:var(--seam);overflow:hidden}
 .bleed--b{top:calc(var(--seam) + var(--flex,0px));height:calc(var(--hraw)*var(--u) - var(--seam));
-          background-position-y:calc(0px - var(--seam));transition:top .3s ease}
+          background-position-y:calc(0px - var(--seam))}
 .bleed--b.bleed--l{background-position-x:right}
 .bleed--b.bleed--r{background-position-x:left}
 
@@ -172,11 +172,12 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
 .qa-a p:last-child{padding-bottom:var(--abot)}
 .qa-a p+p{padding-top:var(--blead)}
 
-.sec[data-flex]{height:calc(var(--h) + var(--flex,0px));transition:height .3s ease}
+.sec[data-flex]{height:calc(var(--h) + var(--flex,0px))}
 .art-a{position:absolute;top:0;left:50%;width:var(--wide);margin-left:calc(0px - var(--wide)/2);overflow:hidden;z-index:1}
 .art-b{position:absolute;left:50%;width:var(--wide);margin-left:calc(0px - var(--wide)/2);
-       top:calc(var(--seam) + var(--flex,0px));transition:top .3s ease;z-index:1}
-.art-a>svg,.art-b>svg{display:block;width:var(--wide)}
+       top:calc(var(--seam) + var(--flex,0px));z-index:1}
+.art-a>svg{display:block;width:var(--wide);height:var(--seam)}
+.art-b>svg{display:block;width:var(--wide);height:var(--tail)}
 /* his traffic, his ship, his planes - his own artwork, set moving */
 .run{transform-box:view-box;will-change:transform}
 .run[data-axis="x"]{animation:h19x var(--dur) linear var(--dly) infinite}
@@ -242,7 +243,8 @@ parts=["""<!doctype html>
 
 for d in SEC:
     k=d['k']
-    fx=(' data-flex="1" style="--h:%s;--hraw:%s;--seam:%s;--flex:0px"'%(U(d['h']),d['h'],U(flex[k]['seam']))) if k in flex \
+    fx=(' data-flex="1" style="--h:%s;--hraw:%s;--seam:%s;--tail:%s;--flex:0px"'
+        %(U(d['h']),d['h'],U(flex[k]['seam']),U(round(d['h']-flex[k]['seam'],2)))) if k in flex \
        else (' style="--h:%s;--hraw:%s"'%(U(d['h']),d['h']))
     parts.append(f'<section class="sec sec--{k}" id="s{k}"{fx}>')
     art=svg_of(k)
@@ -289,6 +291,11 @@ for d in SEC:
         parts.append('</div>')
     parts.append('</section>')
 
+ld={"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+  {"@type":"Question","name":c['q'],
+   "acceptedAnswer":{"@type":"Answer","text":' '.join(c['ans'] or [])}}
+  for d in SEC for c in d['cards'] if c.get('ans')]}
+parts.append('<script type="application/ld+json">'+json.dumps(ld,ensure_ascii=False)+'</script>')
 parts.append('</div>\n<script src="assets/js/qa.js"></script>\n</body>\n</html>')
 open(f'{ROOT}/faq.html','w',encoding='utf-8').write('\n'.join(parts))
 print('faq.html', round(os.path.getsize(f'{ROOT}/faq.html')/1024),'KB')
