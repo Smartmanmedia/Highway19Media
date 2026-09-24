@@ -146,7 +146,7 @@
   runs.forEach(function (run) {
     /* density follows the car size, but not one for one: a road he drew at
        twice the scale should not carry half the traffic */
-    var n = Math.max(3, Math.round(run.L / (SPACING * Math.pow(run.sc, 0.45))));
+    var n = Math.max(3, Math.round(run.L / (SPACING * Math.pow(run.sc, 0.3))));
     for (var i = 0; i < n; i++) {
       var c = { id: NAMES[(Math.random() * NAMES.length) | 0], d: 0, v: 0,
                 topRaw: BASE * run.sc * (0.88 + Math.random() * 0.26) };
