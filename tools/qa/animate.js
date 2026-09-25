@@ -251,19 +251,6 @@ for(const k of KS){
       svg.querySelectorAll('[data-sign]').forEach(g=>
         g.setAttribute('data-sign-travel',String(cfg.signTravel)));
 
-    /* HIS SHADOW LAYERS READ AS SHADOWS. He drew the rock shadows as a solid
-       dark green at full strength, which paints as a shape rather than as a
-       shadow; black at 30% is what he asked for. */
-    svg.querySelectorAll('[id]').forEach(e=>{
-      if(!/shadow/i.test(e.id||'')) return;
-      e.setAttribute('opacity','0.3');
-      e.setAttribute('fill','#000');
-      e.querySelectorAll('[fill]').forEach(q=>{
-        if((q.getAttribute('fill')||'').indexOf('url(')===0) return;
-        q.setAttribute('fill','#000');
-      });
-    });
-
     let raisedOut=''; const wanted=[];
     const cands=[...svg.children,...svg.querySelectorAll('[data-sign],[id]')];
     cands.forEach(e=>{
