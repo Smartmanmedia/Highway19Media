@@ -107,7 +107,33 @@
       acc += seg * (1 - Math.max(0, t - STEP / seg));
       if (acc > STEP) acc = acc % STEP;
     }
-    return { xs: xs, ys: ys };
+    /* HIS LANE, SMOOTHED WITHOUT ROUNDING HIS BENDS OFF. The route is
+       measured off his art and a measurement carries a unit or so of noise;
+       at the distance a heading is read over, a unit of noise is degrees of
+       yaw, and a car crossing his bridge visibly weaves.
+
+       A plain average would take the noise out and his corners with it. This
+       fits a parabola through eighty units of lane either side and keeps the
+       middle of it: a parabola follows a circular arc to second order, so a
+       straight comes out straight, a bend comes out the bend he drew, and
+       the noise between them goes. */
+    var m = xs.length, sx = new Array(m), sy = new Array(m), i2, j2;
+    for (i2 = 0; i2 < m; i2++) {
+      var h = Math.min(8, i2, m - 1 - i2);
+      if (h < 3) { sx[i2] = xs[i2]; sy[i2] = ys[i2]; continue; }
+      var n2 = 0, S2 = 0, S4 = 0, Sx = 0, Sy = 0, Qx = 0, Qy = 0;
+      for (j2 = -h; j2 <= h; j2++) {
+        var jj = j2 * j2;
+        n2++; S2 += jj; S4 += jj * jj;
+        Sx += xs[i2 + j2]; Sy += ys[i2 + j2];
+        Qx += jj * xs[i2 + j2]; Qy += jj * ys[i2 + j2];
+      }
+      var det = n2 * S4 - S2 * S2;
+      if (!det) { sx[i2] = xs[i2]; sy[i2] = ys[i2]; continue; }
+      sx[i2] = (S4 * Sx - S2 * Qx) / det;
+      sy[i2] = (S4 * Sy - S2 * Qy) / det;
+    }
+    return { xs: sx, ys: sy };
   }
 
   var runs = [];
@@ -127,7 +153,7 @@
          road, not the last two samples of it: read off a short baseline the
          yaw picks up every unit of scan noise and the car wiggles. */
       for (var j = 0; j <= n; j++) {
-        var a = Math.max(0, j - 4), b2 = Math.min(n, j + 4);
+        var a = Math.max(0, j - 6), b2 = Math.min(n, j + 6);
         ang[j] = Math.atan2(rs.ys[b2] - rs.ys[a], rs.xs[b2] - rs.xs[a]) * 180 / Math.PI;
       }
       var sc = pitch / LANE_REF;

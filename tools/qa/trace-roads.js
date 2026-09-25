@@ -113,38 +113,74 @@ for(const J of jobs){
       pts[i]=[+(pts[i][0]+nx2*sh2).toFixed(2),+(pts[i][1]+ny2*sh2).toFixed(2),0];
     }
   }
-  /* HIS STRAIGHTS ARE STRAIGHT. The scan wobbles a unit or two either way on
-     dashes, pylons and shadows, and a lane that wobbles makes a car wiggle
-     down it. Where the heading holds steady over a long window the points are
-     put back on the line they belong to; a bend is left exactly as measured. */
+  /* HIS STRAIGHTS ARE STRAIGHT, AND ONE LINE EACH. Projecting every point
+     onto its own local line takes the jitter out but leaves the line itself
+     wandering a unit or so over a hundred, which is still a car weaving down
+     his bridge. So the straight runs are found, runs that are plainly the
+     same straight are joined across whatever interrupted them - a pylon, a
+     cable anchor, a truss - and each is fitted with ONE line and laid on it.
+     His bends are never touched, and the points either side of a run are
+     eased across so nothing kinks. */
   {
-    const W=12, out2=pts.map(q=>q.slice());
-    /* read the heading over a long enough baseline that a unit of scan noise
-       does not read as a bend */
     const head=i=>{const a2=pts[Math.max(0,i-10)], b3=pts[Math.min(pts.length-1,i+10)];
       return Math.atan2(b3[1]-a2[1], b3[0]-a2[0]);};
-    for(let i=0;i<pts.length;i++){
-      const lo=Math.max(0,i-W), hi=Math.min(pts.length-1,i+W);
-      if(hi-lo<W) continue;
-      /* the NET turn across the window. Scan noise cancels over it; a bend
-         does not - his tightest is 170 units of radius, which turns fifty
-         degrees over this window against eight for the worst straight. */
-      let turn=head(hi)-head(lo);
-      while(turn>Math.PI)turn-=2*Math.PI; while(turn<-Math.PI)turn+=2*Math.PI;
-      if(Math.abs(turn)>0.14) continue;
-      let sx=0,sy=0,sxx=0,sxy=0,n=0;
-      for(let j=lo;j<=hi;j++){sx+=pts[j][0];sy+=pts[j][1];n++;}
-      const mx=sx/n,my=sy/n;
-      for(let j=lo;j<=hi;j++){const dx=pts[j][0]-mx,dy=pts[j][1]-my;sxx+=dx*dx;sxy+=dx*dy;}
-      /* project onto the best line through the window's own middle */
-      const ux=Math.cos(head(i)), uy=Math.sin(head(i));
-      const t=(pts[i][0]-mx)*ux+(pts[i][1]-my)*uy;
-      out2[i]=[+(mx+ux*t).toFixed(2), +(my+uy*t).toFixed(2), pts[i][2]];
+    const turn=i=>{const lo=Math.max(0,i-10), hi=Math.min(pts.length-1,i+10);
+      let d=head(hi)-head(lo);
+      while(d>Math.PI)d-=2*Math.PI; while(d<-Math.PI)d+=2*Math.PI;
+      return Math.abs(d);};
+    const raw=pts.map((q,i)=>turn(i)<0.10);
+    const flat=raw.map((v,i)=>{let y=0,n=0;
+      for(let j=i-5;j<=i+5;j++){const t=raw[Math.min(raw.length-1,Math.max(0,j))];n++;if(t)y++;}
+      return y>n*0.6;});
+    const fit=(i,j)=>{
+      let mx=0,my=0,n=0;
+      for(let t=i;t<=j;t++){mx+=pts[t][0];my+=pts[t][1];n++;}
+      mx/=n; my/=n;
+      let sxx=0,sxy=0,syy=0;
+      for(let t=i;t<=j;t++){const dx=pts[t][0]-mx,dy=pts[t][1]-my;
+        sxx+=dx*dx; sxy+=dx*dy; syy+=dy*dy;}
+      const th=0.5*Math.atan2(2*sxy, sxx-syy);
+      return {mx,my,ux:Math.cos(th),uy:Math.sin(th),th};
+    };
+    let runs=[], i=0;
+    while(i<pts.length){
+      if(!flat[i]){ i++; continue; }
+      let j=i; while(j+1<pts.length&&flat[j+1]) j++;
+      if(j-i>=12) runs.push([i,j]);
+      i=j+1;
     }
-    pts=out2;
+    /* the same straight, interrupted */
+    let merged=true;
+    while(merged){
+      merged=false;
+      for(let r=0;r+1<runs.length;r++){
+        const A=runs[r], B=runs[r+1];
+        if(B[0]-A[1]>30) continue;
+        const fa=fit(A[0],A[1]), fb=fit(B[0],B[1]);
+        let dt=fa.th-fb.th;
+        while(dt>Math.PI/2)dt-=Math.PI; while(dt<-Math.PI/2)dt+=Math.PI;
+        if(Math.abs(dt)>0.06) continue;
+        const off=Math.abs((fb.mx-fa.mx)*(-fa.uy)+(fb.my-fa.my)*fa.ux);
+        if(off>8) continue;
+        runs.splice(r,2,[A[0],B[1]]); merged=true; break;
+      }
+    }
+    runs.forEach(([i0,j0])=>{
+      if(j0-i0<18) return;
+      const f=fit(i0,j0), E=6;
+      for(let t=i0;t<=j0;t++){
+        const d=(pts[t][0]-f.mx)*f.ux+(pts[t][1]-f.my)*f.uy;
+        const lx=f.mx+f.ux*d, ly=f.my+f.uy*d;
+        let w=1;
+        if(t-i0<E) w=(t-i0)/E; else if(j0-t<E) w=(j0-t)/E;
+        pts[t]=[+(pts[t][0]+(lx-pts[t][0])*w).toFixed(2),
+                +(pts[t][1]+(ly-pts[t][1])*w).toFixed(2), pts[t][2]];
+      }
+    });
+    window.__runs=runs.length;
   }
   pts=ma(ma(pts,2),2);
-  return {pts,width,note,seed};
+  return {pts,width,note,seed,runs:window.__runs};
  },J);
  /* his road is straights and arcs; the scan wobbles on dashes, pylons and
     shadows, so the line is low-passed before it becomes a route */
@@ -156,7 +192,7 @@ for(const J of jobs){
  if(J.ext!==0) pts=[ext(pts,false),...pts,ext(pts,true)];
  out[J.id]={k:J.k,pts,width:r.width,note:r.note};
  console.log(J.id,r.pts.length+'pts w='+(r.width||0).toFixed(1),r.note,
-   'seed '+r.seed.map(q=>q.slice(0,3).join(',')).join(' / '),'| start',out[J.id].pts[0],'end',out[J.id].pts[out[J.id].pts.length-1]);
+   'straights '+r.runs+' seed '+r.seed.map(q=>q.slice(0,3).join(',')).join(' / '),'| start',out[J.id].pts[0],'end',out[J.id].pts[out[J.id].pts.length-1]);
 }
 fs.writeFileSync('follow.json',JSON.stringify(out));
 await b.close();})();

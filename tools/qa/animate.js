@@ -309,25 +309,32 @@ for(const k of KS){
        sitting under the forest they are there to mend */
     if(frontArt) svg.appendChild(frontArt);
 
-    /* HIS BRIDGE IS OVER THE ROAD, NOT UNDER IT. The cross-brace in the
-       middle of his span is drawn before the deck, so the traffic was
-       running over it; it goes up with his sky instead. */
+    /* HIS BRIDGE IS OVER THE ROAD, NOT UNDER IT. The cables that cross the
+       middle of his span are drawn before the deck, so the traffic ran over
+       them. Everything inside the box they occupy goes up with his sky -
+       both cables and the four anchors - and the cars pass under, the way
+       they pass under his truss. */
     (cfg.over||[]).forEach(box=>{
-      let best=null,bd=1e9;
-      svg.querySelectorAll('g,path,polygon,rect').forEach(el=>{
+      const take=[];
+      svg.querySelectorAll('g,path,polygon,rect,circle,ellipse').forEach(el=>{
         if(el.closest('[data-fleetslot]')||el.closest('[data-sign]')) return;
+        if(take.some(t=>t.contains(el))) return;
         const a2=abs(el); if(!a2) return;
-        const dd=Math.abs(a2.x-box[0])+Math.abs(a2.y-box[1])+
-                 Math.abs(Math.abs(a2.w)-box[2])+Math.abs(Math.abs(a2.h)-box[3]);
-        if(dd<bd){bd=dd;best=el;}
+        const w=Math.abs(a2.w), h=Math.abs(a2.h);
+        const x=Math.min(a2.x,a2.x+a2.w), y=Math.min(a2.y,a2.y+a2.h);
+        if(w<3||h<3) return;
+        if(x<box[0]||y<box[1]||x+w>box[0]+box[2]||y+h>box[1]+box[3]) return;
+        take.push(el);
       });
-      if(!best||bd>26) return;
-      const par=best.parentNode;
-      const m=par&&par.getCTM&&par!==svg? par.getCTM() : null;
-      if(m){ const own=best.getAttribute('transform')||'';
-        best.setAttribute('transform','matrix('+
-          [m.a,m.b,m.c,m.d,m.e,m.f].map(v=>(+v).toFixed(5)).join(',')+') '+own); }
-      if(skyFirst) svg.insertBefore(best,skyFirst); else svg.appendChild(best);
+      take.forEach(el=>{
+        const par=el.parentNode;
+        const m=par&&par.getCTM&&par!==svg? par.getCTM() : null;
+        if(m){ const own=el.getAttribute('transform')||'';
+          el.setAttribute('transform','matrix('+
+            [m.a,m.b,m.c,m.d,m.e,m.f].map(v=>(+v).toFixed(5)).join(',')+') '+own); }
+        if(skyFirst) svg.insertBefore(el,skyFirst); else svg.appendChild(el);
+      });
+      raisedOut+=' | over '+take.length;
     });
 
     /* ---- his roads, measured into lanes ---------------------------------
