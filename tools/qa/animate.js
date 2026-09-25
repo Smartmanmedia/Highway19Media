@@ -303,11 +303,46 @@ for(const k of KS){
       }
       host.appendChild(w.el);
       if(w.rank===2&&!skyFirst) skyFirst=host===svg?w.el:null;
+      /* a cloud is the highest thing he drew, so it overtakes everything;
+         the shadow it throws is on the ground and stays with the ground */
+      if(w.rank===2&&/^Cloud/i.test(w.el.id||'')&&!/shadow/i.test(w.el.id||''))
+        w.el.setAttribute('data-para','cloud');
     });
 
     /* his clumps go on last of all, so they close the joint rather than
        sitting under the forest they are there to mend */
     if(frontArt) svg.appendChild(frontArt);
+
+    /* HIS SECTIONS MEET WITHOUT A JOIN. Each artboard carries its own sky or
+       sea as one gradient; where the one above finishes a shade off where the
+       one below starts, the page shows a band right across it. The first stop
+       of his own gradient is set to the colour the section above ends on, so
+       the two are one gradient running through. */
+    if(cfg.joinTop){
+      let bg=svg.querySelector('[id="ocean"]');
+      if(!bg){
+        let best=null,ba=0;
+        svg.querySelectorAll('polygon,rect,path').forEach(e=>{
+          const a2=abs(e); if(!a2) return;
+          const ar=Math.abs(a2.w*a2.h);
+          if(ar>ba&&(e.getAttribute('fill')||'').indexOf('url(')===0){ba=ar;best=e;}
+        });
+        bg=best;
+      }
+      const f=bg&&bg.getAttribute('fill');
+      const m=f&&/^url\(#(.+)\)$/.exec(f);
+      if(m){
+        const g=svg.querySelector('[id="'+m[1]+'"]');
+        /* which end of his gradient is the TOP of the artboard: he draws them
+           both ways round, and setting the wrong stop repaints his whole sea */
+        const ss=g?[...g.querySelectorAll('stop')]:[];
+        if(ss.length){
+          const y1=parseFloat(g.getAttribute('y1')||'0');
+          const y2=parseFloat(g.getAttribute('y2')||'1');
+          (y1>y2? ss[ss.length-1] : ss[0]).setAttribute('stop-color',cfg.joinTop);
+        }
+      }
+    }
 
     /* HIS BRIDGE IS OVER THE ROAD, NOT UNDER IT. The cables that cross the
        middle of his span are drawn before the deck, so the traffic ran over

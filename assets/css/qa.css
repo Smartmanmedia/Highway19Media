@@ -191,3 +191,11 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
  --mfill:#059236; --mstroke:transparent;
  --msw:calc(0*var(--u)); --gcol:#fff; --gw:calc(11.55*var(--u)); --gsw:calc(3*var(--u));
 }
+.sec--01{background:linear-gradient(#002e79,#0256b6)}
+.sec--02{background:linear-gradient(#0256b6,#002274)}
+.sec--03{background:linear-gradient(#002274,#000000)}
+.sec--04{background:linear-gradient(#000000,#dbb09f)}
+.sec--05{background:linear-gradient(#dbb09f,#1c9023)}
+.sec--06{background:linear-gradient(#1c9023,#725841)}
+.sec--07{background:linear-gradient(#725841,#457319)}
+.sec--08{background:linear-gradient(#457319,#ffffff)}

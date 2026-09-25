@@ -5,6 +5,10 @@ const PITCH={ '01a':40.5,'02a':40,'03a':40.5,'03b':40,'04a':40,'04b':42,'05b':40
 const CHAINS=[['01:a','02:a'],['03:a','04:b'],['03:b','04:a']];
 const up=new Set(CHAINS.map(c=>c[0].replace(':',''))), dn=new Set(CHAINS.map(c=>c[1].replace(':','')));
 
+/* THE RUN-IN FOLLOWS HIS STRAIGHT, NOT THE LOCAL TANGENT. Read off the two
+   points either side of an end that is already bending, the run-in leaves his
+   road on a diagonal across the sand - which is exactly what it was doing at
+   the mouth of his desert turn. Twenty points of lane is a straight. */
 const tang=(p,q)=>{let dx=p[0]-q[0],dy=p[1]-q[1];const m=Math.hypot(dx,dy)||1;return [dx/m,dy/m];};
 const cutAt=(pts,yv,keepBelow)=>{           /* keepBelow: keep y<=yv */
   const out=[];
@@ -34,9 +38,9 @@ Object.entries(F).forEach(([id,v])=>{
   if(isUp) pts=cutAt(pts,H[k],true);
   if(isDn) pts=cutAt(pts,0,false);
   /* off-canvas run-in and run-out where his road simply leaves the picture */
-  if(!isDn){ const t=tang(pts[0],pts[Math.min(4,pts.length-1)]);
+  if(!isDn){ const t=tang(pts[0],pts[Math.min(20,pts.length-1)]);
     pts.unshift([+(pts[0][0]+t[0]*520).toFixed(2), +(pts[0][1]+t[1]*520).toFixed(2)]); }
-  if(!isUp){ const n=pts.length-1, t=tang(pts[n],pts[Math.max(0,n-4)]);
+  if(!isUp){ const n=pts.length-1, t=tang(pts[n],pts[Math.max(0,n-20)]);
     pts.push([+(pts[n][0]+t[0]*520).toFixed(2), +(pts[n][1]+t[1]*520).toFixed(2)]); }
   routes[key]={k,pts,pitch:PITCH[key]||40};
 });

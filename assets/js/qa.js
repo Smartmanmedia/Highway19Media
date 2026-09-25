@@ -68,11 +68,15 @@
      Driven by where the sign itself is on screen, not by how far through his
      section we are: he drew one sign across the 05/06 seam, and two halves
      each riding their own section's progress tore it in half. */
-  var signs = [].slice.call(document.querySelectorAll('[data-sign]'));
+  /* his signs, and his clouds above them. A cloud is the highest thing he
+     drew, so it overtakes everything on the page; the shadow it throws is on
+     his ground and stays there, which is what makes the pair read as height. */
+  var signs = [].slice.call(document.querySelectorAll('[data-sign],[data-para]'));
   signs.forEach(function (g) {
     g.style.willChange = 'transform';
     g.__sec = g.closest('.sec');
-    g.__amt = parseFloat(g.getAttribute('data-sign-travel') || '300');
+    g.__amt = g.getAttribute('data-para') === 'cloud' ? 760
+            : parseFloat(g.getAttribute('data-sign-travel') || '520');
     try {
       var bb = g.getBBox();
       g.__cx = (bb.x + bb.width / 2).toFixed(1);
@@ -93,6 +97,7 @@
     .forEach(function (g, i, list) {
       var prev = list[i - 1];
       if (!prev || g.__page - prev.__page > 220) return;
+      if ((prev.getAttribute('data-para') || '') !== (g.getAttribute('data-para') || '')) return;
       var mid = (prev.__anchor || prev.__page + g.__page) / (prev.__anchor ? 1 : 2);
       prev.__anchor = mid; g.__anchor = mid;
       var cx = (parseFloat(prev.__cx) + parseFloat(g.__cx)) / 2;

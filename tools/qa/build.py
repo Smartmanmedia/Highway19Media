@@ -216,6 +216,18 @@ for d in SEC:
  --mfill:{m['discFill'] or 'transparent'}; --mstroke:{m['discStroke'] or 'transparent'};
  --msw:{U(m['discSW'])}; --gcol:{m['glyphCol']}; --gw:{U(m['glyph'])}; --gsw:{U(m['glyphSW'])};
 }}""")
+# HIS SECTIONS RUN INTO ONE ANOTHER. Each one is backed by the gradient
+# between the colour his artboard above finishes on and the colour this one
+# finishes on, so any sub-pixel row the browser leaves between two fractional
+# heights shows his sky carrying on rather than the page behind it.
+_EDGE=json.load(open(f'{HERE}/edgecols.json',encoding='utf-8')) \
+      if os.path.exists(f'{HERE}/edgecols.json') else {}
+_prev=None
+for _d in SEC:
+    _e=_EDGE.get(_d['k'])
+    if not _e: continue
+    css.append('.sec--%s{background:linear-gradient(%s,%s)}'%(_d['k'],_prev or _e[0],_e[1]))
+    _prev=_e[1]
 open(f'{ROOT}/assets/css/qa.css','w',encoding='utf-8').write('\n'.join(css))
 
 # ---------- HTML ----------

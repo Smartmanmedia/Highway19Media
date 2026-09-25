@@ -143,7 +143,8 @@
   ]
  },
  "02": {
-  "signTravel": 120
+  "signTravel": 120,
+  "joinTop": "#035bbf"
  },
  "04": {
   "patch": [
