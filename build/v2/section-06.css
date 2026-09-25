@@ -319,6 +319,12 @@
 /* AND ON A TOUCHSCREEN THERE IS NO HOVER, so there it simply is. */
 @media (hover:none){
   .sec6 .page .card .btn{ opacity:1; translate:0 0; pointer-events:auto }
+  /* AND NO GROWING UNDER THE THUMB. The 1.05 above is a hover affordance, and
+     a touchscreen has no hover - what it has is :focus-within, which a tap
+     sets and then leaves set, so the card stayed 5% larger than its
+     neighbours until something else was tapped. */
+  .sec6 .page .card:hover,
+  .sec6 .page .card:focus-within{ scale:1 }
 }
 
 @media (prefers-reduced-motion: reduce){

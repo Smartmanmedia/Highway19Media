@@ -918,7 +918,17 @@ html,body{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
        his copy at a size worth reading. A card that fills the screen is what
        pays for that; svh rather than vh so a collapsing address bar does not
        change it mid-scroll. */
-    min-height:80vh; min-height:80svh;
+    min-height:80vh;
+    /* HIS 80%, CAPPED SO ONE WHOLE CARD FITS ONE SCREEN. The floor on its own
+       put an 83svh card under a 102px header - 100.4svh between them, so the
+       button was always a few pixels below the fold and a card could never be
+       seen entire. The second term is the screen less the header and a
+       margin, so 80% is what he gets wherever there is room for it and the
+       whole card is on the screen wherever there is not. */
+    min-height:min(80svh, calc(100svh - var(--hh) - var(--hbar) - 1.25rem));
+    /* AND ROUNDER. 1.071cqw is his desktop corner and it resolves to about
+       4px on a 390 phone, which reads as square. */
+    border-radius:18px;
     /* AND ALL FOUR ARE STILL THE HEIGHT OF THE LONGEST. One to a row means
        each card is its own row, so matching them is grid-auto-rows:1fr on the
        container above - every row the height of the tallest - and this, which

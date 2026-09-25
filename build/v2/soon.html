@@ -93,7 +93,11 @@
      and is THE knob for that distance: a tight, deliberate strip of white,
      not an empty field. The band starts where the machines start, because the
      script crops the empty sky above them away. */
-  --band-gap:76px;
+  /* 76px was over half a phone screen once the band and the form's own top
+     padding were added to it - 394px from the button to the card on a 664
+     tall screen. 40 keeps it a deliberate strip rather than a field. The
+     desktop value is set separately, further down, and is unchanged. */
+  --band-gap:40px;
   --copy-pad-bottom:var(--band-gap);
   /* Reference: road line 67.12% down, so the black under it is the rest.
      --sky-px is the machines' rendered height above the road; the script
@@ -101,8 +105,16 @@
      --black-min is the floor. On a short screen the reference share and a
      generous --copy-space cannot both fit, and the black - flat and empty by
      design - is the one that gives, down to this and no further. */
-  --black-share:32.88vh;
-  --black-min:24vh;
+  /* ON A PHONE THE BLACK IS A STRIP, NOT A FIELD. The reference's share fills
+     the rest of the first screen so the road line lands on its mark - which is
+     right on a desktop, where the fold is the end of the picture. On a phone
+     the form's own black starts immediately underneath, so the two run
+     together into one dead field: 212px of empty black between the machines
+     and the card, on a 664 tall screen. The form continues the same asphalt,
+     so a short strip here loses nothing. The reference share is restored at
+     1025 and up, where it belongs. */
+  --black-share:12vh;
+  --black-min:8vh;
   --sky-px:140px;
   --band-h:calc(var(--black-share) + var(--sky-px));
   /* The stage is a CROP, not a stretch: the script writes --stage-ratio from
@@ -221,6 +233,9 @@
    not centred - with the sign beside the prose rather than above it.
    ===================================================================== */
 @media (min-width:1025px){
+  /* the reference's own share, from here up - see the note on the mobile
+     values above for why a phone gets a strip instead */
+  #h19-detour{ --black-share:32.88vh; --black-min:24vh; }
   #h19-detour{
     /* Each is the reference measurement twice over: as a share of the width,
        and as the pixel size it reaches on the reference's own 1973.04 canvas.
@@ -308,7 +323,9 @@
    stopping at a seam. */
 #h19-detour .soon-form{
   background:var(--asphalt);
-  padding:clamp(34px,6vw,78px) clamp(16px,4vw,40px) clamp(56px,9vw,120px);
+  /* the top floor was 34px of black above the card on top of the band gap;
+     18 on a phone, unchanged from 6vw up */
+  padding:clamp(18px,6vw,78px) clamp(16px,4vw,40px) clamp(56px,9vw,120px);
   scroll-margin-top:12px;
 }
 #h19-detour .soon-form .fcard{
