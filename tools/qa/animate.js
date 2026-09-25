@@ -129,9 +129,32 @@ for(const k of KS){
       }
       return false;
     };
+    /* AND THE SHADOW HE DREW UNDER IT GOES WITH IT. He draws a lorry's
+       shadow as its own flat black shape beside the lorry, so taking the
+       lorry off his road left the shadow lying there - a black slab parked
+       on the tarmac with our traffic driving through it. */
+    const dark=e=>{const f=(e.getAttribute('fill')||'').trim().toLowerCase();
+      if(!f||f.charAt(0)!=='#') return f==='black';
+      const h=f.length===4? f[1]+f[1]+f[2]+f[2]+f[3]+f[3] : f.slice(1,7);
+      if(h.length<6) return false;
+      const v=parseInt(h,16); if(isNaN(v)) return false;
+      return ((v>>16&255)+(v>>8&255)+(v&255))/3 < 48;};
+    const orphan=a=>{
+      [...svg.querySelectorAll('path,polygon,rect,ellipse,circle')].forEach(e=>{
+        if(!dark(e)) return;
+        const c=abs(e); if(!c) return;
+        if(c.w>a.w*1.8||c.h>a.h*1.8||c.w<a.w*0.3||c.h<a.h*0.3) return;
+        const ox=Math.min(a.x+a.w,c.x+c.w)-Math.max(a.x,c.x);
+        const oy=Math.min(a.y+a.h,c.y+c.h)-Math.max(a.y,c.y);
+        if(ox<=0||oy<=0) return;
+        if(ox*oy < Math.min(a.w*a.h,c.w*c.h)*0.3) return;
+        e.remove();
+      });
+    };
     const dropped=[];
     for(let i=made.length-1;i>=0;i--){
       if(!onRoute(made[i].a)) continue;
+      orphan(made[i].a);
       made[i].g.remove(); dropped.push(i); made.splice(i,1);
     }
     const found=made.map((m,i)=>{
@@ -408,7 +431,10 @@ for(const k of KS){
 
     /* his aircraft, flown along a path off his own runway */
     const flightOut=[];
-    (cfg.flights||[]).forEach(f=>{
+    /* A SHADOW GOES UNDER WHAT THROWS IT. Each of these is put in just
+       below his sky, so whichever goes in last ends up on top: the shadows
+       go first and his aircraft fly over them. */
+    (cfg.flights||[]).slice().sort((a,b)=>(b.shadow?1:0)-(a.shadow?1:0)).forEach(f=>{
       let best=null,bd=1e9;
       svg.querySelectorAll('g,path').forEach(el=>{
         const a=abs(el); if(!a) return;
@@ -505,7 +531,9 @@ for(const k of KS){
       if(mv.lift){ if(skyFirst) svg.insertBefore(outer,skyFirst); else svg.appendChild(outer); }
       else if(tagged) tagged.parentNode.insertBefore(outer,tagged);
       else par0.insertBefore(outer,parts[0].el);
-      parts.forEach((q,qi)=>{
+      const order=parts.map((q,qi)=>qi)
+        .sort((a,b)=>((mv.shadow||[]).includes(b)?1:0)-((mv.shadow||[]).includes(a)?1:0));
+      order.map(qi=>[parts[qi],qi]).forEach(([q,qi])=>{
         if((mv.shadow||[]).includes(qi)){
           q.el.setAttribute('fill','#000');
           q.el.setAttribute('opacity','0.26');

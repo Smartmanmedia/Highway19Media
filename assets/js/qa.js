@@ -136,7 +136,14 @@
         use.setAttribute('transform', 'translate(0 ' + ((tops[oi] - tops[ni]) / u).toFixed(2) + ')');
         use.setAttribute('aria-hidden', 'true');
         use.style.pointerEvents = 'none';
-        nb.appendChild(use);
+        /* A COPY GOES UNDER THAT SECTION'S OWN CLOUDS. Put at the very top of
+           the stack, the shadow of the cloud next door was landing on top of
+           the cloud drawn here. Copies sit above his ground and below his
+           own sky, which is where the cloud they come from sits. */
+        var anchor = null, kid = nb.firstChild;
+        for (; kid; kid = kid.nextSibling)
+          if (kid.getAttribute && kid.getAttribute('data-para') === 'cloud') { anchor = kid; break; }
+        if (anchor) nb.insertBefore(use, anchor); else nb.appendChild(use);
       });
     });
   })();
