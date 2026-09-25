@@ -30,10 +30,19 @@
 
   var STEP = 5,          /* lane sample spacing, artboard units */
       LOOK = 26,         /* curvature lookahead, in samples     */
-      BASE = 150,        /* free-flow speed, units/s at scale 1 */
+      BASE = 225,        /* free-flow speed, units/s at scale 1 */
       LANE_REF = 41,     /* his standard lane pitch, measured          */
       SPACING = 250,     /* units of lane per vehicle           */
-      CULL = 420;        /* px of viewport margin still rendered */
+      CULL = 110;        /* px of viewport margin still rendered.
+                            HIS TRAFFIC IS NOT PAINTED WHERE IT CANNOT BE
+                            SEEN. Four hundred was a margin wide enough to
+                            keep the two sections either side of the one on
+                            screen running, and the browser paints them:
+                            measured on his desert highway, that is half the
+                            frame budget spent on cars nobody is looking at.
+                            A car's whole body is off the screen well inside
+                            a hundred, so a hundred and ten is all the margin
+                            there is any reason to keep. */
 
   /* HIS NIGHT IS NOT A WHOLE SECTION. Section four is drawn as a dawn: black
      at the top, his desert light by the foot of it, and the tarmac under it
@@ -160,6 +169,22 @@
     return { xs: sx, ys: sy };
   }
 
+  var ABOVE = {};
+  function above(k) {
+    if (ABOVE[k] !== undefined) return ABOVE[k];
+    var n = parseInt(k, 10) - 1;
+    var key = (n < 10 ? '0' : '') + n;
+    var sec = n > 0 && document.getElementById('s' + key);
+    var svg = sec && sec.querySelector('.art > svg, .art-b > svg, .art-a > svg');
+    if (!svg) return (ABOVE[k] = null);
+    var slot = svg.querySelector('[data-fleetslot]');
+    if (!slot) { slot = el('g', {}); svg.appendChild(slot); }
+    var vb = svg.viewBox && svg.viewBox.baseVal;
+    return (ABOVE[k] = { k: key, sec: sec, svg: svg, slot: slot,
+                         night: !!NIGHT[key], h: vb ? vb.height : 0,
+                         dawn: DAWN[key] || null, layers: {} });
+  }
+
   var runs = [];
   window.H19_QA_RUNS.forEach(function (raw) {
     var segs = [], total = 0, pitch = raw[0].pitch;
@@ -202,10 +227,17 @@
     for (var s3 = 0; s3 < segs.length; s3++) {
       segs[s3].prev = segs[s3 - 1] || null;
       segs[s3].next = segs[s3 + 1] || null;
+      /* HIS ROCKS HIDE A CAR AT A JOIN, NOT A FADE. Where his road simply
+         begins at the top of an artboard it begins under his rocks, and the
+         rock band carries on up into the artboard above. A car arriving
+         there is drawn in that section too, an artboard up, where his own
+         scenery is raised over the traffic and swallows it whole. Only
+         upwards: a car leaving the foot of an artboard is already under the
+         rocks of the artboard it is on. */
+      if (!segs[s3].prev) segs[s3].up = above(segs[s3].k);
     }
     if (segs.length) runs.push({ segs: segs, L: total, pitch: pitch,
-                                 sc: pitch / LANE_REF, cars: [],
-                                 ramp: Math.max(96, pitch * 1.5) });
+                                 sc: pitch / LANE_REF, cars: [] });
   });
   if (!runs.length) return;
   var fleets = runs;
@@ -492,37 +524,14 @@
                  ') rotate(' + c.ang.toFixed(2) + ')';
         c.node.g.setAttribute('transform', tf);
         c.node.stamp = FRAME;
-        /* WHERE HIS ROAD JUST STOPS AT THE EDGE OF AN ARTBOARD. Each
-           section clips its own art. Where his road carries on into the
-           next one the car is drawn on both sides of the join and nothing
-           is lost. Where it does not - his forest road simply begins at the
-           top of its own artboard, under his rocks - a car arriving there
-           was cut in half by the join. It is faded over its own length as
-           it crosses, so it comes up out of the edge instead of being
-           sliced by it. */
-        var sg0 = c.seg, rp = run.ramp, fd = 1;
-        if (!sg0.prev && c.y < rp) fd = c.y / rp;
-        if (!sg0.next && sg0.h && c.y > sg0.h - rp) {
-          var f2 = (sg0.h - c.y) / rp;
-          if (f2 < fd) fd = f2;
-        }
-        if (fd < 0) fd = 0; else if (fd > 1) fd = 1;
-        if (fd !== c.node.fade) {
-          c.node.fade = fd;
-          if (fd >= 1) c.node.g.removeAttribute('opacity');
-          else c.node.g.setAttribute('opacity', fd.toFixed(3));
-          if (c.node.bg) {
-            if (fd >= 1) c.node.bg.removeAttribute('opacity');
-            else c.node.bg.setAttribute('opacity', fd.toFixed(3));
-          }
-        }
+        var fd = 1;
         /* EACH SECTION CLIPS ITS OWN ART, so a car halfway over the join was
            losing whichever half was on the other side of it. While it
            straddles, the same car is drawn in the next section too, a whole
            artboard further up - it is one road. */
-        var sg = c.seg, gh = null, gy = 0;
+        var sg = c.seg, gh = null, gy = 0, pv = sg.prev || sg.up;
         if (sg.next && c.y > sg.h - 150) { gh = sg.next; gy = c.y - sg.h; }
-        else if (sg.prev && c.y < 150 && sg.prev.h) { gh = sg.prev; gy = c.y + sg.prev.h; }
+        else if (pv && c.y < 170 && pv.h) { gh = pv; gy = c.y + pv.h; }
         if (gh) {
           var gb = bandOf(gh, gy);
           if (c.node.gh && c.node.gh.band !== gb) {

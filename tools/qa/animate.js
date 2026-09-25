@@ -36,6 +36,32 @@ const CHAINS=ROUTES._chains||[]; delete ROUTES._chains;
     if(rev) pts.push(q); else pts.unshift(q);
     return true;
   };
+  /* AND WHERE A RUN SIMPLY STARTS IN THE MIDDLE OF HIS PICTURE. The walk
+     seeded the three-lane at the top of its artboard a hundred units in
+     from the edge, so a car appeared out of nothing on open tarmac. That
+     road is dead straight there, so the start is carried off the canvas
+     the way the others already are. */
+  const ends=new Set();
+  CHAINS.forEach(([a,b2])=>{ends.add(a+'<');ends.add(b2+'>');});
+  for(const k of Object.keys(ROUTES)) for(const r of ROUTES[k]){
+    const pts=r.d.replace(/^M/,'').split('L').map(q=>q.trim().split(',').map(Number));
+    const inside=q=>q[0]>4&&q[0]<2124&&q[1]>4&&q[1]<(({'01':982.8,'02':1645.2,'03':1865.2,
+      '04':1951.6,'05':1951.6,'06':1951.6,'07':2378.8,'08':2378.8})[k]-4);
+    let hit=false;
+    if(!ends.has(k+':'+r.id+'>') && inside(pts[0])){
+      const t=pts[Math.min(12,pts.length-1)];
+      const dx=pts[0][0]-t[0], dy=pts[0][1]-t[1], m=Math.hypot(dx,dy);
+      if(m>1){ pts.unshift([+(pts[0][0]+dx/m*600).toFixed(2), +(pts[0][1]+dy/m*600).toFixed(2)]); hit=true; }
+    }
+    const n=pts.length-1;
+    if(!ends.has(k+':'+r.id+'<') && inside(pts[n])){
+      const t=pts[Math.max(0,n-12)];
+      const dx=pts[n][0]-t[0], dy=pts[n][1]-t[1], m=Math.hypot(dx,dy);
+      if(m>1){ pts.push([+(pts[n][0]+dx/m*600).toFixed(2), +(pts[n][1]+dy/m*600).toFixed(2)]); hit=true; }
+    }
+    if(hit){ r.d='M'+pts.map(q=>q[0]+','+q[1]).join(' L');
+      console.log('run',k+':'+r.id,'carried off the canvas'); }
+  }
   for(const [a,b2] of CHAINS){
     const A=find(a), B=find(b2);
     if(!A||!B) continue;
@@ -456,6 +482,38 @@ for(const k of KS){
         bg.parentNode.insertBefore(veil,bg.nextSibling);
       }
     }
+
+    /* HIS LAMPS BELONG TO HIS BOARD. He draws the light each lamp throws
+       down the face of a sign as its own little group of gradient wedges,
+       and on the board he set across a join that group was left outside the
+       assembly - so the light lay on his grass behind the sign instead of
+       down its front. On the boards that came out whole it sits inside the
+       assembly, last, over the face. Any such group standing over one of
+       his boards is put there too, carrying the frame it was drawn in. */
+    [...svg.querySelectorAll('[data-sign]')].forEach(sgn=>{
+      const sb=abs(sgn); if(!sb) return;
+      [...svg.querySelectorAll('g')].forEach(g2=>{
+        if(g2===sgn||sgn.contains(g2)||g2.contains(sgn)) return;
+        if(g2.closest('[data-sign]')) return;
+        const kids=[...g2.children];
+        if(kids.length<2||kids.length>8) return;
+        if(!kids.every(e=>/^(polygon|path)$/.test(e.tagName)&&
+            (e.getAttribute('fill')||'').indexOf('url(')===0)) return;
+        const a2=abs(g2); if(!a2||a2.h<60) return;
+        const ox=Math.min(sb.x+sb.w,a2.x+a2.w)-Math.max(sb.x,a2.x);
+        const oy=Math.min(sb.y+sb.h,a2.y+a2.h)-Math.max(sb.y,a2.y);
+        if(ox<a2.w*0.6||oy<a2.h*0.4) return;          /* it must stand over it */
+        const m1=g2.parentNode.getCTM&&g2.parentNode.getCTM();
+        const m2=sgn.getCTM&&sgn.getCTM();
+        if(m1&&m2){
+          const r=m2.inverse().multiply(m1);
+          const hold=doc.createElementNS(NS,'g');
+          hold.setAttribute('transform','matrix('+
+            [r.a,r.b,r.c,r.d,r.e,r.f].map(v=>(+v).toFixed(5)).join(',')+')');
+          hold.appendChild(g2); sgn.appendChild(hold);
+        } else sgn.appendChild(g2);
+      });
+    });
 
     /* HIS BRIDGE IS OVER THE ROAD, NOT UNDER IT. The cables that cross the
        middle of his span are drawn before the deck, so the traffic ran over
