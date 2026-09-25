@@ -279,6 +279,27 @@
     });
   })();
 
+  /* EVERY SHADOW UNDER EVERY CLOUD. His clouds and the shadows they throw
+     are drawn last in each artboard, and a copy of a cloud from the section
+     next door goes in with them - but a copy landing below that section's
+     own cloud shadow was being painted over by it, and the grey band of
+     that shadow ran straight across the cloud along the join. Sky is sky
+     whichever artboard it was drawn in: all the shadows first, then all the
+     clouds, in the section they are being drawn in. */
+  (function stackSky() {
+    [].forEach.call(document.querySelectorAll('.art > svg, .art-a > svg, .art-b > svg'),
+      function (svg) {
+        var shade = [], puff = [];
+        [].forEach.call(svg.children, function (c) {
+          var name = c.tagName === 'use' ? (c.getAttribute('href') || '')
+                   : (c.getAttribute('data-para') === 'cloud' ? (c.id || '') : '');
+          if (!/cloud/i.test(name)) return;
+          (/shadows?\b|shadows?$|shadow/i.test(name) ? shade : puff).push(c);
+        });
+        shade.concat(puff).forEach(function (c) { svg.appendChild(c); });
+      });
+  })();
+
   var queued = false;
   function frame() {
     queued = false;
