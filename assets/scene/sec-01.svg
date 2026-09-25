@@ -383,11 +383,11 @@
     <linearGradient id="linear-gradient-260" x1="581.66" y1="13022.23" x2="601.43" y2="13022.23" gradientTransform="translate(-11884.2848 279.6) rotate(90) scale(1 -1)" xlink:href="#linear-gradient-4"/>
     <linearGradient id="linear-gradient-261" x1="518.14" y1="1096.41" x2="524.79" y2="1086.66" gradientTransform="translate(2165.2 279.6) rotate(90)" xlink:href="#linear-gradient-4"/>
     <linearGradient id="linear-gradient-262" x1="2067.95" y1="1097.17" x2="2074.7" y2="1087.27" gradientTransform="translate(2165.2 2872.7082) rotate(-90) scale(1 -1)" xlink:href="#linear-gradient-4"/>
-  <clipPath id="fleetclip-01"><rect x="-600" y="97" width="3400" height="9000"/></clipPath></defs>
+  <clipPath id="fleetclip-01"><rect x="-600" y="97" width="3400" height="9000"/></clipPath><linearGradient id="01_joinfade" gradientUnits="userSpaceOnUse" x1="0" y1="562.8" x2="0" y2="982.8"><stop offset="0" stop-color="#035bbf" stop-opacity="0"/><stop offset="1" stop-color="#035bbf" stop-opacity="1"/></linearGradient></defs>
   <g isolation="isolate">
     <g id="Layer_1" data-name="Layer 1">
       <g>
-        <polygon id="ocean" points="2129.6 984 549.76 984 0 984 0 -1.6 2129.6 -1.6 2129.6 984" fill="url(#linear-gradient)"/>
+        <polygon id="ocean" points="2129.6 984 549.76 984 0 984 0 -1.6 2129.6 -1.6 2129.6 984" fill="url(#linear-gradient)"/><polygon points="2129.6 984 549.76 984 0 984 0 -1.6 2129.6 -1.6 2129.6 984" fill="url(#01_joinfade)" data-joinfade="1"/>
         <polygon id="ocean-2" data-name="ocean" points="2129.6 976.38 549.76 976.38 0 976.38 0 -1.6 2129.6 -1.6 2129.6 976.38" fill="url(#linear-gradient-2)"/>
       </g>
       <g id="Curve">

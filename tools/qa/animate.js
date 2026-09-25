@@ -8,6 +8,46 @@ const ROOT='/home/user/highway19media';
 const CFG=JSON.parse(fs.readFileSync(path.join(__dirname,'traffic.json'),'utf8'));
 const ROUTES=JSON.parse(fs.readFileSync(path.join(__dirname,'routes.json'),'utf8'));
 const CHAINS=ROUTES._chains||[]; delete ROUTES._chains;
+/* A CHAINED PAIR MUST MEET AT THE EDGE OF THE ARTBOARD. His sign and his
+   gantry stand over the road exactly where one artboard ends and the next
+   begins, so the walk loses his tarmac there and the two halves of a run
+   stop short of the join - a hundred units of his road at the harbour, four
+   hundred at the studio - with no car ever on them, and a car reaching the
+   end of one half stepping straight to the start of the other. The road
+   under them is dead straight in every case, so each end is carried on its
+   own heading to the edge it belongs to. */
+{
+  const H={'01':982.8,'02':1645.2,'03':1865.2,'04':1951.6,
+           '05':1951.6,'06':1951.6,'07':2378.8,'08':2378.8};
+  const find=key=>{const [k,id]=key.split(':');
+    return (ROUTES[k]||[]).find(r=>r.id===id);};
+  const read=r=>r.d.replace(/^M/,'').split('L').map(q=>q.trim().split(',').map(Number));
+  const write=(r,pts)=>{r.d='M'+pts.map(q=>q[0]+','+q[1]).join(' L');};
+  /* straight down the way his road crosses it. A tangent read off the
+     stretch inland is no use here: four hundred units on, the bend that
+     road is about to make has carried it two hundred units sideways off
+     his tarmac. The two ends of a chain already stand at the same x - that
+     is the ease that put them there - and his road crosses every one of
+     these joins vertically, so the carry is vertical. */
+  const reach=(pts,y,rev)=>{
+    const i=rev?pts.length-1:0;
+    if(Math.abs(y-pts[i][1])<=2) return false;
+    const q=[pts[i][0], +y.toFixed(2)];
+    if(rev) pts.push(q); else pts.unshift(q);
+    return true;
+  };
+  for(const [a,b2] of CHAINS){
+    const A=find(a), B=find(b2);
+    if(!A||!B) continue;
+    const pa=read(A), pb=read(B);
+    const ga=reach(pa, H[a.split(':')[0]], true), gb=reach(pb, 0, false);
+    if(ga) write(A,pa);
+    if(gb) write(B,pb);
+    if(ga||gb) console.log('chain',a,'->',b2,'carried to the join',
+      ga?('+'+(pa[pa.length-1][1]-pa[pa.length-2][1]).toFixed(0)):'-',
+      gb?('+'+(pb[1][1]-pb[0][1]).toFixed(0)):'-');
+  }
+}
 const BLEEDART=JSON.parse(fs.readFileSync(path.join(__dirname,'bleedart.json'),'utf8'));
 const KS=['05','06','07','01','02','03','04','08'];  /* his vehicles first, so every road can borrow them */
 
@@ -368,6 +408,52 @@ for(const k of KS){
           const y2=parseFloat(g.getAttribute('y2')||'1');
           (y1>y2? ss[ss.length-1] : ss[0]).setAttribute('stop-color',cfg.joinTop);
         }
+      }
+    }
+
+    /* AND THE SECTION ABOVE HAS TO ARRIVE AT THAT COLOUR. One stop is one
+       colour, but his sea in the hero runs left to right - #004ca2 on one
+       side of the artboard to #045dc3 on the other - so its foot met the
+       flat top of the next artboard at every shade but one, and the page
+       drew a line straight across. His own sea is left alone and carried
+       the last few hundred units into the colour the next one starts on,
+       over a fade long enough that nothing reads as a change. Only his
+       water is touched: the road, the gantry and the board over it are
+       drawn after it and paint on top, as he drew them. */
+    if(cfg.joinBelow){
+      let bg=svg.querySelector('[id="ocean"]');
+      if(!bg){
+        let best=null,ba=0;
+        svg.querySelectorAll('polygon,rect,path').forEach(e=>{
+          const a2=abs(e); if(!a2) return;
+          const ar=Math.abs(a2.w*a2.h);
+          if(ar>ba&&(e.getAttribute('fill')||'').indexOf('url(')===0){ba=ar;best=e;}
+        });
+        bg=best;
+      }
+      if(bg&&bg.parentNode){
+        const H=parseFloat((svg.getAttribute('viewBox')||'0 0 0 0').split(/\s+/)[3])||0;
+        const span=cfg.joinFade||420;
+        const gid=k+'_joinfade';
+        let defs=svg.querySelector('defs');
+        if(!defs){defs=doc.createElementNS(NS,'defs'); svg.insertBefore(defs,svg.firstChild);}
+        const lg=doc.createElementNS(NS,'linearGradient');
+        lg.setAttribute('id',gid); lg.setAttribute('gradientUnits','userSpaceOnUse');
+        lg.setAttribute('x1','0'); lg.setAttribute('y1',String(H-span));
+        lg.setAttribute('x2','0'); lg.setAttribute('y2',String(H));
+        [[0,'0'],[1,'1']].forEach(([o,a])=>{
+          const st=doc.createElementNS(NS,'stop');
+          st.setAttribute('offset',String(o));
+          st.setAttribute('stop-color',cfg.joinBelow);
+          st.setAttribute('stop-opacity',a);
+          lg.appendChild(st);
+        });
+        defs.appendChild(lg);
+        const veil=bg.cloneNode(true);
+        veil.removeAttribute('id');
+        veil.setAttribute('fill','url(#'+gid+')');
+        veil.setAttribute('data-joinfade','1');
+        bg.parentNode.insertBefore(veil,bg.nextSibling);
       }
     }
 

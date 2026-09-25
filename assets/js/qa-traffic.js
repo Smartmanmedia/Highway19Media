@@ -74,6 +74,30 @@
   probeSvg.appendChild(probe);
   document.body.appendChild(probeSvg);
 
+  /* HIS CAR, IN BLACK, MADE ONCE. A shadow is the car's own outline and
+     nothing else, so it is a copy of his sprite with every colour in it set
+     to black - cut once at load, referenced like the car itself. Doing it
+     with a filter instead costs a repaint per shadow per frame, which on
+     his desert highway is half the frame rate. */
+  NAMES.forEach(function (id) {
+    var src = host.querySelector('[id="' + id + '"]');
+    if (!src || host.querySelector('[id="' + id + '__sh"]')) return;
+    var cp = src.cloneNode(true);
+    cp.setAttribute('id', id + '__sh');
+    var all = [cp].concat([].slice.call(cp.querySelectorAll('*')));
+    for (var q = 0; q < all.length; q++) {
+      var e = all[q];
+      if (e.tagName === 'use') { all.length = 0; cp = null; break; }   /* not ours to recolour */
+      if (e.hasAttribute('stroke') && e.getAttribute('stroke') !== 'none')
+        e.setAttribute('stroke', '#000');
+      if (e.tagName === 'stop') { e.setAttribute('stop-color', '#000'); continue; }
+      var f = e.getAttribute('fill');
+      if (f !== 'none') e.setAttribute('fill', '#000');
+      if (e.style) { e.style.fill = ''; e.style.stroke = ''; }
+    }
+    if (cp) host.appendChild(cp);
+  });
+
   var BOX = {};
   NAMES.forEach(function (id) {
     var u = el('use', {}); u.setAttributeNS(XLINK, 'xlink:href', '#' + id); u.setAttribute('href', '#' + id);
@@ -225,6 +249,7 @@
   /* his light falls from the top left everywhere on the page, so every
      shadow lies down and to the right of the thing that throws it */
   var SHADOW = { dx: 0.16, dy: 0.22, a: 0.28 };
+  function SHAPE(id) { return host.querySelector('[id="' + id + '__sh"]') ? id + '__sh' : id; }
   var LAMP = { inset: 0.02, headSep: 0.55, tailSep: 0.60,
                headLen: 0.70, tailLen: 0.12,
                headBase: 0.06, headTip: 0.20, tailBase: 0.09, tailTip: 0.15 };
@@ -300,7 +325,7 @@
     var sg = null, su = null;
     if (L.sh) {
       sg = el('g', { style: 'opacity:' + SHADOW.a });
-      su = el('use', { style: 'filter:brightness(0)' });
+      su = el('use', {});
       sg.appendChild(su);
     }
     var g = el('g', { style: 'isolation:isolate' });
@@ -327,8 +352,9 @@
         node.bu.setAttribute('href', '#' + c.id + '_beams');
       }
       if (node.su) {
-        node.su.setAttributeNS(XLINK, 'xlink:href', '#' + c.id);
-        node.su.setAttribute('href', '#' + c.id);
+        var sid = SHAPE(c.id);
+        node.su.setAttributeNS(XLINK, 'xlink:href', '#' + sid);
+        node.su.setAttribute('href', '#' + sid);
       }
       node.id = c.id;
     }
@@ -348,8 +374,9 @@
       n.bu.setAttribute('href', '#' + c.id + '_beams');
     }
     if (n.su) {
-      n.su.setAttributeNS(XLINK, 'xlink:href', '#' + c.id);
-      n.su.setAttribute('href', '#' + c.id);
+      var sid2 = SHAPE(c.id);
+      n.su.setAttributeNS(XLINK, 'xlink:href', '#' + sid2);
+      n.su.setAttribute('href', '#' + sid2);
     }
     n.id = c.id;
   }
