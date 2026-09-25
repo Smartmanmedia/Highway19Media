@@ -78,11 +78,13 @@
     g.__sec = g.closest('.sec');
     g.__amt = g.getAttribute('data-para') === 'cloud' ? 760
             : parseFloat(g.getAttribute('data-sign-travel') || '520');
-    /* HIS GREEN BOARDS, HALF AS BIG AGAIN. Which board is green is read off
-       the paint he used: the fill that covers the most of the assembly. */
-    g.__sc = 1;
+    /* HIS GREEN BOARDS, BIGGER. Which board is green is read off the paint
+       he used: the fill that covers the most of the assembly. The board
+       itself is what has to fit the window, not the gantry it hangs from,
+       so the plate is measured on its own - the run of that same green. */
+    g.__sc = 1; g.__up = 1;
     if (g.hasAttribute('data-sign')) {
-      var area = {}, top = '', best = 0;
+      var area = {}, top = '', best = 0, own = {};
       [].forEach.call(g.querySelectorAll('[fill]'), function (e) {
         var f = (e.getAttribute('fill') || '').toLowerCase(), bx;
         if (!f || f === 'none' || f.indexOf('url') === 0) return;
@@ -90,9 +92,14 @@
         var a = bx.width * bx.height;
         if (!a) return;
         area[f] = (area[f] || 0) + a;
+        var o = own[f] || (own[f] = [1e9, -1e9]);
+        if (bx.x < o[0]) o[0] = bx.x;
+        if (bx.x + bx.width > o[1]) o[1] = bx.x + bx.width;
         if (area[f] > best) { best = area[f]; top = f; }
       });
-      if (top === '#1c9022' || top === '#006802') g.__sc = SIGN_UP;
+      if (top === '#1c9022' || top === '#006802') {
+        g.__up = SIGN_UP; g.__plate = own[top];
+      }
     }
     try {
       var bb = g.getBBox();
@@ -195,6 +202,45 @@
     g.__leader = prev.__leader || prev;
     g.__twin = prev; prev.__twin = g;
   });
+
+  /* AS BIG AS THE WINDOW HAS ROOM FOR. Forty per cent on a board he drew
+     hard against the edge of his artboard pushes it off the screen, and on
+     a tablet there is no room to give it at all: the page shows a fixed
+     1960 units of his 2128-wide artboard below that width, so the board
+     ends up cut. The board grows as far as it can without passing the edge
+     of what is on screen, up to the forty per cent - which is what a wide
+     screen gives it and a narrow one does not. A board he drew across a
+     join grows on the one measurement both halves share, or the halves
+     come apart. */
+  function fitSigns() {
+    var seen = [];
+    boards.forEach(function (g) {
+      if (g.__up === 1 || !g.__plate) return;
+      if (seen.indexOf(g) >= 0) return;
+      var pair = g.__twin && g.__twin.__plate ? [g, g.__twin] : [g];
+      pair.forEach(function (h) { seen.push(h); });
+      var x0 = 1e9, x1 = -1e9;
+      pair.forEach(function (h) {
+        if (h.__plate[0] < x0) x0 = h.__plate[0];
+        if (h.__plate[1] > x1) x1 = h.__plate[1];
+      });
+      var art = g.__sec.querySelector('.art, .art-a');
+      var u = art ? art.getBoundingClientRect().width / 3088 : 1;
+      var vw = document.documentElement.clientWidth || innerWidth;
+      var vis = u ? vw / u : 1960;                  /* his units now on screen */
+      /* a shade in from the edge, so the board reads as a board and not as
+         something sliced off by the window */
+      var L = 1064 - vis / 2 + 24, R = 1064 + vis / 2 - 24;
+      var cx = parseFloat(g.__cx);
+      var s = g.__up;
+      if (x1 > cx) s = Math.min(s, (R - cx) / (x1 - cx));
+      if (x0 < cx) s = Math.min(s, (cx - L) / (cx - x0));
+      if (!(s > 1)) s = 1;                          /* never smaller than he drew */
+      pair.forEach(function (h) { h.__sc = s; });
+    });
+  }
+  fitSigns();
+  addEventListener('resize', fitSigns);
 
   /* THE LETTERING IS ONLY IN ONE OF THE TWO HALVES. He set his board across
      the join, and Illustrator wrote the green plate into both artboards but
