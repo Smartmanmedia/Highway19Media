@@ -91,13 +91,30 @@
     g.__page = g.__secTop + g.__frac * g.__secH;     /* his sign on the page */
   });
 
+  /* A CLOUD AND THE SHADOW HE DREW UNDER IT ARE ONE THING, and he names them
+     so: Cloud5 and Cloud_5_shadow, Cloud3 and Cloud3_Shadow. Paired by the
+     name rather than by how close they happen to fall, because a section can
+     carry two of each and proximity pairs the wrong ones. */
+  var byName = {};
+  signs.forEach(function (g) {
+    if (g.getAttribute('data-para') !== 'cloud') return;
+    var key = (g.id || '').toLowerCase()
+      .replace(/[-_]?shadows?/g, '').replace(/cloud[_-]?/, 'cloud').replace(/_/g, '');
+    (byName[key] = byName[key] || []).push(g);
+  });
+  Object.keys(byName).forEach(function (k) {
+    var list = byName[k];
+    if (list.length < 2) return;
+    for (var i = 1; i < list.length; i++) list[i].__leader = list[0];
+  });
+
   /* a sign he drew across a seam arrives as two halves in two sections; they
      share one anchor so they move as the single sign he drew */
   signs.slice().sort(function (a, b) { return a.__page - b.__page; })
     .forEach(function (g, i, list) {
       var prev = list[i - 1];
+      if (g.getAttribute('data-para') === 'cloud') return;   /* named, not guessed */
       if (!prev || g.__page - prev.__page > 220) return;
-      if ((prev.getAttribute('data-para') || '') !== (g.getAttribute('data-para') || '')) return;
       var mid = (prev.__anchor || prev.__page + g.__page) / (prev.__anchor ? 1 : 2);
       prev.__anchor = mid; g.__anchor = mid;
       var cx = (parseFloat(prev.__cx) + parseFloat(g.__cx)) / 2;

@@ -282,7 +282,15 @@ for(const k of KS){
     wanted.forEach(w=>{
       const par=w.el.parentNode;
       if(!par) return;
-      if(par===svg && !w.clipAnc){ svg.appendChild(w.el); return; }
+      /* a cloud is the highest thing he drew, so it overtakes everything -
+         and it takes the shadow he drew under it with it, as one piece */
+      if(w.rank===2&&/^Cloud/i.test(w.el.id||''))
+        w.el.setAttribute('data-para','cloud');
+      if(par===svg && !w.clipAnc){
+        svg.appendChild(w.el);
+        if(w.rank===2&&!skyFirst) skyFirst=w.el;
+        return;
+      }
       let host=svg, base=null;
       if(w.clipAnc){
         base=w.clipAnc.getCTM();
@@ -303,10 +311,6 @@ for(const k of KS){
       }
       host.appendChild(w.el);
       if(w.rank===2&&!skyFirst) skyFirst=host===svg?w.el:null;
-      /* a cloud is the highest thing he drew, so it overtakes everything;
-         the shadow it throws is on the ground and stays with the ground */
-      if(w.rank===2&&/^Cloud/i.test(w.el.id||'')&&!/shadow/i.test(w.el.id||''))
-        w.el.setAttribute('data-para','cloud');
     });
 
     /* his clumps go on last of all, so they close the joint rather than
