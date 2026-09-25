@@ -179,7 +179,9 @@
       segs[s3].prev = segs[s3 - 1] || null;
       segs[s3].next = segs[s3 + 1] || null;
     }
-    if (segs.length) runs.push({ segs: segs, L: total, pitch: pitch, sc: pitch / LANE_REF, cars: [] });
+    if (segs.length) runs.push({ segs: segs, L: total, pitch: pitch,
+                                 sc: pitch / LANE_REF, cars: [],
+                                 ramp: Math.max(96, pitch * 1.5) });
   });
   if (!runs.length) return;
   var fleets = runs;
@@ -259,20 +261,23 @@
 
   /* -- 5. A node per on-screen car ----------------------------------------
      THE BEAMS ARE THEIR OWN LAYER, under every car: that is what stops a
-     queueing car's beams washing over the car in front of it. His cars go
-     dark after sunset as one group, one filter, not a filter per sprite. */
+     queueing car's beams washing over the car in front of it.
+
+     THE NIGHT IS PAINTED ON EACH CAR, NOT ON THE LAYER. One filter over the
+     whole layer is one surface the size of the section, and every car that
+     moves makes the browser paint all of it again: measured, that is a
+     dropped frame every other frame on his three-lane interstate, which is
+     the jitter. A car is a thumbnail; filtered on its own it is cached and
+     only moved. Same sum, same colour - 60fps instead of 30. */
   function lanes(seg, band) {
     var key = String(band);
     if (seg.layers[key]) return seg.layers[key];
     var B = band >= 0 ? BANDS[band] : null;
     var b = el('g', { 'data-beams': '1' });
     var c = el('g', { 'data-cars': '1' });
-    if (B) {
-      b.setAttribute('style', 'opacity:' + B.beam);
-      c.setAttribute('style', 'filter:' + B.f);
-    }
+    if (B) b.setAttribute('style', 'opacity:' + B.beam);
     seg.slot.appendChild(b); seg.slot.appendChild(c);
-    return (seg.layers[key] = { beams: b, cars: c, lit: !!B });
+    return (seg.layers[key] = { beams: b, cars: c, lit: !!B, f: B ? B.f : '' });
   }
   function makeNode(seg, band) {
     var L = lanes(seg, band);
@@ -285,9 +290,10 @@
     var g = el('g', { style: 'isolation:isolate' });
     var inner = el('g', {});
     var u = el('use', {});
+    if (L.f) u.setAttribute('style', 'filter:' + L.f);
     inner.appendChild(u); g.appendChild(inner);
     var node = { g: g, bg: bg, bu: bu, inner: inner, use: u, id: null, car: null,
-                 band: band, layer: L, stamp: -1 };
+                 band: band, layer: L, stamp: -1, fade: -1 };
     g.__n = node; if (bg) bg.__n = node;
     return node;
   }
@@ -432,6 +438,30 @@
                  ') rotate(' + c.ang.toFixed(2) + ')';
         c.node.g.setAttribute('transform', tf);
         c.node.stamp = FRAME;
+        /* WHERE HIS ROAD JUST STOPS AT THE EDGE OF AN ARTBOARD. Each
+           section clips its own art. Where his road carries on into the
+           next one the car is drawn on both sides of the join and nothing
+           is lost. Where it does not - his forest road simply begins at the
+           top of its own artboard, under his rocks - a car arriving there
+           was cut in half by the join. It is faded over its own length as
+           it crosses, so it comes up out of the edge instead of being
+           sliced by it. */
+        var sg0 = c.seg, rp = run.ramp, fd = 1;
+        if (!sg0.prev && c.y < rp) fd = c.y / rp;
+        if (!sg0.next && sg0.h && c.y > sg0.h - rp) {
+          var f2 = (sg0.h - c.y) / rp;
+          if (f2 < fd) fd = f2;
+        }
+        if (fd < 0) fd = 0; else if (fd > 1) fd = 1;
+        if (fd !== c.node.fade) {
+          c.node.fade = fd;
+          if (fd >= 1) c.node.g.removeAttribute('opacity');
+          else c.node.g.setAttribute('opacity', fd.toFixed(3));
+          if (c.node.bg) {
+            if (fd >= 1) c.node.bg.removeAttribute('opacity');
+            else c.node.bg.setAttribute('opacity', fd.toFixed(3));
+          }
+        }
         /* EACH SECTION CLIPS ITS OWN ART, so a car halfway over the join was
            losing whichever half was on the other side of it. While it
            straddles, the same car is drawn in the next section too, a whole
@@ -456,6 +486,15 @@
                    ') rotate(' + c.ang.toFixed(2) + ')';
           gn.g.setAttribute('transform', gt);
           gn.stamp = FRAME;
+          if (fd !== gn.fade) {
+            gn.fade = fd;
+            if (fd >= 1) gn.g.removeAttribute('opacity');
+            else gn.g.setAttribute('opacity', fd.toFixed(3));
+            if (gn.bg) {
+              if (fd >= 1) gn.bg.removeAttribute('opacity');
+              else gn.bg.setAttribute('opacity', fd.toFixed(3));
+            }
+          }
           if (gn.bg) gn.bg.setAttribute('transform', gt + ' ' + gn.carT);
         } else if (c.node.gh && c.node.gh.g.parentNode) {
           c.node.gh.g.parentNode.removeChild(c.node.gh.g);

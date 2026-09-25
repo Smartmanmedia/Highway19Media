@@ -483,15 +483,37 @@ for(const k of KS){
       const centre=doc.createElementNS(NS,'g');
       centre.setAttribute('transform','translate('+(-(a0.x+a0.w/2)).toFixed(2)+','+
         (-(a0.y+a0.h/2)).toFixed(2)+')');
-      parts[0].el.parentNode.insertBefore(outer,parts[0].el);
+      /* HIS SHIP IS ON THE SEA, NOT ON A SIGN. The sign sweep had taken his
+         container ship into the gantry assembly beside it, and the whole
+         assembly is on parallax - so his ship rose and fell with the sign
+         instead of sailing. Anything that moves comes out of a parallax
+         group and is put back exactly where he drew it, in the same slot.
+         His flyover is the other way about: he drew it early in the file, so
+         his port was painted over it. It flies up under the sky with his
+         other aircraft. */
+      const par0=parts[0].el.parentNode;
+      let tagged=null;
+      for(let a1=par0; a1&&a1!==svg; a1=a1.parentNode)
+        if(a1.getAttribute&&(a1.getAttribute('data-sign')||a1.getAttribute('data-para'))) tagged=a1;
+      const home=(mv.lift||tagged)?(()=>{
+        const m=par0.getCTM&&par0!==svg? par0.getCTM() : null;
+        const lift=doc.createElementNS(NS,'g');
+        if(m) lift.setAttribute('transform','matrix('+
+          [m.a,m.b,m.c,m.d,m.e,m.f].map(v=>(+v).toFixed(5)).join(',')+')');
+        return lift;
+      })():null;
+      if(mv.lift){ if(skyFirst) svg.insertBefore(outer,skyFirst); else svg.appendChild(outer); }
+      else if(tagged) tagged.parentNode.insertBefore(outer,tagged);
+      else par0.insertBefore(outer,parts[0].el);
       parts.forEach((q,qi)=>{
         if((mv.shadow||[]).includes(qi)){
           q.el.setAttribute('fill','#000');
           q.el.setAttribute('opacity','0.26');
           q.el.querySelectorAll('[fill]').forEach(e2=>{e2.setAttribute('fill','#000');});
         }
-        centre.appendChild(q.el);
+        (home||centre).appendChild(q.el);
       });
+      if(home) centre.appendChild(home);
       outer.appendChild(centre);
       const mo=doc.createElementNS(NS,'animateMotion');
       mo.setAttribute('path',mv.path); mo.setAttribute('dur',mv.dur+'s');

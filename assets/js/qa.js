@@ -108,6 +108,39 @@
     for (var i = 1; i < list.length; i++) list[i].__leader = list[0];
   });
 
+  /* HIS CLOUDS DO NOT STOP AT A JOIN. Each section clips its own art, so a
+     cloud carried down by its own parallax was being sliced off flat along
+     the seam. The same cloud is drawn in the section next door as well, one
+     artboard away, on top of everything there - the highest thing he drew.
+     A <use> renders the cloud with its own transform, so the copy takes the
+     parallax from the original for free and never needs touching again.
+     The offset is a ratio of two lengths that both scale with the window,
+     so it is right at every width. */
+  (function ghostClouds() {
+    var arts = [].slice.call(document.querySelectorAll('.art > svg, .art-a > svg, .art-b > svg'));
+    if (arts.length < 2) return;
+    var tops = arts.map(function (s2) { return s2.getBoundingClientRect().top + scrollY; });
+    signs.forEach(function (g) {
+      if (g.getAttribute('data-para') !== 'cloud' || !g.id) return;
+      var own = g.ownerSVGElement, oi = arts.indexOf(own);
+      if (oi < 0) return;
+      var box = own.viewBox.baseVal, w = own.getBoundingClientRect().width;
+      var u = box && box.width ? w / box.width : 1;        /* px per his unit */
+      if (!u) return;
+      [oi - 1, oi + 1].forEach(function (ni) {
+        var nb = arts[ni];
+        if (!nb) return;
+        var use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+        use.setAttribute('href', '#' + g.id);
+        use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + g.id);
+        use.setAttribute('transform', 'translate(0 ' + ((tops[oi] - tops[ni]) / u).toFixed(2) + ')');
+        use.setAttribute('aria-hidden', 'true');
+        use.style.pointerEvents = 'none';
+        nb.appendChild(use);
+      });
+    });
+  })();
+
   /* a sign he drew across a seam arrives as two halves in two sections; they
      share one anchor so they move as the single sign he drew */
   signs.slice().sort(function (a, b) { return a.__page - b.__page; })

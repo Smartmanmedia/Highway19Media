@@ -85,7 +85,8 @@
     ],
     "path": "M2820,1140 L-680,1300",
     "dur": 52,
-    "dly": -14
+    "dly": -14,
+    "lift": true
    }
   ],
   "lift": false,
