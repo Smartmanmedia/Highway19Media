@@ -71,12 +71,29 @@
   /* his signs, and his clouds above them. A cloud is the highest thing he
      drew, so it overtakes everything on the page; the shadow it throws is on
      his ground and stays there, which is what makes the pair read as height. */
+  var SIGN_UP = 1.4;                       /* his green boards, 40% bigger */
   var signs = [].slice.call(document.querySelectorAll('[data-sign],[data-para]'));
   signs.forEach(function (g) {
     g.style.willChange = 'transform';
     g.__sec = g.closest('.sec');
     g.__amt = g.getAttribute('data-para') === 'cloud' ? 760
             : parseFloat(g.getAttribute('data-sign-travel') || '520');
+    /* HIS GREEN BOARDS, HALF AS BIG AGAIN. Which board is green is read off
+       the paint he used: the fill that covers the most of the assembly. */
+    g.__sc = 1;
+    if (g.hasAttribute('data-sign')) {
+      var area = {}, top = '', best = 0;
+      [].forEach.call(g.querySelectorAll('[fill]'), function (e) {
+        var f = (e.getAttribute('fill') || '').toLowerCase(), bx;
+        if (!f || f === 'none' || f.indexOf('url') === 0) return;
+        try { bx = e.getBBox(); } catch (err) { return; }
+        var a = bx.width * bx.height;
+        if (!a) return;
+        area[f] = (area[f] || 0) + a;
+        if (area[f] > best) { best = area[f]; top = f; }
+      });
+      if (top === '#1c9022' || top === '#006802') g.__sc = SIGN_UP;
+    }
     try {
       var bb = g.getBBox();
       g.__cx = (bb.x + bb.width / 2).toFixed(1);
@@ -116,11 +133,16 @@
      parallax from the original for free and never needs touching again.
      The offset is a ratio of two lengths that both scale with the window,
      so it is right at every width. */
-  (function ghostClouds() {
+  (function ghostAcrossSeams() {
     var arts = [].slice.call(document.querySelectorAll('.art > svg, .art-a > svg, .art-b > svg'));
     if (arts.length < 2) return;
     var tops = arts.map(function (s2) { return s2.getBoundingClientRect().top + scrollY; });
     signs.forEach(function (g) {
+      /* CLOUDS ONLY. A sign he drew across a join is exported into BOTH
+         artboards whole, each copy clipped to its own, and the two strips
+         tile into the one sign. Draw either of them uncut and its green
+         plate lands over the other one's lettering. His clouds are single
+         objects and copy safely; his signs already carry their own join. */
       if (g.getAttribute('data-para') !== 'cloud' || !g.id) return;
       var own = g.ownerSVGElement, oi = arts.indexOf(own);
       if (oi < 0) return;
@@ -149,26 +171,67 @@
   })();
 
   /* a sign he drew across a seam arrives as two halves in two sections; they
-     share one anchor so they move as the single sign he drew */
-  signs.slice().sort(function (a, b) { return a.__page - b.__page; })
-    .forEach(function (g, i, list) {
-      var prev = list[i - 1];
-      if (g.getAttribute('data-para') === 'cloud') return;   /* named, not guessed */
-      if (!prev || g.__page - prev.__page > 220) return;
-      var mid = (prev.__anchor || prev.__page + g.__page) / (prev.__anchor ? 1 : 2);
-      prev.__anchor = mid; g.__anchor = mid;
-      var cx = (parseFloat(prev.__cx) + parseFloat(g.__cx)) / 2;
-      [prev, g].forEach(function (h) {
-        h.__frac = (h.__anchor - h.__secTop) / h.__secH;
-        /* both halves swell about the one point, or the scale slides them
-           apart and his sign shows a step where he drew none */
-        var a = h.__sec.querySelector('.art, .art-a');
-        var u = a ? a.getBoundingClientRect().width / 3088 : 1;
-        h.__cx = cx.toFixed(1);
-        h.__cy = (u ? (h.__anchor - h.__secTop) / u : 0).toFixed(1);
-      });
-      g.__leader = prev.__leader || prev;
+     share one anchor so they move as the single sign he drew. Only signs
+     pair with signs: a cloud that happened to fall near one was being taken
+     for its other half, and the sign then rode the cloud's travel. */
+  var boards = signs.filter(function (g) {
+    return g.getAttribute('data-para') !== 'cloud';
+  }).sort(function (a, b) { return a.__page - b.__page; });
+  boards.forEach(function (g, i, list) {
+    var prev = list[i - 1];
+    if (!prev || g.__page - prev.__page > 220) return;
+    var mid = (prev.__anchor || prev.__page + g.__page) / (prev.__anchor ? 1 : 2);
+    prev.__anchor = mid; g.__anchor = mid;
+    var cx = (parseFloat(prev.__cx) + parseFloat(g.__cx)) / 2;
+    [prev, g].forEach(function (h) {
+      h.__frac = (h.__anchor - h.__secTop) / h.__secH;
+      /* both halves swell about the one point, or the scale slides them
+         apart and his sign shows a step where he drew none */
+      var a = h.__sec.querySelector('.art, .art-a');
+      var u = a ? a.getBoundingClientRect().width / 3088 : 1;
+      h.__cx = cx.toFixed(1);
+      h.__cy = (u ? (h.__anchor - h.__secTop) / u : 0).toFixed(1);
     });
+    g.__leader = prev.__leader || prev;
+    g.__twin = prev; prev.__twin = g;
+  });
+
+  /* THE LETTERING IS ONLY IN ONE OF THE TWO HALVES. He set his board across
+     the join, and Illustrator wrote the green plate into both artboards but
+     his words into just the one - sitting, in that artboard, above its own
+     top edge. So the top line of "BRANDING & GRAPHIC DESIGN" was cut off by
+     the join and the strip above it was a bare plate.
+
+     The half that carries his words is drawn again in the other half's
+     section, over that bare plate, one artboard away. The two plates are
+     the same plate in the same place, so nothing is covered that is not
+     already identical - and the whole sign reads across the join. */
+  (function joinBoards() {
+    var arts = [].slice.call(document.querySelectorAll('.art > svg, .art-a > svg, .art-b > svg'));
+    var tops = arts.map(function (s2) { return s2.getBoundingClientRect().top + scrollY; });
+    var n = 0;
+    boards.forEach(function (g) {
+      var t = g.__twin;
+      if (!t) return;
+      var mine = (g.textContent || '').trim().length;
+      var theirs = (t.textContent || '').trim().length;
+      if (mine <= theirs) return;                 /* the other half is the master */
+      var oi = arts.indexOf(g.ownerSVGElement), ni = arts.indexOf(t.ownerSVGElement);
+      if (oi < 0 || ni < 0 || oi === ni) return;
+      var box = g.ownerSVGElement.viewBox.baseVal;
+      var u = box && box.width ? g.ownerSVGElement.getBoundingClientRect().width / box.width : 0;
+      if (!u) return;
+      if (!g.id) g.id = 'h19-board-' + (++n);
+      var use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+      use.setAttribute('href', '#' + g.id);
+      use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + g.id);
+      use.setAttribute('transform', 'translate(0 ' + ((tops[oi] - tops[ni]) / u).toFixed(2) + ')');
+      use.setAttribute('aria-hidden', 'true');
+      use.style.pointerEvents = 'none';
+      /* straight over the bare plate it belongs to, and nothing else */
+      t.parentNode.insertBefore(use, t.nextSibling);
+    });
+  })();
 
   var queued = false;
   function frame() {
@@ -192,7 +255,13 @@
          screen and carries on above it - and it TRAVELS. Nothing swells: a
          sign that grows reads as a zoom, not as something close by. */
       var off = (0.5 - p) * g.__amt;
-      g.setAttribute('transform', 'translate(0 ' + off.toFixed(2) + ')');
+      var t = 'translate(0 ' + off.toFixed(2) + ')';
+      /* a board swells about its own middle - and a board he drew across a
+         seam swells about the one middle both halves share, or his sign
+         shows a step where he drew none */
+      if (g.__sc !== 1) t += ' translate(' + g.__cx + ' ' + g.__cy + ') scale(' +
+        g.__sc + ') translate(' + (-g.__cx) + ' ' + (-g.__cy) + ')';
+      g.setAttribute('transform', t);
     }
   }
   function onScroll() { if (!queued) { queued = true; requestAnimationFrame(frame); } }

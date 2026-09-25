@@ -222,6 +222,9 @@
      proportion of that vehicle's own measured box, so a semi throws a longer
      beam than a hatchback with no special case. One set per vehicle type,
      referenced by <use> like the cars themselves. */
+  /* his light falls from the top left everywhere on the page, so every
+     shadow lies down and to the right of the thing that throws it */
+  var SHADOW = { dx: 0.16, dy: 0.22, a: 0.28 };
   var LAMP = { inset: 0.02, headSep: 0.55, tailSep: 0.60,
                headLen: 0.70, tailLen: 0.12,
                headBase: 0.06, headTip: 0.20, tailBase: 0.09, tailTip: 0.15 };
@@ -273,11 +276,18 @@
     var key = String(band);
     if (seg.layers[key]) return seg.layers[key];
     var B = band >= 0 ? BANDS[band] : null;
+    /* HIS OWN LORRIES THROW A SHADOW, so ours do. It is the car's own
+       silhouette, laid on his road a little down and to the right - his
+       light comes from the same corner everywhere on the page - and it
+       stays put in the world while the car turns on top of it. Only by
+       day: after sunset there is nothing to throw one. */
+    var sh = B ? null : el('g', { 'data-shadows': '1' });
     var b = el('g', { 'data-beams': '1' });
     var c = el('g', { 'data-cars': '1' });
     if (B) b.setAttribute('style', 'opacity:' + B.beam);
+    if (sh) seg.slot.appendChild(sh);
     seg.slot.appendChild(b); seg.slot.appendChild(c);
-    return (seg.layers[key] = { beams: b, cars: c, lit: !!B, f: B ? B.f : '' });
+    return (seg.layers[key] = { beams: b, cars: c, sh: sh, lit: !!B, f: B ? B.f : '' });
   }
   function makeNode(seg, band) {
     var L = lanes(seg, band);
@@ -287,14 +297,20 @@
       bu = el('use', {});
       bg.appendChild(bu);
     }
+    var sg = null, su = null;
+    if (L.sh) {
+      sg = el('g', { style: 'opacity:' + SHADOW.a });
+      su = el('use', { style: 'filter:brightness(0)' });
+      sg.appendChild(su);
+    }
     var g = el('g', { style: 'isolation:isolate' });
     var inner = el('g', {});
     var u = el('use', {});
     if (L.f) u.setAttribute('style', 'filter:' + L.f);
     inner.appendChild(u); g.appendChild(inner);
-    var node = { g: g, bg: bg, bu: bu, inner: inner, use: u, id: null, car: null,
-                 band: band, layer: L, stamp: -1, fade: -1 };
-    g.__n = node; if (bg) bg.__n = node;
+    var node = { g: g, bg: bg, bu: bu, sg: sg, su: su, inner: inner, use: u,
+                 id: null, car: null, band: band, layer: L, stamp: -1, fade: -1 };
+    g.__n = node; if (bg) bg.__n = node; if (sg) sg.__n = node;
     return node;
   }
   function bind(node, c) {
@@ -309,6 +325,10 @@
       if (node.bu) {
         node.bu.setAttributeNS(XLINK, 'xlink:href', '#' + c.id + '_beams');
         node.bu.setAttribute('href', '#' + c.id + '_beams');
+      }
+      if (node.su) {
+        node.su.setAttributeNS(XLINK, 'xlink:href', '#' + c.id);
+        node.su.setAttribute('href', '#' + c.id);
       }
       node.id = c.id;
     }
@@ -326,6 +346,10 @@
     if (n.bu) {
       n.bu.setAttributeNS(XLINK, 'xlink:href', '#' + c.id + '_beams');
       n.bu.setAttribute('href', '#' + c.id + '_beams');
+    }
+    if (n.su) {
+      n.su.setAttributeNS(XLINK, 'xlink:href', '#' + c.id);
+      n.su.setAttribute('href', '#' + c.id);
     }
     n.id = c.id;
   }
@@ -424,10 +448,13 @@
       for (i = 0; i < free.length; i++) {
         if (free[i].g.parentNode) free[i].g.parentNode.removeChild(free[i].g);
         if (free[i].bg && free[i].bg.parentNode) free[i].bg.parentNode.removeChild(free[i].bg);
+        if (free[i].sg && free[i].sg.parentNode) free[i].sg.parentNode.removeChild(free[i].sg);
         if (free[i].gh) {
           if (free[i].gh.g.parentNode) free[i].gh.g.parentNode.removeChild(free[i].gh.g);
           if (free[i].gh.bg && free[i].gh.bg.parentNode)
             free[i].gh.bg.parentNode.removeChild(free[i].gh.bg);
+          if (free[i].gh.sg && free[i].gh.sg.parentNode)
+            free[i].gh.sg.parentNode.removeChild(free[i].gh.sg);
           free[i].gh = null;
         }
       }
@@ -475,6 +502,8 @@
             if (c.node.gh.g.parentNode) c.node.gh.g.parentNode.removeChild(c.node.gh.g);
             if (c.node.gh.bg && c.node.gh.bg.parentNode)
               c.node.gh.bg.parentNode.removeChild(c.node.gh.bg);
+            if (c.node.gh.sg && c.node.gh.sg.parentNode)
+              c.node.gh.sg.parentNode.removeChild(c.node.gh.sg);
             c.node.gh = null;
           }
           if (!c.node.gh) c.node.gh = makeNode(gh, gb);
@@ -486,6 +515,14 @@
                    ') rotate(' + c.ang.toFixed(2) + ')';
           gn.g.setAttribute('transform', gt);
           gn.stamp = FRAME;
+          if (gn.sg) {
+            if (gn.sg.parentNode !== gn.layer.sh) gn.layer.sh.appendChild(gn.sg);
+            var gof = run.pitch * 0.70;
+            gn.sg.setAttribute('transform',
+              'translate(' + (c.x + gof * SHADOW.dx).toFixed(2) + ',' +
+              (gy + gof * SHADOW.dy).toFixed(2) + ') rotate(' + c.ang.toFixed(2) +
+              ') ' + gn.carT);
+          }
           if (fd !== gn.fade) {
             gn.fade = fd;
             if (fd >= 1) gn.g.removeAttribute('opacity');
@@ -500,11 +537,26 @@
           c.node.gh.g.parentNode.removeChild(c.node.gh.g);
           if (c.node.gh.bg && c.node.gh.bg.parentNode)
             c.node.gh.bg.parentNode.removeChild(c.node.gh.bg);
+          if (c.node.gh.sg && c.node.gh.sg.parentNode)
+            c.node.gh.sg.parentNode.removeChild(c.node.gh.sg);
         }
         /* the beams ride in their own layer, so they carry the car's place
            AND the car's own scale */
         if (c.node.bg)
           c.node.bg.setAttribute('transform', tf + ' ' + c.node.carT);
+        /* the shadow is displaced in his world, not in the car's - it must
+           not swing round the car as the car turns */
+        if (c.node.sg) {
+          if (c.node.sg.parentNode !== c.node.layer.sh)
+            c.node.layer.sh.appendChild(c.node.sg);
+          var off = run.pitch * 0.70;
+          c.node.sg.setAttribute('transform',
+            'translate(' + (c.x + off * SHADOW.dx).toFixed(2) + ',' +
+            (c.y + off * SHADOW.dy).toFixed(2) + ') rotate(' + c.ang.toFixed(2) +
+            ') ' + c.node.carT);
+          if (fd < 1) c.node.sg.setAttribute('opacity', (SHADOW.a * fd).toFixed(3));
+          else c.node.sg.setAttribute('opacity', SHADOW.a);
+        }
       }
     }
   }
@@ -519,8 +571,9 @@
     for (var si = 0; si < allSegs.length; si++) {
       var L = allSegs[si].layers;
       for (var key in L) {
-        ['cars', 'beams'].forEach(function (which) {
+        ['cars', 'beams', 'sh'].forEach(function (which) {
           var g = L[key][which], i;
+          if (!g) return;
           for (i = g.children.length - 1; i >= 0; i--) {
             var n = g.children[i].__n;
             if (n && n.stamp !== FRAME) g.removeChild(g.children[i]);
