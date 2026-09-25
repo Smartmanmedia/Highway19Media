@@ -216,8 +216,13 @@ for(const [k,H] of SEC){
          and that stays where it lands. */
       const offPlate=e=>{
         const b3=nbox(e); if(!b3||!pa) return true;
-        return Math.abs((b3.x+b3.w/2)-(pa.x+pa.w/2))>pa.w*0.05 ||
-               Math.abs((b3.y+b3.h/2)-(pa.y+pa.h/2))>pa.h*0.05;
+        /* light lands INSIDE the board - his fittings throw a wedge down the
+           face of it. A shadow is the board's own shape pushed off the board.
+           So anything see-through that stays within the plate travels with it,
+           and anything that hangs outside stays on the ground. */
+        const m=6;
+        return b3.x<pa.x-m || b3.y<pa.y-m ||
+               b3.x+b3.w>pa.x+pa.w+m || b3.y+b3.h>pa.y+pa.h+m;
       };
       const band=F.seam?[]:[...host2.children].filter(e=>{
         if(e===wrap) return false;

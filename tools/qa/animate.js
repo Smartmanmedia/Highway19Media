@@ -322,6 +322,27 @@ for(const k of KS){
        sitting under the forest they are there to mend */
     if(frontArt) svg.appendChild(frontArt);
 
+    /* HIS BRIDGE IS OVER THE ROAD, NOT UNDER IT. The cross-brace in the
+       middle of his span is drawn before the deck, so the traffic was
+       running over it; it goes up with his sky instead. */
+    (cfg.over||[]).forEach(box=>{
+      let best=null,bd=1e9;
+      svg.querySelectorAll('g,path,polygon,rect').forEach(el=>{
+        if(el.closest('[data-fleetslot]')||el.closest('[data-sign]')) return;
+        const a2=abs(el); if(!a2) return;
+        const dd=Math.abs(a2.x-box[0])+Math.abs(a2.y-box[1])+
+                 Math.abs(Math.abs(a2.w)-box[2])+Math.abs(Math.abs(a2.h)-box[3]);
+        if(dd<bd){bd=dd;best=el;}
+      });
+      if(!best||bd>26) return;
+      const par=best.parentNode;
+      const m=par&&par.getCTM&&par!==svg? par.getCTM() : null;
+      if(m){ const own=best.getAttribute('transform')||'';
+        best.setAttribute('transform','matrix('+
+          [m.a,m.b,m.c,m.d,m.e,m.f].map(v=>(+v).toFixed(5)).join(',')+') '+own); }
+      if(skyFirst) svg.insertBefore(best,skyFirst); else svg.appendChild(best);
+    });
+
     /* ---- his roads, measured into lanes ---------------------------------
        Each route is a centreline measured off his own art; the lanes are
        offset from it on his own lane pitch, so a curve carries its vehicles

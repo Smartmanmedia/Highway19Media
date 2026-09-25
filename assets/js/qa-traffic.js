@@ -35,7 +35,26 @@
       SPACING = 250,     /* units of lane per vehicle           */
       CULL = 420;        /* px of viewport margin still rendered */
 
+  /* HIS NIGHT IS NOT A WHOLE SECTION. Section four is drawn as a dawn: black
+     at the top, his desert light by the foot of it, and the tarmac under it
+     goes from 22 to 87 on the way down. So how lit a car is follows where it
+     is on his road, not which artboard it happens to be in. */
   var NIGHT = { '03': 1, '04': 1 };
+  var DAWN  = { '04': [480, 980] };
+  var BANDS = [
+    { f: 'brightness(.10) saturate(.20)', beam: 1 },
+    { f: 'brightness(.30) saturate(.38)', beam: 0.78 },
+    { f: 'brightness(.56) saturate(.62)', beam: 0.46 },
+    { f: 'brightness(.82) saturate(.86)', beam: 0.18 }
+  ];
+  function bandOf(seg, y) {
+    if (!seg.night) return -1;
+    if (!seg.dawn) return 0;
+    var t = (y - seg.dawn[0]) / (seg.dawn[1] - seg.dawn[0]);
+    if (t <= 0) return 0;
+    if (t >= 1) return -1;                       /* his daylight: paint as drawn */
+    return 1 + Math.min(BANDS.length - 2, Math.floor(t * (BANDS.length - 1)));
+  }
 
   function el(n, a) { var e = document.createElementNS(SVGNS, n);
     for (var k in a) e.setAttribute(k, a[k]); return e; }
@@ -104,8 +123,11 @@
       var rs = resample(raw[i].pts);
       var n = rs.xs.length - 1;
       var ang = new Array(n + 1);
+      /* HEADING OVER FORTY UNITS, NOT TEN. A car's nose should follow his
+         road, not the last two samples of it: read off a short baseline the
+         yaw picks up every unit of scan noise and the car wiggles. */
       for (var j = 0; j <= n; j++) {
-        var a = Math.max(0, j - 1), b2 = Math.min(n, j + 1);
+        var a = Math.max(0, j - 4), b2 = Math.min(n, j + 4);
         ang[j] = Math.atan2(rs.ys[b2] - rs.ys[a], rs.xs[b2] - rs.xs[a]) * 180 / Math.PI;
       }
       var sc = pitch / LANE_REF;
@@ -121,7 +143,7 @@
       }
       var vb = svg.viewBox && svg.viewBox.baseVal;
       segs.push({ k: raw[i].k, sec: sec, svg: svg, slot: slot, night: !!NIGHT[raw[i].k],
-                  h: vb ? vb.height : 0,
+                  h: vb ? vb.height : 0, dawn: DAWN[raw[i].k] || null, layers: {},
                   x: rs.xs, y: rs.ys, a: ang, lim: lim, n: n, L: n * STEP, d0: total });
       total += n * STEP;
     }
@@ -139,7 +161,7 @@
   /* -- 3. Cars ------------------------------------------------------------ */
   function metrics(c, run) {
     var b = BOX[c.id];
-    c.scale = run.pitch * 0.78 / b.h;
+    c.scale = run.pitch * 0.70 / b.h;
     var len = b.w * c.scale;
     c.len = len + 9 * run.sc;
     var byLen = Math.min(1, Math.max(0, (len - 72 * run.sc) / (92 * run.sc)));
@@ -213,21 +235,23 @@
      THE BEAMS ARE THEIR OWN LAYER, under every car: that is what stops a
      queueing car's beams washing over the car in front of it. His cars go
      dark after sunset as one group, one filter, not a filter per sprite. */
-  function lanes(seg) {
-    if (seg.beamLayer) return;
+  function lanes(seg, band) {
+    var key = String(band);
+    if (seg.layers[key]) return seg.layers[key];
+    var B = band >= 0 ? BANDS[band] : null;
     var b = el('g', { 'data-beams': '1' });
     var c = el('g', { 'data-cars': '1' });
-    if (seg.night) {
-      b.setAttribute('style', 'opacity:1');
-      c.setAttribute('style', 'filter:brightness(.10) saturate(.20)');
+    if (B) {
+      b.setAttribute('style', 'opacity:' + B.beam);
+      c.setAttribute('style', 'filter:' + B.f);
     }
     seg.slot.appendChild(b); seg.slot.appendChild(c);
-    seg.beamLayer = b; seg.carLayer = c;
+    return (seg.layers[key] = { beams: b, cars: c, lit: !!B });
   }
-  function makeNode(seg) {
-    lanes(seg);
+  function makeNode(seg, band) {
+    var L = lanes(seg, band);
     var bg = null, bu = null;
-    if (seg.night) {
+    if (L.lit) {
       bg = el('g', {});
       bu = el('use', {});
       bg.appendChild(bu);
@@ -236,7 +260,10 @@
     var inner = el('g', {});
     var u = el('use', {});
     inner.appendChild(u); g.appendChild(inner);
-    return { g: g, bg: bg, bu: bu, inner: inner, use: u, id: null, car: null };
+    var node = { g: g, bg: bg, bu: bu, inner: inner, use: u, id: null, car: null,
+                 band: band, layer: L, stamp: -1 };
+    g.__n = node; if (bg) bg.__n = node;
+    return node;
   }
   function bind(node, c) {
     if (node.id !== c.id) {
@@ -320,8 +347,10 @@
         measured[s2.k] = [s2.top, s2.u];
       }
   }
+  var FRAME = 0;
   function render() {
     var vh = window.innerHeight, sy = window.pageYOffset;
+    FRAME++;
     measure(sy);
     for (var ri = 0; ri < runs.length; ri++) {
       var run = runs[ri];
@@ -343,7 +372,8 @@
         c.ang = a0 + da * fr;
         var py = seg.top + c.y * seg.u - sy;
         c.on = py > -CULL && py < vh + CULL;
-        if (c.node && (!c.on || c.node.seg !== seg)) {
+        c.band = bandOf(seg, c.y);
+        if (c.node && (!c.on || c.node.seg !== seg || c.node.band !== c.band)) {
           free.push(c.node); c.node.car = null; c.node = null;
         }
       }
@@ -352,10 +382,10 @@
         if (!c.on || c.node) continue;
         var node = null;
         for (var q = 0; q < free.length; q++)
-          if (free[q].seg === c.seg) { node = free.splice(q, 1)[0]; break; }
-        if (!node) { node = makeNode(c.seg); run.nodes.push(node); }
-        if (node.g.parentNode !== c.seg.carLayer) c.seg.carLayer.appendChild(node.g);
-        if (node.bg && node.bg.parentNode !== c.seg.beamLayer) c.seg.beamLayer.appendChild(node.bg);
+          if (free[q].seg === c.seg && free[q].band === c.band) { node = free.splice(q, 1)[0]; break; }
+        if (!node) { node = makeNode(c.seg, c.band); run.nodes.push(node); }
+        if (node.g.parentNode !== node.layer.cars) node.layer.cars.appendChild(node.g);
+        if (node.bg && node.bg.parentNode !== node.layer.beams) node.layer.beams.appendChild(node.bg);
         node.seg = c.seg;
         bind(node, c);
       }
@@ -375,6 +405,7 @@
         var tf = 'translate(' + c.x.toFixed(2) + ',' + c.y.toFixed(2) +
                  ') rotate(' + c.ang.toFixed(2) + ')';
         c.node.g.setAttribute('transform', tf);
+        c.node.stamp = FRAME;
         /* EACH SECTION CLIPS ITS OWN ART, so a car halfway over the join was
            losing whichever half was on the other side of it. While it
            straddles, the same car is drawn in the next section too, a whole
@@ -383,15 +414,22 @@
         if (sg.next && c.y > sg.h - 150) { gh = sg.next; gy = c.y - sg.h; }
         else if (sg.prev && c.y < 150 && sg.prev.h) { gh = sg.prev; gy = c.y + sg.prev.h; }
         if (gh) {
-          if (!c.node.gh) c.node.gh = makeNode(gh);
-          lanes(gh);
+          var gb = bandOf(gh, gy);
+          if (c.node.gh && c.node.gh.band !== gb) {
+            if (c.node.gh.g.parentNode) c.node.gh.g.parentNode.removeChild(c.node.gh.g);
+            if (c.node.gh.bg && c.node.gh.bg.parentNode)
+              c.node.gh.bg.parentNode.removeChild(c.node.gh.bg);
+            c.node.gh = null;
+          }
+          if (!c.node.gh) c.node.gh = makeNode(gh, gb);
           var gn = c.node.gh;
-          if (gn.g.parentNode !== gh.carLayer) gh.carLayer.appendChild(gn.g);
-          if (gn.bg && gn.bg.parentNode !== gh.beamLayer) gh.beamLayer.appendChild(gn.bg);
+          if (gn.g.parentNode !== gn.layer.cars) gn.layer.cars.appendChild(gn.g);
+          if (gn.bg && gn.bg.parentNode !== gn.layer.beams) gn.layer.beams.appendChild(gn.bg);
           bindGhost(gn, c);
           var gt = 'translate(' + c.x.toFixed(2) + ',' + gy.toFixed(2) +
                    ') rotate(' + c.ang.toFixed(2) + ')';
           gn.g.setAttribute('transform', gt);
+          gn.stamp = FRAME;
           if (gn.bg) gn.bg.setAttribute('transform', gt + ' ' + gn.carT);
         } else if (c.node.gh && c.node.gh.g.parentNode) {
           c.node.gh.g.parentNode.removeChild(c.node.gh.g);
@@ -406,12 +444,36 @@
     }
   }
 
+  /* NOTHING IS EVER LEFT STANDING ON HIS ROAD. A node is only his while a car
+     is on it this frame; one that misses a frame is off the page, whatever
+     path took it there. */
+  var allSegs = [];
+  runs.forEach(function (r) { r.segs.forEach(function (s2) {
+    if (allSegs.indexOf(s2) < 0) allSegs.push(s2); }); });
+  function sweep() {
+    for (var si = 0; si < allSegs.length; si++) {
+      var L = allSegs[si].layers;
+      for (var key in L) {
+        ['cars', 'beams'].forEach(function (which) {
+          var g = L[key][which], i;
+          for (i = g.children.length - 1; i >= 0; i--) {
+            var n = g.children[i].__n;
+            if (n && n.stamp !== FRAME) g.removeChild(g.children[i]);
+          }
+        });
+      }
+    }
+  }
+
   var last = 0, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   function frame(t) {
     var dt = last ? Math.min(0.05, (t - last) / 1000) : 0.016;
     last = t;
     if (!reduce) step(dt);
     render();
+    /* an orphan cannot outlive half a second, and the check costs nothing
+       spread over thirty frames */
+    if ((FRAME % 30) === 0) sweep();
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(function (t) { last = t; render(); requestAnimationFrame(frame); });

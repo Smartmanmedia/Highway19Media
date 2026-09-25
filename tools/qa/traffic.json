@@ -132,7 +132,15 @@
  },
  "01": {
   "clipTop": 97,
-  "signTravel": 0
+  "signTravel": 0,
+  "over": [
+   [
+    788.5,
+    682.5,
+    165,
+    165
+   ]
+  ]
  },
  "02": {
   "signTravel": 120

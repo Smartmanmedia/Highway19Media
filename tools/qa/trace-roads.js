@@ -113,6 +113,36 @@ for(const J of jobs){
       pts[i]=[+(pts[i][0]+nx2*sh2).toFixed(2),+(pts[i][1]+ny2*sh2).toFixed(2),0];
     }
   }
+  /* HIS STRAIGHTS ARE STRAIGHT. The scan wobbles a unit or two either way on
+     dashes, pylons and shadows, and a lane that wobbles makes a car wiggle
+     down it. Where the heading holds steady over a long window the points are
+     put back on the line they belong to; a bend is left exactly as measured. */
+  {
+    const W=12, out2=pts.map(q=>q.slice());
+    /* read the heading over a long enough baseline that a unit of scan noise
+       does not read as a bend */
+    const head=i=>{const a2=pts[Math.max(0,i-10)], b3=pts[Math.min(pts.length-1,i+10)];
+      return Math.atan2(b3[1]-a2[1], b3[0]-a2[0]);};
+    for(let i=0;i<pts.length;i++){
+      const lo=Math.max(0,i-W), hi=Math.min(pts.length-1,i+W);
+      if(hi-lo<W) continue;
+      /* the NET turn across the window. Scan noise cancels over it; a bend
+         does not - his tightest is 170 units of radius, which turns fifty
+         degrees over this window against eight for the worst straight. */
+      let turn=head(hi)-head(lo);
+      while(turn>Math.PI)turn-=2*Math.PI; while(turn<-Math.PI)turn+=2*Math.PI;
+      if(Math.abs(turn)>0.14) continue;
+      let sx=0,sy=0,sxx=0,sxy=0,n=0;
+      for(let j=lo;j<=hi;j++){sx+=pts[j][0];sy+=pts[j][1];n++;}
+      const mx=sx/n,my=sy/n;
+      for(let j=lo;j<=hi;j++){const dx=pts[j][0]-mx,dy=pts[j][1]-my;sxx+=dx*dx;sxy+=dx*dy;}
+      /* project onto the best line through the window's own middle */
+      const ux=Math.cos(head(i)), uy=Math.sin(head(i));
+      const t=(pts[i][0]-mx)*ux+(pts[i][1]-my)*uy;
+      out2[i]=[+(mx+ux*t).toFixed(2), +(my+uy*t).toFixed(2), pts[i][2]];
+    }
+    pts=out2;
+  }
   pts=ma(ma(pts,2),2);
   return {pts,width,note,seed};
  },J);
