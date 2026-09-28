@@ -137,6 +137,24 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
 .bleed--b.bleed--l{background-position-x:right}
 .bleed--b.bleed--r{background-position-x:left}
 
+/* ---- HIS MOBILE ARTBOARDS -------------------------------------------
+   The blue column he drew IS the page: it spans the window exactly, and
+   the road and the gantry he ran out past it bleed off the sides, the
+   same way his desktop bleed does. Every length is a ratio of his own
+   numbers to that column, so it is his drawing at whatever width the
+   phone happens to be. */
+.msec{display:none;position:relative;width:100%;overflow:hidden;
+      height:calc(100vw * var(--mh) / var(--mc))}
+.msec + .msec{margin-top:-2px}
+.mart{position:absolute;top:0;width:calc(100vw * var(--mw) / var(--mc));
+      left:calc(0px - 100vw * var(--mx) / var(--mc))}
+.mart>svg{display:block;width:100%;height:auto}
+
+@media (max-width:900px){
+  #page > .sec{display:none}
+  .msec{display:block}
+}
+
 .col{position:absolute;z-index:2;top:var(--y);left:50%;width:var(--w);
      margin-left:calc(0px - var(--half) + var(--x))}
 
@@ -232,6 +250,55 @@ open(f'{ROOT}/assets/css/qa.css','w',encoding='utf-8').write('\n'.join(css))
 
 # ---------- HTML ----------
 BLEED=480          # units of his art shown either side of the artboard
+# HIS MOBILE ARTBOARDS. He draws them trimmed to what is on them, so the blue
+# column - the page itself - is a window inside the artboard and his roads and
+# his gantry hang out past it. Those four numbers per section are measured off
+# his own ocean shape: where the column starts, how wide it is, how tall it is,
+# and how wide the whole artboard is around it.
+MOB=[
+ {'k':'m1','f':'Mobile-QA-Section-1.svg','w':1516.19,'h':2045.63,'cx':225.79,'cw':1073.60,'ch':1929.80,
+  # THE SAME FAULT AS HIS DESKTOP HERO, drawn the same way. He lays a
+  # vertical wash over a horizontal sea and fades the wash out as it goes
+  # down, so the foot of his column is the horizontal one: #004ca2 on one
+  # side of the column to #045dc3 on the other. The next artboard starts on
+  # a flat #045dc3, so the two met at every shade but one and the page drew
+  # a band across the join. His sea is left as he painted it and carried
+  # over its last stretch into the colour the next one starts on.
+  'joinBelow':'#045dc3','joinFade':380},
+ {'k':'m2','f':'Mobile-QA-Section-2.svg','w':1153.43,'h':1927.35,'cx':0.0,  'cw':1089.60,'ch':1927.35},
+]
+
+def msvg_of(m):
+    s=open(f"{ROOT}/assets/scene/{m['f']}",encoding='utf-8').read()
+    s=re.sub(r'^<\?xml[^>]*\?>\s*','',s)
+    s=s.replace('id="Layer_2"',f"id=\"art-{m['k']}\"")
+    ids=set(re.findall(r'\sid="([^"]+)"',s))
+    for i in sorted(ids,key=len,reverse=True):
+        if i==f"art-{m['k']}": continue
+        s=s.replace(f'id="{i}"',f"id=\"{m['k']}_{i}\"")
+        s=s.replace(f'url(#{i})',f"url(#{m['k']}_{i})")
+        s=s.replace(f'xlink:href="#{i}"',f"xlink:href=\"#{m['k']}_{i}\"")
+        s=s.replace(f'href="#{i}"',f"href=\"#{m['k']}_{i}\"")
+    if m.get('joinBelow'):
+        gid=f"{m['k']}_joinfade"
+        y0=round(m['ch']-m['joinFade'],2)
+        grad=(f'<linearGradient id="{gid}" gradientUnits="userSpaceOnUse"'
+              f' x1="0" y1="{y0}" x2="0" y2="{m["ch"]}">'
+              f'<stop offset="0" stop-color="{m["joinBelow"]}" stop-opacity="0"/>'
+              f'<stop offset="1" stop-color="{m["joinBelow"]}" stop-opacity="1"/>'
+              '</linearGradient>')
+        s=s.replace('</defs>', grad+'</defs>', 1)
+        # a copy of his own sea shape, so nothing but his water is touched
+        mo=re.search(r'<polygon id="%s_ocean"[^>]*?points="([^"]*)"[^>]*>'%m['k'], s)
+        last=re.search(r'<polygon id="%s_ocean-2"[^>]*?>'%m['k'], s) or mo
+        if mo and last:
+            veil=f'<polygon points="{mo.group(1)}" fill="url(#{gid})"/>'
+            s=s[:last.end()]+veil+s[last.end():]
+    # his own width/height attributes would fight the column fit
+    s=re.sub(r'\swidth="[\d.]+"','',s,count=1)
+    s=re.sub(r'\sheight="[\d.]+"','',s,count=1)
+    return s
+
 def svg_of(k):
     s=open(f'{ROOT}/assets/scene/sec-{k}.svg',encoding='utf-8').read()
     s=re.sub(r'^<\?xml[^>]*\?>\s*','',s)
@@ -306,6 +373,13 @@ for d in SEC:
               f'<div class="qa-a" id="a{k}-{i}" role="region"><div class="qa-ai">{body}</div></div>'
               f'</div>')
         parts.append('</div>')
+    parts.append('</section>')
+
+# his mobile sections, behind the same door his desktop ones are behind
+for m in MOB:
+    parts.append('<section class="msec msec--%s" id="%s" style="--mx:%s;--mc:%s;--mw:%s;--mh:%s">'
+                 %(m['k'],m['k'],m['cx'],m['cw'],m['w'],m['ch']))
+    parts.append(f'<div class="mart">{msvg_of(m)}</div>')
     parts.append('</section>')
 
 ld={"@context":"https://schema.org","@type":"FAQPage","mainEntity":[

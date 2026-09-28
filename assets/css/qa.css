@@ -45,6 +45,24 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
 .bleed--b.bleed--l{background-position-x:right}
 .bleed--b.bleed--r{background-position-x:left}
 
+/* ---- HIS MOBILE ARTBOARDS -------------------------------------------
+   The blue column he drew IS the page: it spans the window exactly, and
+   the road and the gantry he ran out past it bleed off the sides, the
+   same way his desktop bleed does. Every length is a ratio of his own
+   numbers to that column, so it is his drawing at whatever width the
+   phone happens to be. */
+.msec{display:none;position:relative;width:100%;overflow:hidden;
+      height:calc(100vw * var(--mh) / var(--mc))}
+.msec + .msec{margin-top:-2px}
+.mart{position:absolute;top:0;width:calc(100vw * var(--mw) / var(--mc));
+      left:calc(0px - 100vw * var(--mx) / var(--mc))}
+.mart>svg{display:block;width:100%;height:auto}
+
+@media (max-width:900px){
+  #page > .sec{display:none}
+  .msec{display:block}
+}
+
 .col{position:absolute;z-index:2;top:var(--y);left:50%;width:var(--w);
      margin-left:calc(0px - var(--half) + var(--x))}
 
