@@ -248,6 +248,28 @@ if (fs.existsSync(COMMUNITY)) {
   console.log('  community: ' + files + ' files, ' + Math.round(cbytes / 1024) + ' KB');
 }
 
+/* 4d. THE SERVICE PAGES. Built elsewhere and dropped in whole - each folder
+ *     is a finished page with its own css, js, fonts and art beside it
+ *     (video-production/ comes out of the Video Page project's
+ *     tools/build-release.js). Copied verbatim for the same reason the
+ *     community pages are: they carry their own footer, not this site's
+ *     chrome, so wr()'s chrome check is not theirs to pass. */
+const SERVICE_PAGES = ['video-production'].filter(d => fs.existsSync(path.join(ROOT, d, 'index.html')));
+for (const d of SERVICE_PAGES) {
+  let files = 0, sbytes = 0;
+  (function walk(dir) {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      const from = path.join(dir, e.name);
+      if (e.isDirectory()) { walk(from); continue; }
+      const to = path.join(OUT, path.relative(ROOT, from));
+      fs.mkdirSync(path.dirname(to), { recursive: true });
+      fs.copyFileSync(from, to);
+      files++; sbytes += fs.statSync(from).size;
+    }
+  })(path.join(ROOT, d));
+  console.log('  ' + d + ': ' + files + ' files, ' + Math.round(sbytes / 1024) + ' KB');
+}
+
 /* 5. what the host needs to be told.
  *    Cache-Control is the whole point of splitting the files up: the page is
  *    revalidated every visit, his art is not asked for twice. The fonts and
@@ -290,7 +312,11 @@ wr('_headers',
   Cache-Control: public, max-age=31536000, immutable
 /community/*/assets/*
   Cache-Control: public, max-age=31536000, immutable
-/assets/*
+` + SERVICE_PAGES.map(d => `/${d}/assets/img/*
+  Cache-Control: public, max-age=31536000, immutable
+/${d}/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+`).join('') + `/assets/*
   Cache-Control: public, max-age=31536000, immutable
 /build/v2/*
   Cache-Control: public, max-age=604800
@@ -348,6 +374,7 @@ if (!STAGING) wr('sitemap.xml',
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>${SITE}/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
 ${LEGAL.map(L => `  <url><loc>${SITE}/${L.slug}/</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>`).join('\n')}
+${SERVICE_PAGES.map(d => `  <url><loc>${SITE}/${d}/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>`).join('\n')}
 ${COMMUNITY_URLS}
 </urlset>
 `);
