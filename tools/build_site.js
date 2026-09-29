@@ -323,6 +323,28 @@ if (fs.existsSync(QA_SRC)) {
     qa = qa.slice(0, g0) + qa.slice(g1);
   }
 
+  /* AND HIS ROAD PIECES MEET. Measured by tools/qa/roadsnap-measure.js: each
+     _Stright / _Curve group moved straight across - never scaled - so its
+     white edges land on the piece it joins. Offsets are in the group's
+     parent's units and go in front of its own transform. */
+  const SNAP = path.join(ROOT, 'tools', 'qa', 'roadsnap.json');
+  if (fs.existsSync(SNAP)) {
+    const snap = JSON.parse(fs.readFileSync(SNAP, 'utf8'));
+    let moved = 0;
+    for (const [id, [dx, dy]] of Object.entries(snap)) {
+      const re = new RegExp('<g id="' + id.replace(/[-]/g, '\\-') + '"([^>]*)>');
+      qa = qa.replace(re, (m, rest) => {
+        moved++;
+        const t = 'translate(' + dx + ' ' + dy + ')';
+        return /\stransform="/.test(rest)
+          ? m.replace(/\stransform="/, ' transform="' + t + ' ')
+          : '<g id="' + id + '" transform="' + t + '"' + rest + '>';
+      });
+    }
+    if (moved !== Object.keys(snap).length)
+      throw new Error('Q&A: road snap matched ' + moved + ' of ' + Object.keys(snap).length + ' pieces');
+  }
+
   qa = qa
     .replace(/(?:href|src)="build\/v2\/([^"?]+\.(?:css|js))"/g,
              (m, f) => m.replace('"build/v2/' + f + '"', '"' + codeHref(f) + '"'))
