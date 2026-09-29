@@ -6,12 +6,16 @@
 (function () {
   'use strict';
 
-  var cols = [].slice.call(document.querySelectorAll('.col'));
+  /* his mobile columns answer to the same rules: shut by default, one open
+     at a time. They stand in the flow and take the height they need, so
+     there is no drawn room to fit them into and no flat band to open. */
+  var cols = [].slice.call(document.querySelectorAll('.col, .mcol'));
 
   cols.forEach(function (col) {
-    var sec   = col.closest('.sec');
+    var mob   = col.classList.contains('mcol');
+    var sec   = col.closest(mob ? '.msec' : '.sec');
     var items = [].slice.call(col.querySelectorAll('.qa'));
-    var isFlex = sec.hasAttribute('data-flex');
+    var isFlex = !mob && sec.hasAttribute('data-flex');
 
     /* his drawn room: from the first card down to the top of his CTA panel,
        in his own artboard pixels - converted through the page unit */
@@ -23,6 +27,7 @@
     }
 
     function fit() {
+      if (mob) return;
       var u = unit();
       var h = col.getBoundingClientRect().height / u;
       if (isFlex) {

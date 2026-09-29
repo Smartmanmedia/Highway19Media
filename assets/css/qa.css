@@ -46,17 +46,32 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
 .bleed--b.bleed--r{background-position-x:left}
 
 /* ---- HIS MOBILE ARTBOARDS -------------------------------------------
-   The blue column he drew IS the page: it spans the window exactly, and
-   the road and the gantry he ran out past it bleed off the sides, the
-   same way his desktop bleed does. Every length is a ratio of his own
-   numbers to that column, so it is his drawing at whatever width the
-   phone happens to be. */
+   The column he drew IS the page: it spans the window exactly, and the
+   road and the gantry he ran out past it bleed off the sides, the same
+   way his desktop bleed does. Every length is a ratio of his own numbers
+   to that column, so it is his drawing at whatever width the phone is.
+
+   Where he drew question cards into the art they have been lifted out and
+   rebuilt as real ones - an answer has to open and shut - so the artboard
+   is served in two strips with the cards standing between them, and the
+   section takes whatever height the open answer needs. */
 .msec{display:none;position:relative;width:100%;overflow:hidden;
-      height:calc(100vw * var(--mh) / var(--mc))}
+      --mu:calc(100vw / var(--mbc))}
 .msec + .msec{margin-top:-2px}
-.mart{position:absolute;top:0;width:calc(100vw * var(--mw) / var(--mc));
-      left:calc(0px - 100vw * var(--mx) / var(--mc))}
-.mart>svg{display:block;width:100%;height:auto}
+.mstrip{position:relative;width:100%;overflow:hidden;
+        height:calc(var(--mbs) * var(--mu))}
+.mstrip>svg{display:block;position:absolute;
+            left:calc(0px - var(--mbx) * var(--mu));
+            top:calc(0px - var(--mbo) * var(--mu));
+            width:calc(var(--mbw) * var(--mu));height:auto}
+
+/* his cards, at his width, on the ground he drew behind them */
+.mcol{position:relative;width:100%;
+      padding:0 calc((var(--mbc) - var(--cw) - var(--cx)) * var(--mu))
+              0 calc(var(--cx) * var(--mu));
+      background:linear-gradient(var(--cb1),var(--cb2))}
+.mcol .qa{border-width:max(1px, calc(1.6 * var(--mu)))}
+.mcol .qa:last-child{margin-bottom:0}
 
 @media (max-width:900px){
   #page > .sec{display:none}
@@ -66,7 +81,7 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
 .col{position:absolute;z-index:2;top:var(--y);left:50%;width:var(--w);
      margin-left:calc(0px - var(--half) + var(--x))}
 
-.qa{background:var(--fill);border-radius:10px;margin-bottom:var(--gap);
+.qa{background:var(--fill);border-radius:var(--rad,10px);margin-bottom:var(--gap);
     border:1px solid var(--stroke);overflow:hidden;
     transition:background-color .28s ease}
 .qa[data-nostroke]{border-color:transparent}

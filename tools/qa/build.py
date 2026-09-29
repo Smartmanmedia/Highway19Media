@@ -89,6 +89,10 @@ for k in sorted(cards):
         d['m']=mark[k]
     SEC.append(d)
 
+# his mobile sections carry the same questions as his desktop ones, so the
+# answers are looked up by the artboard they belong to
+cardsrc={d['k']:d['cards'] for d in SEC}
+
 # ---------- CSS ----------
 css=["""/* Highway 19 Media — Q&A. His artboards, placed. Live cards only. */
 @font-face{font-family:'Be Vietnam Pro';src:url(../fonts/bvp-300.woff2) format('woff2');font-weight:300;font-display:block}
@@ -138,17 +142,32 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
 .bleed--b.bleed--r{background-position-x:left}
 
 /* ---- HIS MOBILE ARTBOARDS -------------------------------------------
-   The blue column he drew IS the page: it spans the window exactly, and
-   the road and the gantry he ran out past it bleed off the sides, the
-   same way his desktop bleed does. Every length is a ratio of his own
-   numbers to that column, so it is his drawing at whatever width the
-   phone happens to be. */
+   The column he drew IS the page: it spans the window exactly, and the
+   road and the gantry he ran out past it bleed off the sides, the same
+   way his desktop bleed does. Every length is a ratio of his own numbers
+   to that column, so it is his drawing at whatever width the phone is.
+
+   Where he drew question cards into the art they have been lifted out and
+   rebuilt as real ones - an answer has to open and shut - so the artboard
+   is served in two strips with the cards standing between them, and the
+   section takes whatever height the open answer needs. */
 .msec{display:none;position:relative;width:100%;overflow:hidden;
-      height:calc(100vw * var(--mh) / var(--mc))}
+      --mu:calc(100vw / var(--mbc))}
 .msec + .msec{margin-top:-2px}
-.mart{position:absolute;top:0;width:calc(100vw * var(--mw) / var(--mc));
-      left:calc(0px - 100vw * var(--mx) / var(--mc))}
-.mart>svg{display:block;width:100%;height:auto}
+.mstrip{position:relative;width:100%;overflow:hidden;
+        height:calc(var(--mbs) * var(--mu))}
+.mstrip>svg{display:block;position:absolute;
+            left:calc(0px - var(--mbx) * var(--mu));
+            top:calc(0px - var(--mbo) * var(--mu));
+            width:calc(var(--mbw) * var(--mu));height:auto}
+
+/* his cards, at his width, on the ground he drew behind them */
+.mcol{position:relative;width:100%;
+      padding:0 calc((var(--mbc) - var(--cw) - var(--cx)) * var(--mu))
+              0 calc(var(--cx) * var(--mu));
+      background:linear-gradient(var(--cb1),var(--cb2))}
+.mcol .qa{border-width:max(1px, calc(1.6 * var(--mu)))}
+.mcol .qa:last-child{margin-bottom:0}
 
 @media (max-width:900px){
   #page > .sec{display:none}
@@ -158,7 +177,7 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
 .col{position:absolute;z-index:2;top:var(--y);left:50%;width:var(--w);
      margin-left:calc(0px - var(--half) + var(--x))}
 
-.qa{background:var(--fill);border-radius:10px;margin-bottom:var(--gap);
+.qa{background:var(--fill);border-radius:var(--rad,10px);margin-bottom:var(--gap);
     border:1px solid var(--stroke);overflow:hidden;
     transition:background-color .28s ease}
 .qa[data-nostroke]{border-color:transparent}
@@ -256,17 +275,28 @@ BLEED=480          # units of his art shown either side of the artboard
 # his own ocean shape: where the column starts, how wide it is, how tall it is,
 # and how wide the whole artboard is around it.
 MOB=[
- {'k':'m1','f':'Mobile-QA-Section-1.svg','w':1516.19,'h':2045.63,'cx':225.79,'cw':1073.60,'ch':1929.80,
-  # THE SAME FAULT AS HIS DESKTOP HERO, drawn the same way. He lays a
-  # vertical wash over a horizontal sea and fades the wash out as it goes
-  # down, so the foot of his column is the horizontal one: #004ca2 on one
-  # side of the column to #045dc3 on the other. The next artboard starts on
-  # a flat #045dc3, so the two met at every shade but one and the page drew
-  # a band across the join. His sea is left as he painted it and carried
-  # over its last stretch into the colour the next one starts on.
+ {'k':'m1','f':'m-sec-1.svg','w':1516.19,'h':2045.63,'cx':225.79,'cw':1073.60,'ch':1929.80,
+  # THE SAME FAULT AS HIS DESKTOP HERO, drawn the same way: a vertical wash
+  # over a horizontal sea, faded out going down, so the foot of his column is
+  # the horizontal one and met the flat colour the next artboard starts on.
   'joinBelow':'#045dc3','joinFade':380},
- {'k':'m2','f':'Mobile-QA-Section-2.svg','w':1153.43,'h':1927.35,'cx':0.0,  'cw':1089.60,'ch':1927.35},
+
+ {'k':'m2','f':'m-sec-2.svg','w':1153.43,'h':4611.60,'cx':0.0,'cw':1089.60,'ch':4611.60,
+  'src':'02','top':2719.95,'bot':3905.17,'bg':('#00287c','#002375'),
+  'card':{'x':54.34,'fill':'#fff','open':'#deefff','stroke':'#00287e',
+          'q':'#12161c','a':'#454c57','cx':982.92}},
+
+ {'k':'m4','f':'m-sec-4.svg','w':1122.01,'h':3362.80,'cx':0.0,'cw':1093.20,'ch':3362.80,
+  'src':'03','top':1607.96,'bot':2793.17,'bg':('#000000','#000000'),
+  'card':{'x':59.14,'fill':'#000','open':'#0f1c28','stroke':'#cad9ea',
+          'q':'#fff','a':'#fff','cx':987.72}},
 ]
+
+# his card, measured off the ones he drew: one width, one radius, one set of
+# paddings, the same in both artboards
+MCARD={'w':969.75,'r':30.05,'shut':74.43,'gap':11.5,'pad':50.45,'qpr':75,
+       'qsize':31.99,'qlead':38.39,'qtop':43,'atop':41.5,'abot':118,
+       'bsize':33.93,'blead':56.23,'mw':33.6,'gw':13.33,'gsw':3}
 
 def msvg_of(m):
     s=open(f"{ROOT}/assets/scene/{m['f']}",encoding='utf-8').read()
@@ -376,10 +406,53 @@ for d in SEC:
     parts.append('</section>')
 
 # his mobile sections, behind the same door his desktop ones are behind
+def mstrip(m, art, o, hh, tag):
+    # the strip is a window on his whole artboard: the svg keeps his own
+    # viewBox and is slid up behind it. Rewriting the viewBox as well would
+    # move it twice, and his CTA would be scrolled off the bottom of the page.
+    a=art
+    if tag:
+        a=a.replace(f'id="art-{m["k"]}"', f'id="artb-{m["k"]}"')
+        a=re.sub(r'(\sid=")'+m['k']+r'_', r'\g<1>'+m['k']+'b_', a)
+        a=a.replace(f'url(#{m["k"]}_', f'url(#{m["k"]}b_').replace(f'href="#{m["k"]}_', f'href="#{m["k"]}b_')
+    return (f'<div class="mstrip" style="--mbo:{o};--mbs:{round(hh,2)}">{a}</div>')
+
 for m in MOB:
-    parts.append('<section class="msec msec--%s" id="%s" style="--mx:%s;--mc:%s;--mw:%s;--mh:%s">'
-                 %(m['k'],m['k'],m['cx'],m['cw'],m['w'],m['ch']))
-    parts.append(f'<div class="mart">{msvg_of(m)}</div>')
+    C=m.get('card'); K=MCARD
+    st=(f'--mbx:{m["cx"]};--mbc:{m["cw"]};--mbw:{m["w"]}')
+    parts.append(f'<section class="msec msec--{m["k"]}" id="{m["k"]}" style="{st}">')
+    art=msvg_of(m)
+    if not C:
+        parts.append(mstrip(m, art, 0, m['ch'], False))
+    else:
+        cards=cardsrc[m['src']]
+        parts.append(mstrip(m, art, 0, m['top'], False))
+        MU=lambda n: f'calc({n}*var(--mu))'
+        cst=(f'--cx:{C["x"]};--cw:{K["w"]};'
+             f'--rad:{MU(K["r"])};--shut:{MU(K["shut"])};--gap:{MU(K["gap"])};'
+             f'--pad:{MU(K["pad"])};--qpr:{MU(K["qpr"])};'
+             f'--qsize:{MU(K["qsize"])};--qlead:{MU(K["qlead"])};--qtop:{MU(K["qtop"])};'
+             f'--atop:{MU(K["atop"])};--abot:{MU(K["abot"])};'
+             f'--bsize:{MU(K["bsize"])};--blead:{MU(K["blead"])};'
+             f'--mw:{MU(K["mw"])};--gw:{MU(K["gw"])};--gsw:{MU(K["gsw"])};'
+             f'--msw:0px;--mstroke:transparent;'
+             f'--minset:{MU(round(C["x"]+K["w"]-C["cx"]-K["mw"]/2,2))};'
+             f'--qfam:Arial-BoldMT,Arial,sans-serif;'
+             f"--bfam:'Be Vietnam Pro',sans-serif;--bwgt:300;"
+             f'--fill:{C["fill"]};--fill-open:{C["open"]};--stroke:{C["stroke"]};'
+             f'--qfill:{C["q"]};--bfill:{C["a"]};--mfill:#00aa56;--gcol:#fff;'
+             f'--cb1:{m["bg"][0]};--cb2:{m["bg"][1]}')
+        parts.append(f'<div class="mcol" style="{cst}">')
+        for i,c in enumerate(cards):
+            body=''.join(f'<p>{esc(x)}</p>' for x in (c['ans'] or []))
+            parts.append(
+              f'<div class="qa" data-i="{i}">'
+              f'<button class="qa-q" type="button" aria-expanded="false" aria-controls="a{m["k"]}-{i}">'
+              f'<span>{esc(c["q"])}</span><i class="qa-m" aria-hidden="true"></i></button>'
+              f'<div class="qa-a" id="a{m["k"]}-{i}" role="region"><div class="qa-ai">{body}</div></div>'
+              f'</div>')
+        parts.append('</div>')
+        parts.append(mstrip(m, art, m['bot'], round(m['ch']-m['bot'],2), True))
     parts.append('</section>')
 
 ld={"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
