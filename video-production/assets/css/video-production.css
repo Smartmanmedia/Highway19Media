@@ -426,6 +426,7 @@
     bottom:clamp(20px,5vh,52px);
     display:grid;
     grid-template-columns:auto auto 1fr;
+    max-width:clamp(300px,33vw,540px);
     grid-template-areas:"n t t" ". s l";
     align-items:baseline;
     column-gap:clamp(8px,1.2vw,14px);row-gap:clamp(4px,.6vw,8px);
@@ -447,8 +448,9 @@
     color:var(--accent);
   }
   .shot span{
-    font-size:clamp(20px,2.6vw,34px);
-    font-weight:600;letter-spacing:-.01em;line-height:1;
+    font-size:clamp(20px,2.3vw,32px);
+    font-weight:600;letter-spacing:-.01em;line-height:1.05;
+    text-wrap:balance;
   }
   .shot em{
     font-style:normal;
