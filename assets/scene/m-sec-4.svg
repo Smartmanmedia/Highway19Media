@@ -75,11 +75,11 @@
               <path d="M337.86,142.09l-.82,4.61c-10.12-1.64-20.2-2.69-30.24-3.31.1-1.6.24-3.15.36-4.65,10.15.61,20.43,1.69,30.71,3.35Z" fill="#fff"/>
             </g>
           </g>
-          <rect x="34.21" y="71.06" width="250.59" height="137.82" fill="#161616"/>
-          <rect x="34.21" y="195.95" width="250.59" height="4.77" fill="#fff"/>
-          <rect x="34.21" y="79.58" width="250.59" height="4.77" fill="#fff"/>
+          <rect x="-120.00" y="71.06" width="404.80" height="137.82" fill="#161616"/>
+          <rect x="-120.00" y="195.95" width="404.80" height="4.77" fill="#fff"/>
+          <rect x="-120.00" y="79.58" width="404.80" height="4.77" fill="#fff"/>
           <g>
-            <rect x="45.91" y="134.18" width="39.67" height="5.11" fill="#fff"/>
+            <rect x="-20.50" y="134.18" width="39.67" height="5.11" fill="#fff"/><rect x="-86.91" y="134.18" width="39.67" height="5.11" fill="#fff"/><rect x="-153.32" y="134.18" width="39.67" height="5.11" fill="#fff"/><rect x="45.91" y="134.18" width="39.67" height="5.11" fill="#fff"/>
             <rect x="112.32" y="134.18" width="39.67" height="5.11" fill="#fff"/>
             <rect x="178.72" y="134.18" width="39.68" height="5.11" fill="#fff"/>
             <rect x="245.12" y="134.18" width="44.9" height="5.11" fill="#fff"/>
@@ -135,60 +135,33 @@
         <text transform="translate(125.7557 1472.3477)" fill="#fff" font-family="BeVietnamPro-SemiBold, 'Be Vietnam Pro'" font-size="34.19" font-weight="600" isolation="isolate"><tspan x="0" y="0" letter-spacing="0em">onc</tspan><tspan x="63.38" y="0">e t</tspan><tspan x="106.97" y="0" letter-spacing="0em">h</tspan><tspan x="127.34" y="0" letter-spacing="-.03em">e</tspan><tspan x="147.17" y="0">y a</tspan><tspan x="197.56" y="0" letter-spacing="-.03em">r</tspan><tspan x="210.83" y="0">e.</tspan></text>
       </g>
       <g>
+        
         <g>
-          <polygon points="161.69 544.96 85.52 472.2 80.35 477.14 156.52 549.9 161.69 544.96" fill="url(#linear-gradient-2)"/>
-          <polygon points="84.7 549.9 160.87 477.14 155.7 472.19 79.53 544.96 84.7 549.9" fill="url(#linear-gradient-3)"/>
-          <polygon points="87.47 544.96 11.3 472.2 6.13 477.14 82.3 549.9 87.47 544.96" fill="url(#linear-gradient-4)"/>
-          <polygon points="10.48 549.9 86.66 477.13 81.48 472.19 5.31 544.96 10.48 549.9" fill="url(#linear-gradient-5)"/>
-          <rect x="6.8" y="459.7" width="157.88" height="18.12" transform="translate(171.48 937.52) rotate(-180)" fill="url(#linear-gradient-6)"/>
-          <rect x="6.8" y="539.95" width="157.88" height="18.12" transform="translate(171.4804 1098.0074) rotate(-180)" fill="url(#linear-gradient-7)"/>
-        </g>
-        <g>
-          <rect x="111.46" y="371.7" width="914.94" height="297.91" rx="18.49" ry="18.49" stroke="#000" stroke-miterlimit="7" stroke-width="1.4"/>
-          <rect x="108.85" y="370.59" width="910.02" height="292.18" rx="18.49" ry="18.49" fill="#006802" stroke="#fff" stroke-miterlimit="7" stroke-width="1.4"/>
-          <text transform="translate(312.08 502.53)" fill="#fff" font-family="Arial-BoldMT, Arial" font-size="56.72" font-weight="700" isolation="isolate"><tspan x="0" y="0">WEBSITE DESIGN</tspan><tspan x="0" y="68.06">&amp; DEVELOPMENT</tspan></text>
-          <g data-h="">
-            <path d="M956.1,574.42l-19.86-95.06-76.22,75.48,96.09,19.58Z" fill="#fff" fill-rule="evenodd"/>
-          </g>
-          <rect x="862.23" y="470.91" width="42.43" height="61.46" transform="translate(-97.27 766.8) rotate(-44.72)" fill="#fff"/>
+          
+          <g data-sign="1"><polygon points="161.69 544.96 85.52 472.2 80.35 477.14 156.52 549.9 161.69 544.96" fill="url(#linear-gradient-2)"/><polygon points="84.7 549.9 160.87 477.14 155.7 472.19 79.53 544.96 84.7 549.9" fill="url(#linear-gradient-3)"/><polygon points="87.47 544.96 11.3 472.2 6.13 477.14 82.3 549.9 87.47 544.96" fill="url(#linear-gradient-4)"/><polygon points="10.48 549.9 86.66 477.13 81.48 472.19 5.31 544.96 10.48 549.9" fill="url(#linear-gradient-5)"/><rect x="6.8" y="459.7" width="157.88" height="18.12" transform="translate(171.48 937.52) rotate(-180)" fill="url(#linear-gradient-6)"/><rect x="6.8" y="539.95" width="157.88" height="18.12" transform="translate(171.4804 1098.0074) rotate(-180)" fill="url(#linear-gradient-7)"/><rect x="111.46" y="371.7" width="914.94" height="297.91" rx="18.49" ry="18.49" stroke="#000" stroke-miterlimit="7" stroke-width="1.4"/><rect x="108.85" y="370.59" width="910.02" height="292.18" rx="18.49" ry="18.49" fill="#006802" stroke="#fff" stroke-miterlimit="7" stroke-width="1.4"/><text transform="translate(312.08 502.53)" fill="#fff" font-family="Arial-BoldMT, Arial" font-size="56.72" font-weight="700" isolation="isolate"><tspan x="0" y="0">WEBSITE DESIGN</tspan><tspan x="0" y="68.06">&amp; DEVELOPMENT</tspan></text><path d="M956.1,574.42l-19.86-95.06-76.22,75.48,96.09,19.58Z" fill="#fff" fill-rule="evenodd"/><rect x="862.23" y="470.91" width="42.43" height="61.46" transform="translate(-97.27 766.8) rotate(-44.72)" fill="#fff"/><rect x="199.91" y="642.89" width="50.93" height="14.74" rx="3" ry="3"/><rect x="214.66" y="653.76" width="22.11" height="6.4" transform="translate(882.67 431.24) rotate(90)"/><rect x="524.09" y="642.89" width="50.93" height="14.74" rx="3" ry="3"/><rect x="538.83" y="653.76" width="22.11" height="6.4" transform="translate(1206.8439 107.0711) rotate(90)"/><rect x="828.7" y="642.89" width="50.93" height="14.74" rx="3" ry="3"/><rect x="843.45" y="653.76" width="22.11" height="6.4" transform="translate(1511.4599 -197.5449) rotate(90)"/><rect x="837.63" y="374.62" width="50.93" height="14.74" rx="3" ry="3" transform="translate(1726.1923 763.9902) rotate(-180)"/><rect x="851.7" y="372.09" width="22.11" height="6.4" transform="translate(487.467 1238.0552) rotate(-90)"/><rect x="525.75" y="370.7" width="50.93" height="14.74" rx="3" ry="3" transform="translate(1102.4302 756.1446) rotate(-180)"/><rect x="539.82" y="368.17" width="22.11" height="6.4" transform="translate(179.51 922.25) rotate(-90)"/><rect x="219.8" y="370.7" width="50.93" height="14.74" rx="3" ry="3" transform="translate(490.52 756.14) rotate(-180)"/><rect x="233.87" y="368.17" width="22.11" height="6.4" transform="translate(-126.45 616.3) rotate(-90)"/><polygon points="251.94 643.24 199.07 643.24 131.94 372.36 329.99 372.36 251.94 643.24" fill="url(#linear-gradient-8)"/><polygon points="575.38 643.24 523.22 643.24 456.99 372.36 652.37 372.36 575.38 643.24" fill="url(#linear-gradient-9)"/><polygon points="881.77 643.24 829.62 643.24 763.38 372.36 958.77 372.36 881.77 643.24" fill="url(#linear-gradient-10)"/><polygon points="836.4 389.53 889.27 389.53 956.4 660.41 758.35 660.41 836.4 389.53" fill="url(#linear-gradient-11)"/><polygon points="525.99 384.8 578.15 384.8 644.38 655.67 448.99 655.67 525.99 384.8" fill="url(#linear-gradient-12)"/><polygon points="219.59 384.8 271.75 384.8 337.98 655.67 142.6 655.67 219.59 384.8" fill="url(#linear-gradient-13)"/><path d="M214.77,459.02h0c28.07,0,50.83,22.76,50.83,50.83h0c0,28.07-22.76,50.83-50.83,50.83h0c-28.07,0-50.83-22.76-50.83-50.83h0c0-28.07,22.76-50.83,50.83-50.83Z" fill="#1068b6" stroke="#fff" stroke-miterlimit="10" stroke-width="3"/><rect x="190.27" y="488.75" width="49.96" height="40.39" rx="2.75" ry="2.75" fill="none" stroke="#fff" stroke-miterlimit="10"/><circle cx="197.71" cy="494.6" r="2.26" fill="none" stroke="#fff" stroke-miterlimit="10"/><circle cx="204.89" cy="494.6" r="2.26" fill="none" stroke="#fff" stroke-miterlimit="10"/><circle cx="212.06" cy="494.6" r="2.26" fill="none" stroke="#fff" stroke-miterlimit="10"/><path d="M209.93,508.68l-6.38,6.38,6.38,6.38M220.56,508.68l6.38,6.38-6.38,6.38M217.64,507.36l-4.78,15.41" fill="none" stroke="#fff" stroke-miterlimit="10"/></g>
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
           <g>
-            <rect x="199.91" y="642.89" width="50.93" height="14.74" rx="3" ry="3"/>
-            <rect x="214.66" y="653.76" width="22.11" height="6.4" transform="translate(882.67 431.24) rotate(90)"/>
-          </g>
-          <g>
-            <rect x="524.09" y="642.89" width="50.93" height="14.74" rx="3" ry="3"/>
-            <rect x="538.83" y="653.76" width="22.11" height="6.4" transform="translate(1206.8439 107.0711) rotate(90)"/>
-          </g>
-          <g>
-            <rect x="828.7" y="642.89" width="50.93" height="14.74" rx="3" ry="3"/>
-            <rect x="843.45" y="653.76" width="22.11" height="6.4" transform="translate(1511.4599 -197.5449) rotate(90)"/>
-          </g>
-          <g>
-            <rect x="837.63" y="374.62" width="50.93" height="14.74" rx="3" ry="3" transform="translate(1726.1923 763.9902) rotate(-180)"/>
-            <rect x="851.7" y="372.09" width="22.11" height="6.4" transform="translate(487.467 1238.0552) rotate(-90)"/>
-          </g>
-          <g>
-            <rect x="525.75" y="370.7" width="50.93" height="14.74" rx="3" ry="3" transform="translate(1102.4302 756.1446) rotate(-180)"/>
-            <rect x="539.82" y="368.17" width="22.11" height="6.4" transform="translate(179.51 922.25) rotate(-90)"/>
-          </g>
-          <g>
-            <rect x="219.8" y="370.7" width="50.93" height="14.74" rx="3" ry="3" transform="translate(490.52 756.14) rotate(-180)"/>
-            <rect x="233.87" y="368.17" width="22.11" height="6.4" transform="translate(-126.45 616.3) rotate(-90)"/>
-          </g>
-          <polygon points="251.94 643.24 199.07 643.24 131.94 372.36 329.99 372.36 251.94 643.24" fill="url(#linear-gradient-8)"/>
-          <polygon points="575.38 643.24 523.22 643.24 456.99 372.36 652.37 372.36 575.38 643.24" fill="url(#linear-gradient-9)"/>
-          <polygon points="881.77 643.24 829.62 643.24 763.38 372.36 958.77 372.36 881.77 643.24" fill="url(#linear-gradient-10)"/>
-          <polygon points="836.4 389.53 889.27 389.53 956.4 660.41 758.35 660.41 836.4 389.53" fill="url(#linear-gradient-11)"/>
-          <polygon points="525.99 384.8 578.15 384.8 644.38 655.67 448.99 655.67 525.99 384.8" fill="url(#linear-gradient-12)"/>
-          <polygon points="219.59 384.8 271.75 384.8 337.98 655.67 142.6 655.67 219.59 384.8" fill="url(#linear-gradient-13)"/>
-          <path d="M214.77,459.02h0c28.07,0,50.83,22.76,50.83,50.83h0c0,28.07-22.76,50.83-50.83,50.83h0c-28.07,0-50.83-22.76-50.83-50.83h0c0-28.07,22.76-50.83,50.83-50.83Z" fill="#1068b6" stroke="#fff" stroke-miterlimit="10" stroke-width="3"/>
-          <g>
-            <rect x="190.27" y="488.75" width="49.96" height="40.39" rx="2.75" ry="2.75" fill="none" stroke="#fff" stroke-miterlimit="10"/>
+            
             <path d="M190.27,500.18h49.96" fill="none" stroke="#fff" stroke-miterlimit="10"/>
-            <circle cx="197.71" cy="494.6" r="2.26" fill="none" stroke="#fff" stroke-miterlimit="10"/>
-            <circle cx="204.89" cy="494.6" r="2.26" fill="none" stroke="#fff" stroke-miterlimit="10"/>
-            <circle cx="212.06" cy="494.6" r="2.26" fill="none" stroke="#fff" stroke-miterlimit="10"/>
-            <path d="M209.93,508.68l-6.38,6.38,6.38,6.38M220.56,508.68l6.38,6.38-6.38,6.38M217.64,507.36l-4.78,15.41" fill="none" stroke="#fff" stroke-miterlimit="10"/>
+            
+            
+            
+            
           </g>
         </g>
       </g>

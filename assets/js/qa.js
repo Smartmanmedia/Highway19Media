@@ -77,22 +77,31 @@
      drew, so it overtakes everything on the page; the shadow it throws is on
      his ground and stays there, which is what makes the pair read as height. */
   var SIGN_UP = 1.4;                       /* his green boards, 40% bigger */
-  /* HIS DESKTOP SECTIONS ONLY. The boards lifted into the mobile sections he
-     has not drawn yet are his own art and still carry his tags, but nothing
-     on mobile is on parallax - and a board with no .sec around it has no
-     section to ride. */
-  var signs = [].slice.call(document.querySelectorAll('.sec [data-sign], .sec [data-para]'));
+  /* HIS BOARDS RIDE ON THE PHONE TOO. A board lifted into one of the mobile
+     sections is his own art and carries his own tag; what it had no way of
+     finding was a section to ride, because this only ever looked inside a
+     .sec. It rides its .msec instead.
+     IT DOES NOT SWELL THERE. The forty per cent is a desktop move, made so a
+     board he drew for a 2128-wide artboard fills a wide window; on a phone it
+     is already the width of the column and any growth walks it off the edge.
+     And it travels less: the travel is in HIS units, and a mobile board's
+     svg is 1093 units across where a desktop artboard is 2128, so the same
+     number would be twice the move. */
+  var signs = [].slice.call(document.querySelectorAll(
+    '.sec [data-sign], .sec [data-para], .msec [data-sign], .msec [data-para]'));
   signs.forEach(function (g) {
     g.style.willChange = 'transform';
-    g.__sec = g.closest('.sec');
-    g.__amt = g.getAttribute('data-para') === 'cloud' ? 760
+    g.__sec = g.closest('.sec, .msec');
+    g.__mob = !!(g.__sec && g.__sec.classList.contains('msec'));
+    g.__amt = g.__mob ? 190
+            : g.getAttribute('data-para') === 'cloud' ? 760
             : parseFloat(g.getAttribute('data-sign-travel') || '520');
     /* HIS GREEN BOARDS, BIGGER. Which board is green is read off the paint
        he used: the fill that covers the most of the assembly. The board
        itself is what has to fit the window, not the gantry it hangs from,
        so the plate is measured on its own - the run of that same green. */
     g.__sc = 1; g.__up = 1;
-    if (g.hasAttribute('data-sign')) {
+    if (g.hasAttribute('data-sign') && !g.__mob) {
       var area = {}, top = '', best = 0, own = {};
       [].forEach.call(g.querySelectorAll('[fill]'), function (e) {
         var f = (e.getAttribute('fill') || '').toLowerCase(), bx;
@@ -196,6 +205,10 @@
   boards.forEach(function (g, i, list) {
     var prev = list[i - 1];
     if (!prev || g.__page - prev.__page > 220) return;
+    /* a phone board never has a half in another section, and below 900px
+       every .sec is shut, so their pages all read zero and they would all
+       pair with each other */
+    if (prev.__mob !== g.__mob || g.__mob) return;
     var mid = (prev.__anchor || prev.__page + g.__page) / (prev.__anchor ? 1 : 2);
     prev.__anchor = mid; g.__anchor = mid;
     var cx = (parseFloat(prev.__cx) + parseFloat(g.__cx)) / 2;

@@ -112,7 +112,16 @@ css=["""/* Highway 19 Media — Q&A. His artboards, placed. Live cards only. */
 /* one unit is one of his artboard pixels. Never larger than a screen pixel,
    so his art is only ever shown at his scale or smaller - never enlarged. */
 :root{--u:min(1px, 100vw / 1960);--art:calc(2128*var(--u));--half:calc(1064*var(--u));
-      --wide:calc(3088*var(--u))}
+      --wide:calc(3088*var(--u));
+/* THE HOME PAGE'S OWN TOKENS, copied off build/v2 rather than matched by eye,
+   so every piece of chrome on this page - the panels, the buttons, the plus
+   marks, the ink - is the same colour it is over there. Its body type is 450
+   at 1.62, not 300: the light weight is what made these answers look thin. */
+      --h19-blue-900:#062f5e; --h19-blue-700:#12569f;
+      --h19-green-500:#059236; --h19-sign-green:#1c9022;
+      --h19-yellow-500:#ffc72c;
+      --h19-ink:#12161c; --h19-ink-soft:#454c57;
+      --h19-font:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif}
 
 *{box-sizing:border-box}
 html{background:#00287e}
@@ -166,7 +175,7 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
       padding:0 calc((var(--mbc) - var(--cw) - var(--cx)) * var(--mu))
               0 calc(var(--cx) * var(--mu));
       background:linear-gradient(var(--cb1),var(--cb2))}
-.mcol .qa{border-width:max(1px, calc(1.6 * var(--mu)))}
+.mcol .qa{border-width:1px}
 .mcol .qa:last-child{margin-bottom:0}
 
 /* the sections he has not drawn yet: his road and his board at the top, then
@@ -183,11 +192,11 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
 .mhead h2{margin:0;font-family:'Be Vietnam Pro',sans-serif;font-weight:800;
           font-size:var(--hsize);line-height:var(--hlead);letter-spacing:-.02em}
 .mhead p{margin:var(--headgap) 0 0;font-family:'Be Vietnam Pro',sans-serif;
-         font-weight:600;font-size:var(--lsize);line-height:var(--llead)}
+         font-weight:500;font-size:var(--lsize);line-height:var(--llead)}
 .mcol--gen{margin-top:var(--headgap)}
 .mcta{padding:var(--ctagap) var(--padx) 0}
-.mcta-p{border-radius:max(8px, calc(10*var(--mu)));background:#1562b7;
-        border:max(1px, calc(1.6*var(--mu))) solid #fff;text-align:center;
+.mcta-p{border-radius:12px;background:var(--h19-blue-700);
+        border:1px solid #fff;text-align:center;
         padding:var(--ctapadt) calc(var(--padx)/1.6) var(--ctapadb)}
 .mcta-p strong{display:block;font-family:'Be Vietnam Pro',sans-serif;font-weight:800;
                font-size:var(--ctat);line-height:1.1;color:#fff;letter-spacing:-.02em}
@@ -195,10 +204,10 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
              font-family:'Be Vietnam Pro',sans-serif;font-weight:500;
              font-size:var(--ctas);line-height:var(--ctal);color:#fff}
 .mbtn{display:block;margin:var(--ctal) auto 0;max-width:var(--btnw);
-      min-height:var(--btnh);border-radius:max(8px, calc(10.47*var(--mu)));
-      background:#ffc72c;border:max(1px, calc(2*var(--mu))) solid #12161c;
+      min-height:var(--btnh);border-radius:10px;
+      background:var(--h19-yellow-500);border:2px solid var(--h19-ink);
       font-family:'Be Vietnam Pro',sans-serif;font-weight:800;font-style:normal;
-      font-size:var(--btn);line-height:var(--btnh);color:#12161c;
+      font-size:var(--btn);line-height:var(--btnh);color:var(--h19-ink);
       letter-spacing:.04em;text-transform:uppercase}
 .mtail{height:var(--tail)}
 
@@ -219,8 +228,8 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
 .qa-q{display:flex;align-items:center;width:100%;min-height:var(--shut);
       margin:0;background:none;border:0;cursor:pointer;text-align:left;
       padding:0 var(--qpr) 0 var(--pad);position:relative;
-      font-family:var(--qfam);font-weight:700;font-size:var(--qsize);
-      line-height:var(--qlead);color:var(--qfill);letter-spacing:0}
+      font-family:var(--qfam);font-weight:var(--qwgt,700);font-size:var(--qsize);
+      line-height:var(--qlead);color:var(--qfill);letter-spacing:var(--qls,0)}
 .qa-q::-moz-focus-inner{border:0}
 .qa-q:focus-visible{outline:2px solid #ffce00;outline-offset:-3px}
 
@@ -316,13 +325,13 @@ MOB=[
 
  {'k':'m2','f':'m-sec-2.svg','w':1153.43,'h':4611.60,'cx':0.0,'cw':1089.60,'ch':4611.60,
   'src':'02','top':2719.95,'bot':3905.17,'bg':('#00287c','#002375'),
-  'card':{'x':54.34,'fill':'#fff','open':'#deefff','stroke':'#00287e',
+  'card':{'x':54.34,'fill':'#ffffff','open':'#f1f7ff','stroke':'#cfdcee',
           'q':'#12161c','a':'#454c57','cx':982.92}},
 
  {'k':'m4','f':'m-sec-4.svg','w':1122.01,'h':3362.80,'cx':0.0,'cw':1093.20,'ch':3362.80,
   'src':'03','top':1607.96,'bot':2793.17,'bg':('#000000','#000000'),
-  'card':{'x':59.14,'fill':'#000','open':'#0f1c28','stroke':'#cad9ea',
-          'q':'#fff','a':'#fff','cx':987.72}},
+  'card':{'x':59.14,'fill':'#0e1a27','open':'#16283a','stroke':'#33475c',
+          'q':'#ffffff','a':'#c7d3e0','cx':987.72}},
 ]
 
 # HIS CARD, MEASURED OFF THE ONES HE DREW - with a floor under every length.
@@ -332,11 +341,40 @@ MOB=[
 # length is his own number in his own units OR the floor below, whichever is
 # larger: on a wide phone his drawing wins, on a narrow one the floor does,
 # and the card never shrinks under the size it can be read at.
-#           his   floor(px)
-MCARD={'w':969.75,'shut':(74.43,62),'gap':(11.5,10),'pad':(50.45,26),'qpr':(75,58),
-       'qsize':(31.99,16),'qlead':(38.39,21),'qtop':(43,22),'atop':(41.5,15),
-       'abot':(118,30),'bsize':(33.93,15.5),'blead':(56.23,25),
-       'mw':(33.6,26),'gw':(13.33,11),'gsw':(3,2),'minset':(None,18)}
+# HIS CARD AT PHONE SIZE, not at his artboard's.
+# His mobile artboard is drawn about two and a half times a phone, so every
+# length on it taken literally gives 11px type inside 18px of padding. These
+# are phone numbers, set against what the accordion pattern settles on - 48px
+# is the floor for a tap target, 16-20px of padding, an icon of 16 to 20 -
+# and against his own proportions, not instead of them.
+#
+# THE STEP BETWEEN QUESTION AND ANSWER IS SMALL, about 1.1. The two sit
+# touching, so the weight and the colour separate them; a big jump in size
+# reads as shouting. 600 on the question, not 700 - 700 is a headline weight
+# and at sixteen pixels it screams.
+#
+# AND THEY ARE ROUNDED, NOT STADIUMS. A pill is a button. These are
+# containers that grow to three lines, and a full round on a three-line box
+# bows the sides in around the words. 12px, which is the roundness his own
+# guide sign carries on the home page.
+MCARD={'w':969.75,
+ 'shut':'58px','gap':'10px','pad':'18px','qpr':'54px','rad':'12px',
+ 'qsize':'clamp(15.5px,4.15vw,17px)','qlead':'calc(var(--qsize)*1.38)','qtop':'15px',
+ 'atop':'9px','abot':'18px',
+ 'bsize':'clamp(14.5px,3.78vw,15.5px)','blead':'calc(var(--bsize)*1.62)',
+ 'mw':'24px','gw':'10.5px','gsw':'1.8px','minset':'15px'}
+
+def mcardvars(K=None):
+    K=K or MCARD
+    return (f'--shut:{K["shut"]};--gap:{K["gap"]};--pad:{K["pad"]};--qpr:{K["qpr"]};'
+            f'--qsize:{K["qsize"]};--qlead:{K["qlead"]};--qtop:{K["qtop"]};'
+            f'--atop:{K["atop"]};--abot:{K["abot"]};'
+            f'--bsize:{K["bsize"]};--blead:{K["blead"]};'
+            f'--mw:{K["mw"]};--gw:{K["gw"]};--gsw:{K["gsw"]};--minset:{K["minset"]};'
+            f'--rad:{K["rad"]};--msw:0px;--mstroke:transparent;'
+            f'--qfam:var(--h19-font);--qwgt:600;--qls:-.006em;'
+            f'--bfam:var(--h19-font);--bwgt:450;'
+            f'--mfill:var(--h19-green-500);--gcol:#fff')
 
 def msvg_of(m):
     s=open(f"{ROOT}/assets/scene/{m['f']}",encoding='utf-8').read()
@@ -459,7 +497,7 @@ MGEN=[
   'body':'#297a2b'},   # his own ground around that board, so the green
                        # plate is not lost in the green field
  {'k':'m8','src':'07','sid':'qa-print',      'sign':'print',   'bg':('#725841','#457319')},
- {'k':'m9','src':'08','sid':'qa-working',    'sign':None,      'bg':('#507f1f','#ffffff')},
+ {'k':'m9','src':'08','sid':'qa-working',    'sign':None,      'bg':('#457319','#386295')},
 ]
 MCOL=1093.2          # his section four column, so they all read at one scale
 MROAD=1000.0         # how far down his road runs before his heading starts
@@ -508,25 +546,9 @@ for m in MOB:
     else:
         cards=cardsrc[m['src']]
         parts.append(mstrip(m, art, 0, m['top'], False))
-        def MU(key, fall=None):
-            u,f=K[key] if isinstance(K[key],tuple) else (K[key],0)
-            if fall is not None: u=fall
-            return f'max({f}px, calc({u}*var(--mu)))' if f else f'calc({u}*var(--mu))'
-        cst=(f'--cx:{C["x"]};--cw:{K["w"]};'
-             f'--shut:{MU("shut")};--gap:{MU("gap")};'
-             f'--pad:{MU("pad")};--qpr:{MU("qpr")};'
-             f'--qsize:{MU("qsize")};--qlead:{MU("qlead")};--qtop:{MU("qtop")};'
-             f'--atop:{MU("atop")};--abot:{MU("abot")};'
-             f'--bsize:{MU("bsize")};--blead:{MU("blead")};'
-             f'--mw:{MU("mw")};--gw:{MU("gw")};--gsw:{MU("gsw")};'
-             f'--minset:{MU("minset", C["x"]+K["w"]-C["cx"]-33.6/2)};'
-             # his pill keeps its own roundness whatever size it ends up
-             f'--rad:calc(var(--shut)*0.404);'
-             f'--msw:0px;--mstroke:transparent;'
-             f'--qfam:Arial-BoldMT,Arial,sans-serif;'
-             f"--bfam:'Be Vietnam Pro',sans-serif;--bwgt:300;"
+        cst=(f'--cx:{C["x"]};--cw:{K["w"]};' + mcardvars(K) + ';'
              f'--fill:{C["fill"]};--fill-open:{C["open"]};--stroke:{C["stroke"]};'
-             f'--qfill:{C["q"]};--bfill:{C["a"]};--mfill:#00aa56;--gcol:#fff;'
+             f'--qfill:{C["q"]};--bfill:{C["a"]};'
              f'--cb1:{m["bg"][0]};--cb2:{m["bg"][1]}')
         parts.append(f'<div class="mcol" style="{cst}">')
         for i,c in enumerate(cards):
@@ -577,9 +599,11 @@ for g in MGEN:
     # next one, so the card and the lettering answer to that colour and not to
     # a mud halfway between two of his
     night=lum(g['bg'][0])<0.22
-    card=({'fill':'#0f1c28','open':'#16283a','stroke':'#cad9ea','q':'#fff','a':'#e6edf5'}
+    card=({'fill':'#0e1a27','open':'#16283a','stroke':'#33475c',
+           'q':'#ffffff','a':'#c7d3e0'}
           if night else
-          {'fill':'#ffffff','open':'#deefff','stroke':'#00287e','q':'#12161c','a':'#454c57'})
+          {'fill':'#ffffff','open':'#f1f7ff','stroke':'#cfdcee',
+           'q':'#12161c','a':'#454c57'})
     ink='#fff' if lum(g['bg'][0])<0.55 else '#12161c'
     st=(f'--mbc:{MCOL};--mu:calc(100vw / {MCOL});'
         f'--bg1:{g["bg"][0]};--bg2:{g["bg"][1]};'
@@ -594,20 +618,9 @@ for g in MGEN:
     parts.append(mgen_top(g))
     parts.append('<div class="mhead">'
                  f'<h2>{esc(C["heading"])}</h2><p>{esc(C["lead"])}</p></div>')
-    def MU(key, fall=None):
-        u,f=K[key] if isinstance(K[key],tuple) else (K[key],0)
-        if fall is not None: u=fall
-        return f'max({f}px, calc({u}*var(--mu)))' if f else f'calc({u}*var(--mu))'
-    cst=(f'--cx:59.14;--cw:{K["w"]};--shut:{MU("shut")};--gap:{MU("gap")};'
-         f'--pad:{MU("pad")};--qpr:{MU("qpr")};--qsize:{MU("qsize")};'
-         f'--qlead:{MU("qlead")};--qtop:{MU("qtop")};--atop:{MU("atop")};'
-         f'--abot:{MU("abot")};--bsize:{MU("bsize")};--blead:{MU("blead")};'
-         f'--mw:{MU("mw")};--gw:{MU("gw")};--gsw:{MU("gsw")};--minset:{MU("minset",18)};'
-         f'--rad:calc(var(--shut)*0.404);--msw:0px;--mstroke:transparent;'
-         f'--qfam:Arial-BoldMT,Arial,sans-serif;'
-         f"--bfam:'Be Vietnam Pro',sans-serif;--bwgt:300;"
+    cst=(f'--cx:59.14;--cw:{K["w"]};' + mcardvars(K) + ';'
          f'--fill:{card["fill"]};--fill-open:{card["open"]};--stroke:{card["stroke"]};'
-         f'--qfill:{card["q"]};--bfill:{card["a"]};--mfill:#00aa56;--gcol:#fff')
+         f'--qfill:{card["q"]};--bfill:{card["a"]}')
     parts.append(f'<div class="mcol mcol--gen" style="{cst}">')
     for i,c in enumerate(cards):
         body=''.join(f'<p>{esc(x)}</p>' for x in (c['ans'] or []))

@@ -3,6 +3,7 @@
    a drawing of mine. Two curves: in at the top, out at the foot. */
 const {chromium}=require('playwright');
 const fs=require('fs'), path=require('path');
+const roadout=require('./roadout');
 const ROOT='/home/user/highway19media';
 (async()=>{
 const b=await chromium.launch({executablePath:process.env.CHROME_PATH});
@@ -30,11 +31,14 @@ const r=await p.evaluate(([src])=>{
   const defs=svg.querySelector('defs');
   if(defs) holder.appendChild(defs.cloneNode(true));
   keep.forEach(g=>holder.appendChild(g.cloneNode(true)));
+
   return {svg:new XMLSerializer().serializeToString(holder),
           box:[x0,y0,x1-x0,y1-y0].map(v=>+v.toFixed(2)), n:keep.length};
 },[src]);
 if(!r){ console.log('no road found'); process.exit(1); }
-fs.writeFileSync(`${ROOT}/assets/scene/m-road.svg`, r.svg);
+/* his run carried out to the edge of the screen - see roadout.js */
+const out=roadout.carry(r.svg);
+fs.writeFileSync(`${ROOT}/assets/scene/m-road.svg`, out.svg);
 console.log('his mobile road lifted:', r.n, 'curves | box', r.box.join(','));
 await b.close();
 })();
