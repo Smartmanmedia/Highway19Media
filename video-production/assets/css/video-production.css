@@ -438,10 +438,14 @@
   .shot em{grid-area:s}
   .shot i{grid-area:l;justify-self:start}
   .hud:has(.shot){z-index:12}
-  .shot.shot--ink{text-shadow:none;color:#0b1f3f}
+  .shot.shot--ink{text-shadow:none;color:#003f87}
   .shot.shot--ink b{color:#003f87}
   .shot.shot--ink em{opacity:.85}
-  .shot.shot--ink i{opacity:.9;border-color:rgba(11,31,63,.4)}
+  .shot.shot--ink i{opacity:.9;border-color:rgba(0,63,135,.4)}
+  .shot.shot--dark{text-shadow:none;color:#000}
+  .shot.shot--dark b{color:#00395c}
+  .shot.shot--dark em{opacity:.8}
+  .shot.shot--dark i{opacity:.85;border-color:rgba(0,0,0,.35)}
   .hud-a{z-index:4}
   .shot b{
     font-size:clamp(11px,1.1vw,13px);
