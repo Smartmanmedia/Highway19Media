@@ -197,7 +197,10 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
       font-family:var(--qfam);font-weight:var(--qwgt,700);font-size:var(--qsize);
       line-height:var(--qlead);color:var(--qfill);letter-spacing:var(--qls,0)}
 .qa-q::-moz-focus-inner{border:0}
-.qa-q:focus-visible{outline:2px solid #ffce00;outline-offset:-3px}
+.qa-q:focus,.qa-q:focus-visible{outline:none}
+/* keyboard focus is shown on the card itself - its own rounded edge, brighter -
+   rather than a yellow box drawn inside it */
+.qa:has(.qa-q:focus-visible){box-shadow:0 0 0 2px rgba(255,255,255,.9)}
 
 .qa.is-open .qa-q{min-height:0;align-items:flex-start;
       padding-top:var(--qtop);padding-bottom:0}
