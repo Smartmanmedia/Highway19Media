@@ -32,6 +32,73 @@ const JOBS = [
   { key: 'm4',   file: 'm-sec-4.svg', vb: [1122.01, 3362.8],  seed: [-110, 139.97], dir: 0 },
 ];
 
+const RUNOUT = 260;        /* units of lane carried beyond the box */
+const STEP = 4;            /* the walk's own spacing, kept in the run-out */
+const TRIM = 10;           /* points at each end the walk spends settling */
+const BASE = 34;           /* points of his straight the heading is read over */
+
+/* THE HOOK AT EACH END, OFF - AND THEN STRAIGHT OUT OF THE PICTURE.
+   Where the walk runs out of his tarmac the cross-section stops finding an
+   edge square to the heading, and the last few points curl back on
+   themselves. A car follows a polyline, so it followed that: it reached the
+   end of his road, turned round and came back.
+   So each end is cut back clear of the curl and then carried on in a
+   straight line until it is well outside the box the section shows. The
+   heading for that line is read over thirty-odd points of his own straight,
+   not over the last two - which is the same lesson build-routes.js records
+   for his desktop roads: a short baseline at an end that is already bending
+   leaves his road on a diagonal.
+   A car goes off the screen and comes back on at the other side, the way the
+   home page does it, rather than turning round in view. */
+function runout(pts, vb) {
+  const W = vb[0], H = vb[1];
+  let p = pts.slice(TRIM, pts.length - TRIM);
+  const out = fromStart => {
+    const n = p.length;
+    const A = (fromStart ? p[0] : p[n - 1]).slice();
+    const B = fromStart ? p[Math.min(n - 1, BASE)] : p[Math.max(0, n - 1 - BASE)];
+    let tx = A[0] - B[0], ty = A[1] - B[1];
+    const m = Math.hypot(tx, ty) || 1; tx /= m; ty /= m;
+    /* AND HIS STRAIGHTS ARE SQUARE. Every run he ends on is drawn flat or
+       plumb, so a heading that comes out a dozen degrees off is the tail of
+       his curve still in the baseline, not his road. Anything within twenty
+       degrees of an axis is snapped to it, and the lane leaves the picture
+       along the line he drew rather than drifting off it. */
+    let axis = -1;                                  /* 1 = y is the free one */
+    if (Math.abs(ty) < 0.34) { ty = 0; tx = Math.sign(tx) || 1; axis = 1; }
+    else if (Math.abs(tx) < 0.34) { tx = 0; ty = Math.sign(ty) || 1; axis = 0; }
+    /* AND IT LEAVES ON HIS LINE, not a step above it. The walk drifts a
+       little where his curve straightens - the cross-section is widest there
+       - so a run-out started from the last point begins a few units off his
+       centre and the car twitches as it joins. The last stretch is eased onto
+       the middle of his own straight first: full correction at the end, none
+       at the inner edge of the baseline. */
+    if (axis >= 0) {
+      const win = [];
+      for (let k = 0; k < BASE && k < n; k++)
+        win.push(p[fromStart ? k : n - 1 - k][axis]);
+      win.sort((u, v) => u - v);
+      const mid = win[win.length >> 1];
+      for (let k = 0; k < BASE && k < n; k++) {
+        const idx = fromStart ? k : n - 1 - k, f = 1 - k / BASE;
+        p[idx] = p[idx].slice();
+        p[idx][axis] = +(p[idx][axis] + (mid - p[idx][axis]) * f).toFixed(2);
+      }
+      A[axis] = mid;
+    }
+    const tail = [];
+    let x = A[0], y = A[1];
+    for (let k = 0; k < 900; k++) {
+      x += tx * STEP; y += ty * STEP;
+      tail.push([+x.toFixed(2), +y.toFixed(2)]);
+      if (x < -RUNOUT || y < -RUNOUT || x > W + RUNOUT || y > H + RUNOUT) break;
+    }
+    p = fromStart ? tail.reverse().concat(p) : p.concat(tail);
+  };
+  out(true); out(false);
+  return p;
+}
+
 (async () => {
 const b = await chromium.launch({ executablePath: process.env.CHROME_PATH });
 const p = await b.newPage({ viewport: { width: 1400, height: 1000 } });
@@ -146,10 +213,17 @@ for (const J of JOBS) {
     return { pts, width: +wid[wid.length >> 1].toFixed(2), W, H, n: pts.length };
   }, [src, J]);
   if (r.err) { console.log(J.key, '-', r.err); continue; }
-  /* the first and last few points are the walk settling on and off his road
-     - a little hook at each end - and a car would follow it */
-  const pts = r.pts.slice(3, -2);
-  out[J.key] = { vb: J.vb, width: r.width, pts };
+  /* THE HOOK AT EACH END, OFF - AND THEN STRAIGHT OUT OF THE PICTURE.
+     Where the walk runs out of his tarmac the cross-section stops finding an
+     edge square to the heading and the last few points curl back on
+     themselves. A car follows a polyline, so it followed that: it reached the
+     end of his road, turned round and came back. So each end is trimmed to
+     where the line is still running true, and then carried on in a straight
+     line along its own heading until it is well outside the box the section
+     shows - which is what his desktop lanes do (build-routes.js does it
+     there). A car leaves the screen and comes back on at the other side,
+     rather than turning round in view. */
+  out[J.key] = { vb: J.vb, width: r.width, pts: runout(r.pts, J.vb) };
   console.log(J.key, r.n, 'points | his tarmac', r.width, 'units wide |',
     'from', r.pts[0].join(','), 'to', r.pts[r.pts.length - 1].join(','));
 }
