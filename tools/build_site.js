@@ -251,9 +251,19 @@ if (fs.existsSync(COMMUNITY)) {
 /* 4d. THE SERVICE PAGES. Built elsewhere and dropped in whole - each folder
  *     is a finished page with its own css, js, fonts and art beside it
  *     (video-production/ comes out of the Video Page project's
- *     tools/build-release.js). Copied verbatim for the same reason the
- *     community pages are: they carry their own footer, not this site's
- *     chrome, so wr()'s chrome check is not theirs to pass. */
+ *     tools/build-release.js). Its art and code are copied as they are; the
+ *     page itself goes through wr() like every other page of this site, so it
+ *     wears THIS site's header and footer, and verifyChrome() holds it to them.
+ *
+ *     Three things give way to the chrome on the way in:
+ *       - the page's own stand-in footer (.foot), for the site's footer
+ *       - its own consent.js, for the site's - the chrome loads one, and two
+ *         would each load GA4. Same stored answer (h19.consent.v1), same
+ *         property, so nothing is lost; the Meta Pixel goes in
+ *         build/v2/consent.js's TAGS like any other tool on the site
+ *       - the skip link targets the page's first scene rather than #top
+ *     The chrome's stylesheets load AFTER the page's, so the header's
+ *     body{padding-top} wins over the page's own body reset. */
 const SERVICE_PAGES = ['video-production'].filter(d => fs.existsSync(path.join(ROOT, d, 'index.html')));
 for (const d of SERVICE_PAGES) {
   let files = 0, sbytes = 0;
@@ -261,13 +271,35 @@ for (const d of SERVICE_PAGES) {
     for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
       const from = path.join(dir, e.name);
       if (e.isDirectory()) { walk(from); continue; }
-      const to = path.join(OUT, path.relative(ROOT, from));
+      const rel = path.relative(path.join(ROOT, d), from).split(path.sep).join('/');
+      if (rel === 'index.html' || rel === 'assets/js/consent.js') continue;
+      const to = path.join(OUT, d, rel);
       fs.mkdirSync(path.dirname(to), { recursive: true });
       fs.copyFileSync(from, to);
       files++; sbytes += fs.statSync(from).size;
     }
   })(path.join(ROOT, d));
-  console.log('  ' + d + ': ' + files + ' files, ' + Math.round(sbytes / 1024) + ' KB');
+
+  let page = rd(d + '/index.html');
+  const swap = (re, to, what) => {
+    if (!re.test(page)) throw new Error(d + '/index.html: could not find ' + what);
+    page = page.replace(re, to);
+  };
+  const firstId = (page.match(/<body>\s*<div id="([^"]+)"/) || [])[1];
+  if (!firstId) throw new Error(d + '/index.html: no first section id for the skip link');
+  swap(/<footer class="foot">[\s\S]*?<\/footer>\s*/, '', 'its stand-in footer');
+  swap(/<script src="assets\/js\/consent\.js" defer><\/script>\s*/, '', 'its consent.js');
+  swap(/<\/head>/, () =>
+    CHROME.ASSETS.css.map(f => '<link rel="stylesheet" href="' + codeHref(f) + '">').join('\n') + '\n' +
+    CHROME.ASSETS.js.map(f => '<script src="' + codeHref(f) + '" defer></script>').join('\n') +
+    '\n</head>', '</head>');
+  swap(/<body>/, () => '<body>\n' +
+    HEADER_FOR('/').replace('class="skip" href="#top"', 'class="skip" href="#' + firstId + '"'), '<body>');
+  swap(/<script src="assets\/js\/[^"]+"><\/script>\s*<\/body>/,
+       m => FOOTER() + '\n' + m, 'the page script before </body>');
+  page = page.replace(/\.\.\/\.\.\/assets\//g, '/assets/').replace(/\{\{ROOT\}\}/g, '/');
+  wr(d + '/index.html', minifyHtml(page));
+  console.log('  ' + d + ': page + ' + files + ' files, ' + Math.round(sbytes / 1024) + ' KB');
 }
 
 /* 5. what the host needs to be told.
