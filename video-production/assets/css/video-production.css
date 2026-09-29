@@ -15,6 +15,7 @@
     font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;
     -webkit-font-smoothing:antialiased;
   }
+  html body{padding-top:0}
   #track{position:relative;height:487vh}
   #stage{
     position:sticky;top:0;
@@ -85,7 +86,7 @@
   @media (max-width:880px){
     #hero-o{
       left:6vw;right:6vw;width:auto;
-      top:7vh;transform:none;text-align:center;
+      top:calc(7vh + var(--hh,0px) + var(--hbar,0px));transform:none;text-align:center;
       font-size:3.889vw;
     }
     #hero-o h1{line-height:1}
