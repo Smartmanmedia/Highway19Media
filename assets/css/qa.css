@@ -1,0 +1,338 @@
+/* Highway 19 Media — Q&A. His artboards, placed. Live cards only. */
+@font-face{font-family:'Be Vietnam Pro';src:url(../fonts/bvp-300.woff2) format('woff2');font-weight:300;font-display:block}
+@font-face{font-family:'Be Vietnam Pro';src:url(../fonts/bvp-500.woff2) format('woff2');font-weight:500;font-display:block}
+@font-face{font-family:'Be Vietnam Pro';src:url(../fonts/bvp-600.woff2) format('woff2');font-weight:600;font-display:block}
+@font-face{font-family:'Be Vietnam Pro';src:url(../fonts/bvp-800.woff2) format('woff2');font-weight:800;font-display:block}
+@font-face{font-family:'Be Vietnam Pro';src:url(../fonts/bvp-900.woff2) format('woff2');font-weight:900;font-display:block}
+@font-face{font-family:'Arimo';src:url(../fonts/arimo-700.woff2) format('woff2');font-weight:700;font-display:block}
+/* his Illustrator PostScript names, so his own <text> resolves */
+@font-face{font-family:'BeVietnamPro-Light';src:url(../fonts/bvp-300.woff2) format('woff2');font-display:block}
+@font-face{font-family:'BeVietnamPro-Medium';src:url(../fonts/bvp-500.woff2) format('woff2');font-display:block}
+@font-face{font-family:'BeVietnamPro-SemiBold';src:url(../fonts/bvp-600.woff2) format('woff2');font-display:block}
+@font-face{font-family:'BeVietnamPro-ExtraBold';src:url(../fonts/bvp-800.woff2) format('woff2');font-display:block}
+@font-face{font-family:'BeVietnamPro-Black';src:url(../fonts/bvp-900.woff2) format('woff2');font-display:block}
+@font-face{font-family:'Arial-BoldMT';src:local('Arial Bold'),local('Arial-BoldMT'),url(../fonts/arimo-700.woff2) format('woff2');font-display:block}
+
+/* one unit is one of his artboard pixels. Never larger than a screen pixel,
+   so his art is only ever shown at his scale or smaller - never enlarged. */
+:root{--u:min(1px, 100vw / 1960);--art:calc(2128*var(--u));--half:calc(1064*var(--u));
+      --wide:calc(3088*var(--u));
+/* THE HOME PAGE'S OWN TOKENS, copied off build/v2 rather than matched by eye,
+   so every piece of chrome on this page - the panels, the buttons, the plus
+   marks, the ink - is the same colour it is over there. Its body type is 450
+   at 1.62, not 300: the light weight is what made these answers look thin. */
+      --h19-blue-900:#062f5e; --h19-blue-700:#12569f;
+      --h19-green-500:#059236; --h19-sign-green:#1c9022;
+      --h19-yellow-500:#ffc72c;
+      --h19-ink:#12161c; --h19-ink-soft:#454c57;
+      --h19-font:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif}
+
+*{box-sizing:border-box}
+/* ANDROID WAS GROWING HIS TYPE BEHIND OUR BACK. A WebView inflates text it
+   decides is a block of reading, by a factor it works out from the box it is
+   in - which is why the plus marks measured exactly the 24px they are set to
+   while the button's lettering measured 23 where it is set to 14. Every
+   question overflowed its card and every button wrapped, and no size set
+   here could have fixed it: the bigger the type, the bigger the boost.
+   Text is shown at the size it is set to. */
+html{background:#00287e;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+#page{overflow:hidden}
+
+.sec{position:relative;width:100%;height:var(--h);overflow:hidden}
+/* HIS ARTBOARDS ARE FRACTIONAL HEIGHTS, so two of them stacked leave a
+   sub-pixel row where the page shows through and his road grows a hairline.
+   Each section is pulled up onto the one above by a pixel; the art runs
+   straight across the join, so the pixel it covers is the same pixel. */
+.sec + .sec{margin-top:-2px}
+.art{position:absolute;top:0;left:50%;width:var(--wide);height:var(--h);margin-left:calc(0px - var(--wide)/2);z-index:1}
+.art>svg{display:block;width:var(--wide);height:var(--h)}
+
+/* the flanks: every row of his own edge carried outward on its own rhythm */
+.bleed{position:absolute;top:0;height:var(--h);width:calc(50vw - var(--half) + 8*var(--u));z-index:0;
+       pointer-events:none;background-repeat:repeat-x;
+       background-size:calc(480*var(--u)) calc(var(--hraw)*var(--u))}
+.bleed--l{right:calc(50% + var(--half) - 4*var(--u));background-position:right top}
+.bleed--r{left:calc(50% + var(--half) - 4*var(--u));background-position:left top}
+/* flex sections split their flank the same way they split his art */
+.bleed--a{height:var(--seam);overflow:hidden}
+.bleed--b{top:calc(var(--seam) + var(--flex,0px));height:calc(var(--hraw)*var(--u) - var(--seam));
+          background-position-y:calc(0px - var(--seam))}
+.bleed--b.bleed--l{background-position-x:right}
+.bleed--b.bleed--r{background-position-x:left}
+
+/* ---- HIS MOBILE ARTBOARDS -------------------------------------------
+   The column he drew IS the page: it spans the window exactly, and the
+   road and the gantry he ran out past it bleed off the sides, the same
+   way his desktop bleed does. Every length is a ratio of his own numbers
+   to that column, so it is his drawing at whatever width the phone is.
+
+   Where he drew question cards into the art they have been lifted out and
+   rebuilt as real ones - an answer has to open and shut - so the artboard
+   is served in two strips with the cards standing between them, and the
+   section takes whatever height the open answer needs. */
+.msec{display:none;position:relative;width:100%;overflow:hidden;
+      --mu:calc(100vw / var(--mbc))}
+.msec + .msec{margin-top:-2px}
+.mstrip{position:relative;width:100%;overflow:hidden;
+        height:calc(var(--mbs) * var(--mu))}
+.mstrip>svg{display:block;position:absolute;
+            left:calc(0px - var(--mbx) * var(--mu));
+            top:calc(0px - var(--mbo) * var(--mu));
+            width:calc(var(--mbw) * var(--mu));height:auto}
+
+/* his cards, at his width, on the ground he drew behind them */
+.mcol{position:relative;width:100%;
+      padding:0 calc((var(--mbc) - var(--cw) - var(--cx)) * var(--mu))
+              0 calc(var(--cx) * var(--mu));
+      background:linear-gradient(var(--cb1),var(--cb2))}
+.mcol .qa{border-width:1px}
+.mcol .qa:last-child{margin-bottom:0}
+
+/* the sections he has not drawn yet: his road and his board at the top, then
+   his heading, his cards and his panel, on the run of colour his desktop
+   page makes between one artboard and the next */
+/* HIS COLOUR, HELD, AND ONLY HANDED OVER AT THE FOOT. Running one of his
+   ends straight into the other paints the middle of the section a mud
+   halfway between them - sand into green comes out olive. His desert stays
+   his desert and meets the green at the join, the way his desktop does. */
+.msec--gen{background:linear-gradient(var(--bg1) 0, var(--body) 9%, var(--body) 78%, var(--bg2) 97% 100%)}
+.mtop{position:relative;width:100%}
+.mtop>svg{display:block;width:100%;height:auto}
+.mhead{padding:var(--headgap) var(--headx) 0;color:var(--ink)}
+.mhead h2{margin:0;font-family:var(--h19-font);font-weight:800;
+          font-size:var(--hsize);line-height:var(--hlead);letter-spacing:-.022em}
+.mhead p{margin:18px 0 0;font-family:var(--h19-font);
+         font-weight:450;font-size:var(--lsize);line-height:var(--llead)}
+/* ONE LINE DOWN THE SECTION. His cards ran on his own gutter and the panel
+   under them on another, so the two stood 20px apart down the page. In the
+   sections composed from his parts they share the one gutter. */
+.mcol--gen{margin-top:var(--headgap);padding-left:var(--padx);padding-right:var(--padx)}
+.mcta{padding:var(--ctagap) var(--padx) 0}
+.mcta-p{border-radius:10px;background:var(--h19-blue-700);
+        border:1px solid #fff;text-align:center;
+        padding:var(--ctapadt) 20px var(--ctapadb)}
+.mcta-p strong{display:block;font-family:var(--h19-font);font-weight:800;
+               font-size:var(--ctat);line-height:1.18;color:#fff;letter-spacing:-.018em}
+.mcta-p span{display:block;margin-top:10px;
+             font-family:var(--h19-font);font-weight:450;
+             font-size:var(--ctas);line-height:1.55;color:#fff}
+/* THE BUTTON IS A BOX ITS WORDS SIT IN, not a line of a fixed height. Its
+   line-height was the whole height of the button, so the moment the words
+   went to two lines it opened to twice that with a chasm down the middle.
+   It centres them instead, and grows only if it has to. */
+.mbtn{display:flex;align-items:center;justify-content:center;
+      margin:18px auto 0;width:100%;max-width:var(--btnw);
+      min-height:var(--btnh);padding:12px 18px;border-radius:8px;
+      background:var(--h19-yellow-500);border:2px solid var(--h19-ink);
+      font-family:var(--h19-font);font-weight:800;font-style:normal;
+      font-size:var(--btn);line-height:1.25;color:var(--h19-ink);
+      letter-spacing:.035em;text-transform:uppercase;text-align:center}
+.mtail{height:var(--tail)}
+
+/* ---- THE SITE'S OWN CHROME, ON THIS PAGE -------------------------------
+   HE DREW THE BAR INTO HIS ARTBOARD, so the real one stands exactly on top
+   of it rather than pushing his page down. It was not a guess that the two
+   line up: his band is 116 of his 2128 units, and the art is shown at
+   100vw/1960 per unit, so his bar is 5.918vw tall - where header.css sets
+   the real one to clamp(66px, 5.943vw, 124px). The same height to within
+   half a percent at every width between the clamps, and taller than his
+   outside them, so his drawing is covered and never peeps out below.
+   Pushing the page down instead would have left his own bar showing under
+   the real one, and his bleed strips - which are his edge columns, drawn
+   before any of this - carry that band out to the sides whatever the page
+   does. */
+/* HIS PAGE'S HEADING IS A DRAWING - the blue board at the top of his first
+   artboard - and a drawing is not a heading. This says the same words off
+   screen, so a reader using a screen reader and a crawler building an outline
+   both get the sentence a visitor sees. */
+.qa-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+       clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+/* the question IS the heading; the button inside it keeps every measurement */
+.qa-h{margin:0;padding:0;font:inherit;color:inherit;display:block}
+#page{background:#002e79}
+/* header.css pads the body by the bar's height so a page starts under it.
+   Here that would stand the real bar on top of his drawn one and show both.
+   Only above the phone breakpoint: his mobile artboards carry no bar, so
+   there the site's own padding is exactly right. */
+@media (min-width:901px){ body{padding-top:0} }
+
+/* HIS CONTACT CARD, on his interstate blue. The bar's Contact button points
+   at #contact on every page of this site; the card is the same file the home
+   page and the holding page use, and only its colours are set here - the
+   same values the holding page gives it, which are his. */
+.qa-form{background:#00287e;scroll-margin-top:calc(var(--hh,66px) + 12px);
+         padding:clamp(34px,6vw,78px) clamp(16px,4vw,40px) clamp(56px,9vw,120px)}
+.qa-form .fcard{--fc-paper:#e9eaea;--fc-say-bg:#001328;--fc-say-ink:#fff;
+  --fc-ink:#123a7a;--fc-ask-ink:#476698;--fc-ico:#3d5f9b;--fc-alt-ink:#4e6589;
+  --fc-rule:#4266a4;--fc-rule-on:#12569f;--fc-edge:transparent;--fc-link:#123a7a;
+  --fc-btn:#ffc72c;--fc-btn-ink:#12161c;--fc-btn-hi:#ffd45c;
+  --fc-ok:#7ee0a4;--fc-err:#ff9aa1;--fc-cast:0 22px 50px rgba(0,0,0,.55);
+  --fc-fs:clamp(.84rem,.92vw,.94rem)}
+
+@media (max-width:900px){
+  #page > .sec{display:none}
+  .msec{display:block}
+}
+
+.col{position:absolute;z-index:2;top:var(--y);left:50%;width:var(--w);
+     margin-left:calc(0px - var(--half) + var(--x))}
+
+.qa{background:var(--fill);border-radius:var(--rad,10px);margin-bottom:var(--gap);
+    border:1px solid var(--stroke);overflow:hidden;
+    transition:background-color .28s ease}
+.qa[data-nostroke]{border-color:transparent}
+.qa.is-open{background:var(--fill-open)}
+
+.qa-q{display:flex;align-items:center;width:100%;min-height:var(--shut);
+      margin:0;background:none;border:0;cursor:pointer;text-align:left;
+      /* A QUESTION THAT RUNS TO THREE LINES HAS TO HAVE ROOM ABOVE AND
+         BELOW IT. There was none: the shut card was a fixed height with a
+         centred line in it, so the moment the words outgrew that height they
+         went straight to both edges and sat against the corners. The card
+         takes its height from the words now and keeps its padding either
+         way - his desktop cards are measured off his artboard, so the
+         padding is nothing there unless it is asked for. */
+      padding:var(--qpy,0px) var(--qpr) var(--qpy,0px) var(--pad);position:relative;
+      font-family:var(--qfam);font-weight:var(--qwgt,700);font-size:var(--qsize);
+      line-height:var(--qlead);color:var(--qfill);letter-spacing:var(--qls,0)}
+.qa-q::-moz-focus-inner{border:0}
+.qa-q:focus-visible{outline:2px solid #ffce00;outline-offset:-3px}
+
+.qa.is-open .qa-q{min-height:0;align-items:flex-start;
+      padding-top:var(--qtop);padding-bottom:0}
+.qa-m{position:absolute;right:var(--minset);top:calc(var(--shut)/2);
+      width:var(--mw);height:var(--mw);margin-top:calc(var(--mw)/-2);
+      border-radius:50%;background:var(--mfill);border:var(--msw) solid var(--mstroke);
+      pointer-events:none}
+.qa-m::before,.qa-m::after{content:'';position:absolute;left:50%;top:50%;
+      background:var(--gcol);transition:transform .28s ease,opacity .28s ease}
+.qa-m::before{width:var(--gw);height:var(--gsw);margin:calc(var(--gsw)/-2) 0 0 calc(var(--gw)/-2)}
+.qa-m::after{width:var(--gsw);height:var(--gw);margin:calc(var(--gw)/-2) 0 0 calc(var(--gsw)/-2)}
+.qa.is-open .qa-m::after{transform:scaleY(0);opacity:0}
+
+.qa-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+.qa.is-open .qa-a{grid-template-rows:1fr}
+.qa-ai{overflow:hidden}
+.qa-a p{margin:0;padding:0 var(--pad);
+    font-family:var(--bfam);font-weight:var(--bwgt);font-size:var(--bsize);
+    line-height:var(--blead);color:var(--bfill)}
+.qa.is-open .qa-m{top:calc(var(--qtop) + var(--qlead)/2)}
+.qa-a p:first-child{padding-top:var(--atop)}
+.qa-a p:last-child{padding-bottom:var(--abot)}
+.qa-a p+p{padding-top:var(--blead)}
+
+.sec[data-flex]{height:calc(var(--h) + var(--flex,0px))}
+.art-a{position:absolute;top:0;left:50%;width:var(--wide);margin-left:calc(0px - var(--wide)/2);overflow:hidden;z-index:1}
+.art-b{position:absolute;left:50%;width:var(--wide);margin-left:calc(0px - var(--wide)/2);
+       top:calc(var(--seam) + var(--flex,0px));z-index:1}
+.art-a>svg{display:block;width:var(--wide);height:var(--seam)}
+.art-b>svg{display:block;width:var(--wide);height:var(--tail)}
+/* his traffic, his ship, his planes - his own artwork, set moving */
+.run{transform-box:view-box;will-change:transform}
+.run[data-axis="x"]{animation:h19x var(--dur) linear var(--dly) infinite}
+.run[data-axis="y"]{animation:h19y var(--dur) linear var(--dly) infinite}
+.run[data-axis="xy"]{animation:h19xy var(--dur) linear var(--dly) infinite}
+.run--fade{animation-name:h19xy,h19fade;animation-duration:var(--dur),var(--dur)}
+@keyframes h19x{from{transform:translateX(var(--a))}to{transform:translateX(var(--b))}}
+@keyframes h19y{from{transform:translateY(var(--a))}to{transform:translateY(var(--b))}}
+@keyframes h19xy{from{transform:translate(var(--ax),var(--ay))}
+                 to{transform:translate(var(--bx),var(--by))}}
+@keyframes h19fade{0%{opacity:0}8%{opacity:1}62%{opacity:1}88%{opacity:0}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.run{animation:none!important}}
+
+.hot{position:absolute;z-index:3;display:block;border-radius:6px}
+.hot:focus-visible{outline:2px solid #ffce00;outline-offset:2px}
+
+.col--02{
+ --x:calc(666.2*var(--u)); --y:calc(732.31*var(--u)); --w:calc(839.99*var(--u)); --gap:calc(9.63*var(--u)); --shut:calc(64.47*var(--u));
+ --pad:calc(24.19*var(--u)); --qpr:calc(53.29*var(--u));
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:calc(17.28*var(--u)); --qlead:calc(19*var(--u)); --qfill:#12161c;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:600; --bsize:calc(16*var(--u));
+ --blead:calc(27.52*var(--u)); --bfill:#454c57;
+ --qtop:calc(22.7*var(--u)); --atop:calc(47.89*var(--u)); --abot:calc(43.42*var(--u));
+ --fill:#fff; --fill-open:#deefff; --stroke:#00287e;
+ --mw:calc(29.1*var(--u)); --minset:calc(33.65*var(--u));
+ --mfill:#00aa56; --mstroke:transparent;
+ --msw:calc(0*var(--u)); --gcol:#fff; --gw:calc(11.55*var(--u)); --gsw:calc(3*var(--u));
+}
+.col--03{
+ --x:calc(825.4*var(--u)); --y:calc(755.33*var(--u)); --w:calc(809.79*var(--u)); --gap:calc(9.63*var(--u)); --shut:calc(64.47*var(--u));
+ --pad:calc(24.19*var(--u)); --qpr:calc(53.29*var(--u));
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:calc(17.28*var(--u)); --qlead:calc(19*var(--u)); --qfill:#fff;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:300; --bsize:calc(16*var(--u));
+ --blead:calc(27.52*var(--u)); --bfill:#fff;
+ --qtop:calc(19.79*var(--u)); --atop:calc(20.83*var(--u)); --abot:calc(36.24*var(--u));
+ --fill:rgb(0, 0, 0); --fill-open:#0f1c28; --stroke:#cad9ea;
+ --mw:calc(29.1*var(--u)); --minset:calc(36.05*var(--u));
+ --mfill:#00aa56; --mstroke:transparent;
+ --msw:calc(0*var(--u)); --gcol:#fff; --gw:calc(11.55*var(--u)); --gsw:calc(3*var(--u));
+}
+.col--04{
+ --x:calc(686.5*var(--u)); --y:calc(688.28*var(--u)); --w:calc(833.5*var(--u)); --gap:calc(18.33*var(--u)); --shut:calc(64.47*var(--u));
+ --pad:calc(35.29*var(--u)); --qpr:calc(57.23*var(--u));
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:calc(17.28*var(--u)); --qlead:calc(19*var(--u)); --qfill:#fff;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:300; --bsize:calc(16*var(--u));
+ --blead:calc(27.51*var(--u)); --bfill:#fff;
+ --qtop:calc(22.61*var(--u)); --atop:calc(47.89*var(--u)); --abot:calc(19.99*var(--u));
+ --fill:none; --fill-open:none; --stroke:#cad9ea;
+ --mw:calc(21.95*var(--u)); --minset:calc(42.2*var(--u));
+ --mfill:transparent; --mstroke:transparent;
+ --msw:calc(0*var(--u)); --gcol:#fff; --gw:calc(11.55*var(--u)); --gsw:calc(3*var(--u));
+}
+.col--05{
+ --x:calc(1030.6*var(--u)); --y:calc(692.36*var(--u)); --w:calc(647.4*var(--u)); --gap:calc(8.81*var(--u)); --shut:calc(64.47*var(--u));
+ --pad:calc(24.19*var(--u)); --qpr:calc(53.29*var(--u));
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:calc(17.28*var(--u)); --qlead:calc(19*var(--u)); --qfill:#12161c;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:600; --bsize:calc(16*var(--u));
+ --blead:calc(27.52*var(--u)); --bfill:#454c57;
+ --qtop:calc(22.7*var(--u)); --atop:calc(47.89*var(--u)); --abot:calc(32.31*var(--u));
+ --fill:#fff; --fill-open:#fff; --stroke:#00287e;
+ --mw:calc(29.1*var(--u)); --minset:calc(36.05*var(--u));
+ --mfill:#ffaa00; --mstroke:transparent;
+ --msw:calc(0*var(--u)); --gcol:#fff; --gw:calc(11.55*var(--u)); --gsw:calc(3*var(--u));
+}
+.col--06{
+ --x:calc(949.7*var(--u)); --y:calc(622.51*var(--u)); --w:calc(840.3*var(--u)); --gap:calc(13.57*var(--u)); --shut:calc(64.47*var(--u));
+ --pad:calc(24.19*var(--u)); --qpr:calc(57.79*var(--u));
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:calc(17.28*var(--u)); --qlead:calc(19*var(--u)); --qfill:#12161c;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:300; --bsize:calc(16*var(--u));
+ --blead:calc(27.52*var(--u)); --bfill:#454c57;
+ --qtop:calc(22.7*var(--u)); --atop:calc(28.69*var(--u)); --abot:calc(50.52*var(--u));
+ --fill:#fff; --fill-open:#fff; --stroke:#cad9ea;
+ --mw:calc(33.6*var(--u)); --minset:calc(38.4*var(--u));
+ --mfill:#004abd; --mstroke:#fff;
+ --msw:calc(2*var(--u)); --gcol:#fff; --gw:calc(13.59*var(--u)); --gsw:calc(2*var(--u));
+}
+.col--07{
+ --x:calc(1075.19*var(--u)); --y:calc(454.98*var(--u)); --w:calc(702.01*var(--u)); --gap:calc(13.07*var(--u)); --shut:calc(65.97*var(--u));
+ --pad:calc(24.19*var(--u)); --qpr:calc(46.14*var(--u));
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:calc(17.28*var(--u)); --qlead:calc(19*var(--u)); --qfill:#12161c;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:600; --bsize:calc(16*var(--u));
+ --blead:calc(27.51*var(--u)); --bfill:#454c57;
+ --qtop:calc(22.71*var(--u)); --atop:calc(47.89*var(--u)); --abot:calc(31.3*var(--u));
+ --fill:#fff; --fill-open:#fff; --stroke:#dbe3ee;
+ --mw:calc(21.95*var(--u)); --minset:calc(36.05*var(--u));
+ --mfill:transparent; --mstroke:transparent;
+ --msw:calc(0*var(--u)); --gcol:#12161c; --gw:calc(11.55*var(--u)); --gsw:calc(3*var(--u));
+}
+.col--08{
+ --x:calc(640*var(--u)); --y:calc(481.94*var(--u)); --w:calc(840*var(--u)); --gap:calc(11.19*var(--u)); --shut:calc(64.5*var(--u));
+ --pad:calc(24.19*var(--u)); --qpr:calc(66.59*var(--u));
+ --qfam:Arial,Arimo,Helvetica,sans-serif; --qsize:calc(17.28*var(--u)); --qlead:calc(19*var(--u)); --qfill:#fff;
+ --bfam:'Be Vietnam Pro',sans-serif; --bwgt:600; --bsize:calc(16*var(--u));
+ --blead:calc(27.51*var(--u)); --bfill:#fff;
+ --qtop:calc(22.71*var(--u)); --atop:calc(47.89*var(--u)); --abot:calc(31.31*var(--u));
+ --fill:none; --fill-open:none; --stroke:#fff;
+ --mw:calc(42.4*var(--u)); --minset:calc(37.6*var(--u));
+ --mfill:#059236; --mstroke:transparent;
+ --msw:calc(0*var(--u)); --gcol:#fff; --gw:calc(11.55*var(--u)); --gsw:calc(3*var(--u));
+}
+.sec--01{background:linear-gradient(#002e79,#0256b6)}
+.sec--02{background:linear-gradient(#0256b6,#002274)}
+.sec--03{background:linear-gradient(#002274,#000000)}
+.sec--04{background:linear-gradient(#000000,#dbb09f)}
+.sec--05{background:linear-gradient(#dbb09f,#1c9023)}
+.sec--06{background:linear-gradient(#1c9023,#725841)}
+.sec--07{background:linear-gradient(#725841,#457319)}
+.sec--08{background:linear-gradient(#457319,#ffffff)}

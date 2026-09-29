@@ -241,6 +241,90 @@ for (const L of LEGAL) {
   wr(L.slug + '/index.html', minifyHtml(page));
 }
 
+/* 4b-ii. THE Q&A PAGE. His eight artboards, his questions, the traffic - built
+ *        by tools/qa/make.sh into faq.html at the root of the repository, with
+ *        the site's own header, contact card and footer already in it (see
+ *        tools/chrome-emit.js: it asks tools/chrome.js for them, so there is
+ *        still only one header on this site). What is left to do here is what
+ *        is done to the home page: move its code down a directory, its assets
+ *        up one, and stamp every URL with the hash of what is behind it.
+ *
+ *        ITS OWN CSS AND JS LIVE UNDER /assets/, which is served immutable for
+ *        a year - true only while a file's contents do not change under its
+ *        name, and these change every time his page is rebuilt. So they carry
+ *        the same content hash his stylesheets do. */
+const QA_SRC = path.join(ROOT, 'faq.html');
+if (fs.existsSync(QA_SRC)) {
+  let qa = fs.readFileSync(QA_SRC, 'utf8');
+
+  /* its own code, stamped and copied as it stands - qa.css and the four
+     scripts are written by tools/qa/build.py and are already tight */
+  const own = [...qa.matchAll(/(?:href|src)="(assets\/(?:css|js)\/[^"]+)"/g)]
+    .map(m => m[1]);
+  const ownStamp = {};
+  for (const f of new Set(own)) {
+    const src = fs.readFileSync(path.join(ROOT, f));
+    ownStamp[f] = crypto.createHash('sha1').update(src).digest('hex').slice(0, 8);
+    fs.mkdirSync(path.dirname(path.join(OUT, f)), { recursive: true });
+    fs.writeFileSync(path.join(OUT, f), src);
+  }
+
+  /* every asset it or its stylesheet actually asks for */
+  const qaWanted = new Set();
+  for (const m of qa.matchAll(/(?:xlink:href|href|src)="(assets\/[^"]+)"/g)) qaWanted.add(m[1]);
+  /* and the ones named only inside a style attribute - his bleed strips */
+  for (const m of qa.matchAll(/url\(['"]?(assets\/[^)"']+)/g)) qaWanted.add(m[1]);
+  for (const f of Object.keys(ownStamp)) {
+    const txt = fs.readFileSync(path.join(ROOT, f), 'utf8');
+    /* qa.css says url(../fonts/x.woff2) from assets/css/ */
+    for (const m of txt.matchAll(/url\(\.\.\/([^)"']+)\)/g)) qaWanted.add('assets/' + m[1]);
+    for (const m of txt.matchAll(/["'(](assets\/[^"')\s]+)/g)) qaWanted.add(m[1]);
+  }
+  let qaBytes = 0;
+  for (const a of qaWanted) {
+    if (ownStamp[a]) continue;                       /* written above */
+    const src = path.join(ROOT, a);
+    if (!fs.existsSync(src)) throw new Error('Q&A: missing asset ' + a);
+    fs.mkdirSync(path.dirname(path.join(OUT, a)), { recursive: true });
+    fs.copyFileSync(src, path.join(OUT, a));
+    qaBytes += fs.statSync(src).size;
+  }
+
+  /* AND ITS CHROME IS TODAY'S, NOT THE ONE IT WAS BAKED WITH. faq.html carries
+     the header and footer as they were when tools/qa/make.sh last ran - which
+     can be older than the header itself (the smaller bar, the Services
+     dropdown, CONTACT US to /contact/, the shield linking home). They are
+     swapped for what tools/chrome.js says now, so the Q&A cannot fall out of
+     step with every other page, and verifyChrome() holds it to them. The page
+     has its own contact card, so the footer keeps #contact. */
+  const qaSkip = (qa.match(/<a class="skip" href="([^"]+)"/) || [])[1] || '#top';
+  const qaTree = s => s.replace(/\.\.\/\.\.\/assets\//g, 'assets/').replace(/\{\{ROOT\}\}/g, '/');
+  if (!/<a class="skip"[\s\S]*?<\/header>/.test(qa)) throw new Error('Q&A: no header to replace');
+  if (!/<footer class="sec9"[\s\S]*?<\/footer>/.test(qa)) throw new Error('Q&A: no footer to replace');
+  qa = qa
+    .replace(/<a class="skip"[\s\S]*?<\/header>/, () =>
+      qaTree(HEADER_FOR('/').replace('class="skip" href="#top"', 'class="skip" href="' + qaSkip + '"')))
+    .replace(/<footer class="sec9"[\s\S]*?<\/footer>/, () => qaTree(FOOTER()));
+
+  qa = qa
+    .replace(/(?:href|src)="build\/v2\/([^"?]+\.(?:css|js))"/g,
+             (m, f) => m.replace('"build/v2/' + f + '"', '"' + codeHref(f) + '"'))
+    .replace(/((?:xlink:href|href|src)=")assets\//g, '$1/assets/')
+    /* his bleed strips are named inside style attributes - url(assets/...) -
+       which no href/src rewrite can see, and a page at /q-a/ then asks for
+       /q-a/assets/ and gets nothing */
+    .replace(/url\((['"]?)assets\//g, 'url($1/assets/')
+    .replace(/(?:href|src)="\/(assets\/(?:css|js)\/[^"?]+)"/g,
+             (m, f) => ownStamp[f] ? m.slice(0, -1) + '?v=' + ownStamp[f] + '"' : m);
+  if (STAGING) qa = qa.replace(/<meta name="robots"[^>]*>/,
+                               '<meta name="robots" content="noindex,nofollow">');
+  wr('q-a/index.html', minifyHtml(qa));
+  console.log('  q-a: ' + Math.round(Buffer.byteLength(qa) / 1024) + ' KB page, ' +
+    qaWanted.size + ' assets, ' + Math.round(qaBytes / 1024) + ' KB');
+} else {
+  throw new Error('faq.html is not built - run tools/qa/make.sh first');
+}
+
 /* 4c. THE COMMUNITY PAGES. Landing pages built for local businesses, each
  *     one carrying its customer's branding and deliberately none of this
  *     site's - no header, no footer, no Highway 19 lockup. That is why they
@@ -390,6 +474,12 @@ wr('_headers',
  * 404, and keep the canonical lower case. */
 wr('_redirects',
 `/Community/* /community/:splat 301
+/qa /q-a/ 301
+/qa/ /q-a/ 301
+/faq /q-a/ 301
+/faq/ /q-a/ 301
+/questions /q-a/ 301
+/questions/ /q-a/ 301
 `);
 
 wr('robots.txt', STAGING
@@ -428,6 +518,7 @@ if (!STAGING) wr('sitemap.xml',
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>${SITE}/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
   <url><loc>${SITE}/contact/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>${SITE}/q-a/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 ${LEGAL.map(L => `  <url><loc>${SITE}/${L.slug}/</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>`).join('\n')}
 ${SERVICE_PAGES.map(d => `  <url><loc>${SITE}/${d}/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>`).join('\n')}
 ${COMMUNITY_URLS}

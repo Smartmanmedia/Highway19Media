@@ -1,0 +1,20 @@
+<!doctype html><meta charset=utf-8><style>html,body{margin:0;background:#000}
+#h svg{display:block}</style>
+<div id=h></div>
+<script>
+const k=new URLSearchParams(location.search).get('k')||'01';
+fetch('Highway19-QA-artboard-'+k+'.svg').then(r=>r.text()).then(async t=>{
+  document.getElementById('h').innerHTML=t;
+  const svg=document.querySelector('#h svg');
+  svg.querySelectorAll('[id]').forEach(e=>{
+    if(/^(Cloud|Mountains|Forest|Grass_BG)/i.test(e.id)) e.style.display='none';
+  });
+  svg.querySelectorAll('text').forEach(e=>e.style.display='none');
+  const vb=svg.viewBox.baseVal;
+  window.__W=Math.round(vb.width); window.__H=Math.round(vb.height);
+  svg.setAttribute('width',window.__W); svg.setAttribute('height',window.__H);
+  svg.style.width=window.__W+'px'; svg.style.height=window.__H+'px';
+  await new Promise(r=>setTimeout(r,700));
+  window.__ready=true;
+});
+</script>

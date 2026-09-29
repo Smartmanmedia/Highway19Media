@@ -1,0 +1,799 @@
+/* Wraps the things in his art that should move - his lorries, his ship, his
+   planes - into groups the page can drive, and lays extra lorries onto the
+   lanes he drew but left empty. Nothing is redrawn: every vehicle on the page
+   is his own artwork. */
+const {chromium}=require('playwright');
+const fs=require('fs'), path=require('path');
+const ROOT='/home/user/highway19media';
+const CFG=JSON.parse(fs.readFileSync(path.join(__dirname,'traffic.json'),'utf8'));
+const ROUTES=JSON.parse(fs.readFileSync(path.join(__dirname,'routes.json'),'utf8'));
+const CHAINS=ROUTES._chains||[]; delete ROUTES._chains;
+/* A CHAINED PAIR MUST MEET AT THE EDGE OF THE ARTBOARD. His sign and his
+   gantry stand over the road exactly where one artboard ends and the next
+   begins, so the walk loses his tarmac there and the two halves of a run
+   stop short of the join - a hundred units of his road at the harbour, four
+   hundred at the studio - with no car ever on them, and a car reaching the
+   end of one half stepping straight to the start of the other. The road
+   under them is dead straight in every case, so each end is carried on its
+   own heading to the edge it belongs to. */
+{
+  const H={'01':982.8,'02':1645.2,'03':1865.2,'04':1951.6,
+           '05':1951.6,'06':1951.6,'07':2378.8,'08':2378.8};
+  const find=key=>{const [k,id]=key.split(':');
+    return (ROUTES[k]||[]).find(r=>r.id===id);};
+  const read=r=>r.d.replace(/^M/,'').split('L').map(q=>q.trim().split(',').map(Number));
+  const write=(r,pts)=>{r.d='M'+pts.map(q=>q[0]+','+q[1]).join(' L');};
+  /* straight down the way his road crosses it. A tangent read off the
+     stretch inland is no use here: four hundred units on, the bend that
+     road is about to make has carried it two hundred units sideways off
+     his tarmac. The two ends of a chain already stand at the same x - that
+     is the ease that put them there - and his road crosses every one of
+     these joins vertically, so the carry is vertical. */
+  const reach=(pts,y,rev)=>{
+    const i=rev?pts.length-1:0;
+    if(Math.abs(y-pts[i][1])<=2) return false;
+    const q=[pts[i][0], +y.toFixed(2)];
+    if(rev) pts.push(q); else pts.unshift(q);
+    return true;
+  };
+  /* AND WHERE A RUN SIMPLY STARTS IN THE MIDDLE OF HIS PICTURE. The walk
+     seeded the three-lane at the top of its artboard a hundred units in
+     from the edge, so a car appeared out of nothing on open tarmac. That
+     road is dead straight there, so the start is carried off the canvas
+     the way the others already are. */
+  const ends=new Set();
+  CHAINS.forEach(([a,b2])=>{ends.add(a+'<');ends.add(b2+'>');});
+  for(const k of Object.keys(ROUTES)) for(const r of ROUTES[k]){
+    const pts=r.d.replace(/^M/,'').split('L').map(q=>q.trim().split(',').map(Number));
+    const inside=q=>q[0]>4&&q[0]<2124&&q[1]>4&&q[1]<(({'01':982.8,'02':1645.2,'03':1865.2,
+      '04':1951.6,'05':1951.6,'06':1951.6,'07':2378.8,'08':2378.8})[k]-4);
+    let hit=false;
+    if(!ends.has(k+':'+r.id+'>') && inside(pts[0])){
+      const t=pts[Math.min(12,pts.length-1)];
+      const dx=pts[0][0]-t[0], dy=pts[0][1]-t[1], m=Math.hypot(dx,dy);
+      if(m>1){ pts.unshift([+(pts[0][0]+dx/m*600).toFixed(2), +(pts[0][1]+dy/m*600).toFixed(2)]); hit=true; }
+    }
+    const n=pts.length-1;
+    if(!ends.has(k+':'+r.id+'<') && inside(pts[n])){
+      const t=pts[Math.max(0,n-12)];
+      const dx=pts[n][0]-t[0], dy=pts[n][1]-t[1], m=Math.hypot(dx,dy);
+      if(m>1){ pts.push([+(pts[n][0]+dx/m*600).toFixed(2), +(pts[n][1]+dy/m*600).toFixed(2)]); hit=true; }
+    }
+    if(hit){ r.d='M'+pts.map(q=>q[0]+','+q[1]).join(' L');
+      console.log('run',k+':'+r.id,'carried off the canvas'); }
+  }
+  for(const [a,b2] of CHAINS){
+    const A=find(a), B=find(b2);
+    if(!A||!B) continue;
+    const pa=read(A), pb=read(B);
+    const ga=reach(pa, H[a.split(':')[0]], true), gb=reach(pb, 0, false);
+    if(ga) write(A,pa);
+    if(gb) write(B,pb);
+    if(ga||gb) console.log('chain',a,'->',b2,'carried to the join',
+      ga?('+'+(pa[pa.length-1][1]-pa[pa.length-2][1]).toFixed(0)):'-',
+      gb?('+'+(pb[1][1]-pb[0][1]).toFixed(0)):'-');
+  }
+}
+const BLEEDART=JSON.parse(fs.readFileSync(path.join(__dirname,'bleedart.json'),'utf8'));
+const KS=['05','06','07','01','02','03','04','08'];  /* his vehicles first, so every road can borrow them */
+
+(async()=>{
+const b=await chromium.launch({executablePath:process.env.CHROME_PATH});
+const p=await b.newPage({viewport:{width:1200,height:900}});
+await p.goto('http://localhost:8777/assets/scene/_r.html');
+const report={}; const sprites={}; const lanes={};
+/* a first pass over the sections that carry his vehicles, so every road on
+   the page can put his own artwork on it */
+for(const k of KS){
+  const cfg=CFG[k]; if(!cfg||!cfg.sprite) continue;
+  const src=fs.readFileSync(`${ROOT}/assets/scene/sec-${k}.svg`,'utf8');
+  const got=await p.evaluate(([src,cfg,k,routes,sprites])=>{
+    const doc=new DOMParser().parseFromString(src,'image/svg+xml');
+    const svg=doc.documentElement;
+    document.body.innerHTML=''; document.body.appendChild(svg);
+    svg.setAttribute('width','2128');
+    const abs=el=>{let bb;try{bb=el.getBBox()}catch(e){return null}
+      const c=el.getCTM(); if(!c) return null;
+      return {x:c.a*bb.x+c.c*bb.y+c.e,y:c.b*bb.x+c.d*bb.y+c.f,
+              w:Math.abs(bb.width*c.a),h:Math.abs(bb.height*c.d)};};
+    const PAL=(cfg.palette||[]).map(s=>s.toLowerCase());
+    const out=[]; const claimed=new Set();
+    for(const seed of [...svg.querySelectorAll('[fill]')].filter(e=>
+        PAL.includes((e.getAttribute('fill')||'').toLowerCase()))){
+      if(claimed.has(seed)) continue;
+      const host=seed.parentNode; if(!host||host.tagName==='defs') continue;
+      const kids=[...host.children];
+      let i0=kids.indexOf(seed), i1=i0;
+      const box=abs(seed); if(!box) continue;
+      const pad=cfg.pad==null?26:cfg.pad;
+      const grow=(a,b2)=>({x:Math.min(a.x,b2.x),y:Math.min(a.y,b2.y),
+        w:Math.max(a.x+a.w,b2.x+b2.w)-Math.min(a.x,b2.x),
+        h:Math.max(a.y+a.h,b2.y+b2.h)-Math.min(a.y,b2.y)});
+      let cur={...box};
+      const touches=(a,c)=>c&&c.x<a.x+a.w+pad&&c.x+c.w>a.x-pad&&c.y<a.y+a.h+pad&&
+                     c.y+c.h>a.y-pad&&c.w<a.w+3*pad&&c.h<a.h+3*pad;
+      let moved=true;
+      while(moved){ moved=false;
+        if(i0>0){const c=abs(kids[i0-1]); if(touches(cur,c)){cur=grow(cur,c);i0--;moved=true;}}
+        if(i1<kids.length-1){const c=abs(kids[i1+1]); if(touches(cur,c)){cur=grow(cur,c);i1++;moved=true;}}
+      }
+      const g=doc.createElementNS('http://www.w3.org/2000/svg','g');
+      host.insertBefore(g,kids[i0]);
+      for(let i=i0;i<=i1;i++){ claimed.add(kids[i]); g.appendChild(kids[i]); }
+      const a=abs(g);
+      out.push({x:a.x,y:a.y,w:a.w,h:a.h,up:a.h>a.w,markup:g.innerHTML});
+    }
+    return out;
+  },[src,cfg,k,[],{}]);
+  got.forEach((s2,i)=>{ sprites[k+':'+i]={...s2,i}; });
+  console.log('   sprite pass',k,got.length);
+}
+for(const k of KS){
+  const file=`${ROOT}/assets/scene/sec-${k}.svg`;
+  const src=fs.readFileSync(file,'utf8');
+  const cfg=CFG[k]||{};
+  cfg._sprites={};
+  const routes=ROUTES[k]||[];
+  const bleedart=BLEEDART[k]||[];
+  const r=await p.evaluate(([src,cfg,k,routes,sprites,bleedart])=>{
+    const doc=new DOMParser().parseFromString(src,'image/svg+xml');
+    const svg=doc.documentElement;
+    document.body.innerHTML=''; document.body.appendChild(svg);
+    svg.setAttribute('width','2128');
+    const abs=el=>{let bb;try{bb=el.getBBox()}catch(e){return null}
+      const c=el.getCTM(); if(!c) return null;
+      return {x:c.a*bb.x+c.c*bb.y+c.e, y:c.b*bb.x+c.d*bb.y+c.f,
+              w:Math.abs(bb.width*c.a), h:Math.abs(bb.height*c.d)};};
+    const PAL=(cfg.palette||['#854d26']).map(s=>s.toLowerCase());
+
+    /* seed on his vehicle body colour, then take in every sibling that touches it */
+    const seeds=[...svg.querySelectorAll('[fill]')].filter(e=>
+      PAL.includes((e.getAttribute('fill')||'').toLowerCase()));
+    const made=[];
+    const claimed=new Set();
+    for(const seed of seeds){
+      if(claimed.has(seed)) continue;
+      const host=seed.parentNode; if(!host||host.tagName==='defs') continue;
+      const kids=[...host.children];
+      let i0=kids.indexOf(seed), i1=i0;
+      const box=abs(seed); if(!box) continue;
+      const pad=cfg.pad==null?26:cfg.pad;
+      const grow=(a,b2)=>({x:Math.min(a.x,b2.x),y:Math.min(a.y,b2.y),
+        w:Math.max(a.x+a.w,b2.x+b2.w)-Math.min(a.x,b2.x),
+        h:Math.max(a.y+a.h,b2.y+b2.h)-Math.min(a.y,b2.y)});
+      let cur={...box};
+      const touches=(a,c)=>c&&c.x<a.x+a.w+pad&&c.x+c.w>a.x-pad&&c.y<a.y+a.h+pad&&c.y+c.h>a.y-pad
+                       &&c.w<a.w+3*pad&&c.h<a.h+3*pad;
+      let moved=true;
+      while(moved){ moved=false;
+        if(i0>0){const c=abs(kids[i0-1]); if(touches(cur,c)){cur=grow(cur,c);i0--;moved=true;}}
+        if(i1<kids.length-1){const c=abs(kids[i1+1]); if(touches(cur,c)){cur=grow(cur,c);i1++;moved=true;}}
+      }
+      const g=doc.createElementNS('http://www.w3.org/2000/svg','g');
+      host.insertBefore(g,kids[i0]);
+      for(let i=i0;i<=i1;i++){ claimed.add(kids[i]); g.appendChild(kids[i]); }
+      const a=abs(g);
+      made.push({g,a});
+    }
+    made.sort((u,v)=>u.a.y-v.a.y||u.a.x-v.a.x);
+    /* HIS OWN PARKED VEHICLES COME OFF THE ROAD. He drew a few lorries
+       standing on the tarmac; with our traffic running past them they read
+       as stalled. Anything of his sitting on one of the routes goes; what he
+       parked off the road - at a loading bay, in a yard - stays. */
+    const onRoute=a=>{
+      for(const R of routes){
+        const pr=doc.createElementNS('http://www.w3.org/2000/svg','path');
+        pr.setAttribute('d',R.d); svg.appendChild(pr);
+        let hit=false;
+        const L=pr.getTotalLength(), N=Math.max(12,Math.round(L/24));
+        const cx=a.x+a.w/2, cy=a.y+a.h/2, lim=(R.pitch||41)*(R.lanes||2)*0.62;
+        for(let i=0;i<=N;i++){
+          const q=pr.getPointAtLength(L*i/N);
+          if(Math.hypot(q.x-cx,q.y-cy)<lim){hit=true;break;}
+        }
+        pr.remove(); if(hit) return true;
+      }
+      return false;
+    };
+    /* AND THE SHADOW HE DREW UNDER IT GOES WITH IT. He draws a lorry's
+       shadow as its own flat black shape beside the lorry, so taking the
+       lorry off his road left the shadow lying there - a black slab parked
+       on the tarmac with our traffic driving through it. */
+    const dark=e=>{const f=(e.getAttribute('fill')||'').trim().toLowerCase();
+      if(!f||f.charAt(0)!=='#') return f==='black';
+      const h=f.length===4? f[1]+f[1]+f[2]+f[2]+f[3]+f[3] : f.slice(1,7);
+      if(h.length<6) return false;
+      const v=parseInt(h,16); if(isNaN(v)) return false;
+      return ((v>>16&255)+(v>>8&255)+(v&255))/3 < 48;};
+    const orphan=a=>{
+      [...svg.querySelectorAll('path,polygon,rect,ellipse,circle')].forEach(e=>{
+        if(!dark(e)) return;
+        const c=abs(e); if(!c) return;
+        if(c.w>a.w*1.8||c.h>a.h*1.8||c.w<a.w*0.3||c.h<a.h*0.3) return;
+        const ox=Math.min(a.x+a.w,c.x+c.w)-Math.max(a.x,c.x);
+        const oy=Math.min(a.y+a.h,c.y+c.h)-Math.max(a.y,c.y);
+        if(ox<=0||oy<=0) return;
+        if(ox*oy < Math.min(a.w*a.h,c.w*c.h)*0.3) return;
+        e.remove();
+      });
+    };
+    const dropped=[];
+    for(let i=made.length-1;i>=0;i--){
+      if(!onRoute(made[i].a)) continue;
+      orphan(made[i].a);
+      made[i].g.remove(); dropped.push(i); made.splice(i,1);
+    }
+    const found=made.map((m,i)=>{
+      m.g.setAttribute('data-veh',String(i));
+      return {i,x:+m.a.x.toFixed(1),y:+m.a.y.toFixed(1),w:+m.a.w.toFixed(1),h:+m.a.h.toFixed(1)};
+    });
+    found.dropped=dropped.length;
+
+    const NS='http://www.w3.org/2000/svg';
+    /* put a group on a track: wrapper carries the offset, inner carries the run */
+    const track=(g,axis,a,b,dur,delay)=>{
+      const run=doc.createElementNS(NS,'g');
+      run.setAttribute('class','run');
+      run.setAttribute('style','--a:'+a+'px;--b:'+b+'px;--dur:'+dur+'s;--dly:'+delay+'s');
+      run.setAttribute('data-axis',axis);
+      g.parentNode.insertBefore(run,g);
+      run.appendChild(g);
+      return run;
+    };
+
+    /* his own vehicles, set running on the lane he drew them in */
+    (cfg.drive||[]).forEach(d=>{
+      const m=made[d.veh]; if(!m) return;
+      const at = d.axis==='x' ? m.a.x : m.a.y;
+      const a=d.from-at, b=d.to-at;
+      const run=track(m.g,d.axis,a.toFixed(1),b.toFixed(1),d.dur,0);
+      for(let c=1;c<=(d.clones||0);c++){
+        const cp=run.cloneNode(true);
+        cp.setAttribute('style','--a:'+a.toFixed(1)+'px;--b:'+b.toFixed(1)+'px;--dur:'+d.dur+'s;--dly:'+
+          (-d.dur*c/(d.clones+1)).toFixed(2)+'s');
+        run.parentNode.insertBefore(cp,run);
+      }
+    });
+
+    /* ---- past the edge of his artboard -----------------------------------
+       His own pieces carried into the flank: the industrial strip on its own
+       rhythm, and his tree clump scattered. Drawn first, so everything he
+       actually drew still paints over it inside his artboard. */
+    let frontArt=null, front=null;
+    if(bleedart.length){
+      const back=doc.createElementNS(NS,'g');
+      back.setAttribute('data-bleedart','1');
+      svg.insertBefore(back, svg.firstElementChild&&svg.firstElementChild.tagName==='defs'
+        ? svg.firstElementChild.nextSibling : svg.firstChild);
+      const put=(href,x,y,w,h,extra,over)=>{
+        const im=doc.createElementNS(NS,'image');
+        im.setAttribute('href','assets/img/'+href);
+        im.setAttribute('x',x.toFixed(1)); im.setAttribute('y',y.toFixed(1));
+        im.setAttribute('width',w.toFixed(1));
+        if(h) im.setAttribute('height',h.toFixed(1));
+        if(extra) im.setAttribute('transform',extra);
+        (over?front:back).appendChild(im);
+      };
+      const RATIO={'industrial.webp':909/4034,'trees.webp':454/269,
+                   'treerow.webp':1699/299,'forestclump.webp':667/1446};
+      /* a few of his own tree clumps also go in FRONT, to close the hard
+         vertical joint his forest export leaves where one clump abuts the
+         next - he gave the clump for exactly this */
+      front=doc.createElementNS(NS,'g');
+      front.setAttribute('data-bleedart','front');
+      bleedart.forEach(a=>{
+        if(a.scatter){
+          let sd=a.seed||1;
+          const rnd=()=>{ sd=(sd*1103515245+12345)&0x7fffffff; return sd/0x7fffffff; };
+          const [bx,by,bw,bh]=a.box;
+          for(let i=0;i<a.n;i++){
+            const w=a.w*(0.72+rnd()*0.6);
+            const h=w*RATIO[a.scatter];
+            put(a.scatter, bx+rnd()*(bw-w*0.4)-w*0.3, by+rnd()*(bh-h*0.4)-h*0.3, w, h,
+                'rotate('+Math.round(rnd()*360)+' '+
+                (bx+bw/2).toFixed(0)+' '+(by+bh/2).toFixed(0)+')', a.over);
+          }
+        } else {
+          put(a.img, a.x, a.y, a.w, a.w*RATIO[a.img], null, a.over);
+        }
+      });
+      if(front.children.length) frontArt=front;
+    }
+
+    /* HIS OWN EXPORT LEAVES A HAIRLINE where he drew his road in two pieces.
+       Patched with the tarmac and the lane lines either side of it, so the
+       road reads as the one road he drew. */
+    (cfg.patch||[]).forEach(q=>{
+      const r=doc.createElementNS(NS,'rect');
+      r.setAttribute('x',q[0]); r.setAttribute('y',q[1]);
+      r.setAttribute('width',q[2]); r.setAttribute('height',q[3]);
+      r.setAttribute('fill',q[4]); r.setAttribute('data-patch','1');
+      svg.appendChild(r);
+    });
+
+    /* ---- the slot his traffic drives in ----------------------------------
+       Everything he drew OVER the road - his signs, his clouds, his rock
+       lines, his forest - moves after it, so the cars run under them. */
+    const slot=doc.createElementNS(NS,'g');
+    slot.setAttribute('data-fleetslot','1');
+    if(cfg.clipTop){
+      let defs0=svg.querySelector('defs');
+      if(!defs0){ defs0=doc.createElementNS(NS,'defs'); svg.insertBefore(defs0,svg.firstChild); }
+      const cp=doc.createElementNS(NS,'clipPath');
+      cp.setAttribute('id','fleetclip-'+k);
+      const rr=doc.createElementNS(NS,'rect');
+      rr.setAttribute('x','-600'); rr.setAttribute('y',String(cfg.clipTop));
+      rr.setAttribute('width','3400'); rr.setAttribute('height','9000');
+      cp.appendChild(rr); defs0.appendChild(cp);
+      slot.setAttribute('clip-path','url(#fleetclip-'+k+')');
+    }
+    svg.appendChild(slot);
+    /* His clouds and rock lines sit several groups deep, so lifting only the
+       root's own children moved nothing and the traffic drew over them. Each
+       one is lifted to the root with its ancestors' matrix baked in, so it
+       lands exactly where he drew it - and anything under a clip or a filter
+       is left alone rather than risked. */
+    /* how far his sign rides against the ground. A board that hangs on its
+       own posts can float; the hero's gantry is bolted across his ramp, so
+       that one moves only a little or it tears off the road. */
+    if(cfg.signTravel!=null)
+      svg.querySelectorAll('[data-sign]').forEach(g=>
+        g.setAttribute('data-sign-travel',String(cfg.signTravel)));
+
+    let raisedOut=''; const wanted=[];
+    const cands=[...svg.children,...svg.querySelectorAll('[data-sign],[id]')];
+    cands.forEach(e=>{
+      if(!e||!e.parentNode) return;
+      if(wanted.some(w=>w.el===e)) return;
+      /* his ground first, his signs over it, his sky over everything: a sign
+         is bolted over the rocks, not buried under them */
+      const rank = /^(Mountains|Forest|Grass_BG)/i.test(e.id||'') ? 0
+                 : e.hasAttribute('data-sign') ? 1
+                 : /^Cloud/i.test(e.id||'') ? 2 : -1;
+      if(rank<0) return;
+      /* his rock lines sit inside a clipped group, which used to stop them
+         being raised at all - so the cars drove over the rocks. The clip is
+         carried up with them instead. */
+      let clipAnc=null;
+      for(let a=e.parentNode; a && a!==svg; a=a.parentNode){
+        if(a.getAttribute('mask')||a.getAttribute('filter')||
+           a.getAttribute('opacity')) return;
+        if(a.getAttribute('clip-path')){ if(clipAnc) return; clipAnc=a; }
+        if(wanted.some(w=>w.el===a)) return;      /* an ancestor already goes */
+      }
+      wanted.push({el:e,rank,clipAnc});
+    });
+    wanted.sort((a,b)=>a.rank-b.rank);
+    raisedOut=wanted.length+' raised';
+    const mstr=m=>'matrix('+[m.a,m.b,m.c,m.d,m.e,m.f].map(v=>(+v).toFixed(5)).join(',')+')';
+    const wraps=new Map();
+    let skyFirst=null;
+    wanted.forEach(w=>{
+      const par=w.el.parentNode;
+      if(!par) return;
+      /* a cloud is the highest thing he drew, so it overtakes everything -
+         and it takes the shadow he drew under it with it, as one piece */
+      if(w.rank===2&&/^Cloud/i.test(w.el.id||''))
+        w.el.setAttribute('data-para','cloud');
+      if(par===svg && !w.clipAnc){
+        svg.appendChild(w.el);
+        if(w.rank===2&&!skyFirst) skyFirst=w.el;
+        return;
+      }
+      let host=svg, base=null;
+      if(w.clipAnc){
+        base=w.clipAnc.getCTM();
+        let wr=wraps.get(w.clipAnc);
+        if(!wr){
+          wr=doc.createElementNS(NS,'g');
+          wr.setAttribute('transform',mstr(base));
+          wr.setAttribute('clip-path',w.clipAnc.getAttribute('clip-path'));
+          svg.appendChild(wr); wraps.set(w.clipAnc,wr);
+        }
+        host=wr;
+      }
+      const m=par.getCTM? par.getCTM() : null;
+      if(m){
+        const rel = base ? base.inverse().multiply(m) : m;
+        const own=w.el.getAttribute('transform')||'';
+        w.el.setAttribute('transform',mstr(rel)+' '+own);
+      }
+      host.appendChild(w.el);
+      if(w.rank===2&&!skyFirst) skyFirst=host===svg?w.el:null;
+    });
+
+    /* his clumps go on last of all, so they close the joint rather than
+       sitting under the forest they are there to mend */
+    if(frontArt) svg.appendChild(frontArt);
+
+    /* HIS SECTIONS MEET WITHOUT A JOIN. Each artboard carries its own sky or
+       sea as one gradient; where the one above finishes a shade off where the
+       one below starts, the page shows a band right across it. The first stop
+       of his own gradient is set to the colour the section above ends on, so
+       the two are one gradient running through. */
+    if(cfg.joinTop){
+      let bg=svg.querySelector('[id="ocean"]');
+      if(!bg){
+        let best=null,ba=0;
+        svg.querySelectorAll('polygon,rect,path').forEach(e=>{
+          const a2=abs(e); if(!a2) return;
+          const ar=Math.abs(a2.w*a2.h);
+          if(ar>ba&&(e.getAttribute('fill')||'').indexOf('url(')===0){ba=ar;best=e;}
+        });
+        bg=best;
+      }
+      const f=bg&&bg.getAttribute('fill');
+      const m=f&&/^url\(#(.+)\)$/.exec(f);
+      if(m){
+        const g=svg.querySelector('[id="'+m[1]+'"]');
+        /* which end of his gradient is the TOP of the artboard: he draws them
+           both ways round, and setting the wrong stop repaints his whole sea */
+        const ss=g?[...g.querySelectorAll('stop')]:[];
+        if(ss.length){
+          const y1=parseFloat(g.getAttribute('y1')||'0');
+          const y2=parseFloat(g.getAttribute('y2')||'1');
+          (y1>y2? ss[ss.length-1] : ss[0]).setAttribute('stop-color',cfg.joinTop);
+        }
+      }
+    }
+
+    /* AND THE SECTION ABOVE HAS TO ARRIVE AT THAT COLOUR. One stop is one
+       colour, but his sea in the hero runs left to right - #004ca2 on one
+       side of the artboard to #045dc3 on the other - so its foot met the
+       flat top of the next artboard at every shade but one, and the page
+       drew a line straight across. His own sea is left alone and carried
+       the last few hundred units into the colour the next one starts on,
+       over a fade long enough that nothing reads as a change. Only his
+       water is touched: the road, the gantry and the board over it are
+       drawn after it and paint on top, as he drew them. */
+    if(cfg.joinBelow){
+      let bg=svg.querySelector('[id="ocean"]');
+      if(!bg){
+        let best=null,ba=0;
+        svg.querySelectorAll('polygon,rect,path').forEach(e=>{
+          const a2=abs(e); if(!a2) return;
+          const ar=Math.abs(a2.w*a2.h);
+          if(ar>ba&&(e.getAttribute('fill')||'').indexOf('url(')===0){ba=ar;best=e;}
+        });
+        bg=best;
+      }
+      if(bg&&bg.parentNode){
+        const H=parseFloat((svg.getAttribute('viewBox')||'0 0 0 0').split(/\s+/)[3])||0;
+        const span=cfg.joinFade||420;
+        const gid=k+'_joinfade';
+        let defs=svg.querySelector('defs');
+        if(!defs){defs=doc.createElementNS(NS,'defs'); svg.insertBefore(defs,svg.firstChild);}
+        const lg=doc.createElementNS(NS,'linearGradient');
+        lg.setAttribute('id',gid); lg.setAttribute('gradientUnits','userSpaceOnUse');
+        lg.setAttribute('x1','0'); lg.setAttribute('y1',String(H-span));
+        lg.setAttribute('x2','0'); lg.setAttribute('y2',String(H));
+        [[0,'0'],[1,'1']].forEach(([o,a])=>{
+          const st=doc.createElementNS(NS,'stop');
+          st.setAttribute('offset',String(o));
+          st.setAttribute('stop-color',cfg.joinBelow);
+          st.setAttribute('stop-opacity',a);
+          lg.appendChild(st);
+        });
+        defs.appendChild(lg);
+        const veil=bg.cloneNode(true);
+        veil.removeAttribute('id');
+        veil.setAttribute('fill','url(#'+gid+')');
+        veil.setAttribute('data-joinfade','1');
+        bg.parentNode.insertBefore(veil,bg.nextSibling);
+      }
+    }
+
+    /* HIS LAMPS BELONG TO HIS BOARD. He draws the light each lamp throws
+       down the face of a sign as its own little group of gradient wedges,
+       and on the board he set across a join that group was left outside the
+       assembly - so the light lay on his grass behind the sign instead of
+       down its front. On the boards that came out whole it sits inside the
+       assembly, last, over the face. Any such group standing over one of
+       his boards is put there too, carrying the frame it was drawn in. */
+    [...svg.querySelectorAll('[data-sign]')].forEach(sgn=>{
+      const sb=abs(sgn); if(!sb) return;
+      [...svg.querySelectorAll('g')].forEach(g2=>{
+        if(g2===sgn||sgn.contains(g2)||g2.contains(sgn)) return;
+        if(g2.closest('[data-sign]')) return;
+        const kids=[...g2.children];
+        if(kids.length<2||kids.length>8) return;
+        if(!kids.every(e=>/^(polygon|path)$/.test(e.tagName)&&
+            (e.getAttribute('fill')||'').indexOf('url(')===0)) return;
+        const a2=abs(g2); if(!a2||a2.h<60) return;
+        const ox=Math.min(sb.x+sb.w,a2.x+a2.w)-Math.max(sb.x,a2.x);
+        const oy=Math.min(sb.y+sb.h,a2.y+a2.h)-Math.max(sb.y,a2.y);
+        if(ox<a2.w*0.6||oy<a2.h*0.4) return;          /* it must stand over it */
+        const m1=g2.parentNode.getCTM&&g2.parentNode.getCTM();
+        const m2=sgn.getCTM&&sgn.getCTM();
+        if(m1&&m2){
+          const r=m2.inverse().multiply(m1);
+          const hold=doc.createElementNS(NS,'g');
+          hold.setAttribute('transform','matrix('+
+            [r.a,r.b,r.c,r.d,r.e,r.f].map(v=>(+v).toFixed(5)).join(',')+')');
+          hold.appendChild(g2); sgn.appendChild(hold);
+        } else sgn.appendChild(g2);
+      });
+    });
+
+    /* HIS BRIDGE IS OVER THE ROAD, NOT UNDER IT. The cables that cross the
+       middle of his span are drawn before the deck, so the traffic ran over
+       them. Everything inside the box they occupy goes up with his sky -
+       both cables and the four anchors - and the cars pass under, the way
+       they pass under his truss. */
+    (cfg.over||[]).forEach(box=>{
+      const take=[];
+      svg.querySelectorAll('g,path,polygon,rect,circle,ellipse').forEach(el=>{
+        if(el.closest('[data-fleetslot]')||el.closest('[data-sign]')) return;
+        if(take.some(t=>t.contains(el))) return;
+        const a2=abs(el); if(!a2) return;
+        const w=Math.abs(a2.w), h=Math.abs(a2.h);
+        const x=Math.min(a2.x,a2.x+a2.w), y=Math.min(a2.y,a2.y+a2.h);
+        if(w<3||h<3) return;
+        if(x<box[0]||y<box[1]||x+w>box[0]+box[2]||y+h>box[1]+box[3]) return;
+        take.push(el);
+      });
+      take.forEach(el=>{
+        const par=el.parentNode;
+        const m=par&&par.getCTM&&par!==svg? par.getCTM() : null;
+        if(m){ const own=el.getAttribute('transform')||'';
+          el.setAttribute('transform','matrix('+
+            [m.a,m.b,m.c,m.d,m.e,m.f].map(v=>(+v).toFixed(5)).join(',')+') '+own); }
+        if(skyFirst) svg.insertBefore(el,skyFirst); else svg.appendChild(el);
+      });
+      raisedOut+=' | over '+take.length;
+    });
+
+    /* ---- his roads, measured into lanes ---------------------------------
+       Each route is a centreline measured off his own art; the lanes are
+       offset from it on his own lane pitch, so a curve carries its vehicles
+       round it properly and every lane lands where his road actually is. */
+    const lanesOut=[];
+    if(routes.length){
+      const probe=doc.createElementNS(NS,'path'); svg.appendChild(probe);
+      routes.forEach(R=>{
+        const n=R.lanes||1;
+        for(let li=0; li<n; li++){
+          const off=(li-(n-1)/2)*R.pitch;
+          probe.setAttribute('d',R.d);
+          const L=probe.getTotalLength(), N=Math.max(24,Math.round(L/9));
+          let pts=[];
+          for(let i=0;i<=N;i++){
+            const s2=L*i/N;
+            const a2=probe.getPointAtLength(Math.max(0,s2-1.2));
+            const c2=probe.getPointAtLength(Math.min(L,s2+1.2));
+            const o2=probe.getPointAtLength(s2);
+            const dx=c2.x-a2.x, dy=c2.y-a2.y, m=Math.hypot(dx,dy)||1;
+            pts.push([+(o2.x-dy/m*off).toFixed(1), +(o2.y+dx/m*off).toFixed(1)]);
+          }
+          /* the outer half of the lanes runs the other way */
+          if(li < n/2) pts=pts.reverse();
+          lanesOut.push({road:R.id, lane:li, pitch:R.pitch, pts});
+        }
+      });
+      probe.remove();
+    }
+
+    /* his aircraft, flown along a path off his own runway */
+    const flightOut=[];
+    /* A SHADOW GOES UNDER WHAT THROWS IT. Each of these is put in just
+       below his sky, so whichever goes in last ends up on top: the shadows
+       go first and his aircraft fly over them. */
+    (cfg.flights||[]).slice().sort((a,b)=>(b.shadow?1:0)-(a.shadow?1:0)).forEach(f=>{
+      let best=null,bd=1e9;
+      svg.querySelectorAll('g,path').forEach(el=>{
+        const a=abs(el); if(!a) return;
+        const dd=Math.abs(a.x-f.box[0])+Math.abs(a.y-f.box[1])+
+                 Math.abs(a.w-f.box[2])+Math.abs(a.h-f.box[3]);
+        if(dd<bd){bd=dd;best=el;}
+      });
+      if(!best||bd>14){flightOut.push(f.name+' MISS '+bd.toFixed(1));return}
+      const a=abs(best);
+      if(f.shadow){
+        best.setAttribute('fill','#000'); best.setAttribute('opacity','0.26');
+        best.querySelectorAll&&best.querySelectorAll('[fill]').forEach(e2=>e2.setAttribute('fill','#000'));
+      }
+      const outer=doc.createElementNS(NS,'g');
+      const scaler=doc.createElementNS(NS,'g');
+      const centre=doc.createElementNS(NS,'g');
+      centre.setAttribute('transform','translate('+(-(a.x+a.w/2)).toFixed(2)+','+
+        (-(a.y+a.h/2)).toFixed(2)+')');
+      /* IN THE AIR, NOT UNDER HIS PORT. Left where he drew it, a plane on his
+         runway is painted over by every quay and shed that comes after it in
+         his file. It flies at the top of the section, under his sky. */
+      const par=best.parentNode;
+      const pm=par.getCTM&&par!==svg? par.getCTM() : null;
+      const lift=doc.createElementNS(NS,'g');
+      if(pm) lift.setAttribute('transform','matrix('+
+        [pm.a,pm.b,pm.c,pm.d,pm.e,pm.f].map(v=>(+v).toFixed(5)).join(',')+')');
+      if(skyFirst) svg.insertBefore(outer,skyFirst); else svg.appendChild(outer);
+      lift.appendChild(best); centre.appendChild(lift);
+      scaler.appendChild(centre); outer.appendChild(scaler);
+      const mo=doc.createElementNS(NS,'animateMotion');
+      mo.setAttribute('path',f.path); mo.setAttribute('dur',f.dur+'s');
+      mo.setAttribute('repeatCount','indefinite'); mo.setAttribute('rotate','auto');
+      outer.appendChild(mo);
+      if(f.grow&&f.grow!==1){
+        const sc=doc.createElementNS(NS,'animateTransform');
+        sc.setAttribute('attributeName','transform'); sc.setAttribute('type','scale');
+        sc.setAttribute('values','1;1;'+f.grow); sc.setAttribute('keyTimes','0;0.25;1');
+        sc.setAttribute('dur',f.dur+'s'); sc.setAttribute('repeatCount','indefinite');
+        scaler.appendChild(sc);
+      }
+      if(f.fade){
+        const op=doc.createElementNS(NS,'animate');
+        op.setAttribute('attributeName','opacity');
+        op.setAttribute('values','0;1;1;0;0');
+        const kt=f.fade.map(v=>(v/100).toFixed(3));
+        op.setAttribute('keyTimes','0;'+kt[1]+';'+kt[2]+';'+kt[3]+';1');
+        op.setAttribute('dur',f.dur+'s'); op.setAttribute('repeatCount','indefinite');
+        outer.appendChild(op);
+      }
+      flightOut.push(f.name+' ok '+bd.toFixed(1));
+    });
+
+    /* his ship, his boat, his plane - each moved with its own shadow, and
+       the shadow made a shadow: black, and see-through. */
+    const moversOut=[];
+    const findBox=box=>{
+      let best=null,bd=1e9;
+      svg.querySelectorAll('g,path').forEach(el=>{
+        const a2=abs(el); if(!a2) return;
+        const dd=Math.abs(a2.x-box[0])+Math.abs(a2.y-box[1])+
+                 Math.abs(a2.w-box[2])+Math.abs(a2.h-box[3]);
+        if(dd<bd){bd=dd;best=el;}
+      });
+      return {el:best,err:bd};
+    };
+    (cfg.movers||[]).forEach(mv=>{
+      const parts=mv.parts.map(findBox);
+      if(parts.some(q=>!q.el||q.err>18)){
+        moversOut.push(mv.name+' MISS '+parts.map(q=>q.err.toFixed(0)).join('/')); return; }
+      const a0=abs(parts[0].el);
+      const outer=doc.createElementNS(NS,'g');
+      const centre=doc.createElementNS(NS,'g');
+      centre.setAttribute('transform','translate('+(-(a0.x+a0.w/2)).toFixed(2)+','+
+        (-(a0.y+a0.h/2)).toFixed(2)+')');
+      /* HIS SHIP IS ON THE SEA, NOT ON A SIGN. The sign sweep had taken his
+         container ship into the gantry assembly beside it, and the whole
+         assembly is on parallax - so his ship rose and fell with the sign
+         instead of sailing. Anything that moves comes out of a parallax
+         group and is put back exactly where he drew it, in the same slot.
+         His flyover is the other way about: he drew it early in the file, so
+         his port was painted over it. It flies up under the sky with his
+         other aircraft. */
+      const par0=parts[0].el.parentNode;
+      let tagged=null;
+      for(let a1=par0; a1&&a1!==svg; a1=a1.parentNode)
+        if(a1.getAttribute&&(a1.getAttribute('data-sign')||a1.getAttribute('data-para'))) tagged=a1;
+      const home=(mv.lift||tagged)?(()=>{
+        const m=par0.getCTM&&par0!==svg? par0.getCTM() : null;
+        const lift=doc.createElementNS(NS,'g');
+        if(m) lift.setAttribute('transform','matrix('+
+          [m.a,m.b,m.c,m.d,m.e,m.f].map(v=>(+v).toFixed(5)).join(',')+')');
+        return lift;
+      })():null;
+      if(mv.lift){ if(skyFirst) svg.insertBefore(outer,skyFirst); else svg.appendChild(outer); }
+      else if(tagged) tagged.parentNode.insertBefore(outer,tagged);
+      else par0.insertBefore(outer,parts[0].el);
+      const order=parts.map((q,qi)=>qi)
+        .sort((a,b)=>((mv.shadow||[]).includes(b)?1:0)-((mv.shadow||[]).includes(a)?1:0));
+      order.map(qi=>[parts[qi],qi]).forEach(([q,qi])=>{
+        if((mv.shadow||[]).includes(qi)){
+          q.el.setAttribute('fill','#000');
+          q.el.setAttribute('opacity','0.26');
+          q.el.querySelectorAll('[fill]').forEach(e2=>{e2.setAttribute('fill','#000');});
+        }
+        (home||centre).appendChild(q.el);
+      });
+      if(home) centre.appendChild(home);
+      outer.appendChild(centre);
+      const mo=doc.createElementNS(NS,'animateMotion');
+      mo.setAttribute('path',mv.path); mo.setAttribute('dur',mv.dur+'s');
+      mo.setAttribute('begin',(mv.dly||0)+'s');
+      mo.setAttribute('repeatCount','indefinite');
+      mo.setAttribute('calcMode','linear');
+      outer.appendChild(mo);
+      if(mv.fade){
+        const op=doc.createElementNS(NS,'animate');
+        op.setAttribute('attributeName','opacity');
+        op.setAttribute('values','0;1;1;0;0');
+        const kt=mv.fade.map(v=>(v/100).toFixed(3));
+        op.setAttribute('keyTimes','0;'+kt[1]+';'+kt[2]+';'+kt[3]+';1');
+        op.setAttribute('dur',mv.dur+'s');
+        op.setAttribute('begin',(mv.dly||0)+'s');
+        op.setAttribute('repeatCount','indefinite');
+        outer.appendChild(op);
+      }
+      outer.setAttribute('data-mover',mv.name);
+      moversOut.push(mv.name+' ok');
+    });
+
+    return {found, dropped:found.dropped, raised:raisedOut, roadLanes:lanesOut, flights:flightOut, movers:moversOut,
+            svg:new XMLSerializer().serializeToString(svg)};
+  },[src,cfg,k,routes,sprites,bleedart]);
+  fs.writeFileSync(file, r.svg);
+  report[k]=r.found;
+
+  lanes[k]=r.roadLanes||[];
+  console.log('==',k,r.found.length,'his vehicles','('+(r.dropped||0)+' off the road) |',(r.roadLanes||[]).length,'lanes |',r.raised,'|',
+    (r.flights||[]).join(', '),(r.movers||[]).join(', '));
+}
+fs.writeFileSync(path.join(__dirname,'vehicles.json'),JSON.stringify(report,null,1));
+/* stitch the lanes his roads carry across a section seam into one run, so a
+   vehicle leaving the bottom of a section is the same vehicle arriving at the
+   top of the next instead of vanishing and a stranger appearing */
+const runs=[]; const used=new Set();
+for(const chain of CHAINS){
+  const first=chain[0].split(':');
+  const nL=(lanes[first[0]]||[]).filter(l=>l.road===first[1]).length;
+  for(let li=0; li<nL; li++){
+    const segs=[];
+    chain.forEach(step=>{
+      const [k2,rid]=step.split(':');
+      const l=(lanes[k2]||[]).find(q=>q.road===rid&&q.lane===li);
+      if(l){ segs.push({k:k2,pitch:l.pitch,pts:l.pts}); used.add(k2+':'+rid+':'+li); }
+    });
+    if(segs.length) runs.push(segs);
+  }
+}
+Object.keys(lanes).forEach(k2=>lanes[k2].forEach(l=>{
+  if(used.has(k2+':'+l.road+':'+l.lane)) return;
+  runs.push([{k:k2,pitch:l.pitch,pts:l.pts}]);
+}));
+
+/* -------- HIS MOBILE ROADS ------------------------------------------------
+ * The phone is not the desktop page narrowed: it is his own mobile artboards,
+ * and the road on each of them is a band across the top of a section rather
+ * than one drive running the length of the page. So each one is its own run,
+ * open at both ends - his tarmac leaves the screen on both sides, which is
+ * what stops a car appearing out of nothing - and a car that runs off one end
+ * comes back on at the other.
+ *
+ * The centreline is walked off his own art by tools/qa/mroutes.js. The lanes
+ * are that line pushed out half his tarmac to each side: the near one runs
+ * the way the line was walked, the far one against it, which is the two-way
+ * road he drew. */
+const MR_FILE = path.join(__dirname, 'mroutes.json');
+if (fs.existsSync(MR_FILE)) {
+  const MR = JSON.parse(fs.readFileSync(MR_FILE, 'utf8'));
+  /* which section shows which of his roads, and in which of its boxes.
+     m2 has no road on it - it is his gantry and his sky - so it is not here. */
+  const MSEC = [
+    { id: 'm1', route: 'm1',   sel: '.mstrip > svg' },
+    { id: 'm4', route: 'm4',   sel: '.mstrip > svg' },
+    { id: 'm5', route: 'road', sel: '.mtop > svg' },
+    { id: 'm6', route: 'road', sel: '.mtop > svg' },
+    { id: 'm7', route: 'road', sel: '.mtop > svg' },
+    { id: 'm8', route: 'road', sel: '.mtop > svg' },
+    { id: 'm9', route: 'road', sel: '.mtop > svg' },
+  ];
+  let added = 0;
+  for (const M of MSEC) {
+    const R = MR[M.route];
+    if (!R) { console.log('  mobile', M.id, '- no route'); continue; }
+    const pitch = +(R.width / 2).toFixed(2);        /* two lanes on his tarmac */
+    const c = R.pts;
+    const off = d => {                              /* d = +1 his side, -1 the other */
+      const out = [];
+      for (let i = 0; i < c.length; i++) {
+        const a = c[Math.max(0, i - 2)], b2 = c[Math.min(c.length - 1, i + 2)];
+        let tx = b2[0] - a[0], ty = b2[1] - a[1];
+        const m = Math.hypot(tx, ty) || 1; tx /= m; ty /= m;
+        /* the right hand of something travelling this way, in screen axes */
+        out.push([+(c[i][0] - ty * pitch / 2 * d).toFixed(2),
+                  +(c[i][1] + tx * pitch / 2 * d).toFixed(2)]);
+      }
+      return out;
+    };
+    runs.push([{ k: M.id, m: 1, sel: M.sel, pitch, pts: off(1) }]);
+    runs.push([{ k: M.id, m: 1, sel: M.sel, pitch, pts: off(-1).reverse() }]);
+    added += 2;
+  }
+  console.log('  mobile:', added, 'lanes on', MSEC.length, 'of his sections');
+}
+
+fs.writeFileSync(`${ROOT}/assets/js/qa-lanes.js`,
+  'window.H19_QA_RUNS='+JSON.stringify(runs)+';');
+console.log('runs',runs.length,'| chained',runs.filter(r2=>r2.length>1).length);
+
+await b.close();})();

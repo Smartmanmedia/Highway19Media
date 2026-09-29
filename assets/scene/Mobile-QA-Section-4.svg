@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" width="1122.01" height="3362.8" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1122.01 3362.8">
+  <defs>
+    <linearGradient id="linear-gradient" x1="546.6" y1="3362.8" x2="546.6" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset=".65" stop-color="#000"/>
+      <stop offset=".73" stop-color="#000003"/>
+      <stop offset=".79" stop-color="#00030d"/>
+      <stop offset=".85" stop-color="#00081d"/>
+      <stop offset=".9" stop-color="#000f35"/>
+      <stop offset=".95" stop-color="#001853"/>
+      <stop offset="1" stop-color="#002275"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="-5759.23" y1="3138.73" x2="-5759.23" y2="3128.28" gradientTransform="translate(-4281.9178 -730.8292) rotate(-136.3107) scale(.6847) skewX(-2.6187)" gradientUnits="userSpaceOnUse">
+      <stop offset=".37" stop-color="gray"/>
+      <stop offset="1" stop-color="#000"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="1941.4" y1="6283.2" x2="1941.4" y2="6293.65" gradientTransform="translate(-3954.5181 -1544.9486) rotate(-43.6893) scale(.6847) skewX(2.6187)" xlink:href="#linear-gradient-2"/>
+    <linearGradient id="linear-gradient-4" x1="-5684.28" y1="3063.78" x2="-5684.28" y2="3053.33" gradientTransform="translate(-4281.918 -730.8292) rotate(-136.3107) scale(.6847) skewX(-2.6187)" xlink:href="#linear-gradient-2"/>
+    <linearGradient id="linear-gradient-5" x1="1866.45" y1="6208.25" x2="1866.45" y2="6218.7" gradientTransform="translate(-3954.518 -1544.9483) rotate(-43.6893) scale(.6847) skewX(2.6187)" xlink:href="#linear-gradient-2"/>
+    <linearGradient id="linear-gradient-6" x1="-15998.46" y1="-1270.35" x2="-15998.46" y2="-1297.43" gradientTransform="translate(3937.0285 1327.522) scale(.2407 .6689)" xlink:href="#linear-gradient-2"/>
+    <linearGradient id="linear-gradient-7" x1="-15998.45" y1="-1390.32" x2="-15998.45" y2="-1417.4" gradientTransform="translate(3937.0275 1488.0129) scale(.2407 .6689)" xlink:href="#linear-gradient-2"/>
+    <linearGradient id="linear-gradient-8" x1="230.96" y1="643.24" x2="230.96" y2="372.36" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff" stop-opacity=".4"/>
+      <stop offset="1" stop-color="#8c8c8c" stop-opacity=".1"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-9" x1="554.68" x2="554.68" xlink:href="#linear-gradient-8"/>
+    <linearGradient id="linear-gradient-10" x1="861.08" x2="861.08" xlink:href="#linear-gradient-8"/>
+    <linearGradient id="linear-gradient-11" x1="-4753.18" y1="-7333.73" x2="-4753.18" y2="-7604.61" gradientTransform="translate(-3895.8 -6944.2) rotate(-180)" xlink:href="#linear-gradient-8"/>
+    <linearGradient id="linear-gradient-12" x1="-4442.49" y1="-7329" x2="-4442.49" y2="-7599.87" gradientTransform="translate(-3895.8 -6944.2) rotate(-180)" xlink:href="#linear-gradient-8"/>
+    <linearGradient id="linear-gradient-13" x1="-4136.09" y1="-7329" x2="-4136.09" y2="-7599.87" gradientTransform="translate(-3895.8 -6944.2) rotate(-180)" xlink:href="#linear-gradient-8"/>
+  </defs>
+  <g id="Layer_1-2" data-name="Layer 1">
+    <g>
+      <rect width="1093.2" height="3362.8" fill="url(#linear-gradient)"/>
+      <rect x="63.05" y="1607.96" width="969.75" height="678.45" rx="30.05" ry="30.05" fill="#0f1c28" stroke="#cad9ea"/>
+      <rect x="62.61" y="2880.54" width="969.75" height="323.9" rx="10" ry="10" fill="#1562b7" stroke="#fff"/>
+      <rect x="208.48" y="3099.56" width="670.51" height="68.84" rx="10.47" ry="10.47" fill="#ffc72c" stroke="#12161c" stroke-width="2"/>
+      <text transform="translate(109.5928 1674.3501)" fill="#fff" font-family="Arial-BoldMT, Arial" font-size="31.99" font-weight="700" isolation="isolate" letter-spacing="-.01em"><tspan x="0" y="0">What does Highway 19 Media do?</tspan></text>
+      <text transform="translate(208.2695 2972.5638)" fill="#fff" font-family="BeVietnamPro-ExtraBold, &apos;Be Vietnam Pro&apos;" font-size="57.23" font-weight="700" isolation="isolate"><tspan x="0" y="0" letter-spacing="-.02em">LET’S FIND </tspan><tspan x="321.24" y="0" letter-spacing="-.03em">Y</tspan><tspan x="361.65" y="0" letter-spacing="-.02em">OUR </tspan><tspan x="501.69" y="0" letter-spacing="-.06em">R</tspan><tspan x="540.04" y="0" letter-spacing="-.06em">O</tspan><tspan x="584.05" y="0" letter-spacing="-.02em">AD</tspan></text>
+      <text transform="translate(451.3604 3142.8382)" fill="#12161c" font-family="BeVietnamPro-ExtraBold, &apos;Be Vietnam Pro&apos;" font-size="28.91" font-weight="700" isolation="isolate"><tspan x="0" y="0" letter-spacing=".05em">LET’S </tspan><tspan x="100.41" y="0" letter-spacing="-.05em">T</tspan><tspan x="119.17" y="0" letter-spacing=".06em">ALK</tspan></text>
+      <g>
+        <rect x="59.59" y="2321.89" width="969.75" height="74.43" rx="30.05" ry="30.05" stroke="#cad9ea"/>
+        <text transform="translate(111.6797 2369.1724)" fill="#fff" font-family="Arial-BoldMT, Arial" font-size="31.99" font-weight="700" letter-spacing="-.01em"><tspan x="0" y="0">Are you really local?</tspan></text>
+      </g>
+      <g>
+        <rect x="59.14" y="2543" width="969.75" height="74.43" rx="30.05" ry="30.05" stroke="#cad9ea"/>
+        <text transform="translate(109.6363 2592.8536)" fill="#fff" font-family="Arial-BoldMT, Arial" font-size="31.99" font-weight="700" letter-spacing="-.01em"><tspan x="0" y="0">What if I don’t know exactly what marketing I need?</tspan></text>
+      </g>
+      <g>
+        <rect x="59.14" y="2628.55" width="969.75" height="74.43" rx="30.05" ry="30.05" stroke="#cad9ea"/>
+        <text transform="translate(107.2363 2676.4837)" fill="#fff" font-family="Arial-BoldMT, Arial" font-size="31.99" font-weight="700" letter-spacing="-.01em"><tspan x="0" y="0">Can you work with my budget?</tspan></text>
+      </g>
+      <g>
+        <rect x="59.14" y="2718.75" width="969.75" height="74.43" rx="30.05" ry="30.05" stroke="#cad9ea"/>
+        <text transform="translate(109.7092 2764.8411)" fill="#fff" font-family="Arial-BoldMT, Arial" font-size="31.99" font-weight="700" letter-spacing="-.01em"><tspan x="0" y="0">Do I have to sign a long-term contract?</tspan></text>
+      </g>
+      <circle cx="987.72" cy="1657.2" r="16.8" fill="#00aa56"/>
+      <g>
+        <rect x="59.14" y="2407.82" width="969.75" height="125.22" rx="30.05" ry="30.05" stroke="#cad9ea"/>
+        <text transform="translate(107.2363 2459.5855)" fill="#fff" font-family="Arial-BoldMT, Arial" font-size="31.99" font-weight="700"><tspan letter-spacing="-.01em"><tspan x="0" y="0">What makes Highway 19 Media different</tspan></tspan><tspan letter-spacing="-.01em"><tspan x="0" y="38.39">from a freelancer or a large agency?</tspan></tspan></text>
+      </g>
+      <path d="M980.89,1657.46h13.33" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="3"/>
+      <circle cx="987.72" cy="2358.86" r="16.8" fill="#00aa56"/>
+      <path d="M987.56,2352.44v13.33M980.89,2359.11h13.33" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="3"/>
+      <circle cx="987.27" cy="2445.13" r="16.8" fill="#00aa56"/>
+      <path d="M987.11,2438.72v13.33M980.45,2445.39h13.33" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="3"/>
+      <circle cx="987.27" cy="2576.97" r="16.8" fill="#00aa56"/>
+      <path d="M987.11,2570.55v13.33M980.45,2577.22h13.33" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="3"/>
+      <circle cx="987.27" cy="2663.79" r="16.8" fill="#00aa56"/>
+      <path d="M987.11,2657.38v13.33M980.45,2664.04h13.33" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="3"/>
+      <circle cx="987.27" cy="2758.03" r="16.8" fill="#00aa56"/>
+      <path d="M987.11,2751.61v13.33M980.45,2758.28h13.33" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="3"/>
+      <text transform="translate(131.7148 1756.8755)" fill="#fff" font-family="BeVietnamPro-Light, &apos;Be Vietnam Pro&apos;" font-size="33.93" font-weight="300"><tspan x="0" y="0">Hig</tspan><tspan x="53.41" y="0" letter-spacing="-.02em">h</tspan><tspan x="72.27" y="0" letter-spacing="-.02em">w</tspan><tspan x="100.64" y="0" letter-spacing="0em">a</tspan><tspan x="121.88" y="0">y 19 M</tspan><tspan x="220.72" y="0" letter-spacing="0em">e</tspan><tspan x="240.78" y="0">dia </tspan><tspan x="300.46" y="0" letter-spacing="0em">h</tspan><tspan x="320.18" y="0">elps l</tspan><tspan x="403.21" y="0" letter-spacing="0em">o</tspan><tspan x="424.65" y="0">cal </tspan><tspan x="482.91" y="0" letter-spacing="-.09em">T</tspan><tspan x="501.67" y="0">am</tspan><tspan x="553.62" y="0" letter-spacing="0em">p</tspan><tspan x="575.41" y="0">a B</tspan><tspan x="627.22" y="0" letter-spacing="0em">a</tspan><tspan x="648.46" y="0">y busi</tspan><tspan x="741.67" y="0" letter-spacing="0em">n</tspan><tspan x="761.08" y="0">es</tspan><tspan x="797.99" y="0" letter-spacing="0em">s</tspan><tspan x="814.52" y="0">es </tspan><tspan x="0" y="56.23">with </tspan><tspan x="78.92" y="56.23" letter-spacing="-.02em">w</tspan><tspan x="107.29" y="56.23">ebsi</tspan><tspan x="174.51" y="56.23" letter-spacing="-.02em">t</tspan><tspan x="187.84" y="56.23">es, vid</tspan><tspan x="291.47" y="56.23" letter-spacing="0em">e</tspan><tspan x="311.52" y="56.23">o p</tspan><tspan x="362.76" y="56.23" letter-spacing="-.04em">r</tspan><tspan x="374.33" y="56.23" letter-spacing="0em">o</tspan><tspan x="395.78" y="56.23">duction, </tspan><tspan x="538.12" y="56.23" letter-spacing="0em">s</tspan><tspan x="554.64" y="56.23" letter-spacing="0em">o</tspan><tspan x="576.09" y="56.23">cial </tspan><tspan x="642.76" y="56.23" letter-spacing="0em">m</tspan><tspan x="673.2" y="56.23" letter-spacing="0em">e</tspan><tspan x="693.25" y="56.23">dia, </tspan><tspan x="762.54" y="56.23" letter-spacing="0em">p</tspan><tspan x="784.32" y="56.23">aid </tspan><tspan x="0" y="112.46" letter-spacing="0em">a</tspan><tspan x="21.48" y="112.46">d</tspan><tspan x="43.36" y="112.46" letter-spacing="-.02em">v</tspan><tspan x="61.69" y="112.46">ertisi</tspan><tspan x="142.48" y="112.46" letter-spacing="0em">n</tspan><tspan x="161.89" y="112.46">g, g</tspan><tspan x="222.39" y="112.46" letter-spacing="-.04em">r</tspan><tspan x="233.96" y="112.46">aphic design, b</tspan><tspan x="481.35" y="112.46" letter-spacing="-.04em">r</tspan><tspan x="492.92" y="112.46">a</tspan><tspan x="514.5" y="112.46" letter-spacing="0em">n</tspan><tspan x="533.91" y="112.46">di</tspan><tspan x="564.21" y="112.46" letter-spacing="0em">n</tspan><tspan x="583.62" y="112.46">g, p</tspan><tspan x="644.46" y="112.46" letter-spacing=".02em">r</tspan><tspan x="658.16" y="112.46">i</tspan><tspan x="666.58" y="112.46" letter-spacing="-.02em">n</tspan><tspan x="685.14" y="112.46">t a</tspan><tspan x="728.54" y="112.46" letter-spacing="0em">n</tspan><tspan x="747.95" y="112.46">d </tspan><tspan x="0" y="168.69">p</tspan><tspan x="21.89" y="168.69" letter-spacing="-.04em">r</tspan><tspan x="33.46" y="168.69">o</tspan><tspan x="55" y="168.69" letter-spacing="0em">m</tspan><tspan x="85.44" y="168.69" letter-spacing="0em">o</tspan><tspan x="106.65" y="168.69">tio</tspan><tspan x="150.62" y="168.69" letter-spacing="0em">n</tspan><tspan x="170.03" y="168.69">al p</tspan><tspan x="229.51" y="168.69" letter-spacing="-.04em">r</tspan><tspan x="241.08" y="168.69" letter-spacing="0em">o</tspan><tspan x="262.53" y="168.69">ducts. In</tspan><tspan x="399.47" y="168.69" letter-spacing="0em">s</tspan><tspan x="416" y="168.69" letter-spacing="-.02em">t</tspan><tspan x="429.33" y="168.69" letter-spacing="0em">ea</tspan><tspan x="470.87" y="168.69">d of c</tspan><tspan x="563.57" y="168.69" letter-spacing="0em">o</tspan><tspan x="585.01" y="168.69">o</tspan><tspan x="606.56" y="168.69" letter-spacing="-.04em">r</tspan><tspan x="618.13" y="168.69">di</tspan><tspan x="648.43" y="168.69" letter-spacing="0em">n</tspan><tspan x="667.84" y="168.69" letter-spacing="-.01em">a</tspan><tspan x="688.98" y="168.69">ti</tspan><tspan x="711.41" y="168.69" letter-spacing="0em">n</tspan><tspan x="730.81" y="168.69">g </tspan><tspan x="0" y="224.92">multiple </tspan><tspan x="138.13" y="224.92" letter-spacing="-.02em">v</tspan><tspan x="156.46" y="224.92">e</tspan><tspan x="176.61" y="224.92" letter-spacing="0em">n</tspan><tspan x="196.02" y="224.92">do</tspan><tspan x="239.45" y="224.92" letter-spacing="0em">r</tspan><tspan x="252.25" y="224.92">s, </tspan><tspan x="286.41" y="224.92" letter-spacing="-.03em">y</tspan><tspan x="304.57" y="224.92">ou </tspan><tspan x="352.99" y="224.92" letter-spacing="0em">h</tspan><tspan x="372.7" y="224.92" letter-spacing="-.02em">a</tspan><tspan x="393.71" y="224.92" letter-spacing="-.02em">v</tspan><tspan x="412.03" y="224.92">e o</tspan><tspan x="461.53" y="224.92" letter-spacing="0em">n</tspan><tspan x="480.94" y="224.92">e l</tspan><tspan x="517.11" y="224.92" letter-spacing="0em">o</tspan><tspan x="538.56" y="224.92">cal </tspan><tspan x="596.82" y="224.92" letter-spacing="0em">p</tspan><tspan x="618.6" y="224.92">oi</tspan><tspan x="648.56" y="224.92" letter-spacing="-.02em">n</tspan><tspan x="667.12" y="224.92">t of </tspan><tspan x="0" y="281.15">co</tspan><tspan x="42.21" y="281.15" letter-spacing="-.02em">n</tspan><tspan x="60.77" y="281.15" letter-spacing="-.02em">t</tspan><tspan x="74.11" y="281.15" letter-spacing="0em">a</tspan><tspan x="95.59" y="281.15">ct w</tspan><tspan x="167.11" y="281.15" letter-spacing="0em">h</tspan><tspan x="186.83" y="281.15">o can </tspan><tspan x="285.57" y="281.15" letter-spacing="0em">m</tspan><tspan x="316" y="281.15">a</tspan><tspan x="337.58" y="281.15" letter-spacing="0em">n</tspan><tspan x="356.99" y="281.15" letter-spacing="0em">a</tspan><tspan x="378.47" y="281.15" letter-spacing="-.02em">g</tspan><tspan x="399.44" y="281.15">e as much or as li</tspan><tspan x="676.25" y="281.15" letter-spacing="0em">t</tspan><tspan x="689.92" y="281.15">tle as </tspan><tspan x="786.25" y="281.15" letter-spacing="-.03em">y</tspan><tspan x="804.4" y="281.15">ou </tspan><tspan x="0" y="337.38" letter-spacing="0em">n</tspan><tspan x="19.41" y="337.38" letter-spacing="0em">ee</tspan><tspan x="59.52" y="337.38">d while </tspan><tspan x="182.48" y="337.38" letter-spacing="-.04em">k</tspan><tspan x="199.31" y="337.38" letter-spacing="0em">e</tspan><tspan x="219.37" y="337.38">epi</tspan><tspan x="269.82" y="337.38" letter-spacing="0em">n</tspan><tspan x="289.23" y="337.38">g </tspan><tspan x="318.58" y="337.38" letter-spacing="-.03em">y</tspan><tspan x="336.74" y="337.38">our </tspan><tspan x="398.18" y="337.38" letter-spacing="0em">m</tspan><tspan x="428.62" y="337.38">ar</tspan><tspan x="463.23" y="337.38" letter-spacing="-.04em">k</tspan><tspan x="480.06" y="337.38" letter-spacing="0em">e</tspan><tspan x="499.88" y="337.38">ti</tspan><tspan x="522.3" y="337.38" letter-spacing="0em">n</tspan><tspan x="541.71" y="337.38">g </tspan><tspan x="571.06" y="337.38" letter-spacing="0em">m</tspan><tspan x="601.5" y="337.38" letter-spacing="-.02em">o</tspan><tspan x="622.27" y="337.38">vi</tspan><tspan x="649.68" y="337.38" letter-spacing="0em">n</tspan><tspan x="669.09" y="337.38">g in t</tspan><tspan x="748.02" y="337.38" letter-spacing="0em">h</tspan><tspan x="767.73" y="337.38">e </tspan><tspan x="0" y="393.61" letter-spacing="0em">s</tspan><tspan x="16.52" y="393.61">a</tspan><tspan x="38.1" y="393.61" letter-spacing="0em">m</tspan><tspan x="68.54" y="393.61">e di</tspan><tspan x="126.8" y="393.61" letter-spacing="-.04em">r</tspan><tspan x="138.37" y="393.61" letter-spacing="0em">e</tspan><tspan x="158.42" y="393.61">ction.</tspan></text>
+      <text transform="translate(212.8887 3032.6595)" fill="#fff" font-family="BeVietnamPro-Medium, &apos;Be Vietnam Pro&apos;" font-size="29.08" font-weight="500"><tspan x="0" y="0" letter-spacing="-.09em">T</tspan><tspan x="16.52" y="0" letter-spacing="0em">e</tspan><tspan x="34.06" y="0">ll us w</tspan><tspan x="120.09" y="0" letter-spacing="0em">h</tspan><tspan x="137.22" y="0">e</tspan><tspan x="154.82" y="0" letter-spacing="-.03em">r</tspan><tspan x="165.58" y="0">e </tspan><tspan x="189.86" y="0" letter-spacing="-.03em">y</tspan><tspan x="205.97" y="0">our busi</tspan><tspan x="318.73" y="0" letter-spacing="0em">n</tspan><tspan x="335.57" y="0">e</tspan><tspan x="353.17" y="0" letter-spacing="0em">s</tspan><tspan x="368.18" y="0">s is </tspan><tspan x="419.68" y="0" letter-spacing="-.02em">t</tspan><tspan x="431.75" y="0" letter-spacing="0em">o</tspan><tspan x="450.43" y="0" letter-spacing="0em">d</tspan><tspan x="469.48" y="0" letter-spacing="-.01em">a</tspan><tspan x="487.89" y="0">y </tspan><tspan x="511.68" y="0" letter-spacing="0em">a</tspan><tspan x="530.52" y="0" letter-spacing="0em">n</tspan><tspan x="547.36" y="0">d w</tspan><tspan x="598.61" y="0" letter-spacing="0em">h</tspan><tspan x="615.74" y="0">e</tspan><tspan x="633.34" y="0" letter-spacing="-.03em">r</tspan><tspan x="644.1" y="0">e </tspan><tspan x="206.66" y="34.9" letter-spacing="-.03em">y</tspan><tspan x="222.77" y="34.9">ou </tspan><tspan x="264.94" y="34.9" letter-spacing="-.02em">w</tspan><tspan x="289.75" y="34.9" letter-spacing="0em">a</tspan><tspan x="308.6" y="34.9" letter-spacing="-.02em">n</tspan><tspan x="325.03" y="34.9">t it </tspan><tspan x="371.48" y="34.9" letter-spacing="-.02em">t</tspan><tspan x="383.55" y="34.9">o </tspan><tspan x="409.05" y="34.9" letter-spacing="-.02em">g</tspan><tspan x="427.43" y="34.9">o.</tspan></text>
+      <g>
+        <g id="Curve">
+          <rect x="511.49" y="434.78" width="137.82" height="216.45" fill="#161616"/>
+          <g>
+            <path d="M649.41,434.93c-3.1-106.92-43.73-194.04-112.09-260.04-67.41-65.09-158.79-103.83-252.52-103.83v137.82c55.32,0,111.62,25.2,155.26,65.9,41.26,38.48,67.58,90.03,71.41,160.15h137.94Z" fill="#161616"/>
+            <path d="M640.86,434.93c-2.9-194.9-161.07-352.78-356.04-355.35v4.72c192.37,2.57,348.42,158.34,351.32,350.63h4.72Z" fill="#fff"/>
+            <path d="M524.43,434.93c-2.89-130.72-108.81-236.43-239.62-238.98v4.72c128.2,2.55,232,106.14,234.89,234.26h4.73Z" fill="#fff"/>
+            <g>
+              <path d="M582.67,443.08c-.27-11.23-.89-22.36-1.86-33.31-1.51.18-3.08.36-4.67.62.92,10.77,1.55,21.67,1.82,32.7h4.71Z" fill="#fff"/>
+              <path d="M579.64,389.68l-4.68.51c-1.26-10.12-3.08-20.03-5.31-29.76,1.58-.37,3.11-.68,4.6-.98,2.27,9.87,4.11,19.96,5.39,30.23Z" fill="#fff"/>
+              <path d="M569.25,339.36l-4.49,1.38c-3.18-9.69-6.86-19.09-10.92-28.22,1.48-.65,2.92-1.25,4.33-1.83,4.12,9.25,7.86,18.82,11.08,28.67Z" fill="#fff"/>
+              <path d="M548.96,292.2l-4.08,2.34c-5.25-8.78-10.93-17.12-16.9-25.15,1.3-.96,2.58-1.87,3.81-2.73,6.08,8.11,11.83,16.65,17.17,25.53Z" fill="#fff"/>
+              <path d="M518.48,248.94l-3.61,3.02c-6.7-7.74-13.75-14.97-21.04-21.85,1.11-1.18,2.21-2.27,3.28-3.35,7.39,6.95,14.55,14.36,21.37,22.18Z" fill="#fff"/>
+              <path d="M480.9,211.62l-3.04,3.58c-7.95-6.45-16.15-12.38-24.52-17.89.89-1.34,1.78-2.63,2.64-3.87,8.49,5.58,16.84,11.62,24.92,18.17Z" fill="#fff"/>
+              <path d="M437.37,178.07l-2.37,4.05c-8.95-4.98-18.06-9.39-27.28-13.37.64-1.48,1.3-2.9,1.93-4.25,9.34,4.03,18.62,8.53,27.72,13.58Z" fill="#fff"/>
+              <path d="M389.2,155.76l-1.62,4.4c-9.69-3.37-19.43-6.14-29.2-8.46.37-1.57.78-3.09,1.16-4.53,9.89,2.35,19.82,5.18,29.67,8.59Z" fill="#fff"/>
+              <path d="M337.86,142.09l-.82,4.61c-10.12-1.64-20.2-2.69-30.24-3.31.1-1.6.24-3.15.36-4.65,10.15.61,20.43,1.69,30.71,3.35Z" fill="#fff"/>
+            </g>
+          </g>
+          <rect x="34.21" y="71.06" width="250.59" height="137.82" fill="#161616"/>
+          <rect x="34.21" y="195.95" width="250.59" height="4.77" fill="#fff"/>
+          <rect x="34.21" y="79.58" width="250.59" height="4.77" fill="#fff"/>
+          <g>
+            <rect x="45.91" y="134.18" width="39.67" height="5.11" fill="#fff"/>
+            <rect x="112.32" y="134.18" width="39.67" height="5.11" fill="#fff"/>
+            <rect x="178.72" y="134.18" width="39.68" height="5.11" fill="#fff"/>
+            <rect x="245.12" y="134.18" width="44.9" height="5.11" fill="#fff"/>
+          </g>
+          <rect x="636.09" y="434.78" width="4.76" height="216.45" fill="#fff"/>
+          <rect x="519.65" y="434.78" width="4.78" height="216.45" fill="#fff"/>
+          <rect x="577.86" y="597.8" width="5.11" height="39.68" fill="#fff"/>
+          <rect x="577.86" y="531.39" width="5.11" height="39.68" fill="#fff"/>
+          <rect x="577.86" y="465" width="5.11" height="39.67" fill="#fff"/>
+        </g>
+        <g id="Curve-2" data-name="Curve">
+          <rect x="506.9" y="400.85" width="137.82" height="216.45" fill="#161616"/>
+          <g>
+            <path d="M506.8,617.16c3.1,106.92,43.73,194.04,112.09,260.04,67.41,65.09,158.79,103.83,252.52,103.83v-137.82c-55.32,0-111.62-25.2-155.26-65.9-41.26-38.48-67.58-90.03-71.41-160.15h-137.94Z" fill="#161616"/>
+            <path d="M515.36,617.16c2.9,194.9,161.07,352.78,356.04,355.35v-4.72c-192.37-2.57-348.42-158.34-351.32-350.63h-4.72Z" fill="#fff"/>
+            <path d="M631.78,617.16c2.89,130.72,108.81,236.43,239.62,238.98v-4.72c-128.2-2.55-232-106.14-234.89-234.26h-4.73Z" fill="#fff"/>
+            <g>
+              <path d="M573.55,609.01c.27,11.23.89,22.36,1.86,33.31,1.51-.18,3.08-.36,4.67-.62-.92-10.77-1.55-21.67-1.82-32.7h-4.71Z" fill="#fff"/>
+              <path d="M576.57,662.41l4.68-.51c1.26,10.12,3.08,20.03,5.31,29.76-1.58.37-3.11.68-4.6.98-2.27-9.87-4.11-19.96-5.39-30.23Z" fill="#fff"/>
+              <path d="M586.97,712.73l4.49-1.38c3.18,9.69,6.86,19.09,10.92,28.22-1.48.65-2.92,1.25-4.33,1.83-4.12-9.25-7.86-18.82-11.08-28.67Z" fill="#fff"/>
+              <path d="M607.26,759.89l4.08-2.34c5.25,8.78,10.93,17.12,16.9,25.15-1.3.96-2.58,1.87-3.81,2.73-6.08-8.11-11.83-16.65-17.17-25.53Z" fill="#fff"/>
+              <path d="M637.73,803.15l3.61-3.02c6.7,7.74,13.75,14.97,21.04,21.85-1.11,1.18-2.21,2.27-3.28,3.35-7.39-6.95-14.55-14.36-21.37-22.18Z" fill="#fff"/>
+              <path d="M675.32,840.47l3.04-3.58c7.95,6.45,16.15,12.38,24.52,17.89-.89,1.34-1.78,2.63-2.64,3.87-8.49-5.58-16.84-11.62-24.92-18.17Z" fill="#fff"/>
+              <path d="M718.85,874.02l2.37-4.05c8.95,4.98,18.06,9.39,27.28,13.37-.64,1.48-1.3,2.9-1.93,4.25-9.34-4.03-18.62-8.53-27.72-13.58Z" fill="#fff"/>
+              <path d="M767.01,896.33l1.62-4.4c9.69,3.37,19.43,6.14,29.2,8.46-.37,1.57-.78,3.09-1.16,4.53-9.89-2.35-19.82-5.18-29.67-8.59Z" fill="#fff"/>
+              <path d="M818.36,910l.82-4.61c10.12,1.64,20.2,2.69,30.24,3.31-.1,1.6-.24,3.15-.36,4.65-10.15-.61-20.43-1.69-30.71-3.35Z" fill="#fff"/>
+            </g>
+          </g>
+          <rect x="871.41" y="843.2" width="250.59" height="137.82" fill="#161616"/>
+          <rect x="871.41" y="851.37" width="250.59" height="4.77" fill="#fff"/>
+          <rect x="871.41" y="967.74" width="250.59" height="4.77" fill="#fff"/>
+          <g>
+            <rect x="1070.63" y="912.79" width="39.67" height="5.11" fill="#fff"/>
+            <rect x="1004.22" y="912.79" width="39.67" height="5.11" fill="#fff"/>
+            <rect x="937.82" y="912.79" width="39.68" height="5.11" fill="#fff"/>
+            <rect x="866.19" y="912.79" width="44.9" height="5.11" fill="#fff"/>
+          </g>
+          <rect x="515.36" y="400.85" width="4.76" height="216.45" fill="#fff"/>
+          <rect x="631.78" y="400.85" width="4.78" height="216.45" fill="#fff"/>
+          <rect x="573.24" y="414.62" width="5.11" height="39.68" fill="#fff"/>
+          <rect x="573.24" y="481.02" width="5.11" height="39.68" fill="#fff"/>
+          <rect x="573.24" y="547.43" width="5.11" height="39.67" fill="#fff"/>
+        </g>
+      </g>
+      <rect x="53.53" y="465.85" width="914.94" height="297.91" rx="18.49" ry="18.49" opacity=".3" stroke="#000" stroke-miterlimit="7" stroke-width="1.4"/>
+      <g>
+        <text transform="translate(125.76 958.82)" fill="#fff" font-family="BeVietnamPro-ExtraBold, &apos;Be Vietnam Pro&apos;" font-size="108.55" font-weight="700" isolation="isolate"><tspan x="0" y="0" letter-spacing="-.13em">Y</tspan><tspan x="65.78" y="0" letter-spacing="-.02em">our</tspan></text>
+        <text transform="translate(125.7557 1071.6885)" fill="#fff" font-family="BeVietnamPro-ExtraBold, &apos;Be Vietnam Pro&apos;" font-size="108.55" font-weight="700" isolation="isolate"><tspan x="0" y="0" letter-spacing="-.02em">Busi</tspan><tspan x="225.9" y="0" letter-spacing="-.03em">n</tspan><tspan x="288.54" y="0" letter-spacing="-.02em">e</tspan><tspan x="353.88" y="0" letter-spacing="-.03em">s</tspan><tspan x="409.9" y="0" letter-spacing="-.02em">s,</tspan></text>
+        <text transform="translate(125.7557 1184.5782)" fill="#fff" font-family="BeVietnamPro-ExtraBold, &apos;Be Vietnam Pro&apos;" font-size="108.55" font-weight="700" isolation="isolate"><tspan x="0" y="0" letter-spacing="-.02em">O</tspan><tspan x="87.6" y="0" letter-spacing="-.03em">p</tspan><tspan x="157.73" y="0" letter-spacing="-.03em">e</tspan><tspan x="222.21" y="0" letter-spacing="-.02em">n </tspan><tspan x="308.29" y="0" letter-spacing="-.03em">2</tspan><tspan x="377.88" y="0" letter-spacing="-.02em">4</tspan><tspan x="453.97" y="0" letter-spacing=".03em">/</tspan><tspan x="517.69" y="0" letter-spacing="-.02em">7.</tspan></text>
+        <text transform="translate(125.7557 1296.0674)" fill="#fff" font-family="BeVietnamPro-SemiBold, &apos;Be Vietnam Pro&apos;" font-size="34.19" font-weight="600" isolation="isolate"><tspan x="0" y="0" letter-spacing="-.05em">F</tspan><tspan x="20.31" y="0" letter-spacing="-.03em">r</tspan><tspan x="33.57" y="0" letter-spacing="0em">o</tspan><tspan x="55.72" y="0">m a sim</tspan><tspan x="182.69" y="0" letter-spacing="0em">pl</tspan><tspan x="214.52" y="0">e </tspan><tspan x="243.27" y="0" letter-spacing="0em">l</tspan><tspan x="252.6" y="0" letter-spacing="0em">a</tspan><tspan x="274.96" y="0" letter-spacing="0em">n</tspan><tspan x="294.99" y="0">di</tspan><tspan x="327.37" y="0" letter-spacing="0em">n</tspan><tspan x="347.4" y="0">g </tspan><tspan x="377.62" y="0" letter-spacing="0em">p</tspan><tspan x="400.08" y="0" letter-spacing="0em">a</tspan><tspan x="422.51" y="0" letter-spacing="-.01em">g</tspan><tspan x="444.45" y="0" letter-spacing="0em">e </tspan><tspan x="473.2" y="0" letter-spacing="-.01em">t</tspan><tspan x="487.63" y="0">o a </tspan><tspan x="547.93" y="0" letter-spacing=".01em">f</tspan><tspan x="561.99" y="0" letter-spacing="0em">ull</tspan></text>
+        <text transform="translate(125.7557 1354.8213)" fill="#fff" font-family="BeVietnamPro-SemiBold, &apos;Be Vietnam Pro&apos;" font-size="34.19" font-weight="600" isolation="isolate"><tspan x="0" y="0">cu</tspan><tspan x="41.19" y="0" letter-spacing="0em">s</tspan><tspan x="58.87" y="0" letter-spacing="-.01em">t</tspan><tspan x="73.29" y="0" letter-spacing="0em">o</tspan><tspan x="95.45" y="0">m bui</tspan><tspan x="186.14" y="0" letter-spacing="0em">l</tspan><tspan x="195.48" y="0" letter-spacing="0em">d — </tspan><tspan x="263.51" y="0" letter-spacing="0em">h</tspan><tspan x="283.88" y="0" letter-spacing="-.02em">o</tspan><tspan x="305.35" y="0">w </tspan><tspan x="343.26" y="0" letter-spacing="0em">l</tspan><tspan x="352.6" y="0" letter-spacing="0em">o</tspan><tspan x="374.71" y="0" letter-spacing="0em">c</tspan><tspan x="395.91" y="0" letter-spacing="0em">a</tspan><tspan x="418.27" y="0" letter-spacing="0em">l busi</tspan><tspan x="505.85" y="0" letter-spacing="0em">n</tspan><tspan x="525.89" y="0">e</tspan><tspan x="546.77" y="0" letter-spacing="0em">s</tspan><tspan x="564.65" y="0" letter-spacing="0em">s</tspan><tspan x="582.46" y="0">es</tspan></text>
+        <text transform="translate(125.7557 1413.5938)" fill="#fff" font-family="BeVietnamPro-SemiBold, &apos;Be Vietnam Pro&apos;" font-size="34.19" font-weight="600" isolation="isolate"><tspan x="0" y="0" letter-spacing="-.01em">g</tspan><tspan x="21.95" y="0" letter-spacing="0em">e</tspan><tspan x="42.49" y="0" letter-spacing="0em">t </tspan><tspan x="65.19" y="0" letter-spacing="0em">o</tspan><tspan x="87.35" y="0">nli</tspan><tspan x="126.73" y="0" letter-spacing="0em">n</tspan><tspan x="146.76" y="0" letter-spacing="0em">e, </tspan><tspan x="186.86" y="0" letter-spacing="0em">a</tspan><tspan x="209.22" y="0" letter-spacing="0em">n</tspan><tspan x="229.25" y="0">d </tspan><tspan x="259.75" y="0" letter-spacing="0em">h</tspan><tspan x="280.12" y="0" letter-spacing="-.02em">o</tspan><tspan x="301.59" y="0">w t</tspan><tspan x="354.34" y="0" letter-spacing="0em">h</tspan><tspan x="374.71" y="0" letter-spacing="-.03em">e</tspan><tspan x="394.54" y="0">y </tspan><tspan x="422.64" y="0" letter-spacing="-.04em">k</tspan><tspan x="441.21" y="0" letter-spacing="0em">e</tspan><tspan x="461.92" y="0" letter-spacing="0em">e</tspan><tspan x="482.68" y="0">p g</tspan><tspan x="535.53" y="0" letter-spacing="-.03em">r</tspan><tspan x="548.79" y="0" letter-spacing="-.02em">o</tspan><tspan x="570.26" y="0">wi</tspan><tspan x="610.05" y="0" letter-spacing="0em">n</tspan><tspan x="630.09" y="0" letter-spacing="0em">g</tspan></text>
+        <text transform="translate(125.7557 1472.3477)" fill="#fff" font-family="BeVietnamPro-SemiBold, &apos;Be Vietnam Pro&apos;" font-size="34.19" font-weight="600" isolation="isolate"><tspan x="0" y="0" letter-spacing="0em">onc</tspan><tspan x="63.38" y="0">e t</tspan><tspan x="106.97" y="0" letter-spacing="0em">h</tspan><tspan x="127.34" y="0" letter-spacing="-.03em">e</tspan><tspan x="147.17" y="0">y a</tspan><tspan x="197.56" y="0" letter-spacing="-.03em">r</tspan><tspan x="210.83" y="0">e.</tspan></text>
+      </g>
+      <g>
+        <g>
+          <polygon points="161.69 544.96 85.52 472.2 80.35 477.14 156.52 549.9 161.69 544.96" fill="url(#linear-gradient-2)"/>
+          <polygon points="84.7 549.9 160.87 477.14 155.7 472.19 79.53 544.96 84.7 549.9" fill="url(#linear-gradient-3)"/>
+          <polygon points="87.47 544.96 11.3 472.2 6.13 477.14 82.3 549.9 87.47 544.96" fill="url(#linear-gradient-4)"/>
+          <polygon points="10.48 549.9 86.66 477.13 81.48 472.19 5.31 544.96 10.48 549.9" fill="url(#linear-gradient-5)"/>
+          <rect x="6.8" y="459.7" width="157.88" height="18.12" transform="translate(171.48 937.52) rotate(-180)" fill="url(#linear-gradient-6)"/>
+          <rect x="6.8" y="539.95" width="157.88" height="18.12" transform="translate(171.4804 1098.0074) rotate(-180)" fill="url(#linear-gradient-7)"/>
+        </g>
+        <g>
+          <rect x="111.46" y="371.7" width="914.94" height="297.91" rx="18.49" ry="18.49" stroke="#000" stroke-miterlimit="7" stroke-width="1.4"/>
+          <rect x="108.85" y="370.59" width="910.02" height="292.18" rx="18.49" ry="18.49" fill="#006802" stroke="#fff" stroke-miterlimit="7" stroke-width="1.4"/>
+          <text transform="translate(312.08 502.53)" fill="#fff" font-family="Arial-BoldMT, Arial" font-size="56.72" font-weight="700" isolation="isolate"><tspan x="0" y="0">WEBSITE DESIGN</tspan><tspan x="0" y="68.06">&amp; DEVELOPMENT</tspan></text>
+          <g data-h="">
+            <path d="M956.1,574.42l-19.86-95.06-76.22,75.48,96.09,19.58Z" fill="#fff" fill-rule="evenodd"/>
+          </g>
+          <rect x="862.23" y="470.91" width="42.43" height="61.46" transform="translate(-97.27 766.8) rotate(-44.72)" fill="#fff"/>
+          <g>
+            <rect x="199.91" y="642.89" width="50.93" height="14.74" rx="3" ry="3"/>
+            <rect x="214.66" y="653.76" width="22.11" height="6.4" transform="translate(882.67 431.24) rotate(90)"/>
+          </g>
+          <g>
+            <rect x="524.09" y="642.89" width="50.93" height="14.74" rx="3" ry="3"/>
+            <rect x="538.83" y="653.76" width="22.11" height="6.4" transform="translate(1206.8439 107.0711) rotate(90)"/>
+          </g>
+          <g>
+            <rect x="828.7" y="642.89" width="50.93" height="14.74" rx="3" ry="3"/>
+            <rect x="843.45" y="653.76" width="22.11" height="6.4" transform="translate(1511.4599 -197.5449) rotate(90)"/>
+          </g>
+          <g>
+            <rect x="837.63" y="374.62" width="50.93" height="14.74" rx="3" ry="3" transform="translate(1726.1923 763.9902) rotate(-180)"/>
+            <rect x="851.7" y="372.09" width="22.11" height="6.4" transform="translate(487.467 1238.0552) rotate(-90)"/>
+          </g>
+          <g>
+            <rect x="525.75" y="370.7" width="50.93" height="14.74" rx="3" ry="3" transform="translate(1102.4302 756.1446) rotate(-180)"/>
+            <rect x="539.82" y="368.17" width="22.11" height="6.4" transform="translate(179.51 922.25) rotate(-90)"/>
+          </g>
+          <g>
+            <rect x="219.8" y="370.7" width="50.93" height="14.74" rx="3" ry="3" transform="translate(490.52 756.14) rotate(-180)"/>
+            <rect x="233.87" y="368.17" width="22.11" height="6.4" transform="translate(-126.45 616.3) rotate(-90)"/>
+          </g>
+          <polygon points="251.94 643.24 199.07 643.24 131.94 372.36 329.99 372.36 251.94 643.24" fill="url(#linear-gradient-8)"/>
+          <polygon points="575.38 643.24 523.22 643.24 456.99 372.36 652.37 372.36 575.38 643.24" fill="url(#linear-gradient-9)"/>
+          <polygon points="881.77 643.24 829.62 643.24 763.38 372.36 958.77 372.36 881.77 643.24" fill="url(#linear-gradient-10)"/>
+          <polygon points="836.4 389.53 889.27 389.53 956.4 660.41 758.35 660.41 836.4 389.53" fill="url(#linear-gradient-11)"/>
+          <polygon points="525.99 384.8 578.15 384.8 644.38 655.67 448.99 655.67 525.99 384.8" fill="url(#linear-gradient-12)"/>
+          <polygon points="219.59 384.8 271.75 384.8 337.98 655.67 142.6 655.67 219.59 384.8" fill="url(#linear-gradient-13)"/>
+          <path d="M214.77,459.02h0c28.07,0,50.83,22.76,50.83,50.83h0c0,28.07-22.76,50.83-50.83,50.83h0c-28.07,0-50.83-22.76-50.83-50.83h0c0-28.07,22.76-50.83,50.83-50.83Z" fill="#1068b6" stroke="#fff" stroke-miterlimit="10" stroke-width="3"/>
+          <g>
+            <rect x="190.27" y="488.75" width="49.96" height="40.39" rx="2.75" ry="2.75" fill="none" stroke="#fff" stroke-miterlimit="10"/>
+            <path d="M190.27,500.18h49.96" fill="none" stroke="#fff" stroke-miterlimit="10"/>
+            <circle cx="197.71" cy="494.6" r="2.26" fill="none" stroke="#fff" stroke-miterlimit="10"/>
+            <circle cx="204.89" cy="494.6" r="2.26" fill="none" stroke="#fff" stroke-miterlimit="10"/>
+            <circle cx="212.06" cy="494.6" r="2.26" fill="none" stroke="#fff" stroke-miterlimit="10"/>
+            <path d="M209.93,508.68l-6.38,6.38,6.38,6.38M220.56,508.68l6.38,6.38-6.38,6.38M217.64,507.36l-4.78,15.41" fill="none" stroke="#fff" stroke-miterlimit="10"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,1268 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="50.38 127.19 921.42 312.22"><defs>
+    <clipPath id="clippath">
+      <rect x="1.49" y="-.69" width="2128.11" height="1969.49" fill="none"/>
+    </clipPath>
+    <linearGradient id="linear-gradient" x1="805.63" y1="328.26" x2="809.92" y2="328.26" gradientTransform="translate(1967.332 1368.5397) rotate(-90) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#171714"/>
+      <stop offset=".04" stop-color="#21211e"/>
+      <stop offset=".23" stop-color="#474745"/>
+      <stop offset=".33" stop-color="#565654"/>
+      <stop offset="1" stop-color="#171714"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="834.3" x2="838.59" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-3" x1="808.69" y1="357.98" x2="812.98" y2="357.98" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-4" x1="831.24" y1="357.98" x2="835.53" y2="357.98" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-5" x1="813.81" y1="365.2" x2="830.41" y2="365.2" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-6" x1="803.67" y1="374" x2="807.73" y2="374" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-7" x1="836.49" y1="374" x2="840.55" y2="374" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-8" x1="803.67" y1="386.98" x2="807.73" y2="386.98" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-9" x1="836.49" y1="386.98" x2="840.55" y2="386.98" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-10" x1="803.67" y1="456.37" x2="807.73" y2="456.37" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-11" x1="836.49" y1="456.37" x2="840.55" y2="456.37" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-12" x1="803.67" y1="469.35" x2="807.73" y2="469.35" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-13" x1="836.49" y1="469.35" x2="840.55" y2="469.35" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-14" x1="804.71" y1="421.03" x2="839.89" y2="421.03" gradientTransform="translate(1967.332 1368.5397) rotate(-90) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ad723d"/>
+      <stop offset=".09" stop-color="#b87d47"/>
+      <stop offset=".25" stop-color="#d69b61"/>
+      <stop offset=".26" stop-color="#d99e64"/>
+      <stop offset="1" stop-color="#9e6836"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-15" x1="808.81" y1="337.98" x2="835.41" y2="337.98" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-14"/>
+    <linearGradient id="linear-gradient-16" x1="808.01" y1="354.65" x2="811.09" y2="354.65" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-17" x1="808.01" y1="344.83" x2="811.09" y2="344.83" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-18" x1="820.95" y1="339.27" x2="814.84" y2="340.37" gradientTransform="translate(1967.332 1368.5397) rotate(-90) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#171714"/>
+      <stop offset=".17" stop-color="#2a2a29"/>
+      <stop offset=".33" stop-color="#393938"/>
+      <stop offset="1" stop-color="#171714"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-19" x1="805.86" y1="336.42" x2="808.46" y2="336.42" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-20" x1="801.5" y1="337.62" x2="807.15" y2="337.62" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-21" x1="328.73" y1="397.11" x2="334.46" y2="397.11" gradientTransform="translate(1233.2346 895.9663) rotate(-90)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-14"/>
+    <linearGradient id="linear-gradient-22" x1="835.76" y1="336.42" x2="838.37" y2="336.42" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-23" x1="837.07" y1="337.62" x2="842.72" y2="337.62" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-24" x1="364.62" y1="397.11" x2="370.34" y2="397.11" gradientTransform="translate(1233.2346 895.9663) rotate(-90)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-14"/>
+    <linearGradient id="linear-gradient-25" x1="1062.2" y1="-1945.4" x2="1062.2" y2="3.6" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000"/>
+      <stop offset=".03" stop-color="#020203"/>
+      <stop offset=".28" stop-color="#141521"/>
+      <stop offset=".52" stop-color="#202336"/>
+      <stop offset=".76" stop-color="#282c42"/>
+      <stop offset=".99" stop-color="#2b2f47"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-26" x1="2593.92" y1="4199.72" x2="2593.92" y2="4188.89" gradientTransform="translate(-1619.1007 3201.6509) scale(.7002 -.7002)" gradientUnits="userSpaceOnUse">
+      <stop offset=".37" stop-color="#fff"/>
+      <stop offset="1" stop-color="gray"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-27" x1="5615.77" y1="708.23" x2="5615.77" y2="719.07" gradientTransform="translate(696.0102 4196.9656) rotate(-90) scale(.7002 -.7002)" gradientUnits="userSpaceOnUse">
+      <stop offset=".37" stop-color="#fff"/>
+      <stop offset="1" stop-color="gray"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-28" x1="-4242.29" y1="3506.94" x2="-4242.29" y2="3478.85" gradientTransform="translate(1318.6039 2756.4342) scale(.2407 -.7002)" gradientUnits="userSpaceOnUse">
+      <stop offset=".37" stop-color="#fff"/>
+      <stop offset="1" stop-color="gray"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-29" x1="-4242.29" y1="3382.52" x2="-4242.29" y2="3354.43" gradientTransform="translate(1318.603 2582.1961) scale(.2407 -.7002)" gradientUnits="userSpaceOnUse">
+      <stop offset=".37" stop-color="#fff"/>
+      <stop offset="1" stop-color="gray"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-30" x1="2669.85" y1="4123.78" x2="2669.85" y2="4112.95" gradientTransform="translate(-1747.4677 3148.4757) scale(.7002 -.7002)" gradientUnits="userSpaceOnUse">
+      <stop offset=".37" stop-color="#fff"/>
+      <stop offset="1" stop-color="gray"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-31" x1="5539.83" y1="632.29" x2="5539.83" y2="643.13" gradientTransform="translate(567.6369 4143.788) rotate(-90) scale(.7002 -.7002)" gradientUnits="userSpaceOnUse">
+      <stop offset=".37" stop-color="#fff"/>
+      <stop offset="1" stop-color="gray"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-32" x1="2747.59" y1="4046.05" x2="2747.59" y2="4035.22" gradientTransform="translate(-1878.8728 3094.0498) scale(.7002 -.7002)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-26"/>
+    <linearGradient id="linear-gradient-33" x1="5462.1" y1="554.56" x2="5462.1" y2="565.39" gradientTransform="translate(436.2381 4089.3645) rotate(-90) scale(.7002 -.7002)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-27"/>
+    <linearGradient id="linear-gradient-34" x1="2592.98" y1="4200.66" x2="2592.98" y2="4189.83" gradientTransform="translate(-1617.5141 3202.3068) scale(.7002 -.7002)" gradientUnits="userSpaceOnUse">
+      <stop offset=".37" stop-color="#fff"/>
+      <stop offset="1" stop-color="gray"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-35" x1="5616.71" y1="709.17" x2="5616.71" y2="720" gradientTransform="translate(697.5945 4197.621) rotate(-90) scale(.7002 -.7002)" gradientUnits="userSpaceOnUse">
+      <stop offset=".37" stop-color="#fff"/>
+      <stop offset="1" stop-color="gray"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-36" x1="-3610.16" x2="-3610.16" gradientTransform="translate(1014.262 2756.4342) scale(.2407 -.7002)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-28"/>
+    <linearGradient id="linear-gradient-37" x1="-3610.16" x2="-3610.16" gradientTransform="translate(1014.261 2582.1961) scale(.2407 -.7002)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-29"/>
+    <linearGradient id="linear-gradient-38" x1="-1250.35" y1="2068.12" x2="-1240.93" y2="2068.12" gradientTransform="translate(1272.1196 4021.1717) scale(1 -1)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-39" x1="-1174.04" y1="2068.12" x2="-1164.62" y2="2068.12" gradientTransform="translate(1272.1196 4021.1717) scale(1 -1)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-40" x1="-1247.94" y1="1955.77" x2="-1166.14" y2="1955.77" gradientTransform="translate(1272.1196 4021.1717) scale(1 -1)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-14"/>
+    <linearGradient id="linear-gradient-41" x1="1299.39" y1="2172.79" x2="1299.39" y2="1942.49" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff" stop-opacity=".4"/>
+      <stop offset="1" stop-color="#8c8c8c" stop-opacity=".1"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-42" x1="1564.56" y1="2176.82" x2="1564.56" y2="1946.52" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-41"/>
+    <linearGradient id="linear-gradient-43" x1="1836.14" y1="2175.81" x2="1836.14" y2="1945.51" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-41"/>
+  <clipPath id="signclip-1169-1898"><rect x="1158.5" y="1887.9" width="790.6" height="274.8"/></clipPath></defs><g data-sign="1" transform="matrix(1.00000,0.00000,0.00000,1.00000,0.00339,0.00000) "><g>
+        
+        
+        
+        
+        
+        
+        <g>
+          <g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+          </g>
+          <g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+          </g>
+        </g>
+        <g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+        </g>
+        <g>
+          <g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+          </g>
+          <g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+          </g>
+        </g>
+        <g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+        </g>
+        <g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+          <g>
+            
+            
+            
+            
+            
+            
+          </g>
+        </g>
+        <g>
+          <g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+          </g>
+          <g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+            <g>
+              
+              
+            </g>
+          </g>
+        </g>
+      </g><g>
+        <rect x="137.46" y="187.97" width="783.13" height="251.44" rx="18.49" ry="18.49" opacity=".35"/>
+        <g>
+          <rect x="141.3" y="261" width="111.72" height="7.59" transform="translate(523.81 312.63) rotate(135)" fill="url(#linear-gradient-26)"/>
+          <rect x="192.52" y="208.94" width="7.59" height="111.72" transform="translate(522.37 313.23) rotate(135)" fill="url(#linear-gradient-27)"/>
+          <rect x="149.77" y="300.88" width="295.18" height="19.67" transform="translate(594.72 621.42) rotate(-180)" fill="url(#linear-gradient-28)"/>
+          <rect x="149.77" y="213.76" width="295.18" height="19.67" transform="translate(594.72 447.18) rotate(-180)" fill="url(#linear-gradient-29)"/>
+          <rect x="66.11" y="261" width="111.72" height="7.59" transform="translate(395.44 365.79) rotate(135)" fill="url(#linear-gradient-30)"/>
+          <rect x="117.32" y="208.94" width="7.59" height="111.72" transform="translate(394 366.4) rotate(135)" fill="url(#linear-gradient-31)"/>
+          <rect x="-10.87" y="261" width="111.72" height="7.59" transform="translate(264.04 420.23) rotate(135)" fill="url(#linear-gradient-32)"/>
+          <rect x="40.35" y="208.94" width="7.59" height="111.72" transform="translate(262.6 420.83) rotate(135)" fill="url(#linear-gradient-33)"/>
+          <rect x="142.23" y="261" width="111.72" height="7.59" transform="translate(525.4 311.97) rotate(135)" fill="url(#linear-gradient-34)"/>
+          <rect x="193.45" y="208.94" width="7.59" height="111.72" transform="translate(523.96 312.57) rotate(135)" fill="url(#linear-gradient-35)"/>
+          <rect x="-2.4" y="300.88" width="295.18" height="19.67" transform="translate(290.38 621.42) rotate(-180)" fill="url(#linear-gradient-36)"/>
+          <rect x="-2.4" y="213.76" width="295.18" height="19.67" transform="translate(290.38 447.18) rotate(-180)" fill="url(#linear-gradient-37)"/>
+        </g>
+        <rect x="184.67" y="140.77" width="783.13" height="251.44" rx="18.49" ry="18.49"/>
+        <rect x="188.67" y="136.77" width="783.13" height="251.44" rx="18.49" ry="18.49" fill="#1c9022" stroke="#fff" stroke-miterlimit="7" stroke-width="1.4"/>
+        <g>
+          <g data-h="">
+            <path d="M900.43,305.5l-14.01-67.04-53.75,53.23,67.76,13.81Z" fill="#fff" fill-rule="evenodd"/>
+          </g>
+          <rect x="834.23" y="232.5" width="29.92" height="43.34" transform="translate(66.94 671.07) rotate(-44.72)" fill="#fff"/>
+        </g>
+        <text transform="translate(368.75 250.07)" fill="#fff" font-family="Arial-BoldMT, Arial" font-size="48.81" font-weight="700" isolation="isolate"><tspan x="0" y="0">SOCIA</tspan><tspan x="154.58" y="0" letter-spacing="-.02em">L</tspan><tspan x="183.51" y="0" xml:space="preserve"> MEDI</tspan><tspan x="319.09" y="0" letter-spacing="-.04em">A</tspan><tspan x="0" y="58.57">&amp; </tspan><tspan x="48.81" y="58.57" letter-spacing="-.07em">P</tspan><tspan x="77.74" y="58.57">AID</tspan><tspan x="161.8" y="58.57" letter-spacing="-.04em"> </tspan><tspan x="173.55" y="58.57">ADS</tspan></text>
+        <g>
+          <path d="M295.19,297.71h0c-20.42,0-36.97-16.55-36.97-36.97h0c0-20.42,16.55-36.97,36.97-36.97h0c20.42,0,36.97,16.55,36.97,36.97h0c0,20.42-16.55,36.97-36.97,36.97Z" fill="#ffbc00" stroke="#fff" stroke-miterlimit="10" stroke-width="3"/>
+          <g>
+            <path d="M293.69,243.98h-15.41c-2.41,0-4.37,1.96-4.37,4.37h0v11.87c0,2.41,1.96,4.37,4.37,4.37h1.25v6.87l7.08-6.87h7.08c2.41,0,4.37-1.96,4.37-4.37h0v-11.87c0-2.41-1.96-4.37-4.37-4.37h0Z" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="3"/>
+            <path d="M285.98,259.8c-3.33-2.29-6.25-4.58-6.25-7.08,0-2.71,3.12-3.75,5-1.87l1.25,1.25,1.25-1.25c1.87-1.87,5-.83,5,1.87,0,2.5-2.91,4.79-6.25,7.08Z" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="3"/>
+            <path d="M302.85,258.97v20.61M302.85,262.51l4.37-7.08c2.29.62,3.33,2.5,2.91,4.79l-.62,3.12h4.58c2.08,0,3.54,1.87,3.12,3.96l-1.67,8.54c-.42,1.87-2.08,3.33-4.16,3.33h-8.54" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="3"/>
+          </g>
+        </g>
+      </g><g>
+        <g>
+          <rect x="291.91" y="367.25" width="43.26" height="12.52" rx="3" ry="3"/>
+          <rect x="304.43" y="376.48" width="18.79" height="5.44" transform="translate(693.03 65.37) rotate(90)"/>
+        </g>
+        <g>
+          <rect x="567.3" y="367.25" width="43.26" height="12.52" rx="3" ry="3"/>
+          <rect x="579.83" y="376.48" width="18.79" height="5.44" transform="translate(968.42 -210.02) rotate(90)"/>
+        </g>
+        <g>
+          <rect x="826.08" y="367.25" width="43.26" height="12.52" rx="3" ry="3"/>
+          <rect x="838.61" y="376.48" width="18.79" height="5.44" transform="translate(1227.2 -468.8) rotate(90)"/>
+        </g>
+        <g>
+          <rect x="833.67" y="139.35" width="43.26" height="12.52" rx="3" ry="3" transform="translate(1710.6013 291.2222) rotate(-180)"/>
+          <rect x="845.62" y="137.2" width="18.79" height="5.44" transform="translate(715.1 994.93) rotate(-90)"/>
+        </g>
+        <g>
+          <rect x="570.98" y="136.02" width="43.26" height="12.52" rx="3" ry="3" transform="translate(1185.2234 284.5572) rotate(-180)"/>
+          <rect x="582.93" y="133.87" width="18.79" height="5.44" transform="translate(455.74 728.91) rotate(-90)"/>
+        </g>
+        <g>
+          <rect x="296.35" y="136.02" width="43.26" height="12.52" rx="3" ry="3" transform="translate(635.96 284.56) rotate(-180)"/>
+          <rect x="308.3" y="133.87" width="18.79" height="5.44" transform="translate(181.11 454.28) rotate(-90)"/>
+        </g>
+      </g></g></svg>
