@@ -428,6 +428,11 @@
     flex-wrap:wrap;
     text-shadow:0 2px 20px rgba(0,0,0,.7);
   }
+  .shot.shot--ink{text-shadow:none;color:#0b1f3f}
+  .shot.shot--ink b{color:#003f87}
+  .shot.shot--ink em{opacity:.85}
+  .shot.shot--ink i{opacity:.9;border-color:rgba(11,31,63,.4)}
+  .hud-a{z-index:4}
   .shot b{
     font-size:clamp(11px,1.1vw,13px);
     letter-spacing:.22em;font-weight:600;
