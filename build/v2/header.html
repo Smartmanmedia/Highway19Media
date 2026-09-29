@@ -25,7 +25,17 @@
     </a>
     <img class="hdr-shield" src="../../assets/v2/ui-shield.webp" alt="Highway 19 Media">
     <nav class="hdr-nav">
-      <a href="{{ROOT}}#services">Services</a>
+      <!-- SERVICES OPENS A LIST. The word still goes to the services section;
+           hovering it, or tabbing into it, drops the four lanes under it. -->
+      <div class="hdr-dd">
+        <a class="hdr-dd-t" href="{{ROOT}}#services">Services</a>
+        <ul class="hdr-dd-m" aria-label="Services">
+          <li><a href="/coming-soon/">Website Design</a></li>
+          <li><a href="/video-production/">Video Production</a></li>
+          <li><a href="/coming-soon/">Print &amp; Branding</a></li>
+          <li><a href="/coming-soon/">Social Media &amp; Paid Ads</a></li>
+        </ul>
+      </div>
       <a href="{{ROOT}}#roadmap">The Road Map</a>
       <a href="/coming-soon/">Q&amp;A</a>
     </nav>
