@@ -740,6 +740,58 @@ Object.keys(lanes).forEach(k2=>lanes[k2].forEach(l=>{
   if(used.has(k2+':'+l.road+':'+l.lane)) return;
   runs.push([{k:k2,pitch:l.pitch,pts:l.pts}]);
 }));
+
+/* -------- HIS MOBILE ROADS ------------------------------------------------
+ * The phone is not the desktop page narrowed: it is his own mobile artboards,
+ * and the road on each of them is a band across the top of a section rather
+ * than one drive running the length of the page. So each one is its own run,
+ * open at both ends - his tarmac leaves the screen on both sides, which is
+ * what stops a car appearing out of nothing - and a car that runs off one end
+ * comes back on at the other.
+ *
+ * The centreline is walked off his own art by tools/qa/mroutes.js. The lanes
+ * are that line pushed out half his tarmac to each side: the near one runs
+ * the way the line was walked, the far one against it, which is the two-way
+ * road he drew. */
+const MR_FILE = path.join(__dirname, 'mroutes.json');
+if (fs.existsSync(MR_FILE)) {
+  const MR = JSON.parse(fs.readFileSync(MR_FILE, 'utf8'));
+  /* which section shows which of his roads, and in which of its boxes.
+     m2 has no road on it - it is his gantry and his sky - so it is not here. */
+  const MSEC = [
+    { id: 'm1', route: 'm1',   sel: '.mstrip > svg' },
+    { id: 'm4', route: 'm4',   sel: '.mstrip > svg' },
+    { id: 'm5', route: 'road', sel: '.mtop > svg' },
+    { id: 'm6', route: 'road', sel: '.mtop > svg' },
+    { id: 'm7', route: 'road', sel: '.mtop > svg' },
+    { id: 'm8', route: 'road', sel: '.mtop > svg' },
+    { id: 'm9', route: 'road', sel: '.mtop > svg' },
+  ];
+  let added = 0;
+  for (const M of MSEC) {
+    const R = MR[M.route];
+    if (!R) { console.log('  mobile', M.id, '- no route'); continue; }
+    const pitch = +(R.width / 2).toFixed(2);        /* two lanes on his tarmac */
+    const c = R.pts;
+    const off = d => {                              /* d = +1 his side, -1 the other */
+      const out = [];
+      for (let i = 0; i < c.length; i++) {
+        const a = c[Math.max(0, i - 2)], b2 = c[Math.min(c.length - 1, i + 2)];
+        let tx = b2[0] - a[0], ty = b2[1] - a[1];
+        const m = Math.hypot(tx, ty) || 1; tx /= m; ty /= m;
+        /* the right hand of something travelling this way, in screen axes */
+        out.push([+(c[i][0] - ty * pitch / 2 * d).toFixed(2),
+                  +(c[i][1] + tx * pitch / 2 * d).toFixed(2)]);
+      }
+      return out;
+    };
+    runs.push([{ k: M.id, m: 1, sel: M.sel, pitch, pts: off(1) }]);
+    runs.push([{ k: M.id, m: 1, sel: M.sel, pitch, pts: off(-1).reverse() }]);
+    added += 2;
+  }
+  console.log('  mobile:', added, 'lanes on', MSEC.length, 'of his sections');
+}
+
 fs.writeFileSync(`${ROOT}/assets/js/qa-lanes.js`,
   'window.H19_QA_RUNS='+JSON.stringify(runs)+';');
 console.log('runs',runs.length,'| chained',runs.filter(r2=>r2.length>1).length);

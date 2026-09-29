@@ -48,7 +48,9 @@
      at the top, his desert light by the foot of it, and the tarmac under it
      goes from 22 to 87 on the way down. So how lit a car is follows where it
      is on his road, not which artboard it happens to be in. */
-  var NIGHT = { '03': 1, '04': 1 };
+  /* his night: the two desktop artboards he drew dark, and the two mobile
+     sections that carry the same ground */
+  var NIGHT = { '03': 1, '04': 1, m4: 1, m5: 1 };
   var DAWN  = { '04': [480, 980] };
   var BANDS = [
     { f: 'brightness(.10) saturate(.20)', beam: 1 },
@@ -185,16 +187,58 @@
                          dawn: DAWN[key] || null, layers: {} });
   }
 
+  /* A RUN NAMES ITS OWN HOST. His desktop sections are #s01..#s08 with his
+     artboard in .art; his mobile ones are #m1..#m9 with his road in .mtop or
+     in the strip the section is served in. Both sets are built here and both
+     are always in the document - the breakpoint hides one of them - so a run
+     whose section is not being shown simply never paints (see render). */
+  function hostOf(r) {
+    var sec = document.getElementById(r.m ? r.k : 's' + r.k);
+    if (!sec) return null;
+    var svg = sec.querySelector(r.m ? (r.sel || '.mtop > svg, .mstrip > svg')
+                                    : '.art > svg, .art-a > svg');
+    return svg ? { sec: sec, svg: svg } : null;
+  }
   var runs = [];
   window.H19_QA_RUNS.forEach(function (raw) {
     var segs = [], total = 0, pitch = raw[0].pitch;
     for (var i = 0; i < raw.length; i++) {
-      var sec = document.getElementById('s' + raw[i].k);
-      if (!sec) continue;
-      var svg = sec.querySelector('.art > svg, .art-a > svg');
-      if (!svg) continue;
+      var h = hostOf(raw[i]);
+      if (!h) continue;
+      var sec = h.sec, svg = h.svg, mob = !!raw[i].m;
+      /* HIS TRAFFIC RUNS UNDER HIS BOARD, NOT OVER IT. animate.js cuts the
+         slot into his desktop artboards at the right depth; a mobile svg has
+         none, and appending one put a lorry across the lettering of his
+         VIDEO PRODUCTION sign. The board is the one thing in there that is
+         tagged, so the slot goes in front of whatever top-level group holds
+         it - and where there is no board, at the end as before. */
       var slot = svg.querySelector('[data-fleetslot]');
-      if (!slot) { slot = el('g', {}); svg.appendChild(slot); }
+      if (!slot) {
+        slot = el('g', { 'data-fleetslot': '1' });
+        var sign = svg.querySelector('[data-sign]');
+        var into = svg, before = null;
+        if (sign) {
+          /* CLIMB UNTIL HIS ROAD IS IN THE SAME GROUP, and no further.
+             His composed sections hold the road and the board as two
+             top-level groups, so the slot belongs between them. His own
+             mobile artboards hold everything in one group, and stopping at
+             the top there put the traffic UNDER his whole drawing - twelve
+             cars driving beneath his ground. So the climb stops as soon as
+             the parent is the one that also holds his road.
+             It never stops below a transform: the slot's contents are in his
+             own units, and a group that moves its children would move them
+             with it. */
+          var a = sign;
+          while (a.parentNode && a.parentNode !== svg) {
+            var pn = a.parentNode;
+            if (pn.getAttribute && pn.getAttribute('transform')) { a = pn; continue; }
+            if (pn.querySelector('[id*="Curve"]')) break;
+            a = pn;
+          }
+          into = a.parentNode || svg; before = a;
+        }
+        if (before) into.insertBefore(slot, before); else svg.appendChild(slot);
+      }
       var rs = resample(raw[i].pts);
       var n = rs.xs.length - 1;
       var ang = new Array(n + 1);
@@ -214,10 +258,24 @@
           var dA = Math.abs(((ang[k1] - ang[k0] + 540) % 360) - 180);
           if (dA > worst) worst = dA;
         }
-        lim[j] = BASE * sc * Math.max(0.42, 1 - worst / 15);
+        /* HOW HARD HIS BEND IS, MEASURED AGAINST THE SCALE HE DREW IT AT.
+           The same corner on a 1093-unit mobile board turns twice as many
+           degrees per sample as it does on his 2128-unit artboard, so a
+           tolerance fixed in degrees put every car on a mobile road on the
+           floor speed at once - and they piled up nose to tail all the way
+           round. The tolerance follows the lane, which is what sc measures,
+           and the floor is higher there: his mobile road is two lanes with
+           nothing to queue behind. */
+        lim[j] = BASE * sc * Math.max(mob ? 0.74 : 0.42,
+                                      1 - worst / (15 * (mob ? sc : 1)));
       }
       var vb = svg.viewBox && svg.viewBox.baseVal;
+      /* HIS OWN UNITS, WHATEVER BOX THEY ARE IN. A desktop artboard is served
+         in a 3088-unit box (his 2128 plus the bleed either side); a mobile
+         road is in a box of its own. Reading the width off the viewBox is
+         what lets one engine drive both. */
       segs.push({ k: raw[i].k, sec: sec, svg: svg, slot: slot, night: !!NIGHT[raw[i].k],
+                  vbw: vb && vb.width ? vb.width : 3088,
                   h: vb ? vb.height : 0, dawn: DAWN[raw[i].k] || null, layers: {},
                   x: rs.xs, y: rs.ys, a: ang, lim: lim, n: n, L: n * STEP, d0: total });
       total += n * STEP;
@@ -234,9 +292,9 @@
          scenery is raised over the traffic and swallows it whole. Only
          upwards: a car leaving the foot of an artboard is already under the
          rocks of the artboard it is on. */
-      if (!segs[s3].prev) segs[s3].up = above(segs[s3].k);
+      if (!segs[s3].prev && !raw[s3].m) segs[s3].up = above(segs[s3].k);
     }
-    if (segs.length) runs.push({ segs: segs, L: total, pitch: pitch,
+    if (segs.length) runs.push({ segs: segs, L: total, pitch: pitch, mob: !!raw[0].m,
                                  sc: pitch / LANE_REF, cars: [] });
   });
   if (!runs.length) return;
@@ -260,7 +318,10 @@
   runs.forEach(function (run) {
     /* density follows the car size, but not one for one: a road he drew at
        twice the scale should not carry half the traffic */
-    var n = Math.max(3, Math.round(run.L / (SPACING * Math.pow(run.sc, 0.3))));
+    /* his mobile road is a band across the top of a section, seen for a
+       second on the way past; the desktop density on it reads as a jam */
+    var n = Math.max(2, Math.round(run.L /
+      (SPACING * (run.mob ? 2.2 : 1) * Math.pow(run.sc, 0.3))));
     for (var i = 0; i < n; i++) {
       var c = { id: NAMES[(Math.random() * NAMES.length) | 0], d: 0, v: 0,
                 topRaw: BASE * run.sc * (0.88 + Math.random() * 0.26) };
@@ -456,10 +517,17 @@
     for (var ri = 0; ri < runs.length; ri++)
       for (var i = 0; i < runs[ri].segs.length; i++) {
         var s2 = runs[ri].segs[i];
-        if (measured[s2.k]) { s2.top = measured[s2.k][0]; s2.u = measured[s2.k][1]; continue; }
-        s2.top = s2.sec.getBoundingClientRect().top + sy;
-        s2.u = s2.svg.getBoundingClientRect().width / 3088;
-        measured[s2.k] = [s2.top, s2.u];
+        if (measured[s2.k]) { s2.top = measured[s2.k][0]; s2.u = measured[s2.k][1];
+                              s2.vis = measured[s2.k][2]; continue; }
+        var sr = s2.sec.getBoundingClientRect();
+        s2.top = sr.top + sy;
+        s2.u = s2.svg.getBoundingClientRect().width / s2.vbw;
+        /* THE BREAKPOINT SHUTS ONE OF THE TWO PAGES, and a section that is
+           not being shown measures nought. Without this the phone was
+           carrying six hundred cars on his desktop artboards behind a
+           display:none, stepping and painting every one of them. */
+        s2.vis = sr.width > 0 && sr.height > 0;
+        measured[s2.k] = [s2.top, s2.u, s2.vis];
       }
   }
   var FRAME = 0;
@@ -486,7 +554,7 @@
         var da = ((a1 - a0 + 540) % 360) - 180;
         c.ang = a0 + da * fr;
         var py = seg.top + c.y * seg.u - sy;
-        c.on = py > -CULL && py < vh + CULL;
+        c.on = seg.vis && py > -CULL && py < vh + CULL;
         c.band = bandOf(seg, c.y);
         if (c.node && (!c.on || c.node.seg !== seg || c.node.band !== c.band)) {
           free.push(c.node); c.node.car = null; c.node = null;

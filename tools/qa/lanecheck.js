@@ -9,7 +9,10 @@ const CS={'01':[[1640,300]],'02':[[440,300],[440,60]],'03':[[900,60]],
           '04':[[355,300],[355,600],[355,700],[355,900],[1400,1650]],
           '05':[[600,510],[200,940]],'06':[[123,400]],'07':[[1000,2000]]};
 const byK={};
-runs.forEach((r,ri)=>r.forEach(s=>{ (byK[s.k]=byK[s.k]||[]).push({ri,pts:s.pts}); }));
+/* his desktop artboards only - this checks a lane against the flat export
+   of the artboard it is on, and his mobile roads have no such export */
+runs.forEach((r,ri)=>r.forEach(s=>{ if(s.m) return;
+  (byK[s.k]=byK[s.k]||[]).push({ri,pts:s.pts}); }));
 for(const k of Object.keys(byK)){
   const b64=fs.readFileSync(`/home/user/highway19media/assets/scene/Highway19-QA-artboard-${k}.jpg`).toString('base64');
   const out=await p.evaluate(async([b64,lanes,cs,HH])=>{

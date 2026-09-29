@@ -130,6 +130,46 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
       letter-spacing:.035em;text-transform:uppercase;text-align:center}
 .mtail{height:var(--tail)}
 
+/* ---- THE SITE'S OWN CHROME, ON THIS PAGE -------------------------------
+   HE DREW THE BAR INTO HIS ARTBOARD, so the real one stands exactly on top
+   of it rather than pushing his page down. It was not a guess that the two
+   line up: his band is 116 of his 2128 units, and the art is shown at
+   100vw/1960 per unit, so his bar is 5.918vw tall - where header.css sets
+   the real one to clamp(66px, 5.943vw, 124px). The same height to within
+   half a percent at every width between the clamps, and taller than his
+   outside them, so his drawing is covered and never peeps out below.
+   Pushing the page down instead would have left his own bar showing under
+   the real one, and his bleed strips - which are his edge columns, drawn
+   before any of this - carry that band out to the sides whatever the page
+   does. */
+/* HIS PAGE'S HEADING IS A DRAWING - the blue board at the top of his first
+   artboard - and a drawing is not a heading. This says the same words off
+   screen, so a reader using a screen reader and a crawler building an outline
+   both get the sentence a visitor sees. */
+.qa-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+       clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+/* the question IS the heading; the button inside it keeps every measurement */
+.qa-h{margin:0;padding:0;font:inherit;color:inherit;display:block}
+#page{background:#002e79}
+/* header.css pads the body by the bar's height so a page starts under it.
+   Here that would stand the real bar on top of his drawn one and show both.
+   Only above the phone breakpoint: his mobile artboards carry no bar, so
+   there the site's own padding is exactly right. */
+@media (min-width:901px){ body{padding-top:0} }
+
+/* HIS CONTACT CARD, on his interstate blue. The bar's Contact button points
+   at #contact on every page of this site; the card is the same file the home
+   page and the holding page use, and only its colours are set here - the
+   same values the holding page gives it, which are his. */
+.qa-form{background:#00287e;scroll-margin-top:calc(var(--hh,66px) + 12px);
+         padding:clamp(34px,6vw,78px) clamp(16px,4vw,40px) clamp(56px,9vw,120px)}
+.qa-form .fcard{--fc-paper:#e9eaea;--fc-say-bg:#001328;--fc-say-ink:#fff;
+  --fc-ink:#123a7a;--fc-ask-ink:#476698;--fc-ico:#3d5f9b;--fc-alt-ink:#4e6589;
+  --fc-rule:#4266a4;--fc-rule-on:#12569f;--fc-edge:transparent;--fc-link:#123a7a;
+  --fc-btn:#ffc72c;--fc-btn-ink:#12161c;--fc-btn-hi:#ffd45c;
+  --fc-ok:#7ee0a4;--fc-err:#ff9aa1;--fc-cast:0 22px 50px rgba(0,0,0,.55);
+  --fc-fs:clamp(.84rem,.92vw,.94rem)}
+
 @media (max-width:900px){
   #page > .sec{display:none}
   .msec{display:block}

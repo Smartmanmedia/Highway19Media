@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Builds faq.html from his eight artboards plus the card geometry lifted off them."""
-import json, os, re, html, statistics
+import json, subprocess, base64, hashlib, os, re, html, statistics
 ROOT='/home/user/highway19media'
 HERE=os.path.dirname(os.path.abspath(__file__))
 cards=json.load(open(f'{HERE}/cards.json',encoding='utf-8'))
@@ -226,6 +226,46 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
       letter-spacing:.035em;text-transform:uppercase;text-align:center}
 .mtail{height:var(--tail)}
 
+/* ---- THE SITE'S OWN CHROME, ON THIS PAGE -------------------------------
+   HE DREW THE BAR INTO HIS ARTBOARD, so the real one stands exactly on top
+   of it rather than pushing his page down. It was not a guess that the two
+   line up: his band is 116 of his 2128 units, and the art is shown at
+   100vw/1960 per unit, so his bar is 5.918vw tall - where header.css sets
+   the real one to clamp(66px, 5.943vw, 124px). The same height to within
+   half a percent at every width between the clamps, and taller than his
+   outside them, so his drawing is covered and never peeps out below.
+   Pushing the page down instead would have left his own bar showing under
+   the real one, and his bleed strips - which are his edge columns, drawn
+   before any of this - carry that band out to the sides whatever the page
+   does. */
+/* HIS PAGE'S HEADING IS A DRAWING - the blue board at the top of his first
+   artboard - and a drawing is not a heading. This says the same words off
+   screen, so a reader using a screen reader and a crawler building an outline
+   both get the sentence a visitor sees. */
+.qa-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+       clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+/* the question IS the heading; the button inside it keeps every measurement */
+.qa-h{margin:0;padding:0;font:inherit;color:inherit;display:block}
+#page{background:#002e79}
+/* header.css pads the body by the bar's height so a page starts under it.
+   Here that would stand the real bar on top of his drawn one and show both.
+   Only above the phone breakpoint: his mobile artboards carry no bar, so
+   there the site's own padding is exactly right. */
+@media (min-width:901px){ body{padding-top:0} }
+
+/* HIS CONTACT CARD, on his interstate blue. The bar's Contact button points
+   at #contact on every page of this site; the card is the same file the home
+   page and the holding page use, and only its colours are set here - the
+   same values the holding page gives it, which are his. */
+.qa-form{background:#00287e;scroll-margin-top:calc(var(--hh,66px) + 12px);
+         padding:clamp(34px,6vw,78px) clamp(16px,4vw,40px) clamp(56px,9vw,120px)}
+.qa-form .fcard{--fc-paper:#e9eaea;--fc-say-bg:#001328;--fc-say-ink:#fff;
+  --fc-ink:#123a7a;--fc-ask-ink:#476698;--fc-ico:#3d5f9b;--fc-alt-ink:#4e6589;
+  --fc-rule:#4266a4;--fc-rule-on:#12569f;--fc-edge:transparent;--fc-link:#123a7a;
+  --fc-btn:#ffc72c;--fc-btn-ink:#12161c;--fc-btn-hi:#ffd45c;
+  --fc-ok:#7ee0a4;--fc-err:#ff9aa1;--fc-cast:0 22px 50px rgba(0,0,0,.55);
+  --fc-fs:clamp(.84rem,.92vw,.94rem)}
+
 @media (max-width:900px){
   #page > .sec{display:none}
   .msec{display:block}
@@ -428,7 +468,34 @@ def msvg_of(m):
     # his own width/height attributes would fight the column fit
     s=re.sub(r'\swidth="[\d.]+"','',s,count=1)
     s=re.sub(r'\sheight="[\d.]+"','',s,count=1)
-    return s
+    return unembed(s)
+
+# HIS RASTERS COME OUT OF THE MARKUP.
+# Illustrator embeds a placed image as base64 inside the SVG. On this page the
+# same 711x713 drawing was embedded three times, a fifth of a megabyte apiece,
+# and base64 is the one thing on the page that does not compress - 618 KB of
+# the document, and a browser cannot cache any of it separately from the page.
+# Written out once, by the hash of its own bytes, and referred to by name: the
+# three copies become one file a reader downloads once and never asks for
+# again.
+_EMB={}
+def unembed(svg):
+    def out(m):
+        kind, b64 = m.group(1), m.group(2)
+        raw = base64.b64decode(b64)
+        h = hashlib.sha1(raw).hexdigest()[:10]
+        ext = {'jpeg':'jpg','svg+xml':'svg'}.get(kind, kind)
+        name = f'emb-{h}.{ext}'
+        # tools/qa/embwebp.js turns these into webp once; when it has, that is
+        # what the page asks for - a fifth of the bytes for the same drawing
+        web = f'emb-{h}.webp'
+        if os.path.exists(f'{ROOT}/assets/img/{web}'):
+            return f'"assets/img/{web}"'
+        if name not in _EMB:
+            with open(f'{ROOT}/assets/img/{name}','wb') as f: f.write(raw)
+            _EMB[name]=len(raw)
+        return f'"assets/img/{name}"'
+    return re.sub(r'"data:image/([a-z+]+);base64,([^"]+)"', out, svg)
 
 def svg_of(k):
     s=open(f'{ROOT}/assets/scene/sec-{k}.svg',encoding='utf-8').read()
@@ -442,19 +509,66 @@ def svg_of(k):
         s=s.replace(f'url(#{i})',f'url(#{k}_{i})')
         s=s.replace(f'xlink:href="#{i}"',f'xlink:href="#{k}_{i}"')
         s=s.replace(f'href="#{i}"',f'href="#{k}_{i}"')
-    return s
+    return unembed(s)
 
-parts=["""<!doctype html>
+# ---------- the chrome, from the one place it is built ----------
+# tools/chrome.js assembles the header and the footer for every page on the
+# site. This page is written in Python, so it asks for them through
+# tools/chrome-emit.js rather than growing a second copy - and build_site.js
+# holds what comes out against every other page before anything ships.
+def chrome(part):
+    out=subprocess.run(['node', f'{ROOT}/tools/chrome-emit.js', part, '/'],
+                       capture_output=True, text=True, check=True).stdout
+    # his files say ../../assets/ because they sit two deep; from here the
+    # page is at the root, and build_site.js moves it on to /assets/
+    return out.replace('../../assets/','assets/')
+
+SITE='https://highway19media.com'
+URL=SITE+'/q-a/'
+TITLE='Q&amp;A: Websites, Video, Branding &amp; Print &mdash; Highway 19 Media'
+DESC=('Straight answers about websites, video production, advertising, branding, '
+      'print and working with Highway 19 Media - a creative marketing studio for '
+      'businesses across Tampa Bay.')
+OG=SITE+'/assets/v2/meta/og.jpg'
+
+parts=[f"""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Questions &amp; Answers — Highway 19 Media</title>
-<meta name="description" content="Straight answers about websites, video, advertising, branding, print and working with Highway 19 Media.">
+<title>{TITLE}</title>
+<meta name="description" content="{DESC}">
+<link rel="canonical" href="{URL}">
+<!-- WRITTEN TO BE READ BY A MACHINE AS WELL AS A PERSON. max-snippet:-1 and
+     max-image-preview:large let a search result quote a whole answer and show
+     his art; without them a rich FAQ result is capped at a line. -->
+<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Highway 19 Media">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="{TITLE}">
+<meta property="og:description" content="{DESC}">
+<meta property="og:url" content="{URL}">
+<meta property="og:image" content="{OG}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{TITLE}">
+<meta name="twitter:description" content="{DESC}">
+<meta name="twitter:image" content="{OG}">
+<meta name="theme-color" content="#00287e">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/v2/meta/icon-32.png">
+<link rel="apple-touch-icon" href="assets/v2/meta/icon-180.png">
+{chrome('head')}
+<link rel="stylesheet" href="build/v2/form-card.css">
 <link rel="stylesheet" href="assets/css/qa.css">
 </head>
 <body>
-<div id="page">"""]
+{chrome('header')}
+<main id="top">
+<h1 class="qa-sr">Questions? We&rsquo;ve Got Answers. Highway 19 Media Q&amp;A.</h1>
+<div id="page">"""
+]
 
 for d in SEC:
     k=d['k']
@@ -499,8 +613,10 @@ for d in SEC:
             ns=' data-nostroke' if not d['stroke'] else ''
             parts.append(
               f'<div class="qa"{ns} data-i="{i}">'
+              f'<h3 class="qa-h">'
               f'<button class="qa-q" type="button" aria-expanded="false" aria-controls="a{k}-{i}">'
               f'<span>{esc(c["q"])}</span><i class="qa-m" aria-hidden="true"></i></button>'
+              f'</h3>'
               f'<div class="qa-a" id="a{k}-{i}" role="region"><div class="qa-ai">{body}</div></div>'
               f'</div>')
         parts.append('</div>')
@@ -585,8 +701,10 @@ for m in MOB:
             body=''.join(f'<p>{esc(x)}</p>' for x in (c['ans'] or []))
             parts.append(
               f'<div class="qa" data-i="{i}">'
+              f'<h3 class="qa-h">'
               f'<button class="qa-q" type="button" aria-expanded="false" aria-controls="a{m["k"]}-{i}">'
               f'<span>{esc(c["q"])}</span><i class="qa-m" aria-hidden="true"></i></button>'
+              f'</h3>'
               f'<div class="qa-a" id="a{m["k"]}-{i}" role="region"><div class="qa-ai">{body}</div></div>'
               f'</div>')
         parts.append('</div>')
@@ -657,8 +775,10 @@ for g in MGEN:
         body=''.join(f'<p>{esc(x)}</p>' for x in (c['ans'] or []))
         parts.append(
           f'<div class="qa" data-i="{i}">'
+          f'<h3 class="qa-h">'
           f'<button class="qa-q" type="button" aria-expanded="false" aria-controls="a{g["k"]}-{i}">'
           f'<span>{esc(c["q"])}</span><i class="qa-m" aria-hidden="true"></i></button>'
+          f'</h3>'
           f'<div class="qa-a" id="a{g["k"]}-{i}" role="region"><div class="qa-ai">{body}</div></div>'
           f'</div>')
     parts.append('</div>')
@@ -669,19 +789,63 @@ for g in MGEN:
     parts.append('<div class="mtail"></div>')
     parts.append('</section>')
 
-ld={"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
-  {"@type":"Question","name":c['q'],
-   "acceptedAnswer":{"@type":"Answer","text":' '.join(c['ans'] or [])}}
-  for d in SEC for c in d['cards'] if c.get('ans')]}
-parts.append('<script type="application/ld+json">'+json.dumps(ld,ensure_ascii=False)+'</script>')
-parts.append('</div>')
+# ---------- what a machine reads ----------
+# THE ANSWERS ARE IN THE DOCUMENT, not fetched when a card opens - a shut
+# card is a closed grid row, and every word of every answer is in the markup
+# whether it is open or not. That is what makes this page worth a crawler's
+# time, and it is why the schema below can be trusted: it says the same thing
+# the page says.
+QA=[c for d in SEC for c in d['cards'] if c.get('ans')]
+ORG={"@type":"Organization","@id":SITE+"/#org","name":"Highway 19 Media",
+     "url":SITE+"/","logo":SITE+"/assets/v2/meta/icon-180.png",
+     "email":"highway19media@gmail.com",
+     "sameAs":["https://www.facebook.com/Highway19Media"],
+     "areaServed":{"@type":"Place","name":"Tampa Bay, Florida"},
+     "description":("Creative marketing for Tampa Bay businesses - websites, "
+                    "video production, branding, print, social media and "
+                    "advertising.")}
+LD={"@context":"https://schema.org","@graph":[
+  ORG,
+  {"@type":"WebSite","@id":SITE+"/#site","url":SITE+"/",
+   "name":"Highway 19 Media","publisher":{"@id":SITE+"/#org"},
+   "inLanguage":"en-US"},
+  {"@type":"BreadcrumbList","@id":URL+"#breadcrumb","itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Home","item":SITE+"/"},
+    {"@type":"ListItem","position":2,"name":"Q&A","item":URL}]},
+  {"@type":"FAQPage","@id":URL+"#faq","url":URL,
+   "name":"Questions & Answers",
+   "description":html.unescape(DESC),
+   "isPartOf":{"@id":SITE+"/#site"},
+   "publisher":{"@id":SITE+"/#org"},
+   "breadcrumb":{"@id":URL+"#breadcrumb"},
+   "inLanguage":"en-US",
+   "mainEntity":[
+     {"@type":"Question","name":c['q'],
+      "acceptedAnswer":{"@type":"Answer","text":' '.join(c['ans'] or [])}}
+     for c in QA]},
+]}
+parts.append('</div>')                     # /#page
+# HIS OWN CONTACT CARD, the same file the home page and the holding page use.
+# The bar's Contact button points at #contact on every page of this site, so a
+# page without the card is a page with a dead button in its header - and the
+# build's chrome check is what would have caught it.
+parts.append('<section id="contact" class="qa-form">')
+parts.append(chrome('form'))
+parts.append('</section>')
+parts.append('</main>')
+parts.append(chrome('footer'))
+parts.append('<script type="application/ld+json">'+
+             json.dumps(LD,ensure_ascii=False)+'</script>')
 parts.append('<script src="assets/js/cars-sprite.js"></script>')
 parts.append('<script src="assets/js/qa-lanes.js"></script>')
 parts.append('<script src="assets/js/qa.js"></script>')
 parts.append('<script src="assets/js/qa-traffic.js"></script>')
+parts.append('<script src="build/v2/form.js" defer></script>')
+parts.append(chrome('scripts'))
 parts.append('</body>\n</html>')
 open(f'{ROOT}/faq.html','w',encoding='utf-8').write('\n'.join(parts))
-print('faq.html', round(os.path.getsize(f'{ROOT}/faq.html')/1024),'KB')
+print('faq.html', round(os.path.getsize(f'{ROOT}/faq.html')/1024),'KB |',
+      len(QA),'questions in the schema')
 for d in SEC:
     if d['cards']:
         print(' ',d['k'],'x',d['x'],'w',d['w'],'y',d['y'],'gap',d['gap'],'shut',d['shut'],
