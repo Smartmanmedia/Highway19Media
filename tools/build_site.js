@@ -306,6 +306,23 @@ if (fs.existsSync(QA_SRC)) {
       qaTree(HEADER_FOR('/').replace('class="skip" href="#top"', 'class="skip" href="' + qaSkip + '"')))
     .replace(/<footer class="sec9"[\s\S]*?<\/footer>/, () => qaTree(FOOTER()));
 
+  /* AND HIS DRAWN BAR GOES. His first Q&A artboard has the header drawn into
+     it - bar, shield, nav, button, sun - as one group opening on its
+     2126.88 x 85.39 shadow rect. The old, taller live header hid it; the
+     smaller one does not, and the two showed one under the other. The live
+     header is the header, so the drawing of it comes out. */
+  {
+    const mk = '<rect x="1.12" y="4.27" width="2126.88" height="85.39"/>';
+    const at = qa.indexOf(mk);
+    if (at < 0) throw new Error('Q&A: drawn header group not found');
+    const g0 = qa.lastIndexOf('<g>', at);
+    const re = /<g[\s>]|<\/g>/g; re.lastIndex = g0;
+    let depth = 0, m, g1 = -1;
+    while ((m = re.exec(qa))) { depth += m[0] === '</g>' ? -1 : 1; if (!depth) { g1 = re.lastIndex; break; } }
+    if (g1 < 0) throw new Error('Q&A: drawn header group not closed');
+    qa = qa.slice(0, g0) + qa.slice(g1);
+  }
+
   qa = qa
     .replace(/(?:href|src)="build\/v2\/([^"?]+\.(?:css|js))"/g,
              (m, f) => m.replace('"build/v2/' + f + '"', '"' + codeHref(f) + '"'))

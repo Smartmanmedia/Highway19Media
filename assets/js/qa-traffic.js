@@ -30,7 +30,9 @@
 
   var STEP = 5,          /* lane sample spacing, artboard units */
       LOOK = 26,         /* curvature lookahead, in samples     */
-      BASE = 225,        /* free-flow speed, units/s at scale 1 */
+      BASE = 158,        /* free-flow speed, units/s at scale 1 - 30% under
+                            the 225 it was, which read as a race rather than a
+                            road next to the home page's traffic */
       LANE_REF = 41,     /* his standard lane pitch, measured          */
       SPACING = 250,     /* units of lane per vehicle           */
       CULL = 110;        /* px of viewport margin still rendered.
@@ -486,12 +488,16 @@
         if (gap < 0) gap = 0;
         var seg = segAt(run, c.d);
         var idx = Math.min(seg.n, Math.max(0, Math.round((c.d - seg.d0) / STEP)));
-        var t = Math.min(c.top, seg.lim[idx]);
+        /* the rubberneck multiplies what the driver WANTS, not what they
+           have, so it comes out through the following model as a jam */
+        var t = Math.min(c.top * STARE, seg.lim[idx]);
         var safe = c.gapMin + c.v * c.headTime;
         if (gap < safe) {
           var fr = gap / safe;
           t = Math.min(t, Math.max(0, lead.v * 0.94) * (0.3 + 0.7 * fr) + fr * fr * 45 * run.sc);
         }
+        /* a tapped car wants nothing, at once - it brakes like a car */
+        if (c.held) t = 0;
         var acc = t > c.v ? c.acc : -c.dec, nv = c.v + acc * dt;
         if (acc > 0 && nv > t) nv = t;
         if (acc < 0 && nv < t) nv = t;
@@ -591,6 +597,8 @@
         var tf = 'translate(' + c.x.toFixed(2) + ',' + c.y.toFixed(2) +
                  ') rotate(' + c.ang.toFixed(2) + ')';
         c.node.g.setAttribute('transform', tf);
+        var glow = c.held ? HELD_GLOW : '';
+        if (c.node.glow !== glow) { c.node.g.style.filter = glow; c.node.glow = glow; }
         c.node.stamp = FRAME;
         var fd = 1;
         /* EACH SECTION CLIPS ITS OWN ART, so a car halfway over the join was
@@ -687,10 +695,69 @@
     }
   }
 
+  /* -- 6. THE HOME PAGE'S TWO HABITS -----------------------------------------
+   * The same logic and the same numbers as build/v2/traffic.js, so the road
+   * behaves one way on every page of the site.
+   *
+   * THE RUBBERNECK. Stay put on a section for ten seconds and the drivers
+   * start taking an interest: everyone eases off to half of what they wanted,
+   * slow to notice (2.2s) and quick to forgive (1s) when you scroll on.
+   *
+   * TAP A CAR AND IT STOPS; tap it again and it drives on. Everything behind it
+   * queues on its own. A tap, not a press - down and up in the same place in
+   * under half a second - because press-and-hold is the phone's own gesture.
+   * The listeners are passive, so a swipe that starts on a car still scrolls.
+   * ------------------------------------------------------------------------- */
+  var STARE_AT = 10, STARE_TO = 0.5, STARE = 1, stareY = -1, stareSince = 0;
+  function rubberneck(now, dt) {
+    var y = window.pageYOffset;
+    if (y !== stareY) { stareY = y; stareSince = now; }
+    var want = now - stareSince > STARE_AT * 1000 ? STARE_TO : 1;
+    var rate = want < STARE ? dt / 2.2 : dt / 1.0;
+    STARE += Math.max(-rate, Math.min(rate, want - STARE));
+  }
+
+  var HELD_GLOW = 'drop-shadow(0 0 5px rgba(255,60,40,.95))';
+  var TAP_MS = 500, TAP_PX = 10, tapAt = 0, tapX = 0, tapY = 0, tapOk = false;
+  function carAt(cx, cy) {
+    var best = null, bd = Infinity;
+    for (var ri = 0; ri < runs.length; ri++) {
+      var list = runs[ri].cars;
+      for (var i = 0; i < list.length; i++) {
+        var c = list[i];
+        if (!c.on || !c.node) continue;
+        var b = c.node.g.getBoundingClientRect();
+        var pad = Math.max(6, Math.min(b.width, b.height) * 0.4);
+        if (cx < b.left - pad || cx > b.right + pad || cy < b.top - pad || cy > b.bottom + pad) continue;
+        var d = Math.hypot(cx - (b.left + b.right) / 2, cy - (b.top + b.bottom) / 2);
+        if (d < bd) { bd = d; best = c; }
+      }
+    }
+    return best;
+  }
+  addEventListener('pointerdown', function (e) {
+    tapAt = performance.now(); tapX = e.clientX; tapY = e.clientY;
+    tapOk = !(e.target.closest &&
+              e.target.closest('.mode-switch,a,button,input,textarea,select,summary,details,label'));
+  }, { passive: true });
+  addEventListener('pointermove', function (e) {
+    if (tapOk && Math.hypot(e.clientX - tapX, e.clientY - tapY) > TAP_PX) tapOk = false;
+  }, { passive: true });
+  addEventListener('pointercancel', function () { tapOk = false; }, { passive: true });
+  addEventListener('pointerup', function (e) {
+    if (!tapOk) return;
+    tapOk = false;
+    if (performance.now() - tapAt > TAP_MS) return;
+    if (Math.hypot(e.clientX - tapX, e.clientY - tapY) > TAP_PX) return;
+    var c = carAt(e.clientX, e.clientY);
+    if (c) c.held = !c.held;
+  }, { passive: true });
+
   var last = 0, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   function frame(t) {
     var dt = last ? Math.min(0.05, (t - last) / 1000) : 0.016;
     last = t;
+    rubberneck(t, dt);
     if (!reduce) step(dt);
     render();
     /* an orphan cannot outlive half a second, and the check costs nothing
