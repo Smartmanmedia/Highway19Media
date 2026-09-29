@@ -28,7 +28,14 @@
       --h19-font:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif}
 
 *{box-sizing:border-box}
-html{background:#00287e}
+/* ANDROID WAS GROWING HIS TYPE BEHIND OUR BACK. A WebView inflates text it
+   decides is a block of reading, by a factor it works out from the box it is
+   in - which is why the plus marks measured exactly the 24px they are set to
+   while the button's lettering measured 23 where it is set to 14. Every
+   question overflowed its card and every button wrapped, and no size set
+   here could have fixed it: the bigger the type, the bigger the boost.
+   Text is shown at the size it is set to. */
+html{background:#00287e;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 #page{overflow:hidden}
 
@@ -92,27 +99,35 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
 .msec--gen{background:linear-gradient(var(--bg1) 0, var(--body) 9%, var(--body) 78%, var(--bg2) 97% 100%)}
 .mtop{position:relative;width:100%}
 .mtop>svg{display:block;width:100%;height:auto}
-.mhead{padding:var(--headgap) var(--padx) 0;color:var(--ink)}
-.mhead h2{margin:0;font-family:'Be Vietnam Pro',sans-serif;font-weight:800;
-          font-size:var(--hsize);line-height:var(--hlead);letter-spacing:-.02em}
-.mhead p{margin:var(--headgap) 0 0;font-family:'Be Vietnam Pro',sans-serif;
-         font-weight:500;font-size:var(--lsize);line-height:var(--llead)}
-.mcol--gen{margin-top:var(--headgap)}
+.mhead{padding:var(--headgap) var(--headx) 0;color:var(--ink)}
+.mhead h2{margin:0;font-family:var(--h19-font);font-weight:800;
+          font-size:var(--hsize);line-height:var(--hlead);letter-spacing:-.022em}
+.mhead p{margin:18px 0 0;font-family:var(--h19-font);
+         font-weight:450;font-size:var(--lsize);line-height:var(--llead)}
+/* ONE LINE DOWN THE SECTION. His cards ran on his own gutter and the panel
+   under them on another, so the two stood 20px apart down the page. In the
+   sections composed from his parts they share the one gutter. */
+.mcol--gen{margin-top:var(--headgap);padding-left:var(--padx);padding-right:var(--padx)}
 .mcta{padding:var(--ctagap) var(--padx) 0}
-.mcta-p{border-radius:12px;background:var(--h19-blue-700);
+.mcta-p{border-radius:10px;background:var(--h19-blue-700);
         border:1px solid #fff;text-align:center;
-        padding:var(--ctapadt) calc(var(--padx)/1.6) var(--ctapadb)}
-.mcta-p strong{display:block;font-family:'Be Vietnam Pro',sans-serif;font-weight:800;
-               font-size:var(--ctat);line-height:1.1;color:#fff;letter-spacing:-.02em}
-.mcta-p span{display:block;margin-top:calc(var(--ctal)*.5);
-             font-family:'Be Vietnam Pro',sans-serif;font-weight:500;
-             font-size:var(--ctas);line-height:var(--ctal);color:#fff}
-.mbtn{display:block;margin:var(--ctal) auto 0;max-width:var(--btnw);
-      min-height:var(--btnh);border-radius:10px;
+        padding:var(--ctapadt) 20px var(--ctapadb)}
+.mcta-p strong{display:block;font-family:var(--h19-font);font-weight:800;
+               font-size:var(--ctat);line-height:1.18;color:#fff;letter-spacing:-.018em}
+.mcta-p span{display:block;margin-top:10px;
+             font-family:var(--h19-font);font-weight:450;
+             font-size:var(--ctas);line-height:1.55;color:#fff}
+/* THE BUTTON IS A BOX ITS WORDS SIT IN, not a line of a fixed height. Its
+   line-height was the whole height of the button, so the moment the words
+   went to two lines it opened to twice that with a chasm down the middle.
+   It centres them instead, and grows only if it has to. */
+.mbtn{display:flex;align-items:center;justify-content:center;
+      margin:18px auto 0;width:100%;max-width:var(--btnw);
+      min-height:var(--btnh);padding:12px 18px;border-radius:8px;
       background:var(--h19-yellow-500);border:2px solid var(--h19-ink);
-      font-family:'Be Vietnam Pro',sans-serif;font-weight:800;font-style:normal;
-      font-size:var(--btn);line-height:var(--btnh);color:var(--h19-ink);
-      letter-spacing:.04em;text-transform:uppercase}
+      font-family:var(--h19-font);font-weight:800;font-style:normal;
+      font-size:var(--btn);line-height:1.25;color:var(--h19-ink);
+      letter-spacing:.035em;text-transform:uppercase;text-align:center}
 .mtail{height:var(--tail)}
 
 @media (max-width:900px){
@@ -131,7 +146,14 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
 
 .qa-q{display:flex;align-items:center;width:100%;min-height:var(--shut);
       margin:0;background:none;border:0;cursor:pointer;text-align:left;
-      padding:0 var(--qpr) 0 var(--pad);position:relative;
+      /* A QUESTION THAT RUNS TO THREE LINES HAS TO HAVE ROOM ABOVE AND
+         BELOW IT. There was none: the shut card was a fixed height with a
+         centred line in it, so the moment the words outgrew that height they
+         went straight to both edges and sat against the corners. The card
+         takes its height from the words now and keeps its padding either
+         way - his desktop cards are measured off his artboard, so the
+         padding is nothing there unless it is asked for. */
+      padding:var(--qpy,0px) var(--qpr) var(--qpy,0px) var(--pad);position:relative;
       font-family:var(--qfam);font-weight:var(--qwgt,700);font-size:var(--qsize);
       line-height:var(--qlead);color:var(--qfill);letter-spacing:var(--qls,0)}
 .qa-q::-moz-focus-inner{border:0}

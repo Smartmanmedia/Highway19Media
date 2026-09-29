@@ -124,7 +124,14 @@ css=["""/* Highway 19 Media — Q&A. His artboards, placed. Live cards only. */
       --h19-font:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif}
 
 *{box-sizing:border-box}
-html{background:#00287e}
+/* ANDROID WAS GROWING HIS TYPE BEHIND OUR BACK. A WebView inflates text it
+   decides is a block of reading, by a factor it works out from the box it is
+   in - which is why the plus marks measured exactly the 24px they are set to
+   while the button's lettering measured 23 where it is set to 14. Every
+   question overflowed its card and every button wrapped, and no size set
+   here could have fixed it: the bigger the type, the bigger the boost.
+   Text is shown at the size it is set to. */
+html{background:#00287e;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 #page{overflow:hidden}
 
@@ -188,27 +195,35 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
 .msec--gen{background:linear-gradient(var(--bg1) 0, var(--body) 9%, var(--body) 78%, var(--bg2) 97% 100%)}
 .mtop{position:relative;width:100%}
 .mtop>svg{display:block;width:100%;height:auto}
-.mhead{padding:var(--headgap) var(--padx) 0;color:var(--ink)}
-.mhead h2{margin:0;font-family:'Be Vietnam Pro',sans-serif;font-weight:800;
-          font-size:var(--hsize);line-height:var(--hlead);letter-spacing:-.02em}
-.mhead p{margin:var(--headgap) 0 0;font-family:'Be Vietnam Pro',sans-serif;
-         font-weight:500;font-size:var(--lsize);line-height:var(--llead)}
-.mcol--gen{margin-top:var(--headgap)}
+.mhead{padding:var(--headgap) var(--headx) 0;color:var(--ink)}
+.mhead h2{margin:0;font-family:var(--h19-font);font-weight:800;
+          font-size:var(--hsize);line-height:var(--hlead);letter-spacing:-.022em}
+.mhead p{margin:18px 0 0;font-family:var(--h19-font);
+         font-weight:450;font-size:var(--lsize);line-height:var(--llead)}
+/* ONE LINE DOWN THE SECTION. His cards ran on his own gutter and the panel
+   under them on another, so the two stood 20px apart down the page. In the
+   sections composed from his parts they share the one gutter. */
+.mcol--gen{margin-top:var(--headgap);padding-left:var(--padx);padding-right:var(--padx)}
 .mcta{padding:var(--ctagap) var(--padx) 0}
-.mcta-p{border-radius:12px;background:var(--h19-blue-700);
+.mcta-p{border-radius:10px;background:var(--h19-blue-700);
         border:1px solid #fff;text-align:center;
-        padding:var(--ctapadt) calc(var(--padx)/1.6) var(--ctapadb)}
-.mcta-p strong{display:block;font-family:'Be Vietnam Pro',sans-serif;font-weight:800;
-               font-size:var(--ctat);line-height:1.1;color:#fff;letter-spacing:-.02em}
-.mcta-p span{display:block;margin-top:calc(var(--ctal)*.5);
-             font-family:'Be Vietnam Pro',sans-serif;font-weight:500;
-             font-size:var(--ctas);line-height:var(--ctal);color:#fff}
-.mbtn{display:block;margin:var(--ctal) auto 0;max-width:var(--btnw);
-      min-height:var(--btnh);border-radius:10px;
+        padding:var(--ctapadt) 20px var(--ctapadb)}
+.mcta-p strong{display:block;font-family:var(--h19-font);font-weight:800;
+               font-size:var(--ctat);line-height:1.18;color:#fff;letter-spacing:-.018em}
+.mcta-p span{display:block;margin-top:10px;
+             font-family:var(--h19-font);font-weight:450;
+             font-size:var(--ctas);line-height:1.55;color:#fff}
+/* THE BUTTON IS A BOX ITS WORDS SIT IN, not a line of a fixed height. Its
+   line-height was the whole height of the button, so the moment the words
+   went to two lines it opened to twice that with a chasm down the middle.
+   It centres them instead, and grows only if it has to. */
+.mbtn{display:flex;align-items:center;justify-content:center;
+      margin:18px auto 0;width:100%;max-width:var(--btnw);
+      min-height:var(--btnh);padding:12px 18px;border-radius:8px;
       background:var(--h19-yellow-500);border:2px solid var(--h19-ink);
-      font-family:'Be Vietnam Pro',sans-serif;font-weight:800;font-style:normal;
-      font-size:var(--btn);line-height:var(--btnh);color:var(--h19-ink);
-      letter-spacing:.04em;text-transform:uppercase}
+      font-family:var(--h19-font);font-weight:800;font-style:normal;
+      font-size:var(--btn);line-height:1.25;color:var(--h19-ink);
+      letter-spacing:.035em;text-transform:uppercase;text-align:center}
 .mtail{height:var(--tail)}
 
 @media (max-width:900px){
@@ -227,7 +242,14 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
 
 .qa-q{display:flex;align-items:center;width:100%;min-height:var(--shut);
       margin:0;background:none;border:0;cursor:pointer;text-align:left;
-      padding:0 var(--qpr) 0 var(--pad);position:relative;
+      /* A QUESTION THAT RUNS TO THREE LINES HAS TO HAVE ROOM ABOVE AND
+         BELOW IT. There was none: the shut card was a fixed height with a
+         centred line in it, so the moment the words outgrew that height they
+         went straight to both edges and sat against the corners. The card
+         takes its height from the words now and keeps its padding either
+         way - his desktop cards are measured off his artboard, so the
+         padding is nothing there unless it is asked for. */
+      padding:var(--qpy,0px) var(--qpr) var(--qpy,0px) var(--pad);position:relative;
       font-family:var(--qfam);font-weight:var(--qwgt,700);font-size:var(--qsize);
       line-height:var(--qlead);color:var(--qfill);letter-spacing:var(--qls,0)}
 .qa-q::-moz-focus-inner{border:0}
@@ -358,11 +380,11 @@ MOB=[
 # bows the sides in around the words. 12px, which is the roundness his own
 # guide sign carries on the home page.
 MCARD={'w':969.75,
- 'shut':'58px','gap':'10px','pad':'18px','qpr':'54px','rad':'12px',
- 'qsize':'clamp(15.5px,4.15vw,17px)','qlead':'calc(var(--qsize)*1.38)','qtop':'15px',
- 'atop':'9px','abot':'18px',
- 'bsize':'clamp(14.5px,3.78vw,15.5px)','blead':'calc(var(--bsize)*1.62)',
- 'mw':'24px','gw':'10.5px','gsw':'1.8px','minset':'15px'}
+ 'shut':'54px','gap':'9px','pad':'16px','qpr':'50px','rad':'8px','qpy':'13px',
+ 'qsize':'clamp(14.5px,3.78vw,15.5px)','qlead':'calc(var(--qsize)*1.4)','qtop':'14px',
+ 'atop':'8px','abot':'16px',
+ 'bsize':'clamp(13.8px,3.55vw,14.5px)','blead':'calc(var(--bsize)*1.64)',
+ 'mw':'22px','gw':'9.5px','gsw':'1.7px','minset':'14px'}
 
 def mcardvars(K=None):
     K=K or MCARD
@@ -371,6 +393,7 @@ def mcardvars(K=None):
             f'--atop:{K["atop"]};--abot:{K["abot"]};'
             f'--bsize:{K["bsize"]};--blead:{K["blead"]};'
             f'--mw:{K["mw"]};--gw:{K["gw"]};--gsw:{K["gsw"]};--minset:{K["minset"]};'
+            f'--qpy:{K["qpy"]};'
             f'--rad:{K["rad"]};--msw:0px;--mstroke:transparent;'
             f'--qfam:var(--h19-font);--qwgt:600;--qls:-.006em;'
             f'--bfam:var(--h19-font);--bwgt:450;'
@@ -504,10 +527,17 @@ MROAD=1000.0         # how far down his road runs before his heading starts
 MSLOT=(108.85,370.59,910.02,292.18)   # where his board hangs in that strip
 
 # his type, off his section four, with the same floor the cards have
-MTYPE={'h':(108.55,34),'hlead':(112.9,37),'lead':(34.19,15.5),'leadlead':(58.75,25),
-       'ctat':(57.23,22),'ctas':(29.08,14),'ctal':(34.9,19),'btn':(28.91,14),
-       'padx':(125.76,26),'headgap':(96,26),'ctagap':(86,26),'tail':(160,36),
-       'ctapadt':(92,22),'ctapadb':(66,18),'btnh':(68.84,44),'btnw':(670.51,240)}
+# TWO GUTTERS, BOTH HIS. On the one mobile section he drew in full he set
+# his cards 59.14 units in from the edge of the column and his panel 62.61 -
+# the same line - and his heading further in again at 125.76. The panel here
+# was on the heading's number, which is what put it 20px inside the cards it
+# belongs to. It goes on the card's line, where he has it; the heading keeps
+# its own. The panel's inside padding is its own, not a fraction of the
+# page's.
+MTYPE={'h':(108.55,31),'hlead':(112.9,34),'lead':(34.19,14.5),'leadlead':(58.75,23),
+       'ctat':(57.23,20),'ctas':(29.08,13.5),'ctal':(34.9,17.5),'btn':(28.91,13.5),
+       'padx':(59.14,20),'headx':(125.76,26),'headgap':(96,24),'ctagap':(86,24),'tail':(160,34),
+       'ctapadt':(92,22),'ctapadb':(66,20),'btnh':(68.84,46),'btnw':(670.51,240)}
 
 MSIGN=json.load(open(f'{HERE}/msigns.json')) if os.path.exists(f'{HERE}/msigns.json') else {}
 MROADSVG=(open(f'{ROOT}/assets/scene/m-road.svg',encoding='utf-8').read()
@@ -608,7 +638,8 @@ for g in MGEN:
     st=(f'--mbc:{MCOL};--mu:calc(100vw / {MCOL});'
         f'--bg1:{g["bg"][0]};--bg2:{g["bg"][1]};'
         f'--body:{g.get("body") or g["bg"][0]};--ink:{ink};'
-        f'--padx:{F("padx")};--hsize:{F("h")};--hlead:{F("hlead")};'
+        f'--padx:{F("padx")};--headx:{F("headx")};'
+        f'--hsize:{F("h")};--hlead:{F("hlead")};'
         f'--lsize:{F("lead")};--llead:{F("leadlead")};'
         f'--headgap:{F("headgap")};--ctagap:{F("ctagap")};--tail:{F("tail")};'
         f'--ctat:{F("ctat")};--ctas:{F("ctas")};--ctal:{F("ctal")};--btn:{F("btn")};'
