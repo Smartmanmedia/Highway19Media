@@ -156,8 +156,15 @@ wr('index.html', minifyHtml(page));
  * reaches the home page through '/', and none of them has a night to switch
  * to. Nothing in this file assembles a header or a footer of its own. */
 const CHROME = require('./chrome');
-const HEADER_FOR = root => CHROME.header(root, { modeSwitch: false, logo: '/' });
-const FOOTER = CHROME.footer;
+/* CONTACT US goes to the page's own form where there is one - the home page,
+ * the holding page and the contact page - and to /contact/ from everywhere
+ * else, so no button on the site points at a #contact that is not there. */
+const HEADER_FOR = (root, contact) =>
+  CHROME.header(root, { modeSwitch: false, logo: '/', contact: contact || '#contact' });
+const FOOTER_FOR = contact => contact && contact !== '#contact'
+  ? CHROME.footer().replace(/href="#contact"/g, 'href="' + contact + '"')
+  : CHROME.footer();
+const FOOTER = () => FOOTER_FOR('#contact');
 
 /* AND THE SAME CONTENT HASH THE HOME PAGE PUTS ON ITS CODE. Every page below
  * links /build/v2/x.css, and that directory is cached for a week, so without
@@ -185,6 +192,19 @@ wr('coming-soon/index.html', soonOut);
  * /coming-soon/" - a missing page claiming to be the holding page. A 404 has
  * no canonical URL; that is what makes it a 404. Search Console reads the
  * pair as a duplicate rather than as a not-found. */
+/* 4a. THE CONTACT PAGE. The card and nothing else, between the same header and
+ *     footer as every page - both pointing at its own form. */
+const contactOut = minifyHtml(rd('build/v2/contact.html')
+  .replace('<!--HEADER-->', () => HEADER_FOR('/', '#contact')
+    .replace('class="skip" href="#top"', 'class="skip" href="#contact-main"'))
+  .replace('<!--FOOTER-->', () => FOOTER())
+  .replace('<!--FORM-CARD-->', () => rd('build/v2/form-card.html'))
+  .replace(/(?:href|src)="((?:section-fonts|form-card|section-09|header|consent)\.css|(?:form|header|consent)\.js)"/g,
+           (m, f) => m.replace('"' + f + '"', '"' + codeHref(f) + '"'))
+  .replace(/\.\.\/\.\.\/assets\//g, '/assets/')
+  .replace(/\{\{ROOT\}\}/g, '/'));
+wr('contact/index.html', contactOut);
+
 wr('404.html', soonOut.replace(/<link rel="canonical"[^>]*>/i, ''));
 
 
@@ -206,8 +226,8 @@ const DATE = new Date().toLocaleDateString('en-US',
 const shell = rd('build/v2/legal.html');
 for (const L of LEGAL) {
   let page = shell
-    .replace('<!--HEADER-->', () => HEADER_FOR('/'))
-    .replace('<!--FOOTER-->', () => FOOTER())
+    .replace('<!--HEADER-->', () => HEADER_FOR('/', '/contact/'))
+    .replace('<!--FOOTER-->', () => FOOTER_FOR('/contact/'))
     .replace('{{BODY}}', () => rd('build/v2/legal-' + L.slug + '.html').trimEnd())
     .replace(/\{\{TITLE\}\}/g, L.title.replace(/&/g, '&amp;'))
     .replace(/\{\{SLUG\}\}/g, L.slug)
@@ -294,9 +314,11 @@ for (const d of SERVICE_PAGES) {
     CHROME.ASSETS.js.map(f => '<script src="' + codeHref(f) + '" defer></script>').join('\n') +
     '\n</head>', '</head>');
   swap(/<body>/, () => '<body>\n' +
-    HEADER_FOR('/').replace('class="skip" href="#top"', 'class="skip" href="#' + firstId + '"'), '<body>');
+    HEADER_FOR('/', '/contact/').replace('class="skip" href="#top"', 'class="skip" href="#' + firstId + '"'), '<body>');
   swap(/<script src="assets\/js\/[^"]+"><\/script>\s*<\/body>/,
-       m => FOOTER() + '\n' + m, 'the page script before </body>');
+       m => FOOTER_FOR('/contact/') + '\n' + m, 'the page script before </body>');
+  /* and the page's own calls to action go to the contact page too */
+  page = page.replace(/href="\/#contact"/g, 'href="/contact/"');
   page = page.replace(/\.\.\/\.\.\/assets\//g, '/assets/').replace(/\{\{ROOT\}\}/g, '/');
   wr(d + '/index.html', minifyHtml(page));
   console.log('  ' + d + ': page + ' + files + ' files, ' + Math.round(sbytes / 1024) + ' KB');
@@ -405,6 +427,7 @@ if (!STAGING) wr('sitemap.xml',
 `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>${SITE}/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>${SITE}/contact/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 ${LEGAL.map(L => `  <url><loc>${SITE}/${L.slug}/</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>`).join('\n')}
 ${SERVICE_PAGES.map(d => `  <url><loc>${SITE}/${d}/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>`).join('\n')}
 ${COMMUNITY_URLS}
@@ -428,6 +451,8 @@ function verifyChrome() {
     if (i < 0 || j < 0) return null;
     return [...html.slice(i, j).matchAll(/href="([^"]*)"/g)]
       .map(m => m[1].replace(/^\//, '') || '/')
+      /* the page's own form or the contact page - the same destination */
+      .map(h => h === 'contact/' ? '#contact' : h)
       .filter(h => h !== '/' && h !== 'top' && h !== '#top')
       .join(' ');
   };

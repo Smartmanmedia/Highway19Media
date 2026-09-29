@@ -69,7 +69,7 @@
   /* Every "contact" button on this page is a lead signal. Once a tool is
      allowed, clicks are reported to whichever tools are running. */
   document.addEventListener('click', function (e) {
-    var a = e.target.closest && e.target.closest('a[href="/#contact"]');
+    var a = e.target.closest && e.target.closest('a[href="/contact/"]');
     if (!a) return;
     var label = (a.textContent || '').trim();
     if (window.gtag) gtag('event', 'contact_click', { link_text: label, page: 'video-production' });

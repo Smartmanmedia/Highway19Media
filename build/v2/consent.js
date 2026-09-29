@@ -57,6 +57,51 @@
       } }
   ];
 
+  /* META PIXEL - ready, off. Paste the pixel ID here to switch it on; it then
+     joins the list above, so returning visitors are asked once more (their
+     earlier yes covered GA only). Before it goes live: list it on /cookies/,
+     and add https://connect.facebook.net to script-src and
+     https://www.facebook.com to img-src and connect-src in build_site.js. */
+  var META_PIXEL_ID = '';
+  if (META_PIXEL_ID) TAGS.push({ id: 'meta', name: 'Meta Pixel',
+    init: function () {
+      !function (f, b, e, v, n, t, s) {
+        if (f.fbq) return; n = f.fbq = function () {
+          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+        if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+        n.queue = []; t = b.createElement(e); t.async = !0; t.src = v;
+        s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
+      }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', META_PIXEL_ID);
+      fbq('track', 'PageView');
+    } });
+
+  /* ---- WHAT WE COUNT ------------------------------------------------------
+   * Two moments, both only once a visitor has said yes (before that neither
+   * gtag nor fbq exists, and these do nothing):
+   *   contact_click  any CONTACT US / Send Us Your Site link - to the contact
+   *                  page or to a form on the page. Meta: Contact.
+   *   generate_lead  the form actually sent (form.js calls h19Track after the
+   *                  service says success). Meta: Lead. Mark this one as the
+   *                  conversion in GA4 (Admin > Events > Mark as key event). */
+  window.h19Track = function (name, params) {
+    params = params || {};
+    params.page_path = location.pathname;
+    try { if (window.gtag) gtag('event', name, params); } catch (e) {}
+    try {
+      if (window.fbq) fbq('track', name === 'generate_lead' ? 'Lead' : 'Contact', params);
+    } catch (e) {}
+  };
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a) return;
+    var h = a.getAttribute('href');
+    if (h !== '#contact' && h !== '/#contact' && h !== '/contact/') return;
+    window.h19Track('contact_click', {
+      link_text: (a.getAttribute('aria-label') || a.textContent || '').trim().slice(0, 60),
+      link_url: h });
+  }, true);
+
   var KEY = 'h19.consent.v1';
   var root = document.documentElement;
 

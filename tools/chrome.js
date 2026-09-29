@@ -68,7 +68,10 @@ function header(root, opts) {
     .replace('{{PHONE-GLYPH}}', GLYPH)
     .replace('{{SWITCH}}', o.modeSwitch ? SWITCH : '')
     .replace(/\{\{ROOT\}\}/g, root)
-    .replace('{{LOGO}}', o.logo !== undefined ? o.logo : (root || '#top'));
+    .replace('{{LOGO}}', o.logo !== undefined ? o.logo : (root || '#top'))
+    /* where CONTACT US goes: the page's own form if it has one, else the
+       contact page */
+    .replace(/{{CONTACT}}/g, o.contact || '#contact');
 }
 
 const footer = () =>

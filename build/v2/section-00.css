@@ -140,12 +140,13 @@
    below. The panel is untouched. 1 is his artboard exactly. */
 /* AND BIGGER, BY HIS OWN EDIT (Sept 29). On a 4K screen the column read small
    beside the panel; his Photoshop pass scales it about 1.43x and runs it from
-   the panel's top edge to its bottom one, starting further left - at 11.6% of
-   the stage and 13.8% down (the headline's slant lifts it ~2.4% above that).
+   the panel's top edge to its bottom one. He then settled on about 1.2x the
+   original (--say .86 -> 1.03), held centred on the panel's height and ending
+   the same 9% of the stage short of it - so 17.8% in and 21.9% down.
    Every size here is a share of the stage, so it is the same composition on a
    laptop and on his 4K monitor. The phone block below sets its own --say. */
-.sec0 .bn-say{ --say:1.23;
-  position:absolute; left:11.6%; top:13.8%; width:calc(44% * var(--say)); z-index:1 }
+.sec0 .bn-say{ --say:1.03;
+  position:absolute; left:17.8%; top:21.9%; width:calc(44% * var(--say)); z-index:1 }
 
 .sec0 .bn-h1{
   margin:0; font-weight:800; letter-spacing:-.018em; line-height:.96;

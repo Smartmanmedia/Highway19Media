@@ -149,6 +149,9 @@
       if (!r.ok || j.success !== true) throw new Error(j.message || ('HTTP ' + r.status));
       form.reset();
       done();
+      /* the lead, counted - only if the visitor has allowed analytics
+         (h19Track lives in consent.js and does nothing before a yes) */
+      if (window.h19Track) window.h19Track('generate_lead', { form_id: form.id || 'form' });
     } catch (err) {
       say(DEBUG ? ('FAILED — ' + (err && err.message))
                 : ('That did not go through. Email us at ' + to + ' and we’ll pick it up.'), false);
