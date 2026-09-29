@@ -150,12 +150,35 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
        clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 /* the question IS the heading; the button inside it keeps every measurement */
 .qa-h{margin:0;padding:0;font:inherit;color:inherit;display:block}
-#page{background:#002e79}
-/* header.css pads the body by the bar's height so a page starts under it.
-   Here that would stand the real bar on top of his drawn one and show both.
-   Only above the phone breakpoint: his mobile artboards carry no bar, so
-   there the site's own padding is exactly right. */
-@media (min-width:901px){ body{padding-top:0} }
+#page{position:relative;z-index:0;background:#002e79}
+
+/* ---- HIS DRAWN HEADER, PAINTED OUT --------------------------------------
+   He drew a copy of the site's bar into the top of his first artboard - 116
+   of his units, with the lockup, the shield, the nav and a CONTACT US button
+   in it. It used to be covered by standing the real bar exactly on top of
+   it, which was true only while the two were the same height. They are not
+   any more: the bar has been redrawn at clamp(50px, 4.029vw, 96px) where his
+   is a flat 5.918vw, so twenty-seven pixels of his came out from under it -
+   a black rule and a step of colour straight across the page.
+
+   So it is painted out instead, which does not care how tall the real bar
+   is. The sky he drew immediately below his bar is flat #00287d from edge to
+   edge - sampled on his own artboard, every row from 110 to 180 - so a band
+   of that colour over the top 117 units covers his bar and joins his sky
+   with no seam to find. It covers the bleed strips at the same time, which
+   carry their own copy of that band out to the sides, and it touches none of
+   his art.
+
+   The page is NOT pushed down for the bar: his drawing already leaves those
+   116 units to it, so pushing it down would open a gap and show his bar
+   below the real one again. Below the phone breakpoint none of this applies
+   - his mobile artboards carry no bar - so there the site's own padding is
+   exactly right and there is no band. */
+@media (min-width:901px){
+  body{padding-top:0}
+  #page::before{content:'';position:absolute;left:0;right:0;top:0;z-index:5;
+                height:calc(117*var(--u));background:#00287d;pointer-events:none}
+}
 
 /* HIS CONTACT CARD, on his interstate blue. The bar's Contact button points
    at #contact on every page of this site; the card is the same file the home

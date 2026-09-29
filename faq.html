@@ -46,16 +46,26 @@
       <span class="hdr-rule"></span>
       <span class="hdr-tag">Creative Marketing for Tampa Bay Businesses</span>
     </a>
-    <img class="hdr-shield" src="assets/v2/ui-shield.webp" alt="Highway 19 Media">
+    <a class="hdr-shield" href="/" aria-label="Highway 19 Media - home"><img src="assets/v2/ui-shield.webp" alt=""></a>
     <nav class="hdr-nav">
-      <a href="/#services">Services</a>
+      <!-- SERVICES OPENS A LIST. The word still goes to the services section;
+           hovering it, or tabbing into it, drops the four lanes under it. -->
+      <div class="hdr-dd">
+        <a class="hdr-dd-t" href="/#services">Services</a>
+        <ul class="hdr-dd-m" aria-label="Services">
+          <li><a href="/coming-soon/">Website Design</a></li>
+          <li><a href="/video-production/">Video Production</a></li>
+          <li><a href="/coming-soon/">Print &amp; Branding</a></li>
+          <li><a href="/coming-soon/">Social Media &amp; Paid Ads</a></li>
+        </ul>
+      </div>
       <a href="/#roadmap">The Road Map</a>
       <a href="/q-a/">Q&amp;A</a>
     </nav>
     <!-- the label is its own element so a phone can drop it and keep the
          handset - his button down there is a square with the icon in it and
          nothing else - without the link losing its name to a screen reader -->
-    <a class="hdr-cta" href="#contact" aria-label="Contact us">
+    <a class="hdr-cta" href="/contact/" aria-label="Contact us">
       <img class="hdr-cta-i" src="assets/v2/header/phone.svg" alt="">
       <!-- and the ink on its own for the phone's square button - inline,
            because currentColor is the whole point of it and an <img> cannot
@@ -87,7 +97,7 @@
       <a href="/#roadmap">The Road Map</a>
       <a href="/#promise">How We Work</a>
       <a href="/q-a/">Q&amp;A</a>
-      <a href="#contact">Contact Us</a>
+      <a href="/contact/">Contact Us</a>
     </div>
   </nav>
 </header>
@@ -27103,7 +27113,7 @@
         <h3>Services</h3>
         <ul>
           <li><a href="/coming-soon/">Website Design</a></li>
-          <li><a href="/coming-soon/">Video Production</a></li>
+          <li><a href="/video-production/">Video Production</a></li>
           <li><a href="/coming-soon/">Print &amp; Branding</a></li>
           <li><a href="/coming-soon/">Social Media &amp; Paid Ads</a></li>
         </ul>
