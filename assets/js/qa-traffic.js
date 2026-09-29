@@ -28,6 +28,13 @@
   var BIG = { Green_Truck: 1, Semitrailer: 1, Gas_Truck: 1, Blue_bus: 1,
               Brown_Big_Truck: 1, Yellow_truck: 1, Brown_Truck: 1 };
 
+  /* per section key: above this y (his units) a car is in the tunnel - see
+     render. Section 06's lanes start 560 units up inside 05, across ground
+     where he drew no road; his tarmac resumes at y -12, under the ridge,
+     which runs to 127 - a car is let out once its middle is 60 in, while
+     all of it is still under the rocks. */
+  var TUNNEL = { '06': 60 };
+
   var STEP = 5,          /* lane sample spacing, artboard units */
       LOOK = 26,         /* curvature lookahead, in samples     */
       BASE = 158,        /* free-flow speed, units/s at scale 1 - 30% under
@@ -561,6 +568,13 @@
         c.ang = a0 + da * fr;
         var py = seg.top + c.y * seg.u - sy;
         c.on = seg.vis && py > -CULL && py < vh + CULL;
+        /* HIS TUNNEL. The road down from the desert has no tarmac between the
+           end of his curve and the foot of his rock ridge - he drew it going
+           under the mountain. A car on that stretch is in the tunnel, so it
+           is not drawn: it goes out of sight where his road stops and comes
+           back out from under the ridge (qa.js lays a copy of the ridge over
+           the traffic, so the moment it reappears is under the rocks). */
+        if (TUNNEL[seg.k] !== undefined && c.y < TUNNEL[seg.k]) c.on = false;
         c.band = bandOf(seg, c.y);
         if (c.node && (!c.on || c.node.seg !== seg || c.node.band !== c.band)) {
           free.push(c.node); c.node.car = null; c.node = null;

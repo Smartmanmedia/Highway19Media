@@ -351,6 +351,26 @@
       if (g.__sc !== 1) t += ' translate(' + g.__cx + ' ' + g.__cy + ') scale(' +
         g.__sc + ') translate(' + (-g.__cx) + ' ' + (-g.__cy) + ')';
       g.setAttribute('transform', t);
+      /* AND IT STAYS IN ITS OWN SECTION. Each section cuts what passes its
+         edges, so a board riding up past the top of its section was sliced
+         flat along the join, brackets and all. A single board stops just
+         inside instead; a board he drew across a seam is two halves that
+         are meant to cross it, and is left to its pair. */
+      if (!g.__twin) {
+        var sb = g.getBoundingClientRect(), u = g.__u;
+        if (!u) {
+          var art = g.__sec.querySelector('.art, .art-a');
+          u = g.__u = art ? art.getBoundingClientRect().width / 3088 : 0;
+        }
+        var fix = 0, M = 6;
+        if (sb.top < r.top + M) fix = r.top + M - sb.top;
+        else if (sb.bottom > r.bottom - M && sb.height < r.height - 2 * M) fix = r.bottom - M - sb.bottom;
+        if (fix && u) {
+          off += fix / u;
+          t = t.replace(/^translate\(0 [-\d.]+\)/, 'translate(0 ' + off.toFixed(2) + ')');
+          g.setAttribute('transform', t);
+        }
+      }
     }
   }
   function onScroll() { if (!queued) { queued = true; requestAnimationFrame(frame); } }
@@ -360,4 +380,42 @@
     addEventListener('resize', onScroll);
     frame();
   }
+})();
+
+/* HIS RIDGE IS OVER HIS ROAD, SO IT IS OVER HIS TRAFFIC TOO. Where the road
+   from the desert runs down into the green it passes under his rock ridge -
+   he drew the rocks on top of the tarmac - but the traffic is painted in a
+   layer above his whole artboard, so cars were driving across the rocks. A
+   live copy of the ridge goes in just above the traffic: nothing new is
+   drawn, the rocks look exactly as they did, and the cars go into the ridge
+   and are gone until they come out of the other side.
+   Each ridge is checked before it is copied - no road inside it, and his rock
+   browns for most of its paint - so an artboard rebuilt with its groups in
+   another order skips this rather than copying the wrong thing. */
+(function () {
+  'use strict';
+  var ROCK = { '#97796a': 1, '#876b5f': 1, '#ba9483': 1, '#cfa694': 1, '#dcb09e': 1,
+               '#ecbdaa': 1, '#c89f8c': 1, '#c39988': 1 };
+  [['art-05', 22], ['art-06', 12]].forEach(function (spec) {
+    var art = document.getElementById(spec[0]);
+    var g = art && art.children[spec[1]];
+    if (!g || g.tagName !== 'g' || g.querySelector('[id*="Stright"],[id*="Curve"],image')) return;
+    var all = g.querySelectorAll('[fill]'), rock = 0;
+    for (var i = 0; i < all.length; i++) if (ROCK[(all[i].getAttribute('fill') || '').toLowerCase()]) rock++;
+    if (!all.length || rock / all.length < 0.7) return;
+    var svg = g.ownerSVGElement, slot = svg && svg.querySelector('[data-fleetslot]');
+    if (!slot || slot.parentNode !== svg) return;
+    /* hidden below the breakpoint, where these desktop artboards are shut */
+    var sc = svg.getCTM(), pc = g.parentNode.getCTM();
+    if (!sc || !pc) return;
+    if (!g.id) g.id = spec[0] + '-ridge';
+    var m = sc.inverse().multiply(pc);
+    var use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    use.setAttribute('href', '#' + g.id);
+    use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + g.id);
+    use.setAttribute('transform', 'matrix(' + [m.a, m.b, m.c, m.d, m.e, m.f].map(function (v) {
+      return +v.toFixed(5); }).join(' ') + ')');
+    use.setAttribute('pointer-events', 'none');
+    svg.insertBefore(use, slot.nextSibling);
+  });
 })();
