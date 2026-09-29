@@ -8,23 +8,32 @@
    land on either. Everything below is placed at the percentage his file puts
    it at, so the bar is his drawing with live type in it.
 
-   HIS NUMBERS. The file is 1923.11 across with the bar 114.28 of the 158.15
-   tall (the rest is the shadow), and everything in it is:
+   HIS NUMBERS - "Header HWY19.svg", the smaller bar (Sept 2026). The file is
+   2128 across with the bar 85.73 tall (the shield hangs below it), and
+   everything in it is:
 
-     bar        114.28 / 1923.11  =  5.943% of the window's WIDTH
-     moon       centred at 5.82% across
-     lockup     x 18.49%, baseline 49.5% of the bar
-     rule       18.49% -> 35.20%, at 58.6% of the bar, 1.44 tall, #29abe2
-     tagline    x 17.94%, baseline 77.2% of the bar, 12.97 = 11.35% of it
-     nav        x 56.66%, baseline 55.4% of the bar, 21.11 = 18.47% of it
-     CONTACT    x 83.10%, baseline 55.3% of the bar, 16.14 = 14.12% of it
+     bar        85.73 / 2128  =  4.029% of the window's WIDTH
+     moon       centred at 2.79% across, 54% down the bar, 40% of it tall
+     lockup     x 7.03%, baseline 49.5% of the bar, 22.66 = 26.4% of it;
+                its 19 at 29.01 = 33.8%, in #6cd9ff
+     rule       6.99% -> 18.32%, at 58.6% of the bar, 1.08 tall, #29abe2
+     tagline    x 6.615%, baseline 77.2% of the bar, 9.73 = 11.35% of it
+     shield     centred at 49.32%, top 18.85% of the bar, 116.4% of it tall
+     nav        x 72.72%, baseline 55.4% of the bar, 15.84 = 18.47% of it
+     CONTACT    box at 88.62%, 43.5% of the bar tall, a 2-unit white keyline;
+                type 12.1 = 14.11% of the bar
+
+   The phone header (<= 900px) is its own drawing and is not changed by
+   this file's numbers - the phone block below resets what it must.
 
    Type is sized off the BAR and positions are off the WINDOW, which is what
    his file does: the lockup keeps its proportions while the row it sits in
    spreads with the screen.
    ========================================================================= */
 :root{
-  --hh:clamp(66px, 5.943vw, 124px);
+  /* his 4.029%, held between a height the type can still be read at and
+     one it never needs to pass */
+  --hh:clamp(50px, 4.029vw, 96px);
   /* THE BAR AS TOKENS, so the night palette can reach it the way it reaches
      everything else: night.css sets these three, this file only says what
      they are at noon. See the block at the end of night.css. */
@@ -42,7 +51,7 @@
   --hdr-menu-bg:#fff;
   --hdr-menu-ink:#0b1f3f;
   --hdr-menu-rule:rgba(4,24,64,.13);
-  --hdr-cta-bg:#ffde17;
+  --hdr-cta-bg:#ffda00;
   --hdr-cta-ink:#0b1f3f;
   --hdr-cta-cast:0 3px 9px rgba(0,10,40,.40);
 }
@@ -70,8 +79,8 @@
 /* HIS SWITCH, at his moon's own place in the bar rather than fixed to the
    corner of the window the way it used to be. */
 .hdr .mode-switch{
-  position:absolute; left:5.82%; top:50%; translate:-50% -50%;
-  width:calc(var(--hh) * .62); height:calc(var(--hh) * .62);
+  position:absolute; left:2.79%; top:54%; translate:-50% -50%;
+  width:max(26px, calc(var(--hh) * .40)); height:max(26px, calc(var(--hh) * .40));
   background:none; box-shadow:none; padding:0;
   /* AND NOTHING HERE MAY ISOLATE. His sun and his moon are six `screen`
      circles each - that is how the glow is drawn, and screen over black IS the
@@ -93,7 +102,7 @@
 /* THE THREE LINES ARE CENTRED ON EACH OTHER. The strapline is the widest of
    them and the rule follows it, so left-aligning left his name hanging short
    of both. */
-.hdr-logo{ position:absolute; left:17.94%; top:0; height:100%;
+.hdr-logo{ position:absolute; left:6.615%; top:0; height:100%;
   text-decoration:none; display:flex; flex-direction:column;
   justify-content:center; align-items:center; text-align:center;
   line-height:1 }
@@ -109,7 +118,9 @@
    dark bar here - 3.24 at the worst of them, against a 19 set well over the
    large-text size - so the swap costs no legibility. Left alone, the token
    falls back to the cyan and daylight is untouched. */
-.hdr-lock i{ font-style:normal; color:var(--hdr-accent,#29abe2); font-size:calc(var(--hh) * .313);
+/* by day his 19 is a lighter cyan than the rule under it; at night both take
+   --hdr-accent, so night.css's red still reaches the two of them */
+.hdr-lock i{ font-style:normal; color:var(--hdr-accent,#6cd9ff); font-size:calc(var(--hh) * .338);
   margin:0 .14em }
 /* THE RULE IS AS WIDE AS THE LOCKUP, always. It used to be a fixed slice of
    the window, which meant it fell short of his own title at most widths. The
@@ -119,35 +130,47 @@
   height:max(1px, calc(var(--hh) * .0126));
   background:var(--hdr-accent,#29abe2); margin:calc(var(--hh) * .075) 0 calc(var(--hh) * .06) }
 .hdr-tag{ display:block; white-space:nowrap; color:#fff;
-  font-weight:600; font-size:calc(var(--hh) * .1135); letter-spacing:.055em;
+  font-weight:600; font-size:max(7px, calc(var(--hh) * .1135)); letter-spacing:.055em;
   text-transform:uppercase }
 
 /* HIS SHIELD, on the middle of the WINDOW - which is what he means by the
    logo being centred, and which a flex row cannot do because it centres on
    whatever is left after its neighbours have taken their share. It hangs
    below the bar the way a badge does. */
-.hdr-shield{ position:absolute; left:50%; top:calc(var(--hh) * .06);
-  translate:-50% 0; height:calc(var(--hh) * 1.14); width:auto;
+.hdr-shield{ position:absolute; left:49.32%; top:calc(var(--hh) * .1885);
+  translate:-50% 0; height:calc(var(--hh) * 1.164); width:auto;
   filter:drop-shadow(0 4px 9px rgba(0,10,35,.55)); pointer-events:none }
 
-.hdr-nav{ position:absolute; left:56.66%; top:50%; translate:0 -50%;
-  display:flex; gap:3.2vw; white-space:nowrap }
+.hdr-nav{ position:absolute; left:72.72%; top:50%; translate:0 -50%;
+  display:flex; gap:calc(var(--hh) * .42); white-space:nowrap }
+/* AND ON A NARROWER DESKTOP IT MOVES IN. His nav sits at 72.72% because at his
+   width it clears the button with room to spare; with the bar at its 50px floor
+   and the type at its 12px floor, the three items are ~215px wide, and from
+   there down to the phone breakpoint they would run into CONTACT US. Between
+   the shield and the button there is room for them. */
+@media (min-width:901px) and (max-width:1499px){
+  .hdr-nav{ left:60% }
+  /* and the button keeps off the edge: at its type floor it is wider than
+     his 11.4% of a narrow window */
+  .hdr-in .hdr-cta{ left:auto; right:3%; width:max-content }
+}
 .hdr-nav a{ color:#fff; text-decoration:none;
-  font-weight:500; font-size:calc(var(--hh) * .1847);
+  font-weight:500; font-size:max(12px, calc(var(--hh) * .1847));
   opacity:.94; transition:opacity .18s linear }
 .hdr-nav a:hover,.hdr-nav a:focus-visible{ opacity:1; text-decoration:underline;
   text-underline-offset:.4em; text-decoration-thickness:.08em;
   text-decoration-color:#29abe2 }
 
 .hdr-cta{
-  position:absolute; left:81.6%; top:50%; translate:0 -50%;
+  position:absolute; left:88.62%; top:49.2%; translate:0 -50%;
   display:flex; align-items:center; gap:.6em;
   background:var(--hdr-cta-bg); color:var(--hdr-cta-ink); text-decoration:none;
-  font-weight:900; font-size:calc(var(--hh) * .1412); letter-spacing:.045em;
+  font-weight:900; font-size:max(10px, calc(var(--hh) * .1411)); letter-spacing:.045em;
   text-transform:uppercase; white-space:nowrap;
-  padding:calc(var(--hh) * .125) calc(var(--hh) * .20)
-          calc(var(--hh) * .125) calc(var(--hh) * .125);
-  border-radius:calc(var(--hh) * .075);
+  height:calc(var(--hh) * .435); box-sizing:border-box;
+  padding:0 calc(var(--hh) * .198) 0 calc(var(--hh) * .152);
+  border:max(1px, calc(var(--hh) * .0233)) solid #fff;
+  border-radius:calc(var(--hh) * .0856);
   box-shadow:var(--hdr-cta-cast);
   transition:transform .18s ease, box-shadow .18s ease,
     background-color .9s linear, color .9s linear;
@@ -156,7 +179,7 @@
   box-shadow:0 5px 16px rgba(0,10,40,.5) }
 /* his own phone, from Phone.svg - the white tile with the blue field and the
    handset in it, not a glyph that looks a bit like one */
-.hdr-cta img{ width:calc(var(--hh) * .225); height:auto; display:block }
+.hdr-cta img{ width:calc(var(--hh) * .277); height:auto; display:block }
 /* and the handset alone, which only the phone's square button uses */
 .hdr-cta-g{ display:none }
 
@@ -189,7 +212,10 @@ body{ padding-top:calc(var(--hh) + var(--hbar)) }
   .hdr[data-hide="1"]{ transform:translateY(calc(-100% - 4px)) }
 
   .hdr-nav,.hdr-shield{ display:none }
-  .hdr .mode-switch{ left:7.5%; width:calc(var(--hh) * .50); height:calc(var(--hh) * .50) }
+  .hdr .mode-switch{ left:7.5%; top:50%; width:calc(var(--hh) * .50); height:calc(var(--hh) * .50) }
+  /* the desktop's new 19 colour and size, and its button keyline, are the
+     desktop drawing's - the phone's is unchanged */
+  .hdr-lock i{ color:var(--hdr-accent,#29abe2); font-size:calc(var(--hh) * .313) }
 
   /* HIS LOCKUP GOES TO THE MIDDLE, and it keeps its rule and its strapline -
      that is the whole of what his phone drawing changes about the bar. Centred
@@ -221,7 +247,7 @@ body{ padding-top:calc(var(--hh) + var(--hbar)) }
      is 38, which gives the strapline back its room AND lets the lockup grow,
      and says the same thing. The name survives in aria-label on the link. */
   .hdr-cta-t{ display:none }
-  .hdr-cta{ left:auto; right:4%; gap:0;
+  .hdr-cta{ left:auto; right:4%; top:50%; gap:0; border:0;
     width:calc(var(--hh) * .50); height:calc(var(--hh) * .50);
     padding:0; display:grid; place-items:center;
     border-radius:calc(var(--hh) * .125) }
