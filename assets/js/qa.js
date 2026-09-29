@@ -77,7 +77,11 @@
      drew, so it overtakes everything on the page; the shadow it throws is on
      his ground and stays there, which is what makes the pair read as height. */
   var SIGN_UP = 1.4;                       /* his green boards, 40% bigger */
-  var signs = [].slice.call(document.querySelectorAll('[data-sign],[data-para]'));
+  /* HIS DESKTOP SECTIONS ONLY. The boards lifted into the mobile sections he
+     has not drawn yet are his own art and still carry his tags, but nothing
+     on mobile is on parallax - and a board with no .sec around it has no
+     section to ride. */
+  var signs = [].slice.call(document.querySelectorAll('.sec [data-sign], .sec [data-para]'));
   signs.forEach(function (g) {
     g.style.willChange = 'transform';
     g.__sec = g.closest('.sec');

@@ -169,6 +169,39 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
 .mcol .qa{border-width:max(1px, calc(1.6 * var(--mu)))}
 .mcol .qa:last-child{margin-bottom:0}
 
+/* the sections he has not drawn yet: his road and his board at the top, then
+   his heading, his cards and his panel, on the run of colour his desktop
+   page makes between one artboard and the next */
+/* HIS COLOUR, HELD, AND ONLY HANDED OVER AT THE FOOT. Running one of his
+   ends straight into the other paints the middle of the section a mud
+   halfway between them - sand into green comes out olive. His desert stays
+   his desert and meets the green at the join, the way his desktop does. */
+.msec--gen{background:linear-gradient(var(--bg1) 0, var(--body) 9%, var(--body) 78%, var(--bg2) 97% 100%)}
+.mtop{position:relative;width:100%}
+.mtop>svg{display:block;width:100%;height:auto}
+.mhead{padding:var(--headgap) var(--padx) 0;color:var(--ink)}
+.mhead h2{margin:0;font-family:'Be Vietnam Pro',sans-serif;font-weight:800;
+          font-size:var(--hsize);line-height:var(--hlead);letter-spacing:-.02em}
+.mhead p{margin:var(--headgap) 0 0;font-family:'Be Vietnam Pro',sans-serif;
+         font-weight:600;font-size:var(--lsize);line-height:var(--llead)}
+.mcol--gen{margin-top:var(--headgap)}
+.mcta{padding:var(--ctagap) var(--padx) 0}
+.mcta-p{border-radius:max(8px, calc(10*var(--mu)));background:#1562b7;
+        border:max(1px, calc(1.6*var(--mu))) solid #fff;text-align:center;
+        padding:var(--ctapadt) calc(var(--padx)/1.6) var(--ctapadb)}
+.mcta-p strong{display:block;font-family:'Be Vietnam Pro',sans-serif;font-weight:800;
+               font-size:var(--ctat);line-height:1.1;color:#fff;letter-spacing:-.02em}
+.mcta-p span{display:block;margin-top:calc(var(--ctal)*.5);
+             font-family:'Be Vietnam Pro',sans-serif;font-weight:500;
+             font-size:var(--ctas);line-height:var(--ctal);color:#fff}
+.mbtn{display:block;margin:var(--ctal) auto 0;max-width:var(--btnw);
+      min-height:var(--btnh);border-radius:max(8px, calc(10.47*var(--mu)));
+      background:#ffc72c;border:max(1px, calc(2*var(--mu))) solid #12161c;
+      font-family:'Be Vietnam Pro',sans-serif;font-weight:800;font-style:normal;
+      font-size:var(--btn);line-height:var(--btnh);color:#12161c;
+      letter-spacing:.04em;text-transform:uppercase}
+.mtail{height:var(--tail)}
+
 @media (max-width:900px){
   #page > .sec{display:none}
   .msec{display:block}
@@ -292,11 +325,18 @@ MOB=[
           'q':'#fff','a':'#fff','cx':987.72}},
 ]
 
-# his card, measured off the ones he drew: one width, one radius, one set of
-# paddings, the same in both artboards
-MCARD={'w':969.75,'r':30.05,'shut':74.43,'gap':11.5,'pad':50.45,'qpr':75,
-       'qsize':31.99,'qlead':38.39,'qtop':43,'atop':41.5,'abot':118,
-       'bsize':33.93,'blead':56.23,'mw':33.6,'gw':13.33,'gsw':3}
+# HIS CARD, MEASURED OFF THE ONES HE DREW - with a floor under every length.
+# He draws the mobile artboard at about two and a half times phone size, so
+# taken at face value his card comes out at eleven pixels of type inside
+# eighteen pixels of padding on a 390 phone, which is not readable. Each
+# length is his own number in his own units OR the floor below, whichever is
+# larger: on a wide phone his drawing wins, on a narrow one the floor does,
+# and the card never shrinks under the size it can be read at.
+#           his   floor(px)
+MCARD={'w':969.75,'shut':(74.43,62),'gap':(11.5,10),'pad':(50.45,26),'qpr':(75,58),
+       'qsize':(31.99,16),'qlead':(38.39,21),'qtop':(43,22),'atop':(41.5,15),
+       'abot':(118,30),'bsize':(33.93,15.5),'blead':(56.23,25),
+       'mw':(33.6,26),'gw':(13.33,11),'gsw':(3,2),'minset':(None,18)}
 
 def msvg_of(m):
     s=open(f"{ROOT}/assets/scene/{m['f']}",encoding='utf-8').read()
@@ -405,6 +445,47 @@ for d in SEC:
         parts.append('</div>')
     parts.append('</section>')
 
+# ---- THE SECTIONS HE HAS NOT DRAWN YET ---------------------------------
+# He asked for the rest on the concept he showed: his road in at the top, his
+# board hanging over it, the heading and the line under it, his cards, his
+# panel at the foot. Nothing here is drawn by me - his board comes out of the
+# desktop artboard it lives on, his road out of the one mobile section he put
+# one in, and the rhythm is measured off his own section four. Only the
+# arrangement is mine.
+MGEN=[
+ {'k':'m5','src':'04','sid':'qa-video',      'sign':'video',   'bg':('#000000','#dbb09f')},
+ {'k':'m6','src':'05','sid':'qa-advertising','sign':'social',  'bg':('#dbb09f','#1c9023')},
+ {'k':'m7','src':'06','sid':'qa-branding',   'sign':'branding','bg':('#1c9023','#725841'),
+  'body':'#297a2b'},   # his own ground around that board, so the green
+                       # plate is not lost in the green field
+ {'k':'m8','src':'07','sid':'qa-print',      'sign':'print',   'bg':('#725841','#457319')},
+ {'k':'m9','src':'08','sid':'qa-working',    'sign':None,      'bg':('#507f1f','#ffffff')},
+]
+MCOL=1093.2          # his section four column, so they all read at one scale
+MROAD=1000.0         # how far down his road runs before his heading starts
+MSLOT=(108.85,370.59,910.02,292.18)   # where his board hangs in that strip
+
+# his type, off his section four, with the same floor the cards have
+MTYPE={'h':(108.55,34),'hlead':(112.9,37),'lead':(34.19,15.5),'leadlead':(58.75,25),
+       'ctat':(57.23,22),'ctas':(29.08,14),'ctal':(34.9,19),'btn':(28.91,14),
+       'padx':(125.76,26),'headgap':(96,26),'ctagap':(86,26),'tail':(160,36),
+       'ctapadt':(92,22),'ctapadb':(66,18),'btnh':(68.84,44),'btnw':(670.51,240)}
+
+MSIGN=json.load(open(f'{HERE}/msigns.json')) if os.path.exists(f'{HERE}/msigns.json') else {}
+MROADSVG=(open(f'{ROOT}/assets/scene/m-road.svg',encoding='utf-8').read()
+          if os.path.exists(f'{ROOT}/assets/scene/m-road.svg') else '')
+COPYBY={c['sid']:c for c in json.load(open(f'{HERE}/copy.json',encoding='utf-8'))}
+
+def lum(hx):
+    hx=hx.lstrip('#')
+    r,g,b=(int(hx[i:i+2],16) for i in (0,2,4))
+    return (0.299*r+0.587*g+0.114*b)/255
+
+def mix(a,bq,t):
+    a=a.lstrip('#'); bq=bq.lstrip('#')
+    v=[round(int(a[i:i+2],16)+(int(bq[i:i+2],16)-int(a[i:i+2],16))*t) for i in (0,2,4)]
+    return '#%02x%02x%02x'%tuple(v)
+
 # his mobile sections, behind the same door his desktop ones are behind
 def mstrip(m, art, o, hh, tag):
     # the strip is a window on his whole artboard: the svg keeps his own
@@ -427,16 +508,21 @@ for m in MOB:
     else:
         cards=cardsrc[m['src']]
         parts.append(mstrip(m, art, 0, m['top'], False))
-        MU=lambda n: f'calc({n}*var(--mu))'
+        def MU(key, fall=None):
+            u,f=K[key] if isinstance(K[key],tuple) else (K[key],0)
+            if fall is not None: u=fall
+            return f'max({f}px, calc({u}*var(--mu)))' if f else f'calc({u}*var(--mu))'
         cst=(f'--cx:{C["x"]};--cw:{K["w"]};'
-             f'--rad:{MU(K["r"])};--shut:{MU(K["shut"])};--gap:{MU(K["gap"])};'
-             f'--pad:{MU(K["pad"])};--qpr:{MU(K["qpr"])};'
-             f'--qsize:{MU(K["qsize"])};--qlead:{MU(K["qlead"])};--qtop:{MU(K["qtop"])};'
-             f'--atop:{MU(K["atop"])};--abot:{MU(K["abot"])};'
-             f'--bsize:{MU(K["bsize"])};--blead:{MU(K["blead"])};'
-             f'--mw:{MU(K["mw"])};--gw:{MU(K["gw"])};--gsw:{MU(K["gsw"])};'
+             f'--shut:{MU("shut")};--gap:{MU("gap")};'
+             f'--pad:{MU("pad")};--qpr:{MU("qpr")};'
+             f'--qsize:{MU("qsize")};--qlead:{MU("qlead")};--qtop:{MU("qtop")};'
+             f'--atop:{MU("atop")};--abot:{MU("abot")};'
+             f'--bsize:{MU("bsize")};--blead:{MU("blead")};'
+             f'--mw:{MU("mw")};--gw:{MU("gw")};--gsw:{MU("gsw")};'
+             f'--minset:{MU("minset", C["x"]+K["w"]-C["cx"]-33.6/2)};'
+             # his pill keeps its own roundness whatever size it ends up
+             f'--rad:calc(var(--shut)*0.404);'
              f'--msw:0px;--mstroke:transparent;'
-             f'--minset:{MU(round(C["x"]+K["w"]-C["cx"]-K["mw"]/2,2))};'
              f'--qfam:Arial-BoldMT,Arial,sans-serif;'
              f"--bfam:'Be Vietnam Pro',sans-serif;--bwgt:300;"
              f'--fill:{C["fill"]};--fill-open:{C["open"]};--stroke:{C["stroke"]};'
@@ -453,6 +539,90 @@ for m in MOB:
               f'</div>')
         parts.append('</div>')
         parts.append(mstrip(m, art, m['bot'], round(m['ch']-m['bot'],2), True))
+    parts.append('</section>')
+
+# his road, his board, his rhythm - the sections he has not drawn yet
+def mgen_top(g):
+    road=re.sub(r'^<\?xml[^>]*\?>\s*','',MROADSVG)
+    road=re.sub(r'<svg[^>]*>','',road,count=1).replace('</svg>','')
+    ids=set(re.findall(r'\sid="([^"]+)"',road))
+    for i in sorted(ids,key=len,reverse=True):
+        road=road.replace(f'id="{i}"',f'id="{g["k"]}r_{i}"')
+        road=road.replace(f'url(#{i})',f'url(#{g["k"]}r_{i})')
+        road=road.replace(f'xlink:href="#{i}"',f'xlink:href="#{g["k"]}r_{i}"')
+    board=''
+    if g['sign'] and g['sign'] in MSIGN:
+        S=MSIGN[g['sign']]; pl=S['plate']
+        sv=open(f"{ROOT}/assets/scene/msign-{g['sign']}.svg",encoding='utf-8').read()
+        sv=re.sub(r'^<\?xml[^>]*\?>\s*','',sv)
+        sv=re.sub(r'<svg[^>]*>','',sv,count=1).replace('</svg>','')
+        ids=set(re.findall(r'\sid="([^"]+)"',sv))
+        for i in sorted(ids,key=len,reverse=True):
+            sv=sv.replace(f'id="{i}"',f'id="{g["k"]}s_{i}"')
+            sv=sv.replace(f'url(#{i})',f'url(#{g["k"]}s_{i})')
+            sv=sv.replace(f'xlink:href="#{i}"',f'xlink:href="#{g["k"]}s_{i}"')
+        sc=MSLOT[2]/pl[2]
+        tx=round(MSLOT[0]-pl[0]*sc,2); ty=round(MSLOT[1]-pl[1]*sc,2)
+        board=f'<g transform="translate({tx} {ty}) scale({round(sc,5)})">{sv}</g>'
+    return (f'<div class="mtop"><svg xmlns="http://www.w3.org/2000/svg" '
+            f'viewBox="0 0 {MCOL} {MROAD}" aria-hidden="true">{road}{board}</svg></div>')
+
+for g in MGEN:
+    C=COPYBY[g['sid']]; cards=cardsrc[g['src']]; K=MCARD; T=MTYPE
+    def F(key):
+        u,f=T[key]; return f'max({f}px, calc({u}*var(--mu)))'
+    # where his card block sits on the run of colour, so the card is the one
+    # that can be read on it and the ground behind it is that colour
+    # the body of the section is its own colour; only the foot blends into the
+    # next one, so the card and the lettering answer to that colour and not to
+    # a mud halfway between two of his
+    night=lum(g['bg'][0])<0.22
+    card=({'fill':'#0f1c28','open':'#16283a','stroke':'#cad9ea','q':'#fff','a':'#e6edf5'}
+          if night else
+          {'fill':'#ffffff','open':'#deefff','stroke':'#00287e','q':'#12161c','a':'#454c57'})
+    ink='#fff' if lum(g['bg'][0])<0.55 else '#12161c'
+    st=(f'--mbc:{MCOL};--mu:calc(100vw / {MCOL});'
+        f'--bg1:{g["bg"][0]};--bg2:{g["bg"][1]};'
+        f'--body:{g.get("body") or g["bg"][0]};--ink:{ink};'
+        f'--padx:{F("padx")};--hsize:{F("h")};--hlead:{F("hlead")};'
+        f'--lsize:{F("lead")};--llead:{F("leadlead")};'
+        f'--headgap:{F("headgap")};--ctagap:{F("ctagap")};--tail:{F("tail")};'
+        f'--ctat:{F("ctat")};--ctas:{F("ctas")};--ctal:{F("ctal")};--btn:{F("btn")};'
+        f'--ctapadt:{F("ctapadt")};--ctapadb:{F("ctapadb")};'
+        f'--btnh:{F("btnh")};--btnw:{F("btnw")}')
+    parts.append(f'<section class="msec msec--gen" id="{g["k"]}" style="{st}">')
+    parts.append(mgen_top(g))
+    parts.append('<div class="mhead">'
+                 f'<h2>{esc(C["heading"])}</h2><p>{esc(C["lead"])}</p></div>')
+    def MU(key, fall=None):
+        u,f=K[key] if isinstance(K[key],tuple) else (K[key],0)
+        if fall is not None: u=fall
+        return f'max({f}px, calc({u}*var(--mu)))' if f else f'calc({u}*var(--mu))'
+    cst=(f'--cx:59.14;--cw:{K["w"]};--shut:{MU("shut")};--gap:{MU("gap")};'
+         f'--pad:{MU("pad")};--qpr:{MU("qpr")};--qsize:{MU("qsize")};'
+         f'--qlead:{MU("qlead")};--qtop:{MU("qtop")};--atop:{MU("atop")};'
+         f'--abot:{MU("abot")};--bsize:{MU("bsize")};--blead:{MU("blead")};'
+         f'--mw:{MU("mw")};--gw:{MU("gw")};--gsw:{MU("gsw")};--minset:{MU("minset",18)};'
+         f'--rad:calc(var(--shut)*0.404);--msw:0px;--mstroke:transparent;'
+         f'--qfam:Arial-BoldMT,Arial,sans-serif;'
+         f"--bfam:'Be Vietnam Pro',sans-serif;--bwgt:300;"
+         f'--fill:{card["fill"]};--fill-open:{card["open"]};--stroke:{card["stroke"]};'
+         f'--qfill:{card["q"]};--bfill:{card["a"]};--mfill:#00aa56;--gcol:#fff')
+    parts.append(f'<div class="mcol mcol--gen" style="{cst}">')
+    for i,c in enumerate(cards):
+        body=''.join(f'<p>{esc(x)}</p>' for x in (c['ans'] or []))
+        parts.append(
+          f'<div class="qa" data-i="{i}">'
+          f'<button class="qa-q" type="button" aria-expanded="false" aria-controls="a{g["k"]}-{i}">'
+          f'<span>{esc(c["q"])}</span><i class="qa-m" aria-hidden="true"></i></button>'
+          f'<div class="qa-a" id="a{g["k"]}-{i}" role="region"><div class="qa-ai">{body}</div></div>'
+          f'</div>')
+    parts.append('</div>')
+    cta=C.get('cta') or ['','','']
+    parts.append('<div class="mcta"><div class="mcta-p">'
+                 f'<strong>{esc(cta[0])}</strong><span>{esc(cta[1])}</span>'
+                 f'<i class="mbtn">{esc(cta[2])}</i></div></div>')
+    parts.append('<div class="mtail"></div>')
     parts.append('</section>')
 
 ld={"@context":"https://schema.org","@type":"FAQPage","mainEntity":[

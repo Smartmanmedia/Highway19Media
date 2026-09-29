@@ -73,6 +73,39 @@ body{margin:0;background:#00287e;overflow-x:hidden;-webkit-font-smoothing:antial
 .mcol .qa{border-width:max(1px, calc(1.6 * var(--mu)))}
 .mcol .qa:last-child{margin-bottom:0}
 
+/* the sections he has not drawn yet: his road and his board at the top, then
+   his heading, his cards and his panel, on the run of colour his desktop
+   page makes between one artboard and the next */
+/* HIS COLOUR, HELD, AND ONLY HANDED OVER AT THE FOOT. Running one of his
+   ends straight into the other paints the middle of the section a mud
+   halfway between them - sand into green comes out olive. His desert stays
+   his desert and meets the green at the join, the way his desktop does. */
+.msec--gen{background:linear-gradient(var(--bg1) 0, var(--body) 9%, var(--body) 78%, var(--bg2) 97% 100%)}
+.mtop{position:relative;width:100%}
+.mtop>svg{display:block;width:100%;height:auto}
+.mhead{padding:var(--headgap) var(--padx) 0;color:var(--ink)}
+.mhead h2{margin:0;font-family:'Be Vietnam Pro',sans-serif;font-weight:800;
+          font-size:var(--hsize);line-height:var(--hlead);letter-spacing:-.02em}
+.mhead p{margin:var(--headgap) 0 0;font-family:'Be Vietnam Pro',sans-serif;
+         font-weight:600;font-size:var(--lsize);line-height:var(--llead)}
+.mcol--gen{margin-top:var(--headgap)}
+.mcta{padding:var(--ctagap) var(--padx) 0}
+.mcta-p{border-radius:max(8px, calc(10*var(--mu)));background:#1562b7;
+        border:max(1px, calc(1.6*var(--mu))) solid #fff;text-align:center;
+        padding:var(--ctapadt) calc(var(--padx)/1.6) var(--ctapadb)}
+.mcta-p strong{display:block;font-family:'Be Vietnam Pro',sans-serif;font-weight:800;
+               font-size:var(--ctat);line-height:1.1;color:#fff;letter-spacing:-.02em}
+.mcta-p span{display:block;margin-top:calc(var(--ctal)*.5);
+             font-family:'Be Vietnam Pro',sans-serif;font-weight:500;
+             font-size:var(--ctas);line-height:var(--ctal);color:#fff}
+.mbtn{display:block;margin:var(--ctal) auto 0;max-width:var(--btnw);
+      min-height:var(--btnh);border-radius:max(8px, calc(10.47*var(--mu)));
+      background:#ffc72c;border:max(1px, calc(2*var(--mu))) solid #12161c;
+      font-family:'Be Vietnam Pro',sans-serif;font-weight:800;font-style:normal;
+      font-size:var(--btn);line-height:var(--btnh);color:#12161c;
+      letter-spacing:.04em;text-transform:uppercase}
+.mtail{height:var(--tail)}
+
 @media (max-width:900px){
   #page > .sec{display:none}
   .msec{display:block}

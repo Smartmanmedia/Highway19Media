@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="116.22 225.8 932.25 267.41"><defs>
+    <linearGradient id="linear-gradient" x1="1064" y1="1.6" x2="1064" y2="-1645.75" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#002274"/>
+      <stop offset=".29" stop-color="#002476"/>
+      <stop offset=".5" stop-color="#002b80"/>
+      <stop offset=".67" stop-color="#01368f"/>
+      <stop offset=".84" stop-color="#0247a5"/>
+      <stop offset=".99" stop-color="#035cc1"/>
+      <stop offset="1" stop-color="#045dc3"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="1064.6" y1="1864" x2="1064.6" y2="1.6" gradientUnits="userSpaceOnUse">
+      <stop offset=".65" stop-color="#000"/>
+      <stop offset=".73" stop-color="#000003"/>
+      <stop offset=".79" stop-color="#00030d"/>
+      <stop offset=".85" stop-color="#00081d"/>
+      <stop offset=".9" stop-color="#000f35"/>
+      <stop offset=".95" stop-color="#001853"/>
+      <stop offset="1" stop-color="#002275"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="1062.2" y1="1864.2" x2="1062.2" y2="3813.2" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000"/>
+      <stop offset=".03" stop-color="#020203"/>
+      <stop offset=".28" stop-color="#141521"/>
+      <stop offset=".52" stop-color="#202336"/>
+      <stop offset=".76" stop-color="#282c42"/>
+      <stop offset=".99" stop-color="#2b2f47"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-4" x1="3625.97" y1="8897.3" x2="3625.97" y2="8888.26" gradientTransform="translate(-2178.0767 6277.0736) rotate(-136.3107) scale(.6847) skewX(-2.6187)" gradientUnits="userSpaceOnUse">
+      <stop offset=".37" stop-color="gray"/>
+      <stop offset="1" stop-color="#000"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-5" x1="6504.79" y1="3486.82" x2="6504.79" y2="3495.85" gradientTransform="translate(-4520.3434 1781.3836) rotate(-43.6893) scale(.6847) skewX(2.6187)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-6" x1="3690.77" y1="8832.49" x2="3690.77" y2="8823.46" gradientTransform="translate(-2178.0769 6277.0736) rotate(-136.3107) scale(.6847) skewX(-2.6187)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-7" x1="6439.98" y1="3422.02" x2="6439.98" y2="3431.05" gradientTransform="translate(-4520.3433 1781.3838) rotate(-43.6893) scale(.6847) skewX(2.6187)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-8" x1="3571.25" y1="8960.51" x2="3571.25" y2="8944.28" gradientTransform="translate(-2178.0768 6277.0736) rotate(-136.3107) scale(.6847) skewX(-2.6187)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-9" x1="-3471.43" y1="8661.6" x2="-3471.43" y2="8637.65" gradientTransform="translate(1250.8012 -5465.7831) scale(.2407 .6689)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-10" x1="3760.84" y1="8762.42" x2="3760.84" y2="8753.39" gradientTransform="translate(-2178.0769 6277.0736) rotate(-136.3107) scale(.6847) skewX(-2.6187)" gradientUnits="userSpaceOnUse">
+      <stop offset=".37" stop-color="#fff"/>
+      <stop offset="1" stop-color="gray"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-11" x1="6369.91" y1="3351.95" x2="6369.91" y2="3360.98" gradientTransform="translate(-4520.3433 1781.3838) rotate(-43.6893) scale(.6847) skewX(2.6187)" gradientUnits="userSpaceOnUse">
+      <stop offset=".37" stop-color="#fff"/>
+      <stop offset="1" stop-color="gray"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-12" x1="-3323.78" y1="8661.6" x2="-3323.78" y2="8638.18" gradientTransform="translate(1179.7156 -5466.1371) scale(.2407 .6689)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-13" x1="-3323.78" y1="8557.87" x2="-3323.78" y2="8534.45" gradientTransform="translate(1179.7147 -5327.3756) scale(.2407 .6689)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-14" x1="3824.15" y1="8699.11" x2="3824.15" y2="8690.08" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-15" x1="6306.6" y1="3288.64" x2="6306.6" y2="3297.67" gradientTransform="translate(-4520.3434 1781.3836) rotate(-43.6893) scale(.6847) skewX(2.6187)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-16" x1="3888.96" y1="8634.31" x2="3888.96" y2="8625.27" gradientTransform="translate(-2178.0769 6277.0736) rotate(-136.3107) scale(.6847) skewX(-2.6187)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-17" x1="6241.8" y1="3223.83" x2="6241.8" y2="3232.87" gradientTransform="translate(-4520.3433 1781.3838) rotate(-43.6893) scale(.6847) skewX(2.6187)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-18" x1="3760.06" y1="8763.2" x2="3760.06" y2="8754.17" gradientTransform="translate(-2178.0768 6277.0736) rotate(-136.3107) scale(.6847) skewX(-2.6187)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-19" x1="6370.69" y1="3352.73" x2="6370.69" y2="3361.76" gradientTransform="translate(-4520.3434 1781.3835) rotate(-43.6893) scale(.6847) skewX(2.6187)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-20" x1="-2796.79" y1="8661.6" x2="-2796.79" y2="8638.18" gradientTransform="translate(925.9899 -5466.1371) scale(.2407 .6689)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-21" x1="-2796.78" y1="8557.87" x2="-2796.78" y2="8534.45" gradientTransform="translate(925.989 -5327.3756) scale(.2407 .6689)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-22" x1="3957.31" y1="8565.95" x2="3957.31" y2="8556.92" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-10"/>
+    <linearGradient id="linear-gradient-23" x1="6173.45" y1="3155.48" x2="6173.45" y2="3164.51" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-11"/>
+    <linearGradient id="linear-gradient-24" x1="-2515.61" y1="8661.6" x2="-2515.61" y2="8638.18" gradientTransform="translate(790.6169 -5466.1371) scale(.2407 .6689)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-25" x1="-2515.61" y1="8557.87" x2="-2515.61" y2="8534.45" gradientTransform="translate(790.616 -5327.3756) scale(.2407 .6689)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-26" x1="4020.62" y1="8502.64" x2="4020.62" y2="8493.61" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-27" x1="6110.13" y1="3092.17" x2="6110.13" y2="3101.2" gradientTransform="translate(-4520.3434 1781.3836) rotate(-43.6893) scale(.6847) skewX(2.6187)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-28" x1="4085.43" y1="8437.84" x2="4085.43" y2="8428.81" gradientTransform="translate(-2178.0769 6277.0736) rotate(-136.3107) scale(.6847) skewX(-2.6187)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-29" x1="6045.33" y1="3027.36" x2="6045.33" y2="3036.4" gradientTransform="translate(-4520.3433 1781.3838) rotate(-43.6893) scale(.6847) skewX(2.6187)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-30" x1="3956.53" y1="8566.74" x2="3956.53" y2="8557.7" gradientTransform="translate(-2178.0768 6277.0736) rotate(-136.3107) scale(.6847) skewX(-2.6187)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-31" x1="6174.23" y1="3156.26" x2="6174.23" y2="3165.29" gradientTransform="translate(-4520.3434 1781.3835) rotate(-43.6893) scale(.6847) skewX(2.6187)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-32" x1="-1988.62" y1="8661.6" x2="-1988.62" y2="8638.18" gradientTransform="translate(536.8912 -5466.1371) scale(.2407 .6689)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-33" x1="-1988.61" y1="8557.87" x2="-1988.61" y2="8534.45" gradientTransform="translate(536.8903 -5327.3756) scale(.2407 .6689)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-4"/>
+    <linearGradient id="linear-gradient-34" x1="360.73" y1="470.42" x2="360.73" y2="236.22" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff" stop-opacity=".4"/>
+      <stop offset="1" stop-color="#8c8c8c" stop-opacity=".1"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-35" x1="640.62" x2="640.62" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-34"/>
+    <linearGradient id="linear-gradient-36" x1="905.54" x2="905.54" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-34"/>
+    <linearGradient id="linear-gradient-37" x1="593.86" y1="588.74" x2="593.86" y2="354.54" gradientTransform="translate(1496.2 839.8) rotate(-180)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-34"/>
+    <linearGradient id="linear-gradient-38" x1="862.49" y1="592.83" x2="862.49" y2="358.63" gradientTransform="translate(1496.2 839.8) rotate(-180)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-34"/>
+    <linearGradient id="linear-gradient-39" x1="1127.4" y1="592.83" x2="1127.4" y2="358.63" gradientTransform="translate(1496.2 839.8) rotate(-180)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#linear-gradient-34"/>
+  </defs><g data-sign="1" transform="matrix(0.99999,0.00000,0.00000,0.99999,0.00710,0.00000) "><g>
+      <polygon points="464.77 385.45 398.91 322.53 394.44 326.81 460.3 389.72 464.77 385.45" fill="url(#linear-gradient-4)"/>
+      <polygon points="398.21 389.72 464.06 326.8 459.59 322.53 393.73 385.44 398.21 389.72" fill="url(#linear-gradient-5)"/>
+      <polygon points="400.6 385.44 334.74 322.53 330.27 326.81 396.13 389.72 400.6 385.44" fill="url(#linear-gradient-6)"/>
+      <polygon points="334.04 389.71 399.89 326.8 395.42 322.53 329.56 385.44 334.04 389.71" fill="url(#linear-gradient-7)"/>
+      <polygon points="514.53 381.11 461.51 322.53 457.91 326.51 510.92 385.09 514.53 381.11" fill="url(#linear-gradient-8)"/>
+      <rect x="325.93" y="311.73" width="178.4" height="16.02" transform="translate(830.26 639.48) rotate(-180)" fill="url(#linear-gradient-9)"/>
+      <g>
+        <polygon points="331.21 385.44 265.36 322.53 260.88 326.81 326.74 389.72 331.21 385.44" fill="url(#linear-gradient-10)"/>
+        <polygon points="264.65 389.71 330.51 326.8 326.04 322.53 260.18 385.44 264.65 389.71" fill="url(#linear-gradient-11)"/>
+        <rect x="256.54" y="311.73" width="246.09" height="15.66" transform="translate(759.17 639.12) rotate(-180)" fill="url(#linear-gradient-12)"/>
+        <rect x="256.54" y="381.11" width="246.09" height="15.66" transform="translate(759.17 777.88) rotate(-180)" fill="url(#linear-gradient-13)"/>
+        <polygon points="268.52 385.45 202.67 322.53 198.19 326.81 264.05 389.72 268.52 385.45" fill="url(#linear-gradient-14)"/>
+        <polygon points="201.96 389.72 267.82 326.8 263.34 322.53 197.48 385.44 201.96 389.72" fill="url(#linear-gradient-15)"/>
+        <polygon points="204.35 385.44 138.49 322.53 134.02 326.81 199.88 389.72 204.35 385.44" fill="url(#linear-gradient-16)"/>
+        <polygon points="137.79 389.71 203.65 326.8 199.17 322.53 133.32 385.44 137.79 389.71" fill="url(#linear-gradient-17)"/>
+        <polygon points="331.99 385.45 266.13 322.53 261.66 326.81 327.52 389.72 331.99 385.45" fill="url(#linear-gradient-18)"/>
+        <polygon points="265.42 389.72 331.28 326.8 326.81 322.53 260.95 385.44 265.42 389.72" fill="url(#linear-gradient-19)"/>
+        <rect x="129.68" y="311.73" width="246.09" height="15.66" transform="translate(505.45 639.12) rotate(-180)" fill="url(#linear-gradient-20)"/>
+        <rect x="129.68" y="381.11" width="246.09" height="15.66" transform="translate(505.45 777.88) rotate(-180)" fill="url(#linear-gradient-21)"/>
+      </g>
+      <g>
+        <polygon points="136.66 385.44 70.81 322.53 66.33 326.81 132.19 389.72 136.66 385.44" fill="url(#linear-gradient-22)"/>
+        <polygon points="70.1 389.71 135.96 326.8 131.49 322.53 65.63 385.44 70.1 389.71" fill="url(#linear-gradient-23)"/>
+        <rect x="61.99" y="311.73" width="246.09" height="15.66" transform="translate(370.07 639.12) rotate(-180)" fill="url(#linear-gradient-24)"/>
+        <rect x="61.99" y="381.11" width="246.09" height="15.66" transform="translate(370.07 777.88) rotate(-180)" fill="url(#linear-gradient-25)"/>
+        <polygon points="73.97 385.45 8.12 322.53 3.64 326.81 69.5 389.72 73.97 385.45" fill="url(#linear-gradient-26)"/>
+        <polygon points="7.41 389.72 73.27 326.8 68.79 322.53 2.94 385.44 7.41 389.72" fill="url(#linear-gradient-27)"/>
+        <polygon points="9.8 385.44 -56.06 322.53 -60.53 326.81 5.33 389.72 9.8 385.44" fill="url(#linear-gradient-28)"/>
+        <polygon points="-56.76 389.71 9.1 326.8 4.62 322.53 -61.23 385.44 -56.76 389.71" fill="url(#linear-gradient-29)"/>
+        <polygon points="137.44 385.45 71.58 322.53 67.11 326.81 132.97 389.72 137.44 385.45" fill="url(#linear-gradient-30)"/>
+        <polygon points="70.88 389.72 136.73 326.8 132.26 322.53 66.4 385.44 70.88 389.72" fill="url(#linear-gradient-31)"/>
+        <rect x="-64.87" y="311.73" width="246.09" height="15.66" transform="translate(116.35 639.12) rotate(-180)" fill="url(#linear-gradient-32)"/>
+        <rect x="-64.87" y="381.11" width="246.09" height="15.66" transform="translate(116.35 777.88) rotate(-180)" fill="url(#linear-gradient-33)"/>
+      </g>
+    </g><g>
+      <rect x="257.41" y="235.64" width="791.06" height="257.57" rx="18.49" ry="18.49" stroke="#000" stroke-miterlimit="7" stroke-width="1.4"/>
+      <rect x="255.15" y="234.68" width="786.81" height="252.62" rx="18.49" ry="18.49" fill="#006802" stroke="#fff" stroke-miterlimit="7" stroke-width="1.4"/>
+      <text transform="translate(430.87 354.98)" fill="#fff" font-family="Arial-BoldMT, Arial" font-size="49.04" font-weight="700" isolation="isolate"><tspan x="0" y="0">WEBSITE DESIGN</tspan><tspan x="0" y="58.84">&amp; DEVELOPMENT</tspan></text>
+      <g data-h="">
+        <path d="M987.7,410.92l-17.17-82.19-65.9,65.26,83.08,16.93Z" fill="#fff" fill-rule="evenodd"/>
+      </g>
+      <rect x="906.53" y="321.42" width="36.69" height="53.14" transform="translate(22.83 751.48) rotate(-44.72)" fill="#fff"/>
+      <g>
+        <rect x="333.89" y="470.11" width="44.03" height="12.75" rx="3" ry="3"/>
+        <rect x="346.64" y="479.51" width="19.12" height="5.53" transform="translate(838.48 126.08) rotate(90)"/>
+      </g>
+      <g>
+        <rect x="614.17" y="470.11" width="44.03" height="12.75" rx="3" ry="3"/>
+        <rect x="626.92" y="479.51" width="19.12" height="5.53" transform="translate(1118.7569 -154.198) rotate(90)"/>
+      </g>
+      <g>
+        <rect x="877.54" y="470.11" width="44.03" height="12.75" rx="3" ry="3"/>
+        <rect x="890.29" y="479.51" width="19.12" height="5.53" transform="translate(1382.13 -417.5711) rotate(90)"/>
+      </g>
+      <g>
+        <rect x="885.26" y="238.17" width="44.03" height="12.75" rx="3" ry="3" transform="translate(1814.5616 489.0901) rotate(-180)"/>
+        <rect x="897.43" y="235.98" width="19.12" height="5.53" transform="translate(668.2398 1145.7424) rotate(-90)"/>
+      </g>
+      <g>
+        <rect x="615.61" y="234.78" width="44.03" height="12.75" rx="3" ry="3" transform="translate(1275.2526 482.3067) rotate(-180)"/>
+        <rect x="627.78" y="232.59" width="19.12" height="5.53" transform="translate(401.98 872.7) rotate(-90)"/>
+      </g>
+      <g>
+        <rect x="351.08" y="234.78" width="44.03" height="12.75" rx="3" ry="3" transform="translate(746.19 482.31) rotate(-180)"/>
+        <rect x="363.25" y="232.59" width="19.12" height="5.53" transform="translate(137.45 608.17) rotate(-90)"/>
+      </g>
+      <polygon points="378.87 470.42 333.16 470.42 275.12 236.22 446.35 236.22 378.87 470.42" fill="url(#linear-gradient-34)"/>
+      <polygon points="658.52 470.42 613.42 470.42 556.16 236.22 725.09 236.22 658.52 470.42" fill="url(#linear-gradient-35)"/>
+      <polygon points="923.43 470.42 878.33 470.42 821.07 236.22 990 236.22 923.43 470.42" fill="url(#linear-gradient-36)"/>
+      <polygon points="884.2 251.06 929.91 251.06 987.95 485.26 816.72 485.26 884.2 251.06" fill="url(#linear-gradient-37)"/>
+      <polygon points="615.82 246.97 660.91 246.97 718.18 481.17 549.24 481.17 615.82 246.97" fill="url(#linear-gradient-38)"/>
+      <polygon points="350.9 246.97 396 246.97 453.26 481.17 284.33 481.17 350.9 246.97" fill="url(#linear-gradient-39)"/>
+      <path d="M346.73,311.14h0c24.27,0,43.95,19.68,43.95,43.95h0c0,24.27-19.68,43.95-43.95,43.95h0c-24.27,0-43.95-19.68-43.95-43.95h0c0-24.27,19.68-43.95,43.95-43.95Z" fill="#1068b6" stroke="#fff" stroke-miterlimit="10" stroke-width="3"/>
+      <g>
+        <rect x="325.55" y="336.85" width="43.19" height="34.92" rx="2.75" ry="2.75" fill="none" stroke="#fff" stroke-miterlimit="10"/>
+        <path d="M325.55,346.73h43.19" fill="none" stroke="#fff" stroke-miterlimit="10"/>
+        <circle cx="331.98" cy="341.9" r="1.95" fill="none" stroke="#fff" stroke-miterlimit="10"/>
+        <circle cx="338.19" cy="341.9" r="1.95" fill="none" stroke="#fff" stroke-miterlimit="10"/>
+        <circle cx="344.39" cy="341.9" r="1.95" fill="none" stroke="#fff" stroke-miterlimit="10"/>
+        <path d="M342.55,354.08l-5.51,5.51,5.51,5.51M351.74,354.08l5.51,5.51-5.51,5.51M349.22,352.93l-4.14,13.33" fill="none" stroke="#fff" stroke-miterlimit="10"/>
+      </g>
+    </g></g></svg>
