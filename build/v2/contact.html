@@ -58,6 +58,11 @@ body{ margin:0; background:#00287d }
 .ct img{ max-width:100%; display:block }
 .ct a{ color:inherit }
 .ct .fcard{ width:min(100%, 1240px); margin-top:0; --fc-btn:#ffc72c }
+/* a 1px white keyline round the whole card - both halves - and a shadow
+   lifting it off the blue */
+.ct .fcard{ --fc-edge:rgba(255,255,255,.9);
+  --fc-cast:0 26px 60px rgba(0,10,45,.45), 0 6px 16px rgba(0,10,45,.28) }
+.ct .fcard::after{ box-shadow:inset 0 0 0 1px var(--fc-edge) }
 .ct-h{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden;
   clip:rect(0 0 0 0); white-space:nowrap; border:0 }
 :root[data-mode="night"] .ct{ background:linear-gradient(180deg,#06214e 0%,#010817 100%) }

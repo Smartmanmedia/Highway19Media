@@ -139,7 +139,10 @@
    below the bar the way a badge does. */
 .hdr-shield{ position:absolute; left:49.32%; top:calc(var(--hh) * .1885);
   translate:-50% 0; height:calc(var(--hh) * 1.164); width:auto;
-  filter:drop-shadow(0 4px 9px rgba(0,10,35,.55)); pointer-events:none }
+  filter:drop-shadow(0 4px 9px rgba(0,10,35,.55)); display:block; transition:transform .18s ease }
+/* the shield is a link home now, the same as the lockup */
+.hdr-shield img{ display:block; height:100%; width:auto }
+.hdr-shield:hover{ transform:scale(1.04) }
 
 .hdr-nav{ position:absolute; left:72.72%; top:50%; translate:0 -50%;
   display:flex; gap:calc(var(--hh) * .42); white-space:nowrap }
