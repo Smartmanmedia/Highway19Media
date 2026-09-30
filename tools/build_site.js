@@ -536,8 +536,7 @@ wr('_redirects',
 /qa/ /q-a/ 301
 /faq /q-a/ 301
 /faq/ /q-a/ 301
-/card /card/ 301
-/questions /q-a/ 301
+` + CARD.redirects(CARDS) + `/questions /q-a/ 301
 /questions/ /q-a/ 301
 `);
 

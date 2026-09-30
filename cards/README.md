@@ -4,8 +4,8 @@ What an NFC tag or a QR code opens: a phone-first card that saves the business
 to Contacts in one tap, puts Call / Text / Email / Website one thumb away, and
 installs to the home screen as an app we can keep updating behind the icon.
 
-Highway 19 Media's own card is the first one — `/card/` — and it doubles as
-the live sales demo.
+Adam's card for Highway 19 Media is the first one — `/hwy19/adambc/` — and it
+doubles as the live sales demo.
 
     cards/template/        the code every card shares (css, js, service worker)
     cards/<slug>/card.json everything that differs between businesses
@@ -17,8 +17,8 @@ the live sales demo.
 
 | Where | URL |
 |---|---|
-| NFC tag | `https://highway19media.com/card/?s=nfc` |
-| Printed QR | `dist/site/card/qr.svg` — already encodes `?s=qr` |
+| NFC tag | `https://highway19media.com/hwy19/adambc/?s=nfc` |
+| Printed QR | `dist/site/hwy19/adambc/qr.svg` — already encodes `?s=qr` |
 | Installed app | opens `?s=app` on its own |
 | Shared by a visitor | `?s=share` |
 
@@ -34,7 +34,8 @@ free NFC writer app (NFC Tools on iOS/Android): *Write → Add a record → URL*
    - `theme.accent` is the **only** colour. Every surface, tint, icon and
      button is mixed from it, and text on it goes dark or light by contrast.
      `theme.mode` is `dark` or `light`.
-   - `path` is where it lives, e.g. `"/c/carpenterrick/"`.
+   - `path` is where it lives, e.g. `"/hwy19/adambc/"`; the same URL without
+     the last slash redirects to it.
    - Phones are digits with an optional `+`: `"+18135551234"`.
    - Every link must be `https://`.
    - `identity.logo: false` when the hero photo already shows the logo.
@@ -93,16 +94,12 @@ looped, and still for anyone with reduced motion or Save-Data on.
   numbers regardless, turn on Cloudflare Web Analytics for the Pages project
   (cookieless, no code change).
 
-## Highway 19's card — still to fill in
+## Adam's card — still to fill in
 
-These are empty on purpose because nothing in the repo says what they are:
-
-- `contact.phone` / `sms` — turns on **Call** and **Text** and puts the number
-  in the contact. (The website leaves the phone off deliberately; the card is a
-  different decision.)
-- `identity.person` / `title` — e.g. Adam's full name and role; the contact is
-  then filed under the person, at the company.
 - `modules.review.url` — the Google Business Profile “write a review” link.
-- `social.instagram` / `tiktok` / `youtube` / `linkedin` — only Facebook exists today.
+- `social.instagram` / `tiktok` / `youtube` / `linkedin` — only Facebook and
+  WhatsApp are on it today. WhatsApp is `https://wa.me/<country+number>`.
 - `modules.story`, `gallery`, `offer` — a reel, portfolio shots, a current offer.
 - `modules.promo.url` — points at `/contact/` until the product page exists.
+
+The phone number is on the card only; the website still carries none.

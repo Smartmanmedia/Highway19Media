@@ -97,7 +97,7 @@ function vcard(c, cardUrl, photo) {
   if (k.website) L.push(`URL;TYPE=WORK:${k.website}`);
   L.push(`item1.URL:${cardUrl}`, 'item1.X-ABLabel:Digital card');
   if (a.city || a.street) L.push(`ADR;TYPE=WORK:;;${e(a.street)};${e(a.city)};${e(a.region)};${e(a.postcode)};${e(a.country)}`);
-  for (const [net] of NETWORKS) if (c.social && c.social[net])
+  for (const [net] of NETWORKS) if (c.social && c.social[net] && net !== 'whatsapp')
     L.push(`X-SOCIALPROFILE;TYPE=${net}:${c.social[net]}`);
   const note = [id.tagline, id.services, id.area].filter(Boolean).join(' — ');
   if (note) L.push(`NOTE:${e(note)}`);
@@ -173,7 +173,10 @@ function render(c, ctx) {
   /* socials: only the ones that exist. Two or fewer get a full row each, with
      the handle - a lone round icon on its own looks like something is missing */
   const nets = NETWORKS.filter(([n]) => c.social && c.social[n]);
-  const handle = u => decodeURIComponent(u.replace(/^https:\/\/(www\.)?[^/]+\//, '').replace(/\/$/, '')).replace(/^@?/, '@');
+  /* a WhatsApp link is a number, not a handle - shown the way it is dialled */
+  const handle = u => /^https:\/\/wa\.me\//.test(u)
+    ? u.replace(/^https:\/\/wa\.me\/1?(\d{3})(\d{3})(\d{4}).*$/, '$1-$2-$3')
+    : decodeURIComponent(u.replace(/^https:\/\/(www\.)?[^/]+\//, '').replace(/\/$/, '')).replace(/^@?/, '@');
   const social = !nets.length ? '' : nets.length <= 2 ? `
 <nav class="soc soc--rows" aria-label="Follow">
   ${nets.map(([n, label]) => `<a class="soc-row" href="${esc(c.social[n])}"${ext}${tr('social_click', n)}>${ic(n, 'ic ic-mark')}<span class="soc-name">${label}<small>${esc(handle(c.social[n]))}</small></span>${ic('chevron', 'ic ic-go')}</a>`).join('\n  ')}
@@ -466,4 +469,10 @@ ${b.path}art/*
 `).join('');
 }
 
-module.exports = { buildAll, headers, vcard, qrSvg, onAccent };
+/* /hwy19/adambc and /hwy19/adambc/ are the same card - a tag written or a
+   link typed without the last slash still lands on it */
+function redirects(built) {
+  return built.map(b => `${b.path.replace(/\/$/, '')} ${b.path} 301\n`).join('');
+}
+
+module.exports = { buildAll, headers, redirects, vcard, qrSvg, onAccent };

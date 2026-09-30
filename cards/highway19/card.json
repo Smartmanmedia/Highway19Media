@@ -1,5 +1,5 @@
 {
-  "path": "/card/",
+  "path": "/hwy19/adambc/",
   "index": false,
 
   "theme": {
@@ -10,8 +10,8 @@
   "identity": {
     "business": "Highway 19 Media",
     "logo": false,
-    "person": "",
-    "title": "",
+    "person": "Adam Ayash",
+    "title": "Marketing Director",
     "tagline": "One team for the whole road.",
     "services": "Websites · Video · Print · Social · Ads",
     "area": "Tampa Bay, FL"
@@ -29,6 +29,7 @@
 
   "social": {
     "facebook": "https://www.facebook.com/Highway19Media",
+    "whatsapp": "https://wa.me/17274585769",
     "instagram": "",
     "tiktok": "",
     "youtube": "",
