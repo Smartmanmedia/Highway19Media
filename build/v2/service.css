@@ -206,12 +206,13 @@
 .wwd--smm{ --bg:linear-gradient(214deg,#0459bd 0%,#00287d 100%) }
 .wwd--video{ --bg:linear-gradient(214deg,#00b2d4 0%,#00287d 100%) }
 .wwd--meta{ --bg:linear-gradient(214deg,#e26bc1 0%,#2e43ff 100%) }
-.wwd--google{ --bg:linear-gradient(214deg,#fff 0%,#dbdbdb 100%) }
+.wwd--google{ --bg:linear-gradient(214deg,#fff 0%,#dbdbdb 100%); --cx:517 }
+.wwd--ai{ --bg:#000; --cx:-95 }
 .wwd-in{ position:relative; width:calc(1027 * var(--u)); height:calc(819 * var(--u)) }
 .wwd-in > *{ position:absolute }
-.svc-page .wwd-h{ left:calc(7 * var(--u)); top:calc(112 * var(--u)); z-index:2; margin:0;
+.svc-page .wwd-h{ left:calc((var(--cx, 0) + 7) * var(--u)); top:calc(112 * var(--u)); z-index:2; margin:0;
   font-size:max(24px, calc(36 * var(--u))); font-weight:800; line-height:1.25; letter-spacing:0; color:#fff }
-.wwd-card{ left:0; top:calc(222 * var(--u)); z-index:2; width:calc(447 * var(--u)); min-height:calc(347 * var(--u));
+.wwd-card{ left:calc(var(--cx, 0) * var(--u)); top:calc(222 * var(--u)); z-index:2; width:calc(447 * var(--u)); min-height:calc(347 * var(--u));
   padding:calc(46 * var(--u)) calc(46 * var(--u)) calc(40 * var(--u)) calc(52 * var(--u));
   background:#fff; border:3px solid #a4d4ff; border-radius:calc(29 * var(--u));
   box-shadow:8px 12px 26px rgba(0,12,45,.34) }
@@ -224,8 +225,13 @@
 .wwd-fb{ color:#005be0 }
 .wwd-ig{ color:#d80058 }
 .wwd--meta .wwd-card h3::after{ background:#0b1f3f }
-.svc-page .wwd--google .wwd-h{ left:calc(525 * var(--u)); color:#0b1f3f }
-.wwd--google .wwd-card{ left:calc(517 * var(--u)); border-color:#999 }
+.svc-page .wwd--google .wwd-h{ color:#0b1f3f }
+.wwd--google .wwd-card,.wwd--ai .wwd-card{ border-color:#999 }
+.wwd--ai .wwd-card h3,.wwd--ai .wwd-card p{ color:#000 }
+.wwd--ai .wwd-card h3::after{ background:#000 }
+/* OpenAI's mark turns slowly behind the ChatGPT phone */
+.wwd--ai .wwd-glyph{ animation:wwdTurn 80s linear infinite }
+@keyframes wwdTurn{ to{ rotate:360deg } }
 .wwd--google .wwd-card h3::after{ background:#000 }
 /* his art, each piece at his left/top/width (set on the element) */
 .wwd-art{ inset:0; pointer-events:none }
@@ -295,6 +301,7 @@
   .wwd--video .wwd-in{ --span:623; --ox:487; --ah:714 }
   .wwd--meta .wwd-in{ --span:757; --ox:560; --ah:714 }
   .wwd--google .wwd-in{ --span:646; --ox:-212; --oy:88; --ah:646 }
+  .wwd--ai .wwd-in{ --span:347; --ox:532; --oy:105; --ah:650 }
   .wwd--google .wwd-logo{ display:none }
   .wwd-card,.wwd-h,.wwd-art{ animation:none }
 }

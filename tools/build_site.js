@@ -359,8 +359,8 @@ const SERVICES = require('./services');
           (i ? '        <p class="wwd-h" aria-hidden="true">' + x.h + '</p>\n'
              : '        <h2 class="wwd-h" id="' + id + '">' + x.h + '</h2>\n') +
           '        <div class="wwd-card"><h3>' + it.h + '</h3>' + paras(it.p) + '</div>\n' +
-          '        <div class="wwd-art" aria-hidden="true">' + it.art.map(([k, f, w, h, l, top, cx, px, py, rot]) =>
-            (cx ? '<i class="wwd-shadow" style="--l:' + (cx - 196) + ';--t:680;--w:393"></i>' : '') +
+          '        <div class="wwd-art" aria-hidden="true">' + it.art.map(([k, f, w, h, l, top, cx, px, py, rot, sy]) =>
+            (cx ? '<i class="wwd-shadow" style="--l:' + (cx - 196) + ';--t:' + (sy || 680) + ';--w:393"></i>' : '') +
             '<img class="wwd-' + k + '" src="../../assets/v2/social/' + f + '" alt="" width="' + w +
             '" height="' + h + '" style="--l:' + l + ';--t:' + top + ';--w:' + w +
             (px !== undefined ? ';--px:' + px + ';--py:' + py + '" data-c="' + (l + px) + ',' + (top + py) +

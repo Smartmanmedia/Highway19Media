@@ -187,8 +187,8 @@ module.exports = [
     ],
     sections: [
       /* WHAT WE DO, AS HE DREW IT: four full-screen panels that hold in place
-         while the next one slides up over them. His order - Google Ads last,
-         on the light panel. Art is his, cut from the SVG; each piece is [kind, file, width, height,
+         while the next one slides up over them. His order - Google Ads on the
+         light panel, then advertising in AI on the black. Art is his, cut from the SVG; each piece is [kind, file, width, height,
          left, top (his pixels, from the card's corner), and for a phone its shadow centre,
          the middle of its body in the picture, and its tilt in degrees - all three phones
          are one handset in his file, so the page can turn one into the next. */
@@ -219,7 +219,14 @@ module.exports = [
           'We research the searches, locations and opportunities that make sense, build the campaign, create ' +
           'the ads, set up tracking and manage it as the data comes in.',
           'Already running Google Ads? We can review what you have before starting over.'],
-          art: [['logo', 'google-ads-v1.webp', 749, 673, 861, 153], ['chart', 'analytics-v1.webp', 646, 646, -212, 88]] }
+          art: [['logo', 'google-ads-v1.webp', 749, 673, 861, 153], ['chart', 'analytics-v1.webp', 646, 646, -212, 88]] },
+        /* his last panel (Sept 30, evening): advertising inside the AI answers */
+        { key: 'ai', h: 'Advertising is<br>Entering<br>the Conversation', p: [
+          'People are using AI to research, compare, and decide what to buy and who to hire. We can help ' +
+          'position your business for this new advertising space with the right message, creative, landing ' +
+          'page, and campaign.'],
+          art: [['glyph', 'glyph-openai-v1.webp', 1120, 1135, 488, -158],
+                ['phone', 'phone-ai-v1.webp', 347, 613, 532, 105, 727, 173.6, 306.8, -8.04, 720]] }
       ] },
       { type: 'prose', tone: 'dark', h: 'We Don&rsquo;t Just Run Ads. We Create Them.', body: [
         'This is an important difference.',

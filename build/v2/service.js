@@ -9,8 +9,10 @@
        laid over the old one exactly, turned the same way, and faded in)
      - on Facebook & Instagram their two marks drift in behind the phone
      - then the light: the phone and the marks go, the card slides across,
-       and Google's A and his chart come in.
-   Four states, three changes. Each state holds for a while before it turns.
+       and Google's A and his chart come in
+     - then black: Google goes, the card slides back left, and the ChatGPT
+       phone flies in with OpenAI's mark turning slowly behind it.
+   One state per panel he drew; each holds for a while before it turns.
    Without this script, on a phone or for a reader who asked for less motion,
    the section is simply the four panels one after another.
    ========================================================================= */
@@ -34,7 +36,7 @@
       glyphs: [].slice.call(p.querySelectorAll('.wwd-glyph')),
       logo: p.querySelector('.wwd-logo'),
       chart: p.querySelector('.wwd-chart'),
-      google: p.classList.contains('wwd--google')
+      at: 0                       /* where his card sits in this state: --cx */
     };
   });
   parts.forEach(function (x) {
@@ -84,12 +86,16 @@
       /* the background: each lays over the last and stays until covered */
       set(x.bg, b >= 1 ? 0 : a);
 
+      /* the card and the heading cross the stage when the next state keeps
+         its card somewhere else (right for Google, back left for AI) */
+      var mx = 0;
+      if (next && b > 0) mx = (next.at - x.at) * b;
+      if (prev && a < 1) mx = (prev.at - x.at) * (1 - a);
+      var slide = mx ? 'translateX(' + mx * u + 'px)' : '';
       /* the section's heading - the same words each time, so each lays over
-         the last; it moves with the card when the card crosses to the right */
-      var hx = 0;
-      if (next && next.google) hx = 518 * b;
-      if (x.google && prev) hx = -518 * (1 - a);
-      set(x.h, b >= 1 ? 0 : (next && next.google ? 1 - b : a), hx ? 'translateX(' + hx * u + 'px)' : '');
+         the last; when the card crosses, it fades across with it */
+      var moves = next && next.at !== x.at;
+      set(x.h, b >= 1 ? 0 : (moves ? Math.min(a, 1 - b) : a), slide);
 
       /* the card: one white card whose words change. The old words go in the
          first half of the change, the new ones come in the second. */
@@ -97,10 +103,7 @@
       if (i > 0 && a < 1) { cardOn = a >= 0.5; sayO = (a - 0.5) * 2; }
       else if (b > 0) { cardOn = b < 0.5; sayO = 1 - b * 2; }
       else { cardOn = a >= 1; sayO = 1; }
-      var cx = 0;
-      if (next && next.google) cx = 518 * b;
-      if (x.google && prev) cx = -518 * (1 - a);
-      set(x.card, cardOn ? 1 : 0, cx ? 'translateX(' + cx * u + 'px)' : '');
+      set(x.card, cardOn ? 1 : 0, slide);
       x.say.forEach(function (s) { s.style.opacity = clamp(sayO); });
 
       /* the phone: turned and moved to meet the next one while the next one's
@@ -109,6 +112,9 @@
         var o = 1, dx = 0, dy = 0, dr = 0;
         if (i > 0 && prev && prev.phone && a < 1) {
           o = a; dx = (prev.cx - x.cx) * (1 - a); dy = (prev.cy - x.cy) * (1 - a); dr = (prev.rot - x.rot) * (1 - a);
+        } else if (i > 0 && prev && !prev.phone && a < 1) {
+          /* after a state with no phone, it flies in the way the first one did */
+          o = a; dx = 560 * (1 - a); dy = 300 * (1 - a); dr = 30 * (1 - a);
         } else if (i > 0 && a <= 0) o = 0;
         if (next && next.phone && b > 0) {
           o = b >= 1 ? 0 : o; dx = (next.cx - x.cx) * b; dy = (next.cy - x.cy) * b; dr = (next.rot - x.rot) * b;
@@ -122,15 +128,17 @@
             'translateX(' + dx * u + 'px)');
       }
 
-      /* the Facebook and Instagram marks: in behind the phone, gone with it */
+      /* the marks behind the phone - Facebook and Instagram, then OpenAI's:
+         in with their state, gone with it */
       x.glyphs.forEach(function (g, n) {
         var w = Math.min(a, 1 - b);
         set(g, w, 'translate(' + (n ? 60 : -60) * (1 - a) * u + 'px,' + (90 * (1 - a) - 140 * b) * u + 'px) scale(' + (0.85 + 0.15 * a) + ')');
       });
 
-      /* the light: Google's A from the right, his chart from the left */
-      if (x.logo) set(x.logo, a, 'translateX(' + 420 * (1 - a) * u + 'px)');
-      if (x.chart) set(x.chart, a, 'translateX(' + -360 * (1 - a) * u + 'px)');
+      /* the light: Google's A in from the right, his chart from the left, and
+         out the same ways when the next state comes */
+      if (x.logo) set(x.logo, Math.min(a, 1 - b), 'translateX(' + 420 * (1 - a + b) * u + 'px)');
+      if (x.chart) set(x.chart, Math.min(a, 1 - b), 'translateX(' + -360 * (1 - a + b) * u + 'px)');
     });
   }
 
@@ -147,6 +155,9 @@
       sec.classList.toggle('is-live', live);
       if (!live) clear();
     }
+    /* a screen of scrolling for each state */
+    sec.style.height = live ? N * 100 + 'vh' : '';
+    P.forEach(function (p, i) { parts[i].at = parseFloat(getComputedStyle(p).getPropertyValue('--cx')) || 0; });
     u = Math.min(1, window.innerHeight / 900, (window.innerWidth - 40) / 1110);
     sizeCards();
     frame();
