@@ -69,6 +69,8 @@
     var r = sec.getBoundingClientRect();
     var span = r.height - window.innerHeight;
     var p = span > 0 ? clamp(-r.top / span) * (N - 1) : 0;
+    /* q: how far the section has come up into the window before it pins */
+    var q = ease(clamp(1 - r.top / window.innerHeight));
     /* e[k]: how far the change from state k to k+1 has gone. Each change
        runs over the middle half of its stretch; the rest is the hold. */
     var e = [];
@@ -112,6 +114,9 @@
           o = b >= 1 ? 0 : o; dx = (next.cx - x.cx) * b; dy = (next.cy - x.cy) * b; dr = (next.rot - x.rot) * b;
         }
         if (next && !next.phone && b > 0) { o = 1 - b; dy = 260 * b; dr = 12 * b; }
+        /* the first phone flies in from the right and turns upright as the
+           section scrolls up into the window, and lands as it pins */
+        if (i === 0 && q < 1) { o = q; dx += 560 * (1 - q); dy += 300 * (1 - q); dr += 30 * (1 - q); }
         set(x.phone, o, 'translate(' + dx * u + 'px,' + dy * u + 'px) rotate(' + dr + 'deg)');
         set(x.shadow, o > 0 ? Math.min(o, next && !next.phone ? 1 - b : 1) : 0,
             'translateX(' + dx * u + 'px)');
