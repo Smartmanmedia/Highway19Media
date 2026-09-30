@@ -42,10 +42,10 @@
       <div class="svc-hero-say">
         <p class="svc-eyebrow">{{EYEBROW}}</p>
         <h1>{{H1}}</h1>
-        <p class="svc-lead">{{LEAD}}</p>
+{{TAG}}        <div class="svc-lead">{{LEAD}}</div>
         <div class="svc-acts">
           <a class="svc-btn" href="/contact/">{{CTA}}</a>
-          <a class="svc-btn svc-btn--ghost" href="#questions">Questions &amp; prices</a>
+          <a class="svc-btn svc-btn--ghost" href="#questions">Questions &amp; pricing</a>
         </div>
       </div>
       <div class="svc-hero-sign" aria-hidden="true">
@@ -63,9 +63,9 @@
     </div>
   </section>
 
-  <section class="svc-facts" aria-label="At a glance">
+{{BAND}}  <section class="svc-facts" aria-label="At a glance">
     <div class="svc-in">
-      <ul class="svc-fact-row">
+{{FACTS_H}}      <ul class="svc-fact-row">
 {{FACTS}}
       </ul>
     </div>
@@ -82,8 +82,8 @@
 
   <section class="svc-area" aria-labelledby="svc-where">
     <div class="svc-in">
-      <h2 id="svc-where">Local to Spring Hill. Working along US-19.</h2>
-      <p>{{AREA}}</p>
+      <h2 id="svc-where">{{AREA_H}}</h2>
+      <div class="svc-area-say">{{AREA}}</div>
     </div>
   </section>
 
@@ -91,7 +91,7 @@
     <div class="svc-in svc-narrow">
       <h2 id="svc-q">Questions, answered.</h2>
 {{FAQ}}
-      <p class="svc-more">More answers on the <a href="/faq/">FAQ page</a>.</p>
+      <p class="svc-more"><a href="/faq/">More answers on our FAQ page &rarr;</a></p>
     </div>
   </section>
 

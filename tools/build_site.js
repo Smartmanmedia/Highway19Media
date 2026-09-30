@@ -275,10 +275,15 @@ const SERVICES = require('./services');
   const shell = rd('build/v2/service.html');
   for (const S of SERVICES) {
     const url = SITE + '/' + S.slug + '/';
-    const faq = S.faq.map(q => {
-      if (!answers[q]) throw new Error(S.slug + ': the Q&A has no question "' + q + '"');
-      return [q, answers[q]];
+    /* a question is the Q&A's own, by its wording - or { q, from, a }: shown
+       as q, answered with a (paragraphs) or else with the Q&A's answer to from */
+    const faq = S.faq.map(item => {
+      const it = typeof item === 'string' ? { q: item } : item;
+      const src = it.from || it.q;
+      if (!it.a && !answers[src]) throw new Error(S.slug + ': the Q&A has no question "' + src + '"');
+      return [it.q, it.a ? [].concat(it.a) : [answers[src]]];
     });
+    const paras = v => [].concat(v).map(p => '<p>' + p + '</p>').join('');
     const ld = {
       '@context': 'https://schema.org',
       '@graph': [
@@ -286,7 +291,7 @@ const SERVICES = require('./services');
           inLanguage: 'en-US', isPartOf: { '@id': SITE + '/#website' }, about: { '@id': url + '#service' },
           breadcrumb: { '@id': url + '#breadcrumb' } },
         Object.assign({ '@type': 'Service', '@id': url + '#service', name: plain(S.h1), serviceType: S.serviceType,
-          description: plain(S.lead), url, provider: { '@id': SITE + '/#business' },
+          description: plain([].concat(S.lead).join(' ')), url, provider: { '@id': SITE + '/#business' },
           areaServed: ENTITY.BUSINESS.areaServed },
           S.offers ? { offers: S.offers.map(([n, p]) => ({ '@type': 'Offer', name: n,
             priceSpecification: { '@type': 'PriceSpecification', minPrice: p, priceCurrency: 'USD' } })) } : {}),
@@ -294,7 +299,7 @@ const SERVICES = require('./services');
           { '@type': 'ListItem', position: 1, name: 'Home', item: SITE + '/' },
           { '@type': 'ListItem', position: 2, name: plain(S.label), item: url }] },
         { '@type': 'FAQPage', '@id': url + '#faq', mainEntity: faq.map(([q, a]) => ({
-          '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }
+          '@type': 'Question', name: plain(q), acceptedAnswer: { '@type': 'Answer', text: plain(a.join(' ')) } })) }
       ]
     };
     const others = SERVICES.filter(o => o !== S).map(o => ({ href: '/' + o.slug + '/', label: o.label, c: o.color }))
@@ -311,20 +316,32 @@ const SERVICES = require('./services');
       .replace('{{ICON}}', S.icon)
       .replace('{{EYEBROW}}', S.eyebrow)
       .replace('{{H1}}', S.h1)
-      .replace('{{LEAD}}', S.lead)
+      .replace('{{TAG}}', S.tag ? '        <p class="svc-tag">' + S.tag + '</p>\n' : '')
+      .replace('{{LEAD}}', paras(S.lead))
       .replace(/\{\{CTA\}\}/g, S.cta)
       .replace('{{CTA_H}}', S.ctaH)
       .replace('{{INC_H}}', S.incH)
       .replace('{{INCLUDED}}', S.included.map(([h, p]) =>
-        '        <li><h3>' + h + '</h3><p>' + p + '</p></li>').join('\n'))
+        '        <li><h3>' + h + '</h3>' + paras(p) + '</li>').join('\n'))
+      /* the experience band, where a page has one: the number big in the
+         lane's colour, and read out with the heading by a screen reader */
+      .replace('{{BAND}}', S.band
+        ? '  <section class="svc-band" aria-label="Experience">\n    <div class="svc-in">\n' +
+          '      <div class="svc-band-n" aria-hidden="true">' + S.band.n + '</div>\n' +
+          '      <div><h2><span class="svc-sr">' + S.band.n + ' </span>' + S.band.h + '</h2><p>' +
+          S.band.p + '</p></div>\n    </div>\n  </section>\n'
+        : '')
+      .replace('{{FACTS_H}}', S.factsH ? '      <h2>' + S.factsH + '</h2>\n' : '')
       .replace('{{FACTS}}', S.facts.map(([b, t]) =>
         '        <li><b>' + b + '</b><span>' + t + '</span></li>').join('\n'))
       .replace('{{STEPS}}', S.steps.map(([h, p]) =>
-        '        <li><h3>' + h + '</h3><p>' + p + '</p></li>').join('\n'))
-      .replace('{{AREA}}', SERVICES.AREA + ' <a href="/contact/">Tell us where you are.</a>')
+        '        <li><h3>' + h + '</h3>' + paras(p) + '</li>').join('\n'))
+      .replace('{{AREA_H}}', S.areaH || 'Local to Spring Hill. Working along US-19.')
+      .replace('{{AREA}}', S.area ? paras(S.area)
+        : '<p>' + SERVICES.AREA + ' <a href="/contact/">Tell us where you are.</a></p>')
       .replace('{{FAQ}}', faq.map(([q, a], i) =>
         '      <details class="qa-item"' + (i ? '' : ' open') + '><summary><h3>' + esc(q) +
-        '</h3></summary><p>' + esc(a) + '</p></details>').join('\n'))
+        '</h3></summary>' + a.map(p => '<p>' + esc(p) + '</p>').join('') + '</details>').join('\n'))
       .replace('{{NEXT}}', others.map(o =>
         '        <li><a href="' + o.href + '" style="--c:' + o.c + '">' + o.label + '</a></li>').join('\n'))
       .replace('{{LD}}', () => JSON.stringify(ld))
