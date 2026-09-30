@@ -176,6 +176,12 @@
     reopen();
   });
 
+  /* GLOBAL PRIVACY CONTROL IS AN ANSWER. A browser that sends it has already
+     said no, so nothing loads and the bar does not ask - the privacy and cookie
+     pages promise exactly this. Cookie choices can still reopen the bar for
+     someone who wants to say yes on purpose. */
+  if (navigator.globalPrivacyControl === true) { root.setAttribute('data-consent', 'no'); return; }
+
   var was = saved();
   if (was && was.ok && was.tags === ids()) { root.setAttribute('data-consent', 'yes'); load(); return; }
   if (was && !was.ok && was.tags === ids()) { root.setAttribute('data-consent', 'no'); return; }

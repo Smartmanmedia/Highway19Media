@@ -55,6 +55,7 @@ if (!code.length) throw new Error('no local css/js found in page.html');
 /* the legal pages have one stylesheet of their own, and the home page - which
  * is what the list above is read from - never links it */
 if (!code.includes('legal.css')) code.push('legal.css');
+if (!code.includes('service.css')) code.push('service.css');
 /* ---------------------------------------------------------------------------
  * WHAT SHIPS IS THE CODE WITHOUT ITS PROSE. The sources are heavily commented
  * on purpose - that is where the reasoning lives - but a reader downloading the
@@ -228,11 +229,11 @@ wr('404.html', soonOut.replace(/<link rel="canonical"[^>]*>/i, ''));
  *     cannot see does not count as having one. */
 const LEGAL = [
   { slug: 'privacy', title: 'Privacy Policy', eyebrow: 'How we handle your details',
-    desc: 'What Highway 19 Media collects, why, who else sees it and how to have it deleted. No tracking, no analytics, no selling anything about you.' },
+    desc: 'What Highway 19 Media collects, why, who else sees it and how to have it deleted. Analytics only if you say yes, no advertising cookies, nothing sold.' },
   { slug: 'terms', title: 'Terms & Conditions', eyebrow: 'Using this site',
     desc: 'The terms that cover highway19media.com - what the site is, what sending the contact form does and does not start, and whose law applies.' },
   { slug: 'cookies', title: 'Cookie Policy', eyebrow: 'What is stored on your device',
-    desc: 'This site sets no cookies today. If advertising or analytics is ever added, a banner asks first and nothing loads until you accept.' },
+    desc: 'The one cookie-setting tool on this site is Google Analytics, and it loads only if you accept the banner. No advertising cookies. Change your mind any time.' },
 ];
 const DATE = new Date().toLocaleDateString('en-US',
   { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
@@ -252,6 +253,89 @@ for (const L of LEGAL) {
     .replace(/\.\.\/\.\.\/assets\//g, '/assets/')
     .replace(/\{\{ROOT\}\}/g, '/');
   wr(L.slug + '/index.html', minifyHtml(page));
+}
+
+/* 4b-i. THE SERVICE PAGES. One shell (build/v2/service.html), one entry per
+ *       service (tools/services.js). Each question's answer is the Q&A page's
+ *       own - read out of faq.html's FAQPage data by the question's wording -
+ *       so the service page and the Q&A never say two different things. */
+const SERVICES = require('./services');
+{
+  const faqSrc = fs.readFileSync(path.join(ROOT, 'faq.html'), 'utf8');
+  const answers = {};
+  for (const m of faqSrc.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+    let d; try { d = JSON.parse(m[1]); } catch (e) { continue; }
+    for (const n of (d['@graph'] || [d]))
+      if (n['@type'] === 'FAQPage')
+        for (const q of n.mainEntity) answers[q.name] = q.acceptedAnswer.text;
+  }
+  const esc = t => t.replace(/&(?![a-z]+;|#\d+;)/g, '&amp;').replace(/</g, '&lt;');
+  const plain = t => t.replace(/&amp;/g, '&').replace(/&rsquo;/g, '\u2019').replace(/&middot;/g, '\u00b7')
+                      .replace(/&[a-z]+;/g, '');
+  const shell = rd('build/v2/service.html');
+  for (const S of SERVICES) {
+    const url = SITE + '/' + S.slug + '/';
+    const faq = S.faq.map(q => {
+      if (!answers[q]) throw new Error(S.slug + ': the Q&A has no question "' + q + '"');
+      return [q, answers[q]];
+    });
+    const ld = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        { '@type': 'WebPage', '@id': url + '#webpage', url, name: plain(S.title), description: S.desc,
+          inLanguage: 'en-US', isPartOf: { '@id': SITE + '/#website' }, about: { '@id': url + '#service' },
+          breadcrumb: { '@id': url + '#breadcrumb' } },
+        Object.assign({ '@type': 'Service', '@id': url + '#service', name: plain(S.h1), serviceType: S.serviceType,
+          description: plain(S.lead), url, provider: { '@id': SITE + '/#business' },
+          areaServed: ENTITY.BUSINESS.areaServed },
+          S.offers ? { offers: S.offers.map(([n, p]) => ({ '@type': 'Offer', name: n,
+            priceSpecification: { '@type': 'PriceSpecification', minPrice: p, priceCurrency: 'USD' } })) } : {}),
+        { '@type': 'BreadcrumbList', '@id': url + '#breadcrumb', itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: SITE + '/' },
+          { '@type': 'ListItem', position: 2, name: plain(S.label), item: url }] },
+        { '@type': 'FAQPage', '@id': url + '#faq', mainEntity: faq.map(([q, a]) => ({
+          '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }
+      ]
+    };
+    const others = SERVICES.filter(o => o !== S).map(o => ({ href: '/' + o.slug + '/', label: o.label, c: o.color }))
+      .concat([{ href: '/video-production/', label: 'Video Production', c: '#662d91' },
+               { href: '/q-a/', label: 'Q&amp;A', c: '#0b1f3f' }]);
+    let page = shell
+      .replace('<!--HEADER-->', () => HEADER_FOR('/', '/contact/')
+        .replace('class="skip" href="#top"', 'class="skip" href="#svc-main"'))
+      .replace('<!--FOOTER-->', () => FOOTER_FOR('/contact/'))
+      .replace(/\{\{TITLE\}\}/g, esc(S.title))
+      .replace(/\{\{DESC\}\}/g, esc(S.desc))
+      .replace(/\{\{SLUG\}\}/g, S.slug)
+      .replace('{{COLOR}}', S.color)
+      .replace('{{ICON}}', S.icon)
+      .replace('{{EYEBROW}}', S.eyebrow)
+      .replace('{{H1}}', S.h1)
+      .replace('{{LEAD}}', S.lead)
+      .replace(/\{\{CTA\}\}/g, S.cta)
+      .replace('{{CTA_H}}', S.ctaH)
+      .replace('{{INC_H}}', S.incH)
+      .replace('{{INCLUDED}}', S.included.map(([h, p]) =>
+        '        <li><h3>' + h + '</h3><p>' + p + '</p></li>').join('\n'))
+      .replace('{{FACTS}}', S.facts.map(([b, t]) =>
+        '        <li><b>' + b + '</b><span>' + t + '</span></li>').join('\n'))
+      .replace('{{STEPS}}', S.steps.map(([h, p]) =>
+        '        <li><h3>' + h + '</h3><p>' + p + '</p></li>').join('\n'))
+      .replace('{{AREA}}', SERVICES.AREA + ' <a href="/contact/">Tell us where you are.</a>')
+      .replace('{{FAQ}}', faq.map(([q, a], i) =>
+        '      <details class="qa-item"' + (i ? '' : ' open') + '><summary><h3>' + esc(q) +
+        '</h3></summary><p>' + esc(a) + '</p></details>').join('\n'))
+      .replace('{{NEXT}}', others.map(o =>
+        '        <li><a href="' + o.href + '" style="--c:' + o.c + '">' + o.label + '</a></li>').join('\n'))
+      .replace('{{LD}}', () => JSON.stringify(ld))
+      .replace(/(?:href|src)="((?:section-fonts|section-09|header|consent|service)\.css|(?:header|consent)\.js)"/g,
+               (m, f) => m.replace('"' + f + '"', '"' + codeHref(f) + '"'))
+      .replace(/\.\.\/\.\.\/assets\//g, '/assets/')
+      .replace(/\{\{ROOT\}\}/g, '/');
+    if (/\{\{[A-Z_]+\}\}/.test(page)) throw new Error(S.slug + ': unfilled token');
+    wr(S.slug + '/index.html', minifyHtml(page));
+  }
+  console.log('  services: ' + SERVICES.map(S => '/' + S.slug + '/').join(' '));
 }
 
 /* 4b-ii. THE Q&A PAGE. His eight artboards, his questions, the traffic - built
@@ -370,6 +454,17 @@ if (fs.existsSync(QA_SRC)) {
              (m, f) => ownStamp[f] ? m.slice(0, -1) + '?v=' + ownStamp[f] + '"' : m);
   if (STAGING) qa = qa.replace(/<meta name="robots"[^>]*>/,
                                '<meta name="robots" content="noindex,nofollow">');
+  /* HIS SERVICE BUTTONS GO TO PAGES THAT EXIST. faq.html was generated
+     pointing at a /services/... tree that was never built, and every one of
+     those links was a 404. */
+  const QA_LINKS = {
+    '/services/website-design/': '/website-design/',
+    '/services/video-production/': '/video-production/',
+    '/services/social-paid-ads/': '/social-media-marketing/',
+    '/services/print-branding/': '/branding-and-print/',
+    '/services/': '/#services'
+  };
+  qa = qa.replace(/href="(\/services\/[^"]*)"/g, (m, h) => QA_LINKS[h] ? 'href="' + QA_LINKS[h] + '"' : m);
   /* its title and description, for the searches it can answer - set here
      because faq.html is generated elsewhere (tools/qa/build.py) */
   qa = setMeta(qa, 'Small Business Marketing Q&A | Highway 19 Media, Spring Hill FL',
@@ -600,6 +695,7 @@ if (!STAGING) wr('sitemap.xml',
   <url><loc>${SITE}/q-a/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 ${LEGAL.map(L => `  <url><loc>${SITE}/${L.slug}/</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>`).join('\n')}
 ${SERVICE_PAGES.map(d => `  <url><loc>${SITE}/${d}/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>`).join('\n')}
+${SERVICES.map(S => `  <url><loc>${SITE}/${S.slug}/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>`).join('\n')}
 ${COMMUNITY_URLS}
 </urlset>
 `);

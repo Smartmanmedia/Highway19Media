@@ -163,6 +163,12 @@
    ran off the edge, which is what sent me looking for the transform in the
    first place. transform-origin is the left baseline because that is where his
    translate() puts the text before any of it is applied. */
+/* WHAT AND WHERE. A caption over his headline - level, not on his slant,
+   tracked out, in the banner's white - so the heading says what the business
+   is and where it is before it makes the joke. */
+.sec0 .bn-l0{ display:block; font-size:calc(1.18cqw * var(--say)); font-weight:700;
+              letter-spacing:.2em; line-height:1; color:#fff; opacity:.95;
+              margin:0 0 calc(1.5cqw * var(--say)) .15em; text-shadow:0 .08cqw .35cqw rgba(0,32,64,.35) }
 .sec0 .bn-l1{ display:block; font-size:calc(7.60cqw * var(--say)); transform-origin:left bottom;
               transform:rotate(-2.39deg) scale(.82,1.1) skewX(-3.24deg) }
 /* his second line is a shade in from the first - 405.3 against 382.8 */
@@ -366,6 +372,7 @@
   .sec0 .bn-say{ --say:1; left:13.18%; top:8.82%; width:86%;
                  display:flex; flex-direction:column; align-items:flex-start }
   .sec0 .bn-h1{ display:contents }
+  .sec0 .bn-l0{ order:0; font-size:3.55cqw; letter-spacing:.16em; margin:0 0 2.6cqw .4em }
   .sec0 .bn-l1{ font-size:17.04cqw; order:1 }
   .sec0 .bn-l2{ font-size:6.76cqw; font-weight:800; margin:.30em 0 0 .10em; order:2 }
   /* his stroke sits between the second line and the third here */
