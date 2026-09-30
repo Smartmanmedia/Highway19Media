@@ -299,7 +299,7 @@ const SERVICES = require('./services');
     };
     const others = SERVICES.filter(o => o !== S).map(o => ({ href: '/' + o.slug + '/', label: o.label, c: o.color }))
       .concat([{ href: '/video-production/', label: 'Video Production', c: '#662d91' },
-               { href: '/q-a/', label: 'Q&amp;A', c: '#0b1f3f' }]);
+               { href: '/faq/', label: 'FAQ', c: '#0b1f3f' }]);
     let page = shell
       .replace('<!--HEADER-->', () => HEADER_FOR('/', '/contact/')
         .replace('class="skip" href="#top"', 'class="skip" href="#svc-main"'))
@@ -467,11 +467,16 @@ if (fs.existsSync(QA_SRC)) {
   qa = qa.replace(/href="(\/services\/[^"]*)"/g, (m, h) => QA_LINKS[h] ? 'href="' + QA_LINKS[h] + '"' : m);
   /* its title and description, for the searches it can answer - set here
      because faq.html is generated elsewhere (tools/qa/build.py) */
-  qa = setMeta(qa, 'Small Business Marketing Q&A | Highway 19 Media, Spring Hill FL',
+  qa = setMeta(qa, 'Small Business Marketing FAQ | Highway 19 Media, Spring Hill FL',
     'Straight answers on website design, video production, social media, ads, branding and ' +
     'print for small businesses in Spring Hill, Brooksville and across Tampa Bay.');
-  wr('q-a/index.html', minifyHtml(qa));
-  console.log('  q-a: ' + Math.round(Buffer.byteLength(qa) / 1024) + ' KB page, ' +
+  /* THE PAGE LIVES AT /faq/. It was /q-a/ until the menu was renamed FAQ;
+     faq.html is regenerated rarely, so any /q-a/ address still inside it -
+     canonical, og:url, its structured data - is moved here too. /q-a/
+     redirects, below. */
+  qa = qa.replace(/(https:\/\/highway19media\.com)\/q-a\//g, '$1/faq/');
+  wr('faq/index.html', minifyHtml(qa));
+  console.log('  faq: ' + Math.round(Buffer.byteLength(qa) / 1024) + ' KB page, ' +
     qaWanted.size + ' assets, ' + Math.round(qaBytes / 1024) + ' KB');
 } else {
   throw new Error('faq.html is not built - run tools/qa/make.sh first');
@@ -645,12 +650,13 @@ wr('_headers',
  * 404, and keep the canonical lower case. */
 wr('_redirects',
 `/Community/* /community/:splat 301
-/qa /q-a/ 301
-/qa/ /q-a/ 301
-/faq /q-a/ 301
-/faq/ /q-a/ 301
-` + CARD.redirects(CARDS) + `/questions /q-a/ 301
-/questions/ /q-a/ 301
+/q-a /faq/ 301
+/q-a/ /faq/ 301
+/qa /faq/ 301
+/qa/ /faq/ 301
+/faq /faq/ 301
+` + CARD.redirects(CARDS) + `/questions /faq/ 301
+/questions/ /faq/ 301
 `);
 
 /* the plain-language fact sheet AI assistants look for at the root */
@@ -692,7 +698,7 @@ if (!STAGING) wr('sitemap.xml',
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>${SITE}/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
   <url><loc>${SITE}/contact/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>${SITE}/q-a/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>${SITE}/faq/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 ${LEGAL.map(L => `  <url><loc>${SITE}/${L.slug}/</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>`).join('\n')}
 ${SERVICE_PAGES.map(d => `  <url><loc>${SITE}/${d}/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>`).join('\n')}
 ${SERVICES.map(S => `  <url><loc>${SITE}/${S.slug}/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>`).join('\n')}

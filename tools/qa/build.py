@@ -524,8 +524,8 @@ def chrome(part):
     return out.replace('../../assets/','assets/')
 
 SITE='https://highway19media.com'
-URL=SITE+'/q-a/'
-TITLE='Q&amp;A: Websites, Video, Branding &amp; Print &mdash; Highway 19 Media'
+URL=SITE+'/faq/'
+TITLE='FAQ: Websites, Video, Branding &amp; Print &mdash; Highway 19 Media'
 DESC=('Straight answers about websites, video production, advertising, branding, '
       'print and working with Highway 19 Media - a creative marketing studio for '
       'businesses across Tampa Bay.')
@@ -566,7 +566,7 @@ parts=[f"""<!doctype html>
 <body>
 {chrome('header')}
 <main id="top">
-<h1 class="qa-sr">Questions? We&rsquo;ve Got Answers. Highway 19 Media Q&amp;A.</h1>
+<h1 class="qa-sr">Questions? We&rsquo;ve Got Answers. Highway 19 Media FAQ.</h1>
 <div id="page">"""
 ]
 
@@ -811,7 +811,7 @@ LD={"@context":"https://schema.org","@graph":[
    "inLanguage":"en-US"},
   {"@type":"BreadcrumbList","@id":URL+"#breadcrumb","itemListElement":[
     {"@type":"ListItem","position":1,"name":"Home","item":SITE+"/"},
-    {"@type":"ListItem","position":2,"name":"Q&A","item":URL}]},
+    {"@type":"ListItem","position":2,"name":"FAQ","item":URL}]},
   {"@type":"FAQPage","@id":URL+"#faq","url":URL,
    "name":"Questions & Answers",
    "description":html.unescape(DESC),
