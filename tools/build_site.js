@@ -56,6 +56,7 @@ if (!code.length) throw new Error('no local css/js found in page.html');
  * is what the list above is read from - never links it */
 if (!code.includes('legal.css')) code.push('legal.css');
 if (!code.includes('service.css')) code.push('service.css');
+if (!code.includes('service.js')) code.push('service.js');
 /* ---------------------------------------------------------------------------
  * WHAT SHIPS IS THE CODE WITHOUT ITS PROSE. The sources are heavily commented
  * on purpose - that is where the reasoning lives - but a reader downloading the
@@ -346,21 +347,25 @@ const SERVICES = require('./services');
       area: () => sec('svc-area', S.areaH || 'Local to Spring Hill. Working along US-19.',
         '      <div class="svc-area-say">' + (S.area ? paras(S.area)
           : '<p>' + SERVICES.AREA + ' <a href="/contact/">Tell us where you are.</a></p>') + '</div>\n'),
-      /* panels that hold in place while the next slides up over them - one
-         real heading for the section, the rest are his repeated lettering */
+      /* HIS SCROLL SCENE. One pinned stage; service.js turns it from one
+         state to the next as the reader scrolls - background, card text,
+         the phone's screen and tilt. Written as one block per state, so that
+         without the script (or on a phone) it reads as four plain panels.
+         One real heading for the section; the rest are his repeated lettering. */
       showcase: x => {
         const id = 'svc-s' + (++sid);
-        return '  <section class="wwd" aria-labelledby="' + id + '">\n' + x.items.map((it, i) =>
-          '    <article class="wwd-p wwd--' + it.key + '">\n      <div class="wwd-in">\n' +
+        return '  <section class="wwd" aria-labelledby="' + id + '">\n    <div class="wwd-stage">\n' + x.items.map((it, i) =>
+          '    <article class="wwd-p wwd--' + it.key + '">\n      <div class="wwd-bg"></div>\n      <div class="wwd-in">\n' +
           (i ? '        <p class="wwd-h" aria-hidden="true">' + x.h + '</p>\n'
              : '        <h2 class="wwd-h" id="' + id + '">' + x.h + '</h2>\n') +
           '        <div class="wwd-card"><h3>' + it.h + '</h3>' + paras(it.p) + '</div>\n' +
-          '        <div class="wwd-art" aria-hidden="true">' + it.art.map(([k, f, w, h, l, top, cx]) =>
+          '        <div class="wwd-art" aria-hidden="true">' + it.art.map(([k, f, w, h, l, top, cx, px, py, rot]) =>
             (cx ? '<i class="wwd-shadow" style="--l:' + (cx - 196) + ';--t:680;--w:393"></i>' : '') +
             '<img class="wwd-' + k + '" src="../../assets/v2/social/' + f + '" alt="" width="' + w +
-            '" height="' + h + '" style="--l:' + l + ';--t:' + top + ';--w:' + w + '"' +
-            (i ? ' loading="lazy"' : '') + ' decoding="async">').join('') + '</div>\n' +
-          '      </div>\n    </article>\n').join('') + '  </section>\n';
+            '" height="' + h + '" style="--l:' + l + ';--t:' + top + ';--w:' + w +
+            (px !== undefined ? ';--px:' + px + ';--py:' + py + '" data-c="' + (l + px) + ',' + (top + py) +
+              '" data-rot="' + rot : '') + '" decoding="async">').join('') + '</div>\n' +
+          '      </div>\n    </article>\n').join('') + '    </div>\n  </section>\n';
       },
       faq: () => sec('svc-block svc-faq', 'Questions, answered.', faq.map(([q, a], i) =>
         '      <details class="qa-item"' + (i ? '' : ' open') + '><summary><h3>' + esc(q) +
@@ -402,7 +407,7 @@ const SERVICES = require('./services');
       .replace('{{NEXT}}', others.map(o =>
         '        <li><a href="' + o.href + '" style="--c:' + o.c + '">' + o.label + '</a></li>').join('\n'))
       .replace('{{LD}}', () => JSON.stringify(ld))
-      .replace(/(?:href|src)="((?:section-fonts|section-09|header|consent|service)\.css|(?:header|consent)\.js)"/g,
+      .replace(/(?:href|src)="((?:section-fonts|section-09|header|consent|service)\.css|(?:header|consent|service)\.js)"/g,
                (m, f) => m.replace('"' + f + '"', '"' + codeHref(f) + '"'))
       .replace(/\.\.\/\.\.\/assets\//g, '/assets/')
       .replace(/\{\{ROOT\}\}/g, '/');
