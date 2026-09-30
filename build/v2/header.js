@@ -72,6 +72,17 @@
       menu  = hdr.querySelector('.hdr-menu'),
       open  = false;
 
+  /* SERVICES opens in place inside the drawer, and is folded again whenever
+     the drawer closes - by the bar, a link, Escape or a tap outside - so the
+     menu always opens the same way */
+  var sub  = menu && menu.querySelector('.hdr-sub'),
+      subT = sub && sub.querySelector('.hdr-sub-t');
+  function fold(v) {
+    if (!sub) return;
+    sub.classList.toggle('is-open', v);
+    subT.setAttribute('aria-expanded', v ? 'true' : 'false');
+  }
+
   function setOpen(v) {
     open = v;
     strip.setAttribute('aria-expanded', v ? 'true' : 'false');
@@ -81,12 +92,13 @@
     else {
       /* the attribute goes back on only once the drawer has finished closing,
          so the transition has something to run on */
-      setTimeout(function () { if (!open) menu.setAttribute('hidden', '') }, 280);
+      setTimeout(function () { if (!open) { menu.setAttribute('hidden', ''); fold(false); } }, 280);
     }
   }
 
   if (strip && menu) {
     strip.addEventListener('click', function () { setOpen(!open); });
+    if (subT) subT.addEventListener('click', function () { fold(!sub.classList.contains('is-open')); });
     /* a link is a destination: close on the way out, so the drawer is not
        still sitting over the section it just scrolled to */
     menu.addEventListener('click', function (e) {
