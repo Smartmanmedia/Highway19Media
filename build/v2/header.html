@@ -71,7 +71,21 @@
        night. The links go in one box and the box is the row. -->
   <nav class="hdr-menu" id="hdr-menu" hidden>
     <div class="hdr-menu-in">
-      <a href="{{ROOT}}#services">Services</a>
+      <!-- SERVICES OPENS IN PLACE, the phone's version of the bar's dropdown:
+           the same four lanes, plus the section itself. A button, not a link,
+           because on a phone there is no hover to show the list first. -->
+      <div class="hdr-sub">
+        <button class="hdr-sub-t" type="button" aria-expanded="false" aria-controls="hdr-sub-m">Services</button>
+        <div class="hdr-sub-m" id="hdr-sub-m">
+          <div class="hdr-sub-in">
+            <a href="{{ROOT}}#services">All Services</a>
+            <a href="/coming-soon/">Website Design</a>
+            <a href="/video-production/">Video Production</a>
+            <a href="/coming-soon/">Print &amp; Branding</a>
+            <a href="/coming-soon/">Social Media &amp; Paid Ads</a>
+          </div>
+        </div>
+      </div>
       <a href="{{ROOT}}#roadmap">The Road Map</a>
       <a href="{{ROOT}}#promise">How We Work</a>
       <a href="/q-a/">Q&amp;A</a>

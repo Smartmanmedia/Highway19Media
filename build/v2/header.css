@@ -373,11 +373,45 @@ body{ padding-top:calc(var(--hh) + var(--hbar)) }
     padding:calc(var(--hh) * .29) 7vw;
     border-top:1px solid var(--hdr-menu-rule);
   }
-  .hdr-menu-in a:first-child{ border-top:0 }
+  .hdr-menu-in > :first-child{ border-top:0 }
   .hdr-menu a:active{ background:var(--hdr-menu-rule) }
   /* and a collapsed row still holds focusable children, so they are taken out
      of the tab order until it is open */
-  .hdr-menu:not(.is-open) a{ visibility:hidden }
+  .hdr-menu:not(.is-open) :is(a, button){ visibility:hidden }
+
+  /* -- SERVICES, OPENING IN PLACE ------------------------------------------
+     The row reads exactly like its neighbours - same size, weight, padding
+     and rule - with a chevron that turns when it opens. The lanes under it
+     open the way the drawer itself does, a grid row going 0fr -> 1fr, and sit
+     one step in and one step quieter so they read as belonging to it. */
+  .hdr-sub{ border-top:1px solid var(--hdr-menu-rule) }
+  .hdr-sub-t{
+    display:flex; align-items:center; justify-content:space-between; width:100%;
+    background:none; border:0; margin:0; cursor:pointer; text-align:left;
+    color:var(--hdr-menu-ink); font:inherit;
+    font-weight:700; font-size:calc(var(--hh) * .175); letter-spacing:.01em;
+    padding:calc(var(--hh) * .29) 7vw;
+  }
+  .hdr-sub-t::after{
+    content:""; width:.5em; height:.5em; margin-right:.2em;
+    border-right:.14em solid currentColor; border-bottom:.14em solid currentColor;
+    transform:translateY(-25%) rotate(45deg); transition:transform .22s ease;
+  }
+  .hdr-sub-t[aria-expanded="true"]::after{ transform:translateY(20%) rotate(225deg) }
+  .hdr-sub-t:active{ background:var(--hdr-menu-rule) }
+  .hdr-sub-t:focus-visible{ outline:2px solid #ffde17; outline-offset:-3px }
+  .hdr-sub-m{
+    display:grid; grid-template-rows:0fr;
+    transition:grid-template-rows .24s cubic-bezier(.3,.7,.3,1);
+  }
+  .hdr-sub.is-open .hdr-sub-m{ grid-template-rows:1fr }
+  .hdr-sub-in{ min-height:0; overflow:hidden; background:var(--hdr-menu-rule) }
+  .hdr-menu .hdr-sub-in a{
+    font-weight:500; font-size:calc(var(--hh) * .16);
+    padding:calc(var(--hh) * .22) 7vw calc(var(--hh) * .22) calc(7vw + 1.1em);
+  }
+  .hdr-sub-in a:first-child{ border-top:0 }
+  .hdr-sub:not(.is-open) .hdr-sub-in a{ visibility:hidden }
 }
 
 /* AN ANCHOR HAS TO CLEAR THE BAR. The header is fixed, so a jump to #services
