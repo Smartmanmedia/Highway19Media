@@ -82,7 +82,7 @@ bot, and anything that fills it is answered like a success and sent nowhere.
 
 ## Links that are not built yet
 
-Every service page, the Q&A, the legal pages and the three social icons point
+Every service page, the FAQ, the legal pages and the three social icons point
 at `/coming-soon/`, which is his own **Road work ahead** page
 (`build/v2/soon.html`, from `incoming/Under Construction.rar`). It is also the
 404, so a mistyped URL gets the same answer. Two changes were made to it: its

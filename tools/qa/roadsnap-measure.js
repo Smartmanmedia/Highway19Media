@@ -8,7 +8,7 @@
  * dashes. The home page's road was fixed the same way: nothing is redrawn,
  * each piece is moved - straight across, never scaled - onto the one it joins.
  *
- *   node tools/qa/roadsnap-measure.js http://localhost:8719/q-a/
+ *   node tools/qa/roadsnap-measure.js http://localhost:8719/faq/
  *
  * Needs puppeteer-core and a Chrome (CHROME_PATH). It reads the built page in
  * a real browser, so every piece is measured where it is actually drawn, and
@@ -30,7 +30,7 @@ const fs = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer-core');
 
-const URL = process.argv[2] || 'http://localhost:8719/q-a/';
+const URL = process.argv[2] || 'http://localhost:8719/faq/';
 const OUT = path.join(__dirname, 'roadsnap.json');
 const CHROME = process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 
