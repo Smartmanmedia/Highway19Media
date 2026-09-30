@@ -198,21 +198,21 @@ module.exports = [
           'We help keep your business active with professionally designed posts, photos, videos, ' +
           'promotions and ongoing content.',
           'Stay involved as much as you want, or let us take more of it off your plate.'],
-          art: [['phone', 'phone-smm-v1.webp', 485, 675, 542, 5, 836, 272, 369.8, 6.78]] },
+          art: [['phone', 'phone-smm-v2.webp', 485, 675, 542, 5, 836, 272, 369.8, 6.78]] },
         { key: 'video', h: 'Social Video', p: [
           'One visit can give your business weeks of content.',
           'We come to you, film your business, capture what you do, record tips or customer questions and ' +
           'turn the footage into short videos for Facebook, Instagram and other platforms.',
           'No stock footage pretending to be your business.',
           'Your people. Your location. Your work.'],
-          art: [['phone', 'phone-video-v1.webp', 623, 654, 487, 25, 836, 318.7, 343, -15.49]] },
+          art: [['phone', 'phone-video-v2.webp', 623, 654, 487, 25, 836, 318.7, 343, -15.49]] },
         { key: 'meta', h: '<span class="wwd-fb">Facebook</span> &amp; <span class="wwd-ig">Instagram</span> Ads', p: [
           'Not everyone is searching for you yet.',
           'Meta advertising lets us introduce your business, product or offer to people in your market and ' +
           'build an audience around the people who respond.',
           'We handle the audience, campaign setup, creative, messaging and ongoing management.'],
           art: [['glyph', 'glyph-facebook-v1.svg', 300, 300, 330, -70], ['glyph', 'glyph-instagram-v1.webp', 569, 569, 748, 48],
-                ['phone', 'phone-meta-v1.webp', 984, 672, 395, 7, 837, 420.1, 367.7, 6.78]] },
+                ['phone', 'phone-meta-v2.webp', 984, 676, 395, 3, 837, 420.1, 371.7, 6.78]] },
         { key: 'google', h: 'Google Ads', p: [
           'When someone searches for the service or product you offer, Google Ads can put your business in ' +
           'front of them at exactly that moment.',
