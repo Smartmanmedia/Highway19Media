@@ -305,7 +305,55 @@ const SERVICES = require('./services');
     const others = SERVICES.filter(o => o !== S).map(o => ({ href: '/' + o.slug + '/', label: o.label, c: o.color }))
       .concat([{ href: '/video-production/', label: 'Video Production', c: '#662d91' },
                { href: '/faq/', label: 'FAQ', c: '#0b1f3f' }]);
+    /* THE PAGE'S SECTIONS, IN THE PAGE'S ORDER. A service may list its own in
+       tools/services.js (S.sections); without a list it gets the standard run.
+       Kinds: cards, band, facts, steps, prose, area, faq. Prose takes a body
+       of paragraphs (strings), { list: [...] }, { h3 } and { big } lines. */
+    let sid = 0;
+    const sec = (cls, h, inner, extra) => {
+      const id = 'svc-s' + (++sid);
+      return '  <section class="' + cls + '"' + (extra || '') + ' aria-labelledby="' + id + '">\n' +
+             '    <div class="svc-in' + (/svc-prose|svc-faq/.test(cls) ? ' svc-narrow' : '') + '">\n' +
+             '      <h2 id="' + id + '">' + h + '</h2>\n' + inner + '    </div>\n  </section>\n';
+    };
+    const KINDS = {
+      cards: x => sec('svc-block', x.h, '      <ul class="svc-grid">\n' + x.items.map(([h, p]) =>
+        '        <li><h3>' + h + '</h3>' + paras(p) + '</li>').join('\n') + '\n      </ul>\n'),
+      band: () => S.band
+        ? '  <section class="svc-band" aria-label="Experience">\n    <div class="svc-in">\n' +
+          '      <div class="svc-band-n" aria-hidden="true">' + S.band.n + '</div>\n' +
+          '      <div><h2><span class="svc-sr">' + S.band.n + ' </span>' + S.band.h + '</h2><p>' +
+          S.band.p + '</p></div>\n    </div>\n  </section>\n' : '',
+      facts: () => '  <section class="svc-facts" aria-label="At a glance">\n    <div class="svc-in">\n' +
+        (S.factsH ? '      <h2>' + S.factsH + '</h2>\n' : '') + '      <ul class="svc-fact-row">\n' +
+        S.facts.map(([b, t]) => '        <li><b>' + b + '</b><span>' + t + '</span></li>').join('\n') +
+        '\n      </ul>\n    </div>\n  </section>\n',
+      steps: x => sec('svc-block', x.h || 'How it works', '      <ol class="svc-steps">\n' +
+        S.steps.map(([h, p]) => '        <li><h3>' + h + '</h3>' + paras(p) + '</li>').join('\n') +
+        '\n      </ol>\n'),
+      prose: x => sec('svc-prose svc-prose--' + (x.tone || 'white'), x.h, '      <div class="svc-prose-say">' +
+        x.body.map(v => typeof v === 'string' ? '<p>' + v + '</p>'
+          : v.list ? '<ul class="svc-lines">' + v.list.map(l => '<li>' + l + '</li>').join('') + '</ul>'
+          : v.h3 ? '<h3>' + v.h3 + '</h3>'
+          : v.big ? '<p class="svc-big">' + v.big + '</p>' : '').join('') + '</div>\n'),
+      area: () => sec('svc-area', S.areaH || 'Local to Spring Hill. Working along US-19.',
+        '      <div class="svc-area-say">' + (S.area ? paras(S.area)
+          : '<p>' + SERVICES.AREA + ' <a href="/contact/">Tell us where you are.</a></p>') + '</div>\n'),
+      faq: () => sec('svc-block svc-faq', 'Questions, answered.', faq.map(([q, a], i) =>
+        '      <details class="qa-item"' + (i ? '' : ' open') + '><summary><h3>' + esc(q) +
+        '</h3></summary>' + a.map(p => '<p>' + esc(p) + '</p>').join('') + '</details>').join('\n') +
+        '\n      <p class="svc-more"><a href="/faq/">More answers on our FAQ page &rarr;</a></p>\n',
+        ' id="questions"')
+    };
+    const order = S.sections || [
+      { type: 'cards', h: S.incH, items: S.included }, { type: 'band' }, { type: 'facts' },
+      { type: 'steps' }, { type: 'area' }, { type: 'faq' }];
+    const sectionsHtml = order.map(x => {
+      if (!KINDS[x.type]) throw new Error(S.slug + ': no section kind "' + x.type + '"');
+      return KINDS[x.type](x);
+    }).join('\n');
     let page = shell
+      .replace('{{SECTIONS}}', () => sectionsHtml)
       .replace('<!--HEADER-->', () => HEADER_FOR('/', '/contact/')
         .replace('class="skip" href="#top"', 'class="skip" href="#svc-main"'))
       .replace('<!--FOOTER-->', () => FOOTER_FOR('/contact/'))
@@ -320,28 +368,9 @@ const SERVICES = require('./services');
       .replace('{{LEAD}}', paras(S.lead))
       .replace(/\{\{CTA\}\}/g, S.cta)
       .replace('{{CTA_H}}', S.ctaH)
-      .replace('{{INC_H}}', S.incH)
-      .replace('{{INCLUDED}}', S.included.map(([h, p]) =>
-        '        <li><h3>' + h + '</h3>' + paras(p) + '</li>').join('\n'))
-      /* the experience band, where a page has one: the number big in the
-         lane's colour, and read out with the heading by a screen reader */
-      .replace('{{BAND}}', S.band
-        ? '  <section class="svc-band" aria-label="Experience">\n    <div class="svc-in">\n' +
-          '      <div class="svc-band-n" aria-hidden="true">' + S.band.n + '</div>\n' +
-          '      <div><h2><span class="svc-sr">' + S.band.n + ' </span>' + S.band.h + '</h2><p>' +
-          S.band.p + '</p></div>\n    </div>\n  </section>\n'
-        : '')
-      .replace('{{FACTS_H}}', S.factsH ? '      <h2>' + S.factsH + '</h2>\n' : '')
-      .replace('{{FACTS}}', S.facts.map(([b, t]) =>
-        '        <li><b>' + b + '</b><span>' + t + '</span></li>').join('\n'))
-      .replace('{{STEPS}}', S.steps.map(([h, p]) =>
-        '        <li><h3>' + h + '</h3>' + paras(p) + '</li>').join('\n'))
-      .replace('{{AREA_H}}', S.areaH || 'Local to Spring Hill. Working along US-19.')
-      .replace('{{AREA}}', S.area ? paras(S.area)
-        : '<p>' + SERVICES.AREA + ' <a href="/contact/">Tell us where you are.</a></p>')
-      .replace('{{FAQ}}', faq.map(([q, a], i) =>
-        '      <details class="qa-item"' + (i ? '' : ' open') + '><summary><h3>' + esc(q) +
-        '</h3></summary>' + a.map(p => '<p>' + esc(p) + '</p>').join('') + '</details>').join('\n'))
+      /* the closing words: the page's own, or the standard line */
+      .replace('{{CTA_P}}', () => '      <div class="svc-cta-say">' +
+        paras(S.ctaP || 'Show us where you are and tell us where you want to go. We reply within 24 hours.') + '</div>')
       .replace('{{NEXT}}', others.map(o =>
         '        <li><a href="' + o.href + '" style="--c:' + o.c + '">' + o.label + '</a></li>').join('\n'))
       .replace('{{LD}}', () => JSON.stringify(ld))

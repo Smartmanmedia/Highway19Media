@@ -62,7 +62,7 @@ const BUSINESS = {
   ],
   knowsAbout: [
     'Small business marketing', 'Website design', 'Landing pages', 'Search engine optimization',
-    'Video production', 'Commercial video', 'Podcast production', 'Social media marketing',
+    'Video production', 'Commercial video', 'Photography', 'Podcast production', 'Social media marketing',
     'Social media management', 'Paid advertising', 'Pay-per-click advertising', 'Branding',
     'Logo design', 'Graphic design', 'Print design', 'Signage', 'Promotional products'
   ],
