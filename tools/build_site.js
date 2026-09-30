@@ -27,7 +27,20 @@ fs.mkdirSync(OUT, { recursive: true });
 const crypto = require('crypto');
 const rd = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const WRITTEN = [];
-const wr = (p, s) => { fs.mkdirSync(path.dirname(path.join(OUT, p)), { recursive: true });
+/* THE ONE BUSINESS RECORD (tools/entity.js) goes on every page this site
+ * writes - not the community pages, which are copied verbatim and are their
+ * customers' own businesses. */
+const ENTITY = require('./entity');
+/* a page's title and description, and the share card's copies of both */
+function setMeta(html, title, desc) {
+  const e = t => t.replace(/&(?![a-z]+;|#\d+;)/g, '&amp;').replace(/"/g, '&quot;');
+  return html
+    .replace(/<title>[\s\S]*?<\/title>/, '<title>' + e(title) + '</title>')
+    .replace(/(<meta (?:name|property)="(?:description|og:description|twitter:description)" content=")[^"]*"/g, '$1' + e(desc) + '"')
+    .replace(/(<meta (?:name|property)="(?:og:title|twitter:title)" content=")[^"]*"/g, '$1' + e(title) + '"');
+}
+const wr = (p, s) => { if (p.endsWith('.html')) s = ENTITY.apply(s);
+                       fs.mkdirSync(path.dirname(path.join(OUT, p)), { recursive: true });
                        fs.writeFileSync(path.join(OUT, p), s);
                        if (p.endsWith('.html')) WRITTEN.push(p); };
 
@@ -357,6 +370,11 @@ if (fs.existsSync(QA_SRC)) {
              (m, f) => ownStamp[f] ? m.slice(0, -1) + '?v=' + ownStamp[f] + '"' : m);
   if (STAGING) qa = qa.replace(/<meta name="robots"[^>]*>/,
                                '<meta name="robots" content="noindex,nofollow">');
+  /* its title and description, for the searches it can answer - set here
+     because faq.html is generated elsewhere (tools/qa/build.py) */
+  qa = setMeta(qa, 'Small Business Marketing Q&A | Highway 19 Media, Spring Hill FL',
+    'Straight answers on website design, video production, social media, ads, branding and ' +
+    'print for small businesses in Spring Hill, Brooksville and across Tampa Bay.');
   wr('q-a/index.html', minifyHtml(qa));
   console.log('  q-a: ' + Math.round(Buffer.byteLength(qa) / 1024) + ' KB page, ' +
     qaWanted.size + ' assets, ' + Math.round(qaBytes / 1024) + ' KB');
@@ -539,6 +557,9 @@ wr('_redirects',
 ` + CARD.redirects(CARDS) + `/questions /q-a/ 301
 /questions/ /q-a/ 301
 `);
+
+/* the plain-language fact sheet AI assistants look for at the root */
+wr('llms.txt', rd('build/v2/llms.txt'));
 
 wr('robots.txt', STAGING
   ? 'User-agent: *\nDisallow: /\n'

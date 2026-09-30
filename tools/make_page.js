@@ -15,10 +15,11 @@ const files = fs.readdirSync(DIR).filter(f => /^section-\d\d\.html$/.test(f)).so
  * none. SITE has no trailing slash - every URL built from it adds its own. */
 const SITE  = 'https://highway19media.com';
 const SOON  = '/coming-soon/';          /* everything not built yet lands here */
-const TITLE = 'Highway 19 Media | Creative Marketing for Tampa Bay Businesses';
-const DESC  = 'Websites, video, print, branding, social media and paid ads for '
-            + 'Tampa Bay businesses. One team for the whole road \u2014 and an honest '
-            + 'read on what you have now, back within 24 hours.';
+/* Spring Hill first: that is where he is, and the town a local search is won in.
+   Tampa Bay stays in the description, where it is a service area, not a claim. */
+const TITLE = 'Marketing Agency in Spring Hill, FL | Highway 19 Media';
+const DESC  = 'Spring Hill, FL marketing agency: website design, video production, social media and ads ' +
+              'for small businesses in Brooksville, along US-19 and across Tampa Bay.';
 /* STAGING IS THE SAME BUILD, TOLD NOT TO BE FOUND. A test site that Google
  * indexes competes with the real one for his own name.
  *   node tools/make_page.js --staging   */
