@@ -180,7 +180,15 @@
   if (was && was.ok && was.tags === ids()) { root.setAttribute('data-consent', 'yes'); load(); return; }
   if (was && !was.ok && was.tags === ids()) { root.setAttribute('data-consent', 'no'); return; }
   if (!TAGS.length) return;                    /* nothing to ask about yet */
+  /* LET THEM SEE THE PAGE FIRST. The bar waits five seconds after the page is
+     ready, so the first thing a visitor meets is the site, not a question.
+     Nothing loads in the meantime - waiting is the same as not yet saying yes.
+     If they answer sooner through "Cookie choices", the late bar stays away. */
+  var DELAY = 5000;
+  function later() {
+    setTimeout(function () { if (!root.hasAttribute('data-consent')) show(); }, DELAY);
+  }
   if (document.readyState === 'loading')
-    document.addEventListener('DOMContentLoaded', show);
-  else show();
+    document.addEventListener('DOMContentLoaded', later);
+  else later();
 })();
