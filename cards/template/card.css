@@ -1,0 +1,348 @@
+/* ============================================================================
+   THE DIGITAL CARD
+   One stylesheet for every business's card. Nothing in here names a colour a
+   business chose: the page sets --accent (and --on-accent, worked out in
+   tools/card/build.js) and every surface, tint, border and icon below is
+   mixed from it - so a new client is one hex value, not a new stylesheet.
+
+   Built for a phone held in one hand: the column never passes 440px, every
+   target is at least 48px, and the whole thing sits inside the safe area so
+   the installed app clears the notch and the home bar.
+   ========================================================================= */
+@font-face{ font-family:"Be Vietnam Pro"; font-weight:500; font-display:swap;
+            src:url("/assets/fonts/BeVietnamPro-Medium.woff2") format("woff2") }
+@font-face{ font-family:"Be Vietnam Pro"; font-weight:800; font-display:swap;
+            src:url("/assets/fonts/BeVietnamPro-ExtraBold.woff2") format("woff2") }
+@font-face{ font-family:"Be Vietnam Pro"; font-weight:700; font-display:swap;
+            src:url("/assets/fonts/BeVietnamPro-Bold.woff2") format("woff2") }
+
+:root{
+  --accent:#f2c14e; --on-accent:#111;
+  --r-lg:28px; --r:20px; --r-sm:14px;
+  --gap:12px;
+  --font:"Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+[data-theme="dark"]{
+  --bg:#0e0f11;
+  --surface:color-mix(in oklab, var(--accent) 5%, #17181b);
+  --surface-2:color-mix(in oklab, var(--accent) 9%, #202226);
+  --line:color-mix(in oklab, var(--accent) 10%, rgb(255 255 255 / .07));
+  --text:#f4f2ee;
+  --muted:#a9a69f;
+  --ink:var(--accent);                              /* icons and links */
+  --tint:color-mix(in oklab, var(--accent) 14%, transparent);
+  --shadow:0 1px 0 rgb(255 255 255 / .04) inset, 0 10px 30px rgb(0 0 0 / .35);
+  color-scheme:dark;
+}
+[data-theme="light"]{
+  --bg:#f4f2ed;
+  --surface:#fff;
+  --surface-2:color-mix(in oklab, var(--accent) 7%, #f7f5f1);
+  --line:color-mix(in oklab, var(--accent) 12%, rgb(0 0 0 / .08));
+  --text:#16171a;
+  --muted:#65625c;
+  /* a light accent (yellow, mint) is unreadable as a line on white, so on a
+     light card the icons use the accent pulled towards black */
+  --ink:color-mix(in oklab, var(--accent) 62%, #000);
+  --tint:color-mix(in oklab, var(--accent) 16%, transparent);
+  --shadow:0 1px 2px rgb(0 0 0 / .05), 0 8px 24px rgb(0 0 0 / .06);
+  color-scheme:light;
+}
+
+*,*::before,*::after{ box-sizing:border-box }
+html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; background:var(--bg) }
+body{
+  margin:0; min-height:100dvh; background:var(--bg); color:var(--text);
+  font:500 16px/1.45 var(--font); -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+}
+a{ color:inherit; text-decoration:none }
+button{ font:inherit; color:inherit; background:none; border:0; padding:0; cursor:pointer }
+img,svg,video{ display:block; max-width:100% }
+.sprite{ position:absolute; width:0; height:0; overflow:hidden }
+.ic{ width:24px; height:24px; flex:none; color:var(--ink) }
+.ic-s{ width:15px; height:15px }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:6px }
+
+/* the column --------------------------------------------------------------- */
+.card{
+  max-width:440px; margin:0 auto;
+  padding:max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+          max(28px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  display:flex; flex-direction:column; gap:var(--gap);
+}
+
+/* anything a thumb presses gives back a little */
+.save,.act,.soc-row,.soc-ic,.btn,.svc a,.review,.promo,.gal-i,.offer-code{
+  transition:transform .12s ease, background-color .2s ease, opacity .2s ease;
+}
+:is(.save,.act,.soc-row,.soc-ic,.btn,.svc a,.review,.promo,.offer-code):active{ transform:scale(.975) }
+
+/* 1. identity --------------------------------------------------------------- */
+.id{
+  position:relative; overflow:hidden; border-radius:var(--r-lg);
+  background:var(--surface); box-shadow:var(--shadow);
+  aspect-ratio:1 / 1.06; max-height:62dvh; min-height:340px;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  isolation:isolate;
+}
+.hero-media{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:-2 }
+.id::after{
+  content:""; position:absolute; inset:0; z-index:-1;
+  background:linear-gradient(180deg, rgb(0 0 0 / 0) 30%, rgb(0 0 0 / .55) 58%, rgb(0 0 0 / .88) 100%);
+}
+.id-body{ padding:22px 22px 20px; color:#fff }
+.id-logo{ width:52px; height:52px; object-fit:contain; margin-bottom:12px; filter:drop-shadow(0 4px 10px rgb(0 0 0 / .45)) }
+.id-name{ margin:0; font-weight:800; font-size:30px; line-height:1.05; letter-spacing:-.02em }
+.id-person{ margin:6px 0 0; font-weight:700; font-size:17px }
+.id-person span{ font-weight:500; opacity:.8 }
+.id-tag{ margin:8px 0 0; font-size:16px; line-height:1.35; color:rgb(255 255 255 / .92) }
+.id-meta{ margin:12px 0 0; display:flex; flex-wrap:wrap; gap:6px 14px; font-size:13px; color:rgb(255 255 255 / .74) }
+.id-area{ display:inline-flex; align-items:center; gap:4px }
+.id-area .ic{ color:var(--accent) }
+/* no photo: the card is the colour of the page and the text is the page's */
+.id--plain{ aspect-ratio:auto; min-height:0; max-height:none }
+.id--plain::after{ display:none }
+.id--plain .id-body{ color:var(--text); padding-top:28px }
+.id--plain .id-tag{ color:var(--text) }
+.id--plain .id-meta{ color:var(--muted) }
+
+/* 2. save to contacts - the one thing this page is for ------------------------ */
+.save{
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  min-height:62px; border-radius:var(--r);
+  background:var(--accent); color:var(--on-accent);
+  font-weight:800; font-size:16px; letter-spacing:.09em; text-transform:uppercase;
+  box-shadow:0 10px 28px color-mix(in oklab, var(--accent) 30%, transparent);
+}
+.save .ic{ color:currentColor; width:26px; height:26px }
+.save-note{ margin:-4px 0 4px; text-align:center; font-size:13px; color:var(--muted) }
+
+/* 3. quick actions ------------------------------------------------------------ */
+.acts{ display:grid; gap:10px; grid-template-columns:repeat(var(--cols, 4), 1fr) }
+.acts--1{ --cols:1 } .acts--2{ --cols:2 } .acts--3{ --cols:3 } .acts--4{ --cols:4 }
+.act{
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px;
+  min-height:84px; padding:10px 6px; border-radius:var(--r);
+  background:var(--surface); border:1px solid var(--line);
+  font-size:13px; font-weight:700; text-align:center; line-height:1.15;
+}
+.act .ic{ width:26px; height:26px }
+.acts--1 .act,.acts--2 .act{ flex-direction:row; min-height:64px; font-size:15px; gap:10px }
+
+/* 4. social ----------------------------------------------------------------- */
+.soc{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; padding:4px 0 }
+.soc-ic{
+  display:grid; place-items:center; width:54px; height:54px; border-radius:50%;
+  background:var(--surface); border:1px solid var(--line);
+}
+.soc--rows{ display:flex; flex-direction:column; gap:10px }
+.soc-row{
+  display:flex; align-items:center; gap:14px; min-height:64px; padding:10px 16px;
+  border-radius:var(--r); background:var(--surface); border:1px solid var(--line);
+}
+.soc-row .ic-mark{ width:28px; height:28px }
+.soc-name{ flex:1; display:flex; flex-direction:column; font-weight:700; line-height:1.2 }
+.soc-name small{ font-weight:500; font-size:13px; color:var(--muted); margin-top:2px }
+.ic-go{ width:18px; height:18px; color:var(--muted) }
+
+/* modules ------------------------------------------------------------------ */
+.mod{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg);
+  padding:20px 18px;
+}
+.mod-h{
+  margin:0 0 12px; font-size:12px; font-weight:800; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--muted);
+}
+.mod-p{ margin:0 0 14px; color:var(--muted); font-size:15px }
+
+.btn{
+  display:flex; align-items:center; justify-content:center; gap:9px; width:100%;
+  min-height:54px; padding:0 18px; border-radius:var(--r-sm);
+  background:var(--accent); color:var(--on-accent); font-weight:800; font-size:15px;
+}
+.btn .ic{ color:currentColor; width:22px; height:22px }
+.btn--ghost{ background:var(--surface-2); color:var(--text); border:1px solid var(--line) }
+.btn--ghost .ic{ color:var(--ink) }
+.btn[disabled]{ opacity:.6 }
+.duo{ display:grid; grid-template-columns:1fr 1fr; gap:10px }
+.mod-share{ padding:10px; border-radius:var(--r) }
+
+/* story */
+.story-v,.story-link{ width:100%; aspect-ratio:16/9; border-radius:var(--r-sm); background:#000; object-fit:cover }
+.story-link{ position:relative; display:grid; place-items:center; overflow:hidden }
+.story-link img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.85 }
+.ic-play{ position:relative; width:64px; height:64px; color:#fff; filter:drop-shadow(0 2px 8px rgb(0 0 0 / .6)) }
+.mod-story .mod-p{ margin:12px 0 0 }
+
+/* gallery - a sideways strip, one photo and a peek of the next */
+.gal{
+  display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory;
+  margin:0 -18px; padding:0 18px; scrollbar-width:none;
+}
+.gal::-webkit-scrollbar{ display:none }
+.gal-i{ flex:0 0 78%; margin:0; scroll-snap-align:center; border-radius:var(--r-sm); overflow:hidden; aspect-ratio:4/5; background:var(--surface-2) }
+.gal-i img{ width:100%; height:100%; object-fit:cover }
+
+/* services */
+.svc{ list-style:none; margin:0 -6px; padding:0 }
+.svc li + li{ border-top:1px solid var(--line) }
+.svc a{ display:flex; align-items:center; gap:12px; min-height:62px; padding:10px 6px }
+.svc span{ flex:1; display:flex; flex-direction:column }
+.svc b{ font-weight:700; font-size:16px }
+.svc small{ color:var(--muted); font-size:13.5px; margin-top:2px }
+
+/* offer */
+.mod-offer{ background:linear-gradient(160deg, var(--tint), transparent 70%), var(--surface); border-color:color-mix(in oklab, var(--accent) 35%, transparent) }
+.offer{ display:flex; gap:14px; align-items:flex-start }
+.ic-offer{ width:28px; height:28px; margin-top:2px }
+.offer-h{ margin:0 0 6px; font-size:19px; font-weight:800; line-height:1.2 }
+.offer-until{ margin:-8px 0 14px; font-size:13px; color:var(--muted) }
+.offer-code{
+  width:100%; margin-bottom:10px; min-height:58px; border-radius:var(--r-sm);
+  border:1.5px dashed color-mix(in oklab, var(--accent) 60%, transparent);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  font-weight:800; letter-spacing:.14em;
+}
+.offer-code small{ font-weight:500; letter-spacing:0; font-size:12px; color:var(--muted) }
+
+/* review */
+.mod-review{ padding:0 }
+.review{ display:flex; align-items:center; gap:14px; padding:18px }
+.stars{ display:flex; gap:1px }
+.stars .ic{ width:17px; height:17px; fill:var(--accent) }
+.review-t{ flex:1; display:flex; flex-direction:column }
+.review-t small{ color:var(--muted); font-size:13px }
+
+/* lead form */
+.lead{ display:flex; flex-direction:column; gap:10px }
+.lead label{ display:flex; flex-direction:column; gap:5px; font-size:13px; font-weight:700; color:var(--muted) }
+.lead label i{ font-style:normal; font-weight:500; opacity:.8 }
+.lead input,.lead textarea{
+  width:100%; min-height:52px; padding:13px 14px; border-radius:var(--r-sm);
+  background:var(--surface-2); border:1px solid var(--line); color:var(--text);
+  font:500 16px/1.3 var(--font);            /* 16px or iOS zooms on focus */
+  -webkit-appearance:none; appearance:none; resize:vertical;
+}
+.lead textarea{ min-height:78px }
+.lead input:focus,.lead textarea:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--tint) }
+.lead .btn{ margin-top:4px }
+.hp{ position:absolute; left:-9999px; width:1px; height:1px; opacity:0 }
+.lead-err{ margin:0; font-size:14px; color:#ff8a7a }
+[data-theme="light"] .lead-err{ color:#b3261e }
+.lead-ok{ display:flex; gap:12px; align-items:center }
+.lead-ok p{ margin:0; color:var(--muted) }
+.lead-ok b{ color:var(--text) }
+.ic-ok{ width:38px; height:38px; padding:8px; border-radius:50%; background:var(--tint) }
+
+/* install */
+.mod-install{
+  text-align:center; padding:26px 20px 20px;
+  background:radial-gradient(120% 90% at 50% 0%, var(--tint), transparent 70%), var(--surface);
+  border-color:color-mix(in oklab, var(--accent) 30%, transparent);
+}
+.app-ic{ width:64px; height:64px; margin:0 auto 14px; border-radius:15px; box-shadow:0 8px 22px rgb(0 0 0 / .35) }
+.install-h{ margin:0 0 6px; font-size:15px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; line-height:1.3 }
+.mod-install .mod-p{ margin-bottom:18px }
+
+/* promo - quiet, last, and still there for anyone who wonders how this works */
+.promo{
+  display:flex; align-items:center; gap:12px; margin-top:6px; padding:16px 18px;
+  border-radius:var(--r); border:1px dashed color-mix(in oklab, var(--accent) 40%, var(--line));
+}
+.promo span{ flex:1; display:flex; flex-direction:column }
+.promo b{ font-size:15px }
+.promo small{ font-size:13px; color:var(--muted) }
+.promo .ic-go{ color:var(--ink) }
+
+.foot{ padding:10px 0 0; text-align:center; font-size:12px; color:var(--muted) }
+.foot p{ margin:2px 0 }
+.foot a{ text-decoration:underline; text-underline-offset:2px }
+
+/* sheets ------------------------------------------------------------------- */
+.sheet{
+  width:min(440px, 100%); max-width:100%; margin:auto auto 0; padding:0; border:0;
+  background:transparent; color:var(--text);
+}
+.sheet::backdrop{ background:rgb(0 0 0 / .6); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px) }
+.sheet[open]{ animation:up .28s cubic-bezier(.2,.8,.2,1) }
+@keyframes up{ from{ transform:translateY(40px); opacity:0 } }
+.sheet-in{
+  background:var(--surface); border:1px solid var(--line); border-bottom:0;
+  border-radius:var(--r-lg) var(--r-lg) 0 0;
+  padding:26px 20px max(20px, env(safe-area-inset-bottom));
+  display:flex; flex-direction:column; gap:14px;
+}
+.sheet-t{ margin:0; font-size:19px; font-weight:800; text-align:center }
+.sheet-s{ margin:0; color:var(--muted); text-align:center; font-size:15px }
+.sheet-qr .qr{ width:min(72vw, 280px); margin:6px auto 2px; border-radius:18px; padding:4px; background:#fff }
+.how{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px }
+.how li{ display:flex; align-items:center; gap:14px; padding:12px 14px; border-radius:var(--r-sm); background:var(--surface-2) }
+.how b{ color:var(--text) }
+.how li span{ color:var(--muted); font-size:15px }
+div.how{ gap:14px }
+
+.toast{
+  position:fixed; left:50%; bottom:max(24px, env(safe-area-inset-bottom)); z-index:30;
+  transform:translate(-50%, 20px); opacity:0; pointer-events:none;
+  padding:12px 18px; border-radius:999px; background:var(--text); color:var(--bg);
+  font-size:14px; font-weight:700; transition:.25s ease;
+}
+.toast.on{ opacity:1; transform:translate(-50%, 0) }
+
+/* the desktop answer -------------------------------------------------------
+   A card is a phone app. On a laptop the honest thing to show is the way onto
+   the phone, not a stretched copy of it. "View it here anyway" is for the
+   person showing it off from their laptop. Installed on a desktop, it is the
+   card - that person already chose. */
+.desk{ display:none }
+@media (min-width:820px) and (hover:hover) and (pointer:fine){
+  html:not(.anyway) .card, html:not(.anyway) .sheet{ display:none }
+  html:not(.anyway) .desk{ display:grid; place-items:center; min-height:100dvh; padding:40px }
+  html.anyway .card{ padding-top:40px; padding-bottom:60px }
+}
+@media (display-mode:standalone){
+  html .card{ display:flex !important }
+  html .desk{ display:none !important }
+}
+.desk-in{
+  display:flex; align-items:center; gap:56px; max-width:860px; padding:48px;
+  border-radius:36px; background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow);
+}
+.desk .qr{ width:260px; flex:none; padding:14px; border-radius:24px; background:#fff }
+.desk img{ width:64px; height:64px; margin-bottom:14px }
+.desk h1{ margin:0 0 18px; font-size:34px; font-weight:800; letter-spacing:-.02em; line-height:1.1 }
+.desk-lead{ margin:0 0 8px; font-size:22px; font-weight:700; color:var(--accent) }
+[data-theme="light"] .desk-lead{ color:var(--ink) }
+.desk-s{ margin:0 0 22px; color:var(--muted); font-size:16px; max-width:32ch }
+.desk-anyway{ font-size:14px; color:var(--muted); text-decoration:underline; text-underline-offset:3px }
+
+@media (prefers-reduced-motion:reduce){
+  *{ transition:none !important; animation:none !important }
+}
+
+/* the hidden attribute wins over any display set above */
+[hidden]{ display:none !important }
+
+/* THE SITE'S CONSENT BAR, IN THE CARD'S CLOTHES. Same words, same buttons,
+   same stored answer - consent.js is untouched. On the site it is a full-width
+   navy bar; here that would be the biggest thing on the first screen, sitting
+   over the buttons the card exists for. So on a card it floats, compact, in
+   the card's own surface and accent. (card.css loads first, hence html.) */
+html .consent{
+  /* at the TOP on a card: at the foot of a small phone it sits squarely on
+     Save to Contacts, and over the photo it hides nothing anyone came for */
+  left:10px; right:10px; top:max(10px, env(safe-area-inset-top)); bottom:auto;
+  width:auto; max-width:420px; margin:0 auto; padding:14px 14px 12px; gap:10px;
+  border-radius:var(--r); border:1px solid var(--line);
+  background:var(--surface-2); color:var(--text);
+  box-shadow:0 18px 40px rgb(0 0 0 / .45);
+  font:500 13px/1.4 var(--font);
+}
+html .consent:not(.is-up){ translate:0 calc(-100% - 20px) }
+html .consent__text{ font-size:13px; line-height:1.4; color:var(--muted) }
+html .consent__text a{ color:var(--ink) }
+html .consent__btn{ min-height:42px; font-size:14px; border-radius:12px }
+html .consent__btn--yes{ background:var(--accent); color:var(--on-accent) }
+html .consent__btn--no{ color:var(--text); border-color:var(--line) }

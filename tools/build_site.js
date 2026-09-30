@@ -447,6 +447,25 @@ for (const d of SERVICE_PAGES) {
   console.log('  ' + d + ': page + ' + files + ' files, ' + Math.round(sbytes / 1024) + ' KB');
 }
 
+/* 4e. THE DIGITAL CARDS. cards/<slug>/card.json, one per business, through
+ *     one template - see tools/card/build.js. What an NFC tag or a printed QR
+ *     code opens: a phone app, not a page of this site, so like the community
+ *     pages it wears no site header or footer and is not held to the chrome
+ *     check. It does carry the site's consent banner and h19Track, so what a
+ *     visitor taps is counted exactly when the rest of the site's is - after
+ *     they have said yes, and never before. */
+const CARD = require('./card/build');
+const CARDS = CARD.buildAll({
+  ROOT, OUT, SITE,
+  og: SITE + '/assets/v2/meta/og.jpg?v=' + ogStamp,
+  privacy: '/privacy/',
+  consent: '<link rel="stylesheet" href="' + codeHref('consent.css') + '">\n' +
+           '<script src="' + codeHref('consent.js') + '" defer></script>',
+});
+for (const c of CARDS)
+  console.log('  card ' + c.path + ': ' + Math.round(c.bytes / 1024) + ' KB page, ' + c.vcf +
+              '  (NFC: ' + c.url + '?s=nfc)');
+
 /* 5. what the host needs to be told.
  *    Cache-Control is the whole point of splitting the files up: the page is
  *    revalidated every visit, his art is not asked for twice. The fonts and
@@ -493,7 +512,7 @@ wr('_headers',
   Cache-Control: public, max-age=31536000, immutable
 /${d}/assets/fonts/*
   Cache-Control: public, max-age=31536000, immutable
-`).join('') + `/assets/*
+`).join('') + CARD.headers(CARDS) + `/assets/*
   Cache-Control: public, max-age=31536000, immutable
 /build/v2/*
   Cache-Control: public, max-age=604800
@@ -517,6 +536,7 @@ wr('_redirects',
 /qa/ /q-a/ 301
 /faq /q-a/ 301
 /faq/ /q-a/ 301
+/card /card/ 301
 /questions /q-a/ 301
 /questions/ /q-a/ 301
 `);
