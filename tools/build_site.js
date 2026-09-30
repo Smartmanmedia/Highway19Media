@@ -120,6 +120,13 @@ collect(rd('build/v2/soon.html'));
    cannot see - and a card that 404s is the blank rectangle it was drawn to
    replace. */
 wanted.add('assets/v2/meta/og.jpg');
+/* the service pages' own art - his cuts for a page, named in tools/services.js
+   by file, and only reachable from the pages the service shell builds */
+for (const S of require('./services')) {
+  if (S.hero === 'icons') [0, 1, 2].forEach(i => wanted.add('assets/v2/social/hero-icons-' + i + '-v1.webp'));
+  for (const x of S.sections || []) for (const it of x.items || [])
+    for (const a of (it && it.art) || []) wanted.add('assets/v2/social/' + a[1]);
+}
 
 /* AND THE SHARE CARD CARRIES ITS CONTENT HASH TOO.
  * /assets/* is served immutable for a year, which is only true while a file's
@@ -270,7 +277,7 @@ const SERVICES = require('./services');
         for (const q of n.mainEntity) answers[q.name] = q.acceptedAnswer.text;
   }
   const esc = t => t.replace(/&(?![a-z]+;|#\d+;)/g, '&amp;').replace(/</g, '&lt;');
-  const plain = t => t.replace(/&amp;/g, '&').replace(/&rsquo;/g, '\u2019').replace(/&middot;/g, '\u00b7')
+  const plain = t => t.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&rsquo;/g, '\u2019').replace(/&middot;/g, '\u00b7')
                       .replace(/&[a-z]+;/g, '');
   const shell = rd('build/v2/service.html');
   for (const S of SERVICES) {
@@ -339,6 +346,22 @@ const SERVICES = require('./services');
       area: () => sec('svc-area', S.areaH || 'Local to Spring Hill. Working along US-19.',
         '      <div class="svc-area-say">' + (S.area ? paras(S.area)
           : '<p>' + SERVICES.AREA + ' <a href="/contact/">Tell us where you are.</a></p>') + '</div>\n'),
+      /* panels that hold in place while the next slides up over them - one
+         real heading for the section, the rest are his repeated lettering */
+      showcase: x => {
+        const id = 'svc-s' + (++sid);
+        return '  <section class="wwd" aria-labelledby="' + id + '">\n' + x.items.map((it, i) =>
+          '    <article class="wwd-p wwd--' + it.key + '">\n      <div class="wwd-in">\n' +
+          (i ? '        <p class="wwd-h" aria-hidden="true">' + x.h + '</p>\n'
+             : '        <h2 class="wwd-h" id="' + id + '">' + x.h + '</h2>\n') +
+          '        <div class="wwd-card"><h3>' + it.h + '</h3>' + paras(it.p) + '</div>\n' +
+          '        <div class="wwd-art" aria-hidden="true">' + it.art.map(([k, f, w, h, l, top, cx]) =>
+            (cx ? '<i class="wwd-shadow" style="--l:' + (cx - 196) + ';--t:680;--w:393"></i>' : '') +
+            '<img class="wwd-' + k + '" src="../../assets/v2/social/' + f + '" alt="" width="' + w +
+            '" height="' + h + '" style="--l:' + l + ';--t:' + top + ';--w:' + w + '"' +
+            (i ? ' loading="lazy"' : '') + ' decoding="async">').join('') + '</div>\n' +
+          '      </div>\n    </article>\n').join('') + '  </section>\n';
+      },
       faq: () => sec('svc-block svc-faq', 'Questions, answered.', faq.map(([q, a], i) =>
         '      <details class="qa-item"' + (i ? '' : ' open') + '><summary><h3>' + esc(q) +
         '</h3></summary>' + a.map(p => '<p>' + esc(p) + '</p>').join('') + '</details>').join('\n') +
@@ -361,6 +384,11 @@ const SERVICES = require('./services');
       .replace(/\{\{DESC\}\}/g, esc(S.desc))
       .replace(/\{\{SLUG\}\}/g, S.slug)
       .replace('{{COLOR}}', S.color)
+      .replace('{{PAGE}}', S.hero ? ' svc-page--hero-' + S.hero : '')
+      .replace('{{HERO_ART}}', () => S.hero === 'icons'
+        ? '      <div class="svc-hero-icons" aria-hidden="true">' + [0, 1, 2].map(i =>
+            '<img class="hi hi' + i + '" src="../../assets/v2/social/hero-icons-' + i + '-v1.webp" alt="" width="454" height="757">').join('') + '</div>'
+        : '      <div class="svc-hero-sign" aria-hidden="true">\n        <img src="../../assets/v2/section-06/{{ICON}}" alt="" width="260" height="260">\n      </div>')
       .replace('{{ICON}}', S.icon)
       .replace('{{EYEBROW}}', S.eyebrow)
       .replace('{{H1}}', S.h1)

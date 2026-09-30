@@ -139,7 +139,11 @@ module.exports = [
     desc: 'Social media content, video, Google Ads and Facebook & Instagram ads for local businesses ' +
           'in Spring Hill and Tampa Bay - strategy, creative, targeting and management.',
     eyebrow: 'Social media &amp; paid ads &middot; Spring Hill &amp; Tampa Bay',
-    h1: 'Social Media Marketing &amp; Paid Ads in Spring Hill, FL',
+    h1: 'Social Media Marketing &amp; Paid Ads in <span class="svc-h1-at">Spring Hill, FL</span>',
+    /* HIS HERO (social-media-marketing.svg, Sept 30): the likes, hearts and
+       platform icons in three layers that drift at their own pace, in place
+       of the lane's sign */
+    hero: 'icons',
     tag: 'Put some traffic behind it.',
     lead: [
       'Having a great business isn&rsquo;t enough if the right people don&rsquo;t know you&rsquo;re there.',
@@ -182,29 +186,37 @@ module.exports = [
       '<a href="/contact/">Tell Us Where You Are &rarr;</a>'
     ],
     sections: [
-      { type: 'cards', h: 'What We Do', items: [
-        ['Social Media Management', [
+      /* WHAT WE DO, AS HE DREW IT: four full-screen panels that hold in place
+         while the next one slides up over them. His order - Google Ads last,
+         on the light panel. Art is his, cut from the SVG; each piece is [kind, file, width, height,
+         left, top (his pixels, from the card's corner), shadow centre]. */
+      { type: 'showcase', h: 'What We Do', items: [
+        { key: 'smm', h: 'Social Media Management', p: [
           'Your social media shouldn&rsquo;t look like you disappeared six months ago.',
           'We help keep your business active with professionally designed posts, photos, videos, ' +
           'promotions and ongoing content.',
-          'Stay involved as much as you want, or let us take more of it off your plate.']],
-        ['Social Video', [
+          'Stay involved as much as you want, or let us take more of it off your plate.'],
+          art: [['phone', 'phone-smm-v1.webp', 485, 675, 542, 5, 836]] },
+        { key: 'video', h: 'Social Video', p: [
           'One visit can give your business weeks of content.',
           'We come to you, film your business, capture what you do, record tips or customer questions and ' +
           'turn the footage into short videos for Facebook, Instagram and other platforms.',
           'No stock footage pretending to be your business.',
-          'Your people. Your location. Your work.']],
-        ['Google Ads', [
+          'Your people. Your location. Your work.'],
+          art: [['phone', 'phone-video-v1.webp', 623, 654, 487, 25, 836]] },
+        { key: 'meta', h: '<span class="wwd-fb">Facebook</span> &amp; <span class="wwd-ig">Instagram</span> Ads', p: [
+          'Not everyone is searching for you yet.',
+          'Meta advertising lets us introduce your business, product or offer to people in your market and ' +
+          'build an audience around the people who respond.',
+          'We handle the audience, campaign setup, creative, messaging and ongoing management.'],
+          art: [['glyph', 'glyph-instagram-v1.webp', 569, 569, 748, 48], ['phone', 'phone-meta-v1.webp', 984, 672, 395, 7, 837]] },
+        { key: 'google', h: 'Google Ads', p: [
           'When someone searches for the service or product you offer, Google Ads can put your business in ' +
           'front of them at exactly that moment.',
           'We research the searches, locations and opportunities that make sense, build the campaign, create ' +
           'the ads, set up tracking and manage it as the data comes in.',
-          'Already running Google Ads? We can review what you have before starting over.']],
-        ['Facebook &amp; Instagram Ads', [
-          'Not everyone is searching for you yet.',
-          'Meta advertising lets us introduce your business, product or offer to people in your market and ' +
-          'build an audience around the people who respond.',
-          'We handle the audience, campaign setup, creative, messaging and ongoing management.']]
+          'Already running Google Ads? We can review what you have before starting over.'],
+          art: [['logo', 'google-ads-v1.webp', 749, 673, 861, 153], ['chart', 'analytics-v1.webp', 646, 646, -212, 88]] }
       ] },
       { type: 'prose', tone: 'dark', h: 'We Don&rsquo;t Just Run Ads. We Create Them.', body: [
         'This is an important difference.',
