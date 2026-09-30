@@ -346,3 +346,10 @@ html .consent__text a{ color:var(--ink) }
 html .consent__btn{ min-height:42px; font-size:14px; border-radius:12px }
 html .consent__btn--yes{ background:var(--accent); color:var(--on-accent) }
 html .consent__btn--no{ color:var(--text); border-color:var(--line) }
+
+/* five actions: three across, then two sharing the row evenly rather than
+   two tiles and a hole. The grid goes to sixths so both rows can divide it. */
+.acts--3{ grid-template-columns:repeat(6, 1fr) }
+.acts--3 .act{ grid-column:span 2 }
+.acts--3 .act:nth-child(3n+1):nth-last-child(2),
+.acts--3 .act:nth-child(3n+1):nth-last-child(2) ~ .act{ grid-column:span 3; flex-direction:row; min-height:64px; gap:10px; font-size:14px }

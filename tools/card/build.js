@@ -89,7 +89,9 @@ function vcard(c, cardUrl, photo) {
     L.push(`N:${e(id.business)};;;;`, `FN:${e(id.business)}`, 'X-ABShowAs:COMPANY');
   }
   L.push(`ORG:${e(id.business)}`);
-  if (k.phone) L.push(`TEL;TYPE=WORK,VOICE:${k.phone}`);
+  /* one number for calls and texts is a mobile - filed as CELL, so the
+     phone offers Message as well as Call */
+  if (k.phone) L.push(`TEL;TYPE=${k.sms === k.phone ? 'CELL' : 'WORK'},VOICE:${k.phone}`);
   if (k.sms && k.sms !== k.phone) L.push(`TEL;TYPE=CELL:${k.sms}`);
   if (k.email) L.push(`EMAIL;TYPE=INTERNET,WORK:${k.email}`);
   if (k.website) L.push(`URL;TYPE=WORK:${k.website}`);
@@ -153,7 +155,7 @@ function render(c, ctx) {
 <a class="save" href="${esc(ctx.vcf)}"${tr('save_contact')}>
   ${ic('userAdd')}<span>Save to Contacts</span>
 </a>
-<p class="save-note">${[k.phone && 'Phone', k.email && 'email', k.website && 'website'].filter(Boolean).join(', ').replace(/^./, s => s.toUpperCase())} — straight into your phone.</p>`;
+<p class="save-note">${[k.phone && 'Phone', k.email && 'email', k.website && 'website'].filter(Boolean).join(', ').replace(/^./, s => s.toUpperCase()).replace(/, ([^,]+)$/, ' and $1')} in one tap.</p>`;
 
   /* the quick actions, in the order a stranger reaches for them */
   const acts = [];
