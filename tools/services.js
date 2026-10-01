@@ -139,7 +139,7 @@ module.exports = [
     desc: 'Social media content, video, Google Ads and Facebook & Instagram ads for local businesses ' +
           'in Spring Hill and Tampa Bay - strategy, creative, targeting and management.',
     eyebrow: 'Social media &amp; paid ads &middot; Spring Hill &amp; Tampa Bay',
-    h1: 'Social Media Marketing &amp; Paid Ads in <span class="svc-h1-at">Spring Hill, FL</span>',
+    h1: 'Social Media Marketing &amp;<br> Paid Ads in <span class="svc-h1-at">Spring Hill, FL</span>',
     /* HIS HERO (social-media-marketing.svg, Sept 30): the likes, hearts and
        platform icons in three layers that drift at their own pace, in place
        of the lane's sign */

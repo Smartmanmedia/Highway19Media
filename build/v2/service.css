@@ -313,6 +313,8 @@
   .svc-page--hero-icons .svc-hero{ padding-bottom:28px }
   .svc-page--hero-icons .svc-hero-say{ text-align:center }
   .svc-page--hero-icons .svc-hero h1,.svc-page--hero-icons .svc-lead{ margin-left:auto; margin-right:auto }
+  /* his two lines, the longer as wide as the paragraph under it */
+  .svc-page--hero-icons .svc-hero h1{ font-size:calc((100vw - 40px) * .075); max-width:none }
   .svc-page--hero-icons .svc-acts{ justify-content:center }
   .svc-page--hero-icons .svc-hero .svc-eyebrow{ font-size:min(.72rem, 2.3vw); letter-spacing:.05em; white-space:nowrap }
   .svc-hero-icons{ position:relative; right:auto; top:auto; width:min(58vw,300px); margin:28px auto 0;
