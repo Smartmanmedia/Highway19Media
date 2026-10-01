@@ -145,7 +145,8 @@
          out the same ways when the next state comes */
       /* each piece comes in from its own side: the left half from the left, the right half from the right */
       /* his faded background pieces come and go with their state */
-      x.bgart.forEach(function (g) { set(g, Math.min(a, 1 - b)); });
+      /* the first panel's calendar waits until the scene has pinned, then fades in */
+      x.bgart.forEach(function (g) { set(g, i === 0 && q < 1 ? 0 : Math.min(a, 1 - b)); });
       x.logo.concat(x.chart).forEach(function (c) {
         var k = 1 - a + b;
         /* the ChatGPT phone rises up from the bottom of the screen */
