@@ -210,6 +210,8 @@
 }
 .hdr-nav .hdr-dd-m a:hover,
 .hdr-nav .hdr-dd-m a:focus-visible{ text-decoration:none; background-size:100% .12em; outline:none }
+/* and from the keyboard, a ring as well as the underline, so the focus is plain to see */
+.hdr-nav .hdr-dd-m a:focus-visible{ outline:2px solid var(--hdr-accent,#29abe2); outline-offset:4px; border-radius:2px }
 
 .hdr-cta{
   position:absolute; left:88.62%; top:49.2%; translate:0 -50%;

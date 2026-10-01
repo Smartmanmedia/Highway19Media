@@ -596,6 +596,13 @@ if (fs.existsSync(QA_SRC)) {
     '/services/': '/#services'
   };
   qa = qa.replace(/href="(\/services\/[^"]*)"/g, (m, h) => QA_LINKS[h] ? 'href="' + QA_LINKS[h] + '"' : m);
+  /* ACCESSIBILITY: the questions sit straight under the page's h1, so they
+     are h2s, not h3s (a screen reader's outline should not skip a level);
+     and each answer panel is a region named by the question that opens it */
+  qa = qa.replace(/<h3 class="qa-h">([\s\S]*?)<\/h3>/g, '<h2 class="qa-h">$1</h2>')
+    .replace(/<button class="qa-q" type="button" aria-expanded="(true|false)" aria-controls="([^"]+)">/g,
+      '<button class="qa-q" id="q-$2" type="button" aria-expanded="$1" aria-controls="$2">')
+    .replace(/id="([^"]+)" role="region"(?! aria-labelledby)/g, 'id="$1" role="region" aria-labelledby="q-$1"');
   /* its title and description, for the searches it can answer - set here
      because faq.html is generated elsewhere (tools/qa/build.py) */
   qa = setMeta(qa, 'Small Business Marketing FAQ | Highway 19 Media, Spring Hill FL',
@@ -685,10 +692,12 @@ for (const d of SERVICE_PAGES) {
     CHROME.ASSETS.css.map(f => '<link rel="stylesheet" href="' + codeHref(f) + '">').join('\n') + '\n' +
     CHROME.ASSETS.js.map(f => '<script src="' + codeHref(f) + '" defer></script>').join('\n') +
     '\n</head>', '</head>');
+  /* the page's own content is the page's main landmark, between the chrome */
   swap(/<body>/, () => '<body>\n' +
-    HEADER_FOR('/', '/contact/').replace('class="skip" href="#top"', 'class="skip" href="#' + firstId + '"'), '<body>');
+    HEADER_FOR('/', '/contact/').replace('class="skip" href="#top"', 'class="skip" href="#' + firstId + '"') +
+    '\n<main id="vp-main">', '<body>');
   swap(/<script src="assets\/js\/[^"]+"><\/script>\s*<\/body>/,
-       m => FOOTER_FOR('/contact/') + '\n' + m, 'the page script before </body>');
+       m => '</main>\n' + FOOTER_FOR('/contact/') + '\n' + m, 'the page script before </body>');
   /* and the page's own calls to action go to the contact page too */
   page = page.replace(/href="\/#contact"/g, 'href="/contact/"');
   page = page.replace(/\.\.\/\.\.\/assets\//g, '/assets/').replace(/\{\{ROOT\}\}/g, '/');

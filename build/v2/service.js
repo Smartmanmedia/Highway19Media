@@ -76,7 +76,10 @@
   var set = function (el, o, t) {
     if (!el) return;
     el.style.opacity = o;
-    el.style.visibility = o <= 0.001 ? 'hidden' : '';
+    /* art may leave entirely; the words only fade, so a screen reader still
+       reads every panel's heading and card in order */
+    var words = el.classList.contains('wwd-card') || el.classList.contains('wwd-h');
+    el.style.visibility = o <= 0.001 && !words ? 'hidden' : '';
     el.style.transform = t || '';
   };
 
