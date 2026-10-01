@@ -1,3 +1,27 @@
+/* THE HERO'S INTRO: the headline is split into words so each can rise in on
+   its own beat (service.css). Without this the headline still appears, a
+   moment later and all at once. */
+(function () {
+  var h = document.querySelector('.svc-page--hero-icons .svc-hero h1');
+  if (!h || !document.documentElement.classList.contains('svc-intro')) return;
+  var n = 0;
+  (function split(el) {
+    [].slice.call(el.childNodes).forEach(function (c) {
+      if (c.nodeType === 1) { if (c.tagName !== 'BR') split(c); return; }
+      if (c.nodeType !== 3 || !c.textContent.trim()) return;
+      var f = document.createDocumentFragment();
+      c.textContent.split(/(\s+)/).forEach(function (w) {
+        if (!w) return;
+        if (/^\s+$/.test(w)) { f.appendChild(document.createTextNode(w)); return; }
+        var s = document.createElement('span'); s.className = 'hw'; s.style.setProperty('--i', n++); s.textContent = w;
+        f.appendChild(s);
+      });
+      el.replaceChild(f, c);
+    });
+  })(h);
+  h.classList.add('is-split');
+})();
+
 /* ============================================================================
    HIS SCROLL SCENE on the service pages (Social Media & Paid Ads' What We Do).
    The section pins one stage for as long as it takes to scroll through it, and

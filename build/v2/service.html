@@ -31,6 +31,8 @@
 <link rel="stylesheet" href="header.css">
 <link rel="stylesheet" href="consent.css">
 <link rel="stylesheet" href="service.css">
+<!-- the hero's intro is set up before first paint, so its words never flash -->
+<script>if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("svc-intro")</script>
 <script type="application/ld+json">{{LD}}</script>
 </head>
 <body class="svc-page{{PAGE}}" style="--lane:{{COLOR}}">

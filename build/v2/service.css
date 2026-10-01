@@ -553,3 +553,32 @@ img.hi-s{ background:none }
 @media (prefers-reduced-motion:reduce){
   .ap-bubble,.ap-a1,.ap-card,.ap-more{ opacity:1 } .ap-q{ clip-path:none; opacity:0 }
 }
+
+/* ---- THE HERO'S INTRO, once per visit: the eyebrow settles out of a wide
+   blur, the headline rises word by word, Spring Hill catches the light, the
+   tagline slides in, the paragraphs follow and the buttons pop. Only when
+   the page asked for it (html.svc-intro, set before first paint, never with
+   reduced motion). */
+.svc-intro .svc-page--hero-icons .svc-hero .svc-eyebrow{ animation:hiEyebrow 1s cubic-bezier(.2,.8,.2,1) .1s both }
+/* the headline waits for its words; if they never come it shows anyway */
+.svc-intro .svc-page--hero-icons .svc-hero h1{ animation:hiShow .6s ease 1.4s both }
+.svc-intro .svc-page--hero-icons .svc-hero h1.is-split{ animation:none }
+.hw{ display:inline-block }
+.svc-intro .hw{ animation:hiWord .85s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(.3s + var(--i) * .075s) }
+.svc-intro .svc-h1-at .hw{ background:linear-gradient(100deg,#a4d4ff 38%,#fff 50%,#a4d4ff 62%) 100% 0 / 260% 100% no-repeat;
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  animation:hiWord .85s cubic-bezier(.2,.8,.2,1) both, hiShine 1.3s ease-in-out 1.35s both;
+  animation-delay:calc(.3s + var(--i) * .075s), 1.35s }
+.svc-intro .svc-page--hero-icons .svc-tag{ animation:hiTag .8s cubic-bezier(.2,.8,.2,1) 1.05s both }
+.svc-intro .svc-page--hero-icons .svc-lead p{ animation:hiUp .8s cubic-bezier(.2,.8,.2,1) 1.25s both }
+.svc-intro .svc-page--hero-icons .svc-lead p + p{ animation-delay:1.38s }
+.svc-intro .svc-page--hero-icons .svc-lead p + p + p{ animation-delay:1.5s }
+.svc-intro .svc-page--hero-icons .svc-acts .svc-btn{ animation:hiPop .6s cubic-bezier(.3,1.5,.5,1) 1.65s both }
+.svc-intro .svc-page--hero-icons .svc-acts .svc-btn + .svc-btn{ animation-delay:1.77s }
+@keyframes hiEyebrow{ from{ opacity:0; letter-spacing:.6em; filter:blur(6px) } }
+@keyframes hiShow{ from{ opacity:0 } }
+@keyframes hiWord{ from{ opacity:0; transform:translateY(.6em) rotate(4deg); filter:blur(10px) } }
+@keyframes hiShine{ from{ background-position:100% 0 } to{ background-position:0% 0 } }
+@keyframes hiTag{ from{ opacity:0; transform:translateX(-40px) } }
+@keyframes hiUp{ from{ opacity:0; transform:translateY(18px) } }
+@keyframes hiPop{ from{ opacity:0; transform:scale(.82) } }
