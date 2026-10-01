@@ -238,11 +238,13 @@
 .wwd--ai .wwd-card h3::after{ background:#000 }
 /* OpenAI's mark turns slowly behind the ChatGPT phone */
 .wwd--ai .wwd-glyph{ animation:wwdTurn 80s linear infinite }
-/* the ChatGPT phone grows when it is pointed at, shadow and all */
-.is-live .wwd--ai .wwd-phone{ pointer-events:auto; cursor:pointer; transition:scale .45s cubic-bezier(.2,.8,.2,1) }
-.is-live .wwd--ai .wwd-phone:hover{ scale:1.2 }
-.is-live .wwd--ai .wwd-shadow{ transition:scale .45s cubic-bezier(.2,.8,.2,1) }
-.is-live .wwd--ai .wwd-art:has(.wwd-phone:hover) .wwd-shadow{ animation:none; scale:1.25 1.1 }
+/* every phone, pointed at, grows and stands up straight to be read, shadow
+   and all; it eases back to his tilt when the pointer leaves */
+.is-live .wwd-phone{ pointer-events:auto; cursor:pointer;
+  transition:scale .5s cubic-bezier(.2,.8,.2,1), rotate .5s cubic-bezier(.2,.8,.2,1) }
+.is-live .wwd-phone:hover{ scale:1.2; rotate:calc(var(--rot, 0) * -1deg) }
+.is-live .wwd-shadow{ transition:scale .5s cubic-bezier(.2,.8,.2,1) }
+.is-live .wwd-art:has(.wwd-phone:hover) .wwd-shadow{ animation:none; scale:1.25 1.1 }
 @keyframes wwdTurn{ to{ rotate:360deg } }
 .wwd--google .wwd-card h3::after{ background:#000 }
 /* his art, each piece at his left/top/width (set on the element) */
