@@ -189,14 +189,17 @@
    drifting on its own clock so the icons never move as one sheet */
 .svc-hero-icons{ position:absolute; right:.6%; top:16px; width:min(454px,24vw); aspect-ratio:454/757;
   container-type:inline-size; filter:drop-shadow(0 8px 9px rgba(0,14,60,.38)) }
-/* each icon drifts on its layer's clock, and eases home to his spot after the
-   pointer's ball has pushed it aside */
+/* each icon is two layers: the outer one sits at his spot and is what the
+   pointer's ball pushes aside (and eases home); the inner one is the picture,
+   drifting on its layer's clock */
 .hi-i{ position:absolute; left:var(--x); top:var(--y); width:var(--w); height:var(--h); display:block;
+  transition:transform 1.3s cubic-bezier(.45,0,.25,1) }
+.hi-s{ display:block; width:100%; height:100%;
   background:url("../../assets/v2/social/hero-sprite-v1.webp") var(--bp) / var(--bs) no-repeat;
-  animation:hiA 7s ease-in-out infinite; transition:transform 1.3s cubic-bezier(.45,0,.25,1) }
-.hi-i.hi1{ animation-name:hiB; animation-duration:9s; animation-delay:-3s }
-.hi-i.hi2{ animation-name:hiC; animation-duration:8s; animation-delay:-5s }
-.hi-ig{ background:none }
+  animation:hiA 7s ease-in-out infinite }
+.hi1 > .hi-s{ animation-name:hiB; animation-duration:9s; animation-delay:-3s }
+.hi2 > .hi-s{ animation-name:hiC; animation-duration:8s; animation-delay:-5s }
+img.hi-s{ background:none }
 /* pushed by the pointer's ball (service.js): out quickly, home slowly */
 .svc-hero-icons.is-pushed .hi-i{ transition:transform .4s cubic-bezier(.2,.8,.2,1) }
 @keyframes hiA{ 50%{ translate:0 -12px } }
@@ -319,13 +322,13 @@
   .svc-page--hero-icons .svc-hero .svc-eyebrow{ font-size:min(.72rem, 2.3vw); letter-spacing:.05em; white-space:nowrap }
   .svc-hero-icons{ position:relative; right:auto; top:auto; width:min(58vw,300px); margin:28px auto 0;
     view-timeline-name:--hic }
-  .hi-i.hi0{ --lk:0 } .hi-i.hi1{ --lk:1 } .hi-i.hi2{ --lk:2 }
+  .hi0 > .hi-s{ --lk:0 } .hi1 > .hi-s{ --lk:1 } .hi2 > .hi-s{ --lk:2 }
   @supports (view-timeline-name: --hic){
-    .hi-i,.hi-i.hi1,.hi-i.hi2{ animation-name:hiA, hiLife; animation-duration:7s, auto;
+    .hi-s,.hi1 > .hi-s,.hi2 > .hi-s{ animation-name:hiA, hiLife; animation-duration:7s, auto;
       animation-timing-function:ease-in-out, linear; animation-iteration-count:infinite, 1;
       animation-fill-mode:none, both; animation-timeline:auto, --hic; animation-range:normal, cover 0% cover 100% }
-    .hi-i.hi1{ animation-name:hiB, hiLife; animation-duration:9s, auto }
-    .hi-i.hi2{ animation-name:hiC, hiLife; animation-duration:8s, auto }
+    .hi1 > .hi-s{ animation-name:hiB, hiLife; animation-duration:9s, auto }
+    .hi2 > .hi-s{ animation-name:hiC, hiLife; animation-duration:8s, auto }
   }
   /* his phones stand a little straighter on a phone screen */
   .wwd-phone{ transform-origin:calc(var(--px, 0) * var(--m)) calc(var(--py, 0) * var(--m)); rotate:calc(var(--rot, 0) * -0.7deg) }
@@ -359,7 +362,7 @@
   30%,50%{ transform:none; opacity:1 }
   75%,100%{ transform:translateY(calc(-110px - var(--lk, 0) * 50px)) scale(.7); opacity:0 } }
 @media (prefers-reduced-motion:reduce){
-  .hi-i,.hi-i.hi1,.hi-i.hi2,.wwd-phone,.wwd-shadow,.wwd-card,.wwd-h,.wwd-art,.wwd-glyph,.wwd-logo,.wwd-chart{ animation:none }
+  .hi-s,.hi1 > .hi-s,.hi2 > .hi-s,.wwd-phone,.wwd-shadow,.wwd-card,.wwd-h,.wwd-art,.wwd-glyph,.wwd-logo,.wwd-chart{ animation:none }
 }
 
 /* ---- one strong picture beside a short paragraph (Why Highway 19 Media) ---- */

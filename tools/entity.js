@@ -63,7 +63,8 @@ const BUSINESS = {
   knowsAbout: [
     'Small business marketing', 'Website design', 'Landing pages', 'Search engine optimization',
     'Video production', 'Commercial video', 'Photography', 'Podcast production', 'Social media marketing',
-    'Social media management', 'Paid advertising', 'Pay-per-click advertising', 'Branding',
+    'Social media management', 'Paid advertising', 'Pay-per-click advertising', 'Google Ads',
+    'Facebook advertising', 'Instagram advertising', 'Social video', 'Advertising on AI platforms', 'Branding',
     'Logo design', 'Graphic design', 'Print design', 'Signage', 'Promotional products'
   ],
   hasOfferCatalog: {
@@ -72,7 +73,8 @@ const BUSINESS = {
       ['Website Design', 'Custom websites and landing pages for small businesses, built on WordPress, Webflow, Shopify and other platforms, with SEO foundations.', SITE + '/website-design/'],
       ['Video Production', 'Commercials, podcasts, interviews, testimonials, training and social video, on location or in our Spring Hill studio.', SITE + '/video-production/'],
       ['Social Media Marketing', 'Content, posting and management of your social media, from one post a week to a full calendar.', SITE + '/social-media-marketing/'],
-      ['Paid Advertising', 'Pay-per-click and paid social campaigns built around your audience, offer and budget.', SITE + '/social-media-marketing/'],
+      ['Paid Advertising', 'Google Ads and Facebook & Instagram campaigns built around your audience, offer and budget.', SITE + '/social-media-marketing/'],
+      ['Advertising on AI Platforms', 'Positioning your business for advertising inside AI assistants such as ChatGPT, with the message, creative, landing page and campaign.', SITE + '/social-media-marketing/'],
       ['Branding & Graphic Design', 'Logos, brand identity, colours, type and production-ready files.', SITE + '/branding-and-print/'],
       ['Print & Promotional Products', 'Business cards, signs, vehicle graphics, shirts and custom promotional products.', SITE + '/branding-and-print/']
     ].map(([name, description, url]) => ({

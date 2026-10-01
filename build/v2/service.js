@@ -77,6 +77,7 @@
        runs over the middle half of its stretch; the rest is the hold. */
     var e = [];
     for (var k = 0; k < N - 1; k++) e.push(ease(clamp((p - k - 0.25) / 0.5)));
+    if (q >= 1) counted(p);
     var into = function (i) { return i === 0 ? 1 : e[i - 1]; };
     var outOf = function (i) { return i === N - 1 ? 0 : e[i]; };
 
@@ -142,6 +143,16 @@
     });
   }
 
+  /* how far a reader goes: each state of the scene, once per visit */
+  var seen = {};
+  function counted(p) {
+    var k = Math.round(p);
+    if (seen[k] || !window.h19Track) return;
+    seen[k] = true;
+    var h = parts[k] && parts[k].card.querySelector('h3');
+    window.h19Track('scene_step', { step: k + 1, step_name: h ? h.innerHTML.replace(/<br\s*\/?>/g, ' ').replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim().slice(0, 60) : '' });
+  }
+
   function clear() {
     sec.querySelectorAll('[style]').forEach(function (el) {
       ['opacity', 'visibility', 'transform', 'minHeight'].forEach(function (k) { el.style[k] = ''; });
@@ -175,14 +186,16 @@
    HIS HERO ICONS AND THE POINTER. An invisible ball 250px across rides with
    the mouse; any like, heart or platform tile it touches is pushed out to its
    edge, and the moment the ball moves on each one eases back to his spot.
-   Only for a real mouse, and not for a reader who asked for less motion.
+   On a touch screen the finger is the ball - a smaller one, for the smaller
+   cluster - while it touches or drags across them; the page still scrolls.
+   Not for a reader who asked for less motion.
    ========================================================================= */
 (function () {
   var box = document.querySelector('.svc-hero-icons');
   if (!box) return;
   var fine = window.matchMedia('(hover: hover) and (pointer: fine)');
   var still = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var R = 125;                                   /* the ball's radius */
+  var R = 125;                                   /* the ball's radius: 250px across */
   var icons = [].slice.call(box.querySelectorAll('.hi-i')).map(function (el, n) {
     var v = function (k) { return parseFloat(el.style.getPropertyValue(k)) / 100; };
     return { el: el, x: v('--x'), y: v('--y'), w: v('--w'), h: v('--h'), turn: n % 2 ? 1 : -1, on: false };
@@ -197,7 +210,7 @@
       var w = c.w * b.width, h = c.h * b.height;
       var cx = b.left + (c.x * b.width) + w / 2, cy = b.top + (c.y * b.height) + h / 2;
       var dx = cx - mx, dy = cy - my, d = Math.sqrt(dx * dx + dy * dy) || 0.01;
-      var reach = R + Math.max(w, h) / 2;
+      var reach = (fine.matches ? R : 70) + Math.max(w, h) / 2;
       if (live && d < reach) {
         var push = reach - d;
         c.el.style.transform = 'translate(' + (dx / d * push).toFixed(1) + 'px,' + (dy / d * push).toFixed(1) +
@@ -214,6 +227,25 @@
   }
   function away() { live = false; if (!raf) raf = requestAnimationFrame(frame); }
   window.addEventListener('pointermove', move, { passive: true });
+  /* touch: follow the finger over the cluster, let go and they ease home */
+  var held = 0;
+  function touch(e) {
+    if (still.matches || !e.touches.length) return;
+    var t = e.touches[0]; mx = t.clientX; my = t.clientY; live = true; clearTimeout(held);
+    if (!raf) raf = requestAnimationFrame(frame);
+  }
+  box.addEventListener('touchstart', touch, { passive: true });
+  box.addEventListener('touchmove', touch, { passive: true });
+  ['touchend', 'touchcancel'].forEach(function (k) {
+    box.addEventListener(k, function () { held = setTimeout(away, 120); }, { passive: true });
+  });
   document.documentElement.addEventListener('pointerleave', away);
   window.addEventListener('scroll', function () { if (live && !raf) raf = requestAnimationFrame(frame); }, { passive: true });
 })();
+
+/* which questions get opened (consent.js sends it, and only after a yes) */
+document.querySelectorAll('.svc-faq details').forEach(function (d) {
+  d.addEventListener('toggle', function () {
+    if (d.open && window.h19Track) window.h19Track('faq_open', { question: d.querySelector('summary').textContent.trim().slice(0, 90) });
+  });
+});

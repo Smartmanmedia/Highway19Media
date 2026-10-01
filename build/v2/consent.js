@@ -83,13 +83,21 @@
    *                  page or to a form on the page. Meta: Contact.
    *   generate_lead  the form actually sent (form.js calls h19Track after the
    *                  service says success). Meta: Lead. Mark this one as the
-   *                  conversion in GA4 (Admin > Events > Mark as key event). */
+   *                  conversion in GA4 (Admin > Events > Mark as key event).
+   * and, on the pages that have them (service.js), how far a reader goes:
+   *   scene_step     the What We Do scene reached a state (step_name)
+   *   faq_open       a question was opened (question)
+   * Those reach Meta as custom events, never as a Contact or a Lead. */
   window.h19Track = function (name, params) {
     params = params || {};
     params.page_path = location.pathname;
     try { if (window.gtag) gtag('event', name, params); } catch (e) {}
     try {
-      if (window.fbq) fbq('track', name === 'generate_lead' ? 'Lead' : 'Contact', params);
+      if (window.fbq) {
+        if (name === 'generate_lead') fbq('track', 'Lead', params);
+        else if (name === 'contact_click') fbq('track', 'Contact', params);
+        else fbq('trackCustom', name, params);
+      }
     } catch (e) {}
   };
   document.addEventListener('click', function (e) {
@@ -97,9 +105,12 @@
     if (!a) return;
     var h = a.getAttribute('href');
     if (h !== '#contact' && h !== '/#contact' && h !== '/contact/') return;
+    /* where on the page the click came from: hero, the closing ask, header... */
+    var at = a.closest('header,footer,nav,section');
     window.h19Track('contact_click', {
       link_text: (a.getAttribute('aria-label') || a.textContent || '').trim().slice(0, 60),
-      link_url: h });
+      link_url: h,
+      link_location: at ? (at.className || at.tagName).toString().split(' ')[0].slice(0, 40) : 'page' });
   }, true);
 
   var KEY = 'h19.consent.v1';

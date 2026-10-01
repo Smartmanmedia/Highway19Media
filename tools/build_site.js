@@ -128,6 +128,7 @@ for (const S of require('./services')) {
   for (const x of S.sections || []) for (const it of x.items || [])
     for (const a of (it && it.art) || []) wanted.add('assets/v2/social/' + a[1]);
   for (const x of S.sections || []) if (x.img) wanted.add('assets/v2/social/' + x.img[0]);
+  if (S.og) wanted.add('assets/v2/' + S.og);
 }
 
 /* AND THE SHARE CARD CARRIES ITS CONTENT HASH TOO.
@@ -292,11 +293,12 @@ const SERVICES = require('./services');
     return '      <div class="svc-hero-icons" aria-hidden="true">' + M.icons.map(c =>
       '<i class="hi-i hi' + c.layer + '" style="--x:' + pc(c.l / BW * 100) + ';--y:' + pc(c.t / BH * 100) +
       ';--w:' + pc(c.w / BW * 100) + ';--h:' + pc(c.h / BH * 100) + ';--bs:' + pc(SW / c.w * 100) + ' ' + pc(SH / c.h * 100) +
-      ';--bp:' + pc(c.sx / (SW - c.w) * 100) + ' ' + pc(c.sy / (SH - c.h) * 100) + '"></i>').join('') +
+      ';--bp:' + pc(c.sx / (SW - c.w) * 100) + ' ' + pc(c.sy / (SH - c.h) * 100) + '"><i class="hi-s"></i></i>').join('') +
       /* his Instagram tile: the export kept only its outline and the mask of its
          edge, so it is rebuilt on that geometry (hero-instagram-v2.svg) */
-      '<img class="hi-i hi1 hi-ig" src="../../assets/v2/social/hero-instagram-v2.svg" alt="" width="102" height="99" style="--x:' +
-      pc(55.82 / BW * 100) + ';--y:' + pc(550.84 / BH * 100) + ';--w:' + pc(102 / BW * 100) + ';--h:' + pc(99 / BH * 100) + '"></div>';
+      '<i class="hi-i hi1" style="--x:' + pc(55.82 / BW * 100) + ';--y:' + pc(550.84 / BH * 100) +
+      ';--w:' + pc(102 / BW * 100) + ';--h:' + pc(99 / BH * 100) + '"><img class="hi-s" src="../../assets/v2/social/hero-instagram-v2.svg"' +
+      ' alt="" width="102" height="99"></i></div>';
   };
   for (const S of SERVICES) {
     const url = SITE + '/' + S.slug + '/';
@@ -319,7 +321,12 @@ const SERVICES = require('./services');
           description: plain([].concat(S.lead).join(' ')), url, provider: { '@id': SITE + '/#business' },
           areaServed: ENTITY.BUSINESS.areaServed },
           S.offers ? { offers: S.offers.map(([n, p]) => ({ '@type': 'Offer', name: n,
-            priceSpecification: { '@type': 'PriceSpecification', minPrice: p, priceCurrency: 'USD' } })) } : {}),
+            priceSpecification: { '@type': 'PriceSpecification', minPrice: p, priceCurrency: 'USD' } })) } : {},
+          /* what the page offers, by name, each its own Service */
+          S.catalog ? { hasOfferCatalog: { '@type': 'OfferCatalog', name: plain(S.label), itemListElement:
+            S.catalog.map(([n, d]) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: n, description: d,
+              provider: { '@id': SITE + '/#business' }, areaServed: ENTITY.BUSINESS.areaServed } })) } } : {},
+          S.og ? { image: SITE + '/assets/v2/' + S.og } : {}),
         { '@type': 'BreadcrumbList', '@id': url + '#breadcrumb', itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home', item: SITE + '/' },
           { '@type': 'ListItem', position: 2, name: plain(S.label), item: url }] },
@@ -443,6 +450,9 @@ const SERVICES = require('./services');
                (m, f) => m.replace('"' + f + '"', '"' + codeHref(f) + '"'))
       .replace(/\.\.\/\.\.\/assets\//g, '/assets/')
       .replace(/\{\{ROOT\}\}/g, '/');
+    /* a page with its own share card wears it instead of the site's */
+    if (S.og) page = page.replace(/https:\/\/highway19media\.com\/assets\/v2\/meta\/og\.jpg/g, SITE + '/assets/v2/' + S.og)
+      .replace(/(<meta property="og:image:height" content="630">)/, '$1\n<meta property="og:image:alt" content="' + esc(S.ogAlt || S.title) + '">');
     if (/\{\{[A-Z_]+\}\}/.test(page)) throw new Error(S.slug + ': unfilled token');
     wr(S.slug + '/index.html', minifyHtml(page));
   }

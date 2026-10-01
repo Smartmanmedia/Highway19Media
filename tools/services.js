@@ -136,8 +136,19 @@ module.exports = [
     color: '#f7931e',
     icon: 'icon-social.webp',
     title: 'Social Media & Paid Ads in Spring Hill, FL | Highway 19 Media',
-    desc: 'Social media content, video, Google Ads and Facebook & Instagram ads for local businesses ' +
-          'in Spring Hill and Tampa Bay - strategy, creative, targeting and management.',
+    desc: 'Social media management, social video, Google Ads, Facebook & Instagram ads and ChatGPT advertising ' +
+          'for Spring Hill & Tampa Bay businesses.',
+    /* the page's own share card (his hero), and what it offers, by name - for
+       search results and AI answers that list what a business does */
+    og: 'social/og-social-v1.jpg',
+    ogAlt: 'Highway 19 Media - Social Media Marketing & Paid Ads in Spring Hill, FL',
+    catalog: [
+      ['Social Media Management', 'Professionally designed posts, photos, videos, promotions and ongoing content that keep a business active on social media.'],
+      ['Social Video', 'On-location filming turned into short videos for Facebook, Instagram and other platforms.'],
+      ['Facebook & Instagram Ads', 'Meta advertising: audience, campaign setup, creative, messaging and ongoing management.'],
+      ['Google Ads', 'Search campaigns researched, built, tracked and managed around the searches and locations that matter.'],
+      ['Advertising on AI Platforms', 'Positioning a business for advertising inside AI assistants such as ChatGPT, with the message, creative, landing page and campaign.']
+    ],
     eyebrow: 'Social media &amp; paid ads &middot; Spring Hill &amp; Tampa Bay',
     h1: 'Social Media Marketing &amp;<br> Paid Ads in <span class="svc-h1-at">Spring Hill, FL</span>',
     /* HIS HERO (social-media-marketing.svg, Sept 30): the likes, hearts and
