@@ -36,6 +36,7 @@
       glyphs: [].slice.call(p.querySelectorAll('.wwd-glyph')),
       logo: [].slice.call(p.querySelectorAll('.wwd-logo')),
       chart: [].slice.call(p.querySelectorAll('.wwd-chart')),
+      bgart: [].slice.call(p.querySelectorAll('.wwd-bgart')),
       at: 0                       /* where his card sits in this state: --cx */
     };
   });
@@ -70,14 +71,16 @@
     if (!live) return;
     var r = sec.getBoundingClientRect();
     var span = r.height - window.innerHeight;
-    var p = span > 0 ? clamp(-r.top / span) * (N - 1) : 0;
+    /* every state holds for the same stretch: the first and last get a half
+       screen more, so they hold as long as the ones in the middle */
+    var p = span > 0 ? clamp(-r.top / span) * (N - 0.5) - 0.25 : 0;
     /* q: how far the section has come up into the window before it pins */
     var q = ease(clamp(1 - r.top / window.innerHeight));
     /* e[k]: how far the change from state k to k+1 has gone. Each change
        runs over the middle half of its stretch; the rest is the hold. */
     var e = [];
     for (var k = 0; k < N - 1; k++) e.push(ease(clamp((p - k - 0.25) / 0.5)));
-    if (q >= 1) counted(p);
+    if (q >= 1) counted(Math.max(0, p));
     /* mid-change (or still flying in), no phone may stay enlarged */
     sec.classList.toggle('is-moving', q < 0.995 || e.some(function (v) { return v > 0.001 && v < 0.999; }));
     var into = function (i) { return i === 0 ? 1 : e[i - 1]; };
@@ -141,6 +144,8 @@
       /* the light: Google's A in from the right, his chart from the left, and
          out the same ways when the next state comes */
       /* each piece comes in from its own side: the left half from the left, the right half from the right */
+      /* his faded background pieces come and go with their state */
+      x.bgart.forEach(function (g) { set(g, Math.min(a, 1 - b)); });
       x.logo.concat(x.chart).forEach(function (c) {
         var dir = parseFloat(c.style.getPropertyValue('--l')) > 400 ? 420 : -360;
         set(c, Math.min(a, 1 - b), 'translateX(' + dir * (1 - a + b) * u + 'px)');
@@ -172,7 +177,7 @@
       if (!live) clear();
     }
     /* a screen of scrolling for each state */
-    sec.style.height = live ? N * 100 + 'vh' : '';
+    sec.style.height = live ? (N + 0.5) * 100 + 'vh' : '';
     P.forEach(function (p, i) { parts[i].at = parseFloat(getComputedStyle(p).getPropertyValue('--cx')) || 0; });
     u = Math.min(1, window.innerHeight / 900, (window.innerWidth - 40) / 1110);
     sizeCards();

@@ -360,9 +360,10 @@ img.hi-s{ background:none }
     width:calc(var(--w) * var(--m)) }
   .wwd-shadow{ height:calc(30 * var(--m)) }
   .wwd--smm .wwd-in{ --span:338; --ox:645; --ah:715 }
-  .wwd--video .wwd-in{ --span:406; --ox:602; --oy:20; --ah:695 }
+  .wwd--video .wwd-in{ --span:406; --ox:505; --oy:20; --ah:695 }
   .wwd--meta .wwd-in{ --span:338; --ox:646; --ah:714 }
-  .wwd--google .wwd-in{ --span:300; --ox:10; --oy:112; --ah:600 }
+  .wwd--google .wwd-in{ --span:300; --ox:-70; --oy:112; --ah:600 }
+  .wwd-bgart{ display:none }
   .wwd--ai .wwd-in{ --span:347; --ox:532; --oy:105; --ah:650 }
   .wwd--google img.wwd-logo{ display:none }
   /* stacked, the panels read as one list: only the first says What We Do */

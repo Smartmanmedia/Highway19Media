@@ -189,14 +189,16 @@ module.exports = [
           'We help keep your business active with professionally designed posts, photos, videos, ' +
           'promotions and ongoing content.',
           'Stay involved as much as you want, or let us take more of it off your plate.'],
-          art: [['phone', 'phone-smm-v2.webp', 485, 675, 542, 5, 836, 272, 369.8, 6.78]] },
+          art: [['bgart', 'bg-calendar-v1.webp', 518, 450, 316, -29],   /* his faded calendar (Oct 1) */
+                ['phone', 'phone-smm-v2.webp', 485, 675, 542, 5, 836, 272, 369.8, 6.78]] },
         { key: 'video', h: 'Social Video', p: [
           'One visit can give your business weeks of content.',
           'We come to you, film your business, capture what you do, record tips or customer questions and ' +
           'turn the footage into short videos for Facebook, Instagram and other platforms.',
           'No stock footage pretending to be your business.',
           'Your people. Your location. Your work.'],
-          art: [['phone', 'phone-video-v2.webp', 623, 654, 487, 25, 836, 318.7, 343, -15.49]] },
+          art: [['bgart', 'bg-clapper-v1.webp', 477, 427, 768, 172],    /* his faded clapperboard (Oct 1) */
+                ['phone', 'phone-video-v3.webp', 623, 654, 390, 24, 739, 318.6, 343, -15.49]] },
         { key: 'meta', h: '<span class="wwd-fb">Facebook</span> &amp; <span class="wwd-ig">Instagram</span> Ads', p: [
           'Not everyone is searching for you yet.',
           'Meta advertising lets us introduce your business, product or offer to people in your market and ' +
@@ -212,16 +214,16 @@ module.exports = [
           'Already running Google Ads? We can review what you have before starting over.'],
           art: [/* an abstract take on the Ads mark (his request, Oct 1) in place of Google's own */
                 /* his layout (Oct 1): the phone and the floating mark on the left, his chart on the right */
-                ['logo', 'ads-mark-v1.svg', 749, 673, -290, 150],
-                ['chart', 'chart-disc-v1.webp', 646, 646, 800, 88],
-                ['chart wwd-gear wwd-gear1', 'chart-gear-1-v1.webp', 91, 91, 1197, 225],
-                ['chart wwd-gear wwd-gear2', 'chart-gear-2-v1.webp', 77, 78, 1273, 349],
-                ['chart wwd-gear wwd-gear3', 'chart-gear-3-v1.webp', 54, 55, 1140, 215],
-                ['chart wwd-gear wwd-gear4', 'chart-gear-4-v1.webp', 55, 55, 1269, 290],
-                ['chart', 'chart-screen-v1.webp', 646, 646, 800, 88],
-                ['chart wwd-glass', 'chart-magnifier-v1.webp', 187, 243, 913, 402],
+                ['logo', 'ads-mark-v1.svg', 749, 673, -294, 73],
+                ['chart', 'chart-disc-v1.webp', 646, 646, 650, 88],
+                ['chart wwd-gear wwd-gear1', 'chart-gear-1-v1.webp', 91, 91, 1047, 225],
+                ['chart wwd-gear wwd-gear2', 'chart-gear-2-v1.webp', 77, 78, 1123, 349],
+                ['chart wwd-gear wwd-gear3', 'chart-gear-3-v1.webp', 54, 55, 990, 215],
+                ['chart wwd-gear wwd-gear4', 'chart-gear-4-v1.webp', 55, 55, 1119, 290],
+                ['chart', 'chart-screen-v1.webp', 646, 646, 650, 88],
+                ['chart wwd-glass', 'chart-magnifier-v1.webp', 187, 243, 763, 402],
                 /* a search, our sponsored result, a tap, our page: drawn in code (gads-phone.html) */
-                ['chart wwd-gphone', 'HTML', 280, 575, 20, 122]] },
+                ['chart wwd-gphone', 'HTML', 280, 575, -60, 122]] },
         /* his last panel (Sept 30, evening): advertising inside the AI answers */
         { key: 'ai', h: 'Advertising is<br>Entering<br>the Conversation', p: [
           'People are using AI to research, compare, and decide what to buy and who to hire. We can help ' +
