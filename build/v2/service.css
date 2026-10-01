@@ -358,7 +358,7 @@ img.hi-s{ background:none }
   .wwd--smm .wwd-in{ --span:338; --ox:645; --ah:715 }
   .wwd--video .wwd-in{ --span:406; --ox:602; --oy:20; --ah:695 }
   .wwd--meta .wwd-in{ --span:338; --ox:646; --ah:714 }
-  .wwd--google .wwd-in{ --span:646; --ox:-212; --oy:88; --ah:646 }
+  .wwd--google .wwd-in{ --span:300; --ox:195; --oy:112; --ah:600 }
   .wwd--ai .wwd-in{ --span:347; --ox:532; --oy:105; --ah:650 }
   .wwd--google .wwd-logo{ display:none }
   /* stacked, the panels read as one list: only the first says What We Do */
@@ -402,3 +402,93 @@ img.hi-s{ background:none }
   box-shadow:0 10px 30px rgba(0,0,0,.28), 0 0 0 6px rgba(255,199,44,.18) }
 .svc-btn--big:hover{ box-shadow:0 14px 36px rgba(0,0,0,.32), 0 0 0 8px rgba(255,199,44,.24) }
 .svc-cta-local{ margin:1.6em auto 0 !important; font-size:.92rem; color:rgba(255,255,255,.72) !important }
+
+/* ---- THE GOOGLE ADS PHONE: a search, his sponsored result, a tap, his landing
+   page, a message sent - twelve seconds on a loop. Drawn in code, sized in the
+   phone's own width (cqw), so it is sharp at any size and uses none of Google's
+   artwork: a generic search bar, a "Sponsored" result, Highway 19 Media's page. */
+.wwd-gphone{ container-type:inline-size }
+.gp{ --T:12s; width:100%; aspect-ratio:280/575; padding:3.2cqw; border-radius:15cqw; background:#121417;
+  rotate:-5deg; box-shadow:0 3cqw 8cqw rgba(11,31,63,.35), inset 0 0 0 .8cqw #2a2e35;
+  transition:rotate .5s cubic-bezier(.2,.8,.2,1) }
+.gp-screen{ position:relative; height:100%; overflow:hidden; border-radius:12cqw; background:#fff;
+  color:#202124; font-family:inherit; line-height:1.3; animation:gpScreen var(--T) linear infinite }
+.gp p{ margin:0 }
+.gp-bar{ display:flex; justify-content:space-between; align-items:center; height:9cqw; padding:0 7cqw;
+  font-size:3.4cqw }
+.gp-bar i{ position:absolute; left:50%; top:2.2cqw; width:28cqw; height:7cqw; margin-left:-14cqw;
+  border-radius:4cqw; background:#121417 }
+.gp-page{ padding:3cqw 5cqw }
+.gp-search{ display:flex; align-items:center; gap:2.4cqw; height:12cqw; padding:0 4cqw; border-radius:6cqw;
+  box-shadow:0 .8cqw 3cqw rgba(32,33,36,.2); font-size:4.3cqw; white-space:nowrap }
+.gp-search svg{ flex:none; width:5cqw; height:5cqw; fill:none; stroke:#5f6368; stroke-width:2.4 }
+.gp-q{ clip-path:inset(0 100% 0 0); animation:gpType var(--T) steps(28) infinite }
+.gp-caret{ width:.5cqw; height:5cqw; background:#1a73e8; animation:gpBlink .9s steps(2) infinite }
+.gp-tabs{ display:flex; gap:4.5cqw; margin:3.5cqw 1cqw 0; font-size:3.4cqw; color:#5f6368 }
+.gp-tabs b{ color:#1a73e8; font-weight:600; box-shadow:0 .8cqw 0 #1a73e8 }
+.gp-ad{ margin-top:4cqw; padding:3.5cqw; border-radius:4cqw; opacity:0;
+  animation:gpIn var(--T) ease-out infinite, gpGlow var(--T) ease-in-out infinite }
+.gp-sp{ font-size:3.3cqw; font-weight:700 }
+.gp-site{ display:flex; align-items:center; gap:2.4cqw; margin:2cqw 0 1.6cqw; font-size:3.6cqw }
+.gp-site small{ display:block; font-size:3.1cqw; color:#4d5156 }
+.gp-fav{ display:grid; place-items:center; width:7.5cqw; height:7.5cqw; border-radius:50%;
+  background:#00287d; color:#fff; font-size:3.2cqw; font-weight:900 }
+.gp-h{ position:relative; font-size:5.5cqw; font-weight:600; line-height:1.25; color:#1a0dab }
+.gp-d{ margin-top:1.4cqw; font-size:3.6cqw; line-height:1.45; color:#4d5156 }
+.gp-links{ display:flex; flex-wrap:wrap; gap:1.8cqw; margin-top:3cqw }
+.gp-links span{ padding:1.4cqw 3cqw; border:.3cqw solid #dadce0; border-radius:5cqw; font-size:3.2cqw; color:#1a0dab }
+.gp-links .gp-go{ background:#e8f0fe; border-color:#c6dafc }
+.gp-org{ margin:4.5cqw 1cqw 0; opacity:0; animation:gpIn var(--T) ease-out infinite }
+.gp-org i{ display:block; height:2.6cqw; margin-top:2.2cqw; border-radius:1.3cqw; background:#e8eaed; width:88% }
+.gp-org i:nth-child(2){ width:64% } .gp-org i:nth-child(3){ width:76% }
+.gp-land{ position:absolute; inset:9cqw 0 0; padding:0 6cqw; background:#fff; translate:100% 0;
+  animation:gpLand var(--T) cubic-bezier(.2,.8,.2,1) infinite }
+.gp-land-top{ margin:0 -6cqw 5cqw; padding:4cqw 6cqw; background:linear-gradient(160deg,#0459bd,#00287d);
+  color:#fff; font-size:4.2cqw; font-weight:900; letter-spacing:.02em }
+.gp-land-top em{ font-style:normal; color:#6cd9ff }
+.gp-land-h{ font-size:6.2cqw; font-weight:800; line-height:1.15; color:#0b1f3f }
+.gp-land-p{ margin-top:2cqw; font-size:3.6cqw; color:#33445e }
+.gp-field{ display:flex; align-items:center; height:10cqw; margin-top:3cqw; padding:0 3cqw;
+  border:.3cqw solid #cfd6e0; border-radius:2.5cqw; font-size:3.5cqw; color:#0b1f3f; white-space:nowrap }
+.gp-type{ clip-path:inset(0 100% 0 0) }
+.gp-t1{ animation:gpT1 var(--T) steps(14) infinite }
+.gp-t2{ animation:gpT2 var(--T) steps(24) infinite }
+.gp-send{ display:grid; place-items:center; height:11cqw; margin-top:4cqw; border-radius:2.5cqw;
+  background:#ffc72c; color:#0b2247; font-size:4cqw; font-weight:800; animation:gpPress var(--T) ease infinite }
+.gp-done{ display:flex; align-items:center; gap:2cqw; margin-top:4cqw; font-size:3.6cqw; color:#138a3d;
+  font-weight:600; opacity:0; animation:gpDone var(--T) ease-out infinite }
+.gp-land-foot{ position:absolute; left:6cqw; right:6cqw; bottom:7cqw; padding-top:3cqw; border-top:.3cqw solid #e3e8ef;
+  font-size:3.2cqw; line-height:1.4; color:#5b6b82; text-align:center }
+.gp-done b{ display:grid; place-items:center; flex:none; width:6cqw; height:6cqw; border-radius:50%;
+  background:#138a3d; color:#fff; font-size:3.4cqw }
+/* the finger: a ring that lands on the ad's Get a Quote, then on Send */
+.gp-tap{ position:absolute; left:0; top:0; width:12cqw; height:12cqw; margin:-6cqw 0 0 -6cqw; border-radius:50%;
+  background:rgba(32,33,36,.18); box-shadow:0 0 0 .6cqw rgba(32,33,36,.28); opacity:0;
+  animation:gpTap var(--T) ease-out infinite }
+@keyframes gpScreen{ 0%,94%{ opacity:1 } 97%{ opacity:0 } 100%{ opacity:1 } }
+@keyframes gpType{ 0%,4%{ clip-path:inset(0 100% 0 0) } 20%,100%{ clip-path:inset(0 0 0 0) } }
+@keyframes gpBlink{ 50%{ opacity:0 } }
+@keyframes gpIn{ 0%,22%{ opacity:0; translate:0 4cqw } 27%,100%{ opacity:1; translate:0 0 } }
+@keyframes gpGlow{ 0%,31%{ box-shadow:0 0 0 0 rgba(26,115,232,0) } 34%,39%{ box-shadow:0 0 0 .8cqw rgba(26,115,232,.35) }
+  44%,100%{ box-shadow:0 0 0 0 rgba(26,115,232,0) } }
+@keyframes gpLand{ 0%,46%{ translate:100% 0 } 51%,95%{ translate:0 0 } 97%,100%{ translate:100% 0 } }
+@keyframes gpT1{ 0%,54%{ clip-path:inset(0 100% 0 0) } 61%,100%{ clip-path:inset(0 0 0 0) } }
+@keyframes gpT2{ 0%,63%{ clip-path:inset(0 100% 0 0) } 73%,100%{ clip-path:inset(0 0 0 0) } }
+@keyframes gpPress{ 0%,78%{ scale:1; filter:none } 79.5%{ scale:.95; filter:brightness(.92) } 81%,100%{ scale:1; filter:none } }
+@keyframes gpDone{ 0%,81%{ opacity:0; translate:0 2cqw } 84%,95%{ opacity:1; translate:0 0 } 97%,100%{ opacity:0 } }
+@keyframes gpTap{
+  0%,39%{ opacity:0; left:19cqw; top:var(--tap1, 93.5cqw); scale:1.6 }
+  41%{ opacity:1; left:19cqw; top:var(--tap1, 93.5cqw); scale:1 }
+  44%{ opacity:0; left:19cqw; top:var(--tap1, 93.5cqw); scale:1.3 }
+  76%{ opacity:0; left:50cqw; top:var(--tap2, 85.5cqw); scale:1.6 }
+  78%{ opacity:1; left:50cqw; top:var(--tap2, 85.5cqw); scale:1 }
+  81%,100%{ opacity:0; left:50cqw; top:var(--tap2, 85.5cqw); scale:1.3 } }
+@media (hover:hover) and (pointer:fine){
+  .is-live .wwd-gphone{ pointer-events:auto; cursor:pointer; transition:scale .5s cubic-bezier(.2,.8,.2,1) }
+  .is-live:not(.is-moving) .wwd-gphone:hover{ scale:1.15 }
+  .is-live:not(.is-moving) .wwd-gphone:hover .gp{ rotate:0deg }
+}
+@media (prefers-reduced-motion:reduce){
+  .gp *, .gp-screen{ animation:none !important }
+  .gp-q,.gp-type{ clip-path:none } .gp-ad,.gp-org{ opacity:1 }
+}
