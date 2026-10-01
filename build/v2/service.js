@@ -207,8 +207,8 @@
     var b = box.getBoundingClientRect(), any = false;
     icons.forEach(function (c) {
       /* his spot, from the box - not from where the drift has it this instant */
-      var w = c.w * b.width, h = c.h * b.height;
-      var cx = b.left + (c.x * b.width) + w / 2, cy = b.top + (c.y * b.height) + h / 2;
+      var w = c.el.offsetWidth, h = c.el.offsetHeight;
+      var cx = b.left + c.el.offsetLeft + w / 2, cy = b.top + c.el.offsetTop + h / 2;
       var dx = cx - mx, dy = cy - my, d = Math.sqrt(dx * dx + dy * dy) || 0.01;
       var reach = (fine.matches ? R : 70) + Math.max(w, h) / 2;
       if (live && d < reach) {

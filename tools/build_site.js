@@ -292,12 +292,12 @@ const SERVICES = require('./services');
     const pc = v => +v.toFixed(3) + '%';
     return '      <div class="svc-hero-icons" aria-hidden="true">' + M.icons.map(c =>
       '<i class="hi-i hi' + c.layer + '" style="--x:' + pc(c.l / BW * 100) + ';--y:' + pc(c.t / BH * 100) +
-      ';--w:' + pc(c.w / BW * 100) + ';--h:' + pc(c.h / BH * 100) + ';--bs:' + pc(SW / c.w * 100) + ' ' + pc(SH / c.h * 100) +
+      ';--w:' + pc(c.w / BW * 100) + ';--h:' + pc(c.h / BH * 100) + ';--pw:' + c.w + ';--ph:' + c.h + ';--bs:' + pc(SW / c.w * 100) + ' ' + pc(SH / c.h * 100) +
       ';--bp:' + pc(c.sx / (SW - c.w) * 100) + ' ' + pc(c.sy / (SH - c.h) * 100) + '"><i class="hi-s"></i></i>').join('') +
       /* his Instagram tile: the export kept only its outline and the mask of its
          edge, so it is rebuilt on that geometry (hero-instagram-v2.svg) */
       '<i class="hi-i hi1" style="--x:' + pc(55.82 / BW * 100) + ';--y:' + pc(550.84 / BH * 100) +
-      ';--w:' + pc(102 / BW * 100) + ';--h:' + pc(99 / BH * 100) + '"><img class="hi-s" src="../../assets/v2/social/hero-instagram-v2.svg"' +
+      ';--w:' + pc(102 / BW * 100) + ';--h:' + pc(99 / BH * 100) + ';--pw:102;--ph:99"><img class="hi-s" src="../../assets/v2/social/hero-instagram-v2.svg"' +
       ' alt="" width="102" height="99"></i></div>';
   };
   for (const S of SERVICES) {

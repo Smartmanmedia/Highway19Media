@@ -320,8 +320,11 @@ img.hi-s{ background:none }
   .svc-page--hero-icons .svc-hero h1{ font-size:calc((100vw - 40px) * .075); max-width:none }
   .svc-page--hero-icons .svc-acts{ justify-content:center }
   .svc-page--hero-icons .svc-hero .svc-eyebrow{ font-size:min(.72rem, 2.3vw); letter-spacing:.05em; white-space:nowrap }
-  .svc-hero-icons{ position:relative; right:auto; top:auto; width:min(58vw,300px); margin:28px auto 0;
-    view-timeline-name:--hic }
+  /* the cluster spread across the whole width of the screen: his places
+     stretched side to side, every icon kept at the size it had */
+  .svc-hero-icons{ position:relative; right:auto; top:auto; width:100vw; margin:28px 0 0 calc(50% - 50vw);
+    aspect-ratio:auto; height:min(84vw,520px); --k:calc(min(58vw,300px) / 454); view-timeline-name:--hic }
+  .hi-i{ width:calc(var(--pw) * var(--k)); height:calc(var(--ph) * var(--k)) }
   .hi0 > .hi-s{ --lk:0 } .hi1 > .hi-s{ --lk:1 } .hi2 > .hi-s{ --lk:2 }
   @supports (view-timeline-name: --hic){
     .hi-s,.hi1 > .hi-s,.hi2 > .hi-s{ animation-name:hiA, hiLife; animation-duration:7s, auto;
