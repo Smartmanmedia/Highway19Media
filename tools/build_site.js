@@ -126,7 +126,7 @@ wanted.add('assets/v2/meta/og.jpg');
 for (const S of require('./services')) {
   if (S.hero === 'icons') wanted.add('assets/v2/social/hero-instagram-v2.svg');
   for (const x of S.sections || []) for (const it of x.items || [])
-    for (const a of (it && it.art) || []) if (a[1] !== 'HTML') wanted.add('assets/v2/social/' + a[1]);
+    for (const a of (it && it.art) || []) if (!/^HTML/.test(a[1])) wanted.add('assets/v2/social/' + a[1]);
   for (const x of S.sections || []) if (x.img) wanted.add('assets/v2/social/' + x.img[0]);
   if (S.og) wanted.add('assets/v2/' + S.og);
 }
@@ -285,6 +285,8 @@ const SERVICES = require('./services');
   const shell = rd('build/v2/service.html');
   /* the Google Ads phone: markup, not a picture (art kind 'HTML') */
   const GPHONE = rd('build/v2/gads-phone.html').replace(/\n\s*/g, '');
+  /* and its twin for advertising in AI (art kind 'HTML:ai') */
+  const APHONE = rd('build/v2/ai-phone.html').replace(/\n\s*/g, '');
   /* HIS HERO ICONS, one by one. Each like, heart and platform tile is cut from
      his cluster (tools/hero-icons.json: where it sits in his 454 x 757 box,
      and where it is in the one sprite they all share). Placed in percent of
@@ -396,7 +398,7 @@ const SERVICES = require('./services');
           '        <div class="wwd-card"><h3>' + it.h + '</h3>' + paras(it.p) + '</div>\n' +
           '        <div class="wwd-art" aria-hidden="true">' + it.art.map(([k, f, w, h, l, top, cx, px, py, rot, sy]) =>
             (cx ? '<i class="wwd-shadow" style="--l:' + (cx - 196) + ';--t:' + (sy || 680) + ';--w:393"></i>' : '') +
-            (f === 'HTML' ? '<div class="wwd-' + k + '" style="--l:' + l + ';--t:' + top + ';--w:' + w + '">' + GPHONE + '</div>' :
+            (/^HTML/.test(f) ? '<div class="wwd-' + k + '" style="--l:' + l + ';--t:' + top + ';--w:' + w + '">' + (f === 'HTML:ai' ? APHONE : GPHONE) + '</div>' :
             '<img class="wwd-' + k + '" src="../../assets/v2/social/' + f + '" alt="" width="' + w +
             '" height="' + h + '" style="--l:' + l + ';--t:' + top + ';--w:' + w +
             (px !== undefined ? ';--px:' + px + ';--py:' + py + ';--rot:' + rot + '" data-c="' + (l + px) + ',' + (top + py) +

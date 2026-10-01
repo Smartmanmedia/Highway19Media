@@ -367,7 +367,7 @@ img.hi-s{ background:none }
   .wwd--meta .wwd-in{ --span:338; --ox:646; --ah:714 }
   .wwd--google .wwd-in{ --span:300; --ox:-70; --oy:112; --ah:600 }
   .wwd-bgart{ display:none }
-  .wwd--ai .wwd-in{ --span:347; --ox:532; --oy:105; --ah:650 }
+  .wwd--ai .wwd-in{ --span:300; --ox:556; --oy:104; --ah:640 }
   .wwd--google img.wwd-logo{ display:none }
   /* stacked, the panels read as one list: only the first says What We Do */
   p.wwd-h{ display:none }
@@ -504,4 +504,51 @@ img.hi-s{ background:none }
 @media (prefers-reduced-motion:reduce){
   .gp *, .gp-screen{ animation:none !important }
   .gp-q,.gp-type{ clip-path:none } .gp-ad,.gp-org{ opacity:1 }
+}
+
+/* ---- THE AI PHONE: the same story as the Google phone, in a chat. A question
+   types itself, the answer names Your Business in a Sponsored card above the
+   other options, a tap, your page, a new customer - on the Google phone's
+   fifteen-second clock, so the two read as a pair. Drawn in code. */
+.wwd-aiphone{ container-type:inline-size }
+.gp--ai{ rotate:-8deg; --tap1:89cqw; --tap2:85.5cqw }
+.ap-head{ display:flex; justify-content:space-between; align-items:center; height:10cqw; padding:0 5cqw;
+  font-size:4.2cqw; border-bottom:.3cqw solid #ececec }
+.ap-head b{ font-weight:600 }
+.ap-menu,.ap-new{ width:5cqw; height:3.4cqw; border-top:.6cqw solid #555; border-bottom:.6cqw solid #555 }
+.ap-new{ width:4.4cqw; height:4.4cqw; border:.6cqw solid #555; border-radius:1.2cqw }
+.ap-chat{ padding:4cqw 5cqw 0 }
+.ap-chat p{ margin:0 }
+.ap-bubble{ margin-left:auto !important; max-width:72%; padding:2.6cqw 3.6cqw; border-radius:5cqw;
+  background:#f1f1f1; font-size:3.6cqw; line-height:1.35; opacity:0; animation:apBubble var(--T) ease-out infinite }
+.ap-ans{ margin-top:4cqw !important; font-size:3.6cqw; line-height:1.45; color:#202124 }
+.ap-a1{ opacity:0; animation:apA1 var(--T) ease-out infinite }
+.ap-card{ margin-top:3cqw; padding:3.2cqw 3.6cqw; border:.35cqw solid #d9dde3; border-radius:4cqw; opacity:0;
+  animation:apCard var(--T) ease-out infinite, gpGlow var(--T) ease-in-out infinite }
+.ap-card .gp-site{ margin:1.6cqw 0 1.2cqw }
+.ap-card-d{ font-size:3.4cqw; line-height:1.4; color:#4d5156 }
+.ap-go{ display:block; margin-top:2.6cqw; padding:2.2cqw 0; border-radius:2.5cqw; background:#ffc72c;
+  color:#0b2247; font-size:3.5cqw; font-weight:800; text-align:center }
+.ap-more{ opacity:0; animation:apMore var(--T) ease-out infinite }
+.ap-more p + p{ margin-top:1.2cqw !important; font-size:3.3cqw; color:#4d5156 }
+.ap-more b{ color:#202124; font-weight:600 }
+.ap-ask{ position:absolute; left:4cqw; right:4cqw; bottom:5cqw; display:flex; align-items:center; gap:2cqw;
+  height:11cqw; padding:0 2.6cqw 0 4cqw; border-radius:6cqw; background:#f4f4f4; font-size:3.5cqw; white-space:nowrap }
+.ap-q{ flex:1; overflow:hidden; clip-path:inset(0 100% 0 0); animation:apQ var(--T) steps(40) infinite }
+.ap-send{ flex:none; width:7cqw; height:7cqw; border-radius:50%; background:#000;
+  animation:apSendBtn var(--T) ease infinite }
+@keyframes apQ{ 0%,2%{ clip-path:inset(0 100% 0 0); opacity:1 } 12%{ clip-path:inset(0 0 0 0); opacity:1 }
+  13.5%,100%{ clip-path:inset(0 0 0 0); opacity:0 } }
+@keyframes apSendBtn{ 0%,12%{ scale:1 } 13%{ scale:.8 } 14%,100%{ scale:1 } }
+@keyframes apBubble{ 0%,13%{ opacity:0; translate:0 3cqw } 16%,100%{ opacity:1; translate:0 0 } }
+@keyframes apA1{ 0%,18%{ opacity:0 } 22%,100%{ opacity:1 } }
+@keyframes apCard{ 0%,24%{ opacity:0; translate:0 3cqw } 29%,100%{ opacity:1; translate:0 0 } }
+@keyframes apMore{ 0%,31%{ opacity:0; translate:0 3cqw } 36%,100%{ opacity:1; translate:0 0 } }
+@media (hover:hover) and (pointer:fine){
+  .is-live .wwd-aiphone{ pointer-events:auto; cursor:pointer; transition:scale .5s cubic-bezier(.2,.8,.2,1) }
+  .is-live:not(.is-moving) .wwd-aiphone:hover{ scale:1.15 }
+  .is-live:not(.is-moving) .wwd-aiphone:hover .gp{ rotate:0deg }
+}
+@media (prefers-reduced-motion:reduce){
+  .ap-bubble,.ap-a1,.ap-card,.ap-more{ opacity:1 } .ap-q{ clip-path:none; opacity:0 }
 }
