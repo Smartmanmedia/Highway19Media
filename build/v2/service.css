@@ -242,12 +242,17 @@ img.hi-s{ background:none }
 /* OpenAI's mark turns slowly behind the ChatGPT phone */
 .wwd--ai .wwd-glyph{ animation:wwdTurn 80s linear infinite }
 /* every phone, pointed at, grows and stands up straight to be read, shadow
-   and all; it eases back to his tilt when the pointer leaves */
-.is-live .wwd-phone{ pointer-events:auto; cursor:pointer;
-  transition:scale .5s cubic-bezier(.2,.8,.2,1), rotate .5s cubic-bezier(.2,.8,.2,1) }
-.is-live .wwd-phone:hover{ scale:1.2; rotate:calc(var(--rot, 0) * -1deg) }
-.is-live .wwd-shadow{ transition:scale .5s cubic-bezier(.2,.8,.2,1) }
-.is-live .wwd-art:has(.wwd-phone:hover) .wwd-shadow{ animation:none; scale:1.25 1.1 }
+   and all; it eases back to his tilt when the pointer leaves. A real mouse
+   only - a tap on a tablet would leave it stuck big - and never while the
+   scene is turning from one phone to the next (service.js sets is-moving),
+   or the two would no longer lie one on the other */
+@media (hover:hover) and (pointer:fine){
+  .is-live .wwd-phone{ pointer-events:auto; cursor:pointer;
+    transition:scale .5s cubic-bezier(.2,.8,.2,1), rotate .5s cubic-bezier(.2,.8,.2,1) }
+  .is-live:not(.is-moving) .wwd-phone:hover{ scale:1.2; rotate:calc(var(--rot, 0) * -1deg) }
+  .is-live .wwd-shadow{ transition:scale .5s cubic-bezier(.2,.8,.2,1) }
+  .is-live:not(.is-moving) .wwd-art:has(.wwd-phone:hover) .wwd-shadow{ animation:none; scale:1.25 1.1 }
+}
 @keyframes wwdTurn{ to{ rotate:360deg } }
 .wwd--google .wwd-card h3::after{ background:#000 }
 /* his art, each piece at his left/top/width (set on the element) */

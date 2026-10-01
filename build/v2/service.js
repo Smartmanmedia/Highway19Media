@@ -78,6 +78,8 @@
     var e = [];
     for (var k = 0; k < N - 1; k++) e.push(ease(clamp((p - k - 0.25) / 0.5)));
     if (q >= 1) counted(p);
+    /* mid-change (or still flying in), no phone may stay enlarged */
+    sec.classList.toggle('is-moving', q < 0.995 || e.some(function (v) { return v > 0.001 && v < 0.999; }));
     var into = function (i) { return i === 0 ? 1 : e[i - 1]; };
     var outOf = function (i) { return i === N - 1 ? 0 : e[i]; };
 
