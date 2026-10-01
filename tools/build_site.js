@@ -387,7 +387,7 @@ const SERVICES = require('./services');
             (cx ? '<i class="wwd-shadow" style="--l:' + (cx - 196) + ';--t:' + (sy || 680) + ';--w:393"></i>' : '') +
             '<img class="wwd-' + k + '" src="../../assets/v2/social/' + f + '" alt="" width="' + w +
             '" height="' + h + '" style="--l:' + l + ';--t:' + top + ';--w:' + w +
-            (px !== undefined ? ';--px:' + px + ';--py:' + py + '" data-c="' + (l + px) + ',' + (top + py) +
+            (px !== undefined ? ';--px:' + px + ';--py:' + py + ';--rot:' + rot + '" data-c="' + (l + px) + ',' + (top + py) +
               '" data-rot="' + rot : '') + '" decoding="async">').join('') + '</div>\n' +
           '      </div>\n    </article>\n').join('') + '    </div>\n  </section>\n';
       },
