@@ -147,8 +147,11 @@
       /* his faded background pieces come and go with their state */
       x.bgart.forEach(function (g) { set(g, Math.min(a, 1 - b)); });
       x.logo.concat(x.chart).forEach(function (c) {
+        var k = 1 - a + b;
+        /* the ChatGPT phone rises up from the bottom of the screen */
+        if (c.classList.contains('wwd-aiphone')) { set(c, Math.min(a, 1 - b), 'translateY(' + 700 * k * u + 'px)'); return; }
         var dir = parseFloat(c.style.getPropertyValue('--l')) > 400 ? 420 : -360;
-        set(c, Math.min(a, 1 - b), 'translateX(' + dir * (1 - a + b) * u + 'px)');
+        set(c, Math.min(a, 1 - b), 'translateX(' + dir * k * u + 'px)');
       });
     });
   }
