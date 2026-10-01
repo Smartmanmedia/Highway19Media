@@ -193,6 +193,7 @@
   filter:drop-shadow(0 8px 9px rgba(0,14,60,.38)); animation:hiA 7s ease-in-out infinite }
 .svc-hero-icons .hi1{ animation-name:hiB; animation-duration:9s; animation-delay:-3s }
 .svc-hero-icons .hi2{ animation-name:hiC; animation-duration:8s; animation-delay:-5s }
+.svc-hero-icons .hi-ig{ inset:auto; left:13.39%; top:73.03%; width:21.15%; height:auto }
 @keyframes hiA{ 50%{ translate:0 -12px } }
 @keyframes hiB{ 50%{ translate:6px -16px } }
 @keyframes hiC{ 50%{ translate:-5px -10px } }
@@ -207,7 +208,8 @@
 .wwd--video{ --bg:linear-gradient(214deg,#00b2d4 0%,#00287d 100%) }
 .wwd--meta{ --bg:linear-gradient(214deg,#e26bc1 0%,#2e43ff 100%) }
 .wwd--google{ --bg:linear-gradient(214deg,#fff 0%,#dbdbdb 100%); --cx:517 }
-.wwd--ai{ --bg:#000; --cx:-95 }
+/* his black, lifted a little so the card's shadow still reads */
+.wwd--ai{ --bg:linear-gradient(214deg,#4a4d55 0%,#1d1f24 55%,#0b0c0e 100%); --cx:-95 }
 .wwd-in{ position:relative; width:calc(1027 * var(--u)); height:calc(819 * var(--u)) }
 .wwd-in > *{ position:absolute }
 .svc-page .wwd-h{ left:calc((var(--cx, 0) + 7) * var(--u)); top:calc(112 * var(--u)); z-index:2; margin:0;
@@ -231,6 +233,11 @@
 .wwd--ai .wwd-card h3::after{ background:#000 }
 /* OpenAI's mark turns slowly behind the ChatGPT phone */
 .wwd--ai .wwd-glyph{ animation:wwdTurn 80s linear infinite }
+/* the ChatGPT phone grows when it is pointed at, shadow and all */
+.is-live .wwd--ai .wwd-phone{ pointer-events:auto; cursor:pointer; transition:scale .45s cubic-bezier(.2,.8,.2,1) }
+.is-live .wwd--ai .wwd-phone:hover{ scale:1.2 }
+.is-live .wwd--ai .wwd-shadow{ transition:scale .45s cubic-bezier(.2,.8,.2,1) }
+.is-live .wwd--ai .wwd-art:has(.wwd-phone:hover) .wwd-shadow{ animation:none; scale:1.25 1.1 }
 @keyframes wwdTurn{ to{ rotate:360deg } }
 .wwd--google .wwd-card h3::after{ background:#000 }
 /* his art, each piece at his left/top/width (set on the element) */

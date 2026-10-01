@@ -124,7 +124,10 @@ wanted.add('assets/v2/meta/og.jpg');
 /* the service pages' own art - his cuts for a page, named in tools/services.js
    by file, and only reachable from the pages the service shell builds */
 for (const S of require('./services')) {
-  if (S.hero === 'icons') [0, 1, 2].forEach(i => wanted.add('assets/v2/social/hero-icons-' + i + '-v1.webp'));
+  if (S.hero === 'icons') {
+    [0, 1, 2].forEach(i => wanted.add('assets/v2/social/hero-icons-' + i + '-v2.webp'));
+    wanted.add('assets/v2/social/hero-instagram-v1.svg');
+  }
   for (const x of S.sections || []) for (const it of x.items || [])
     for (const a of (it && it.art) || []) wanted.add('assets/v2/social/' + a[1]);
 }
@@ -392,7 +395,9 @@ const SERVICES = require('./services');
       .replace('{{PAGE}}', S.hero ? ' svc-page--hero-' + S.hero : '')
       .replace('{{HERO_ART}}', () => S.hero === 'icons'
         ? '      <div class="svc-hero-icons" aria-hidden="true">' + [0, 1, 2].map(i =>
-            '<img class="hi hi' + i + '" src="../../assets/v2/social/hero-icons-' + i + '-v1.webp" alt="" width="454" height="757">').join('') + '</div>'
+            '<img class="hi hi' + i + '" src="../../assets/v2/social/hero-icons-' + i + '-v2.webp" alt="" width="454" height="757">' +
+            /* his Instagram, drawn as a tile again (the export lost its face), riding with the middle layer */
+            (i === 1 ? '<img class="hi hi1 hi-ig" src="../../assets/v2/social/hero-instagram-v1.svg" alt="" width="96" height="92">' : '')).join('') + '</div>'
         : '      <div class="svc-hero-sign" aria-hidden="true">\n        <img src="../../assets/v2/section-06/{{ICON}}" alt="" width="260" height="260">\n      </div>')
       .replace('{{ICON}}', S.icon)
       .replace('{{EYEBROW}}', S.eyebrow)

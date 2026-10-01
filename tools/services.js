@@ -233,7 +233,7 @@ module.exports = [
           'People are using AI to research, compare, and decide what to buy and who to hire. We can help ' +
           'position your business for this new advertising space with the right message, creative, landing ' +
           'page, and campaign.'],
-          art: [['glyph', 'glyph-openai-v1.webp', 1120, 1135, 488, -158],
+          art: [['glyph', 'glyph-openai-v1.webp', 860, 872, 276, -24],
                 ['phone', 'phone-ai-v1.webp', 347, 613, 532, 105, 727, 173.6, 306.8, -8.04, 720]] }
       ] },
       { type: 'prose', tone: 'dark', h: 'We Don&rsquo;t Just Run Ads. We Create Them.', body: [
