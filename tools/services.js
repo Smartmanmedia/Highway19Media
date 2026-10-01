@@ -229,7 +229,7 @@ module.exports = [
           'People are using AI to research, compare, and decide what to buy and who to hire. We can help ' +
           'position your business for this new advertising space with the right message, creative, landing ' +
           'page, and campaign.'],
-          art: [['glyph', 'glyph-openai-v1.webp', 860, 872, 276, -24],
+          art: [['glyph', 'glyph-openai-v2.svg', 790, 800, 311, 12],
                 /* the same story as the Google phone, in a chat: drawn in code (ai-phone.html) */
                 ['chart wwd-aiphone', 'HTML:ai', 300, 616, 556, 104]] }
       ] },
