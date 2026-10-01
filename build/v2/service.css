@@ -188,12 +188,19 @@
 /* his likes, hearts and platform icons: three layers of the one cluster, each
    drifting on its own clock so the icons never move as one sheet */
 .svc-hero-icons{ position:absolute; right:.6%; top:16px; width:min(454px,24vw); aspect-ratio:454/757;
-  pointer-events:none }
-.svc-hero-icons .hi{ position:absolute; inset:0; width:100%; height:100%;
-  filter:drop-shadow(0 8px 9px rgba(0,14,60,.38)); animation:hiA 7s ease-in-out infinite }
-.svc-hero-icons .hi1{ animation-name:hiB; animation-duration:9s; animation-delay:-3s }
-.svc-hero-icons .hi2{ animation-name:hiC; animation-duration:8s; animation-delay:-5s }
-.svc-hero-icons .hi-ig{ inset:auto; left:13.39%; top:73.03%; width:21.15%; height:auto }
+  container-type:inline-size; filter:drop-shadow(0 8px 9px rgba(0,14,60,.38)) }
+/* each icon drifts on its layer's clock; pointed at, the cluster fans out from
+   its middle, and when the pointer leaves every icon eases home to his spot */
+.hi-i{ position:absolute; left:var(--x); top:var(--y); width:var(--w); height:var(--h); display:block;
+  background:url("../../assets/v2/social/hero-sprite-v1.webp") var(--bp) / var(--bs) no-repeat;
+  animation:hiA 7s ease-in-out infinite; transition:transform 1.3s cubic-bezier(.45,0,.25,1) }
+.hi-i.hi1{ animation-name:hiB; animation-duration:9s; animation-delay:-3s }
+.hi-i.hi2{ animation-name:hiC; animation-duration:8s; animation-delay:-5s }
+.hi-ig{ background:none }
+@media (hover:hover){
+  .svc-hero-icons:hover .hi-i{ transform:translate(var(--dx),var(--dy)) rotate(var(--dr));
+    transition:transform .75s cubic-bezier(.2,.8,.2,1) }
+}
 @keyframes hiA{ 50%{ translate:0 -12px } }
 @keyframes hiB{ 50%{ translate:6px -16px } }
 @keyframes hiC{ 50%{ translate:-5px -10px } }
@@ -326,5 +333,5 @@
   .wwd-card,.wwd-h,.wwd-art{ animation:none }
 }
 @media (prefers-reduced-motion:reduce){
-  .svc-hero-icons .hi,.wwd-phone,.wwd-shadow,.wwd-card,.wwd-h,.wwd-art,.wwd-glyph,.wwd-logo,.wwd-chart{ animation:none }
+  .hi-i,.wwd-phone,.wwd-shadow,.wwd-card,.wwd-h,.wwd-art,.wwd-glyph,.wwd-logo,.wwd-chart{ animation:none }
 }

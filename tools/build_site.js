@@ -124,10 +124,7 @@ wanted.add('assets/v2/meta/og.jpg');
 /* the service pages' own art - his cuts for a page, named in tools/services.js
    by file, and only reachable from the pages the service shell builds */
 for (const S of require('./services')) {
-  if (S.hero === 'icons') {
-    [0, 1, 2].forEach(i => wanted.add('assets/v2/social/hero-icons-' + i + '-v2.webp'));
-    wanted.add('assets/v2/social/hero-instagram-v1.svg');
-  }
+  if (S.hero === 'icons') wanted.add('assets/v2/social/hero-instagram-v1.svg');
   for (const x of S.sections || []) for (const it of x.items || [])
     for (const a of (it && it.art) || []) wanted.add('assets/v2/social/' + a[1]);
 }
@@ -284,6 +281,30 @@ const SERVICES = require('./services');
   const plain = t => t.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&rsquo;/g, '\u2019').replace(/&middot;/g, '\u00b7')
                       .replace(/&[a-z]+;/g, '');
   const shell = rd('build/v2/service.html');
+  /* HIS HERO ICONS, one by one. Each like, heart and platform tile is cut from
+     his cluster (tools/hero-icons.json: where it sits in his 454 x 757 box,
+     and where it is in the one sprite they all share). Placed in percent of
+     the box so the cluster scales as one; each carries the way it moves when
+     the cluster is pointed at - straight out from the middle, a little turned. */
+  const heroIcons = () => {
+    const M = require('./hero-icons.json'), [SW, SH] = M.sprite, BW = 454, BH = 757;
+    const pc = v => +v.toFixed(3) + '%';
+    const spread = (l, t, w, h, n) => {
+      /* the cluster sits against the right edge, so it opens mostly leftward */
+      const ox = l + w / 2 - BW / 2, oy = t + h / 2 - BH / 2;
+      const dx = ox > 0 ? -ox * 0.08 : ox * 0.55, dy = oy * (oy < 0 ? 0.1 : 0.32);
+      return ';--dx:' + +(dx / BW * 100).toFixed(2) + 'cqw;--dy:' + +(dy / BW * 100).toFixed(2) +
+             'cqw;--dr:' + (n % 2 ? 1 : -1) * (6 + n % 5 * 2) + 'deg';
+    };
+    return '      <div class="svc-hero-icons" aria-hidden="true">' + M.icons.map((c, n) =>
+      '<i class="hi-i hi' + c.layer + '" style="--x:' + pc(c.l / BW * 100) + ';--y:' + pc(c.t / BH * 100) +
+      ';--w:' + pc(c.w / BW * 100) + ';--h:' + pc(c.h / BH * 100) + ';--bs:' + pc(SW / c.w * 100) + ' ' + pc(SH / c.h * 100) +
+      ';--bp:' + pc(c.sx / (SW - c.w) * 100) + ' ' + pc(c.sy / (SH - c.h) * 100) + spread(c.l, c.t, c.w, c.h, n) + '"></i>').join('') +
+      /* his Instagram, drawn as a tile again (the export lost its face) */
+      '<img class="hi-i hi1 hi-ig" src="../../assets/v2/social/hero-instagram-v1.svg" alt="" width="96" height="92" style="--x:' +
+      pc(60.8 / BW * 100) + ';--y:' + pc(552.8 / BH * 100) + ';--w:' + pc(96 / BW * 100) + ';--h:' + pc(92 / BH * 100) +
+      spread(60.8, 552.8, 96, 92, 7) + '"></div>';
+  };
   for (const S of SERVICES) {
     const url = SITE + '/' + S.slug + '/';
     /* a question is the Q&A's own, by its wording - or { q, from, a }: shown
@@ -393,11 +414,7 @@ const SERVICES = require('./services');
       .replace(/\{\{SLUG\}\}/g, S.slug)
       .replace('{{COLOR}}', S.color)
       .replace('{{PAGE}}', S.hero ? ' svc-page--hero-' + S.hero : '')
-      .replace('{{HERO_ART}}', () => S.hero === 'icons'
-        ? '      <div class="svc-hero-icons" aria-hidden="true">' + [0, 1, 2].map(i =>
-            '<img class="hi hi' + i + '" src="../../assets/v2/social/hero-icons-' + i + '-v2.webp" alt="" width="454" height="757">' +
-            /* his Instagram, drawn as a tile again (the export lost its face), riding with the middle layer */
-            (i === 1 ? '<img class="hi hi1 hi-ig" src="../../assets/v2/social/hero-instagram-v1.svg" alt="" width="96" height="92">' : '')).join('') + '</div>'
+      .replace('{{HERO_ART}}', () => S.hero === 'icons' ? heroIcons()
         : '      <div class="svc-hero-sign" aria-hidden="true">\n        <img src="../../assets/v2/section-06/{{ICON}}" alt="" width="260" height="260">\n      </div>')
       .replace('{{ICON}}', S.icon)
       .replace('{{EYEBROW}}', S.eyebrow)
