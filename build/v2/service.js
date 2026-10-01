@@ -170,3 +170,50 @@
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(mode);
   mode();
 })();
+
+/* ============================================================================
+   HIS HERO ICONS AND THE POINTER. An invisible ball 250px across rides with
+   the mouse; any like, heart or platform tile it touches is pushed out to its
+   edge, and the moment the ball moves on each one eases back to his spot.
+   Only for a real mouse, and not for a reader who asked for less motion.
+   ========================================================================= */
+(function () {
+  var box = document.querySelector('.svc-hero-icons');
+  if (!box) return;
+  var fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var R = 125;                                   /* the ball's radius */
+  var icons = [].slice.call(box.querySelectorAll('.hi-i')).map(function (el, n) {
+    var v = function (k) { return parseFloat(el.style.getPropertyValue(k)) / 100; };
+    return { el: el, x: v('--x'), y: v('--y'), w: v('--w'), h: v('--h'), turn: n % 2 ? 1 : -1, on: false };
+  });
+  var mx = 0, my = 0, raf = 0, live = false;
+
+  function frame() {
+    raf = 0;
+    var b = box.getBoundingClientRect(), any = false;
+    icons.forEach(function (c) {
+      /* his spot, from the box - not from where the drift has it this instant */
+      var w = c.w * b.width, h = c.h * b.height;
+      var cx = b.left + (c.x * b.width) + w / 2, cy = b.top + (c.y * b.height) + h / 2;
+      var dx = cx - mx, dy = cy - my, d = Math.sqrt(dx * dx + dy * dy) || 0.01;
+      var reach = R + Math.max(w, h) / 2;
+      if (live && d < reach) {
+        var push = reach - d;
+        c.el.style.transform = 'translate(' + (dx / d * push).toFixed(1) + 'px,' + (dy / d * push).toFixed(1) +
+          'px) rotate(' + (c.turn * push / reach * 14).toFixed(1) + 'deg)';
+        c.on = any = true;
+      } else if (c.on) { c.el.style.transform = ''; c.on = false; }
+    });
+    box.classList.toggle('is-pushed', any);
+  }
+  function move(e) {
+    if (!fine.matches || still.matches) return;
+    mx = e.clientX; my = e.clientY; live = true;
+    if (!raf) raf = requestAnimationFrame(frame);
+  }
+  function away() { live = false; if (!raf) raf = requestAnimationFrame(frame); }
+  window.addEventListener('pointermove', move, { passive: true });
+  document.documentElement.addEventListener('pointerleave', away);
+  window.addEventListener('scroll', function () { if (live && !raf) raf = requestAnimationFrame(frame); }, { passive: true });
+})();

@@ -284,26 +284,17 @@ const SERVICES = require('./services');
   /* HIS HERO ICONS, one by one. Each like, heart and platform tile is cut from
      his cluster (tools/hero-icons.json: where it sits in his 454 x 757 box,
      and where it is in the one sprite they all share). Placed in percent of
-     the box so the cluster scales as one; each carries the way it moves when
-     the cluster is pointed at - straight out from the middle, a little turned. */
+     the box so the cluster scales as one. */
   const heroIcons = () => {
     const M = require('./hero-icons.json'), [SW, SH] = M.sprite, BW = 454, BH = 757;
     const pc = v => +v.toFixed(3) + '%';
-    const spread = (l, t, w, h, n) => {
-      /* the cluster sits against the right edge, so it opens mostly leftward */
-      const ox = l + w / 2 - BW / 2, oy = t + h / 2 - BH / 2;
-      const dx = ox > 0 ? -ox * 0.08 : ox * 0.55, dy = oy * (oy < 0 ? 0.1 : 0.32);
-      return ';--dx:' + +(dx / BW * 100).toFixed(2) + 'cqw;--dy:' + +(dy / BW * 100).toFixed(2) +
-             'cqw;--dr:' + (n % 2 ? 1 : -1) * (6 + n % 5 * 2) + 'deg';
-    };
-    return '      <div class="svc-hero-icons" aria-hidden="true">' + M.icons.map((c, n) =>
+    return '      <div class="svc-hero-icons" aria-hidden="true">' + M.icons.map(c =>
       '<i class="hi-i hi' + c.layer + '" style="--x:' + pc(c.l / BW * 100) + ';--y:' + pc(c.t / BH * 100) +
       ';--w:' + pc(c.w / BW * 100) + ';--h:' + pc(c.h / BH * 100) + ';--bs:' + pc(SW / c.w * 100) + ' ' + pc(SH / c.h * 100) +
-      ';--bp:' + pc(c.sx / (SW - c.w) * 100) + ' ' + pc(c.sy / (SH - c.h) * 100) + spread(c.l, c.t, c.w, c.h, n) + '"></i>').join('') +
+      ';--bp:' + pc(c.sx / (SW - c.w) * 100) + ' ' + pc(c.sy / (SH - c.h) * 100) + '"></i>').join('') +
       /* his Instagram, drawn as a tile again (the export lost its face) */
       '<img class="hi-i hi1 hi-ig" src="../../assets/v2/social/hero-instagram-v1.svg" alt="" width="96" height="92" style="--x:' +
-      pc(60.8 / BW * 100) + ';--y:' + pc(552.8 / BH * 100) + ';--w:' + pc(96 / BW * 100) + ';--h:' + pc(92 / BH * 100) +
-      spread(60.8, 552.8, 96, 92, 7) + '"></div>';
+      pc(60.8 / BW * 100) + ';--y:' + pc(552.8 / BH * 100) + ';--w:' + pc(96 / BW * 100) + ';--h:' + pc(92 / BH * 100) + '"></div>';
   };
   for (const S of SERVICES) {
     const url = SITE + '/' + S.slug + '/';
