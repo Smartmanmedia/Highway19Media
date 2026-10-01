@@ -348,6 +348,8 @@
   .wwd--google .wwd-in{ --span:646; --ox:-212; --oy:88; --ah:646 }
   .wwd--ai .wwd-in{ --span:347; --ox:532; --oy:105; --ah:650 }
   .wwd--google .wwd-logo{ display:none }
+  /* stacked, the panels read as one list: only the first says What We Do */
+  p.wwd-h{ display:none }
   .wwd-card,.wwd-h,.wwd-art{ animation:none }
 }
 @keyframes hiLife{
