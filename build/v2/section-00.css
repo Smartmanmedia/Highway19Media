@@ -301,7 +301,7 @@
   content:""; position:absolute; right:1.15cqw; top:50%; translate:0 -50%;
   width:.85cqw; height:.85cqw; pointer-events:none;
   background:no-repeat center/contain;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 6l5 5 5-5' fill='none' stroke='%23001328' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-image:url("../../assets/v2/ui-select-arrow.svg");
 }
 
 /* his button: 299.1 x 57.3 at 1292.1, 893 - 52.13% of the panel, on its foot */

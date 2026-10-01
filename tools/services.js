@@ -24,6 +24,7 @@ module.exports = [
   {
     /* HIS OWN COPY, as he wrote it for this page (Sept 30, 2026). */
     slug: 'website-design',
+    og: 'meta/og-website-design-v1.jpg', ogAlt: 'Highway 19 Media - Website Design in Spring Hill, FL',
     label: 'Website Design',
     color: '#009245',
     icon: 'icon-webdesign.webp',
@@ -167,7 +168,7 @@ module.exports = [
     /* the closing section: his words, one big button, and where we are */
     ctaH: 'Let&rsquo;s Get Your Business Seen.',
     ctaP: 'Tell us what you do and where you want to go. We&rsquo;ll help you figure out the next step.',
-    ctaBtn: 'Let&rsquo;s Talk About Your Business',
+    ctaBtn: 'Let&rsquo;s Talk About Your Business', ctaBig: true,
     ctaLocal: 'Based in Spring Hill, serving businesses along US-19 and beyond.',
     next: false,
     serviceType: 'Social media marketing and paid advertising',
@@ -263,6 +264,7 @@ module.exports = [
   {
     /* HIS OWN COPY, as he wrote it for this page (Sept 30, 2026). */
     slug: 'branding-and-print',
+    og: 'meta/og-branding-and-print-v1.jpg', ogAlt: 'Highway 19 Media - Branding, Graphic Design & Print in Spring Hill, FL',
     label: 'Print &amp; Branding',
     color: '#d4145a',
     icon: 'icon-print.webp',
@@ -280,6 +282,7 @@ module.exports = [
       'everywhere customers see them.'
     ],
     cta: 'Let&rsquo;s Build Your Brand',
+    ctaBtn: 'Let&rsquo;s Build Your Brand &rarr;',     /* his closing button, with its arrow */
     ctaH: 'Does Your Brand Look Ready for the Road?',
     ctaP: [
       'Maybe you&rsquo;re starting from scratch.',

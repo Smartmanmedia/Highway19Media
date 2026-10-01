@@ -140,6 +140,11 @@ for (const S of require('./services')) {
 const ogStamp = crypto.createHash('sha1')
   .update(fs.readFileSync(path.join(ROOT, 'assets/v2/meta/og.jpg'))).digest('hex').slice(0, 8);
 
+/* /favicon.ico: browsers, Google and bookmark tools ask for it by that name
+   whatever the page links. His 32px icon, as is - a PNG answers there fine. */
+fs.mkdirSync(OUT, { recursive: true });
+fs.copyFileSync(path.join(ROOT, 'assets/v2/meta/icon-32.png'), path.join(OUT, 'favicon.ico'));
+
 let bytes = 0;
 for (const a of wanted) {
   const src = path.join(ROOT, a);
@@ -443,7 +448,7 @@ const SERVICES = require('./services');
       .replace('{{CTA_P}}', () => '      <div class="svc-cta-say">' +
         paras(S.ctaP || 'Show us where you are and tell us where you want to go. We reply within 24 hours.') + '</div>')
       /* the last word: the page's own button text and a local line, if it has them */
-      .replace('{{CTA_BTN}}', () => '      <a class="svc-btn' + (S.ctaBtn ? ' svc-btn--big' : '') + '" href="/contact/">' +
+      .replace('{{CTA_BTN}}', () => '      <a class="svc-btn' + (S.ctaBig ? ' svc-btn--big' : '') + '" href="/contact/">' +
         (S.ctaBtn || S.cta) + '</a>' + (S.ctaLocal ? '\n      <p class="svc-cta-local">' + S.ctaLocal + '</p>' : ''))
       /* the other lanes, unless the page ends on its ask (next: false) */
       .replace('{{NEXT_NAV}}', () => S.next === false ? '' :
@@ -733,13 +738,14 @@ const CSP = [
   "default-src 'self'",
   /* GOOGLE ANALYTICS. Only the tag loader's own host - consent.js fetches
    * https://www.googletagmanager.com/gtag/js and nothing else runs scripts. */
-  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
+  /* and Cloudflare Web Analytics, which Cloudflare adds to every page itself */
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com",
   "style-src 'self' 'unsafe-inline'",
   /* GA still falls back to a pixel on some browsers, and it is served from
    * the analytics hosts rather than from here. */
   "img-src 'self' https://*.google-analytics.com https://*.googletagmanager.com",
   "font-src 'self'",
-  "connect-src 'self' https://api.web3forms.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
+  "connect-src 'self' https://api.web3forms.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://cloudflareinsights.com",
   "form-action 'self' https://api.web3forms.com",
   "frame-ancestors 'self'",
   "base-uri 'self'",

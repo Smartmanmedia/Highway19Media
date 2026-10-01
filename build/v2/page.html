@@ -77,10 +77,10 @@ section + section{ margin-top:-1px }</style>
     </a>
     <a class="hdr-shield" href="#top" aria-label="Highway 19 Media - home"><img src="../../assets/v2/ui-shield.webp" alt=""></a>
     <nav class="hdr-nav">
-      <!-- SERVICES OPENS A LIST. The word still goes to the services section;
-           hovering it, or tabbing into it, drops the four lanes under it. -->
+      <!-- SERVICES OPENS A LIST, and only that: the word is a button, not a
+           link. Hovering it, tapping it or tabbing to it drops the four lanes. -->
       <div class="hdr-dd">
-        <a class="hdr-dd-t" href="#services">Services</a>
+        <button class="hdr-dd-t" type="button" aria-haspopup="true">Services</button>
         <ul class="hdr-dd-m" aria-label="Services">
           <li><a href="/website-design/">Website Design</a></li>
           <li><a href="/video-production/">Video Production</a></li>
@@ -5092,7 +5092,7 @@ section + section{ margin-top:-1px }</style>
   <div class="inner">
     <!-- The banner's own device: green guide sign, lane arrows, shield
          breaking out of the panel top and bottom. -->
-    <div class="guide-sign">
+    <a class="guide-sign" href="/" aria-label="Highway 19 Media - home">
       <svg class="guide-sign__arrows" viewBox="0 0 78 26" aria-hidden="true" focusable="false">
         <g fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
           <path d="M8 24v-9c0-3.3 2.7-6 6-6h1"/><path d="M26 24v-9c0-3.3 2.7-6 6-6h1"/>
@@ -5116,7 +5116,7 @@ section + section{ margin-top:-1px }</style>
           <path d="M45 4l-6 5 6 5z"/><path d="M63 4l-6 5 6 5z"/>
         </g>
       </svg>
-    </div>
+    </a>
 
     <div class="foot-cols">
 
