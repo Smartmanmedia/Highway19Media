@@ -359,3 +359,33 @@
 @media (prefers-reduced-motion:reduce){
   .hi-i,.hi-i.hi1,.hi-i.hi2,.wwd-phone,.wwd-shadow,.wwd-card,.wwd-h,.wwd-art,.wwd-glyph,.wwd-logo,.wwd-chart{ animation:none }
 }
+
+/* ---- one strong picture beside a short paragraph (Why Highway 19 Media) ---- */
+.svc-feature{ background:#fff; padding:clamp(56px,7vw,104px) 0 }
+.svc-feature .svc-in{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); gap:clamp(28px,5vw,72px);
+  align-items:center }
+.svc-feature h2{ margin-bottom:.55em }
+.svc-feature-say p{ margin:0; max-width:32em; font-size:clamp(1.05rem,1.35vw,1.2rem); line-height:1.65; color:#27384f }
+.svc-feature-img{ width:100%; height:auto; border-radius:18px;
+  box-shadow:0 18px 44px rgba(11,31,63,.16) }
+@media (max-width:820px){
+  .svc-feature .svc-in{ grid-template-columns:1fr }
+}
+
+/* ---- three short steps in a row: a number, a heading, two lines ---- */
+.svc-block--steps{ padding:clamp(52px,6.5vw,96px) 0 }
+.svc-steps--compact{ grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(20px,3vw,44px) }
+.svc-steps--compact li{ background:none; box-shadow:none; border-radius:0; padding:0 0 0 0;
+  border-top:3px solid var(--lane) }
+.svc-steps--compact li::before{ position:static; display:block; width:auto; height:auto; margin:.7em 0 .35em;
+  background:none; border:0; box-shadow:none; border-radius:0; place-items:initial;
+  color:var(--lane); font-size:clamp(1.8rem,2.6vw,2.4rem); line-height:1; letter-spacing:-.02em }
+.svc-steps--compact h3{ font-size:clamp(1.12rem,1.4vw,1.28rem) }
+.svc-steps--compact p{ margin:0 }
+@media (max-width:820px){ .svc-steps--compact{ grid-template-columns:1fr } }
+
+/* ---- the ask, with its button as the thing to look at ---- */
+.svc-btn--big{ min-height:3.9em; padding:0 2.6em; font-size:clamp(1rem,1.2vw,1.12rem); letter-spacing:.04em;
+  box-shadow:0 10px 30px rgba(0,0,0,.28), 0 0 0 6px rgba(255,199,44,.18) }
+.svc-btn--big:hover{ box-shadow:0 14px 36px rgba(0,0,0,.32), 0 0 0 8px rgba(255,199,44,.24) }
+.svc-cta-local{ margin:1.6em auto 0 !important; font-size:.92rem; color:rgba(255,255,255,.72) !important }

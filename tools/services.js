@@ -153,37 +153,17 @@ module.exports = [
       'Need the ad itself? We create that too.'
     ],
     cta: 'Let&rsquo;s Build Your Campaign',
-    ctaH: 'Ready for more traffic?',
+    /* the closing section: his words, one big button, and where we are */
+    ctaH: 'Let&rsquo;s Get Your Business Seen.',
+    ctaP: 'Tell us what you do and where you want to go. We&rsquo;ll help you figure out the next step.',
+    ctaBtn: 'Let&rsquo;s Talk About Your Business',
+    ctaLocal: 'Based in Spring Hill, serving businesses along US-19 and beyond.',
+    next: false,
     serviceType: 'Social media marketing and paid advertising',
     steps: [
-      ['Who Are We Talking To?', [
-        'We define the customer, location and audience we&rsquo;re trying to reach.',
-        'Advertising to the wrong people is just paying for traffic going the wrong direction.']],
-      ['What Are We Saying?', [
-        'We develop the offer and message.',
-        'What are we showing them? Why should they care? What do we want them to do next?']],
-      ['What Happens After They Click?', [
-        'A good ad can still fail if it sends people somewhere confusing.',
-        'We look at the website, landing page, contact process and tracking behind the campaign.',
-        'If something is missing, we can build it.']],
-      ['Launch. Learn. Refine.', [
-        'Then the campaign goes live.',
-        'For businesses without much existing traffic or advertising data, we may begin by building ' +
-        'awareness and learning which audiences and messages get a response.',
-        'As useful data develops, we can refine the targeting, test different creative, build ' +
-        'retargeting audiences and put more attention behind what is working.']]
-    ],
-    areaH: 'Local to Spring Hill. Working Along US-19.',
-    area: [
-      'Highway 19 Media is based in Spring Hill and works with businesses throughout Hernando County ' +
-      'and down the US-19 corridor into the greater Tampa Bay area.',
-      '<span class="svc-towns">Spring Hill. Brooksville. Weeki Wachee. Hudson. Port Richey. New Port ' +
-      'Richey. Pinellas &mdash; and everywhere in between.</span>',
-      'Need content? We come to you.',
-      'Want to talk strategy? We can meet at your business, grab a coffee or meet by video.',
-      'And from the first conversation through the campaign, you have one local contact who knows ' +
-      'your business and what we&rsquo;re trying to accomplish.',
-      '<a href="/contact/">Tell Us Where You Are &rarr;</a>'
+      ['We Plan It', 'We learn about your business, your customers, and what you want to achieve. Then we build a plan that fits.'],
+      ['We Create It', 'We bring your message to life with video, photography, design, and copy that feel like your business.'],
+      ['We Put It to Work', 'We publish your content, manage your campaigns, and use what we learn to improve what comes next.']
     ],
     sections: [
       /* WHAT WE DO, AS HE DREW IT: four full-screen panels that hold in place
@@ -236,111 +216,31 @@ module.exports = [
           art: [['glyph', 'glyph-openai-v1.webp', 860, 872, 276, -24],
                 ['phone', 'phone-ai-v1.webp', 347, 613, 532, 105, 727, 173.6, 306.8, -8.04, 720]] }
       ] },
-      { type: 'prose', tone: 'dark', h: 'We Don&rsquo;t Just Run Ads. We Create Them.', body: [
-        'This is an important difference.',
-        'An advertising campaign may need more than somebody managing a dashboard.',
-        { list: ['It may need a better photo.', 'A professional video.', 'New graphics.', 'A stronger offer.',
-                 'A landing page built specifically for the campaign.',
-                 'Or a complete change in how the business is being presented.'] },
-        'We can handle all of it.',
-        'Highway 19 Media combines advertising with website design, video production, photography, ' +
-        'graphic design and branding &mdash; so the ad, the message and where the customer lands can all ' +
-        'work together.',
-        { big: 'One campaign. One direction. One local contact.' }
-      ] },
-      { type: 'cards', h: 'Before We Spend Your Money', items: [
-        ['Audience First', [
-          'Who actually needs what you sell?',
-          'We look at your customer, location, service area, offer, existing website traffic, previous ' +
-          'advertising and any useful customer data you already have.',
-          'Because showing a great ad to the wrong person is still wasting money.']],
-        ['Then the Offer', [
-          'Why should someone stop scrolling, click or call?',
-          'Sometimes the problem isn&rsquo;t the advertising.',
-          'It&rsquo;s the offer.',
-          'We&rsquo;ll look at what you&rsquo;re putting in front of the customer before putting money behind it.']],
-        ['Then the Creative', [
-          'What are they actually going to see?',
-          'Depending on the campaign, we can create the photography, video, graphics, copy and landing page ' +
-          'needed to support it.']],
-        ['Then We Run It', [
-          'Once the pieces are in place, we launch, track what happens and start learning from real traffic.']]
-      ] },
-      { type: 'prose', tone: 'tint', h: 'What Does a Marketing Budget Actually Mean?', body: [
-        { big: 'Your ad spend and our fee are separate.' },
-        'Ad spend is the money paid directly to platforms such as Google, Facebook and Instagram to show ' +
-        'your advertising.',
-        'Our fee covers the work behind the campaign &mdash; strategy, setup, management and the creative ' +
-        'services included in your plan.',
-        { h3: 'What if I only have $500?' },
-        'Tell us.',
-        'If you mean $500 in monthly ad spend, we&rsquo;ll look at your business, market and goals and tell ' +
-        'you what we think that budget can realistically support.',
-        'If you mean $500 total for everything, tell us that too.',
-        'We would rather help you choose something useful within your budget than sell you a campaign that ' +
-        'doesn&rsquo;t have enough behind it to make sense.',
-        { big: 'No mystery budget. No automatic package. We talk about the numbers before we start.' }
-      ] },
-      { type: 'steps' },
-      { type: 'prose', tone: 'white', h: 'How Fast Does Advertising Work?', body: [
-        'There isn&rsquo;t one honest answer.',
-        'Some campaigns can generate activity quickly. Others need time, testing and enough traffic before ' +
-        'there&rsquo;s useful data to work with.',
-        'Clicks and views are easy to count.',
-        'What matters is whether the advertising is helping produce the actions your business actually needs ' +
-        '&mdash; calls, forms, visits, appointments, purchases or qualified inquiries.',
-        'That&rsquo;s what we want to measure.',
-        { big: 'We don&rsquo;t promise a magic number of customers.' },
-        'We build the campaign, track what happens and make decisions from real data.'
-      ] },
-      { type: 'prose', tone: 'tint', h: 'Social Media + Advertising Works Better When It Connects', body: [
-        'Your social media doesn&rsquo;t have to live in one box while your advertising, website and video ' +
-        'live somewhere else.',
-        'A video we shoot for your business can become:',
-        { list: ['Social content.', 'A Facebook or Instagram ad.', 'Website content.', 'A landing-page video.',
-                 'Short vertical clips.', 'Retargeting creative.'] },
-        'One piece of production can keep working in different places.',
-        { big: 'That&rsquo;s how we help smaller businesses get more out of the marketing they&rsquo;re already paying for.' }
-      ] },
-      { type: 'area' },
-      { type: 'faq' }
+      /* BELOW THE SCENE (his builder brief, Sept 30): why us, three steps, four
+         quick questions, then the ask - compact, short, no more full screens */
+      { type: 'feature', h: 'We Don&rsquo;t Just Run Ads. We Create Them.', p: [
+        'Great advertising starts with something worth showing. We plan, film, photograph, and design ' +
+        'content around your business&mdash;then put it to work across social media and paid advertising. ' +
+        'One team, from the first idea to the final campaign.'],
+        img: ['why-production-v1.webp', 1200, 605, 'A Highway 19 Media crew filming an interview on a green-screen studio set'] },
+      { type: 'steps', h: 'You Run Your Business. We&rsquo;ll Help You Get Seen.', compact: true },
+      { type: 'faq', h: 'A Few Things You Might Be Wondering.', closed: true, more: false }
     ],
     faq: [
-      { q: 'Can you manage my social media?', a: [
-        'Yes. We can create the content, design posts, produce videos, organize your messaging and manage ' +
-        'your ongoing social media presence.',
-        'You can stay closely involved or let us handle more of the day-to-day work.'] },
-      { q: 'Can you create ongoing social media videos?', a: [
-        'Yes. We can visit your business and capture enough material to create multiple pieces of content ' +
-        'from one production session.'] },
-      { q: 'Can you run my paid advertising?', a: [
-        'Yes. We manage Google Ads and paid Facebook and Instagram campaigns, including campaign strategy, ' +
-        'setup, targeting, creative and ongoing management.'] },
-      { q: 'What do you look at before launching an advertising campaign?', a: [
-        'Your audience, location, offer, website, existing traffic, tracking, previous campaigns and ' +
-        'available customer data.',
-        'We want to understand what we’re working with before spending your money.'] },
-      { q: 'Should a new business start with awareness advertising?', a: [
-        'Sometimes.',
-        'If there isn’t much traffic or customer data yet, an awareness campaign can help introduce the ' +
-        'business and begin building useful information about who responds.',
-        'But we don’t automatically run the same campaign for every business.'] },
-      { q: 'How quickly will advertising produce results?', a: [
-        'It depends on the business, market, offer, budget, competition and campaign.',
-        'Some campaigns show activity quickly. Others need enough traffic and testing before we can make ' +
-        'useful decisions.',
-        'We won’t invent a timeline just to make the sale.'] },
-      { q: 'Is your management fee included in my advertising budget?', a: [
-        'No.',
-        'Your ad spend is paid to the advertising platform. Highway 19 Media’s fee covers the strategy, ' +
-        'campaign management and agreed creative services.',
-        'You’ll know both numbers before anything launches.'] },
-      { q: 'What if I only have $500 for marketing?', a: [
-        'Tell us exactly what you’re comfortable spending.',
-        'We’ll look at what you’re trying to accomplish and tell you what we believe makes sense within that ' +
-        'budget — whether that’s advertising, creating better content first, improving the page you’re ' +
-        'sending people to, or starting smaller.',
-        'Sometimes the smartest first move isn’t buying more ads.'] }
+      { q: 'How much should I budget?', a: [
+        'That depends on your goals and the work involved. We&rsquo;ll explain the cost of creating and ' +
+        'managing your content separately from the money spent placing your ads, so you know where your ' +
+        'budget goes.'] },
+      { q: 'How quickly will I see results?', a: [
+        'Ads can start bringing visitors once they&rsquo;re running. Turning that attention into inquiries ' +
+        'and customers takes testing, a clear offer, and a good experience after the click. We&rsquo;ll set ' +
+        'expectations around your business and goals.'] },
+      { q: 'Do I need to provide the photos and videos?', a: [
+        'We can create them for you. From filming at your business to studio production, photography, and ' +
+        'design, we help build the content your campaign needs.'] },
+      { q: 'Can you help with both social media and paid ads?', a: [
+        'Yes. We can manage your social content and paid advertising together, keeping your message ' +
+        'consistent across the places customers find you.'] }
     ]
   },
   {

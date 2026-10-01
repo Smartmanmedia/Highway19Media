@@ -127,6 +127,7 @@ for (const S of require('./services')) {
   if (S.hero === 'icons') wanted.add('assets/v2/social/hero-instagram-v2.svg');
   for (const x of S.sections || []) for (const it of x.items || [])
     for (const a of (it && it.art) || []) wanted.add('assets/v2/social/' + a[1]);
+  for (const x of S.sections || []) if (x.img) wanted.add('assets/v2/social/' + x.img[0]);
 }
 
 /* AND THE SHARE CARD CARRIES ITS CONTENT HASH TOO.
@@ -352,7 +353,16 @@ const SERVICES = require('./services');
         (S.factsH ? '      <h2>' + S.factsH + '</h2>\n' : '') + '      <ul class="svc-fact-row">\n' +
         S.facts.map(([b, t]) => '        <li><b>' + b + '</b><span>' + t + '</span></li>').join('\n') +
         '\n      </ul>\n    </div>\n  </section>\n',
-      steps: x => sec('svc-block', x.h || 'How it works', '      <ol class="svc-steps">\n' +
+      /* one strong picture beside a short paragraph */
+      feature: x => {
+        const id = 'svc-s' + (++sid);
+        return '  <section class="svc-feature" aria-labelledby="' + id + '">\n    <div class="svc-in">\n' +
+          '      <div class="svc-feature-say"><h2 id="' + id + '">' + x.h + '</h2>' + paras(x.p) + '</div>\n' +
+          '      <img class="svc-feature-img" src="../../assets/v2/social/' + x.img[0] + '" alt="' + x.img[3] +
+          '" width="' + x.img[1] + '" height="' + x.img[2] + '" loading="lazy" decoding="async">\n    </div>\n  </section>\n';
+      },
+      steps: x => sec('svc-block' + (x.compact ? ' svc-block--steps' : ''), x.h || 'How it works',
+        '      <ol class="svc-steps' + (x.compact ? ' svc-steps--compact' : '') + '">\n' +
         S.steps.map(([h, p]) => '        <li><h3>' + h + '</h3>' + paras(p) + '</li>').join('\n') +
         '\n      </ol>\n'),
       prose: x => sec('svc-prose svc-prose--' + (x.tone || 'white'), x.h, '      <div class="svc-prose-say">' +
@@ -383,10 +393,12 @@ const SERVICES = require('./services');
               '" data-rot="' + rot : '') + '" decoding="async">').join('') + '</div>\n' +
           '      </div>\n    </article>\n').join('') + '    </div>\n  </section>\n';
       },
-      faq: () => sec('svc-block svc-faq', 'Questions, answered.', faq.map(([q, a], i) =>
-        '      <details class="qa-item"' + (i ? '' : ' open') + '><summary><h3>' + esc(q) +
+      /* the page's questions; x.closed keeps every answer folded, x.more: false
+         leaves off the link to the FAQ page */
+      faq: x => sec('svc-block svc-faq', x.h || 'Questions, answered.', faq.map(([q, a], i) =>
+        '      <details class="qa-item"' + (i || x.closed ? '' : ' open') + '><summary><h3>' + esc(q) +
         '</h3></summary>' + a.map(p => '<p>' + esc(p) + '</p>').join('') + '</details>').join('\n') +
-        '\n      <p class="svc-more"><a href="/faq/">More answers on our FAQ page &rarr;</a></p>\n',
+        (x.more === false ? '' : '\n      <p class="svc-more"><a href="/faq/">More answers on our FAQ page &rarr;</a></p>') + '\n',
         ' id="questions"')
     };
     const order = S.sections || [
@@ -418,8 +430,14 @@ const SERVICES = require('./services');
       /* the closing words: the page's own, or the standard line */
       .replace('{{CTA_P}}', () => '      <div class="svc-cta-say">' +
         paras(S.ctaP || 'Show us where you are and tell us where you want to go. We reply within 24 hours.') + '</div>')
-      .replace('{{NEXT}}', others.map(o =>
-        '        <li><a href="' + o.href + '" style="--c:' + o.c + '">' + o.label + '</a></li>').join('\n'))
+      /* the last word: the page's own button text and a local line, if it has them */
+      .replace('{{CTA_BTN}}', () => '      <a class="svc-btn' + (S.ctaBtn ? ' svc-btn--big' : '') + '" href="/contact/">' +
+        (S.ctaBtn || S.cta) + '</a>' + (S.ctaLocal ? '\n      <p class="svc-cta-local">' + S.ctaLocal + '</p>' : ''))
+      /* the other lanes, unless the page ends on its ask (next: false) */
+      .replace('{{NEXT_NAV}}', () => S.next === false ? '' :
+        '\n  <nav class="svc-next" aria-label="Other services">\n    <div class="svc-in">\n      <p class="svc-eyebrow">Other lanes</p>\n      <ul>\n' +
+        others.map(o => '        <li><a href="' + o.href + '" style="--c:' + o.c + '">' + o.label + '</a></li>').join('\n') +
+        '\n      </ul>\n    </div>\n  </nav>\n')
       .replace('{{LD}}', () => JSON.stringify(ld))
       .replace(/(?:href|src)="((?:section-fonts|section-09|header|consent|service)\.css|(?:header|consent|service)\.js)"/g,
                (m, f) => m.replace('"' + f + '"', '"' + codeHref(f) + '"'))
