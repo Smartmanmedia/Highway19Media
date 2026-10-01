@@ -219,7 +219,15 @@ module.exports = [
           'We research the searches, locations and opportunities that make sense, build the campaign, create ' +
           'the ads, set up tracking and manage it as the data comes in.',
           'Already running Google Ads? We can review what you have before starting over.'],
-          art: [['logo', 'google-ads-v1.webp', 749, 673, 861, 153], ['chart', 'analytics-v1.webp', 646, 646, -212, 88]] },
+          art: [['logo', 'google-ads-v1.webp', 749, 673, 861, 153], 
+                /* his chart in its parts, so the gears can turn and the glass can look around */
+                ['chart', 'chart-disc-v1.webp', 646, 646, -212, 88],
+                ['chart wwd-gear wwd-gear1', 'chart-gear-1-v1.webp', 91, 91, 185, 225],
+                ['chart wwd-gear wwd-gear2', 'chart-gear-2-v1.webp', 77, 78, 261, 349],
+                ['chart wwd-gear wwd-gear3', 'chart-gear-3-v1.webp', 54, 55, 128, 215],
+                ['chart wwd-gear wwd-gear4', 'chart-gear-4-v1.webp', 55, 55, 257, 290],
+                ['chart', 'chart-screen-v1.webp', 646, 646, -212, 88],
+                ['chart wwd-glass', 'chart-magnifier-v1.webp', 187, 243, -99, 402]] },
         /* his last panel (Sept 30, evening): advertising inside the AI answers */
         { key: 'ai', h: 'Advertising is<br>Entering<br>the Conversation', p: [
           'People are using AI to research, compare, and decide what to buy and who to hire. We can help ' +

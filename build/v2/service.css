@@ -272,6 +272,19 @@
 /* Google's A wiggles now and then, like a sign catching the wind; his chart bobs */
 .wwd-logo{ transform-origin:30% 85%; animation:wwdWiggle 3.6s ease-in-out infinite }
 .wwd-chart{ animation:wwdBob 5s ease-in-out infinite }
+/* his gears turn - neighbours the opposite way, as gears do - and the glass
+   looks around the screen, pivoting from the hand that holds it */
+.wwd-gear{ animation:wwdSpin 9s linear infinite, wwdBob 5s ease-in-out infinite }
+.wwd-gear2{ animation-duration:8s, 5s }
+.wwd-gear3,.wwd-gear4{ animation-name:wwdSpinBack, wwdBob; animation-duration:6s, 5s }
+.wwd-glass{ transform-origin:12% 92%; animation:wwdPeer 6.5s ease-in-out infinite }
+@keyframes wwdSpin{ to{ rotate:360deg } }
+@keyframes wwdSpinBack{ to{ rotate:-360deg } }
+@keyframes wwdPeer{
+  0%,100%{ translate:0 0; rotate:0deg }
+  25%{ translate:calc(22 * var(--u)) calc(-26 * var(--u)); rotate:5deg }
+  50%{ translate:calc(48 * var(--u)) calc(-6 * var(--u)); rotate:-2deg }
+  75%{ translate:calc(20 * var(--u)) calc(12 * var(--u)); rotate:-5deg } }
 @keyframes wwdWiggle{ 0%,55%,100%{ rotate:0deg } 62%{ rotate:-5deg } 69%{ rotate:4deg } 76%{ rotate:-3deg } 83%{ rotate:2deg } 90%{ rotate:-1deg } }
 @keyframes wwdBob{ 50%{ translate:0 calc(-10 * var(--u)) } }
 @keyframes wwdDrift{ 50%{ translate:calc(10 * var(--u)) calc(-18 * var(--u)); rotate:-3deg } }

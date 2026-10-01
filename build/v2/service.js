@@ -35,7 +35,7 @@
       shadow: p.querySelector('.wwd-shadow'),
       glyphs: [].slice.call(p.querySelectorAll('.wwd-glyph')),
       logo: p.querySelector('.wwd-logo'),
-      chart: p.querySelector('.wwd-chart'),
+      chart: [].slice.call(p.querySelectorAll('.wwd-chart')),
       at: 0                       /* where his card sits in this state: --cx */
     };
   });
@@ -138,7 +138,7 @@
       /* the light: Google's A in from the right, his chart from the left, and
          out the same ways when the next state comes */
       if (x.logo) set(x.logo, Math.min(a, 1 - b), 'translateX(' + 420 * (1 - a + b) * u + 'px)');
-      if (x.chart) set(x.chart, Math.min(a, 1 - b), 'translateX(' + -360 * (1 - a + b) * u + 'px)');
+      x.chart.forEach(function (c) { set(c, Math.min(a, 1 - b), 'translateX(' + -360 * (1 - a + b) * u + 'px)'); });
     });
   }
 
