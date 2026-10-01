@@ -26,10 +26,10 @@
     </a>
     <a class="hdr-shield" href="{{LOGO}}" aria-label="Highway 19 Media - home"><img src="../../assets/v2/ui-shield.webp" alt=""></a>
     <nav class="hdr-nav">
-      <!-- SERVICES OPENS A LIST. The word still goes to the services section;
-           hovering it, or tabbing into it, drops the four lanes under it. -->
+      <!-- SERVICES OPENS A LIST, and only that: the word is a button, not a
+           link. Hovering it, tapping it or tabbing to it drops the four lanes. -->
       <div class="hdr-dd">
-        <a class="hdr-dd-t" href="{{ROOT}}#services">Services</a>
+        <button class="hdr-dd-t" type="button" aria-haspopup="true">Services</button>
         <ul class="hdr-dd-m" aria-label="Services">
           <li><a href="/website-design/">Website Design</a></li>
           <li><a href="/video-production/">Video Production</a></li>

@@ -173,6 +173,10 @@
    cyan. Desktop only: the phone has its own menu.
    ------------------------------------------------------------------------- */
 .hdr-dd{ position:relative; display:flex; align-items:center }
+/* the word wears the nav's type, though it is a button that goes nowhere */
+.hdr-nav .hdr-dd-t{ appearance:none; background:none; border:0; margin:0; padding:0; cursor:default;
+  font:inherit; color:#fff; font-weight:500; font-size:max(12px, calc(var(--hh) * .1847)); opacity:.94 }
+.hdr-nav .hdr-dd-t:focus-visible{ outline:2px solid #29abe2; outline-offset:4px; border-radius:2px }
 .hdr-dd-t::after{ content:""; display:inline-block; width:.42em; height:.42em;
   margin-left:.45em; border-right:.12em solid currentColor; border-bottom:.12em solid currentColor;
   transform:translateY(-.22em) rotate(45deg); transition:transform .18s ease }
@@ -180,7 +184,7 @@
 .hdr-dd:focus-within .hdr-dd-t::after{ transform:translateY(0) rotate(225deg) }
 .hdr-dd-m{
   position:absolute; left:-1.1em; top:calc(100% + var(--hh) * .30);
-  margin:0; padding:.45em 0; list-style:none; min-width:max-content;
+  margin:0; padding:.8em 0; list-style:none; min-width:max-content;
   background:var(--hdr-menu-bg); border-radius:8px;
   box-shadow:0 14px 30px rgba(0,16,50,.24), 0 2px 6px rgba(0,16,50,.12);
   opacity:0; visibility:hidden; translate:0 -6px;
@@ -196,7 +200,7 @@
   transition:opacity .18s ease, translate .18s ease, visibility 0s }
 .hdr-dd-m li{ display:block }
 .hdr-nav .hdr-dd-m a{
-  display:inline-block; margin:0 1.1em; padding:.55em 0;
+  display:inline-block; margin:0 1.6em; padding:.85em 0;
   color:var(--hdr-menu-ink); opacity:1; white-space:nowrap;
   font-size:max(12px, calc(var(--hh) * .1847));
   text-decoration:none;
