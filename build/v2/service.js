@@ -34,7 +34,7 @@
       phone: p.querySelector('.wwd-phone'),
       shadow: p.querySelector('.wwd-shadow'),
       glyphs: [].slice.call(p.querySelectorAll('.wwd-glyph')),
-      logo: p.querySelector('.wwd-logo'),
+      logo: [].slice.call(p.querySelectorAll('.wwd-logo')),
       chart: [].slice.call(p.querySelectorAll('.wwd-chart')),
       at: 0                       /* where his card sits in this state: --cx */
     };
@@ -140,8 +140,11 @@
 
       /* the light: Google's A in from the right, his chart from the left, and
          out the same ways when the next state comes */
-      if (x.logo) set(x.logo, Math.min(a, 1 - b), 'translateX(' + 420 * (1 - a + b) * u + 'px)');
-      x.chart.forEach(function (c) { set(c, Math.min(a, 1 - b), 'translateX(' + -360 * (1 - a + b) * u + 'px)'); });
+      /* each piece comes in from its own side: the left half from the left, the right half from the right */
+      x.logo.concat(x.chart).forEach(function (c) {
+        var dir = parseFloat(c.style.getPropertyValue('--l')) > 400 ? 420 : -360;
+        set(c, Math.min(a, 1 - b), 'translateX(' + dir * (1 - a + b) * u + 'px)');
+      });
     });
   }
 

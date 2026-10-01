@@ -211,17 +211,17 @@ module.exports = [
           'the ads, set up tracking and manage it as the data comes in.',
           'Already running Google Ads? We can review what you have before starting over.'],
           art: [/* an abstract take on the Ads mark (his request, Oct 1) in place of Google's own */
-                ['logo', 'ads-mark-v1.svg', 749, 673, 861, 153],
-                /* his chart in its parts, so the gears can turn and the glass can look around */
-                ['chart', 'chart-disc-v1.webp', 646, 646, -300, 88],
-                ['chart wwd-gear wwd-gear1', 'chart-gear-1-v1.webp', 91, 91, 97, 225],
-                ['chart wwd-gear wwd-gear2', 'chart-gear-2-v1.webp', 77, 78, 173, 349],
-                ['chart wwd-gear wwd-gear3', 'chart-gear-3-v1.webp', 54, 55, 40, 215],
-                ['chart wwd-gear wwd-gear4', 'chart-gear-4-v1.webp', 55, 55, 169, 290],
-                ['chart', 'chart-screen-v1.webp', 646, 646, -300, 88],
-                ['chart wwd-glass', 'chart-magnifier-v1.webp', 187, 243, -187, 402],
+                /* his layout (Oct 1): the phone and the floating mark on the left, his chart on the right */
+                ['logo', 'ads-mark-v1.svg', 749, 673, -290, 150],
+                ['chart', 'chart-disc-v1.webp', 646, 646, 800, 88],
+                ['chart wwd-gear wwd-gear1', 'chart-gear-1-v1.webp', 91, 91, 1197, 225],
+                ['chart wwd-gear wwd-gear2', 'chart-gear-2-v1.webp', 77, 78, 1273, 349],
+                ['chart wwd-gear wwd-gear3', 'chart-gear-3-v1.webp', 54, 55, 1140, 215],
+                ['chart wwd-gear wwd-gear4', 'chart-gear-4-v1.webp', 55, 55, 1269, 290],
+                ['chart', 'chart-screen-v1.webp', 646, 646, 800, 88],
+                ['chart wwd-glass', 'chart-magnifier-v1.webp', 187, 243, 913, 402],
                 /* a search, our sponsored result, a tap, our page: drawn in code (gads-phone.html) */
-                ['chart wwd-gphone', 'HTML', 280, 575, 205, 122]] },
+                ['chart wwd-gphone', 'HTML', 280, 575, 20, 122]] },
         /* his last panel (Sept 30, evening): advertising inside the AI answers */
         { key: 'ai', h: 'Advertising is<br>Entering<br>the Conversation', p: [
           'People are using AI to research, compare, and decide what to buy and who to hire. We can help ' +
