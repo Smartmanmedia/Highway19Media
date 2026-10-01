@@ -14,7 +14,10 @@
   --shell:1200px; --gutter:clamp(20px,4vw,48px);
 
   position:relative; z-index:2;
-  background:var(--sec9-bg,var(--blue-900)); color:#fff;
+  /* the header's blue, a shade deeper: dark at the edges, brighter through
+     the middle, under a soft shade from the top */
+  background:var(--sec9-bg,linear-gradient(180deg,rgba(0,8,30,.35),rgba(0,8,30,0) 40%),
+    linear-gradient(90deg,#001a5c 0%,#033d8f 42%,#03398a 48%,#022f74 66%,#011f57 100%)); color:#fff;
   font-family:var(--font-sign);
   font-size:clamp(16px,1.05vw,17.5px); line-height:1.62; font-weight:450;
 }
@@ -35,7 +38,11 @@
   border:3px solid #fff; border-radius:11px;
   padding:clamp(15px,2vw,24px) clamp(16px,3vw,36px);
   margin:0 0 clamp(46px,5vw,68px);
+  text-decoration:none; transition:transform .25s ease, box-shadow .25s ease;
 }
+/* the sign goes home */
+.sec9 .guide-sign:hover{ transform:translateY(-2px); box-shadow:0 10px 24px rgba(0,8,30,.35) }
+.sec9 .guide-sign:focus-visible{ outline:3px solid var(--yellow-500); outline-offset:4px }
 .sec9 .guide-sign span{
   font-weight:800; color:#fff;
   font-size:clamp(1.05rem,2.5vw,2.05rem); letter-spacing:-.012em;
