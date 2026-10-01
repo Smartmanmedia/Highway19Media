@@ -175,7 +175,7 @@
 .svc-page--hero-icons .svc-hero .svc-eyebrow{ font-size:.72rem; letter-spacing:.12em; margin-bottom:.9em }
 .svc-page--hero-icons .svc-hero h1{ font-size:clamp(2.1rem,3.6vw,3.52rem); line-height:1.21; letter-spacing:-.005em;
   max-width:13.6em; text-wrap:initial }
-.svc-h1-at{ color:#a4d4ff }
+.svc-h1-at,.svc-page--hero-icons .svc-hero .svc-eyebrow{ color:#a4d4ff }
 .svc-page--hero-icons .svc-tag{ margin-top:.95em; font-size:clamp(1.2rem,1.6vw,1.54rem) }
 .svc-page--hero-icons .svc-lead{ margin-top:.55em; max-width:40em; font-size:clamp(1rem,1.1vw,1.1rem);
   line-height:1.2; color:#fff }

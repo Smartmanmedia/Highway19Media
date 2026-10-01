@@ -124,7 +124,7 @@ wanted.add('assets/v2/meta/og.jpg');
 /* the service pages' own art - his cuts for a page, named in tools/services.js
    by file, and only reachable from the pages the service shell builds */
 for (const S of require('./services')) {
-  if (S.hero === 'icons') wanted.add('assets/v2/social/hero-instagram-v1.svg');
+  if (S.hero === 'icons') wanted.add('assets/v2/social/hero-instagram-v2.svg');
   for (const x of S.sections || []) for (const it of x.items || [])
     for (const a of (it && it.art) || []) wanted.add('assets/v2/social/' + a[1]);
 }
@@ -292,9 +292,10 @@ const SERVICES = require('./services');
       '<i class="hi-i hi' + c.layer + '" style="--x:' + pc(c.l / BW * 100) + ';--y:' + pc(c.t / BH * 100) +
       ';--w:' + pc(c.w / BW * 100) + ';--h:' + pc(c.h / BH * 100) + ';--bs:' + pc(SW / c.w * 100) + ' ' + pc(SH / c.h * 100) +
       ';--bp:' + pc(c.sx / (SW - c.w) * 100) + ' ' + pc(c.sy / (SH - c.h) * 100) + '"></i>').join('') +
-      /* his Instagram, drawn as a tile again (the export lost its face) */
-      '<img class="hi-i hi1 hi-ig" src="../../assets/v2/social/hero-instagram-v1.svg" alt="" width="96" height="92" style="--x:' +
-      pc(60.8 / BW * 100) + ';--y:' + pc(552.8 / BH * 100) + ';--w:' + pc(96 / BW * 100) + ';--h:' + pc(92 / BH * 100) + '"></div>';
+      /* his Instagram tile: the export kept only its outline and the mask of its
+         edge, so it is rebuilt on that geometry (hero-instagram-v2.svg) */
+      '<img class="hi-i hi1 hi-ig" src="../../assets/v2/social/hero-instagram-v2.svg" alt="" width="102" height="99" style="--x:' +
+      pc(55.82 / BW * 100) + ';--y:' + pc(550.84 / BH * 100) + ';--w:' + pc(102 / BW * 100) + ';--h:' + pc(99 / BH * 100) + '"></div>';
   };
   for (const S of SERVICES) {
     const url = SITE + '/' + S.slug + '/';
