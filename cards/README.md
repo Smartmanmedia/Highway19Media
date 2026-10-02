@@ -103,3 +103,14 @@ looped, and still for anyone with reduced motion or Save-Data on.
 - `modules.promo.url` — points at `/contact/` until the product page exists.
 
 The phone number is on the card only; the website still carries none.
+
+## The printed card
+
+    TK=/path/to/node_modules node tools/card/make_print.js <slug>
+
+writes `cards/<slug>/print/front.svg` and `back.svg` from the same `card.json`:
+US 3.5 × 2 in with 1/8 in bleed (3.75 × 2.25 in), text converted to outlines,
+photos embedded, and a QR code on the back that opens the card tagged `?s=qr`.
+`proof.png` shows both sides with the trim (solid red) and safe (dashed blue)
+lines — for checking only, never for sending. Needs opentype.js, wawoff2 and
+sharp; the outputs are committed, so the site build needs none of them.
