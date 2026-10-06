@@ -1,0 +1,861 @@
+@font-face{ font-family:"Be Vietnam Pro"; font-weight:200; font-style:normal; font-display:swap; src:url("../../assets/fonts/bvp-200.woff2") format("woff2") }
+@font-face{ font-family:"Be Vietnam Pro"; font-weight:200; font-style:italic; font-display:swap; src:url("../../assets/fonts/bvp-200i.woff2") format("woff2") }
+@font-face{ font-family:"Be Vietnam Pro"; font-weight:600; font-style:normal; font-display:swap; src:url("../../assets/fonts/bvp-600.woff2") format("woff2") }
+
+/* Layout: his 1922 x 935 hero as one stage, scaled in --u; the earth is his own
+   art from the PNG, everything that moves is drawn live on top of it. */
+:root{
+  --night:#000321;          /* the dark side, from his PNG */
+  --deep:#001346;           /* where the blue begins */
+  --sky:#0a5bff;            /* the globe's light */
+  --ink:#ffffff;
+  --gold:#ffc72c;           /* the site's yellow */
+  --pin:#ff1f5a;            /* his red pin */
+  --display:"Be Vietnam Pro","Helvetica Neue",Arial,sans-serif;
+}
+.wd-page{ background:var(--night) }
+.wd-page main{ color:var(--ink) }
+html{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
+.w-stage img,.jr-stage img,.jr-sky img,.w-dev,.m-globe{ max-width:none !important }
+.wd-page main{ font-family:var(--display); -webkit-font-smoothing:antialiased }
+/* the hero is a full screen: his stage scaled to cover it (not so far that the
+   words leave the left edge), centred, the gradient filling any band left over */
+.stage{ --u:max(calc(100vw / 1922), min(calc(100vh / 935), calc(100vw / 1450))); position:relative; width:100%; height:100vh; min-height:560px; overflow:hidden;
+  container-type:inline-size; background:linear-gradient(90deg,var(--night) 0%,#00072a 38%,var(--deep) 62%,#002070 100%) }
+.wrap{ container-type:inline-size; max-width:100%; }
+.stage-in{ position:absolute; left:50%; top:50%; width:calc(1922 * var(--u)); height:calc(935 * var(--u)); transform:translate(-50%,-50%) }
+.earth{ transform-origin:100% 50%; position:absolute; left:calc(900 * var(--u)); top:0; width:calc(1022 * var(--u)); height:100% }
+.earth img,.earth canvas{ position:absolute; inset:0; width:100%; height:100% }
+.earth img{ object-fit:cover; transform-origin:85% 50%; animation:breathe 14s ease-in-out infinite }
+/* the globe breathes: a slow swell and the faintest turn, like it is spinning
+   just out of sight */
+@keyframes breathe{ 50%{ transform:scale(1.025) translateX(calc(-6 * var(--u))) rotate(-.6deg) } }
+/* his own glow pulses: the globe brightens and settles, so there is only ever his one edge */
+.earth{ animation:glow 5s ease-in-out infinite }
+/* the intro: the globe rolls in from the right and settles, a little turned, then
+   the pin lights up once it has landed */
+/* the globe slides straight in from the right; the light lines in his art grow
+   out to their full length as it lands (a mask whose edge travels left) */
+@property --reach{ syntax:"<percentage>"; inherits:false; initial-value:14% }
+.earth{ -webkit-mask:linear-gradient(90deg,transparent calc(var(--reach) - 14%),#000 var(--reach)); mask:linear-gradient(90deg,transparent calc(var(--reach) - 14%),#000 var(--reach)) }
+.run .earth{ animation:earthIn 1.8s cubic-bezier(.16,.84,.24,1) both, reach 1.8s cubic-bezier(.4,0,.2,1) both, glow 5s ease-in-out 1.8s infinite }
+@keyframes earthIn{ from{ transform:translateX(60%); opacity:0 } 30%{ opacity:1 } to{ transform:none } }
+@keyframes reach{ from{ --reach:70% } to{ --reach:14% } }
+/* and the pin and its beam come last, after the buttons */
+.run .pin{ animation:pinIn .5s cubic-bezier(.3,1.6,.5,1) 3.5s both }
+.run .beam{ animation:beam 5s cubic-bezier(.6,0,.2,1) 3.9s infinite backwards }
+.run .beam::after{ animation:spark 5s cubic-bezier(.6,0,.2,1) 3.9s infinite backwards }
+@keyframes pinIn{ from{ opacity:0; scale:.2 } }
+@keyframes glow{ 50%{ filter:brightness(1.14) saturate(1.1) } }
+canvas.fx{ position:absolute; inset:0; width:100%; height:100%; mix-blend-mode:screen; pointer-events:none }
+
+/* his red pin: a heartbeat, and a beam that runs out to the globe */
+.pin{ position:absolute; left:calc(1155 * var(--u)); top:calc(658 * var(--u)); width:calc(24 * var(--u)); height:calc(24 * var(--u));
+  transform:translate(-50%,-50%); border-radius:50%; background:var(--pin);
+  box-shadow:0 0 calc(18 * var(--u)) var(--pin), 0 0 calc(40 * var(--u)) rgba(255,31,90,.5) }
+/* the rings grow from the dot's own centre */
+.pin::before,.pin::after{ content:""; position:absolute; left:50%; top:50%; width:100%; height:100%; border-radius:50%;
+  border:calc(2 * var(--u)) solid var(--pin); box-sizing:border-box; transform:translate(-50%,-50%); animation:ping 2.4s ease-out infinite }
+.pin::after{ animation-delay:1.2s }
+@keyframes ping{ from{ transform:translate(-50%,-50%) scale(1); opacity:.9 } to{ transform:translate(-50%,-50%) scale(4.2); opacity:0 } }
+.beam{ position:absolute; left:calc(1155 * var(--u)); top:calc(657 * var(--u)); width:calc(520 * var(--u)); height:calc(2 * var(--u));
+  background:linear-gradient(90deg,var(--pin),rgba(255,31,90,.15)); transform-origin:left; animation:beam 5s cubic-bezier(.6,0,.2,1) infinite }
+.beam::after{ content:""; position:absolute; top:calc(-3 * var(--u)); width:calc(70 * var(--u)); height:calc(8 * var(--u)); border-radius:50%;
+  background:radial-gradient(closest-side,#fff,rgba(255,80,130,.6),transparent); animation:spark 5s cubic-bezier(.6,0,.2,1) infinite }
+@keyframes beam{ 0%{ transform:scaleX(0) } 30%,80%{ transform:scaleX(1); opacity:1 } 100%{ transform:scaleX(1); opacity:0 } }
+@keyframes spark{ 0%{ left:0; opacity:0 } 8%{ opacity:1 } 30%{ left:100%; opacity:1 } 40%,100%{ left:100%; opacity:0 } }
+
+/* ---- his words ---- */
+.say{ position:absolute; left:calc(334 * var(--u)); top:calc(172 * var(--u)); width:calc(560 * var(--u)) }
+.eyebrow{ margin:0; font-size:calc(12 * var(--u)); font-weight:800; letter-spacing:.16em; color:var(--gold); text-transform:uppercase }
+.stage h1{ margin:calc(36 * var(--u)) 0 0; font-weight:900; line-height:.98; letter-spacing:-.005em; text-transform:uppercase }
+.stage h1 .l1{ display:block; font-size:calc(30 * var(--u)); font-weight:800 }
+.stage h1 .l2,.stage h1 .l3{ display:block; font-size:calc(66 * var(--u)) }
+.lede{ margin:calc(12 * var(--u)) 0 0; font-size:calc(25 * var(--u)); font-weight:600; line-height:1.22; color:var(--gold) }
+.para{ margin:calc(10 * var(--u)) 0 0; max-width:calc(510 * var(--u)); font-size:calc(17.6 * var(--u)); font-weight:500; line-height:1.24; color:var(--ink) }
+.acts{ position:absolute; left:calc(340 * var(--u)); top:calc(636 * var(--u)); display:flex; gap:calc(12 * var(--u)) }
+.btn{ display:grid; place-items:center; height:calc(44 * var(--u)); padding:0 calc(30 * var(--u)); border-radius:calc(7 * var(--u));
+  font:800 calc(14 * var(--u))/1 var(--display); letter-spacing:.02em; text-transform:uppercase; text-decoration:none; cursor:pointer }
+.btn--go{ background:var(--gold); color:#0b2247; border:0 }
+.btn--ghost{ background:transparent; color:var(--ink); border:calc(2 * var(--u)) solid rgba(255,255,255,.75) }
+.btn:focus-visible{ outline:2px solid var(--gold); outline-offset:3px }
+
+/* ---- THE INTRO: glitter and a pulse ---- */
+.run .eyebrow{ animation:fadeUp .8s ease .15s both }
+.stage.run .l1{ animation:fadeUp .7s ease .4s both }
+.ch{ display:inline-block; position:relative }
+.run .ch{ animation:land .9s cubic-bezier(.2,.9,.25,1) both; animation-delay:calc(.65s + var(--i) * .055s) }
+/* each letter lands with a four-point glint */
+.ch::after{ content:""; position:absolute; left:50%; top:45%; width:.42em; height:.42em; margin:-.21em 0 0 -.21em;
+  background:radial-gradient(closest-side,#fff,rgba(255,255,255,0) 70%),
+    linear-gradient(transparent 46%,#fff 50%,transparent 54%),linear-gradient(90deg,transparent 46%,#fff 50%,transparent 54%);
+  opacity:0; pointer-events:none }
+.run .ch::after{ animation:glint .7s ease-out both; animation-delay:calc(1.05s + var(--i) * .055s) }
+/* then the whole headline catches a sweep of glitter, and keeps a slow pulse */
+/* the sweep is a copy of the line laid exactly over it, its glitter clipped to the letters */
+.stage h1 .l2,.stage h1 .l3{ position:relative }
+.stage h1 .l2::after,.stage h1 .l3::after{ content:attr(data-text); position:absolute; left:0; top:0; white-space:nowrap; pointer-events:none;
+  background:linear-gradient(100deg,transparent 38%,rgba(190,225,255,.9) 45%,#fff 50%,rgba(150,205,255,.9) 55%,transparent 62%) 130% 0 / 300% 100% no-repeat;
+  -webkit-background-clip:text; background-clip:text; color:transparent; opacity:0 }
+.run.stage h1 .l2::after,.stage.run h1 .l3::after{ animation:sweep 1.6s ease-in-out 2.2s both }
+.run.stage h1 .l3::after{ animation-delay:2.45s }
+.run.stage h1 .l2,.stage.run h1 .l3{ animation:pulse 4.5s ease-in-out 3.9s infinite }
+.stage.run .lede{ animation:fadeUp .9s ease 2.0s both }
+.run .para{ animation:fadeUp .9s ease 2.25s both }
+.run .btn{ animation:pop .9s linear both }
+.run .btn--go{ animation-delay:2.6s } .run .btn--ghost{ animation-delay:2.75s }
+@keyframes fadeUp{ from{ opacity:0; transform:translateY(14px) } }
+@keyframes land{ 0%{ opacity:0; transform:translateY(.35em) scale(1.35); filter:blur(8px) } 60%{ opacity:1; filter:blur(0) } }
+@keyframes glint{ 0%{ opacity:0; transform:scale(.2) rotate(0) } 35%{ opacity:1; transform:scale(1.25) rotate(45deg) } 100%{ opacity:0; transform:scale(.4) rotate(90deg) } }
+@keyframes sweep{ 0%{ background-position:130% 0; opacity:1 } 90%{ opacity:1 } 100%{ background-position:-30% 0; opacity:0 } }
+@keyframes pulse{ 0%,100%{ filter:drop-shadow(0 0 0 rgba(90,170,255,0)) } 50%{ filter:drop-shadow(0 0 calc(14 * var(--u)) rgba(90,170,255,.75)) } }
+@keyframes pop{ 0%{ opacity:0; transform:translateY(60px) scale(.7); animation-timing-function:cubic-bezier(.2,.7,.3,1) }
+  45%{ opacity:1; transform:translateY(-10px) scale(1.06); animation-timing-function:cubic-bezier(.4,0,.4,1) }
+  70%{ transform:translateY(4px) scale(.98) } 85%{ transform:translateY(-2px) scale(1.01) } 100%{ opacity:1; transform:none } }
+
+
+/* PHONES, as on the Social Media page: his words centred at the top (the
+   headline as wide as the paragraph, the eyebrow on one line), the buttons
+   stacked, and the globe under them, sliding in from the right */
+@media (max-width:820px){
+  .stage{ height:auto; min-height:0; --u:1px }
+  .stage-in{ position:relative; left:0; top:0; width:auto; height:auto; transform:none; display:flex; flex-direction:column;
+    align-items:center; padding:110px 20px 0; text-align:center }
+  .say{ position:static; width:100%; max-width:520px }
+  .eyebrow{ font-size:min(.74rem, 2.55vw); letter-spacing:.06em; white-space:nowrap }
+  .stage h1{ margin-top:22px }
+  .stage h1 .l1{ font-size:calc((min(100vw, 560px) - 40px) * .074) }
+  .stage h1 .l2,.stage h1 .l3{ font-size:calc((min(100vw, 560px) - 40px) * .142); white-space:nowrap }
+  .lede{ margin-top:14px; font-size:calc((min(100vw, 560px) - 40px) * .049) }
+  .say{ order:1 } .acts{ order:2 } .earth{ order:3 }
+  .para{ max-width:none; margin-top:12px; font-size:16px; line-height:1.5 }
+  .acts{ position:static; margin-top:26px; display:flex; flex-direction:column; align-items:stretch; gap:12px; width:100%; max-width:340px }
+  .btn{ height:54px; font-size:15px; padding:0 20px; border-radius:9px }
+  .btn--ghost{ border-width:2px }
+  .earth{ position:relative; left:auto; top:auto; width:100vw; height:min(96vw, 520px); margin-top:22px;
+    --reach:0%; -webkit-mask:linear-gradient(180deg,transparent 0,#000 18%); mask:linear-gradient(180deg,transparent 0,#000 18%) }
+  .run .earth{ animation:earthIn 1.8s cubic-bezier(.16,.84,.24,1) .6s both, glow 5s ease-in-out 2.4s infinite }
+  .earth img{ object-fit:cover; object-position:72% 50% }
+  .beam,.pin{ display:none }
+}
+@media (prefers-reduced-motion:reduce){ .stage *,.stage *::before,.stage *::after{ animation:none !important } .stage.run h1 .l2,.stage.run h1 .l3{ color:var(--ink) } }
+
+
+/* ---- WHAT WE DO: his five panels as one pinned scene. The card, the knob and
+   the three devices stay put; the colour, the card's words, the knob's needle
+   and the website on every screen change as the reader scrolls. Laid out in
+   his 1922 x 819 pixels and scaled as one. */
+.w{ position:relative }
+.w-pin{ position:sticky; top:0; height:100vh; overflow:hidden; background:#00287d }
+.w-stage{ position:absolute; left:50%; top:50%; width:1922px; height:819px; transform-origin:center; font-family:var(--display) }
+.w-bg{ position:absolute; inset:-400px -2000px; opacity:0; transition:opacity .7s ease }
+.w-bg:first-child{ opacity:1 }
+.w-h{ position:absolute; left:1061px; top:96px; margin:0; font-size:36px; font-weight:800; white-space:nowrap }
+.w-h--dark{ color:#000 } .w-h--light{ color:#fff }
+/* the card: one plain shell, five sets of words; its shadow is one CSS shadow,
+   not his hundred stacked shapes */
+.w-card{ position:absolute; left:447px; top:142px; width:339px; height:542px; border-radius:30px; background:#f2f2f2;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.7), 10px 14px 0 rgba(0,10,40,.18), 18px 26px 30px rgba(0,10,40,.32) }
+.w-say{ position:absolute; inset:0; padding:0 26px; opacity:0 }
+.w-say:first-child{ opacity:1 }
+.w-say h3{ position:absolute; left:26px; right:20px; bottom:calc(542px - 120px - 175px); margin:0; font-size:27.4px; font-weight:800; line-height:1.08; text-transform:uppercase }
+.w-say .sub{ position:absolute; left:26px; top:158px; margin:0; font-size:15.5px; font-weight:800; text-transform:uppercase }
+.w-say .rule{ position:absolute; left:27px; top:191px; width:129px; height:2px }
+.w-say .txt{ position:absolute; left:26px; right:22px; top:206px; margin:0; font-size:12.1px; font-weight:500; line-height:1.52 }
+.w-say .txt span{ display:block }
+.w-say .txt-m{ display:none }
+.w-say .meta{ position:absolute; left:26px; right:22px; top:332px; margin:0; font-size:11.9px; font-weight:800; line-height:1.35 }
+.w-say .go,.w-say .inc{ position:absolute; left:44px; width:242px; height:45px; border-radius:9px; display:grid; place-items:center;
+  font-size:12.6px; font-weight:800; letter-spacing:.01em; text-transform:uppercase; text-decoration:none }
+.w-say .go{ top:393px; color:#fff }
+.w-say .inc{ top:443px; background:transparent; border:1.5px solid currentColor }
+/* both buttons sit up off the card, and lift when pointed at */
+.w-say .go,.w-say .inc{ transition:transform .2s ease, box-shadow .2s ease, filter .2s ease, background-color .2s ease }
+/* at rest: a tight shadow, close to the card. Pointed at, the main button lifts;
+   the outlined one presses in instead - same line, an inner shadow, no lift */
+.w-say .go{ box-shadow:0 2px 3px rgba(0,8,30,.22), inset 0 1px 0 rgba(255,255,255,.25) }
+.w-say .inc{ box-shadow:none }
+.w-say .go:hover{ transform:translateY(-2px); filter:brightness(1.08) saturate(1.05); box-shadow:0 6px 10px rgba(0,8,30,.24), inset 0 1px 0 rgba(255,255,255,.3) }
+.w-say .inc:hover{ background:rgba(0,8,30,.03); box-shadow:inset 0 3px 7px rgba(0,8,30,.22), inset 0 1px 2px rgba(0,8,30,.18) }
+.w-say .go:active{ transform:translateY(0); transition-duration:.05s }
+.w-say .inc:active{ box-shadow:inset 0 4px 9px rgba(0,8,30,.3) }
+.w-say .go:focus-visible,.w-say .inc:focus-visible{ outline:3px solid #ffc72c; outline-offset:3px }
+/* the knob: his dial, its needle turning to each lane */
+.w-knob{ position:absolute; left:541px; top:83px; width:134px; height:134px }
+.w-ring{ position:absolute; inset:0; border-radius:50%; opacity:0 }
+.w-ring:first-child{ opacity:1 }
+/* his dial: ring, base disc and cap all on one centre; only the needle turns.
+   One light, at the top left: the ring's shadow falls softly on the card, and
+   the base's and the cap's run down-right together. */
+.k-rsh{ position:absolute; inset:4px; border-radius:50%; background:rgba(0,8,30,.32); filter:blur(14px); transform:translate(10px,18px) }
+.k-clip{ position:absolute; border-radius:50%; overflow:hidden }
+.k-clip--ring{ inset:0 } .k-clip--base{ left:16px; top:16px; width:102px; height:102px }
+.k-long{ position:absolute; border-radius:999px; transform-origin:50% 0; background:linear-gradient(180deg,rgba(0,8,30,.55),rgba(0,8,30,.28) 50%,rgba(0,8,30,0)) }
+.k-long--base{ left:16px; top:67px; width:102px; height:120px; transform:rotate(-45deg) }   /* one light, top left: every shadow falls down-right */
+.k-long--cap{ left:17.5px; top:53px; width:67px; height:90px; transform:rotate(-45deg); background:linear-gradient(180deg,rgba(0,0,0,.3),rgba(0,0,0,.14) 50%,rgba(0,0,0,0)) }
+.k-base,.k-cap{ position:absolute; border-radius:50% }
+.k-base{ left:16px; top:16px; width:102px; height:102px; background:#f2f2f2; box-shadow:inset 0 -3px 0 #dcdcdc, inset 0 2px 0 #fff }
+.k-cap{ left:33.5px; top:35px; width:67px; height:67px; background:#ededed; box-shadow:inset 0 0 0 1.5px #f8f8f8, 0 0 0 1px rgba(0,0,0,.05) }
+.k-ptr{ position:absolute; inset:0; transform-origin:67px 67px }
+.k-ptr b{ position:absolute; left:57px; top:5px; width:0; height:0; border-left:10px solid transparent; border-right:10px solid transparent; border-bottom:34px solid #f4f4f4; filter:drop-shadow(1px 1px 0 rgba(0,8,30,.18)) drop-shadow(5px 6px 4px rgba(0,8,30,.3)) }
+/* the devices, his art; the websites are drawn live on their screens */
+.w-devs,.w-cardg{ position:absolute; inset:0 }
+/* the dots: where you are among the five lanes; each one goes to its lane */
+.w-dots{ position:absolute; left:clamp(14px,2.2vw,34px); top:50%; z-index:5; translate:0 -50%; display:flex; flex-direction:column; gap:14px }
+.w-dots button{ width:12px; height:12px; padding:0; border-radius:999px; border:2px solid #fff; background:transparent; cursor:pointer;
+  box-shadow:0 1px 4px rgba(0,8,30,.35); transition:height .3s ease, background .3s ease }
+.w-dots button.on{ height:34px; background:#fff }
+.w-dots button:hover{ background:rgba(255,255,255,.6) }
+.w-dots button:focus-visible{ outline:2px solid #ffc72c; outline-offset:3px }
+.w-dots.dark button{ border-color:#0b1f3f; box-shadow:none }
+.w-dots.dark button.on{ background:#0b1f3f }
+@media (max-width:820px){ .w-dots{ left:6px; gap:10px } .w-dots button{ width:9px; height:9px; border-width:1.5px } .w-dots button.on{ height:24px } }
+.w-dev{ position:absolute; pointer-events:none }
+/* the laptop and the phone lift when pointed at, and every so often give a
+   little bob of their own; their shadows stay on the floor, shrinking as they rise */
+.w-lift{ position:absolute; inset:0; pointer-events:none; transition:translate .45s cubic-bezier(.2,.8,.2,1) }
+.w-lift--lap{ animation:bob 7s ease-in-out infinite }
+.w-lift--ph{ animation:bob 8.5s ease-in-out 3s infinite }
+@keyframes bob{ 0%,78%,100%{ transform:none } 84%{ transform:translateY(-9px) } 90%{ transform:translateY(1px) } 95%{ transform:translateY(-3px) } }
+.w-hit{ position:absolute; z-index:4; cursor:pointer }
+.w-hit--lap{ left:1110px; top:390px; width:440px; height:270px }
+.w-hit--ph{ left:1552px; top:434px; width:100px; height:206px }
+.w-devs:has(.w-hit--lap:hover) .w-lift--lap{ translate:0 -22px }
+.w-devs:has(.w-hit--ph:hover) .w-lift--ph{ translate:0 -22px }
+.w-lapsh,.w-phsh{ transition:scale .45s cubic-bezier(.2,.8,.2,1), opacity .45s ease }
+.w-devs:has(.w-hit--lap:hover) .w-lapsh,.w-devs:has(.w-hit--ph:hover) .w-phsh{ scale:.82; opacity:.55 }
+.w-lapsh{ animation:shbob 7s ease-in-out infinite } .w-phsh{ animation:shbob 8.5s ease-in-out 3s infinite }
+@keyframes shbob{ 0%,78%,100%{ transform:none } 84%{ transform:scale(.9) } 90%{ transform:none } 95%{ transform:scale(.96) } }
+.w-phsh{ position:absolute; left:1546px; top:636px; width:116px; height:22px; border-radius:50%;
+  background:radial-gradient(closest-side,rgba(0,8,30,.45),rgba(0,8,30,.18) 60%,rgba(0,8,30,0)); filter:blur(2px) }
+@media (prefers-reduced-motion:reduce){ .w-lift,.w-lapsh,.w-phsh{ animation:none } }
+/* the laptop's shadow: a plain soft one on the floor, in place of his picture of one */
+.w-lapsh{ position:absolute; left:1100px; top:600px; width:470px; height:70px; border-radius:50%;
+  background:radial-gradient(closest-side,rgba(0,8,30,.5),rgba(0,8,30,.22) 55%,rgba(0,8,30,0)); filter:blur(4px) }
+.w-scr{ position:absolute; overflow:hidden; background:#000 }
+.w-scr::after{ content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 38%,rgba(255,255,255,0) 70%,rgba(255,255,255,.05) 100%) }
+.w-site{ position:absolute; left:0; top:0; transform-origin:0 0; opacity:0 }
+.w-site:first-child{ opacity:1 }
+/* each site opens on its header, waits a moment, then scrolls down its page -
+   started afresh every time its lane comes up (service.js adds .go) */
+.w-roll{ transform:none }
+.w-roll.go{ animation:rollDown 7s cubic-bezier(.45,0,.3,1) 2s both }
+@keyframes rollDown{ to{ transform:translateY(var(--rollby,0px)) } }
+@media (prefers-reduced-motion:reduce){ .w-roll.go{ animation:none } }
+
+/* ---- the typing line: who it is for, typed, deleted, typed again */
+.w-type{ position:absolute; left:120px; top:742px; margin:0; display:flex; align-items:baseline; gap:18px; white-space:nowrap;
+  font-size:26px; font-weight:200; color:#fff; transition:color .5s ease }
+.w-type.dark{ color:#0b1f3f }
+.w-type .q{ font-style:italic; font-weight:200; letter-spacing:.01em }   /* a light, spoken voice */
+.w-type .to{ font-size:20px; font-weight:300; letter-spacing:.02em; opacity:.85; text-transform:uppercase; transition:opacity .3s ease }
+.w-type .to.hide{ opacity:0 }
+.w-type .cur{ display:inline-block; width:2px; height:1em; margin:0 2px -2px; background:currentColor; animation:blink .9s steps(2) infinite }
+@keyframes blink{ 50%{ opacity:0 } }
+
+@media (max-width:820px){
+  .w-cardg{ transform:none !important }
+  .w-card{ left:7.5%; width:85%; height:auto; background:none; box-shadow:none; border-radius:0 }
+  .w-say{ padding:0; display:flex; flex-direction:column; align-items:center; text-align:center; bottom:auto }
+  .w-say > *{ position:static !important; left:auto !important; right:auto !important }
+  .w-say h3{ font-size:24px; line-height:1.1 } .w-say .sub{ margin-top:6px; font-size:13.5px }
+  .w-say .rule{ display:block; width:110px; margin:10px auto 10px }
+  .w-say .txt{ font-size:13.5px; line-height:1.45 } .w-say .meta{ margin-top:8px; font-size:12.5px }
+  .w-say .meta span{ font-size:14px !important }
+  .w-say .go,.w-say .inc{ width:100%; max-width:300px; height:44px; margin-top:12px; font-size:13px; box-sizing:border-box }
+  .w-say .inc{ margin-top:8px }
+  .w-knob{ left:calc(50% - 67px); top:44px; transform:scale(.62); transform-origin:50% 0 }
+  .k-rsh{ display:none }
+  /* phones get the short description */
+  .w-say .txt:not(.txt-m){ display:none } .w-say .txt-m{ display:block }
+  .w-tight .w-say .meta{ margin-top:12px }
+  .w-card{ left:10% !important; width:82% !important }
+  .w-tight .w-say h3{ font-size:26px !important } .w-tight .w-say .sub{ font-size:15px !important } .w-tight .w-say .txt{ font-size:15px !important } .w-tight .w-say .meta,.w-tight .w-say .meta span{ font-size:15px !important } .w-tight .w-say .rule{ margin:10px 0 12px !important }
+  .w-say{ align-items:flex-start !important; text-align:left !important }
+  .w-say h3{ font-size:calc(32px * var(--cz,1)) !important; line-height:1.05 } .w-say .sub{ font-size:calc(18px * var(--cz,1)) !important; margin-top:8px }
+  .w-say .rule{ width:154px !important; height:2px; margin:16px 0 18px !important }
+  .w-say .txt{ font-size:calc(21px * var(--cz,1)) !important; line-height:1.34 !important }
+  .w-say .meta{ margin-top:16px !important; font-size:calc(19px * var(--cz,1)) !important; text-align:left !important } .w-say .meta span{ font-size:calc(20px * var(--cz,1)) !important; text-align:left !important }
+  .w-say .inc{ display:none !important }
+  .w-say .go{ position:absolute !important; left:50% !important; top:var(--goY,600px) !important; width:271px !important; max-width:none !important; height:50px !important;
+    margin:0 0 0 -135.5px !important; font-size:14px !important; border-radius:12px !important }
+  .w-knob{ display:none !important; left:auto !important; right:5%; top:29px !important; transform:scale(.58) !important; transform-origin:100% 0 !important }
+  .w-devs > img:first-child,#scr-mon{ display:none !important }
+  #wwd .w-h{ position:absolute !important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0) }
+  /* his typing line: one line, an upright quote, then "- LANDING PAGE" small and bold */
+  #w-type{ justify-content:center; align-items:baseline; gap:2px 8px !important }
+  #w-type{ flex-wrap:nowrap !important; white-space:nowrap !important }
+  #w-type .q{ font-size:var(--tq,16px); font-style:normal !important; font-weight:200 !important; letter-spacing:0 }
+  #w-type .to{ font-size:calc(var(--tq,16px) * .75) !important; font-weight:300 !important; letter-spacing:.03em; opacity:1 }
+  #w-type .arr{ display:none } #w-type .to::before{ content:"- "; font-weight:400 }
+  /* his button: a lighter blue, a thin light edge */
+  /* the lane's own colours, run the opposite way to its background: light meets shadow */
+  /* in the cards: a white outline, nothing else */
+  .w-say .go{ background:transparent !important; border:1px solid #fff !important; box-shadow:none !important; filter:none !important; border-radius:12px !important; font-weight:800 }
+  .w-say .go:hover{ background:rgba(255,255,255,.1) !important }
+  .w-say .go{ padding:0 18px !important; box-sizing:border-box; white-space:nowrap }
+  .w-say:nth-child(3) .go{ color:#fff !important }
+  .w-say:nth-child(3) h3,.w-say:nth-child(3) .sub,.w-say:nth-child(3) .meta,.w-say:nth-child(3) .txt,.w-say:nth-child(3) .inc{ color:#00287d !important } .w-say:nth-child(3) .rule{ background:#00287d !important }
+  /* no card under the words on the dark lanes: they go light */
+  .w-say:nth-child(1) h3,.w-say:nth-child(1) .txt,.w-say:nth-child(4) h3,.w-say:nth-child(4) .txt,.w-say:nth-child(5) h3,.w-say:nth-child(5) .txt{ color:#fff !important }
+  .w-say:nth-child(1) .sub,.w-say:nth-child(1) .meta,.w-say:nth-child(4) .sub,.w-say:nth-child(4) .meta,.w-say:nth-child(5) .sub,.w-say:nth-child(5) .meta{ color:#bfe0ff !important }
+  .w-say:nth-child(1) .rule,.w-say:nth-child(4) .rule,.w-say:nth-child(5) .rule{ background:#bfe0ff !important }
+  .w-say:nth-child(1) .inc,.w-say:nth-child(4) .inc,.w-say:nth-child(5) .inc{ color:#fff !important }
+  .w-say:nth-child(1) .go,.w-say:nth-child(4) .go,.w-say:nth-child(5) .go{ box-shadow:0 0 0 1.5px rgba(255,255,255,.8), 0 4px 10px rgba(0,8,30,.3) !important }
+}
+/* ---- PHONES: the scene unpins into five panels, one after another, as on the
+   Social Media page. Each panel is his card (with its needle) over the three
+   devices, laid out on a 900-wide stage and scaled to the screen. */
+/* the card is scaled on its own, to a size that reads; the devices fill the width under it */
+
+/* ---- the five example sites (each written once, laid out for desktop or phone) */
+.ws{ font-family:var(--display); color:#152238; background:#fff; overflow:hidden; line-height:1.35 }
+.ws *{ box-sizing:border-box }
+.ws nav{ display:flex; align-items:center; gap:34px; padding:26px 56px; font-size:17px; font-weight:600 }
+.ws .logo{ display:flex; align-items:center; gap:12px; margin-right:auto; font-size:24px; font-weight:900; letter-spacing:-.01em }
+.ws .logo i{ width:36px; height:36px; border-radius:10px; display:grid; place-items:center; color:#fff; font-style:normal; font-size:15px }
+.ws .pill{ padding:13px 24px; border-radius:999px; color:#fff; font-weight:800 }
+.ws h1{ margin:0; font-weight:900; line-height:1.02; letter-spacing:-.02em }
+.ws p{ margin:0 }
+.ws .btn{ display:inline-block; padding:18px 30px; border-radius:12px; color:#fff; font-weight:800; font-size:18px }
+.ws .btn2{ display:inline-block; padding:16px 28px; border-radius:12px; font-weight:800; font-size:18px; border:2px solid currentColor }
+.ws .row{ display:flex; gap:24px }
+.ws .cardx{ flex:1; border-radius:18px; padding:26px; background:#f3f6fb }
+.ws .cardx b{ display:block; font-size:21px; margin:14px 0 6px }
+.ws .cardx span{ font-size:15px; color:#5a6476 }
+.ws .ic{ width:52px; height:52px; border-radius:14px; display:grid; place-items:center; color:#fff; font-size:24px; font-weight:900 }
+.ws .bar{ height:12px; border-radius:6px; background:#e5e9f1 }
+/* phone layouts: one column, bigger type */
+.ws.m nav{ padding:22px 24px; gap:14px }
+.ws.m nav .lk{ display:none }
+.ws.m .burger{ display:block }
+.ws .burger{ display:none; width:30px; height:22px; border-top:4px solid; border-bottom:4px solid; position:relative }
+.ws .burger::after{ content:""; position:absolute; left:0; right:0; top:5px; border-top:4px solid }
+
+
+/* ---- THE JOURNEY: his sections 1-7 as one continuous scene. Pinned like What
+   We Do: one scroll, one step. Everything is laid out in his 1922 x 819 frame
+   and scaled as one; each step plays its own little film when it arrives. */
+@property --cr{ syntax:"<length>"; inherits:false; initial-value:0px }
+.jr{ position:relative }
+.jr-pin{ position:sticky; top:0; height:100vh; overflow:hidden; background:#000 }
+.jr-stage{ position:absolute; left:50%; top:50%; width:1922px; height:819px; transform-origin:center; font-family:var(--display) }
+.jr-stage *,.jr-sky *{ position:absolute }
+.jr-stage img{ display:block; max-width:none }
+/* the host page caps images at their box (max-width:100%); the skies must cover edge to edge */
+.jr-pin .sk{ inset:0; width:100%; height:100%; max-width:none !important; max-height:none !important; object-fit:cover; opacity:0; transition:opacity .8s ease }
+.sk-deep{ background:#000 }
+.sk-grey{ background:radial-gradient(ellipse 60% 75% at 38% 46%,#3b3b3b,#1c1c1c 45%,#060606 80%) }
+.jr-stars{ position:absolute; inset:0; width:100%; height:100%; opacity:0; pointer-events:none; transition:opacity .6s ease }
+/* going back up a step, nothing waits: the scene simply returns */
+.jr-pin.rev *,.jr-pin.rev{ transition-delay:0s !important }
+.jr-pin.jump .j-rocket,.jr-pin.jump .j-world,.jr-pin.jump .jc,.jr-pin.jump .jr-stage,.jr-pin.jump .j-moon,.jr-pin.jump .jet,.jr-pin.jump .j-lift{ transition:none !important }
+
+/* --- 1. the idea: his bulb, off, then lit */
+.j-bulb{ opacity:0; left:370px; top:-18px; width:530px; height:652px; transition:transform 1.1s cubic-bezier(.6,0,.2,1), opacity .5s ease;
+  -webkit-mask:radial-gradient(closest-side,#000 62%,transparent); mask:radial-gradient(closest-side,#000 62%,transparent) }
+.j-bulb img{ left:0; top:0; width:100%; height:100%; mix-blend-mode:screen }
+.j-bulb .off{ filter:grayscale(1) brightness(.5) contrast(1.2) }
+.j-bulb .on{ opacity:0; transition:opacity .4s ease }
+/* the bulb is a switch: click it off, click it back on */
+.j-world,.j-rocket,.jc,.j-chalk,.j-moon{ pointer-events:none }
+.j-bulb{ cursor:pointer }
+.j-bulb:focus-visible{ outline:2px solid #ffc72c; outline-offset:-60px; border-radius:50% }
+.jr-pin.dark-bulb .j-bulb .on{ opacity:0 !important; animation:none !important; transition:opacity .12s ease !important }
+.jr-pin.dark-bulb .sk-deep{ background:#000 }
+.sk-grey{ opacity:0 !important; transition:opacity .25s ease !important }
+.jr-pin.relit .j-bulb .on{ animation:relit .5s linear both !important }
+@keyframes relit{ 0%{ opacity:0 } 20%{ opacity:.9 } 30%{ opacity:.2 } 55%,100%{ opacity:1 } }
+
+/* --- 2. the flight plan: his badge and the chalkboard behind it */
+.j-chalk{ left:581px; top:0; width:1341px; height:819px; opacity:0; transition:opacity .4s ease, --cr .4s ease;
+  -webkit-mask:radial-gradient(circle at 650px 421px,#000 var(--cr),transparent calc(var(--cr) + 220px));
+  mask:radial-gradient(circle at 650px 421px,#000 var(--cr),transparent calc(var(--cr) + 220px)) }
+.j-chalk > .jcv{ left:0; top:0; width:1341px; height:819px }
+/* each group of his math has its own light: they glow up one at a time and fade back very slowly */
+.jcv .eq{ opacity:.32; transition:opacity 5s ease }
+.jcv .eq.lit{ opacity:1; transition:opacity 1.8s ease }
+/* a few of the scribbles light up at a time, as if someone is working it out */
+.j-spot{ width:240px; height:240px; overflow:hidden; border-radius:50%; opacity:0; transition:opacity 1.1s ease;
+  -webkit-mask:radial-gradient(closest-side,#000 35%,transparent); mask:radial-gradient(closest-side,#000 35%,transparent) }
+.j-spot.lit{ opacity:1; transition-duration:.5s }
+.j-spot img{ width:1341px; height:819px; mix-blend-mode:screen; filter:brightness(2.4) drop-shadow(0 0 5px rgba(255,236,170,.8)) }
+.j-scheme{ left:0; top:0; width:1341px; height:819px; overflow:visible }
+.j-scheme path,.j-scheme line{ fill:none; stroke:rgba(255,255,255,.72); stroke-width:2.2; stroke-linecap:round; stroke-dasharray:1; stroke-dashoffset:1; transition:stroke-dashoffset .3s ease }
+.j-scheme .gold{ stroke:#ffb000; stroke-width:2.6; filter:drop-shadow(0 0 4px rgba(255,176,0,.7)) }
+.j-orbit{ fill:none; stroke:rgba(255,255,255,.4); stroke-width:1.6; stroke-dasharray:3 9; opacity:0; transition:opacity .4s }
+.j-badge{ left:984px; top:174px; width:495px; height:495px; pointer-events:none }
+.j-badge img{ left:0; top:0; width:100%; height:100%; opacity:0 }
+.j-badge .disc{ left:60px; top:60px; width:375px; height:375px; border-radius:50%; background:radial-gradient(closest-side,#000 70%,rgba(0,0,0,0)); opacity:0; transition:opacity .4s }
+.j-badge .sh{ transform:translate(9px,12px); filter:blur(3px) brightness(0); transition:opacity .4s ease, transform .5s ease }
+.j-badge .ic{ transform:scale(.85); transition:opacity .4s ease, transform .5s ease }
+.j-badge .ring{ transform:rotate(-200deg) scale(1.18); transition:opacity .4s ease, transform .5s ease }
+
+/* --- 3 to 6: the launch pad (his section 4) and the rocket, seen by a camera */
+.j-world{ left:0; top:0; width:1922px; height:819px; transform-origin:0 0; opacity:0; transform:translate(-24239px,-9110px) scale(40);
+  transition:transform 1s cubic-bezier(.5,0,.2,1), opacity .4s ease }
+.j-world > *{ opacity:0; transition:opacity .4s ease, transform .6s ease }
+.j-ground{ left:-247px; top:753px; width:2192px; height:73px }
+.j-ground::after{ content:""; position:absolute; left:0; right:0; top:66px; height:1400px; background:linear-gradient(90deg,#7fae2e 0%,#a9cf4f 30%,rgba(190,225,120,.6) 48%,rgba(190,225,120,0) 62%) }
+.j-ground::before{ content:""; position:absolute; right:100%; top:20px; width:3000px; height:1500px; background:#7fae2e }
+.j-ground img{ left:0; top:0; width:100%; height:100% }
+.j-palms{ left:-45px; top:574px; width:370px }
+.j-cl4a{ left:99px; top:134px; width:367px; animation:drift 16s ease-in-out infinite }
+.j-cl4b{ left:913px; top:36px; width:367px; animation:drift 19s ease-in-out -6s infinite reverse }
+@keyframes drift{ 50%{ translate:34px 0 } }
+.j-tower{ left:55px; top:21px; width:994px; height:803px }
+.j-tower img{ left:0; top:0; width:100% }
+.wk{ transition:transform 1.4s cubic-bezier(.4,0,.6,1), opacity .9s ease }
+.wk{ transform-origin:50% 100% }
+.wk .wv{ left:0; top:0; width:100%; height:100% }
+.w1{ left:515px; top:607px; width:60px; height:118px } .w2{ left:601px; top:597px; width:54px; height:126px }
+.w3{ left:653px; top:164px; width:53px; height:84px } .w4{ left:700px; top:455px; width:71px; height:86px }
+.wv .arm,.wv .hand,.wv .gear,.wv .hands{ transform-box:fill-box }
+.wv .arm{ transform-origin:0% 100% } .wv .hand{ transform-origin:100% 100% } .wv .gear{ transform-origin:50% 50% } .wv .hands{ transform-origin:50% 50% }
+.j-rocket{ left:0; top:0; width:251px; height:687px; transform-origin:0 0; opacity:0; transform:translate(-3999px,-8030px) scale(40);
+  transition:transform 1s cubic-bezier(.5,0,.2,1), opacity .4s ease }
+.j-zoom{ opacity:0; pointer-events:none; overflow:hidden }
+.jr-pin.snap .j-rocket{ opacity:1 !important; transition:none !important }
+.jr-pin.zooming .j-chalk,.jr-pin.zooming .j-badge,.jr-pin.zooming .j-bulb{ opacity:0 !important; transition:opacity .25s ease !important }
+.jr-pin.zooming .j-rocket{ opacity:0 !important; transition:none !important }
+.j-lift,.j-shake{ inset:0 }
+.rk-tint{ left:85.4px; top:170.5px; width:82px; height:82px; border-radius:50%; background:#000; opacity:0 }
+/* his sign: it comes down with the girl, and once hung it rides the rocket to space */
+.rk-sign{ left:75px; top:299px; width:99px; height:99px; opacity:0; transform:scale(0); transition:opacity .3s, transform .4s ease }
+.j-rocket .rk-sign .sv{ opacity:1; left:0; top:0; width:100%; height:100% }
+/* the girl on the swing hangs from the rocket's window: she is lowered out of it,
+   and pulled back in before launch (everything above the window line is hidden) */
+.j-girlwin{ left:540px; top:279px; width:180px; height:220px; overflow:hidden }
+.j-girl{ left:60px; top:4px; width:60px; height:136px; transform:translateY(-150px); transition:transform .6s ease }
+.j-girl .gv{ left:0; top:0; width:100%; height:100%; transform-origin:29.5px -6px }
+@keyframes swing{ 0%,100%{ transform:rotate(-2.2deg) } 50%{ transform:rotate(2.2deg) } }
+.j-lift{ transition:transform .6s ease }
+.j-rocket img,.j-rocket svg{ opacity:0; transition:opacity .5s ease }
+.rk4{ left:0; top:0; width:251px; height:687px } .rk{ left:-6.3px; top:-5px; width:263.4px; height:697.5px }
+/* THE JET: one flame from ignition to space. A white-hot core at the nozzle, a
+   tapered plume with exhaust streaming down it, and a glow; its length, spread and
+   colours change by step (gold in the sky, blue into nothing in space) */
+@property --j1{ syntax:"<color>"; inherits:true; initial-value:#fff3b0 }
+@property --j2{ syntax:"<color>"; inherits:true; initial-value:#ffb52e }
+@property --j3{ syntax:"<color>"; inherits:true; initial-value:rgba(255,90,20,.55) }
+@property --jw{ syntax:"<percentage>"; inherits:true; initial-value:0% }
+.jet{ left:-24.5px; top:646px; width:300px; height:1550px; transform-origin:50% 0; transform:scaleY(0); opacity:0;
+  --j1:#fff3b0; --j2:#ffb52e; --j3:rgba(255,90,20,.55); --jw:0%;
+  transition:transform 1s ease, opacity .4s ease, --j1 2s ease, --j2 2s ease, --j3 2s ease, --jw 2s ease }
+.jet i{ position:absolute; display:block }
+.jet .plume{ inset:0; clip-path:polygon(33.7% 0,66.3% 0,calc(100% - var(--jw)) 100%,var(--jw) 100%);
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,0) 0,rgba(255,255,255,.1) 70px,rgba(255,255,255,0) 140px) 0 0/100% 140px,
+    linear-gradient(180deg,var(--j1) 0%,var(--j2) 22%,var(--j3) 62%,rgba(0,0,0,0) 100%);
+  filter:blur(3.5px); animation:jetFlow .4s linear infinite, jetFlick .09s linear infinite alternate; transform-origin:50% 0 }
+.jet .core{ left:38%; width:24%; top:0; height:26%; clip-path:polygon(0 0,100% 0,62% 100%,38% 100%);
+  background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,.92) 35%,rgba(255,255,255,0) 100%); filter:blur(3px);
+  animation:jetCore .12s linear infinite alternate; transform-origin:50% 0 }
+.jet .glow{ left:20%; width:60%; top:-30px; height:120px; border-radius:50%;
+  background:radial-gradient(closest-side,var(--j2),rgba(0,0,0,0)); filter:blur(8px); opacity:.85; animation:jetCore .15s linear infinite alternate }
+@keyframes jetFlow{ to{ background-position:0 140px,0 0 } }
+@keyframes jetFlick{ to{ scale:1.025 1.04 } }
+@keyframes jetCore{ to{ scale:.9 1.12; opacity:.85 } }
+.fl5{ left:-26.3px; top:649.8px; width:303.6px; transform-origin:50% 0; transform:scaleY(0); transition:opacity .4s, transform .5s ease !important; animation:flick .11s linear infinite alternate }
+.tr6{ left:-125.4px; top:650px; width:467.6px; transform-origin:50% 0; transform:scaleY(0); animation:flick2 .13s linear infinite alternate;
+  -webkit-mask:linear-gradient(#000 62%,transparent); mask:linear-gradient(#000 62%,transparent);
+  clip-path:polygon(0 0,100% 0,100% 100%,0 100%);
+  transition:opacity .5s, transform 1s ease, filter 1.6s ease, clip-path 2s ease !important }
+@keyframes flick2{ to{ scale:1.03 1.06 } }
+@keyframes flick{ to{ scale:1.03 1.08; filter:brightness(1.12) } }
+.jc{ transition:transform 1s cubic-bezier(.5,0,.2,1) }
+.j-cl3a{ left:-216px; top:3px; width:840px; transform:translateX(-1500px) }
+.j-cl3b{ left:832px; top:79px; width:1049px; transform:translateX(1600px) }
+.j-cl5t{ left:90px; top:290px; width:1020px; transform:translateX(-1700px) }
+.j-cl5b{ left:115px; top:544px; width:1076px; transform:translateY(760px) }
+.j-cl5b img{ left:0; top:0; width:100%; animation:billow 3.2s ease-in-out infinite }
+@keyframes billow{ 50%{ scale:1.035; translate:0 -6px } }
+.j-cl6{ left:-13px; top:600px; width:1526px; height:340px; transform:translateY(720px) }
+/* step 6's clouds, his vectors: every puff breathes on its own, and a second bank
+   behind keeps growing up out of the bottom and sinking back */
+.c6v{ left:0; top:0; width:100%; height:100%; overflow:visible }
+.c6v > g > g > :not([class]){ display:none }
+.c6v [class^="c"]{ transform-box:fill-box; transform-origin:50% 100% }
+.c6v.back{ transform:translate(380px,-24px); filter:brightness(.96) saturate(1.1) }
+@keyframes puff{ 0%,100%{ transform:scale(1) } 50%{ transform:scale(1.07,1.1) } }
+@keyframes rise{ 0%{ transform:translateY(115%) scale(.55) } 40%,62%{ transform:translateY(0) scale(1.05) } 100%{ transform:translateY(115%) scale(.6) } }
+@keyframes sway{ 50%{ translate:-26px 0 } }
+
+.j-moon{ translate:0 0; left:1285px; top:180px; width:220px; height:220px; opacity:0; transform:translateY(-470px); mix-blend-mode:screen;
+  transition:opacity .6s ease, transform .8s ease; -webkit-mask:radial-gradient(closest-side,#000 80%,transparent); mask:radial-gradient(closest-side,#000 80%,transparent) }
+.j-moon img{ left:0; top:0; width:100%; height:100%; animation:moonGlow 6s ease-in-out infinite }
+@keyframes moonGlow{ 50%{ filter:brightness(1.15) } }
+
+/* --- the words, one block per step, in his places and his type */
+.jt{ width:540px; opacity:0; pointer-events:none; transition:opacity .35s ease, transform .6s ease; color:#fff }
+.jt *{ position:relative }
+.jr-sky{ position:absolute; inset:0 }
+.jt-eb{ margin:0 0 6px; font-size:18px; font-weight:800; letter-spacing:.01em; text-transform:uppercase; color:#006cce }
+.jt-h{ margin:0; font-size:32px; font-weight:800; line-height:1.12; text-transform:uppercase }
+.jt-rule{ display:block; width:422px; height:3px; margin:10px 0 18px; background:#12579a }
+.jt-p{ font-size:15px; font-weight:500; line-height:1.5 }
+.jt-p p{ position:relative; margin:0 0 6px }
+.jt-big{ display:block; margin-top:6px; font-size:19px; font-weight:800; letter-spacing:.02em; text-transform:uppercase; color:#7fc1ff }
+.jt-go{ margin:26px 0 0 }
+/* his colours: gold on the dark idea and flight-plan steps, his blue on the sky and space steps */
+.t1 .jt-go a{ background:#ffb000 !important; color:#1a1200 !important }
+.t2 .jt-go a,.t3 .jt-go a,.t4 .jt-go a,.t5 .jt-go a,.t6 .jt-go a{ background:#0067cf !important; color:#fff !important }
+.jt-go a{ position:relative; display:inline-grid; place-items:center; min-width:227px; height:41px; padding:0 26px; box-sizing:border-box; border-radius:8px;
+  background:#0067cf; color:#fff; font-size:16.8px; font-weight:800; text-transform:uppercase; text-decoration:none;
+  box-shadow:0 2px 3px rgba(0,8,30,.22), inset 0 1px 0 rgba(255,255,255,.22); transition:transform .2s ease, box-shadow .2s ease, filter .2s ease }
+.jt-go a:hover{ transform:translateY(-2px); filter:brightness(1.1); box-shadow:0 7px 12px rgba(0,8,30,.28), inset 0 1px 0 rgba(255,255,255,.3) }
+.jt-go a:focus-visible{ outline:3px solid #ffc72c; outline-offset:3px }
+.t2,.t3,.t4{ color:#000 }
+.t0 .jt-eb,.t1 .jt-eb{ color:#ffb000 }
+.t0 .jt-rule,.t1 .jt-rule{ width:467px; height:1px; background:#ffb000 }
+.t5,.t6{ color:#f7f6f7 } .t6 .jt-eb{ color:#3d9bff } .t5 .jt-eb{ color:#cfe6ff } .t5 .jt-rule,.t6 .jt-rule{ background:#2a6fd6 }
+/* the idea's words start black on black and come on with the bulb */
+.jt.t0{ opacity:0; color:#000; transition:opacity .5s ease, transform 1.1s cubic-bezier(.6,0,.2,1) }
+.jt.t0 .jt-h,.jt.t0 .jt-p,.jt.t0 .jt-eb,.jt.t0 .jt-rule{ transition:color 1.2s ease, background-color 1.2s ease }
+.jt.t0 .jt-eb{ color:#000 } .jt.t0 .jt-rule{ background:#000 }
+.jt.t0 .jt-go a{ background:#0d0d0d; color:#262626; box-shadow:inset 0 0 0 1.5px #222; transition:background-color .2s, color .2s, box-shadow .6s, transform .2s }
+.gw{ display:inline-block; white-space:nowrap } .gc{ display:inline-block; position:relative }
+.gc::after{ content:""; position:absolute; left:50%; top:45%; width:.5em; height:.5em; margin:-.25em 0 0 -.25em; opacity:0; pointer-events:none;
+  background:radial-gradient(closest-side,#fff,rgba(255,255,255,0) 70%),linear-gradient(transparent 46%,#fff 50%,transparent 54%),linear-gradient(90deg,transparent 46%,#fff 50%,transparent 54%) }
+
+/* the dots: seven steps, on the left as in What We Do */
+.jr-dots{ position:absolute; left:clamp(14px,2.2vw,34px); top:50%; z-index:5; translate:0 -50%; display:flex; flex-direction:column; gap:14px }
+.jr-dots button{ width:12px; height:12px; padding:0; border-radius:999px; border:2px solid #fff; background:transparent; cursor:pointer;
+  box-shadow:0 1px 4px rgba(0,8,30,.35); transition:height .3s ease, background .3s ease, border-color .3s }
+.jr-dots button.on{ height:34px; background:#fff }
+.jr-dots button:hover{ background:rgba(255,255,255,.6) }
+.jr-dots button:focus-visible{ outline:2px solid #ffc72c; outline-offset:3px }
+.jr-dots.dark button{ border-color:#0b1f3f; box-shadow:none } .jr-dots.dark button.on{ background:#0b1f3f }
+
+@keyframes jIn{ from{ opacity:0 } }
+@keyframes jRise{ from{ opacity:0; transform:translateY(60px) } }
+@keyframes jRight{ from{ opacity:0; transform:translateX(150px) } }
+@keyframes jLeft{ from{ opacity:0; transform:translateX(-220px) } }
+@keyframes jUp{ from{ opacity:0; transform:translateY(110px) } }
+@keyframes jPop{ 0%{ opacity:0; transform:translateY(60px) scale(.7); animation-timing-function:cubic-bezier(.2,.7,.3,1) }
+  45%{ opacity:1; transform:translateY(-10px) scale(1.06) } 70%{ transform:translateY(4px) scale(.98) } 100%{ opacity:1; transform:none } }
+@keyframes jGrow{ 0%{ opacity:0; transform:scale(.2) } 60%{ opacity:1; transform:scale(1.12) } 80%{ transform:scale(.97) } 100%{ opacity:1; transform:none } }
+@keyframes jLand{ 0%{ opacity:0; transform:translateY(.35em) scale(1.35); filter:blur(8px) } 60%{ opacity:1; filter:blur(0) } }
+@keyframes jGlint{ 0%{ opacity:0; transform:scale(.2) rotate(0) } 35%{ opacity:1; transform:scale(1.25) rotate(45deg) } 100%{ opacity:0; transform:scale(.4) rotate(90deg) } }
+@keyframes jSweep{ 50%{ filter:drop-shadow(0 0 14px rgba(90,170,255,.8)) } }
+@keyframes ctaOn{ 0%{ background:#0d0d0d; color:#262626 } 8%{ background:#ffb000; color:#1a1200 } 14%{ background:#0d0d0d; color:#262626 }
+  22%,100%{ background:#ffb000; color:#1a1200 } }
+@keyframes bulbOn{ 0%{ opacity:0 } 10%{ opacity:.9 } 16%{ opacity:.05 } 26%{ opacity:1 } 32%{ opacity:.3 } 44%,100%{ opacity:1 } }
+@keyframes tool{ 0%,100%{ transform:rotate(0) } 30%{ transform:rotate(-7deg) } 60%{ transform:rotate(3deg) } }
+@keyframes wave{ 0%,100%{ transform:rotate(0) } 50%{ transform:rotate(14deg) } }
+@keyframes crank{ 0%,100%{ transform:rotate(-18deg) } 50%{ transform:rotate(22deg) } }
+@keyframes grip{ 0%,100%{ transform:translate(0,0) } 50%{ transform:translate(.4px,-.5px) } }
+@keyframes wob{ 0%,100%{ transform:rotate(-2deg) } 50%{ transform:rotate(2.6deg) translateY(-2px) } }
+@keyframes walk{ 50%{ transform:translateY(-4px) rotate(2deg) } }
+@keyframes vib{ 0%{ translate:0 0 } 25%{ translate:1.6px -.8px } 50%{ translate:-1.4px .6px } 75%{ translate:.8px 1px } 100%{ translate:0 0 } }
+@keyframes rshake{ 0%,100%{ translate:0 0 } 25%{ translate:1.2px 0 } 75%{ translate:-1.2px 0 } }
+.jr-pin[data-at="-1"] .j-bulb{ opacity:1 }.jr-pin[data-at="0"] .j-bulb{ opacity:1 }.jr-pin[data-at="1"] .j-bulb{ opacity:1 }.jr-pin[data-at="-1"] .t0{ opacity:1 }.jr-pin[data-at="0"] .t0{ opacity:1 }
+.jr-pin[data-at="0"] .sk-grey{ opacity:1; transition:opacity 1.6s ease .5s }
+.jr-pin[data-at="0"] .j-bulb .on{ opacity:1; animation:bulbOn 1.3s linear .3s both }
+.jr-pin[data-at="0"] .t0{ pointer-events:auto }
+.jr-pin[data-at="0"] .t0 .jt-h{ color:#fff; transition-delay:.7s }.jr-pin[data-at="0"] .t0 .jt-p{ color:#fff; transition-delay:.9s }
+.jr-pin[data-at="0"] .t0 .jt-eb{ color:#ffb000; transition-delay:.6s }.jr-pin[data-at="0"] .t0 .jt-rule{ background:#ffb000; transition-delay:.8s }
+.jr-pin[data-at="0"] .t0 .jt-go a{ background:#ffb000; color:#1a1200; box-shadow:0 0 22px rgba(255,176,0,.45), 0 2px 3px rgba(0,0,0,.4); animation:ctaOn 1.1s linear 1.7s both }
+.jr-pin[data-at="1"] .j-bulb{ transform:translate(calc(var(--vl) * 1px - 690px),40px) }.jr-pin[data-at="1"] .j-bulb .on{ opacity:1 }
+.jr-pin[data-at="1"] .t0{ opacity:0; transform:translateX(-640px) }
+.jr-pin[data-at="1"] .t1{ opacity:1; pointer-events:auto; transition:opacity .1s }
+.jr-pin[data-at="1"] .t1 > *{ animation:jRight .9s cubic-bezier(.2,.8,.2,1) both }.jr-pin[data-at="1"] .t1 > :nth-child(1){ animation-delay:0.35s }.jr-pin[data-at="1"] .t1 > :nth-child(2){ animation-delay:0.45s }.jr-pin[data-at="1"] .t1 > :nth-child(3){ animation-delay:0.55s }.jr-pin[data-at="1"] .t1 > :nth-child(4){ animation-delay:0.65s }.jr-pin[data-at="1"] .t1 > :nth-child(5){ animation-delay:0.75s }
+.jr-pin[data-at="1"] .j-badge .disc{ opacity:1; transition-delay:.3s }
+.jr-pin[data-at="1"] .j-badge .sh{ opacity:.8; transform:translate(9px,12px); transition:opacity .6s ease .45s }
+.jr-pin[data-at="1"] .j-badge .ic{ opacity:1; transform:none; transition:opacity .6s ease .65s, transform .8s cubic-bezier(.3,1.5,.5,1) .65s }
+.jr-pin[data-at="1"] .j-badge .ring{ opacity:1; transform:none; transition:opacity .9s ease 1.1s, transform 2.8s cubic-bezier(.2,.75,.25,1) 1.1s }
+.jr-pin[data-at="1"] .j-chalk{ opacity:1; --cr:1500px; transition:opacity .3s ease 1.1s, --cr 3s cubic-bezier(.4,0,.3,1) 1.2s }
+.jr-pin[data-at="1"] .j-scheme path,.jr-pin[data-at="1"] .j-scheme line{ stroke-dashoffset:0; transition:stroke-dashoffset 1.6s ease-in-out var(--d) }
+.jr-pin[data-at="1"] .j-orbit{ opacity:1; transition:opacity 1.4s ease 3.2s }
+.jr-pin[data-at="2"] .j-world{ opacity:1; transform:translate(-1949.8px,-460.8px) scale(4.067); transition:transform 2.2s cubic-bezier(.55,0,.15,1) .35s, opacity .5s ease }
+.jr-pin[data-at="2"] .j-rocket{ opacity:1; transform:translate(108.1px,-351px) scale(4.067); transition:transform 2.2s cubic-bezier(.55,0,.15,1) .35s, opacity .5s ease }
+.jr-pin[data-at="2"] .rk4{ opacity:1; transition:none }
+.jr-pin[data-at="2"] .sk3{ opacity:1; transition:opacity 1s ease .25s }
+.jr-pin[data-at="2"] .j-cl3a,.jr-pin[data-at="2"] .j-cl3b{ transform:none; transition:transform 1.9s cubic-bezier(.15,.8,.2,1) .7s }
+.jr-pin[data-at="2"] .t2{ opacity:1; pointer-events:auto; transition:opacity .1s }
+.jr-pin[data-at="2"] .t2 > *{ animation:jIn 1.1s ease both }.jr-pin[data-at="2"] .t2 > :nth-child(1){ animation-delay:1.50s }.jr-pin[data-at="2"] .t2 > :nth-child(2){ animation-delay:1.70s }.jr-pin[data-at="2"] .t2 > :nth-child(3){ animation-delay:1.90s }.jr-pin[data-at="2"] .t2 > :nth-child(4){ animation-delay:2.10s }
+.jr-pin[data-at="2"] .t2 .jt-go{ animation:jPop .9s linear 2.9s both }
+.jr-pin[data-at="3"] .j-world{ opacity:1; transform:translate(0px,0px) scale(1); transition:transform 1.7s cubic-bezier(.45,0,.15,1) }
+.jr-pin[data-at="3"] .j-rocket{ opacity:1; transform:translate(506px,27px) scale(1); transition:transform 1.7s cubic-bezier(.45,0,.15,1) }
+.jr-pin[data-at="3"] .rk4{ opacity:1 }
+.jr-pin[data-at="3"] .sk4{ opacity:1; transition:opacity 1.2s ease .2s }
+.jr-pin[data-at="3"] .j-world > *{ opacity:1; transition:opacity .8s ease .35s }
+.jr-pin[data-at="3"] .wk{ opacity:1; transition:opacity .6s ease 1.3s }
+.jr-pin[data-at="3"] .j-girl{ transform:none; transition:transform 1.6s cubic-bezier(.3,.7,.3,1) 1.5s }
+.jr-pin[data-at="3"] .j-girl .gv{ animation:swing 2.6s ease-in-out 3.2s infinite }
+.jr-pin[data-at="2"] .rk-sign{ opacity:1; transform:none; transition:none }.jr-pin[data-at="3"] .rk-sign{ opacity:1; transform:none }
+.jr-pin[data-at="4"] .rk-sign{ opacity:1; transform:none }.jr-pin[data-at="5"] .rk-sign{ opacity:1; transform:none }.jr-pin[data-at="6"] .rk-sign{ opacity:1; transform:none }
+.jr-pin[data-at="4"] .j-girl{ transform:translateY(-150px); transition:transform 1.1s cubic-bezier(.6,0,.8,.4) .1s }
+.jr-pin[data-at="5"] .j-girlwin{ opacity:0; transition:none }.jr-pin[data-at="6"] .j-girlwin{ opacity:0; transition:none }
+.jr-pin[data-at="3"] .w1 .arm{ animation:tool 1.1s ease-in-out infinite }.jr-pin[data-at="3"] .w2 .hand{ animation:wave 1.6s ease-in-out infinite }.jr-pin[data-at="3"] .wv .gear{ animation:crank 2.4s ease-in-out infinite }.jr-pin[data-at="3"] .w4 .gear{ animation-duration:2.9s; animation-delay:-1s }.jr-pin[data-at="3"] .wv .hands{ animation:grip 1.2s ease-in-out infinite }
+.jr-pin[data-at="3"] .t3{ opacity:1; pointer-events:auto; transition:opacity .1s }
+.jr-pin[data-at="3"] .t3 > *{ animation:jRise 1s cubic-bezier(.2,.8,.2,1) both }.jr-pin[data-at="3"] .t3 > :nth-child(1){ animation-delay:1.20s }.jr-pin[data-at="3"] .t3 > :nth-child(2){ animation-delay:1.34s }.jr-pin[data-at="3"] .t3 > :nth-child(3){ animation-delay:1.48s }.jr-pin[data-at="3"] .t3 > :nth-child(4){ animation-delay:1.62s }
+.jr-pin[data-at="3"] .t3 .jt-go{ animation:jRight .9s cubic-bezier(.2,.8,.2,1) 2.1s both }
+.jr-pin[data-at="4"] .j-world{ opacity:1; transform:translate(144px,123px) scale(0.85); transition:transform 1.4s cubic-bezier(.45,0,.2,1) }
+.jr-pin[data-at="4"] .j-rocket{ opacity:1; transform:translate(574.1px,146px) scale(0.85); transition:transform 1.4s cubic-bezier(.45,0,.2,1) }
+.jr-pin[data-at="4"] .j-world > *{ opacity:1 }
+.jr-pin[data-at="4"] .j-palms,.jr-pin[data-at="4"] .j-ground{ transform:translateX(calc((var(--vl) * 1px - 144px) / .85 + 39px)); transition:transform 1.4s cubic-bezier(.45,0,.2,1), opacity .4s }
+.jr-pin[data-at="5"] .j-palms,.jr-pin[data-at="5"] .j-ground{ transform:translateX(calc(var(--vl) * 2px - 921px)); transition:transform 1.9s cubic-bezier(.5,0,.2,1) }
+.jr-pin[data-at="5"] .j-tower{ transform:translateX(calc(var(--vr) * 2px - 2009px)); transition:transform 1.9s cubic-bezier(.5,0,.2,1) }
+.jr-pin[data-at="4"] .rk4{ opacity:1 }
+.jr-pin[data-at="4"] .sk5{ opacity:1; transition:opacity 1.2s ease }
+.jr-pin[data-at="4"] .w1{ opacity:0; transform:scale(0); transition:transform .9s cubic-bezier(.5,0,.75,0) 0s, opacity .4s ease 0.55s }
+.jr-pin[data-at="4"] .w2{ opacity:0; transform:scale(0); transition:transform .9s cubic-bezier(.5,0,.75,0) 0.25s, opacity .4s ease 0.80s }
+.jr-pin[data-at="4"] .w3{ opacity:0; transform:scale(0); transition:transform .9s cubic-bezier(.5,0,.75,0) 0.1s, opacity .4s ease 0.65s }
+.jr-pin[data-at="4"] .w4{ opacity:0; transform:scale(0); transition:transform .9s cubic-bezier(.5,0,.75,0) 0.35s, opacity .4s ease 0.90s }
+.jr-pin[data-at="4"] .j-tower{ transform:translateX(90px); transition:transform 1.3s cubic-bezier(.5,0,.3,1) 2.2s; animation:vib .09s linear .4s 20 }
+.jr-pin[data-at="4"] .jet{ opacity:1; transform:scaleY(.3); --j1:#fff6c8; --j2:#ffb22e; --j3:rgba(255,95,25,.6); --jw:18%; transition:transform .6s cubic-bezier(.2,1.4,.4,1) 1.1s, opacity .2s ease 1.1s }
+.jr-pin[data-at="4"] .j-shake{ animation:rshake .07s linear 1.1s infinite }
+.jr-pin[data-at="4"] .j-lift{ transform:translateY(-110px); transition:transform 3.2s cubic-bezier(.6,0,.5,1) 2.2s }
+.jr-pin[data-at="4"] .j-cl5t{ transform:none; transition:transform 2s cubic-bezier(.2,.7,.25,1) .3s }
+.jr-pin[data-at="4"] .j-cl5b{ transform:none; transition:transform 1.8s cubic-bezier(.15,.8,.25,1) 1.2s }
+.jr-pin[data-at="4"] .t4{ opacity:1; pointer-events:auto; transition:opacity .1s }
+.jr-pin[data-at="4"] .t4 > *{ animation:jIn 1s ease both }.jr-pin[data-at="4"] .t4 > :nth-child(1){ animation-delay:0.60s }.jr-pin[data-at="4"] .t4 > :nth-child(2){ animation-delay:0.75s }.jr-pin[data-at="4"] .t4 > :nth-child(3){ animation-delay:0.90s }.jr-pin[data-at="4"] .t4 > :nth-child(4){ animation-delay:1.05s }
+.jr-pin[data-at="4"] .t4 .jt-go{ animation:jPop .9s linear 1.9s both }
+.jr-pin[data-at="5"] .j-world{ opacity:1; transform:translate(480px,1000px) scale(0.5); transition:transform 1.9s cubic-bezier(.5,0,.2,1) }
+.jr-pin[data-at="5"] .j-world > *{ opacity:1 }
+.jr-pin[data-at="5"] .wk{ opacity:0; transform:scale(0); transition:none }.jr-pin[data-at="6"] .wk{ opacity:0; transform:scale(0); transition:none }
+.jr-pin[data-at="5"] .j-rocket{ opacity:1; transform:translate(726px,268.6px) scale(0.3508); transition:transform 1.9s cubic-bezier(.5,0,.2,1) }
+.jr-pin[data-at="5"] .rk4{ opacity:1 }.jr-pin[data-at="5"] .j-lift{ transform:translateY(-110px) }
+.jr-pin[data-at="5"] .jet{ opacity:1; transform:none; --j1:#fffbe0; --j2:#ffd84a; --j3:rgba(255,170,60,.5); --jw:0%; transition:transform .7s cubic-bezier(.2,.8,.3,1), --j1 2s ease, --j2 2s ease, --j3 2s ease, --jw 2s ease }
+.jr-pin[data-at="5"] .j-shake{ animation:rshake .09s linear infinite }
+.jr-pin[data-at="5"] .sk6{ opacity:1; transition:opacity 1.8s ease .2s }
+.jr-pin[data-at="5"] .j-cl5b{ transform:translateY(900px); transition:transform 1.6s cubic-bezier(.5,0,.3,1) }
+.jr-pin[data-at="5"] .j-cl5t{ transform:translateY(1100px); transition:transform 1.6s cubic-bezier(.5,0,.3,1) }
+.jr-pin[data-at="5"] .c6v.front{ animation:sway 16s ease-in-out infinite }
+.jr-pin[data-at="5"] .c6v.front .c0{ animation:puff 4.2s ease-in-out 0.0s infinite }
+.jr-pin[data-at="5"] .c6v.back .c0{ animation:rise 9.0s ease-in-out 0.0s infinite }
+.jr-pin[data-at="5"] .c6v.front .c1{ animation:puff 5.6s ease-in-out -0.9s infinite }
+.jr-pin[data-at="5"] .c6v.back .c1{ animation:rise 14.5s ease-in-out -1.7s infinite }
+.jr-pin[data-at="5"] .c6v.front .c2{ animation:puff 7.0s ease-in-out -1.8s infinite }
+.jr-pin[data-at="5"] .c6v.back .c2{ animation:rise 12.3s ease-in-out -3.4s infinite }
+.jr-pin[data-at="5"] .c6v.front .c3{ animation:puff 4.9s ease-in-out -2.7s infinite }
+.jr-pin[data-at="5"] .c6v.back .c3{ animation:rise 10.1s ease-in-out -5.1s infinite }
+.jr-pin[data-at="5"] .c6v.front .c4{ animation:puff 6.3s ease-in-out -3.6s infinite }
+.jr-pin[data-at="5"] .c6v.back .c4{ animation:rise 15.6s ease-in-out -6.8s infinite }
+.jr-pin[data-at="5"] .c6v.front .c5{ animation:puff 4.2s ease-in-out -4.5s infinite }
+.jr-pin[data-at="5"] .c6v.back .c5{ animation:rise 13.4s ease-in-out -8.5s infinite }
+.jr-pin[data-at="5"] .c6v.front .c6{ animation:puff 5.6s ease-in-out -5.4s infinite }
+.jr-pin[data-at="5"] .c6v.back .c6{ animation:rise 11.2s ease-in-out -10.2s infinite }
+.jr-pin[data-at="5"] .c6v.front .c7{ animation:puff 7.0s ease-in-out -6.3s infinite }
+.jr-pin[data-at="5"] .c6v.back .c7{ animation:rise 9.0s ease-in-out -11.9s infinite }
+.jr-pin[data-at="5"] .c6v.front .c8{ animation:puff 4.9s ease-in-out -7.2s infinite }
+.jr-pin[data-at="5"] .c6v.back .c8{ animation:rise 14.5s ease-in-out -13.6s infinite }
+.jr-pin[data-at="5"] .c6v.front .c9{ animation:puff 6.3s ease-in-out -8.1s infinite }
+.jr-pin[data-at="5"] .c6v.back .c9{ animation:rise 12.3s ease-in-out -15.3s infinite }
+.jr-pin[data-at="5"] .c6v.front .c10{ animation:puff 4.2s ease-in-out -9.0s infinite }
+.jr-pin[data-at="5"] .c6v.back .c10{ animation:rise 10.1s ease-in-out -17.0s infinite }
+.jr-pin[data-at="5"] .c6v.front .c11{ animation:puff 5.6s ease-in-out -9.9s infinite }
+.jr-pin[data-at="5"] .c6v.back .c11{ animation:rise 15.6s ease-in-out -18.7s infinite }
+.jr-pin[data-at="5"] .c6v.front .c12{ animation:puff 7.0s ease-in-out -10.8s infinite }
+.jr-pin[data-at="5"] .c6v.back .c12{ animation:rise 13.4s ease-in-out -20.4s infinite }
+.jr-pin[data-at="5"] .c6v.front .c13{ animation:puff 4.9s ease-in-out -11.7s infinite }
+.jr-pin[data-at="5"] .c6v.back .c13{ animation:rise 11.2s ease-in-out -22.1s infinite }
+.jr-pin[data-at="5"] .c6v.front .c14{ animation:puff 6.3s ease-in-out -12.6s infinite }
+.jr-pin[data-at="5"] .c6v.back .c14{ animation:rise 9.0s ease-in-out -23.8s infinite }
+.jr-pin[data-at="5"] .j-cl6{ transform:none; transition:transform 1.8s cubic-bezier(.15,.8,.25,1) .7s }
+.jr-pin[data-at="5"] .jr-stars{ opacity:.4; transition:opacity 2s ease 1s }
+.jr-pin[data-at="5"] .t5{ opacity:1; pointer-events:auto; transition:opacity .1s }
+.jr-pin[data-at="5"] .t5 > *{ animation:jRight 1s cubic-bezier(.2,.8,.2,1) both }.jr-pin[data-at="5"] .t5 > :nth-child(1){ animation-delay:0.90s }.jr-pin[data-at="5"] .t5 > :nth-child(2){ animation-delay:1.04s }.jr-pin[data-at="5"] .t5 > :nth-child(3){ animation-delay:1.18s }
+.jr-pin[data-at="5"] .t5 .jt-go{ animation:jUp .9s cubic-bezier(.2,.8,.2,1) 2.4s both }
+.jr-pin[data-at="6"] .j-rocket{ opacity:1; transform:translate(1128px,245.8px) scale(0.316); transition:transform 2s cubic-bezier(.5,0,.2,1) }
+.jr-pin[data-at="6"] .rk4{ opacity:1 }
+.jr-pin[data-at="6"] .j-lift{ transform:translateY(-344px); transition:transform 55s cubic-bezier(.3,0,.6,1) .5s }
+.jr-pin[data-at="6"] .sk-deep{ opacity:1; transition:opacity 29s ease-in-out .5s }
+.jr-pin[data-at="6"] .jet{ opacity:1; transform:scaleY(.64); --j1:#d8fffb; --j2:#3fe3ea; --j3:rgba(40,110,255,.5); --jw:24%; transition:transform 2s ease, --j1 2.4s ease, --j2 2.4s ease, --j3 2.4s ease, --jw 2.4s ease }
+.jr-pin[data-at="6"] .j-world{ opacity:0; transform:translate(480px,1600px) scale(0.5); transition:transform 1.6s ease, opacity .8s ease .8s }
+.jr-pin[data-at="6"] .sk7{ opacity:1; transition:opacity 2s ease }
+.jr-pin[data-at="6"] .j-cl6{ transform:translateY(720px); transition:transform 1.6s cubic-bezier(.5,0,.3,1) }
+.jr-pin[data-at="6"] .j-moon{ opacity:1; transform:none; translate:0 90px; transition:opacity 2s ease .3s, transform 5s cubic-bezier(.2,.6,.2,1) .3s, translate 60s linear 5.3s }
+.jr-pin[data-at="6"] .jr-stars{ opacity:1; transition:opacity 2.4s ease }
+.jr-pin[data-at="6"] .t6{ opacity:1; pointer-events:auto; transition:opacity .1s }
+.jr-pin[data-at="6"] .t6 .jt-eb{ animation:jIn 1s ease 1s both }.jr-pin[data-at="6"] .t6 .jt-rule{ animation:jIn 1s ease 2.4s both }.jr-pin[data-at="6"] .t6 .jt-p{ animation:jRise 1s cubic-bezier(.2,.8,.2,1) 2.6s both }
+.jr-pin[data-at="6"] .gc{ animation:jLand .9s cubic-bezier(.2,.9,.25,1) both; animation-delay:calc(1.3s + var(--i) * .045s) }
+.jr-pin[data-at="6"] .gc::after{ animation:jGlint .7s ease-out both; animation-delay:calc(1.65s + var(--i) * .045s) }
+.jr-pin[data-at="6"] .t6 .jt-h{ animation:jSweep 4.5s ease-in-out 3.4s infinite }
+.jr-pin[data-at="6"] .t6 .jt-go{ animation:jGrow 1s cubic-bezier(.3,0,.3,1) 3.3s both }
+.jr-pin[data-at="2"] .sk3{ opacity:1 }
+.jr-pin[data-at="3"] .sk3{ opacity:1 }
+.jr-pin[data-at="4"] .sk3{ opacity:1 }
+.jr-pin[data-at="5"] .sk3{ opacity:1 }
+.jr-pin[data-at="6"] .sk3{ opacity:1 }
+.jr-pin[data-at="3"] .sk4{ opacity:1 }
+.jr-pin[data-at="4"] .sk4{ opacity:1 }
+.jr-pin[data-at="5"] .sk4{ opacity:1 }
+.jr-pin[data-at="6"] .sk4{ opacity:1 }
+.jr-pin[data-at="4"] .sk5{ opacity:1 }
+.jr-pin[data-at="5"] .sk5{ opacity:1 }
+.jr-pin[data-at="6"] .sk5{ opacity:1 }
+.jr-pin[data-at="5"] .sk6{ opacity:1 }
+.jr-pin[data-at="6"] .sk6{ opacity:1 }
+.jr-pin[data-at="6"] .sk7{ opacity:1 }
+/* the skies' order, and the light and dark of the dots */
+@media (prefers-reduced-motion:reduce){ .jr-pin *{ transition-duration:.01s !important; transition-delay:0s !important } }
+
+/* ---- PHONE TYPE: a phone that enlarges text (an accessibility setting) gets it scaled back,
+   and headings and buttons fit themselves to their line (see fitType below) */
+@media (max-width:820px){
+  .say > *,.acts,.jmt > *{ zoom:var(--tz,1) }
+  /* THE HERO, his Hero mobile: the globe hangs overhead, its light raining down; the red pin
+     below it with its beam straight up; then a calm, centred stack of words; two buttons
+     two-thirds wide, after a pause */
+  .stage{ height:auto; min-height:100vh; min-height:100svh; background:linear-gradient(180deg,#000f3e 0%,#000f3e 33.8%,#001143 50.6%,#001a5a 67.5%,#002575 84.4%,#00287d 100%) }
+  .stage-in{ position:relative; min-height:100vh; min-height:100svh; padding:70.6vw 0 10svh !important; box-sizing:border-box; justify-content:flex-start }
+  .earth,.beam{ display:none !important }
+  .m-globe{ display:block !important; position:absolute; left:0; top:0; width:100%; height:auto; -webkit-mask:linear-gradient(#000 88%,transparent); mask:linear-gradient(#000 88%,transparent); z-index:0; pointer-events:none }
+  .m-fx{ display:block !important; position:absolute; left:0; top:0; width:100%; height:70vw; z-index:1; pointer-events:none; mix-blend-mode:screen }
+  .m-spark{ display:block !important; position:absolute; left:72.6%; top:20vw; width:3px; height:26px; margin-left:-1.5px; z-index:1; border-radius:2px; pointer-events:none;
+    background:linear-gradient(180deg,rgba(255,80,130,0),#fff 60%,rgba(255,80,130,.8)); filter:drop-shadow(0 0 4px #ff2a6a); opacity:0; animation:mSpark 3.2s cubic-bezier(.5,0,.3,1) 2.2s infinite }
+  @keyframes mSpark{ 0%{ top:60vw; opacity:0 } 10%{ opacity:1 } 45%{ top:18vw; opacity:1 } 55%,100%{ top:16vw; opacity:0 } }
+  .run .m-globe{ animation:heroDrop 1.6s cubic-bezier(.16,.84,.24,1) .15s both, glow 5s ease-in-out 1.8s infinite }
+  .m-globe{ animation-name:heroDrop,mGlow !important }
+  @keyframes mGlow{ 50%{ filter:brightness(1.22) saturate(1.15) drop-shadow(0 0 12px rgba(60,150,255,.55)) } }
+  @keyframes heroDrop{ from{ opacity:0; transform:translateY(-14%) } }
+  .pin{ display:block !important; left:72.6% !important; top:62.2vw !important; width:11px !important; height:11px !important; z-index:1; background:transparent !important; box-shadow:none !important }
+  .run .pin{ animation:pinIn .5s cubic-bezier(.3,1.6,.5,1) 1.4s both !important }
+  .say,.acts{ position:relative !important; left:auto !important; top:auto !important; z-index:2 }
+  .say{ width:90%; max-width:420px; margin:0 auto }
+  .eyebrow{ font-size:11.3px; letter-spacing:.22em; line-height:1.45; white-space:normal }
+  .eyebrow .dotsep{ display:block; height:0; overflow:hidden }
+  .stage h1{ margin-top:14px; line-height:1 }
+  .stage h1 .l1,.stage h1 .l2{ display:inline !important; font-size:min(31px,7.4vw) !important; font-weight:900; letter-spacing:-.005em; opacity:1 }
+  .stage h1 .l2{ margin-left:.24em }
+  .stage h1 .l3{ display:block; margin-top:4px; font-size:min(49px,11.7vw) !important; white-space:nowrap }
+  .lede{ margin-top:26px; font-size:min(18px,4.3vw); line-height:1.22; font-weight:600 }
+  .para{ margin:8px auto 0; max-width:340px; font-size:min(17.6px,4.2vw); line-height:1.2; color:#fff }
+  .acts{ width:66%; max-width:300px; margin:auto auto 0; padding-top:44px; gap:12px }
+  .btn{ height:46px; padding:0 14px; font-size:min(14px,3.4vw); letter-spacing:.03em; white-space:nowrap; border-radius:7px }
+  .btn--ghost{ height:44px }
+}
+/* ---- PHONES: the scene stays pinned. The step's words sit in a band at the top,
+   and the animation plays underneath, panning to whatever matters in each step */
+.jm{ display:none }
+.jr-mt{ display:none }
+@media (max-width:820px){
+  .jr-pin{ height:100vh; height:100svh }
+  .jr-stage{ left:0; top:0; transform-origin:0 0; transition:transform 1.1s cubic-bezier(.5,0,.2,1) }
+  .jr-stage .jt{ display:none }
+  .jr-mt{ display:block; position:absolute; left:0; right:0; top:0; bottom:0; z-index:4; padding:16px 18px 0 30px; font-family:var(--display); pointer-events:none }
+  .jmt{ position:absolute; left:5%; right:5%; top:16px; text-align:center; opacity:0; transform:translateY(12px); transition:opacity .35s ease, transform .5s ease; color:#fff }
+  .jmt .jt-eb{ font-size:13px; margin:0 0 4px } .jmt .jt-h{ margin:0; white-space:normal; font-size:21px; font-weight:800; line-height:1.12; text-transform:uppercase }
+  .jmt .jt-rule{ display:block; width:160px; height:2px; margin:8px auto 10px } .jmt .jt-p{ font-size:13.5px; line-height:1.45 } .jmt .jt-p p{ margin:0 }
+  .jmt .jt-go{ margin:12px 0 0 } .jmt .jt-go a{ min-width:0; height:40px; font-size:14px; padding:0 22px }
+  .jr-pin[data-at="-1"] .jc,.jr-pin[data-at="0"] .jc,.jr-pin[data-at="1"] .jc{ visibility:hidden }
+  .jmt.t0,.jmt.t1{ top:calc(var(--H,800px) * .325); bottom:calc(var(--H,800px) * .06); display:flex; flex-direction:column; align-items:center }
+  .jmt.t0 .jt-eb,.jmt.t1 .jt-eb{ font-size:min(18px,2.4vh); color:#ffb000; margin:0 0 6px }
+  .jmt.t0 .jt-h,.jmt.t1 .jt-h{ font-size:min(30px,4vh,7.3vw); line-height:1.08; white-space:nowrap }
+  .jmt.t0 .jt-rule,.jmt.t1 .jt-rule{ display:block; flex:none; width:min(307px,78%); height:1.5px; background:#ffb000 !important; margin:12px auto 14px }
+  .jmt.t0 .jt-p,.jmt.t1 .jt-p{ font-size:min(15px,2vh,3.65vw); line-height:1.45; max-width:344px }
+  .jmt.t0 .jt-go,.jmt.t1 .jt-go{ margin:18px 0 0 } .jmt.t0 .jt-go,.jmt.t1 .jt-go{ padding-top:14px } .jmt.t0 .jt-go a,.jmt.t1 .jt-go a{ height:41px; padding:0 min(30px,6vw); white-space:nowrap; font-size:min(16px,3.9vw); background:#ffb000; color:#1a1200; border-radius:8px; box-shadow:0 0 18px rgba(255,176,0,.35) }
+  .jr-pin[data-at="1"] .j-bulb{ opacity:0 !important }
+  /* his Mobile 3: words on the big cloud - heading, rule and button to the left, the body centred */
+  .jmt.t2,.jmt.t3{ left:5%; right:5%; text-align:left; color:#000 }
+  .jmt.t2{ top:calc(var(--H,800px) * .161) } .jmt.t3{ top:calc(var(--H,800px) * .056) }
+  .jmt.t2 .jt-eb,.jmt.t3 .jt-eb{ font-size:min(16px,2.2vh); color:#006cce !important; margin:0 0 4px }
+  .jmt.t2 .jt-h,.jmt.t3 .jt-h{ font-size:min(28.6px,3.8vh,7vw); line-height:1.1 } .jmt.t2 .jt-h{ white-space:nowrap; font-size:min(28.6px,3.8vh,6.55vw) }
+  .jmt.t2 .jt-rule{ width:100%; height:2px; background:#0d5bb5; margin:10px 0 14px } .jmt.t3 .jt-rule{ width:52%; height:1px; background:#0d5bb5; margin:12px 0 18px }
+  .jmt.t2 .jt-p,.jmt.t3 .jt-p{ text-align:center; font-size:min(15px,2vh,3.65vw); line-height:1.6 }
+  .jmt.t2 .jt-go{ margin:20px 0 0 } .jmt.t2 .jt-go a{ height:41px; min-width:227px; font-size:16px; background:#00287d; border-radius:8px }
+  /* his Mobile 4: a big centred button */
+  .jmt.t3 .jt-go{ margin:22px 0 0; text-align:center } .jmt.t3 .jt-go a{ height:52px; min-width:min(287px,78vw); font-size:min(21px,5vw); border-radius:8px; background:#fff; color:#000 }
+  .jr-pin[data-at="2"] .jr-mt::before{ opacity:0 !important }
+  /* phones: the cloud bank waits until we are out of the window, then drifts in */
+  .jr-pin[data-at="2"] .j-cl3b{ transition:opacity 1s ease !important } .jr-pin.zooming .j-cl3b{ opacity:0 !important; transition:none !important }
+  .jr-pin.zooming .jmt.t2{ opacity:0 !important; transition:none !important }
+  /* his Mobile 5-7 */
+  .jmt.t4,.jmt.t5,.jmt.t6{ left:5%; right:5%; text-align:left; top:calc(var(--H,800px) * .056) }
+  .jmt.t6{ top:calc(var(--H,800px) * .357) }
+  .jmt.t4 .jt-eb,.jmt.t5 .jt-eb,.jmt.t6 .jt-eb{ font-size:min(16px,2.2vh); color:#3d9bff !important; margin:0 0 4px } .jmt.t4 .jt-eb{ color:#006cce !important }
+  .jmt.t4 .jt-h,.jmt.t5 .jt-h,.jmt.t6 .jt-h{ font-size:min(28.6px,3.8vh,7vw); line-height:1.1 }
+  .jmt.t4 .jt-rule,.jmt.t5 .jt-rule,.jmt.t6 .jt-rule{ width:52%; height:1px; background:#2a6fd6; margin:12px 0 18px }
+  .jmt.t4 .jt-p,.jmt.t5 .jt-p,.jmt.t6 .jt-p{ text-align:center; font-size:min(15px,2vh,3.65vw); line-height:1.6 }
+  .jmt.t4 .jt-go,.jmt.t5 .jt-go,.jmt.t6 .jt-go{ margin:22px 0 0; text-align:center } .jmt.t4 .jt-go a,.jmt.t5 .jt-go a,.jmt.t6 .jt-go a{ height:52px; min-width:min(287px,78vw); font-size:min(21px,5vw); border-radius:8px; background:#fff; color:#000 }
+  .jmt.t4 .jt-h,.jmt.t5 .jt-h{ white-space:nowrap; font-size:min(26px,3.5vh,6.3vw) }
+  .jmt.t4 .jt-p,.jmt.t5 .jt-p,.jmt.t6 .jt-p{ line-height:1.5 } .jmt.t4 .jt-go,.jmt.t5 .jt-go,.jmt.t6 .jt-go{ margin-top:16px }
+  /* on a phone the space climb is short and done on arrival, so the rocket sits above the words */
+  .jr-pin[data-at="6"] .j-lift{ transform:translateY(-110px) !important; transition:none !important }
+  .jr-pin[data-at="6"] .j-rocket{ transform:translate(726px,268.6px) scale(0.3508) !important; transition:none !important }
+  .jr-pin[data-at="5"] .jmt.t5{ transition-duration:.3s !important }
+  .jr-pin[data-at="6"] .jmt.t6{ transition-delay:1.1s !important }
+  .jmt .jt-p{ font-size:min(16px,2.3vh,4vw) !important; line-height:1.55 !important; max-width:340px; margin-left:auto; margin-right:auto }
+  /* scene 06: the rocket and moon take the top half, the payoff and the one button the rest */
+  .jmt.t0,.jmt.t1{ top:calc(var(--H,800px) * .62) !important; bottom:auto !important }
+  .jmt.t3,.jmt.t4,.jmt.t5{ top:calc(var(--H,800px) * .15) !important }
+  .jmt.t2{ top:calc(var(--H,800px) * .2) !important }
+  .jr-pin[data-at="6"] .jet{ transform:scaleY(.17) !important }
+  .jmt.t6{ top:calc(var(--H,800px) * .47) !important }
+  /* phones: every title, eyebrow and paragraph centred; rules centred under them */
+  .jr-mt .jmt{ text-align:center !important } .jr-mt .jmt .jt-rule{ margin-left:auto !important; margin-right:auto !important }
+  .jr-mt .jmt .jt-p{ font-size:min(18px,2.6vh,4.6vw) !important }
+  /* every step has its button again, a quiet one; the last stays the loud one */
+  .jr-mt .jmt .jt-go{ margin-top:16px !important; text-align:center } .jr-mt .jmt .jt-go a{ height:46px !important; min-width:66% !important; padding:0 24px !important; font-size:min(14px,3.5vw) !important; border-radius:8px !important; box-shadow:none !important }
+  .jmt.t3,.jmt.t4,.jmt.t5{ top:calc(var(--H,800px) * .1) !important } .jmt.t6 .jt-go{ text-align:center } .jmt.t6 .jt-big{ text-align:center }
+
+  .jmt.t6 .jt-go{ margin-top:22px }
+  .jmt.t6 .jt-big{ display:block; margin-top:14px; font-size:min(15px,2.1vh) !important; letter-spacing:.14em }
+  .jmt.t6 .jt-big{ text-align:center; font-size:min(17px,2.3vh) }
+  .jr-mt::before{ display:none }
+  .jr-pin[data-at="2"] .j-cl3a{ visibility:hidden }
+  .jmt.t3,.jmt.t4{ color:#0b1f3f } .jmt.t2 .jt-eb{ color:#9fd2ff }
+  /* a soft band of the step's own sky behind the words, so the art can run up under them */
+  .jr-mt::before{ content:""; position:absolute; left:0; right:0; top:0; height:calc(var(--tp,300px) + 40px); opacity:0; transition:opacity .8s ease, background .8s ease;
+    background:linear-gradient(180deg,var(--band,#000) 0%,var(--band,#000) calc(100% - 70px),rgba(0,0,0,0) 100%) }
+  .jr-pin[data-at="2"] .jr-mt::before{ --band:#0a49b9; opacity:.94; transition-delay:1.2s }
+  .jr-pin[data-at="0"] .jr-mt::before,.jr-pin[data-at="1"] .jr-mt::before{ opacity:0 }
+  .jr-dots,.w-dots{ display:none !important } .jr-dots{ left:6px; gap:9px } .jr-dots button{ width:8px; height:8px; border-width:1.5px } .jr-dots button.on{ height:22px }
+}
+.jr-pin[data-at="0"] .jmt.t0,.jr-pin[data-at="-1"] .jmt.t0{ opacity:1; transform:none; pointer-events:auto; transition:opacity .6s ease 0.5s, transform .7s ease 0.5s }
+.jr-pin[data-at="1"] .jmt.t1{ opacity:1; transform:none; pointer-events:auto; transition:opacity .6s ease 0.5s, transform .7s ease 0.5s }
+.jr-pin[data-at="2"] .jmt.t2{ opacity:1; transform:none; pointer-events:auto; transition:opacity .6s ease 1.6s, transform .7s ease 1.6s }
+.jr-pin[data-at="3"] .jmt.t3{ opacity:1; transform:none; pointer-events:auto; transition:opacity .6s ease 0.5s, transform .7s ease 0.5s }
+.jr-pin[data-at="4"] .jmt.t4{ opacity:1; transform:none; pointer-events:auto; transition:opacity .6s ease 0.5s, transform .7s ease 0.5s }
+.jr-pin[data-at="5"] .jmt.t5{ opacity:1; transform:none; pointer-events:auto; transition:opacity .6s ease 0.5s, transform .7s ease 0.5s }
+.jr-pin[data-at="6"] .jmt.t6{ opacity:1; transform:none; pointer-events:auto; transition:opacity .6s ease 0.5s, transform .7s ease 0.5s }
+.jr-pin[data-at="-1"] .jmt.t0{ transition:none }
+.jm-p{ position:relative; padding:0 0 44px; overflow:hidden; font-family:var(--display) }
+.jm-p img{ display:block; width:100%; height:auto; max-height:72vh; object-fit:cover }
+.jm-t{ color:#fff; padding:6px 22px 0; max-width:560px; margin:0 auto }
+.jm-t .jt-h{ font-size:clamp(22px,6.4vw,30px); white-space:normal }
+.jm-t .jt-rule{ width:100%; max-width:300px }
+.jm-t .jt-p{ font-size:16px }
+.jm-t .jt-go a{ height:52px; width:100%; max-width:340px; font-size:15px }
+.jm-p .jm-t > *{ opacity:0; transform:translateY(26px); transition:opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1) }
+.jm-p.in .jm-t > *{ opacity:1; transform:none }
+.jm-p.in .jm-t > :nth-child(2){ transition-delay:.12s } .jm-p.in .jm-t > :nth-child(3){ transition-delay:.2s }
+.jm-p.in .jm-t > :nth-child(4){ transition-delay:.28s } .jm-p.in .jm-t > :nth-child(5){ transition-delay:.5s }
+.jm-1 img{ filter:grayscale(1) brightness(.5); transition:filter .6s ease .3s; -webkit-mask:radial-gradient(closest-side,#000 70%,transparent); mask:radial-gradient(closest-side,#000 70%,transparent); max-width:420px; margin:0 auto }
+.jm-1.in img{ filter:none; animation:bulbOnM 1.2s linear .3s both }
+@keyframes bulbOnM{ 0%{ filter:grayscale(1) brightness(.5) } 12%{ filter:none } 18%{ filter:grayscale(1) brightness(.5) } 30%,100%{ filter:none } }
+.jm-p .t2,.jm-p .t3,.jm-p .t4{ color:#000 } .jm-3 .jt-eb{ color:#00307a }
+.jm-t.t0 .jt-go a{ background:#ffb000; color:#1a1200; box-shadow:0 0 22px rgba(255,176,0,.45) }
+.jm-6 img{ height:min(120vw,620px); object-fit:cover } .jm-7 img{ width:auto; max-width:100%; margin:0 auto }
+@media (prefers-reduced-motion:reduce){ .jm-p .jm-t > *{ opacity:1; transform:none } }
+
+
+/* ---- Q&A: the Social page's questions, in its own design ---- */
+.wq{ background:#fff; color:#0b1f3f; padding:clamp(56px,8vw,110px) 0; font-family:var(--display) }
+.wq-in,.wq-cta-in{ width:min(880px,90%); margin:0 auto }
+.wq-eb{ margin:0 0 .6em; font-size:.82rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:#0459bd }
+.wq h2{ margin:0 0 1.1em; font-size:clamp(1.7rem,3.6vw,2.4rem); font-weight:800; line-height:1.15; color:#0b1f3f }
+.wq .qa-item{ border-top:1px solid rgba(11,31,63,.16) }
+.wq .qa-item:last-of-type{ border-bottom:1px solid rgba(11,31,63,.16) }
+.wq summary{ list-style:none; cursor:pointer; display:flex; align-items:center; gap:16px; padding:1.15em 0 }
+.wq summary::-webkit-details-marker{ display:none }
+.wq summary::after{ content:"+"; margin-left:auto; flex:0 0 auto; font-size:1.6rem; font-weight:300; line-height:1; color:#0459bd; transition:transform .2s ease }
+.wq details[open] summary::after{ transform:rotate(45deg) }
+.wq summary h3{ margin:0; font-size:clamp(1.02rem,1.6vw,1.18rem); font-weight:700; line-height:1.35 }
+.wq details p{ margin:0 0 .8em; max-width:62ch; color:#27384f; font-weight:400; font-size:1rem; line-height:1.6 }
+.wq details p:last-child{ margin-bottom:1.4em }
+.wq summary:focus-visible{ outline:3px solid #0459bd; outline-offset:4px }
+.wq-cta{ background:linear-gradient(160deg,#0459bd 0%,#00287d 100%); color:#fff; text-align:center; padding:clamp(56px,8vw,100px) 0; font-family:var(--display) }
+.wq-cta h2{ margin:0 0 .4em; font-size:clamp(1.7rem,3.6vw,2.4rem); font-weight:800; text-transform:uppercase; color:#fff }
+.wq-cta p{ margin:0 auto 1.8em; max-width:36em; font-size:1.1rem; color:rgba(255,255,255,.9) }
+.wq-go{ display:inline-grid; place-items:center; min-width:min(300px,66vw); height:50px; padding:0 28px; box-sizing:border-box; border-radius:8px;
+  background:#ffc72c; color:#0b2247; font-weight:800; letter-spacing:.04em; text-transform:uppercase; text-decoration:none; transition:transform .2s ease, filter .2s ease }
+.wq-go:hover{ transform:translateY(-2px); filter:brightness(1.06) }
+.wq-go:focus-visible{ outline:3px solid #fff; outline-offset:3px }
+@media (prefers-reduced-motion:reduce){ .wq summary::after,.wq-go{ transition:none } }
+
+
+/* until the intro starts (web-design.js adds .run), the hero waits unseen - set in the head, so nothing flashes */
+.wd-intro .stage:not(.run) .say,.wd-intro .stage:not(.run) .acts,.wd-intro .stage:not(.run) .earth,.wd-intro .stage:not(.run) .m-globe{ opacity:0 }

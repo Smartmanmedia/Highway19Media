@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- THE WEBSITE DESIGN PAGE. His own design, not the service template: the body
+     is build/v2/web-design-body.html, its code web-design.css / web-design.js.
+     build_site.js fills the tokens from tools/services.js (slug website-design),
+     drops in the site's header and footer, and writes the structured data -
+     its FAQPage read from the questions on this page. -->
+<title>{{TITLE}}</title>
+<meta name="description" content="{{DESC}}">
+<link rel="canonical" href="https://highway19media.com/{{SLUG}}/">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="theme-color" content="#000321">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Highway 19 Media">
+<meta property="og:title" content="{{TITLE}}">
+<meta property="og:description" content="{{DESC}}">
+<meta property="og:url" content="https://highway19media.com/{{SLUG}}/">
+<meta property="og:image" content="https://highway19media.com/assets/v2/meta/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{TITLE}}">
+<meta name="twitter:description" content="{{DESC}}">
+<meta name="twitter:image" content="https://highway19media.com/assets/v2/meta/og.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/v2/meta/icon-32.png">
+<link rel="apple-touch-icon" href="../../assets/v2/meta/icon-180.png">
+<!-- the hero's globe is the first thing seen: fetch it before the stylesheets ask -->
+<link rel="preload" as="image" href="{{HERO_IMG}}">
+<link rel="stylesheet" href="section-fonts.css">
+<link rel="stylesheet" href="section-09.css">
+<link rel="stylesheet" href="header.css">
+<link rel="stylesheet" href="consent.css">
+<link rel="stylesheet" href="web-design.css">
+<!-- the hero's intro is set up before first paint, so its words never flash -->
+<script>if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("wd-intro")</script>
+<script type="application/ld+json">{{LD}}</script>
+</head>
+<body class="wd-page">
+<!--HEADER-->
+<main id="wd-main" tabindex="-1">
+<!--BODY-->
+</main>
+<!--FOOTER-->
+<script src="header.js" defer></script>
+<script src="consent.js" defer></script>
+<script src="web-design.js" defer></script>
+</body>
+</html>

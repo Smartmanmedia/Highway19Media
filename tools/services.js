@@ -22,111 +22,33 @@ const AREA =
 
 module.exports = [
   {
-    /* HIS OWN COPY, as he wrote it for this page (Sept 30, 2026). */
+    /* HIS DESIGN, ITS OWN PAGE (Oct 2026). The globe hero, the five-lane What We Do
+       scene, the seven-step journey from the idea to space and the Q&A - built as
+       build/v2/web-design-body.html (+ web-design.css/js). The build drops it into the
+       site shell; the entry here is what search engines, share cards and the
+       structured data say about it. Its questions are read from the page itself. */
     slug: 'website-design',
+    custom: 'web-design',
     og: 'meta/og-website-design-v1.jpg', ogAlt: 'Highway 19 Media - Website Design in Spring Hill, FL',
     label: 'Website Design',
     color: '#009245',
     icon: 'icon-webdesign.webp',
     title: 'Website Design in Spring Hill, FL | Highway 19 Media',
-    desc: 'Landing pages, complete websites and online stores for local businesses in Spring Hill and ' +
-          'across Tampa Bay. Landing pages from $699, full websites from about $2,000.',
-    eyebrow: 'Website design &middot; Spring Hill &amp; Tampa Bay',
+    desc: 'Custom websites for every budget in Spring Hill & Tampa Bay: landing pages from $699, business ' +
+          'sites from about $2,000, online stores and custom builds.',
     h1: 'Website Design in Spring Hill, FL',
-    tag: 'A better home for your business online.',
     lead: [
-      'From a simple landing page to a complete website or online store, we build professional ' +
-      'websites for local businesses in Spring Hill and across Tampa Bay.',
-      'No one-size-fits-all package. We figure out what your business actually needs, build it on ' +
-      'the right platform, and give you a site you&rsquo;re proud to send customers to.'
+      'We design custom, professional websites for every budget and scope - built to make a strong first ' +
+      'impression, explain what you do, and give customers a clear direction to your business.'
     ],
-    cta: 'Let&rsquo;s Build Your Site',
-    ctaH: 'Ready to get online?',
     serviceType: 'Website design',
-    offers: [['Landing page', 699], ['Full website', 2000]],
-    incH: 'What We Build',
-    included: [
-      ['Landing Pages', [
-        'Sometimes you don&rsquo;t need a giant website.',
-        'You need one professional place where people can see what you do, learn about your business, ' +
-        'contact you and find everything else online.',
-        'Landing pages start at $699 and can typically be live in about a week.']],
-      ['Full Websites', [
-        'Need more room?',
-        'We build complete multi-page websites for service businesses, contractors, professionals, ' +
-        'retailers and other local businesses.',
-        'Custom design, mobile optimization, forms, integrations and the technical setup are handled for you.',
-        'Full websites start around $2,000.']],
-      ['E-Commerce', [
-        'Ready to sell online?',
-        'We build online stores and product catalogs using Shopify, Magento and other platforms, with ' +
-        'the products, payments, shipping and integrations your business needs.']],
-      ['Get Found on Google &mdash; and Understood by AI', [
-        'A good website needs more than good looks.',
-        'We build the technical SEO and AEO foundations into the site so search engines and AI-powered ' +
-        'tools can better understand your business, your services and the areas you serve.']],
-      ['The Right Platform', [
-        'WordPress. Webflow. Shopify. Magento. Custom builds. Templates. AI-assisted development.',
-        'We&rsquo;re not tied to one platform.',
-        'We choose the tools based on what makes sense for your business, budget and what the website ' +
-        'actually needs to do.']],
-      ['Need Changes Later?', [
-        'Your business isn&rsquo;t going to stay exactly the same.',
-        'New service? New photos? Seasonal offer? Another page?',
-        'We can continue managing and updating the site after launch, so you don&rsquo;t have to hunt ' +
-        'down a developer every time something changes.']]
-    ],
-    band: { n: '25+', h: 'Years behind the screen.',
-            p: 'Websites have changed a lot. Good design, clear communication and knowing how to sell a ' +
-               'business haven&rsquo;t.' },
-    factsH: 'Websites That Fit the Business',
-    facts: [
-      ['From $699', 'Landing pages, typically live in about a week.'],
-      ['From about $2,000', 'Complete websites, typically a few weeks to a month depending on the project.'],
-      ['The keys are yours', 'Your website is built for your business. After the project and warranty ' +
-       'period are complete, you receive control of the site and its accounts.']
-    ],
-    steps: [
-      ['Show Us What You Have', [
-        'Send us your current website, Facebook page, logo, photos, videos &mdash; whatever exists.',
-        'Starting from scratch? That&rsquo;s okay too. We can help create the pieces you&rsquo;re missing.']],
-      ['Map the Route', [
-        'We&rsquo;ll talk about your business, what you need the website to accomplish and what makes ' +
-        'sense for your budget.',
-        'We can meet by video, face-to-face or grab a coffee somewhere local.']],
-      ['Design &amp; Build', [
-        'We plan the site around the people you&rsquo;re trying to reach, then design and build it on ' +
-        'the platform that makes sense for the job.',
-        'And because we also handle branding, photography, video and marketing, you don&rsquo;t have to ' +
-        'piece everything together between five different companies.']],
-      ['Launch', [
-        'We test it, connect everything, put the SEO foundations in place and get your new website on the road.',
-        'Need us afterward? We can keep managing and updating it too.']]
-    ],
-    areaH: 'Local to Spring Hill. Working Along US-19.',
-    area: [
-      'Highway 19 Media is based in Spring Hill and works with businesses throughout Hernando County ' +
-      'and down the US-19 corridor into the greater Tampa Bay area.',
-      '<span class="svc-towns">Spring Hill. Brooksville. Weeki Wachee. Hudson. Port Richey. New Port ' +
-      'Richey. Pinellas &mdash; and everywhere in between.</span>',
-      'We can come to your business, meet over coffee or jump on a video call.',
-      'And from the first conversation to the finished website, you have one local contact who knows ' +
-      'your project.',
-      '<a href="/contact/">Tell Us Where You Are &rarr;</a>'
-    ],
-    faq: [
-      { q: 'I’m a small business. Do I really need a website?', a: [
-        'Maybe. But you may not need a big website.',
-        'For some local businesses, one well-designed page is enough — a professional place where ' +
-        'customers can see what you do, contact you and find the rest of your business online.',
-        'That’s why we created our landing-page option starting at $699.',
-        'Think of it as your business’s entrance ramp to the web.'] },
-      { q: 'When should I get a full website instead?', from: 'When should I get my own website instead?' },
-      'How much does a full website cost?',
-      'What platforms can you build on?',
-      'How long does a website take?',
-      'What do I need to provide?',
-      'Who owns my website when it’s finished?'
+    offers: [['Landing page', 699], ['Business website', 2000]],
+    catalog: [
+      ['Landing Pages', 'A professional online address for a business, service or campaign: one simple place to learn, contact and order. From $699.'],
+      ['Business Websites', 'A complete online home with dedicated pages for services, work, company and customers. From about $2,000.'],
+      ['Online Stores', 'Products, payments, shipping and inventory on Shopify or WooCommerce, from a small product line to a complete store.'],
+      ['Artist & Portfolio Websites', 'Galleries, video, audio, projects, bio and contact for photographers, musicians, artists and creators.'],
+      ['Custom Web Builds', 'Bookings, memberships, directories, events, CRM integrations and custom tools.']
     ]
   },
   {

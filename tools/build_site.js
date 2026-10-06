@@ -57,6 +57,8 @@ if (!code.length) throw new Error('no local css/js found in page.html');
 if (!code.includes('legal.css')) code.push('legal.css');
 if (!code.includes('service.css')) code.push('service.css');
 if (!code.includes('service.js')) code.push('service.js');
+/* the Website Design page is his own design, with its own stylesheet and script */
+for (const f of ['web-design.css', 'web-design.js']) if (!code.includes(f)) code.push(f);
 /* ---------------------------------------------------------------------------
  * WHAT SHIPS IS THE CODE WITHOUT ITS PROSE. The sources are heavily commented
  * on purpose - that is where the reasoning lives - but a reader downloading the
@@ -117,6 +119,7 @@ const collect = txt => {
 code.forEach(f => collect(rd('build/v2/' + f)));
 collect(rd('build/v2/page.html'));
 collect(rd('build/v2/soon.html'));
+collect(rd('build/v2/web-design-body.html'));
 /* the share card is named only in absolute og:image URLs, which the walk above
    cannot see - and a card that 404s is the blank rectangle it was drawn to
    replace. */
@@ -313,7 +316,11 @@ const SERVICES = require('./services');
     const url = SITE + '/' + S.slug + '/';
     /* a question is the Q&A's own, by its wording - or { q, from, a }: shown
        as q, answered with a (paragraphs) or else with the Q&A's answer to from */
-    const faq = S.faq.map(item => {
+    /* a page of his own design (S.custom) carries its questions in its body:
+       read them from there, so the structured data says exactly what the page shows */
+    const body = S.custom ? rd('build/v2/' + S.custom + '-body.html') : '';
+    const faq = S.custom ? [...body.matchAll(/<summary><h3[^>]*>([\s\S]*?)<\/h3><\/summary><div[^>]*>([\s\S]*?)<\/div><\/details>/g)]
+      .map(m => [m[1], [...m[2].matchAll(/<p>([\s\S]*?)<\/p>/g)].map(p => p[1])]) : S.faq.map(item => {
       const it = typeof item === 'string' ? { q: item } : item;
       const src = it.from || it.q;
       if (!it.a && !answers[src]) throw new Error(S.slug + ': the Q&A has no question "' + src + '"');
@@ -343,6 +350,30 @@ const SERVICES = require('./services');
           '@type': 'Question', name: plain(q), acceptedAnswer: { '@type': 'Answer', text: plain(a.join(' ')) } })) }
       ]
     };
+    if (S.custom) {
+      if (!faq.length) throw new Error(S.slug + ': no questions found on the page');
+      const hero = (body.match(/id="earth-img"[^>]*|<img src="(\.\.\/\.\.\/assets\/[^"]+)" alt="" id="earth-img"/) || [])[1];
+      let page = rd('build/v2/' + S.custom + '.html')
+        .replace('<!--BODY-->', () => body.trimEnd())
+        .replace('<!--HEADER-->', () => HEADER_FOR('/', '/contact/')
+          .replace('class="skip" href="#top"', 'class="skip" href="#wd-main"'))
+        .replace('<!--FOOTER-->', () => FOOTER_FOR('/contact/'))
+        .replace(/\{\{TITLE\}\}/g, esc(S.title))
+        .replace(/\{\{DESC\}\}/g, esc(S.desc))
+        .replace(/\{\{SLUG\}\}/g, S.slug)
+        .replace('{{HERO_IMG}}', hero || '')
+        .replace('{{LD}}', () => JSON.stringify(ld))
+        .replace(/(?:href|src)="((?:section-fonts|section-09|header|consent|web-design)\.css|(?:header|consent|web-design)\.js)"/g,
+                 (m, f) => m.replace('"' + f + '"', '"' + codeHref(f) + '"'))
+        .replace(/\.\.\/\.\.\/assets\//g, '/assets/')
+        .replace(/\{\{ROOT\}\}/g, '/');
+      if (!hero) page = page.replace(/<link rel="preload" as="image" href="">\n?/, '');
+      if (S.og) page = page.replace(/https:\/\/highway19media\.com\/assets\/v2\/meta\/og\.jpg/g, SITE + '/assets/v2/' + S.og)
+        .replace(/(<meta property="og:image:height" content="630">)/, '$1\n<meta property="og:image:alt" content="' + esc(S.ogAlt || S.title) + '">');
+      if (/\{\{[A-Z_]+\}\}/.test(page)) throw new Error(S.slug + ': unfilled token');
+      wr(S.slug + '/index.html', minifyHtml(page));
+      continue;
+    }
     const others = SERVICES.filter(o => o !== S).map(o => ({ href: '/' + o.slug + '/', label: o.label, c: o.color }))
       .concat([{ href: '/video-production/', label: 'Video Production', c: '#662d91' },
                { href: '/faq/', label: 'FAQ', c: '#0b1f3f' }]);
