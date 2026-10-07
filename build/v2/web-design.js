@@ -276,9 +276,9 @@ run();
 
 
 (function () {
-  var sec = document.getElementById('jr'), pin = sec.querySelector('.jr-pin'), stage = document.getElementById('jr-stage'), N = 7, cur = -2;
+  var sec = document.getElementById('jr'), pin = sec.querySelector('.jr-pin'), stage = document.getElementById('jr-stage'), N = 8, cur = -2;
   var narrowQ = matchMedia('(max-width:820px)'), still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var dotbar = sec.querySelector('.jr-dots'), dots = [].slice.call(dotbar.children), DARK = [0, 0, 1, 1, 1, 0, 0];
+  var dotbar = sec.querySelector('.jr-dots'), dots = [].slice.call(dotbar.children), DARK = [0, 0, 1, 1, 1, 0, 0, 0];
   var blocks = [].slice.call(sec.querySelectorAll('.jt'));
   function sizeSec() { sec.style.height = (100 + (N - 0.5) * 100) + 'vh'; }
   sizeSec(); narrowQ.addEventListener && narrowQ.addEventListener('change', sizeSec);
@@ -400,7 +400,8 @@ run();
     var zooming = k === 2 && cur < 2 && cur >= -1;
     if (narrowQ.matches) { var prev = cur; cur = k; stage.style.transition = zooming ? 'none' : ''; fit(true); cur = prev; void stage.offsetWidth; stage.style.transition = ''; }
     zoom(zooming);
-    pin.classList.toggle('rev', k < cur); cur = k; pin.setAttribute('data-at', k);
+    pin.classList.toggle('rev', k < cur); cur = k; pin.setAttribute('data-at', Math.min(k, 6)); pin.classList.toggle('up', k === 7);
+    var fm = document.getElementById('wd-form'); if (fm) fm.toggleAttribute('inert', k !== 7);
     chalkOn(k === 1); drift = k === 5 ? .006 : .011; last = 0; starsOn(k >= 5);
     blocks.forEach(function (b, i) { b.querySelectorAll('a').forEach(function (a) { if (i === k) a.removeAttribute('tabindex'); else a.setAttribute('tabindex', '-1'); }); });
     dots.forEach(function (d, i) { d.classList.toggle('on', i === k); d.setAttribute('aria-current', i === k ? 'true' : 'false'); });
@@ -446,7 +447,9 @@ run();
     else if (!moving) { clearTimeout(quiet); quiet = setTimeout(function () { busy = false; }, 220); }
     return true;
   }
-  addEventListener('wheel', function (e) { if (Math.abs(e.deltaY) > 1) step(e.deltaY > 0 ? 1 : -1, e); }, { passive: false });
+  /* inside the form, a scroll that the form itself can take is the form's, not a step */
+  function formScrolls(t, dir) { var f = t && t.closest && t.closest('.jr-form'); return !!f && (dir > 0 ? f.scrollTop + f.clientHeight < f.scrollHeight - 1 : f.scrollTop > 0); }
+  addEventListener('wheel', function (e) { if (Math.abs(e.deltaY) > 1 && !formScrolls(e.target, e.deltaY)) step(e.deltaY > 0 ? 1 : -1, e); }, { passive: false });
   addEventListener('keydown', function (e) {
     var d = { ArrowDown: 1, PageDown: 1, ' ': 1, ArrowUp: -1, PageUp: -1 }[e.key];
     if (d && !/input|textarea|select/i.test(e.target.tagName)) step(e.shiftKey && e.key === ' ' ? -1 : d, e);
@@ -456,6 +459,7 @@ run();
   addEventListener('touchmove', function (e) {
     if (ty === null) return;
     var dy = ty - e.touches[0].clientY;
+    if (formScrolls(e.target, dy)) return;
     if (Math.abs(dy) > 24 && step(dy > 0 ? 1 : -1, e)) ty = null; else if (pinned() && busy) e.preventDefault();
   }, { passive: false });
   addEventListener('touchend', function () { ty = null; }, { passive: true });
@@ -507,6 +511,34 @@ run();
         cx.beginPath(); cx.arc(x, y, r, 0, 6.3); cx.fill(); cx.globalAlpha = a * .6; cx.fillRect(x - r * 5, y - .4 * d, r * 10, .8 * d); cx.fillRect(x - .4 * d, y - r * 5, .8 * d, r * 10); });
       raf = requestAnimationFrame(draw); }
     size(); addEventListener('resize', size); raf = requestAnimationFrame(draw);
+  })();
+  /* the last scene's button brings the form down; and the form, sent */
+  sec.querySelectorAll('a[href="#wd-form"]').forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); go(7); }); });
+  (function () {
+    var form = document.querySelector('[data-wd-form]'); if (!form) return;
+    var out = form.querySelector('.wf-status'), btn = form.querySelector('button[type=submit]'), dom = form.querySelector('.wf-dom');
+    form.querySelectorAll('input[name=has_site]').forEach(function (r) { r.addEventListener('change', function () {
+      dom.hidden = form.elements.namedItem('has_site').value !== 'Yes'; if (!dom.hidden) dom.querySelector('input').focus(); }); });
+    var say = function (t, c) { out.textContent = t; out.className = 'wf-status' + (c ? ' ' + c : ''); };
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var el = function (n) { return form.elements.namedItem(n); }, name = el('name').value.trim(), email = el('email').value.trim();
+      if (!name) { say('Your name, first.', 'err'); el('name').focus(); return; }
+      if (!/^[^@ ]+@[^@ ]+[.][^@ ]+$/.test(email)) { say('That email address does not look right.', 'err'); el('email').focus(); return; }
+      var done = function () { form.querySelector('.wf-body').hidden = true; form.querySelector('.wf-done').hidden = false; };
+      if (el('botcheck').checked) { done(); return; }
+      var has = el('has_site').value || '';
+      btn.disabled = true; say('Sending…');
+      fetch(form.dataset.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ access_key: form.dataset.key, subject: 'Website enquiry - ' + name + (el('kind').value ? ' (' + el('kind').value + ')' : ''),
+          from_name: name, replyto: email, name: name, email: email, 'Phone': el('phone').value.trim(),
+          'Has a website': has, 'Domain': has === 'Yes' ? el('domain').value.trim() : '', 'Website type': el('kind').value,
+          'Heard about us': el('heard').value, 'Notes': el('notes').value.trim(), 'Page': location.pathname }) })
+        .then(function (r) { return r.text().then(function (t) { var j = {}; try { j = JSON.parse(t); } catch (x) {} if (!r.ok || j.success !== true) throw new Error(); }); })
+        .then(function () { form.reset(); done(); if (window.h19Track) window.h19Track('generate_lead', { form_id: 'web-design' }); })
+        .catch(function () { say('That did not go through. Email us at highway19media@gmail.com and we’ll pick it up.', 'err'); })
+        .then(function () { btn.disabled = false; });
+    });
   })();
   /* phones: each section plays as it comes into view */
   if ('IntersectionObserver' in window) {
