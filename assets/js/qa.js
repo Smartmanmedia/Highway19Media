@@ -177,10 +177,18 @@
       [oi - 1, oi + 1].forEach(function (ni) {
         var nb = arts[ni];
         if (!nb) return;
+        /* the two strips of one section already carry the same cloud each: a copy
+           between them would draw it twice */
+        if (nb.closest('section') === own.closest('section')) return;
         var use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
         use.setAttribute('href', '#' + g.id);
         use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + g.id);
-        use.setAttribute('transform', 'translate(0 ' + ((tops[oi] - tops[ni]) / u).toFixed(2) + ')');
+        /* the two artboards can start at different heights of his drawing (a
+           tail strip's viewBox begins where the seam strip ends), so the copy is
+           moved by both: the gap between the two on the page, and the gap
+           between where each one's drawing starts */
+        var nvb = nb.viewBox.baseVal, oy = (box ? box.y : 0) - (nvb ? nvb.y : 0);
+        use.setAttribute('transform', 'translate(0 ' + ((tops[oi] - tops[ni]) / u - oy).toFixed(2) + ')');
         use.setAttribute('aria-hidden', 'true');
         use.style.pointerEvents = 'none';
         /* A COPY GOES UNDER THAT SECTION'S OWN CLOUDS. Put at the very top of
