@@ -15,6 +15,9 @@
 
 /* one unit is one of his artboard pixels. Never larger than a screen pixel,
    so his art is only ever shown at his scale or smaller - never enlarged. */
+/* past 1960 wide the whole page grows with the window, so a 4K screen gets his
+   scene edge to edge instead of his 1960 stopping short of it */
+@media (min-width:1961px){ :root{ --u:calc(100vw / 1960) !important } }
 :root{--u:min(1px, 100vw / 1960);--art:calc(2128*var(--u));--half:calc(1064*var(--u));
       --wide:calc(3088*var(--u));
 /* THE HOME PAGE'S OWN TOKENS, copied off build/v2 rather than matched by eye,
