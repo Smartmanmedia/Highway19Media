@@ -209,6 +209,8 @@ img.hi-s{ background:none }
 
 /* ---- WHAT WE DO: each panel holds the screen while the next slides up over it */
 .wwd{ --u:min(1px, calc(100vh / 900), calc((100vw - 40px) / 1110)); position:relative }
+/* past his 1920 the panel grows with the screen, so a 4K window is filled as his design fills 1920 */
+@media (min-width:1921px){ .wwd{ --u:min(calc(100vw / 1920), calc(100vh / 900)) } }
 .wwd-p{ position:sticky; top:0; height:100vh; min-height:calc(819 * var(--u)); overflow:clip;
   display:grid; place-items:center }
 .wwd-p{ background:var(--bg) }
@@ -590,3 +592,23 @@ img.hi-s{ background:none }
   70%{ transform:translateY(4px) scale(.98) }
   85%{ transform:translateY(-2px) scale(1.01) }
   100%{ opacity:1; transform:none } }
+
+/* ============================================================================
+   WIDE SCREENS. His pages are drawn at 1920 wide; past that, the hero and the
+   type grow with the window instead of standing at their 1920 size in the
+   middle of it. Every value is its 1920 size written in vw (px / 19.2).
+   ========================================================================= */
+@media (min-width:1921px){
+  :root:has(.svc-page){ font-size:.8333vw }
+  .svc-in{ max-width:61.46vw; padding:0 2.5vw }
+  .svc-narrow{ max-width:45.83vw }
+  .svc-page--hero-icons .svc-hero{ padding:9.1vw 0 15.6vw }
+  .svc-page--hero-icons .svc-hero-in{ max-width:68.44vw }
+  .svc-page--hero-icons .svc-hero-say{ max-width:39.58vw }
+  .svc-page--hero-icons .svc-hero h1{ font-size:2.933vw }
+  .svc-page--hero-icons .svc-tag{ font-size:1.283vw }
+  .svc-page--hero-icons .svc-lead{ font-size:.917vw }
+  .svc-page--hero-icons .svc-acts{ gap:.73vw }
+  .svc-page--hero-icons .svc-hero .svc-btn{ min-height:2.29vw; padding:0 1.25vw; border-radius:.42vw }
+  .svc-hero-icons{ width:23.65vw; top:.83vw }
+}
