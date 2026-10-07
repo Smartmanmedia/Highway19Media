@@ -73,7 +73,8 @@
     background-image .9s linear, border-color .9s linear, box-shadow .9s linear;
   will-change:transform;
 }
-.hdr[data-hide="1"]{ transform:translateY(calc(-1 * var(--hh) - 20px)) }
+/* the shield hangs below the bar (its bottom is at 1.35 bars), so hiding the bar takes it all the way up */
+.hdr[data-hide="1"]{ transform:translateY(calc(-1.4 * var(--hh) - 20px)) }
 .hdr-in{ position:relative; height:100% }
 
 /* HIS SWITCH, at his moon's own place in the bar rather than fixed to the

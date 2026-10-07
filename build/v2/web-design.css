@@ -472,7 +472,14 @@ canvas.fx{ position:absolute; inset:0; width:100%; height:100%; mix-blend-mode:s
   transition:transform 1s cubic-bezier(.5,0,.2,1), opacity .4s ease }
 .j-zoom{ opacity:0; pointer-events:none; overflow:hidden }
 .jr-pin.snap .j-rocket{ opacity:1 !important; transition:none !important }
-.jr-pin.zooming .j-chalk,.jr-pin.zooming .j-badge,.jr-pin.zooming .j-bulb{ opacity:0 !important; transition:opacity .25s ease !important }
+/* the last of the flight plan dims slowly into the dark window, over the pull-back (its timing unchanged) */
+.jr-pin.zooming .j-chalk,.jr-pin.zooming .j-badge,.jr-pin.zooming .j-bulb{ z-index:5; opacity:0 !important; transition:opacity 1.6s cubic-bezier(.4,0,.6,1) !important }
+/* and while they dim they hold where step 2 left them */
+.jr-pin.zooming .j-bulb{ transform:translate(calc(var(--vl) * 1px - 690px),40px) !important }
+.jr-pin.zooming .j-bulb .on{ opacity:1 !important; animation:none !important }
+.jr-pin.zooming .j-chalk{ --cr:1500px !important }
+.jr-pin.zooming .j-badge .disc,.jr-pin.zooming .j-badge .ic,.jr-pin.zooming .j-badge .ring{ opacity:1 !important; transform:none !important; transition:none !important }
+.jr-pin.zooming .j-badge .sh{ opacity:.8 !important; transform:translate(9px,12px) !important; transition:none !important }
 .jr-pin.zooming .j-rocket{ opacity:0 !important; transition:none !important }
 .j-lift,.j-shake{ inset:0 }
 .rk-tint{ left:85.4px; top:170.5px; width:82px; height:82px; border-radius:50%; background:#000; opacity:0 }
