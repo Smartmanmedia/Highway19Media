@@ -325,7 +325,7 @@ function render(c, ctx) {
   const title = id.person ? `${id.person} · ${id.business}` : id.business;
 
   return `<!doctype html>
-<html lang="en" data-theme="${ctx.mode}" style="--accent:${ctx.accent};--on-accent:${ctx.onAccent}">
+<html lang="en"${ctx.intro ? ' class="intro-on"' : ''} data-theme="${ctx.mode}" style="--accent:${ctx.accent};--on-accent:${ctx.onAccent}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -349,9 +349,9 @@ ${ctx.og ? `<meta property="og:image" content="${esc(ctx.og)}">\n<meta name="twi
 ${ctx.fonts.map(f => `<link rel="preload" as="font" type="font/woff2" href="${f}" crossorigin>`).join('\n')}
 <link rel="stylesheet" href="card.css?v=${ctx.stamp.css}">
 ${ctx.consent ? ctx.consent + '\n' : ''}<script src="card.js?v=${ctx.stamp.js}" defer></script>
-</head>
+${ctx.intro ? '<style>' + ctx.intro.css + '</style>\n<script src="intro.js?v=' + ctx.intro.stamp + '" defer></script>\n' : ''}</head>
 <body>
-${sprite(used.concat(['close']))}
+${ctx.intro ? ctx.intro.html + '\n' : ''}${sprite(used.concat(['close']))}
 <main class="card" data-card="${esc(ctx.slug)}">
 ${body}
 </main>
@@ -388,6 +388,14 @@ function buildCard(dir, o) {
   const stamp = { css: hash(css), js: hash(js) };
   fs.writeFileSync(path.join(outDir, 'card.css'), css);
   fs.writeFileSync(path.join(outDir, 'card.js'), js);
+  /* the intro film (card.json "intro": true): a road into the blue, the shield, then the card */
+  let intro = null;
+  if (c.intro) {
+    if (!art.includes('intro-logo.png')) throw new Error('card ' + slug + ': art/intro-logo.png missing for the intro');
+    const ijs = fs.readFileSync(path.join(T, 'intro.js'), 'utf8');
+    fs.writeFileSync(path.join(outDir, 'intro.js'), ijs);
+    intro = { css: fs.readFileSync(path.join(T, 'intro.css'), 'utf8'), html: fs.readFileSync(path.join(T, 'intro.html'), 'utf8'), stamp: hash(ijs) };
+  }
 
   /* the fonts are the site's own files at /assets/fonts - the card uses the
      same face as everything else, and they are already cached for a year */
@@ -402,7 +410,7 @@ function buildCard(dir, o) {
 
   const html = render(c, {
     slug, url, mode, accent, onAccent: onAccent(accent), bg: BASE[mode].bg,
-    index: !!c.index, vcf: vcfName, stamp, fonts: fonts.slice(0, 2),
+    index: !!c.index, vcf: vcfName, stamp, intro, fonts: fonts.slice(0, 2),
     og: c.og || o.og, privacy: c.privacy === undefined ? o.privacy : c.privacy,
     consent: o.consent,
   });

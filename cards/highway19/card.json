@@ -1,6 +1,7 @@
 {
   "path": "/hwy19/adambc/",
   "index": false,
+  "intro": true,
 
   "theme": {
     "mode": "dark",

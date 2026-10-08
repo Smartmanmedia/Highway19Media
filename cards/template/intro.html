@@ -1,0 +1,30 @@
+<div id="intro"><svg id="intro-svg" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <linearGradient id="tun" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0459bd"/><stop offset="1" stop-color="#00287d"/></linearGradient>
+    <linearGradient id="tunIn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#003a9e"/><stop offset="1" stop-color="#001a5c"/></linearGradient>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0459bd"/><stop offset="1" stop-color="#00287d"/></linearGradient>
+    <linearGradient id="asphalt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a4d55"/><stop offset="1" stop-color="#2b2d33"/></linearGradient>
+    <!-- the shield -->
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#b9c0cc"/><stop offset=".7" stop-color="#eef1f5"/><stop offset="1" stop-color="#8d96a5"/></linearGradient>
+    <linearGradient id="red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2343f"/><stop offset="1" stop-color="#a5121d"/></linearGradient>
+    <linearGradient id="shblue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c63c9"/><stop offset="1" stop-color="#0a3a96"/></linearGradient>
+    <linearGradient id="chrome" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#e6ebf2"/><stop offset=".56" stop-color="#c3cad6"/><stop offset="1" stop-color="#f4f6fa"/></linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <path id="shieldPath" d="M150 30C120 12 74 8 36 20C33 42 25 62 16 82C5 108 3 142 15 178C34 234 88 266 150 290C212 266 266 234 285 178C297 142 295 108 284 82C275 62 267 42 264 20C226 8 180 12 150 30Z"/>
+    <clipPath id="shieldClip"><use href="#shieldPath"/></clipPath>
+    <clipPath id="innerClip"><path d="M150 44C122 28 82 24 48 33C45 51 38 69 30 87C21 110 19 140 29 172C46 222 94 251 150 273C206 251 254 222 271 172C281 140 279 110 270 87C262 69 255 51 252 33C218 24 178 28 150 44Z"/></clipPath>
+    <filter id="drop" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#000c2e" flood-opacity=".45"/></filter>
+  </defs>
+
+  <rect id="sky" x="0" y="0" width="390" height="844" fill="url(#bg)" opacity="0"/>
+  <g id="tunnel"></g>
+  <g id="road"></g>
+
+  <!-- HIGHWAY 19 MEDIA, his shield, drawn as vectors -->
+  <g id="logo" opacity="0">
+    <!-- PLACEHOLDER: his logo PNG. Replace the href with his final file (SVG preferred) -->
+    <g id="logoIn" filter="url(#drop)"><image id="logoImg" href="art/intro-logo.png" x="0" y="0" width="300" height="300"/>
+      <g clip-path="url(#shieldClip)"><rect id="glint" x="-140" y="0" width="90" height="300" fill="url(#shine)" transform="skewX(-18)" style="mix-blend-mode:screen"/></g>
+    </g>
+  </g>
+</svg><div id="intro-acts"><button type="button" id="intro-install">Add to Home Screen</button></div></div>
