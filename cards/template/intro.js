@@ -107,7 +107,7 @@
     var lt = seg(t, 2.45, 3.05);
     /* it grows from nothing the moment we are inside, with a little overshoot */
     var sc = lt <= 0 ? 0 : back(lt);
-    var size = 250 * sc, cy = H * 0.5;   /* the end screen: the shield big and low, close over the road */
+    var size = 250 * sc, cy = H * 0.43;   /* the end screen: the shield big and low, close over the road */
     logo.setAttribute('opacity', lt > 0 ? 1 : 0);
     logo.setAttribute('transform', 'translate(' + (W / 2 - size / 2).toFixed(1) + ' ' + (cy - size / 2).toFixed(1) + ') scale(' + (size / 300).toFixed(4) + ')');
     /* a glint across it once it lands */
