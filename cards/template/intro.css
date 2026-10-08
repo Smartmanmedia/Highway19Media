@@ -3,7 +3,7 @@
 #intro.out{ opacity:0; pointer-events:none }
 #intro-svg{ position:absolute; inset:0; width:100%; height:100% }
 html.intro-on, html.intro-on body{ overflow:hidden }
-#intro-acts{ position:absolute; left:0; right:0; top:24%; display:flex; justify-content:center; padding:0 15%; pointer-events:none }
+#intro-acts{ position:absolute; left:0; right:0; top:67%; display:flex; justify-content:center; padding:0 15%; pointer-events:none }
 #intro-acts button{ width:100%; height:50px; border-radius:9px; border:0; background:#fff; color:#00287d; font:800 14px/1 "Be Vietnam Pro",Arial,sans-serif;
   letter-spacing:.06em; text-transform:uppercase; box-shadow:0 8px 20px rgba(0,10,40,.35); opacity:0; transform:translateY(40px) scale(.8); cursor:pointer }
 #intro-acts button:focus-visible{ outline:3px solid #fff; outline-offset:3px }
