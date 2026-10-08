@@ -114,6 +114,8 @@
     var gt = ease(seg(t, 3.3, 4.0));
     glint.setAttribute('x', (-140 + 520 * gt).toFixed(1));
     acts.classList.toggle('on', t >= 3.35);
+    /* the card comes once the button has been on screen a while - however late the film started */
+    if (t >= 3.35 && !window.__introHold) { window.__introHold = setTimeout(function () { window.__introFinish && window.__introFinish(); }, 2600); }
     if (t < T && !still) raf = requestAnimationFrame(frame);
   }
   function play() { cancelAnimationFrame(raf); t0 = performance.now(); raf = requestAnimationFrame(frame); }
@@ -125,5 +127,6 @@
   go.addEventListener('click', function (e) { e.stopPropagation(); var b = document.querySelector('[data-install-go]'); finish(); if (b) b.click(); });
   box.addEventListener('click', finish);
   if (matchMedia('(display-mode: standalone)').matches || navigator.standalone) go.hidden = true;
-  play(); setTimeout(finish, 5000);
+  window.__introFinish = finish;
+  play(); setTimeout(finish, 9000);   /* and never longer than this, whatever happens */
 })();
