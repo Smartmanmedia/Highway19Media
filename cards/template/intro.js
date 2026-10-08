@@ -1,4 +1,4 @@
-/* Highway 19 card intro - his home page scene, a road into the blue, the shield, then the card. Built by tools/card/build.js when card.json has "intro". */
+/* Highway 19 card intro - a night road into the blue, the shield, then the card. Built by tools/card/build.js when card.json has "intro". */
 (function () {
   if (!document.getElementById("intro")) return;
 
@@ -21,17 +21,13 @@
   var asph = el('path', { fill: 'url(#asphalt)' }), edgeL = el('path', { fill: 'none', stroke: '#fff', 'stroke-linejoin': 'round' }),
       edgeR = el('path', { fill: 'none', stroke: '#fff', 'stroke-linejoin': 'round' }), dashes = el('path', { fill: '#ffffff' });
   road.appendChild(asph); road.appendChild(edgeL); road.appendChild(edgeR); road.appendChild(dashes);
-  var yelL = el('path', { fill: 'none', stroke: '#ffd400', 'stroke-width': 3 }), yelR = el('path', { fill: 'none', stroke: '#ffd400', 'stroke-width': 3 });
-  road.appendChild(yelL); road.appendChild(yelR);
-  /* the props: his palms and lamps, placed along the road in the world and driven past */
-  var ART = { pa: ['art/intro-palm-a.webp', .609], pb: ['art/intro-palm-b.webp', .693], pc: ['art/intro-palm-c.webp', .701], pd: ['art/intro-palm-d.webp', .639],
-              ll: ['art/intro-lamp-l.webp', .1921], lr: ['art/intro-lamp-r.webp', .1921] };
-  var PROPS = [], propsG = document.getElementById('props');
-  for (var i = 0; i < 14; i++) {
-    var left = i % 2 === 0, kind = i % 4 === 1 ? (left ? 'll' : 'lr') : ['pa', 'pb', 'pc', 'pd'][i % 4], img = el('image', { href: ART[kind][0], preserveAspectRatio: 'none' });
-    PROPS.push({ img: img, kind: kind, side: left ? -1 : 1, off: kind.charAt(0) === 'l' ? 2.05 : 2.6 + (i % 3) * .7, z0: 3 + i * 4.3, h: kind.charAt(0) === 'l' ? 6.2 : 5.4 + (i % 3) * .6 });
-    propsG.appendChild(img);
-  }
+  /* the stars: a field above the horizon, twinkling, a few with a glint */
+  var STARS = [], sg = document.getElementById('stars'), rnd = (function () { var x = 7; return function () { x = (x * 16807) % 2147483647; return x / 2147483647; }; })();
+  for (var i = 0; i < 120; i++) { var big = rnd() < .08, st = el(big ? 'path' : 'circle', big ? { fill: '#fff' } : { r: (.4 + rnd() * 1.1).toFixed(2), fill: '#fff' });
+    var sx = rnd() * W, sy = rnd() * (H * .78) * Math.pow(rnd(), .35);
+    if (big) { var k = 2.6 + rnd() * 2.5; st.setAttribute('d', 'M' + sx + ' ' + (sy - k) + 'L' + (sx + k * .18) + ' ' + (sy - k * .18) + 'L' + (sx + k) + ' ' + sy + 'L' + (sx + k * .18) + ' ' + (sy + k * .18) + 'L' + sx + ' ' + (sy + k) + 'L' + (sx - k * .18) + ' ' + (sy + k * .18) + 'L' + (sx - k) + ' ' + sy + 'L' + (sx - k * .18) + ' ' + (sy - k * .18) + 'Z'); }
+    else { st.setAttribute('cx', sx.toFixed(1)); st.setAttribute('cy', sy.toFixed(1)); }
+    STARS.push({ e: st, p: rnd() * 6.3, s: 1 + rnd() * 3 }); sg.appendChild(st); }
   /* the tunnel: his blue, a portal with a dark mouth the road runs into */
   var portal = el('path', { fill: 'url(#tun)' }), mouth = el('path', { fill: 'url(#tunIn)' }), lip = el('path', { fill: 'none', stroke: '#a4d4ff', 'stroke-opacity': '.6' });
   tun.appendChild(portal); tun.appendChild(mouth); tun.appendChild(lip);
@@ -62,21 +58,6 @@
             'L' + c[0].toFixed(1) + ' ' + c[1].toFixed(1) + 'L' + e[0].toFixed(1) + ' ' + e[1].toFixed(1) + 'Z';
     }
     dashes.setAttribute('d', dd);
-    yelL.setAttribute('d', line(-HALF - .05)); yelR.setAttribute('d', line(HALF + .05));
-    if (!o.inside) {
-      var SH = HALF + 2.3, A = [], B = [];
-      zs.forEach(function (z) { var xc = o.curve * z * z; A.push(proj(xc - SH, z, o.hor, o.cx)); B.push(proj(xc + SH, z, o.hor, o.cx)); });
-      document.getElementById('shoulder').setAttribute('d', 'M' + A.map(function (p) { return p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join('L') + 'L' +
-        B.reverse().map(function (p) { return p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join('L') + 'Z');
-      var wv = ''; for (var r = 0; r < 9; r++) { var zz = 2 + r * r * .9 + (o.travel * .3) % 2, yy = o.hor + CAMH * F / zz; if (yy > H) continue;
-        wv += 'M0 ' + yy.toFixed(1) + 'Q' + (W * .25) + ' ' + (yy - 2) + ' ' + (W * .5) + ' ' + yy.toFixed(1) + 'T' + W + ' ' + yy.toFixed(1); }
-      document.getElementById('waves').setAttribute('d', wv);
-      var list = PROPS.map(function (p) { var L = 60, z = ((p.z0 - o.travel * .9) % L + L) % L + .6; return { p: p, z: z }; }).sort(function (a, b) { return b.z - a.z; });
-      list.forEach(function (q) { var p = q.p, z = q.z, s2 = F / z, xc = o.curve * z * z, bx = o.cx + (xc + p.side * p.off) * s2, by = o.hor + CAMH * s2;
-        var hh = p.h * s2, ww = hh * ART[p.kind][1], x0 = p.kind.charAt(0) === 'l' ? (p.side < 0 ? bx - ww * .06 : bx - ww * .94) : bx - ww / 2;
-        p.img.setAttribute('x', x0.toFixed(1)); p.img.setAttribute('y', (by - hh).toFixed(1)); p.img.setAttribute('width', ww.toFixed(1)); p.img.setAttribute('height', hh.toFixed(1));
-        p.img.setAttribute('opacity', z > o.tz ? 0 : Math.min(1, (60 - z) / 8)); propsG.appendChild(p.img); });
-    }
     road.setAttribute('opacity', o.alpha);
   }
   function drawTunnel(o) {
@@ -111,7 +92,7 @@
     var blue = seg(t, 2.4, 2.45);                                  /* inside: the screen is his blue */
     sky.setAttribute('opacity', blue);
     document.getElementById('scene').setAttribute('opacity', 1 - blue);
-    ['cl1', 'cl2', 'cl3', 'cl4'].forEach(function (id, k) { document.getElementById(id).setAttribute('transform', 'translate(' + ((k % 2 ? 1 : -1) * (14 + 8 * k) * t).toFixed(1) + ' 0)'); });
+    STARS.forEach(function (q) { q.e.setAttribute('opacity', (.35 + .65 * Math.abs(Math.sin(t * q.s + q.p))).toFixed(2)); });
     var insideT = seg(t, 3.15, 3.95);
     /* ONE ROAD, start to finish: the same road runs into the tunnel and on under the
        shield - its horizon rises with the camera, its bend eases out as the shield lands */
@@ -120,13 +101,13 @@
     var curveR = (.012 + .01 * ease(seg(t, 0, .4))) * (1 - easeOut(seg(t, .6, .9)));
     /* the tunnel stands on the same road, on the same bend */
     drawTunnel({ show: t < 2.45, z: Math.max(zT, .3), curve: curveR, hor: hor0, cx: W / 2, land: ease(seg(t, 2.05, 2.45)) });
-    drawRoad({ hor: horR, cx: W / 2, curve: curveR, zEnd: ZF, travel: travel, alpha: aIn, inside: blue >= 1, tz: Math.max(zT, .3) });
+    drawRoad({ hor: horR, cx: W / 2, curve: curveR, zEnd: ZF, travel: travel, alpha: aIn });
     /* 3. the shield: from a point on the road's horizon to the screen */
     /* THE SLAP: in at once, a size too big, hits, overshoots small and settles */
     var lt = seg(t, 2.45, 3.05);
     /* it grows from nothing the moment we are inside, with a little overshoot */
     var sc = lt <= 0 ? 0 : back(lt);
-    var size = 230 * sc, cy = H * 0.37;
+    var size = 250 * sc, cy = H * 0.5;   /* the end screen: the shield big and low, close over the road */
     logo.setAttribute('opacity', lt > 0 ? 1 : 0);
     logo.setAttribute('transform', 'translate(' + (W / 2 - size / 2).toFixed(1) + ' ' + (cy - size / 2).toFixed(1) + ') scale(' + (size / 300).toFixed(4) + ')');
     /* a glint across it once it lands */
