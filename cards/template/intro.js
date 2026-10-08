@@ -124,9 +124,11 @@
   function finish() { if (done) return; done = true; cancelAnimationFrame(raf); box.classList.add('out');
     setTimeout(function () { box.remove(); document.documentElement.classList.remove('intro-on'); }, 650); }
   var go = document.getElementById('intro-install');
-  go.addEventListener('click', function (e) { e.stopPropagation(); var b = document.querySelector('[data-install-go]'); finish(); if (b) b.click(); });
+  go.addEventListener('click', function (e) { e.stopPropagation(); var b = installed ? null : document.querySelector('[data-install-go]'); finish(); if (b) b.click(); });
   box.addEventListener('click', finish);
-  if (matchMedia('(display-mode: standalone)').matches || navigator.standalone) go.hidden = true;
+  /* already on the Home Screen (opened from its icon): the button opens the card instead */
+  var installed = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  if (installed) go.textContent = 'Open My Card';
   window.__introFinish = finish;
   play(); setTimeout(finish, 9000);   /* and never longer than this, whatever happens */
 })();
