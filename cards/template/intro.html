@@ -16,6 +16,21 @@
     <filter id="drop" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#000c2e" flood-opacity=".45"/></filter>
   </defs>
 
+  <!-- HIS HOME PAGE, before the tunnel -->
+  <g id="scene">
+    <linearGradient id="day" x1="0" y1="0" x2="1" y2=".55"><stop offset="0" stop-color="#e3f0fd"/><stop offset=".45" stop-color="#8fc3f7"/><stop offset="1" stop-color="#3f8ef0"/></linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e3d9e"/><stop offset="1" stop-color="#0b2f86"/></linearGradient>
+    <rect width="390" height="844" fill="url(#day)"/>
+    <image href="art/intro-sun.svg" x="26" y="58" width="34" height="34"/>
+    <image id="cl1" href="art/intro-cloud-1.svg" x="-30" y="190" width="170" height="54"/>
+    <image id="cl2" href="art/intro-cloud-2.svg" x="230" y="130" width="140" height="61"/>
+    <image id="cl3" href="art/intro-cloud-3.svg" x="250" y="300" width="90" height="50"/>
+    <image id="cl4" href="art/intro-cloud-1.svg" x="130" y="560" width="150" height="48"/>
+    <rect id="sea" y="675" width="390" height="169" fill="url(#sea)"/>
+    <path id="waves" fill="none" stroke="#5aa2ff" stroke-opacity=".55" stroke-width="1.4"/>
+    <path id="shoulder" fill="#1a9a3c"/>
+    <g id="props"></g>
+  </g>
   <rect id="sky" x="0" y="0" width="390" height="844" fill="url(#bg)" opacity="0"/>
   <g id="tunnel"></g>
   <g id="road"></g>
