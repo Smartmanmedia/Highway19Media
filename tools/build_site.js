@@ -841,7 +841,13 @@ wr('robots.txt', STAGING
    * noindex is never read - so disallowing it is how a URL ends up listed as a
    * bare link with no title. Let it be crawled and let the noindex do the
    * work. */
-  : 'User-agent: *\nAllow: /\n\nSitemap: ' + SITE + '/sitemap.xml\n');
+  /* AND IT SAYS WHERE THE FACT SHEET IS. There is no robots directive for
+   * llms.txt - the convention is a well-known path and nothing more - so
+   * this is a comment, ignored by everything that parses the file. It costs
+   * one line and it puts the path in the one place a crawler already looks,
+   * instead of leaving an assistant to guess that we have one. */
+  : 'User-agent: *\nAllow: /\n\nSitemap: ' + SITE + '/sitemap.xml\n' +
+    '# LLMs: ' + SITE + '/llms.txt\n');
 
 /* the community pages that are meant to be found. A page carrying its own
  * noindex is left out - listing it tells the one crawler that reads the
