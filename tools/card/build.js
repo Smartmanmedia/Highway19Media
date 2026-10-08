@@ -139,7 +139,22 @@ function render(c, ctx) {
     : hero
       ? `<img class="hero-media" src="art/hero-720.webp" srcset="art/hero-720.webp 720w, art/hero-1080.webp 1080w" sizes="(max-width: 480px) 100vw, 440px" alt="${esc(hero.alt || '')}" fetchpriority="high" decoding="async">`
       : '';
-  const identity = `
+  /* the emblem hero (art.emblem): no photo - the name on top, the shield on a
+     bridge truss, then the person with their title underlined */
+  const emblem = c.art && c.art.emblem;
+  const truss = (() => {
+    let x = '';
+    for (let i = 0; i < 12; i++) { const a = i * 33; x += `M${a} 7.7 L${a + 33} 34.3 M${a + 33} 7.7 L${a} 34.3 `; }
+    return `<svg class="id-truss" viewBox="0 0 396 42" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#9aa3b2"/></linearGradient></defs><path d="${x}" stroke="url(#tg)" stroke-width="3" fill="none"/><rect y="0" width="396" height="7.7" fill="url(#tg)" stroke="#0a1838" stroke-width=".6"/><rect y="34.3" width="396" height="7.7" fill="url(#tg)" stroke="#0a1838" stroke-width=".6"/></svg>`;
+  })();
+  const identity = emblem ? `
+<header class="id id--emblem">
+  <h1 class="id-name">${esc(id.business)}</h1>
+  ${id.services ? `<p class="id-svc">${esc(id.services)}</p>` : ''}
+  <div class="id-band">${truss}<img class="id-shield" src="art/${esc(emblem)}" alt="" width="150" height="150" fetchpriority="high"></div>
+  ${id.person ? `<p class="id-person"><b>${esc(id.person)}</b>${id.title ? ` <span>${esc(id.title)}</span>` : ''}</p>` : ''}
+  ${id.tagline ? `<p class="id-tag">${esc(id.tagline)}</p>` : ''}
+</header>` : `
 <header class="id${media ? '' : ' id--plain'}">
   ${media}
   <div class="id-body">
@@ -151,11 +166,16 @@ function render(c, ctx) {
   </div>
 </header>`;
 
-  const save = `
+  const note = [k.phone && 'Phone', k.email && 'email', k.website && 'website'].filter(Boolean).join(', ').replace(/^./, s => s.toUpperCase()).replace(/, ([^,]+)$/, ' and $1') + ' in one tap.';
+  /* the navy skin carries the note inside the button */
+  const save = ctx.skin === 'navy' ? `
+<a class="save save--note" href="${esc(ctx.vcf)}"${tr('save_contact')}>
+  <span class="save-row">${ic('userAdd')}<span>Save to Contacts</span></span><small>${note}</small>
+</a>` : `
 <a class="save" href="${esc(ctx.vcf)}"${tr('save_contact')}>
   ${ic('userAdd')}<span>Save to Contacts</span>
 </a>
-<p class="save-note">${[k.phone && 'Phone', k.email && 'email', k.website && 'website'].filter(Boolean).join(', ').replace(/^./, s => s.toUpperCase()).replace(/, ([^,]+)$/, ' and $1')} in one tap.</p>`;
+<p class="save-note">${note}</p>`;
 
   /* the quick actions, in the order a stranger reaches for them */
   const acts = [];
@@ -172,12 +192,13 @@ function render(c, ctx) {
 
   /* socials: only the ones that exist. Two or fewer get a full row each, with
      the handle - a lone round icon on its own looks like something is missing */
-  const nets = NETWORKS.filter(([n]) => c.social && c.social[n]);
+  /* in the order card.json lists them */
+  const nets = Object.keys(c.social || {}).filter(n => c.social[n]).map(n => NETWORKS.find(([x]) => x === n)).filter(Boolean);
   /* a WhatsApp link is a number, not a handle - shown the way it is dialled */
   const handle = u => /^https:\/\/wa\.me\//.test(u)
     ? u.replace(/^https:\/\/wa\.me\/1?(\d{3})(\d{3})(\d{4}).*$/, '$1-$2-$3')
     : decodeURIComponent(u.replace(/^https:\/\/(www\.)?[^/]+\//, '').replace(/\/$/, '')).replace(/^@?/, '@');
-  const social = !nets.length ? '' : nets.length <= 2 ? `
+  const social = !nets.length ? '' : nets.length <= 3 ? `
 <nav class="soc soc--rows" aria-label="Follow">
   ${nets.map(([n, label]) => `<a class="soc-row" href="${esc(c.social[n])}"${ext}${tr('social_click', n)}>${ic(n, 'ic ic-mark')}<span class="soc-name">${label}<small>${esc(handle(c.social[n]))}</small></span>${ic('chevron', 'ic ic-go')}</a>`).join('\n  ')}
 </nav>` : `
@@ -191,17 +212,18 @@ function render(c, ctx) {
   ${body}
 </section>`;
 
-  const blocks = [];
+  /* every section by name, so card.json "order" can arrange them */
+  const B = {};
 
   if (m.story) {
     const s = m.story, file = /\.mp4($|\?)/.test(s.video || '');
-    blocks.push(sec('mod-story', s.title || 'Watch our story', file
+    B.story = (sec('mod-story', s.title || 'Watch our story', file
       ? `<video class="story-v" controls playsinline preload="none" poster="${esc(s.poster || '')}"${tr('story_play')}><source src="${esc(s.video)}" type="video/mp4"></video>${s.line ? `<p class="mod-p">${esc(s.line)}</p>` : ''}`
       : `<a class="story-link" href="${esc(s.video)}"${ext}${tr('story_play')}>${s.poster ? `<img src="${esc(s.poster)}" alt="" loading="lazy">` : ''}${ic('play', 'ic ic-play')}</a>${s.line ? `<p class="mod-p">${esc(s.line)}</p>` : ''}`));
   }
 
   if (m.gallery && m.gallery.items && m.gallery.items.length) {
-    blocks.push(sec('mod-gal', m.gallery.title || 'Our work', `<div class="gal" tabindex="0" aria-label="Gallery, scroll sideways">
+    B.gallery = (sec('mod-gal', m.gallery.title || 'Our work', `<div class="gal" tabindex="0" aria-label="Gallery, scroll sideways">
     ${m.gallery.items.map(g => {
       const img = `<img src="${esc(g.src)}" alt="${esc(g.alt || '')}" loading="lazy" decoding="async">`;
       return g.url ? `<a class="gal-i" href="${esc(g.url)}"${ext}${tr('gallery_click', g.alt)}>${img}</a>` : `<figure class="gal-i">${img}</figure>`;
@@ -210,20 +232,20 @@ function render(c, ctx) {
   }
 
   if (m.services && m.services.items && m.services.items.length) {
-    blocks.push(sec('mod-svc', m.services.title || 'Services', `<ul class="svc">
+    B.services = (sec('mod-svc', m.services.title || 'Services', `<ul class="svc">
     ${m.services.items.map(s => `<li><a href="${esc(s.url || k.website)}"${ext}${tr('service_click', s.name)}><span><b>${esc(s.name)}</b>${s.line ? `<small>${esc(s.line)}</small>` : ''}</span>${ic('chevron', 'ic ic-go')}</a></li>`).join('\n    ')}
   </ul>`));
   }
 
   if (m.offer) {
     const o = m.offer;
-    blocks.push(sec('mod-offer', '', `<div class="offer">${ic('tag', 'ic ic-offer')}<div><h2 class="offer-h">${esc(o.title)}</h2>${o.line ? `<p class="mod-p">${esc(o.line)}</p>` : ''}${o.until ? `<p class="offer-until">Until ${esc(o.until)}</p>` : ''}</div></div>
+    B.offer = (sec('mod-offer', '', `<div class="offer">${ic('tag', 'ic ic-offer')}<div><h2 class="offer-h">${esc(o.title)}</h2>${o.line ? `<p class="mod-p">${esc(o.line)}</p>` : ''}${o.until ? `<p class="offer-until">Until ${esc(o.until)}</p>` : ''}</div></div>
   ${o.code ? `<button class="offer-code" type="button" data-copy="${esc(o.code)}"${tr('offer_copy')}><span>${esc(o.code)}</span><small>Tap to copy</small></button>` : ''}
   ${o.url ? `<a class="btn btn--ghost" href="${esc(o.url)}"${ext}${tr('offer_click')}>${esc(o.cta || 'Claim offer')}</a>` : ''}`));
   }
 
   if (m.review && m.review.url) {
-    blocks.push(sec('mod-review', '', `<a class="review" href="${esc(m.review.url)}"${ext}${tr('review_click')}>
+    B.review = (sec('mod-review', '', `<a class="review" href="${esc(m.review.url)}"${ext}${tr('review_click')}>
     <span class="stars">${ic('star')}${ic('star')}${ic('star')}${ic('star')}${ic('star')}</span>
     <span class="review-t"><b>${esc(m.review.title || 'Leave us a review')}</b><small>${esc(m.review.line || 'It takes a minute and helps more than you know.')}</small></span>
     ${ic('chevron', 'ic ic-go')}
@@ -232,7 +254,7 @@ function render(c, ctx) {
 
   if (m.lead) {
     const L = m.lead;
-    blocks.push(sec('mod-lead', L.title || 'Send me your info', `${L.line ? `<p class="mod-p">${esc(L.line)}</p>` : ''}
+    B.lead = (sec('mod-lead', L.title || 'Send me your info', `${L.line ? `<p class="mod-p">${esc(L.line)}</p>` : ''}
   <form class="lead" novalidate data-to="${esc(L.to)}" data-endpoint="${esc(L.endpoint || '')}" data-key="${esc(L.key || '')}" data-business="${esc(id.business)}">
     <label><span>Name</span><input name="name" autocomplete="name" required enterkeyhint="next"></label>
     <label><span>Phone</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" enterkeyhint="next"></label>
@@ -246,19 +268,19 @@ function render(c, ctx) {
   }
 
   if (m.share) {
-    blocks.push(sec('mod-share', '', `<div class="duo">
+    B.share = (sec('mod-share', '', `<div class="duo">
     <button class="btn btn--ghost" type="button" data-share${tr('share')}>${ic('share')}<span>Share card</span></button>
     <button class="btn btn--ghost" type="button" data-open="qr"${tr('show_qr')}>${ic('qr')}<span>Show QR</span></button>
   </div>`));
   }
 
   if (m.install) {
-    blocks.push(`
+    B.install = (`
 <section class="mod mod-install" data-install hidden>
-  <img class="app-ic" src="art/apple-touch-icon.png" alt="" width="60" height="60">
+  ${emblem ? `<img class="app-ic app-ic--emblem" src="art/${esc(emblem)}" alt="" width="110" height="110" loading="lazy">` : '<img class="app-ic" src="art/apple-touch-icon.png" alt="" width="60" height="60">'}
   <h2 class="install-h">${esc(m.install.title || `Keep ${id.business} on your phone`)}</h2>
   <p class="mod-p">${esc(m.install.line || 'Add our app for one-tap access anytime.')}</p>
-  <button class="btn" type="button" data-install-go${tr('install_click')}>${ic('plusApp')}<span>Add to Home Screen</span></button>
+  <button class="btn" type="button" data-install-go${tr('install_click')}>${ic(ctx.skin === 'navy' ? 'mobile' : 'plusApp')}<span>Add to Home Screen</span></button>
 </section>`);
   }
 
@@ -320,12 +342,14 @@ function render(c, ctx) {
   ${ctx.privacy ? `<p><a href="${esc(ctx.privacy)}">Privacy</a></p>` : ''}
 </footer>`;
 
-  const body = [identity, save, actions, social, ...blocks, promo, footer].join('\n');
+  Object.assign(B, { identity, save, actions, social, promo, footer });
+  const order = c.order || ['identity', 'save', 'actions', 'social', 'story', 'gallery', 'services', 'offer', 'review', 'lead', 'share', 'install', 'promo', 'footer'];
+  const body = order.map(n => B[n] || '').join('\n');
   const desc = [id.tagline, id.services, id.area].filter(Boolean).join(' ');
   const title = id.person ? `${id.person} · ${id.business}` : id.business;
 
   return `<!doctype html>
-<html lang="en"${ctx.intro ? ' class="intro-on"' : ''} data-theme="${ctx.mode}" style="--accent:${ctx.accent};--on-accent:${ctx.onAccent}">
+<html lang="en"${ctx.intro ? ' class="intro-on"' : ''} data-theme="${ctx.mode}"${ctx.skin ? ` data-skin="${ctx.skin}"` : ''} style="--accent:${ctx.accent};--on-accent:${ctx.onAccent}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -345,7 +369,7 @@ ${ctx.index ? '' : '<meta name="robots" content="noindex, follow">\n'}<meta name
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${esc(ctx.url)}">
-${ctx.og ? `<meta property="og:image" content="${esc(ctx.og)}">\n<meta name="twitter:card" content="summary_large_image">\n` : ''}<link rel="preload" as="image" href="art/hero-720.webp" imagesrcset="art/hero-720.webp 720w, art/hero-1080.webp 1080w" imagesizes="(max-width: 480px) 100vw, 440px">
+${ctx.og ? `<meta property="og:image" content="${esc(ctx.og)}">\n<meta name="twitter:card" content="summary_large_image">\n` : ''}${hero && !emblem ? '<link rel="preload" as="image" href="art/hero-720.webp" imagesrcset="art/hero-720.webp 720w, art/hero-1080.webp 1080w" imagesizes="(max-width: 480px) 100vw, 440px">' : ''}
 ${ctx.fonts.map(f => `<link rel="preload" as="font" type="font/woff2" href="${f}" crossorigin>`).join('\n')}
 <link rel="stylesheet" href="card.css?v=${ctx.stamp.css}">
 ${ctx.consent ? ctx.consent + '\n' : ''}<script src="card.js?v=${ctx.stamp.js}" defer></script>
@@ -409,14 +433,14 @@ function buildCard(dir, o) {
   fs.writeFileSync(path.join(outDir, 'qr.svg'), qrSvg(url + '?s=qr'));
 
   const html = render(c, {
-    slug, url, mode, accent, onAccent: onAccent(accent), bg: BASE[mode].bg,
+    slug, url, mode, accent, onAccent: onAccent(accent), bg: c.theme.bg || BASE[mode].bg, skin: c.theme.skin || '',
     index: !!c.index, vcf: vcfName, stamp, intro, fonts: fonts.slice(0, 2),
     og: c.og || o.og, privacy: c.privacy === undefined ? o.privacy : c.privacy,
     consent: o.consent,
   });
   fs.writeFileSync(path.join(outDir, 'index.html'), html);
 
-  const bg = BASE[mode].bg;
+  const bg = c.theme.bg || BASE[mode].bg;
   fs.writeFileSync(path.join(outDir, 'manifest.webmanifest'), JSON.stringify({
     id: c.path,
     name: (c.app && c.app.name) || c.identity.business,

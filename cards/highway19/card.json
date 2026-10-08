@@ -2,90 +2,125 @@
   "path": "/hwy19/adambc/",
   "index": false,
   "intro": true,
-
   "theme": {
     "mode": "dark",
-    "accent": "#F2C14E"
+    "skin": "navy",
+    "accent": "#F2C14E",
+    "bg": "#000a1e"
   },
-
   "identity": {
     "business": "Highway 19 Media",
     "logo": false,
     "person": "Adam Ayash",
-    "title": "Marketing Director",
+    "title": "Creative Director",
     "tagline": "One team for the whole road.",
     "services": "Websites · Video · Print · Social · Ads",
     "area": "Tampa Bay, FL"
   },
-
   "contact": {
     "phone": "+17274585769",
     "sms": "+17274585769",
     "email": "highway19media@gmail.com",
     "website": "https://highway19media.com/",
-    "address": { "street": "", "city": "Tampa", "region": "FL", "postcode": "", "country": "USA" },
+    "address": {
+      "street": "",
+      "city": "Tampa",
+      "region": "FL",
+      "postcode": "",
+      "country": "USA"
+    },
     "directions": "",
-    "book": { "label": "Get a Free Review", "url": "https://highway19media.com/contact/" }
+    "book": null
   },
-
   "social": {
     "facebook": "https://www.facebook.com/Highway19Media",
+    "instagram": "https://www.instagram.com/Highway19Media/",
     "whatsapp": "https://wa.me/17274585769",
-    "instagram": "",
     "tiktok": "",
     "youtube": "",
     "linkedin": "",
     "x": ""
   },
-
   "modules": {
     "story": null,
-
     "gallery": null,
-
     "services": {
       "title": "What we do",
       "items": [
-        { "name": "Website Design", "line": "Fast, custom sites that bring in calls.", "url": "https://highway19media.com/#services" },
-        { "name": "Video Production", "line": "Brand films, ads and social cuts.", "url": "https://highway19media.com/video-production/" },
-        { "name": "Print & Branding", "line": "Logos, signs, cards and wraps.", "url": "https://highway19media.com/#services" },
-        { "name": "Social & Paid Ads", "line": "Content and campaigns that get seen.", "url": "https://highway19media.com/#services" }
+        {
+          "name": "Website Design",
+          "line": "Custom websites built for your business.",
+          "url": "https://highway19media.com/#services"
+        },
+        {
+          "name": "Video Production",
+          "line": "Commercials, interviews and social video.",
+          "url": "https://highway19media.com/video-production/"
+        },
+        {
+          "name": "Print & Branding",
+          "line": "Logos, signs, packaging and more.",
+          "url": "https://highway19media.com/#services"
+        },
+        {
+          "name": "Social & Paid Ads",
+          "line": "Creative content and targeted campaigns.",
+          "url": "https://highway19media.com/#services"
+        }
       ]
     },
-
     "review": null,
-
     "offer": null,
-
     "lead": {
-      "title": "Send me your info",
-      "line": "Leave your details and we’ll be in touch — usually within a day.",
+      "title": "Let’s Stay in Touch",
+      "line": "Have a project in mind? Leave your details and I’ll get back to you.",
       "to": "highway19media@gmail.com",
       "endpoint": "https://api.web3forms.com/submit",
       "key": "e2f57011-b7df-4b38-9c6d-6ba1bf1c04b7"
     },
-
     "share": true,
-
     "install": {
       "title": "Keep Highway 19 Media on your phone",
       "line": "Add our app for one-tap access anytime."
     },
-
     "promo": {
       "title": "Want one for your business?",
-      "line": "Put your business in your customers’ pocket.",
+      "line": "Get your own HWYBIZ digital card.",
       "url": "https://highway19media.com/contact/"
     }
   },
-
   "app": {
     "name": "Highway 19 Media",
     "short": "Highway 19"
   },
-
   "art": {
-    "hero": { "src": "assets/brand/Highway19-mobile-banner-night-.jpg", "crop": [0, 1800, 941, 1060], "alt": "Tampa's skyline at night across the water, a Highway 19 Media shield on the traffic-light pole" },
-    "icon": { "src": "assets/v2/ui-shield.webp", "bg": "#111214", "scale": 0.72 }
-  }
+    "hero": {
+      "src": "assets/brand/Highway19-mobile-banner-night-.jpg",
+      "crop": [
+        0,
+        1800,
+        941,
+        1060
+      ],
+      "alt": "Tampa's skyline at night across the water, a Highway 19 Media shield on the traffic-light pole"
+    },
+    "icon": {
+      "src": "assets/v2/ui-shield.webp",
+      "bg": "#111214",
+      "scale": 0.72
+    },
+    "emblem": "intro-logo.png"
+  },
+  "order": [
+    "identity",
+    "save",
+    "actions",
+    "share",
+    "social",
+    "services",
+    "lead",
+    "promo",
+    "install",
+    "footer"
+  ]
 }

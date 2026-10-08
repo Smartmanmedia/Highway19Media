@@ -353,3 +353,77 @@ html .consent__btn--no{ color:var(--text); border-color:var(--line) }
 .acts--3 .act{ grid-column:span 2 }
 .acts--3 .act:nth-child(3n+1):nth-last-child(2),
 .acts--3 .act:nth-child(3n+1):nth-last-child(2) ~ .act{ grid-column:span 3; flex-direction:row; min-height:64px; gap:10px; font-size:14px }
+
+/* ============================================================================
+   THE NAVY SKIN (theme.skin "navy") - Adam's Illustrator design, Oct 2026.
+   The page runs navy into black, left to right; every panel is the brand blue
+   at 30% with a thin blue rim; the accent stays the yellow.
+   ========================================================================= */
+@font-face{ font-family:"Be Vietnam Pro"; font-weight:300; font-display:swap;
+            src:url("/assets/fonts/BeVietnamPro-Light.woff2") format("woff2") }
+[data-skin="navy"]{
+  --bg:#000a1e;
+  --panel:linear-gradient(90deg, rgb(0 40 125 / .3), rgb(3 85 183 / .3));
+  --rim:rgb(61 125 216 / .3);
+  --blue:#3d7dd8;
+  --surface:rgb(2 60 150 / .3); --surface-2:rgb(2 60 150 / .3);
+  --line:var(--rim);
+  --r-lg:27px; --r:17px; --r-sm:12px; --gap:10px;
+}
+[data-skin="navy"] body{ background:linear-gradient(90deg, #001338, #000102) fixed }
+[data-skin="navy"] :is(.id,.act,.soc-row,.mod){ background:var(--panel); border:1px solid var(--rim); box-shadow:none }
+[data-skin="navy"] .mod-h{ color:var(--blue); font-size:15px; letter-spacing:.1em }
+
+/* the emblem hero */
+.id--emblem{
+  aspect-ratio:auto; min-height:0; max-height:none; overflow:visible;
+  justify-content:flex-start; align-items:center; text-align:center;
+  padding:26px 0 30px; border-radius:20px; color:#fff;
+}
+.id--emblem::after{ display:none }
+.id--emblem .id-name{ font-size:22.5px; font-weight:800; letter-spacing:0 }
+.id-svc{ margin:6px 0 0; font-size:13px; color:#fff }
+.id-band{ position:relative; width:100%; height:150px; margin:38px 0 40px; display:grid; place-items:center }
+.id-truss{ position:absolute; left:0; right:0; top:50%; width:100%; height:42px; transform:translateY(-50%) }
+.id-shield{ position:relative; width:142px; height:auto; filter:drop-shadow(0 6px 14px rgb(0 0 0 / .45)) }
+.id--emblem .id-person{
+  margin:0; padding:0 4px 6px; font-size:23.5px; line-height:1.2;
+  border-bottom:2.4px solid var(--blue); display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; justify-content:center;
+}
+.id--emblem .id-person b{ font-weight:800 }
+.id--emblem .id-person span{ font-weight:300; font-size:17px; color:#9cc4ff; opacity:1 }
+.id--emblem .id-tag{ margin:10px 0 0; font-size:15.5px; color:#fff }
+
+/* save: the note rides inside the button */
+.save--note{ flex-direction:column; gap:2px; min-height:76px; border-radius:13px; box-shadow:none }
+.save-row{ display:flex; align-items:center; gap:10px; letter-spacing:.02em }
+.save--note small{ font:300 13px/1.2 var(--font); letter-spacing:0; text-transform:none; color:#001338 }
+
+[data-skin="navy"] .act{ min-height:78px; font-size:13px }
+[data-skin="navy"] .acts{ gap:9px }
+
+/* share and QR, right under the actions: share in yellow, QR outlined */
+[data-skin="navy"] .mod-share{ padding:12px 11px }
+[data-skin="navy"] .mod-share .btn{ min-height:51px; border-radius:11.5px; white-space:nowrap; padding:0 10px; gap:7px }
+[data-skin="navy"] .mod-share .btn:first-child{ background:var(--accent); color:var(--on-accent); border:0 }
+[data-skin="navy"] .mod-share .btn:first-child .ic{ color:currentColor }
+[data-skin="navy"] .mod-share .btn--ghost:last-child{ background:transparent; border:1px solid var(--rim) }
+
+[data-skin="navy"] .soc-row{ min-height:61px }
+[data-skin="navy"] .mod-svc,[data-skin="navy"] .mod-lead{ padding:24px 18px 20px }
+[data-skin="navy"] .svc li + li{ border-top-color:rgb(61 125 216 / .25) }
+
+/* the form: the lead heading keeps its case; the fields are solid blue */
+[data-skin="navy"] .mod-lead .mod-h{ font-size:12px; text-transform:none }
+[data-skin="navy"] .lead input,[data-skin="navy"] .lead textarea{ background:var(--blue); border:0; color:#fff; border-radius:11.5px }
+[data-skin="navy"] .lead input:focus,[data-skin="navy"] .lead textarea:focus{ box-shadow:0 0 0 3px rgb(242 193 78 / .55) }
+
+/* promo: before the install panel, dashed in yellow */
+[data-skin="navy"] .promo{ margin-top:6px; padding:36px 26px 36px 32px; border:1px dashed #f3c760; background:transparent }
+[data-skin="navy"] .promo small{ color:#a9a69f }
+
+/* install: the shield sits half over the panel's top edge */
+[data-skin="navy"] .mod-install{ margin-top:62px; padding:112px 20px 26px; position:relative; color:#fff }
+.app-ic--emblem{ position:absolute; left:50%; top:-18px; transform:translateX(-50%); width:100px; height:auto; border-radius:0; box-shadow:none; filter:drop-shadow(0 6px 14px rgb(0 0 0 / .45)) }
+[data-skin="navy"] .mod-install .mod-p{ color:#fff }
+[data-skin="navy"] .mod-install .btn .ic{ width:24px; height:24px }
