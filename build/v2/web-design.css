@@ -345,6 +345,9 @@ canvas.fx{ position:absolute; inset:0; width:100%; height:100%; mix-blend-mode:s
 .jr-cam{ position:absolute; inset:0; transition:translate 1.5s cubic-bezier(.6,0,.25,1) }
 .jr-pin.up .jr-cam{ translate:0 100% }
 .jr-pin.up .j-lift{ transition:none !important }
+/* at the form it is full night: plain black, no glow */
+.jr-pin.up .sk-deep{ animation:nightIn 1.2s ease forwards }
+@keyframes nightIn{ to{ opacity:1 } }
 /* THE FORM, coming down out of the stars */
 .jr-form{ position:absolute; inset:0; z-index:6; display:grid; place-items:center; padding:24px 5%; box-sizing:border-box; overflow-y:auto;
   translate:0 -100%; opacity:0; pointer-events:none; transition:translate 1.5s cubic-bezier(.6,0,.25,1), opacity .5s ease 1s; font-family:var(--display) }
@@ -484,11 +487,11 @@ canvas.fx{ position:absolute; inset:0; width:100%; height:100%; mix-blend-mode:s
 .j-lift,.j-shake{ inset:0 }
 /* the porthole speaks before take-off (Back to the Future) */
 .rk-say{ left:-200px; top:132px; width:262px; margin:0; padding:18px 22px; box-sizing:border-box; border-radius:22px; background:#fff; color:#0b1f3f;
-  font:800 23px/1.22 var(--display); border:3px solid #0459bd; box-shadow:0 10px 24px rgba(0,30,80,.25); opacity:0; transform:scale(.2); transform-origin:100% 75% }
+  font:300 19px/1.3 var(--display); letter-spacing:.01em; border:3px solid #0459bd; box-shadow:0 10px 24px rgba(0,30,80,.25); opacity:0; transform:scale(.2); transform-origin:100% 75% }
 .rk-say::before{ content:""; position:absolute; right:-29px; bottom:26px; border:18px solid transparent; border-left:30px solid #0459bd; border-right:0 }
 .rk-say::after{ content:""; position:absolute; right:-23px; bottom:30px; border:14px solid transparent; border-left:24px solid #fff; border-right:0 }
 @keyframes say{ 0%{ opacity:0; transform:scale(.2) } 55%{ opacity:1; transform:scale(1.1) } 80%{ transform:scale(.97) } 100%{ opacity:1; transform:scale(1) } }
-@media (max-width:820px){ .rk-say{ left:-300px; top:-10px; width:310px; padding:20px 22px; font-size:34px; border-radius:26px } }
+@media (max-width:820px){ .rk-say{ left:-300px; top:-10px; width:310px; padding:18px 20px; font-size:28px; border-radius:26px } }
 .rk-tint{ left:85.4px; top:170.5px; width:82px; height:82px; border-radius:50%; background:#000; opacity:0 }
 /* his sign: it comes down with the girl, and once hung it rides the rocket to space */
 .rk-sign{ left:75px; top:299px; width:99px; height:99px; opacity:0; transform:scale(0); transition:opacity .3s, transform .4s ease }
