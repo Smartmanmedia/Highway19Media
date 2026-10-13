@@ -7,6 +7,10 @@ This is the whole picture: what is live, how it is built, how to change it,
 what is left, and what went wrong along the way so it does not go wrong
 again.
 
+**Adding a page? Read `BUILD-A-PAGE.md` instead** - it is the narrower
+question, with the four recipes the build already has and the traps this
+site sets.
+
 ---
 
 ## 1. Links
