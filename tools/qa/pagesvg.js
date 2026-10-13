@@ -26,14 +26,16 @@ const OUT = process.argv[3] || path.join(ROOT, 'dist', 'highway19-faq-page.svg')
 
 (async () => {
 const b = await chromium.launch({ executablePath: process.env.CHROME_PATH });
-/* HIS OWN WIDTH, 2128. Two things make this the only window that reads
-   straight. --u is min(1px, 100vw/1960), so at anything past 1960 one CSS
-   pixel is one of his units and every number comes off the page already in
-   his scale. And his art is a 3088-unit box centred on the window while the
-   cards are laid out from its left edge, so the two only sit together as
-   drawn where the window is his artboard: wider, and the art slides right
-   while the cards stay put. */
-const p = await b.newPage({ viewport: { width: 2128, height: 1200 } });
+/* 1960, WHERE ONE PIXEL IS ONE OF HIS UNITS. The page's unit is
+   min(1px, 100vw/1960), and past 1960 qa.css overrides that to
+   calc(100vw/1960) so the whole design grows with the window: there is no
+   width at which it stops scaling, and at 2128 every number would come off
+   the page 8.57% large. At exactly 1960 the unit is 1px and nothing has to
+   be divided back out.
+   This is also the page's own width. His artboard is 2128, so 84 units at
+   each edge are bleed the reader never sees at any window size, and what
+   the file holds is the page, not the artboard. */
+const p = await b.newPage({ viewport: { width: 1960, height: 1200 } });
 await p.goto(URL, { waitUntil: 'load' });
 await p.waitForTimeout(3500);          /* his fonts, and the traffic settling */
 
@@ -75,9 +77,9 @@ await p.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
 await p.waitForTimeout(600);
 
 const data = await p.evaluate(() => {
-  const ART = 2128;
   const page = document.getElementById('page');
   const pr = page.getBoundingClientRect();
+  const ART = pr.width;          /* the page as it stands, measured */
   const cv = document.createElement('canvas').getContext('2d');
 
   /* where a line of text sits on its baseline, from the font's own metrics */
@@ -109,24 +111,18 @@ const data = await p.evaluate(() => {
                            height: l.bottom - l.top, left: l.left }));
   };
 
-  /* WHERE HIS ARTBOARD'S x=0 ACTUALLY IS. The art is a 3088-unit box -
-     his 2128 plus 480 of bleed either side - centred on the window, so the
-     left edge of the page is NOT the left edge of his artboard unless the
-     window happens to be exactly his 2128 - which is why it is set to that
-     above. Measured rather than assumed: a window 72 units wider slides his
-     origin 36 units off the page's edge, enough to look almost right and be
-     wrong. */
-  const probe = document.createElement('div');
-  probe.style.cssText = 'position:absolute;width:var(--u)'; page.appendChild(probe);
-  const U = probe.getBoundingClientRect().width || 1; probe.remove();
+  /* THE FRAME IS THE PAGE, NOT THE ARTBOARD. Two different things are
+     anchored two different ways: his art is a 3088-unit box centred on the
+     window, and the cards are laid out from the window's left edge. Measure
+     either one against the other and the file is right only at the one
+     window width where they happen to agree. Measure both against the page
+     and the file is a picture of the page, which is what it is for. */
 
   const secs = [];
   document.querySelectorAll('#page > .sec').forEach(sec => {
     const sr = sec.getBoundingClientRect();
     const y0 = sr.top - pr.top;
-    const art0 = sec.querySelector('.art, .art-a');
-    /* his x=0, in window coordinates */
-    const X0 = art0.getBoundingClientRect().left + 480 * U;
+    const X0 = pr.left;                        /* the page's left edge */
     const parts = [...sec.querySelectorAll('.art, .art-a, .art-b')].map(a => {
       const svg = a.querySelector('svg');
       const vb = (svg.getAttribute('viewBox') || '').split(/[\s,]+/).map(Number);
