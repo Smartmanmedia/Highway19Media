@@ -2,6 +2,7 @@
   "path": "/community/carpenterrick/bc/",
   "index": false,
   "intro": true,
+  "emailButton": false,
   "theme": {
     "mode": "dark",
     "accent": "#E2A33B",
@@ -45,11 +46,31 @@
     "gallery": {
       "title": "Built your way",
       "items": [
-        { "src": "/community/carpenterrick/assets/s3-slide-1-500.webp", "alt": "A cabin fitted out as a workshop", "url": "https://highway19media.com/community/carpenterrick/" },
-        { "src": "/community/carpenterrick/assets/s3-slide-5-500.webp", "alt": "A cabin fitted out as a home office", "url": "https://highway19media.com/community/carpenterrick/" },
-        { "src": "/community/carpenterrick/assets/s3-slide-3-500.webp", "alt": "A cabin fitted out for yard equipment", "url": "https://highway19media.com/community/carpenterrick/" },
-        { "src": "/community/carpenterrick/assets/s3-slide-4-500.webp", "alt": "A cabin fitted out for bikes and storage", "url": "https://highway19media.com/community/carpenterrick/" },
-        { "src": "/community/carpenterrick/assets/s3-slide-2-500.webp", "alt": "A cabin fitted out as a guest room", "url": "https://highway19media.com/community/carpenterrick/" }
+        {
+          "src": "/community/carpenterrick/assets/s3-slide-1-500.webp",
+          "alt": "A cabin fitted out as a workshop",
+          "url": "https://highway19media.com/community/carpenterrick/"
+        },
+        {
+          "src": "/community/carpenterrick/assets/s3-slide-5-500.webp",
+          "alt": "A cabin fitted out as a home office",
+          "url": "https://highway19media.com/community/carpenterrick/"
+        },
+        {
+          "src": "/community/carpenterrick/assets/s3-slide-3-500.webp",
+          "alt": "A cabin fitted out for yard equipment",
+          "url": "https://highway19media.com/community/carpenterrick/"
+        },
+        {
+          "src": "/community/carpenterrick/assets/s3-slide-4-500.webp",
+          "alt": "A cabin fitted out for bikes and storage",
+          "url": "https://highway19media.com/community/carpenterrick/"
+        },
+        {
+          "src": "/community/carpenterrick/assets/s3-slide-2-500.webp",
+          "alt": "A cabin fitted out as a guest room",
+          "url": "https://highway19media.com/community/carpenterrick/"
+        }
       ]
     },
     "services": {
@@ -104,7 +125,12 @@
   "art": {
     "hero": {
       "src": "community/carpenterrick/assets/hero-mobile-1100.webp",
-      "crop": [0, 150, 1100, 860],
+      "crop": [
+        0,
+        150,
+        1100,
+        860
+      ],
       "alt": "A custom-built wood cabin shed with a ramp in a Florida backyard, built by Carpenter Rick"
     },
     "icon": {

@@ -181,7 +181,9 @@ function render(c, ctx) {
   const acts = [];
   if (k.phone) acts.push([`tel:${k.phone}`, 'phone', 'Call', 'call']);
   if (k.sms || k.phone) acts.push([`sms:${k.sms || k.phone}`, 'message', 'Text', 'text']);
-  if (k.email) acts.push([`mailto:${k.email}`, 'mail', 'Email', 'email']);
+  /* "emailButton": false keeps the address in the saved contact but off the
+     buttons - for a card whose form below already does the emailing */
+  if (k.email && c.emailButton !== false) acts.push([`mailto:${k.email}`, 'mail', 'Email', 'email']);
   if (k.website) acts.push([k.website, 'globe', 'Website', 'website', true]);
   if (k.directions) acts.push([k.directions, 'pin', 'Directions', 'directions', true]);
   if (k.book && k.book.url) acts.push([k.book.url, 'calendar', k.book.label || 'Book', 'book', true]);
