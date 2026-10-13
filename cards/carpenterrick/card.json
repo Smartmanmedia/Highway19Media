@@ -1,0 +1,129 @@
+{
+  "path": "/community/carpenterrick/bc/",
+  "index": false,
+  "intro": true,
+  "theme": {
+    "mode": "dark",
+    "accent": "#E2A33B",
+    "bg": "#141210"
+  },
+  "identity": {
+    "business": "Carpenter Rick",
+    "logo": true,
+    "person": "",
+    "title": "",
+    "tagline": "Built for your home. Built to last.",
+    "services": "Cabin sheds · Repairs · Custom builds",
+    "area": "Spring Hill · Brooksville · Hudson, FL"
+  },
+  "contact": {
+    "phone": "+13525730536",
+    "sms": "+13525730536",
+    "email": "highway19media@gmail.com",
+    "website": "https://highway19media.com/community/carpenterrick/",
+    "address": {
+      "street": "",
+      "city": "Spring Hill",
+      "region": "FL",
+      "postcode": "",
+      "country": "USA"
+    },
+    "directions": "",
+    "book": null
+  },
+  "social": {
+    "facebook": "",
+    "instagram": "",
+    "whatsapp": "",
+    "tiktok": "",
+    "youtube": "",
+    "linkedin": "",
+    "x": ""
+  },
+  "modules": {
+    "story": null,
+    "gallery": {
+      "title": "Built your way",
+      "items": [
+        { "src": "/community/carpenterrick/assets/s3-slide-1-500.webp", "alt": "A cabin fitted out as a workshop", "url": "https://highway19media.com/community/carpenterrick/" },
+        { "src": "/community/carpenterrick/assets/s3-slide-5-500.webp", "alt": "A cabin fitted out as a home office", "url": "https://highway19media.com/community/carpenterrick/" },
+        { "src": "/community/carpenterrick/assets/s3-slide-3-500.webp", "alt": "A cabin fitted out for yard equipment", "url": "https://highway19media.com/community/carpenterrick/" },
+        { "src": "/community/carpenterrick/assets/s3-slide-4-500.webp", "alt": "A cabin fitted out for bikes and storage", "url": "https://highway19media.com/community/carpenterrick/" },
+        { "src": "/community/carpenterrick/assets/s3-slide-2-500.webp", "alt": "A cabin fitted out as a guest room", "url": "https://highway19media.com/community/carpenterrick/" }
+      ]
+    },
+    "services": {
+      "title": "What Rick builds",
+      "items": [
+        {
+          "name": "12 ft. Cabin Sheds",
+          "line": "Real wood, built on-site in your backyard.",
+          "url": "https://highway19media.com/community/carpenterrick/"
+        },
+        {
+          "name": "Repairs & Improvements",
+          "line": "Fixes and upgrades around your home.",
+          "url": "https://highway19media.com/community/carpenterrick/"
+        },
+        {
+          "name": "One-of-a-Kind Builds",
+          "line": "Tell Rick what you have in mind.",
+          "url": "https://highway19media.com/community/carpenterrick/"
+        }
+      ]
+    },
+    "review": null,
+    "offer": {
+      "title": "A cabin shed for about $9,000 total",
+      "line": "Materials about $4,000, labor about $5,000. Built in about 14 days. Only a few 2026 build dates left.",
+      "url": "https://highway19media.com/community/carpenterrick/#lead-name",
+      "cta": "Book your build"
+    },
+    "lead": {
+      "title": "Get a Free Estimate",
+      "line": "Leave your details and Rick will call you to walk the yard.",
+      "to": "highway19media@gmail.com",
+      "endpoint": "https://api.web3forms.com/submit",
+      "key": "e2f57011-b7df-4b38-9c6d-6ba1bf1c04b7"
+    },
+    "share": true,
+    "install": {
+      "title": "Keep Carpenter Rick on your phone",
+      "line": "Add the card to your home screen for one-tap access."
+    },
+    "promo": {
+      "title": "Want one for your business?",
+      "line": "Get your own HWYBIZ digital card.",
+      "url": "https://highway19media.com/contact/"
+    }
+  },
+  "app": {
+    "name": "Carpenter Rick",
+    "short": "Carpenter Rick"
+  },
+  "art": {
+    "hero": {
+      "src": "community/carpenterrick/assets/hero-mobile-1100.webp",
+      "crop": [0, 150, 1100, 860],
+      "alt": "A custom-built wood cabin shed with a ramp in a Florida backyard, built by Carpenter Rick"
+    },
+    "icon": {
+      "src": "community/carpenterrick/assets/logo-520.webp",
+      "bg": "#141210",
+      "scale": 0.9
+    }
+  },
+  "order": [
+    "identity",
+    "save",
+    "actions",
+    "share",
+    "offer",
+    "gallery",
+    "services",
+    "lead",
+    "install",
+    "promo",
+    "footer"
+  ]
+}
