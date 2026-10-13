@@ -412,13 +412,19 @@ function buildCard(dir, o) {
   const stamp = { css: hash(css), js: hash(js) };
   fs.writeFileSync(path.join(outDir, 'card.css'), css);
   fs.writeFileSync(path.join(outDir, 'card.js'), js);
-  /* the intro film (card.json "intro": true): a road into the blue, the shield, then the card */
+  /* the intro film (card.json "intro": true). A card with its own folder
+     cards/<slug>/intro/ (intro.html, intro.css, intro.js) plays its own film;
+     without one it gets the Highway 19 film in cards/template - a road into
+     the blue, the shield, then the card. That one is Highway 19's: a client
+     card gets a film of its own. */
   let intro = null;
   if (c.intro) {
     if (!art.includes('intro-logo.png')) throw new Error('card ' + slug + ': art/intro-logo.png missing for the intro');
-    const ijs = fs.readFileSync(path.join(T, 'intro.js'), 'utf8');
+    const own = path.join(dir, 'intro');
+    const I = fs.existsSync(path.join(own, 'intro.html')) ? own : T;
+    const ijs = fs.readFileSync(path.join(I, 'intro.js'), 'utf8');
     fs.writeFileSync(path.join(outDir, 'intro.js'), ijs);
-    intro = { css: fs.readFileSync(path.join(T, 'intro.css'), 'utf8'), html: fs.readFileSync(path.join(T, 'intro.html'), 'utf8'), stamp: hash(ijs) };
+    intro = { css: fs.readFileSync(path.join(I, 'intro.css'), 'utf8'), html: fs.readFileSync(path.join(I, 'intro.html'), 'utf8'), stamp: hash(ijs) };
   }
 
   /* the fonts are the site's own files at /assets/fonts - the card uses the
