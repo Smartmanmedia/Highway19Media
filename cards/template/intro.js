@@ -6,6 +6,11 @@
   var sky = document.getElementById('sky'), tun = document.getElementById('tunnel'), road = document.getElementById('road');
   var logo = document.getElementById('logo'), glint = document.getElementById('glint'), acts = document.getElementById('intro-acts');
   var still = false;
+  /* a tablet or a landscape screen: show the whole phone-shaped film, centred,
+     rather than slicing it - sliced, the road and the logo fall off the edges */
+  var box0 = document.getElementById('intro'), svg0 = document.getElementById('intro-svg');
+  function fit() { var wide = innerWidth / innerHeight > 0.62; svg0.setAttribute('preserveAspectRatio', wide ? 'xMidYMid meet' : 'xMidYMid slice'); box0.classList.toggle('wide', wide); }
+  fit(); addEventListener('resize', fit);
   function el(tag, a) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); return e; }
   var clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
   var ease = function (t) { return t * t * (3 - 2 * t); };
