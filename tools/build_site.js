@@ -237,6 +237,24 @@ const contactOut = minifyHtml(rd('build/v2/contact.html')
   .replace(/\{\{ROOT\}\}/g, '/'));
 wr('contact/index.html', contactOut);
 
+/* 4a-ii. HIGHWAY BIZ. The NFC card, sold: what it is, what it is good for,
+ *        what $199 buys and the five steps from asking to holding it. Built
+ *        like /contact/ - the site's header and footer, the site's own contact
+ *        card at the foot - so it needs no stylesheet of its own and nothing
+ *        under /assets to keep in step. Every card we build links here from
+ *        its footer, which is the point: the people most likely to want one
+ *        are the ones somebody just handed a card to. */
+const bizOut = minifyHtml(rd('build/v2/highway-biz.html')
+  .replace('<!--HEADER-->', () => HEADER_FOR('/', '/contact/')
+    .replace('class="skip" href="#top"', 'class="skip" href="#hb-main"'))
+  .replace('<!--FOOTER-->', () => FOOTER_FOR('/contact/'))
+  .replace('<!--FORM-CARD-->', () => rd('build/v2/form-card.html'))
+  .replace(/(?:href|src)="((?:section-fonts|form-card|section-09|header|consent)\.css|(?:form|header|consent)\.js)"/g,
+           (m, f) => m.replace('"' + f + '"', '"' + codeHref(f) + '"'))
+  .replace(/\.\.\/\.\.\/assets\//g, '/assets/')
+  .replace(/\{\{ROOT\}\}/g, '/'));
+wr('highway-biz/index.html', bizOut);
+
 wr('404.html', soonOut.replace(/<link rel="canonical"[^>]*>/i, ''));
 
 
@@ -829,6 +847,13 @@ wr('_redirects',
 /faq /faq/ 301
 ` + CARD.redirects(CARDS) + `/questions /faq/ 301
 /questions/ /faq/ 301
+/highway-biz /highway-biz/ 301
+/highwaybiz /highway-biz/ 301
+/highwaybiz/ /highway-biz/ 301
+/biz /highway-biz/ 301
+/biz/ /highway-biz/ 301
+/nfc /highway-biz/ 301
+/nfc/ /highway-biz/ 301
 `);
 
 /* the plain-language fact sheet AI assistants look for at the root */
@@ -841,7 +866,13 @@ wr('robots.txt', STAGING
    * noindex is never read - so disallowing it is how a URL ends up listed as a
    * bare link with no title. Let it be crawled and let the noindex do the
    * work. */
-  : 'User-agent: *\nAllow: /\n\nSitemap: ' + SITE + '/sitemap.xml\n');
+  /* AND IT SAYS WHERE THE FACT SHEET IS. There is no robots directive for
+   * llms.txt - the convention is a well-known path and nothing more - so
+   * this is a comment, ignored by everything that parses the file. It costs
+   * one line and it puts the path in the one place a crawler already looks,
+   * instead of leaving an assistant to guess that we have one. */
+  : 'User-agent: *\nAllow: /\n\nSitemap: ' + SITE + '/sitemap.xml\n' +
+    '# LLMs: ' + SITE + '/llms.txt\n');
 
 /* the community pages that are meant to be found. A page carrying its own
  * noindex is left out - listing it tells the one crawler that reads the
@@ -871,6 +902,7 @@ if (!STAGING) wr('sitemap.xml',
   <url><loc>${SITE}/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
   <url><loc>${SITE}/contact/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>${SITE}/faq/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>${SITE}/highway-biz/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 ${LEGAL.map(L => `  <url><loc>${SITE}/${L.slug}/</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>`).join('\n')}
 ${SERVICE_PAGES.map(d => `  <url><loc>${SITE}/${d}/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>`).join('\n')}
 ${SERVICES.map(S => `  <url><loc>${SITE}/${S.slug}/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>`).join('\n')}

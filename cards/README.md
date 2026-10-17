@@ -10,6 +10,7 @@ doubles as the live sales demo.
     cards/template/        the code every card shares (css, js, service worker)
     cards/<slug>/card.json everything that differs between businesses
     cards/<slug>/art/      its pictures, cut by tools/card/make_art.js
+                           and tools/card/make_share.js
     tools/card/build.js    json -> page, .vcf, manifest, worker, QR
                            (run for you by tools/build_site.js, step 4e)
 
@@ -46,7 +47,17 @@ free NFC writer app (NFC Tools on iOS/Android): *Write → Add a record → URL*
 
    and commit what it writes to `cards/<slug>/art/`. The host's build never
    needs sharp — it only copies.
-4. `node tools/make_page.js && node tools/build_site.js` — a card with a
+4. The picture the card sends ahead of itself:
+
+       CHROME_PATH=/path/to/chrome node tools/card/make_share.js <slug>
+
+   WhatsApp, Messenger, iMessage and Facebook never open the card — they read
+   `og:image`. This writes `art/share-1200.jpg`, the card's own logo on its own
+   colour with its tagline, so a forwarded card arrives wearing its own
+   business and not Highway 19's shield. Commit it like the rest of the art.
+   A card that wants something else instead — a photograph, a poster — puts
+   that absolute URL in `card.json` as `"og"`, and that wins.
+5. `node tools/make_page.js && node tools/build_site.js` — a card with a
    missing field, a bad phone, an http link or a missing picture stops the build.
 
 ### Modules

@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Highway Biz - NFC Digital Business Card, $199 | Highway 19 Media</title>
+<meta name="description" content="A tap-to-share digital business card for your business: your own page, your logo, every link in one place. $199 one time, includes five NFC tags shipped free in the US and five years of hosting. Spring Hill &amp; Tampa Bay.">
+<link rel="canonical" href="https://highway19media.com/highway-biz/">
+<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Highway 19 Media">
+<meta property="og:title" content="Highway Biz - the business card you never print again">
+<meta property="og:description" content="Tap a phone, your details are there. $199 one time - five NFC tags, your own page and five years of hosting.">
+<meta property="og:url" content="https://highway19media.com/highway-biz/">
+<meta property="og:image" content="https://highway19media.com/assets/v2/meta/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Highway Biz - the business card you never print again">
+<meta name="twitter:description" content="Tap a phone, your details are there. $199 one time - five NFC tags, your own page and five years of hosting.">
+<meta name="twitter:image" content="https://highway19media.com/assets/v2/meta/og.jpg">
+<meta name="theme-color" content="#00287d">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/v2/meta/icon-32.png">
+<link rel="apple-touch-icon" href="../../assets/v2/meta/icon-180.png">
+<link rel="stylesheet" href="section-fonts.css">
+<link rel="stylesheet" href="form-card.css">
+<link rel="stylesheet" href="section-09.css">
+<link rel="stylesheet" href="header.css">
+<link rel="stylesheet" href="consent.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"ProfessionalService","@id":"https://highway19media.com/#business","name":"Highway 19 Media","url":"https://highway19media.com/","email":"highway19media@gmail.com","sameAs":["https://www.facebook.com/Highway19Media"],"areaServed":{"@type":"AdministrativeArea","name":"Tampa Bay, Florida"}},
+ {"@type":"Product","@id":"https://highway19media.com/highway-biz/#product","name":"Highway Biz - NFC Digital Business Card","description":"A hosted digital business card: its own page with your logo and colours, every contact method and social link in one place, a saveable contact file, a QR code and five NFC tags. Built for you by Highway 19 Media.","brand":{"@id":"https://highway19media.com/#business"},"category":"Digital business card","offers":{"@type":"Offer","price":"199","priceCurrency":"USD","availability":"https://schema.org/InStock","url":"https://highway19media.com/highway-biz/","seller":{"@id":"https://highway19media.com/#business"},"priceValidUntil":"2027-12-31"}},
+ {"@type":"WebPage","@id":"https://highway19media.com/highway-biz/#webpage","url":"https://highway19media.com/highway-biz/","name":"Highway Biz - NFC Digital Business Card","inLanguage":"en-US","isPartOf":{"@id":"https://highway19media.com/#website"},"about":{"@id":"https://highway19media.com/highway-biz/#product"},"breadcrumb":{"@id":"https://highway19media.com/highway-biz/#breadcrumb"}},
+ {"@type":"BreadcrumbList","@id":"https://highway19media.com/highway-biz/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://highway19media.com/"},{"@type":"ListItem","position":2,"name":"Highway Biz","item":"https://highway19media.com/highway-biz/"}]}
+]}
+</script>
+<style>
+/* HIGHWAY BIZ - the product page for the tap-to-share card.
+   Built like /contact/: the site's own header and footer, the site's own
+   contact card at the foot, and everything between them written here. No new
+   stylesheet to stamp and nothing under /assets to keep in step. */
+body{ margin:0; background:#00287d }
+.hb{
+  --font-sign:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  --ink:#fff; --dim:rgba(255,255,255,.76); --rule:rgba(255,255,255,.18);
+  --gold:#ffc72c; --green:#00b14f;
+  color:var(--ink); font-family:var(--font-sign); font-weight:450;
+  font-size:clamp(16px,1.05vw,17.5px); line-height:1.62;
+}
+.hb *,.hb *::before,.hb *::after{ box-sizing:border-box }
+.hb img{ max-width:100%; display:block }
+.hb section{ padding:clamp(52px,7vw,104px) clamp(16px,4vw,40px) }
+.hb .in{ width:min(100%,1120px); margin:0 auto }
+.hb h2{ font-size:clamp(26px,3.2vw,42px); line-height:1.15; font-weight:800;
+  letter-spacing:-.015em; margin:0 0 .5em }
+.hb h3{ font-size:clamp(18px,1.5vw,21px); line-height:1.3; font-weight:700; margin:0 0 .35em }
+.hb p{ margin:0 0 1em } .hb p:last-child{ margin-bottom:0 }
+.hb .eyebrow{ font-size:13px; font-weight:800; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--gold); margin:0 0 .9em }
+
+/* the hero, on the header's own sky */
+.hb-hero{ background:
+    radial-gradient(120% 90% at 50% 0%, rgba(255,255,255,.14), rgba(255,255,255,0) 60%),
+    linear-gradient(180deg,#0459bd 0%,#00287d 100%);
+  padding-top:clamp(40px,6vw,86px) }
+.hb-hero h1{ font-size:clamp(34px,5.4vw,66px); line-height:1.04; font-weight:800;
+  letter-spacing:-.025em; margin:0 0 .4em; max-width:16ch }
+.hb-lead{ font-size:clamp(17px,1.35vw,21px); max-width:52ch; color:var(--dim) }
+.hb-price{ display:flex; flex-wrap:wrap; align-items:baseline; gap:.5em 1em;
+  margin:clamp(26px,3vw,40px) 0 clamp(20px,2.4vw,30px) }
+.hb-price b{ font-size:clamp(42px,5.6vw,68px); font-weight:800; letter-spacing:-.03em;
+  line-height:1; color:var(--gold) }
+.hb-price span{ font-size:clamp(15px,1.1vw,17px); color:var(--dim) }
+.hb-cta{ display:flex; flex-wrap:wrap; gap:12px }
+.hb-btn{ display:inline-flex; align-items:center; justify-content:center; gap:.5em;
+  min-height:54px; padding:0 28px; border-radius:8px; text-decoration:none;
+  font-weight:800; font-size:16px; letter-spacing:.01em; line-height:1.25 }
+.hb-btn--go{ background:var(--gold); color:#111 }
+.hb-btn--ghost{ background:transparent; color:#fff; box-shadow:inset 0 0 0 2px rgba(255,255,255,.5) }
+
+/* the plain-dark bands */
+.hb-dark{ background:#001a52 }
+.hb-darker{ background:#00123a }
+
+.hb-grid{ display:grid; gap:clamp(18px,2.4vw,30px);
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr)) }
+.hb-card{ background:rgba(255,255,255,.055); border:1px solid var(--rule);
+  border-radius:10px; padding:clamp(20px,2.2vw,28px) }
+.hb-card p{ color:var(--dim); font-size:15.5px }
+
+/* the five steps */
+.hb-steps{ counter-reset:step; list-style:none; margin:0; padding:0;
+  display:grid; gap:14px }
+.hb-steps li{ counter-increment:step; display:grid; grid-template-columns:46px 1fr;
+  gap:18px; align-items:start; padding:18px 0; border-top:1px solid var(--rule) }
+.hb-steps li:last-child{ border-bottom:1px solid var(--rule) }
+.hb-steps li::before{ content:counter(step); grid-row:span 2;
+  width:46px; height:46px; border-radius:50%; background:var(--gold); color:#111;
+  font-weight:800; font-size:19px; display:grid; place-items:center }
+.hb-steps p{ color:var(--dim); font-size:15.5px; margin:.2em 0 0 }
+
+/* what a tick list looks like */
+.hb-ticks{ list-style:none; margin:0; padding:0; display:grid; gap:11px }
+.hb-ticks li{ display:grid; grid-template-columns:24px 1fr; gap:12px; align-items:start;
+  color:var(--dim) }
+.hb-ticks li::before{ content:""; width:22px; height:22px; margin-top:2px; border-radius:50%;
+  background:var(--green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round' d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/15px no-repeat }
+
+.hb-note{ font-size:14.5px; color:rgba(255,255,255,.62); margin-top:2.2em }
+.hb-see{ display:flex; flex-wrap:wrap; gap:12px; margin-top:1.4em }
+.hb-see a{ display:inline-flex; align-items:center; min-height:46px; padding:0 20px;
+  border-radius:8px; text-decoration:none; color:#fff; font-weight:700; font-size:15px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.35) }
+
+/* the contact card, on the same sky as /contact/ */
+.hb-ask{ background:
+    radial-gradient(120% 90% at 50% 0%, rgba(255,255,255,.14), rgba(255,255,255,0) 60%),
+    linear-gradient(180deg,#0459bd 0%,#00287d 100%);
+  display:grid; place-items:center;
+  scroll-margin-top:calc(var(--hh) + var(--hbar) + 8px) }
+.hb-ask .fcard{ width:min(100%,1240px); margin-top:0; --fc-btn:#ffc72c;
+  --fc-edge:rgba(255,255,255,.9);
+  --fc-cast:0 26px 60px rgba(0,10,45,.45), 0 6px 16px rgba(0,10,45,.28) }
+.hb-ask .fcard::after{ box-shadow:inset 0 0 0 1px var(--fc-edge) }
+.hb-ask-h{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden;
+  clip:rect(0 0 0 0); white-space:nowrap; border:0 }
+
+:root[data-mode="night"] .hb-hero,
+:root[data-mode="night"] .hb-ask{ background:linear-gradient(180deg,#06214e 0%,#010817 100%) }
+</style>
+</head>
+<body>
+<!--HEADER-->
+<main id="hb-main" class="hb" tabindex="-1">
+
+  <section class="hb-hero">
+    <div class="in">
+      <p class="eyebrow">Highway Biz &middot; Spring Hill &amp; Tampa Bay</p>
+      <h1>The business card you never print again.</h1>
+      <p class="hb-lead">One tap of your phone against theirs and your details are on their
+        screen &mdash; your number, your website, your Instagram, your Facebook, your hours,
+        your directions. Change a thing tomorrow and everyone who taps it sees the change,
+        because there is nothing printed to go out of date.</p>
+      <p class="hb-price"><b>$199</b> <span>one time &middot; five NFC tags, your own page and five
+        years of hosting included</span></p>
+      <div class="hb-cta">
+        <a class="hb-btn hb-btn--go" href="#hb-ask">Contact us to get started</a>
+        <a class="hb-btn hb-btn--ghost" href="#hb-how">See how it works</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="hb-dark">
+    <div class="in">
+      <h2>What it is good for</h2>
+      <div class="hb-grid">
+        <div class="hb-card">
+          <h3>You stop printing cards</h3>
+          <p>No box of 500 in a drawer. No reprint because the number changed, the logo
+            changed or you moved. One card, and it is never out of date.</p>
+        </div>
+        <div class="hb-card">
+          <h3>Every update is already there</h3>
+          <p>New phone number, new hours, a new Instagram, a new offer &mdash; tell us and it
+            is live. Every tag you ever handed out points at the same page.</p>
+        </div>
+        <div class="hb-card">
+          <h3>Easy links to connect</h3>
+          <p>Call, text, email, directions, website, Instagram, Facebook, WhatsApp, a
+            booking link &mdash; each one a button, each one a single tap.</p>
+        </div>
+        <div class="hb-card">
+          <h3>It saves into their phone</h3>
+          <p>One tap adds you to their contacts with your photo or logo attached, so your
+            name comes up properly the next time you call them.</p>
+        </div>
+        <div class="hb-card">
+          <h3>It works without the tag too</h3>
+          <p>Your page has its own QR code and its own link. Put it in an email signature,
+            on a truck, on a flyer, in a text message.</p>
+        </div>
+        <div class="hb-card">
+          <h3>It looks like your business</h3>
+          <p>Your logo, your colours, your photos. Not a profile on somebody else's app
+            with their branding across the top.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hb-darker">
+    <div class="in">
+      <h2>What you get for $199</h2>
+      <ul class="hb-ticks">
+        <li>Your own card page, hosted at its own web address.</li>
+        <li>Five NFC tags, programmed, ready to tap and posted to you free anywhere in the US.</li>
+        <li>Your logo, your colours and your photos on it.</li>
+        <li>Every contact method and social link as its own button.</li>
+        <li>A saveable contact file, so one tap puts you in their phone.</li>
+        <li>Your own QR code, for print, email and anything that is not a tap.</li>
+        <li>Add-to-home-screen, so it sits on your phone like an app.</li>
+        <li>Five years of hosting, from the day it goes live.</li>
+        <li>The links and plain instructions for using it.</li>
+      </ul>
+      <p class="hb-note">Want to see one? These are real cards we built and they are live
+        right now.</p>
+      <div class="hb-see">
+        <a href="/community/carpenterrick/bc/">Carpenter Rick</a>
+        <a href="/hwy19/adambc/">Highway 19 Media</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="hb-dark" id="hb-how">
+    <div class="in">
+      <h2>How it works</h2>
+      <ol class="hb-steps">
+        <li><h3>You get in touch</h3>
+          <p>Tell us the business and how to reach you. That is all we need to start.</p></li>
+        <li><h3>We send the invoice</h3>
+          <p>$199, one time. Nothing to fill in and nothing to gather yet.</p></li>
+        <li><h3>You pay it</h3>
+          <p>Once it is paid we send you the form &mdash; so you are not filling anything in
+            before you have decided.</p></li>
+        <li><h3>You fill in the form</h3>
+          <p>Your name, phone, email, website, Instagram, Facebook, hours, area, your
+            logo, any photos you want on it, and a US address to post your tags to.
+            One form, one time.</p></li>
+        <li><h3>We build it and hand it over</h3>
+          <p>We make your card, send you the link, the QR and your tags, and the
+            instructions for using them.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="hb-darker">
+    <div class="in">
+      <h2>The price, in full</h2>
+      <p class="hb-lead"><b style="color:#fff">$199 once.</b> That covers building your card,
+        your five NFC tags posted to you, and five years of hosting from the day it goes
+        live. No monthly fee, no plan, nothing to cancel &mdash; the card is yours.</p>
+      <p class="hb-lead"><b style="color:#fff">Changes are free for the first 30 days.</b>
+        A wrong number, a better photo, a link you forgot &mdash; just tell us. After that,
+        a round of changes is $49, and rebuilding the card around a new business or a new
+        look is a new job we will quote you for.</p>
+      <p class="hb-note">Compare that with the apps: most charge $60 to $80 a year, every
+        year, for a profile on their template with their name on it. Five years of one of
+        those costs more than this does, and you never own it.</p>
+    </div>
+  </section>
+
+  <section class="hb-ask" id="hb-ask" aria-labelledby="hb-ask-h">
+    <h2 id="hb-ask-h" class="hb-ask-h">Get your Highway Biz card</h2>
+    <!--FORM-CARD-->
+  </section>
+
+</main>
+
+<!--FOOTER-->
+
+<script src="header.js" defer></script>
+<script src="form.js" defer></script>
+<script src="consent.js" defer></script>
+</body>
+</html>
