@@ -338,10 +338,15 @@ function render(c, ctx) {
   </div>
 </aside>`;
 
+  /* AND THE WAY TO GET ONE. Whoever has just been handed this card is the
+     person most likely to want their own, and the card is the only place
+     they meet us. One quiet line under the business's own name - never above
+     it, and never styled to compete with it. */
   const footer = `
 <footer class="foot">
   <p>${esc(id.business)}${id.area ? ` · ${esc(id.area)}` : ''}</p>
   ${ctx.privacy ? `<p><a href="${esc(ctx.privacy)}">Privacy</a></p>` : ''}
+  <p class="foot-biz"><a href="https://highway19media.com/highway-biz/">Want a card like this? Highway Biz &middot; $199</a></p>
 </footer>`;
 
   Object.assign(B, { identity, save, actions, social, promo, footer });
