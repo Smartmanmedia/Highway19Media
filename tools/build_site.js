@@ -120,6 +120,9 @@ code.forEach(f => collect(rd('build/v2/' + f)));
 collect(rd('build/v2/page.html'));
 collect(rd('build/v2/soon.html'));
 collect(rd('build/v2/web-design-body.html'));
+/* and the Highway Biz page, which names the two card photographs it sells
+   with - a page whose examples 404 is a page arguing against itself */
+collect(rd('build/v2/highway-biz.html'));
 /* the share card is named only in absolute og:image URLs, which the walk above
    cannot see - and a card that 404s is the blank rectangle it was drawn to
    replace. */

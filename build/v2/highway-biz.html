@@ -109,10 +109,22 @@ body{ margin:0; background:#00287d }
   background:var(--green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round' d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/15px no-repeat }
 
 .hb-note{ font-size:14.5px; color:rgba(255,255,255,.62); margin-top:2.2em }
-.hb-see{ display:flex; flex-wrap:wrap; gap:12px; margin-top:1.4em }
-.hb-see a{ display:inline-flex; align-items:center; min-height:46px; padding:0 20px;
-  border-radius:8px; text-decoration:none; color:#fff; font-weight:700; font-size:15px;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.35) }
+
+/* THE EXAMPLES. Describing a card is the weakest way to sell one, so these
+   are the real ones, shot on a phone-sized window - the thing being sold,
+   on the page selling it. The shots are photographs of live cards, not
+   mock-ups, which is why the link under each one goes to the card itself. */
+.hb-eg{ display:grid; gap:clamp(22px,3vw,40px); margin-top:clamp(26px,3vw,38px);
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); align-items:start }
+.hb-eg figure{ margin:0; text-align:center }
+.hb-eg img{ width:min(100%,280px); margin:0 auto; border-radius:18px;
+  box-shadow:0 22px 50px rgba(0,8,34,.55), 0 0 0 1px rgba(255,255,255,.14) }
+.hb-eg figcaption{ margin-top:16px }
+.hb-eg b{ display:block; font-size:17px; font-weight:800 }
+.hb-eg span{ display:block; font-size:14.5px; color:rgba(255,255,255,.62); margin-top:2px }
+.hb-eg a{ display:inline-flex; align-items:center; min-height:44px; margin-top:12px;
+  padding:0 20px; border-radius:8px; text-decoration:none; color:#fff; font-weight:700;
+  font-size:14.5px; box-shadow:inset 0 0 0 1px rgba(255,255,255,.35) }
 
 /* the contact card, on the same sky as /contact/ */
 .hb-ask{ background:
@@ -204,11 +216,27 @@ body{ margin:0; background:#00287d }
         <li>Five years of hosting, from the day it goes live.</li>
         <li>The links and plain instructions for using it.</li>
       </ul>
-      <p class="hb-note">Want to see one? These are real cards we built and they are live
-        right now.</p>
-      <div class="hb-see">
-        <a href="/community/carpenterrick/bc/">Carpenter Rick</a>
-        <a href="/hwy19/adambc/">Highway 19 Media</a>
+      <p class="hb-note">Two we built, live right now &mdash; open either one on your
+        phone and it behaves exactly like the one you would get.</p>
+      <div class="hb-eg">
+        <figure>
+          <img src="../../assets/v2/biz/card-carpenterrick-v1.jpg" width="390" height="720"
+               alt="Carpenter Rick's digital business card on a phone: his logo over a photo of a cabin shed he built, a Save to Contacts button, and Call, Text and Website buttons." loading="lazy" decoding="async">
+          <figcaption>
+            <b>Carpenter Rick</b>
+            <span>Cabin sheds &amp; custom builds &middot; Spring Hill</span>
+            <a href="/community/carpenterrick/bc/">Open his card</a>
+          </figcaption>
+        </figure>
+        <figure>
+          <img src="../../assets/v2/biz/card-hwy19-v1.jpg" width="390" height="720"
+               alt="The Highway 19 Media digital business card on a phone: the shield on the gantry, Adam Ayash, a Save to Contacts button and Call, Text, Email and Website buttons." loading="lazy" decoding="async">
+          <figcaption>
+            <b>Highway 19 Media</b>
+            <span>Our own card &middot; the one we hand out</span>
+            <a href="/hwy19/adambc/">Open our card</a>
+          </figcaption>
+        </figure>
       </div>
     </div>
   </section>
