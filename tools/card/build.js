@@ -371,7 +371,7 @@ ${ctx.index ? '' : '<meta name="robots" content="noindex, follow">\n'}<meta name
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${esc(ctx.url)}">
-${ctx.og ? `<meta property="og:image" content="${esc(ctx.og)}">\n<meta name="twitter:card" content="summary_large_image">\n` : ''}${hero && !emblem ? '<link rel="preload" as="image" href="art/hero-720.webp" imagesrcset="art/hero-720.webp 720w, art/hero-1080.webp 1080w" imagesizes="(max-width: 480px) 100vw, 440px">' : ''}
+${ctx.og ? `<meta property="og:image" content="${esc(ctx.og)}">\n${ctx.ogSize ? `<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n` : ''}<meta property="og:image:alt" content="${esc(id.business)}">\n<meta name="twitter:card" content="summary_large_image">\n` : ''}${hero && !emblem ? '<link rel="preload" as="image" href="art/hero-720.webp" imagesrcset="art/hero-720.webp 720w, art/hero-1080.webp 1080w" imagesizes="(max-width: 480px) 100vw, 440px">' : ''}
 ${ctx.fonts.map(f => `<link rel="preload" as="font" type="font/woff2" href="${f}" crossorigin>`).join('\n')}
 <link rel="stylesheet" href="card.css?v=${ctx.stamp.css}">
 ${ctx.consent ? ctx.consent + '\n' : ''}<script src="card.js?v=${ctx.stamp.js}" defer></script>
@@ -443,7 +443,15 @@ function buildCard(dir, o) {
   const html = render(c, {
     slug, url, mode, accent, onAccent: onAccent(accent), bg: c.theme.bg || BASE[mode].bg, skin: c.theme.skin || '',
     index: !!c.index, vcf: vcfName, stamp, intro, fonts: fonts.slice(0, 2),
-    og: c.og || o.og, privacy: c.privacy === undefined ? o.privacy : c.privacy,
+    /* WHAT IT SENDS AHEAD OF ITSELF IS ITS OWN. WhatsApp and the rest never
+       open the card; they read og:image. Falling straight through to the
+       site's picture put the Highway 19 shield on somebody else's business
+       card the moment a customer forwarded it. Its own share picture - cut
+       by tools/card/make_share.js from its logo and its colours - wins,
+       then anything card.json names in "og", then the site's. */
+    og: c.og || (art.includes('share-1200.jpg') ? url + 'art/share-1200.jpg' : o.og),
+    ogSize: !c.og && art.includes('share-1200.jpg'),
+    privacy: c.privacy === undefined ? o.privacy : c.privacy,
     consent: o.consent,
   });
   fs.writeFileSync(path.join(outDir, 'index.html'), html);
@@ -470,7 +478,11 @@ function buildCard(dir, o) {
   /* the worker is versioned by everything it caches, so any change to the
      card - text, art, code - is a new cache and the old one is cleared */
   const shell = ['./', vcfName, 'manifest.webmanifest', `card.css?v=${stamp.css}`, `card.js?v=${stamp.js}`,
-    ...art.filter(f => f !== 'vcard-photo.jpg' && f !== 'hero-1080.webp').map(f => 'art/' + f), ...fonts];
+    /* share-1200.jpg is for the apps that preview a link, never for the
+       page - precaching it would cost every installed card 50 KB it never
+       draws, the way vcard-photo.jpg would */
+    ...art.filter(f => f !== 'vcard-photo.jpg' && f !== 'hero-1080.webp' &&
+                       f !== 'share-1200.jpg').map(f => 'art/' + f), ...fonts];
   const version = hash(html + JSON.stringify(shell) + art.map(f => fs.statSync(path.join(artDir, f)).size).join());
   const sw = fs.readFileSync(path.join(T, 'sw.js'), 'utf8')
     .replace('__CACHE__', `card-${slug}-${version}`)
