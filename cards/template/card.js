@@ -184,8 +184,32 @@
   }
 
   /* ---- the worker: what makes it open with no signal ---------------------- */
-  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost'))
+  /* AND WHAT MAKES AN EDIT REACH A CARD ALREADY ON A HOME SCREEN. Opening it
+     cold fetches the page - the worker is network-first for that - but a card
+     on a home screen is usually RESUMED, not opened: the phone hands back the
+     screen exactly as it was left, no navigation, no fetch, and a number
+     changed last week is still the old number weeks later. Nobody is going to
+     think to force-quit a business card.
+     So when it comes back to the front, ask whether there is a newer worker.
+     If there is, it skips waiting, takes over, and the reload below puts the
+     current card on screen. The guard matters: on a first-ever visit the
+     worker also takes control, and reloading there would be a flicker for no
+     reason. */
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    var hadWorker = !!navigator.serviceWorker.controller, checked = 0;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (hadWorker) location.reload();
+    });
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('sw.js').catch(function () {});
     });
+    document.addEventListener('visibilitychange', function () {
+      /* a glance at another app and back is not a reason to go to the network */
+      if (document.visibilityState !== 'visible' || Date.now() - checked < 60000) return;
+      checked = Date.now();
+      navigator.serviceWorker.getRegistration()
+        .then(function (r) { if (r) r.update(); })
+        .catch(function () {});
+    });
+  }
 })();
