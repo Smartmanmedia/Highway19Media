@@ -5,7 +5,8 @@
   "theme": {
     "mode": "dark",
     "accent": "#C8A96A",
-    "bg": "#0B0E14"
+    "bg": "#0B0E14",
+    "skin": "law"
   },
   "identity": {
     "business": "Triquetra Law Group",
@@ -78,5 +79,13 @@
       "bg": "#0B0E14"
     }
   },
-  "order": ["identity", "save", "actions", "services", "share", "install", "footer"]
+  "order": [
+    "identity",
+    "save",
+    "actions",
+    "services",
+    "share",
+    "install",
+    "footer"
+  ]
 }

@@ -430,3 +430,53 @@ html .consent__btn--no{ color:var(--text); border-color:var(--line) }
 .app-ic--emblem{ position:absolute; left:50%; top:-18px; transform:translateX(-50%); width:100px; height:auto; border-radius:0; box-shadow:none; filter:drop-shadow(0 6px 14px rgb(0 0 0 / .45)) }
 [data-skin="navy"] .mod-install .mod-p{ color:#fff }
 [data-skin="navy"] .mod-install .btn .ic{ width:24px; height:24px }
+
+/* ============================================================================
+   THE LAW SKIN  (card.json: "theme": { "skin": "law" })
+   A contractor's card should look like a tool: round, bright, high-contrast.
+   Counsel's should look like a letterhead - squared corners, hairline rules,
+   a serif for the name, small caps for the labels, and no glow anywhere.
+   The ground is the one the intro film opens on, so the card the reader
+   lands on is the same room the film was shot in.
+   ========================================================================= */
+[data-skin="law"]{
+  --r-lg:3px; --r:3px; --r-sm:2px;
+  --gap:10px;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --rule:color-mix(in oklab, var(--accent) 22%, rgb(255 255 255 / .09));
+  --panel:rgb(255 255 255 / .028);
+}
+[data-skin="law"] body{
+  background:linear-gradient(180deg,#121725 0%,#0B0E14 55%,#05070B 100%) fixed;
+}
+/* panels are bounded by a line, not lifted by a shadow */
+[data-skin="law"] :is(.id,.act,.soc-row,.mod,.save){
+  background:var(--panel); border:1px solid var(--rule); box-shadow:none;
+}
+[data-skin="law"] .id{ padding-bottom:22px }
+[data-skin="law"] .id-name{ font-family:var(--serif); font-weight:400; letter-spacing:.01em; line-height:1.1 }
+[data-skin="law"] .id-person{ font-family:var(--serif); font-weight:400; color:var(--accent); letter-spacing:.06em }
+[data-skin="law"] .id-tag{ font-family:var(--serif); font-weight:400; font-style:italic; color:var(--text); opacity:.92 }
+[data-skin="law"] .id-meta{ font-size:11.5px; letter-spacing:.045em; text-transform:uppercase; color:var(--muted) }
+[data-skin="law"] .id-logo{ width:62px; height:62px; border-radius:0 }
+
+/* the one filled control on the card, and it is a rectangle */
+[data-skin="law"] .save{
+  background:var(--accent); color:var(--on-accent); border:0;
+  font-family:var(--serif); font-weight:600; font-size:15px;
+  letter-spacing:.16em; text-transform:uppercase;
+}
+[data-skin="law"] .save-note{ color:var(--muted); font-size:12px; letter-spacing:.05em }
+
+[data-skin="law"] .act{ font-size:13px; letter-spacing:.11em; text-transform:uppercase }
+[data-skin="law"] .mod-h{
+  font-family:var(--serif); font-weight:400; font-size:12px;
+  letter-spacing:.26em; text-transform:uppercase; color:var(--muted);
+  padding-bottom:10px; border-bottom:1px solid var(--rule); margin-bottom:4px;
+}
+[data-skin="law"] .svc li + li{ border-top-color:var(--rule) }
+[data-skin="law"] .svc b{ font-family:var(--serif); font-weight:400; font-size:17px; letter-spacing:.01em }
+[data-skin="law"] .btn{ border-radius:2px; letter-spacing:.14em; text-transform:uppercase; font-size:12px }
+[data-skin="law"] .install-h{ font-family:var(--serif); font-weight:400; letter-spacing:.04em }
+[data-skin="law"] .app-ic{ border-radius:0 }
+[data-skin="law"] .foot{ letter-spacing:.06em }
