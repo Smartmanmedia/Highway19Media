@@ -1,0 +1,82 @@
+{
+  "path": "/bc/triquetra/",
+  "index": false,
+  "intro": true,
+  "theme": {
+    "mode": "dark",
+    "accent": "#C8A96A",
+    "bg": "#0B0E14"
+  },
+  "identity": {
+    "business": "Triquetra Law Group",
+    "logo": true,
+    "person": "Jennifer",
+    "title": "",
+    "tagline": "Every case is handled personally by a founding member.",
+    "services": "Intellectual property for life sciences",
+    "area": "Boston, Massachusetts"
+  },
+  "contact": {
+    "email": "info@triquetralawgroup.com",
+    "website": "https://www.triquetralawgroup.com/",
+    "address": {
+      "street": "",
+      "city": "Boston",
+      "region": "MA",
+      "postcode": "",
+      "country": "USA"
+    },
+    "directions": "",
+    "book": null
+  },
+  "social": {
+    "facebook": "",
+    "instagram": "",
+    "whatsapp": "",
+    "tiktok": "",
+    "youtube": "",
+    "linkedin": "",
+    "x": ""
+  },
+  "modules": {
+    "story": null,
+    "gallery": null,
+    "services": {
+      "title": "Who you are hiring",
+      "items": [
+        {
+          "name": "Former Big Law partners",
+          "line": "The firm's members came up through the practices your investors already know."
+        },
+        {
+          "name": "In-house at biotech",
+          "line": "They have also served as in-house IP executives at biotech companies - the client's side of the table."
+        },
+        {
+          "name": "$1.5B+ negotiated",
+          "line": "Lead IP negotiators on more than $1.5 billion in equity, collaboration and royalty transactions."
+        }
+      ]
+    },
+    "offer": null,
+    "review": null,
+    "lead": null,
+    "share": true,
+    "install": {
+      "title": "Keep us on your phone",
+      "line": "One tap to the people handling your IP."
+    },
+    "promo": null
+  },
+  "app": {
+    "name": "Triquetra Law Group",
+    "short": "Triquetra"
+  },
+  "art": {
+    "icon": {
+      "src": "cards/triquetra/art-src/mark.svg",
+      "bg": "#0B0E14"
+    }
+  },
+  "order": ["identity", "save", "actions", "services", "share", "install", "footer"]
+}

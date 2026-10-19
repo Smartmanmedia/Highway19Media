@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Triquetra Law Group">
+  <!-- THE MARK: a triquetra, the three-cornered trinity knot the firm is named
+       for. Three vesica leaves at 120 degrees, struck from circles whose
+       centres sit on an equilateral triangle the length of their own radius -
+       so each passes through the other two centres and the three leaves
+       interlock. Drawn as a line rather than filled, because the firm's own
+       argument is three strands held in one piece (Big Law, in-house, the deal
+       table) and because a line can be drawn - which is what the intro does. -->
+  <g fill="none" stroke="#C8A96A" stroke-width="5.2" stroke-linejoin="round" stroke-linecap="round">
+    <!-- the knot's own bbox centre is 10.2 below the viewBox centre - three
+         leaves at 120 degrees do not balance about the point they rotate
+         around - so it is lifted to sit true inside the ring -->
+    <g transform="translate(0 -10.2)">
+    <path class="k1" d="M100.000,73.442 A46.0,46.0 0 0 1 100.000,153.116 A46.0,46.0 0 0 1 100.000,73.442Z"/>
+    <path class="k2" d="M123.000,113.279 A46.0,46.0 0 0 1 54.000,73.442 A46.0,46.0 0 0 1 123.000,113.279Z"/>
+    <path class="k3" d="M77.000,113.279 A46.0,46.0 0 0 1 146.000,73.442 A46.0,46.0 0 0 1 77.000,113.279Z"/>
+    </g>
+    <circle class="ring" cx="100" cy="100" r="64" stroke-width="2.4" opacity=".5"/>
+  </g>
+</svg>
