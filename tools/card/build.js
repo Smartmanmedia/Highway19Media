@@ -160,7 +160,7 @@ function render(c, ctx) {
   <div class="id-body">
     ${id.logo === false ? '' : '<img class="id-logo" src="art/logo-160.webp" alt="" width="56" height="56">'}
     <h1 class="id-name">${esc(id.business)}</h1>
-    ${id.person ? `<p class="id-person">${esc(id.person)}${id.title ? ` <span>· ${esc(id.title)}</span>` : ''}</p>` : ''}
+    ${id.person ? `<p class="id-person">${esc(id.person)}${id.title ? ` <span><span class="id-sep">· </span>${esc(id.title)}</span>` : ''}</p>` : ''}
     ${id.tagline ? `<p class="id-tag">${esc(id.tagline)}</p>` : ''}
     <p class="id-meta">${id.services ? `<span>${esc(id.services)}</span>` : ''}${id.area ? `<span class="id-area">${ic('pin', 'ic ic-s')}${esc(id.area)}</span>` : ''}</p>
   </div>
@@ -346,7 +346,7 @@ function render(c, ctx) {
 <footer class="foot">
   <p>${esc(id.business)}${id.area ? ` · ${esc(id.area)}` : ''}</p>
   ${ctx.privacy ? `<p><a href="${esc(ctx.privacy)}">Privacy</a></p>` : ''}
-  <p class="foot-biz"><a href="https://highway19media.com/highway-biz/">Want a card like this? Highway Biz &middot; $199</a></p>
+  <p class="foot-biz"><a href="https://highway19media.com/highway-biz/">Want a card like this?</a></p>
 </footer>`;
 
   Object.assign(B, { identity, save, actions, social, promo, footer });
@@ -356,7 +356,7 @@ function render(c, ctx) {
   const title = id.person ? `${id.person} · ${id.business}` : id.business;
 
   return `<!doctype html>
-<html lang="en"${ctx.intro ? ' class="intro-on"' : ''} data-theme="${ctx.mode}"${ctx.skin ? ` data-skin="${ctx.skin}"` : ''} style="--accent:${ctx.accent};--on-accent:${ctx.onAccent}">
+<html lang="en" data-card${ctx.intro ? ' class="intro-on"' : ''} data-theme="${ctx.mode}"${ctx.skin ? ` data-skin="${ctx.skin}"` : ''} style="--accent:${ctx.accent};--on-accent:${ctx.onAccent}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">

@@ -334,16 +334,20 @@ div.how{ gap:14px }
    over the buttons the card exists for. So on a card it floats, compact, in
    the card's own surface and accent. (card.css loads first, hence html.) */
 html .consent{
-  /* at the TOP on a card: at the foot of a small phone it sits squarely on
-     Save to Contacts, and over the photo it hides nothing anyone came for */
-  left:10px; right:10px; top:max(10px, env(safe-area-inset-top)); bottom:auto;
+  /* at the FOOT, rising into view: it comes late (consent.js waits until the
+     card has been seen), so by then the reader knows where they are and the
+     question arrives from below, out of the way of the name and the logo */
+  left:10px; right:10px; top:auto; bottom:max(10px, calc(env(safe-area-inset-bottom) + 6px));
   width:auto; max-width:420px; margin:0 auto; padding:14px 14px 12px; gap:10px;
   border-radius:var(--r); border:1px solid var(--line);
-  background:var(--surface-2); color:var(--text);
-  box-shadow:0 18px 40px rgb(0 0 0 / .45);
+  /* the panel colour laid on the card's own ground: a skin whose panels are
+     see-through (navy) would otherwise show the buttons through the words */
+  background:linear-gradient(var(--surface-2),var(--surface-2)), var(--bg); color:var(--text);
+  box-shadow:0 -12px 40px rgb(0 0 0 / .45);
   font:500 13px/1.4 var(--font);
 }
-html .consent:not(.is-up){ translate:0 calc(-100% - 20px) }
+html .consent:not(.is-up){ translate:0 calc(100% + 40px) }
+html .consent{ transition:translate .5s cubic-bezier(.2,.8,.2,1) }
 html .consent__text{ font-size:13px; line-height:1.4; color:var(--muted) }
 html .consent__text a{ color:var(--ink) }
 html .consent__btn{ min-height:42px; font-size:14px; border-radius:12px }
@@ -456,6 +460,12 @@ html .consent__btn--no{ color:var(--text); border-color:var(--line) }
 [data-skin="law"] .id{ padding-bottom:22px; text-align:center }
 [data-skin="law"] .id-name{ font-family:var(--serif); font-weight:400; letter-spacing:.01em; line-height:1.1 }
 [data-skin="law"] .id-person{ font-family:var(--serif); font-weight:400; color:var(--accent); letter-spacing:.06em }
+/* her name is the line; her title sits under it, never broken off the end */
+[data-skin="law"] .id-person > span{ display:block; margin-top:3px; font-size:14px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); opacity:1 }
+[data-skin="law"] .id-sep{ display:none }
+/* the firm's name on one line on the narrowest iPhones (SE, mini) too */
+@media (max-width:380px){ [data-skin="law"] .id-name{ font-size:26px } }
+@media (max-width:340px){ [data-skin="law"] .id-name{ font-size:22px } }
 [data-skin="law"] .id-tag{ font-family:var(--serif); font-weight:400; font-style:italic; color:var(--text); opacity:.92 }
 [data-skin="law"] .id-meta{ font-size:11.5px; letter-spacing:.045em; text-transform:uppercase; color:var(--muted); justify-content:center }
 /* the city is signed at the foot of the card, like a letterhead's address */
@@ -464,7 +474,8 @@ html .consent__btn--no{ color:var(--text); border-color:var(--line) }
 
 /* the one filled control on the card, and it is a rectangle */
 [data-skin="law"] .save{
-  background:var(--accent); color:var(--on-accent); border:0;
+  /* struck like the metal of her mark: its gold, lit across the middle */
+  background:linear-gradient(180deg,#E1BF61 0%,var(--accent) 48%,#C99A1E 100%); color:var(--on-accent); border:0;
   font-family:var(--serif); font-weight:600; font-size:15px;
   letter-spacing:.16em; text-transform:uppercase;
 }

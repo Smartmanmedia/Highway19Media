@@ -9,10 +9,17 @@
   /* a tablet or a landscape phone: show the whole phone-shaped film centred
      rather than slicing it, or the mark and the name fall off the edges */
   var svg = document.getElementById('intro-svg');
+  var acts = document.getElementById('intro-acts');
   function fit() {
     var wide = innerWidth / innerHeight > 0.62;
     svg.setAttribute('preserveAspectRatio', wide ? 'xMidYMid meet' : 'xMidYMid slice');
     box.classList.toggle('wide', wide);
+    /* the button hangs under the film's last line wherever the slice put it -
+       a fixed 80% landed on that line on an iPhone SE and a 13 in Safari */
+    var m = svg.getScreenCTM(), p = svg.createSVGPoint();
+    if (!m) return;
+    p.x = 0; p.y = 656;
+    acts.style.top = Math.min(p.matrixTransform(m).y, innerHeight - 74) + 'px';
   }
   fit(); addEventListener('resize', fit);
 

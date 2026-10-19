@@ -201,8 +201,13 @@
      ready, so the first thing a visitor meets is the site, not a question.
      Nothing loads in the meantime - waiting is the same as not yet saying yes.
      If they answer sooner through "Cookie choices", the late bar stays away. */
-  var DELAY = 5000;
+  /* A BUSINESS CARD waits four seconds, and its clock starts only once the
+     card's intro film has gone: the film is part of arriving, and the reader
+     should have the card itself in front of them before anything asks. */
+  var DELAY = root.hasAttribute('data-card') ? 4000 : 5000;
   function later() {
+    var film = document.getElementById('intro');
+    if (film && film.offsetWidth) { setTimeout(later, 250); return; }
     setTimeout(function () { if (!root.hasAttribute('data-consent')) show(); }, DELAY);
   }
   if (document.readyState === 'loading')
