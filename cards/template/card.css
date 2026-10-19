@@ -447,7 +447,7 @@ html .consent__btn--no{ color:var(--text); border-color:var(--line) }
   --panel:rgb(255 255 255 / .028);
 }
 [data-skin="law"] body{
-  background:linear-gradient(180deg,#121725 0%,#0B0E14 55%,#05070B 100%) fixed;
+  background:radial-gradient(130% 70% at 50% 0%,#004827 0%,#111715 72%) fixed #111715;
 }
 /* panels are bounded by a line, not lifted by a shadow */
 [data-skin="law"] :is(.id,.act,.soc-row,.mod,.save){

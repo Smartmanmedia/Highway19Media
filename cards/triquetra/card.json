@@ -4,21 +4,21 @@
   "intro": true,
   "theme": {
     "mode": "dark",
-    "accent": "#C8A96A",
-    "bg": "#0B0E14",
+    "accent": "#D3A72A",
+    "bg": "#111715",
     "skin": "law"
   },
   "identity": {
     "business": "Triquetra Law Group",
     "logo": true,
-    "person": "Jennifer",
-    "title": "",
+    "person": "Jennifer H. Burdman",
+    "title": "Co-Founder",
     "tagline": "Every case is handled personally by a founding member.",
     "services": "Intellectual property for life sciences",
     "area": "Boston, Massachusetts"
   },
   "contact": {
-    "email": "info@triquetralawgroup.com",
+    "email": "jburdman@triquetralawgroup.com",
     "website": "https://www.triquetralawgroup.com/",
     "address": {
       "street": "",
@@ -47,11 +47,11 @@
       "items": [
         {
           "name": "Former Big Law partners",
-          "line": "The firm's members came up through the practices your investors already know."
+          "line": "Seasoned trial lawyers and dealmakers who built the firm to deliver senior counsel without the layers."
         },
         {
           "name": "In-house at biotech",
-          "line": "They have also served as in-house IP executives at biotech companies - the client's side of the table."
+          "line": "They have also served as in-house IP executives at biotech companies, and as Managing Directors at an IP-based investment firm."
         },
         {
           "name": "$1.5B+ negotiated",
@@ -76,7 +76,7 @@
   "art": {
     "icon": {
       "src": "cards/triquetra/art-src/mark.svg",
-      "bg": "#0B0E14"
+      "bg": "#111715"
     }
   },
   "order": [

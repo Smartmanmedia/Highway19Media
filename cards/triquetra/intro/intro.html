@@ -1,38 +1,59 @@
 <div id="intro"><svg id="intro-svg" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
   <defs>
-    <linearGradient id="tqInk" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#121725"/><stop offset=".55" stop-color="#0B0E14"/><stop offset="1" stop-color="#05070B"/>
-    </linearGradient>
+    <!-- the firm's own ground, from its green lockup: forest green under the
+         mark, falling away to the green-black every version of the logo sits on -->
+    <radialGradient id="tqInk" cx="195" cy="372" r="520" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#004827"/><stop offset="1" stop-color="#111715"/>
+    </radialGradient>
     <linearGradient id="tqGlint" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
     </linearGradient>
-    <filter id="tqGlow" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
+    <radialGradient id="tq-g1" cx="133.61" cy="125.07" r="62.54" gradientUnits="userSpaceOnUse"><stop offset=".25" stop-color="#fff"/><stop offset=".31" stop-color="#f9f2df"/><stop offset=".4" stop-color="#efdeae"/><stop offset=".5" stop-color="#e7cd84"/><stop offset=".59" stop-color="#e1bf61"/><stop offset=".69" stop-color="#dcb447"/><stop offset=".79" stop-color="#d8ad34"/><stop offset=".89" stop-color="#d6a828"/><stop offset="1" stop-color="#d6a725"/></radialGradient><radialGradient id="tq-g2" cx="133.5" cy="124.45" r="60.78" href="#tq-g1" xlink:href="#tq-g1"/><radialGradient id="tq-g3" cx="76.1" cy="133.53" r="64.26" href="#tq-g1" xlink:href="#tq-g1"/><radialGradient id="tq-g4" cx="75.98" cy="134.33" r="61.88" href="#tq-g1" xlink:href="#tq-g1"/><radialGradient id="tq-g5" cx="99.91" cy="79.28" r="67.78" href="#tq-g1" xlink:href="#tq-g1"/><radialGradient id="tq-g6" cx="99.67" cy="79.23" r="65.41" href="#tq-g1" xlink:href="#tq-g1"/>
+    <!-- THE PEN. The logo is three filled strands, and a fill cannot be drawn,
+         so each strand is uncovered by a mask instead: a circle about the
+         strand's own centre, stroked wide enough to cover it, its dash let out
+         from the cut end of the strand round to the other. pathLength="1"
+         keeps the dash in whole turns, so the three strands finish in step. -->
+    <mask id="tq-m1" maskUnits="userSpaceOnUse" x="-20" y="-20" width="240" height="224">
+      <circle id="tq-k1" pathLength="1" cx="99.91" cy="79.28" r="58" fill="none" stroke="#fff" stroke-width="68" transform="rotate(89 99.91 79.28)"/>
+    </mask>
+    <mask id="tq-m2" maskUnits="userSpaceOnUse" x="-20" y="-20" width="240" height="224">
+      <circle id="tq-k2" pathLength="1" cx="133.61" cy="125.07" r="58" fill="none" stroke="#fff" stroke-width="68" transform="rotate(203.5 133.61 125.07)"/>
+    </mask>
+    <mask id="tq-m3" maskUnits="userSpaceOnUse" x="-20" y="-20" width="240" height="224">
+      <circle id="tq-k3" pathLength="1" cx="76.1" cy="133.53" r="58" fill="none" stroke="#fff" stroke-width="68" transform="rotate(323.5 76.1 133.53)"/>
+    </mask>
+    <clipPath id="tq-clip"><use href="#tq-p1"/><use href="#tq-p2"/><use href="#tq-p3"/><use href="#tq-p4"/><use href="#tq-p5"/><use href="#tq-p6"/></clipPath>
   </defs>
 
   <rect width="390" height="844" fill="url(#tqInk)"/>
 
-  <!-- THE MARK, DRAWN. Each leaf carries pathLength="1", so the dash runs in
-       its own units and no two leaves need the same real length to finish
-       together. Three strands, in the order the firm argues them. -->
-  <g id="tq-mark" transform="translate(195 372) scale(1.15) translate(-100 -100)"
-     fill="none" stroke="#C8A96A" stroke-width="5.2" stroke-linejoin="round" stroke-linecap="round" filter="url(#tqGlow)">
-    <circle id="tq-ring" cx="100" cy="100" r="64" stroke-width="2.4" opacity=".55" pathLength="1"/>
-    <g transform="translate(0 -10.2)">
-      <path id="tq-k1" pathLength="1" d="M100.000,73.442 A46.0,46.0 0 0 1 100.000,153.116 A46.0,46.0 0 0 1 100.000,73.442Z"/>
-      <path id="tq-k2" pathLength="1" d="M123.000,113.279 A46.0,46.0 0 0 1 54.000,73.442 A46.0,46.0 0 0 1 123.000,113.279Z"/>
-      <path id="tq-k3" pathLength="1" d="M77.000,113.279 A46.0,46.0 0 0 1 146.000,73.442 A46.0,46.0 0 0 1 77.000,113.279Z"/>
+  <!-- THE MARK, DRAWN - the firm's own, from Export/SVG/Logo Icon.svg. Black
+       hairlines under gold, each layer split by strand so one mask uncovers
+       both. Three strands, in the order the firm argues them. -->
+  <g id="tq-mark" transform="translate(195 372) scale(1.1) translate(-100.24 -91.9)">
+    <g>
+      <g mask="url(#tq-m1)"><path d="M64.24,92.09c1.72,23.8,12.87,45.16,31.98,59.26-5.88,3.9-10.15,5.44-16.27,7.71-26.77-23.09-39.06-58.31-31.36-93.15C54.87,37.51,74.21,13.36,100.28.5c29.57,14.06,50.02,43.25,53.62,75.45.07.66.24,2.11.19,2.33-5.72-3.39-12.6-6.95-19.35-9.26-4.72-19.87-16.97-36.93-34.33-48.18-24.06,15.48-38.25,42.54-36.17,71.25Z"/><path d="M100.38,18.3c-34.08,21.27-48.08,63.58-31.52,100.43,5.58,12.42,13.98,22.99,25.09,31.6-4.46,2.58-8.98,4.51-13.83,6.23-10.13-9.36-18.27-20.08-23.77-32.62-20.11-45.82-.44-98.47,44.05-121.06,10.03,4.88,18.49,11.35,26.11,19.37,13.38,14.17,22.25,31.71,24.99,51.74-4.92-2.35-9.55-4.75-14.91-6.65-5.24-20.58-18.24-37.8-36.21-49.05Z"/></g>
+      <g mask="url(#tq-m2)"><path d="M119.37,164.48c20.32,6.16,43.93,2.45,62.91-6.68-1.86-20.96-11.81-40.24-27.75-53.95-24.03-20.67-57.6-25.14-87.16-12.82-.15-6.83.12-11.88.91-17.99,28.82-9.59,61.12-7.41,86.58,8.99,29.28,18.87,46.76,51.17,45.55,86.16-16.66,10.59-35.7,15.91-55.42,15.6-14.11-.25-29.51-2.06-42.76-8.29,6.33-3.58,11.47-6.15,17.14-11.03Z"/><path d="M119.48,164.59c21.05,5.88,45.81,4.21,65.04-5.5-2.15-30.86-21.27-57.5-49.32-69.97-20.77-9.23-44.54-9.68-65.98-1.51-.17-4.97.35-9.8,1.38-14.68,27.38-8.77,57.18-5.07,81.54,9.91,29.29,18.02,46.88,49.89,46.24,84.14-14.38,8.94-30.19,13.74-46.89,14.55-14.83.7-29.32-1.67-43.05-7.35,5.15-2.93,6.59-5.96,11.04-9.59Z"/></g>
+      <g mask="url(#tq-m3)"><path d="M136.52,95.85c5.85,3.08,11.06,6.05,15.97,10-2.31,11.29-6.49,21.55-12.43,30.91C110.17,183.88,47.66,197.81.37,168.08c-1.25-33.08,14.48-63.4,41.2-82.43.3-.21,1.93-1.3,1.93-1.3,0,0-.15,1.25-.15,1.84.01,6.58.63,12.12,1.74,18.69-15.42,13.6-24.72,32.38-26.54,52.8,28.62,13.73,62.57,9.88,87.56-9.63,16.47-12.86,26.95-31.21,30.41-52.21Z"/><path d="M150.2,106.57c-10.19,45.83-53.59,77.2-100.16,74.99-17.07-.81-33.35-5.62-47.67-14.66-.12-12.42,1.95-24,6.02-35.44,6.59-17.42,17.87-32.18,32.83-43.47.22,5.66.76,10.67,1.63,16.17-15.64,14.23-25.03,33.58-26.52,54.9,24.69,12.41,54.05,11.98,78.29-.95,23.09-12.06,39.18-33.72,43.44-59.62l12.15,8.08Z"/></g>
     </g>
-    <g id="tq-shine" clip-path="none" opacity="0">
-      <rect x="-60" y="0" width="46" height="200" fill="url(#tqGlint)" transform="skewX(-16)" style="mix-blend-mode:screen"/>
+    <g>
+      <g mask="url(#tq-m1)"><path id="tq-p5" d="M63.94,91.59c1.72,23.8,12.87,45.16,31.98,59.26-5.88,3.9-10.15,5.44-16.27,7.71-26.77-23.09-39.06-58.31-31.36-93.15C54.57,37.01,73.91,12.86,99.98,0c29.57,14.06,50.02,43.25,53.62,75.45.07.66.24,2.11.19,2.33-5.72-3.39-12.6-6.95-19.35-9.26-4.72-19.87-16.97-36.93-34.33-48.18-24.06,15.48-38.25,42.54-36.17,71.25Z" fill="url(#tq-g5)"/><path id="tq-p6" d="M100.08,17.8c-34.08,21.27-48.08,63.58-31.52,100.43,5.58,12.42,13.98,22.99,25.09,31.6-4.46,2.58-8.98,4.51-13.83,6.23-10.13-9.36-18.27-20.08-23.77-32.62-20.11-45.82-.44-98.47,44.05-121.06,10.03,4.88,18.49,11.35,26.11,19.37,13.38,14.17,22.25,31.71,24.99,51.74-4.92-2.35-9.55-4.75-14.91-6.65-5.24-20.58-18.24-37.8-36.21-49.05Z" fill="url(#tq-g6)"/></g>
+      <g mask="url(#tq-m2)"><path id="tq-p1" d="M119.07,163.98c20.32,6.16,43.93,2.45,62.91-6.68-1.86-20.96-11.81-40.24-27.75-53.95-24.03-20.67-57.6-25.14-87.16-12.82-.15-6.83.12-11.88.91-17.99,28.82-9.59,61.12-7.41,86.58,8.99,29.28,18.87,46.76,51.17,45.55,86.16-16.66,10.59-35.7,15.91-55.42,15.6-14.11-.25-29.51-2.06-42.76-8.29,6.33-3.58,11.47-6.15,17.14-11.03Z" fill="url(#tq-g1)"/><path id="tq-p2" d="M119.18,164.09c21.05,5.88,45.81,4.21,65.04-5.5-2.15-30.86-21.27-57.5-49.32-69.97-20.77-9.23-44.54-9.68-65.98-1.51-.17-4.97.35-9.8,1.38-14.68,27.38-8.77,57.18-5.07,81.54,9.91,29.29,18.02,46.88,49.89,46.24,84.14-14.38,8.94-30.19,13.74-46.89,14.55-14.83.7-29.32-1.67-43.05-7.35,5.15-2.93,6.59-5.96,11.04-9.59Z" fill="url(#tq-g2)"/></g>
+      <g mask="url(#tq-m3)"><path id="tq-p3" d="M136.22,95.35c5.85,3.08,11.06,6.05,15.97,10-2.31,11.29-6.49,21.55-12.43,30.91C109.87,183.38,47.36,197.31.07,167.58c-1.25-33.08,14.48-63.4,41.2-82.43.3-.21,1.93-1.3,1.93-1.3,0,0-.15,1.25-.15,1.84.01,6.58.63,12.12,1.74,18.69-15.42,13.6-24.72,32.38-26.54,52.8,28.62,13.73,62.57,9.88,87.56-9.63,16.47-12.86,26.95-31.21,30.41-52.21Z" fill="url(#tq-g3)"/><path id="tq-p4" d="M149.9,106.07c-10.19,45.83-53.59,77.2-100.16,74.99-17.07-.81-33.35-5.62-47.67-14.66-.12-12.42,1.95-24,6.02-35.44,6.59-17.42,17.87-32.18,32.83-43.47.22,5.66.76,10.67,1.63,16.17-15.64,14.23-25.03,33.58-26.52,54.9,24.69,12.41,54.05,11.98,78.29-.95,23.09-12.06,39.18-33.72,43.44-59.62l12.15,8.08Z" fill="url(#tq-g4)"/></g>
+    </g>
+    <!-- the glint is cut to the gold, so it crosses the metal and not the room -->
+    <g clip-path="url(#tq-clip)">
+      <g id="tq-shine" opacity="0">
+        <rect x="-60" y="-10" width="46" height="204" fill="url(#tqGlint)" transform="skewX(-16)" style="mix-blend-mode:screen"/>
+      </g>
     </g>
   </g>
 
   <g id="tq-word" opacity="0">
     <text x="195" y="556" text-anchor="middle" class="tq-n">TRIQUETRA</text>
     <text x="195" y="586" text-anchor="middle" class="tq-s">LAW GROUP</text>
-    <line x1="155" y1="606" x2="235" y2="606" stroke="#C8A96A" stroke-width="1" opacity=".5"/>
+    <line x1="155" y1="606" x2="235" y2="606" stroke="#D3A72A" stroke-width="1" opacity=".5"/>
     <text x="195" y="632" text-anchor="middle" class="tq-t">INTELLECTUAL PROPERTY &#183; BOSTON</text>
   </g>
 </svg><div id="intro-acts"><button type="button" id="intro-install">Add to Home Screen</button></div></div>

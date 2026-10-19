@@ -34,7 +34,11 @@ if (!fs.existsSync(markFile)) {
   process.exit(1);
 }
 const card = JSON.parse(fs.readFileSync(path.join(dir, 'card.json'), 'utf8'));
-const mark = fs.readFileSync(markFile, 'utf8').replace(/width="\d+"\s+height="\d+"/, 'width="100%" height="100%"');
+/* the mark fills its box whatever size it was saved at - or at none, which is
+   how a viewBox-only drawing arrives */
+const mark = fs.readFileSync(markFile, 'utf8')
+  .replace(/<svg\b([^>]*)>/, (m, a) => '<svg' + a.replace(/\s(width|height)="[^"]*"/g, '') +
+    ' width="100%" height="100%" style="display:block">');
 const bg = ((card.art || {}).icon || {}).bg || (card.theme || {}).bg || '#000';
 const OUT = path.join(dir, 'art');
 
