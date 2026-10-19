@@ -74,6 +74,7 @@
     "short": "Triquetra"
   },
   "art": {
+    "share": "cards/triquetra/art-src/lockup.svg",
     "icon": {
       "src": "cards/triquetra/art-src/mark.svg",
       "bg": "#111714"

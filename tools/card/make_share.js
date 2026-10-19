@@ -48,6 +48,17 @@ function page(card) {
   const bg = theme.bg || icon.bg || '#000';
   const accent = theme.accent || '#fff';
 
+  /* A CARD WITH ITS OWN LOCKUP (art.share: the logo with its name, as the
+     business's designer set it) sends that and nothing else - no tagline,
+     no city, nothing in our typeface standing next to theirs. */
+  const lock = (card.art || {}).share && path.join(ROOT, card.art.share);
+  if (lock && fs.existsSync(lock)) return `<!doctype html><meta charset="utf-8"><style>
+*{margin:0;padding:0}
+html,body{width:${W}px;height:${H}px}
+body{background:${bg};display:grid;place-items:center}
+img{height:${Math.round(H * 0.8)}px;width:auto;display:block}
+</style><img src="${dataUri(lock, mimeOf(lock))}" alt="">`;
+
   const src = icon.src && path.join(ROOT, icon.src);
   const logo = src && fs.existsSync(src) ? dataUri(src, mimeOf(src)) : null;
 
