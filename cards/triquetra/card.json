@@ -14,7 +14,7 @@
     "person": "Jennifer H. Burdman",
     "title": "Co-Founder",
     "tagline": "Every case is handled personally by a founding member.",
-    "services": "Intellectual property for life sciences",
+    "services": "Intellectual property, for the science that changes lives.",
     "area": "Boston, Massachusetts"
   },
   "contact": {
@@ -43,19 +43,19 @@
     "story": null,
     "gallery": null,
     "services": {
-      "title": "Who you are hiring",
+      "title": "Our team. Your partners.",
       "items": [
         {
           "name": "Former Big Law partners",
-          "line": "Seasoned trial lawyers and dealmakers who built the firm to deliver senior counsel without the layers."
+          "line": "Seasoned trial lawyers and dealmakers who built Triquetra Law Group to deliver senior counsel without the layers."
         },
         {
-          "name": "In-house at biotech",
-          "line": "They have also served as in-house IP executives at biotech companies, and as Managing Directors at an IP-based investment firm."
+          "name": "In-house IP executives",
+          "line": "Our members have also served as in-house IP executives at biotech companies, and as Managing Directors at an IP-based investment firm."
         },
         {
-          "name": "$1.5B+ negotiated",
-          "line": "Lead IP negotiators on more than $1.5 billion in equity, collaboration and royalty transactions."
+          "name": "Lead IP negotiators",
+          "line": "On more than $1.5 billion in equity, collaboration, and royalty transactions."
         }
       ]
     },

@@ -453,12 +453,14 @@ html .consent__btn--no{ color:var(--text); border-color:var(--line) }
 [data-skin="law"] :is(.id,.act,.soc-row,.mod,.save){
   background:var(--panel); border:1px solid var(--rule); box-shadow:none;
 }
-[data-skin="law"] .id{ padding-bottom:22px }
+[data-skin="law"] .id{ padding-bottom:22px; text-align:center }
 [data-skin="law"] .id-name{ font-family:var(--serif); font-weight:400; letter-spacing:.01em; line-height:1.1 }
 [data-skin="law"] .id-person{ font-family:var(--serif); font-weight:400; color:var(--accent); letter-spacing:.06em }
 [data-skin="law"] .id-tag{ font-family:var(--serif); font-weight:400; font-style:italic; color:var(--text); opacity:.92 }
-[data-skin="law"] .id-meta{ font-size:11.5px; letter-spacing:.045em; text-transform:uppercase; color:var(--muted) }
-[data-skin="law"] .id-logo{ width:62px; height:62px; border-radius:0 }
+[data-skin="law"] .id-meta{ font-size:11.5px; letter-spacing:.045em; text-transform:uppercase; color:var(--muted); justify-content:center }
+/* the city is signed at the foot of the card, like a letterhead's address */
+[data-skin="law"] .id-area{ display:none }
+[data-skin="law"] .id-logo{ display:block; width:62px; height:62px; margin:0 auto 12px; border-radius:0 }
 
 /* the one filled control on the card, and it is a rectangle */
 [data-skin="law"] .save{
