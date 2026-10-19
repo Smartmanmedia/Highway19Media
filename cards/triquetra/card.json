@@ -4,8 +4,8 @@
   "intro": true,
   "theme": {
     "mode": "dark",
-    "accent": "#D3A72A",
-    "bg": "#111715",
+    "accent": "#C8A96A",
+    "bg": "#0B0E14",
     "skin": "law"
   },
   "identity": {
@@ -76,7 +76,7 @@
   "art": {
     "icon": {
       "src": "cards/triquetra/art-src/mark.svg",
-      "bg": "#111715"
+      "bg": "#0B0E14"
     }
   },
   "order": [

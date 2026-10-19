@@ -1,10 +1,10 @@
 /* TRIQUETRA LAW GROUP - the card's intro. The firm's own mark draws itself:
-   three strands in the order the firm argues them, a glint across the gold,
-   then the name. Nothing flies, nothing bounces -
+   three strands in the order the firm argues them, the ring closing round
+   them, a glint across the gold, then the name. Nothing flies, nothing bounces -
    this is a lawyer's card, and the film should read as composure.
    Phones and tablets only; a mouse-and-keyboard desktop and anyone who asked
    for less motion get the card straight away, as the template's does. */
-#intro{ position:fixed; inset:0; z-index:2147483000; background:#111715; overflow:hidden; transition:opacity .6s ease }
+#intro{ position:fixed; inset:0; z-index:2147483000; background:#0B0E14; overflow:hidden; transition:opacity .6s ease }
 #intro.out{ opacity:0; pointer-events:none }
 #intro-svg{ position:absolute; inset:0; width:100%; height:100% }
 html.intro-on, html.intro-on body{ overflow:hidden }
@@ -16,6 +16,8 @@ html.intro-on, html.intro-on body{ overflow:hidden }
 #intro.go #tq-k1{ animation:tqDraw .95s cubic-bezier(.4,0,.2,1) .18s both }
 #intro.go #tq-k2{ animation:tqDraw .95s cubic-bezier(.4,0,.2,1) .46s both }
 #intro.go #tq-k3{ animation:tqDraw .95s cubic-bezier(.4,0,.2,1) .74s both }
+#tq-ring{ stroke-dasharray:1; stroke-dashoffset:1; transform-box:fill-box; transform-origin:center; transform:rotate(-90deg) }
+#intro.go #tq-ring{ animation:tqDraw 1.05s cubic-bezier(.4,0,.2,1) 1.05s both }
 @keyframes tqDraw{ to{ stroke-dashoffset:0 } }
 
 /* the glint: one pass across the finished mark, the only flourish there is */
@@ -23,17 +25,17 @@ html.intro-on, html.intro-on body{ overflow:hidden }
 @keyframes tqShine{ 0%{ opacity:0; transform:translateX(0) } 15%{ opacity:.9 } 100%{ opacity:0; transform:translateX(300px) } }
 
 /* the name: a serif, because every document this firm touches is set in one */
-#tq-word text{ font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif; fill:#FFFFFF }
+#tq-word text{ font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif; fill:#F4EBD8 }
 .tq-n{ font-size:30px; letter-spacing:.22em; font-weight:400 }
-.tq-s{ font-size:13px; letter-spacing:.40em; fill:#D3A72A !important }
-.tq-t{ font-size:9.5px; letter-spacing:.26em; fill:#93A39B !important }
+.tq-s{ font-size:13px; letter-spacing:.40em; fill:#C8A96A !important }
+.tq-t{ font-size:9.5px; letter-spacing:.26em; fill:#8C8575 !important }
 #intro.go #tq-word{ animation:tqRise .9s cubic-bezier(.25,.8,.3,1) 1.55s both }
 @keyframes tqRise{ from{ opacity:0; transform:translateY(14px) } to{ opacity:1; transform:none } }
 
 #intro-acts{ position:absolute; left:0; right:0; top:80%; display:flex; justify-content:center; padding:0 14%; pointer-events:none }
-#intro-acts button{ width:100%; max-width:300px; height:50px; border-radius:4px; border:1px solid #D3A72A; background:transparent; color:#D3A72A;
+#intro-acts button{ width:100%; max-width:300px; height:50px; border-radius:4px; border:1px solid #C8A96A; background:transparent; color:#C8A96A;
   font:600 12px/1 "Iowan Old Style",Georgia,serif; letter-spacing:.20em; text-transform:uppercase; opacity:0; cursor:pointer }
-#intro-acts button:focus-visible{ outline:2px solid #FFFFFF; outline-offset:3px }
+#intro-acts button:focus-visible{ outline:2px solid #F4EBD8; outline-offset:3px }
 #intro-acts.on{ pointer-events:auto }
 #intro-acts.on button{ animation:tqFade .8s ease both }
 @keyframes tqFade{ to{ opacity:1 } }
