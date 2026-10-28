@@ -131,6 +131,8 @@ wanted.add('assets/v2/meta/og.jpg');
    by file, and only reachable from the pages the service shell builds */
 for (const S of require('./services')) {
   if (S.hero === 'icons') wanted.add('assets/v2/social/hero-instagram-v2.svg');
+  /* a lane icon the home page does not show (the consulting board) */
+  if (S.icon) wanted.add('assets/v2/section-06/' + S.icon);
   for (const x of S.sections || []) for (const it of x.items || [])
     for (const a of (it && it.art) || []) if (!/^HTML/.test(a[1])) wanted.add('assets/v2/social/' + a[1]);
   for (const x of S.sections || []) if (x.img) wanted.add('assets/v2/social/' + x.img[0]);
@@ -359,6 +361,10 @@ const SERVICES = require('./services');
           areaServed: ENTITY.BUSINESS.areaServed },
           S.offers ? { offers: S.offers.map(([n, p]) => ({ '@type': 'Offer', name: n,
             priceSpecification: { '@type': 'PriceSpecification', minPrice: p, priceCurrency: 'USD' } })) } : {},
+          /* fixed prices, one per tier (consulting: per session, by business size) */
+          S.prices ? { offers: S.prices.map(([n, p]) => ({ '@type': 'Offer', name: 'Consultation session - ' + n + ' annual revenue',
+            price: p, priceCurrency: 'USD', priceSpecification: { '@type': 'UnitPriceSpecification', price: p,
+              priceCurrency: 'USD', unitText: 'session' } })) } : {},
           /* what the page offers, by name, each its own Service */
           S.catalog ? { hasOfferCatalog: { '@type': 'OfferCatalog', name: plain(S.label), itemListElement:
             S.catalog.map(([n, d]) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: n, description: d,
@@ -438,6 +444,16 @@ const SERVICES = require('./services');
           : v.list ? '<ul class="svc-lines">' + v.list.map(l => '<li>' + l + '</li>').join('') + '</ul>'
           : v.h3 ? '<h3>' + v.h3 + '</h3>'
           : v.big ? '<p class="svc-big">' + v.big + '</p>' : '').join('') + '</div>\n'),
+      /* THE PRICE CARDS (consulting): one per tier from S.prices, then the
+         offer that goes with them (S.deal) as its own band underneath */
+      pricing: () => sec('svc-block svc-pricing', S.pricesH,
+        (S.pricesP ? '      <p class="svc-pr-sub">' + S.pricesP + '</p>\n' : '') +
+        '      <ul class="svc-pr">\n' + S.prices.map(([n, p]) =>
+          '        <li><h3><span class="svc-pr-k">Annual revenue</span>' + n + '</h3>' +
+          '<p class="svc-pr-n"><b>$' + p.toLocaleString('en-US') + '</b><span>per session</span></p></li>').join('\n') +
+        '\n      </ul>\n' +
+        (S.deal ? '      <div class="svc-deal"><p class="svc-deal-h">' + S.deal.h + '</p><p>' + S.deal.p + '</p>' +
+          '<a class="svc-btn" href="/contact/">Book 10 Sessions</a></div>\n' : ''), ' id="pricing"'),
       area: () => sec('svc-area', S.areaH || 'Local to Spring Hill. Working along US-19.',
         '      <div class="svc-area-say">' + (S.area ? paras(S.area)
           : '<p>' + SERVICES.AREA + ' <a href="/contact/">Tell us where you are.</a></p>') + '</div>\n'),
