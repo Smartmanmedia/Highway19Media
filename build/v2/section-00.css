@@ -410,3 +410,86 @@
   .sec0 .bn-go-a{ width:4.4cqw; height:4.4cqw }
   .sec0 .form__status{ bottom:2.2cqw; font-size:2.4cqw }
 }
+
+/* ============================================================================
+   THE BANNER AS A POP-UP (Oct 28)
+   ----------------------------------------------------------------------------
+   He asked for the page to open on section one - the sign gantry - and for
+   this banner to arrive as a pop-up once the reader has scrolled two sections
+   down (banner-pop.js decides when). So the section stops being a 140svh
+   scroll-through and becomes the dimmed backdrop, and his stage - the same
+   1937 x 1258 composition, every size still a share of it - becomes the card,
+   carrying the photograph itself. Nothing above this block is changed; these
+   rules simply come later.
+   ========================================================================= */
+html{ scrollbar-gutter:stable }               /* no sideways jump when it locks */
+html.bn-open{ overflow:hidden }
+
+.sec0{
+  position:fixed; inset:0;
+  /* over the header (9000), under the cookie bar (10050) */
+  z-index:9500;
+  height:auto; padding:0; margin:0;
+  display:grid; place-items:center;
+  overflow:hidden auto; overscroll-behavior:contain;
+  background:rgba(1,10,28,.76);
+  box-shadow:none;
+  outline:none;
+  opacity:0; visibility:hidden;
+  transition:opacity .35s ease, visibility 0s .35s;
+}
+.sec0.is-open{ opacity:1; visibility:visible; transition:opacity .35s ease, visibility 0s }
+
+/* THE CARD. As big as the screen allows at his ratio, with a margin of the
+   page showing round it so it reads as a pop-up and not a new page. */
+.sec0 .bn-stage{
+  position:relative; top:auto;
+  width:min(94vw, calc((100svh - 6svh) * 1.5400));
+  height:auto;
+  aspect-ratio:1937.04 / 1257.84;
+  background:#1479d0 var(--bn-photo,
+      image-set(url("../../assets/v2/banner/road-wide.webp") 1x,
+                url("../../assets/v2/banner/road-wide@2x.webp") 2x))
+             left center/cover no-repeat;
+  border:3px solid #fff;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 30px 110px rgba(0,0,0,.6);
+  scale:.95;
+  transition:scale .4s cubic-bezier(.2,.8,.3,1);
+}
+.sec0.is-open .bn-stage{ scale:1 }
+
+.sec0 .bn-x{
+  position:absolute; top:1.4cqw; right:1.4cqw; z-index:5;
+  display:grid; place-content:center;
+  width:max(40px, 2.6cqw); height:max(40px, 2.6cqw); padding:0;
+  color:#fff; background:#00287d;
+  border:2px solid #fff; border-radius:50%;
+  box-shadow:0 4px 14px rgba(0,0,0,.35);
+  cursor:pointer;
+  transition:background .16s ease;
+}
+/* px, not %: a percentage of a grid track sized to its content is zero */
+.sec0 .bn-x svg{ width:max(18px, 1.15cqw); height:max(18px, 1.15cqw) }
+.sec0 .bn-x:hover{ background:#ea2127 }
+.sec0 .bn-x:focus-visible{ outline:3px solid #ffda00; outline-offset:2px }
+
+@media (prefers-reduced-motion:reduce){
+  .sec0, .sec0 .bn-stage{ transition:none !important; scale:none !important }
+}
+
+/* HIS PHONE BOARD IS 3.1 SCREENS TALL, so on a phone the pop-up takes the
+   whole screen and scrolls inside itself; the close button stays put. */
+@media (max-width:900px) and (pointer:coarse){
+  .sec0{ aspect-ratio:auto; display:block; background:rgba(1,10,28,.9) }
+  .sec0 .bn-stage{
+    width:100%; height:auto; aspect-ratio:1088.16 / 3411.84;
+    background-image:var(--bn-photo-mob,url("../../assets/v2/banner/road-tall.webp"));
+    background-position:center top;
+    border:0; border-radius:0; box-shadow:none;
+    scale:none;                       /* a scaled box would trap the fixed X */
+  }
+  .sec0 .bn-x{ position:fixed; top:12px; right:12px; width:44px; height:44px }
+  .sec0 .bn-x svg{ width:20px; height:20px }
+}

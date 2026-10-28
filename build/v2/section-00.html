@@ -8,12 +8,20 @@
      words are words and the form is a form: his export has them as <text> and
      <rect>, and shipped that way they could not be read by a search engine,
      selected, translated, or typed into. -->
-<section class="sec0" aria-labelledby="bn-h">
+<!-- A POP-UP, NOT THE OPENING (Oct 28). The page starts on section one, the
+     sign gantry; this banner waits off-screen and banner-pop.js opens it once
+     the reader has scrolled past sections one and two. role=dialog so a screen
+     reader hears it as one when it arrives. -->
+<section class="sec0" id="bn-pop" role="dialog" aria-modal="true" aria-labelledby="bn-h" tabindex="-1">
   <!-- HIS ARTBOARD, AS A BOX OF ITS OWN. The section is what the photograph
        fills and is capped at 80% of the screen; this keeps his 1937 x 1258
        proportion inside it and centres it, so his composition never stretches
        to whatever shape the window happens to be. -->
   <div class="bn-stage">
+  <button class="bn-x" type="button" aria-label="Close">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none"
+         stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></svg>
+  </button>
 
   <div class="bn-say">
     <h1 id="bn-h" class="bn-h1">

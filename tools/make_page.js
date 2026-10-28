@@ -168,6 +168,8 @@ parts.filter(p =>  /^<footer/.test(p)).join('\n\n') +
   + '<script src="mode.js" defer></script>\n'
   /* the contact form - validation, and the route a lead takes to his inbox */
   + '<script src="form.js" defer></script>\n'
+  /* the main banner is a pop-up now - this says when it opens */
+  + '<script src="banner-pop.js" defer></script>\n'
   + '<script src="consent.js" defer></script>\n'
   /* the drive, last: it measures the section it lives in, so everything above
      it has to have laid out first */
