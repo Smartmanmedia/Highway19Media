@@ -1,0 +1,213 @@
+<!-- THE BUSINESS CONSULTING PAGE (Oct 28, 2026). Built in the site's own road
+     language - the gantry and the 19 shield from the home page, green guide
+     signs with his yellow tabs, exit numbers, a blue lane sign, a road with
+     its mile markers - over Adobe Stock photographs he has already licensed
+     (J:\PSD, see assets/v2/consulting/). The shell is consulting.html; the
+     build fills it from tools/services.js (slug business-consulting) and reads
+     the questions at the foot of this file into the page's FAQPage data, so
+     each <details> below has to stay on one line in exactly this shape. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- the road-sign arrow, drawn once: a straight shaft and a broad head -->
+  <symbol id="cs-arrow" viewBox="0 0 60 80"><path fill="currentColor" d="M30 0 58 31H40v49H20V31H2z"/></symbol>
+</svg>
+
+<!-- 1. THE GANTRY. The road runs to the mountains; the sign over it is the page's heading. -->
+<section class="cs-hero" aria-labelledby="cs-h1">
+  <img class="cs-hero-bg" src="../../assets/v2/consulting/cs-hero.webp" alt="" width="2400" height="1600" fetchpriority="high">
+  <div class="cs-gantry">
+    <span class="cs-truss" aria-hidden="true"></span>
+    <div class="cs-sign cs-sign--hero">
+      <img class="cs-shield" src="../../assets/v2/ui-shield.webp" alt="" aria-hidden="true">
+      <p class="cs-tab cs-tab--l">Business &amp; Marketing Consulting</p>
+      <p class="cs-tab cs-tab--r">Spring Hill, FL</p>
+      <h1 id="cs-h1"><span>Take Your Business</span> <span>to the Next Level</span></h1>
+      <svg class="cs-sign-arrow" aria-hidden="true"><use href="#cs-arrow"/></svg>
+    </div>
+  </div>
+  <div class="cs-hero-say">
+    <p class="cs-lede">Your business. Your people. Your income. Your next move.</p>
+    <p>Sit down with people who have grown companies from a first $100K to tens of millions &mdash; and
+       leave with a clear direction for the whole business, not just the marketing.</p>
+    <div class="cs-acts">
+      <a class="cs-btn" href="/contact/">Book a Session</a>
+      <a class="cs-btn cs-btn--ghost" href="#cs-price">See Pricing</a>
+    </div>
+  </div>
+</section>
+
+<!-- 2. MILES ALREADY DRIVEN. His track record, as mile-marker signs on a road. -->
+<section class="cs-proof" aria-labelledby="cs-proof-h">
+  <div class="cs-in">
+    <p class="cs-eyebrow">Miles already driven</p>
+    <h2 id="cs-proof-h">We&rsquo;ve Been Down This Road Before.</h2>
+    <p class="cs-intro">We have sat at the table with small local businesses, fast-growing companies and
+      organizations worth hundreds of millions. The road looks different at every size. The questions are
+      surprisingly familiar.</p>
+    <ul class="cs-markers">
+      <li class="cs-sign cs-marker"><p class="cs-tab">Grew</p><b><small>$100K <i aria-hidden="true">&rarr;</i><span class="cs-sr">to</span></small> $500K</b><span>Annual revenue, multiplied five times over.</span></li>
+      <li class="cs-sign cs-marker"><p class="cs-tab">Grew</p><b><small>$300K <i aria-hidden="true">&rarr;</i><span class="cs-sr">to</span></small> $12&ndash;18M</b><span>From $300K a year to between $12 and $18 million.</span></li>
+      <li class="cs-sign cs-marker"><p class="cs-tab">Revenue</p><b><small>Up to</small> $20M</b><span>Companies running at up to $20 million a year.</span></li>
+      <li class="cs-sign cs-marker"><p class="cs-tab">Worth</p><b><small>Valued at</small> $400M</b><span>Organizations valued at $400 million &mdash; franchises included.</span></li>
+    </ul>
+  </div>
+  <div class="cs-road" aria-hidden="true"></div>
+</section>
+
+<!-- 3. THE WHOLE BUSINESS. Marketing leads; every other exit is on the same road. -->
+<section class="cs-whole" aria-labelledby="cs-whole-h">
+  <div class="cs-in">
+    <p class="cs-eyebrow">Every exit on the route</p>
+    <h2 id="cs-whole-h">It&rsquo;s Not Just Marketing.<br> It&rsquo;s the Whole Business.</h2>
+    <p class="cs-intro">Marketing is where most owners start, and it is where we are strongest. But more customers
+      only help a business that can deliver for them, staff for them and profit from them. So we look at all of it.</p>
+    <ol class="cs-exits">
+      <li class="cs-sign cs-exit cs-exit--lead"><p class="cs-tab">Exit 1</p><svg class="cs-exit-a" aria-hidden="true"><use href="#cs-arrow"/></svg>
+        <h3>Marketing &amp; Growth</h3><p>How customers find you, why they choose you, and how to bring in more of the right ones &mdash; without wasting a dollar on the wrong ones.</p></li>
+      <li class="cs-sign cs-exit"><p class="cs-tab">Exit 2</p><svg class="cs-exit-a" aria-hidden="true"><use href="#cs-arrow"/></svg>
+        <h3>Strategy &amp; Direction</h3><p>Where the business is going, what to focus on first, and what to stop doing.</p></li>
+      <li class="cs-sign cs-exit"><p class="cs-tab">Exit 3</p><svg class="cs-exit-a" aria-hidden="true"><use href="#cs-arrow"/></svg>
+        <h3>Operations &amp; Logistics</h3><p>How the work actually gets done &mdash; systems, suppliers, scheduling and the bottlenecks that cost you.</p></li>
+      <li class="cs-sign cs-exit"><p class="cs-tab">Exit 4</p><svg class="cs-exit-a" aria-hidden="true"><use href="#cs-arrow"/></svg>
+        <h3>Delivery &amp; Customer Experience</h3><p>What happens after the sale, and whether it brings customers back.</p></li>
+      <li class="cs-sign cs-exit"><p class="cs-tab">Exit 5</p><svg class="cs-exit-a" aria-hidden="true"><use href="#cs-arrow"/></svg>
+        <h3>Employees &amp; Hiring</h3><p>Who to hire, how to lead them, and how to build a team that runs without you in the room.</p></li>
+      <li class="cs-sign cs-exit"><p class="cs-tab">Exit 6</p><svg class="cs-exit-a" aria-hidden="true"><use href="#cs-arrow"/></svg>
+        <h3>Sales, Pricing &amp; Profit</h3><p>What you charge, what you keep, and how to grow the number that matters.</p></li>
+      <li class="cs-sign cs-exit"><p class="cs-tab">Exit 7</p><svg class="cs-exit-a" aria-hidden="true"><use href="#cs-arrow"/></svg>
+        <h3>AI in Your Business</h3><p>Where artificial intelligence can save you time and money today &mdash; and how to start using it.</p></li>
+      <li class="cs-sign cs-exit"><p class="cs-tab">Exit 8</p><svg class="cs-exit-a" aria-hidden="true"><use href="#cs-arrow"/></svg>
+        <h3>Brand &amp; Reputation</h3><p>How the business looks, sounds and is talked about when you are not there.</p></li>
+      <li class="cs-sign cs-exit cs-exit--any"><p class="cs-tab">Any Exit</p><svg class="cs-exit-a" aria-hidden="true"><use href="#cs-arrow"/></svg>
+        <h3>Not on the List?</h3><p>If it is part of running your business, it is on the table. <a href="/contact/">Bring it to us &rarr;</a></p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 4. WHAT A SESSION FEELS LIKE. A photograph beside the promise. -->
+<section class="cs-session" aria-labelledby="cs-session-h">
+  <div class="cs-in">
+    <figure class="cs-session-img">
+      <img src="../../assets/v2/consulting/cs-session.webp" alt="Two business owners talking through a plan across an office table" width="1600" height="1067" loading="lazy" decoding="async">
+      <figcaption class="cs-sign cs-street" aria-hidden="true">Rest Area &middot; Next Exit</figcaption>
+    </figure>
+    <div class="cs-session-say">
+      <p class="cs-eyebrow">The session</p>
+      <h2 id="cs-session-h">Pull Over. Look at the Map. Find the Way Forward.</h2>
+      <p>Running a business means wearing every hat at once &mdash; and it is hard to see the road when you
+         are the one driving. A session gives you an hour off the wheel with someone who has seen where these
+         roads go.</p>
+      <p>We listen first. Then we ask the questions nobody around you is asking, look honestly at what is
+         working and what is not, and talk through the options in plain language.</p>
+      <p class="cs-big">You leave with clarity, a plan &mdash; and a renewed sense of purpose for the business you built.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5. EVERY INDUSTRY. Photographs, each named by a green street sign. -->
+<section class="cs-ind" aria-labelledby="cs-ind-h">
+  <div class="cs-in">
+    <p class="cs-eyebrow">Every road, every industry</p>
+    <h2 id="cs-ind-h">Wherever Your Business Is Headed, We&rsquo;ve Been Close By.</h2>
+    <p class="cs-intro">From the shop floor to the showroom, from the first product to the franchise network &mdash;
+      we have worked alongside businesses in almost every kind of industry.</p>
+    <ul class="cs-tiles">
+      <li><img src="../../assets/v2/consulting/cs-ind-auto.webp" alt="" width="900" height="600" loading="lazy" decoding="async"><span class="cs-sign cs-street">Auto &amp; Trades</span></li>
+      <li><img src="../../assets/v2/consulting/cs-ind-logistics.webp" alt="" width="900" height="600" loading="lazy" decoding="async"><span class="cs-sign cs-street">Logistics &amp; Delivery</span></li>
+      <li><img src="../../assets/v2/consulting/cs-ind-local.webp" alt="" width="900" height="600" loading="lazy" decoding="async"><span class="cs-sign cs-street">Local Shops &amp; Franchises</span></li>
+      <li><img src="../../assets/v2/consulting/cs-ind-commerce.webp" alt="" width="900" height="561" loading="lazy" decoding="async"><span class="cs-sign cs-street">Products &amp; E-Commerce</span></li>
+      <li><img src="../../assets/v2/consulting/cs-ind-hospitality.webp" alt="" width="900" height="600" loading="lazy" decoding="async"><span class="cs-sign cs-street">Restaurants &amp; Hospitality</span></li>
+      <li><img src="../../assets/v2/consulting/cs-ind-events.webp" alt="" width="900" height="527" loading="lazy" decoding="async"><span class="cs-sign cs-street">Events &amp; Entertainment</span></li>
+      <li><img src="../../assets/v2/consulting/cs-ind-arts.webp" alt="" width="900" height="600" loading="lazy" decoding="async"><span class="cs-sign cs-street">Art &amp; Artists</span></li>
+      <li><img src="../../assets/v2/consulting/cs-ind-teams.webp" alt="" width="900" height="600" loading="lazy" decoding="async"><span class="cs-sign cs-street">Professional Services</span></li>
+    </ul>
+    <p class="cs-more">&hellip;and many more. If you&rsquo;re in business, you&rsquo;re on the map.</p>
+  </div>
+</section>
+
+<!-- 6. AI. A dark, lit section and the blue lane sign: which lane AI takes. -->
+<section class="cs-ai" aria-labelledby="cs-ai-h">
+  <img class="cs-ai-bg" src="../../assets/v2/consulting/cs-ai.webp" alt="" width="1800" height="1252" loading="lazy" decoding="async">
+  <div class="cs-in">
+    <div class="cs-ai-say">
+      <p class="cs-eyebrow">Exit 7 &middot; Artificial intelligence</p>
+      <h2 id="cs-ai-h">Where Can AI Take Your Business?</h2>
+      <p>Everyone is talking about AI. Very few owners have had someone sit down and show them where it
+         actually fits in <em>their</em> business.</p>
+      <p>We will walk you through the areas where AI can help today, what it can and can&rsquo;t do, and how to
+         start &mdash; and we can teach you and your team to use it with confidence.</p>
+    </div>
+    <div class="cs-lanes" role="img" aria-label="Four lanes where AI can help: customer service, marketing and content, operations and admin, sales and follow-up">
+      <div class="cs-lane"><svg aria-hidden="true" class="cs-lane-a cs-lane-a--l"><use href="#cs-arrow"/></svg><span>Customer Service</span></div>
+      <div class="cs-lane"><svg aria-hidden="true" class="cs-lane-a"><use href="#cs-arrow"/></svg><span>Marketing &amp; Content</span></div>
+      <div class="cs-lane"><svg aria-hidden="true" class="cs-lane-a"><use href="#cs-arrow"/></svg><span>Operations &amp; Admin</span></div>
+      <div class="cs-lane"><svg aria-hidden="true" class="cs-lane-a cs-lane-a--r"><use href="#cs-arrow"/></svg><span>Sales &amp; Follow-Up</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. THE ROAD AHEAD. The price, as a guide sign; the offer, as a yellow one. -->
+<section class="cs-price" id="cs-price" aria-labelledby="cs-price-h">
+  <div class="cs-in">
+    <p class="cs-eyebrow">Pricing</p>
+    <h2 id="cs-price-h">One Session. Priced for the Size of Your Business.</h2>
+    <p class="cs-intro">A fair rate for a business just getting started, and for one that is already moving fast.
+      Your price per session is set by your business&rsquo;s annual revenue.</p>
+    <div class="cs-sign cs-board">
+      <p class="cs-tab">Price per session &middot; by annual revenue</p>
+      <img class="cs-shield cs-shield--board" src="../../assets/v2/ui-shield.webp" alt="" aria-hidden="true">
+      <dl class="cs-rows">
+        <div><dt>Under $100K</dt><dd>$300</dd></div>
+        <div><dt>Under $500K</dt><dd>$400</dd></div>
+        <div><dt>Under $1 Million</dt><dd>$500</dd></div>
+        <div><dt>Over $1 Million</dt><dd>$1,299</dd></div>
+      </dl>
+    </div>
+    <div class="cs-offer">
+      <p class="cs-offer-k">Special offer</p>
+      <p class="cs-offer-h">Book 10 Sessions.<br> Your First One Is Free.</p>
+      <p>Commit to the full road and we take the first session off the bill &mdash; ten sessions for the price of nine.</p>
+      <a class="cs-btn cs-btn--dark" href="/contact/">Book 10 Sessions</a>
+    </div>
+  </div>
+</section>
+
+<!-- 8. THE DRIVE, IN THREE MILE MARKERS. -->
+<section class="cs-steps" aria-labelledby="cs-steps-h">
+  <div class="cs-in">
+    <p class="cs-eyebrow">How it works</p>
+    <h2 id="cs-steps-h">Three Miles to a Clearer Road.</h2>
+    <ol class="cs-miles">
+      <li><span class="cs-mile" aria-hidden="true">Mile<b>1</b></span><h3>Tell Us Where You Are</h3><p>Your business, your customers, your numbers &mdash; and what keeps you up at night.</p></li>
+      <li><span class="cs-mile" aria-hidden="true">Mile<b>2</b></span><h3>Map the Route</h3><p>We work through your questions together and lay out the options, honestly and in plain language.</p></li>
+      <li><span class="cs-mile" aria-hidden="true">Mile<b>3</b></span><h3>Hit the Road</h3><p>You leave with clear next steps &mdash; to take on yourself, or to hand to us if you want help doing them.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 9. QUESTIONS. One line each: build_site.js reads them into the FAQPage data. -->
+<section class="cs-faq" aria-labelledby="cs-faq-h">
+  <div class="cs-in cs-narrow">
+    <h2 id="cs-faq-h">A Few Things You Might Be Wondering.</h2>
+    <details class="cs-q" open><summary><h3>Is this only about marketing?</h3></summary><div><p>No. Marketing is where we are strongest, but a session can cover any part of the business &mdash; strategy, operations, logistics, delivery, hiring and managing employees, pricing, growth and how to use AI.</p></div></details>
+    <details class="cs-q"><summary><h3>How is the price of a session set?</h3></summary><div><p>By the size of your business. Under $100K in annual revenue, a session is $300. Under $500K it is $400, under $1 million $500, and over $1 million $1,299.</p></div></details>
+    <details class="cs-q"><summary><h3>How does the 10-session offer work?</h3></summary><div><p>Book ten sessions and your first one is free, so you pay for nine.</p></div></details>
+    <details class="cs-q"><summary><h3>Can you help us use AI?</h3></summary><div><p>Yes. We can show you which parts of your business AI can help with today, what it can and can&rsquo;t do, and teach you and your team how to start using it.</p></div></details>
+    <details class="cs-q"><summary><h3>Can we meet in person?</h3></summary><div><p>Yes. We are based in Spring Hill and can meet at your business, over coffee or by video.</p></div></details>
+    <details class="cs-q"><summary><h3>What if I want help doing what we plan?</h3></summary><div><p>You can take the plan and run with it, or we can do the work &mdash; websites, video, branding, social media and advertising are what we do every day.</p></div></details>
+  </div>
+</section>
+
+<!-- 10. THE NEXT EXIT. -->
+<section class="cs-close" aria-labelledby="cs-close-h">
+  <img class="cs-close-bg" src="../../assets/v2/consulting/cs-close.webp" alt="" width="2200" height="1467" loading="lazy" decoding="async">
+  <div class="cs-in">
+    <div class="cs-sign cs-sign--close">
+      <p class="cs-tab">Next Exit</p>
+      <h2 id="cs-close-h">Your Next Level</h2>
+      <svg class="cs-sign-arrow cs-sign-arrow--r" aria-hidden="true"><use href="#cs-arrow"/></svg>
+    </div>
+    <p>Tell us about your business and what you want to work on. We&rsquo;ll set up your first session.</p>
+    <a class="cs-btn cs-btn--big" href="/contact/">Book a Session</a>
+    <p class="cs-local">We reply within 24 hours &middot; Based in Spring Hill, serving businesses along US-19 and beyond.</p>
+  </div>
+</section>

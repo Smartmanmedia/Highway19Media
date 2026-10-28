@@ -59,6 +59,8 @@ if (!code.includes('service.css')) code.push('service.css');
 if (!code.includes('service.js')) code.push('service.js');
 /* the Website Design page is his own design, with its own stylesheet and script */
 for (const f of ['web-design.css', 'web-design.js']) if (!code.includes(f)) code.push(f);
+/* and so is the Business Consulting page (Oct 28, 2026) */
+for (const f of ['consulting.css', 'consulting.js']) if (!code.includes(f)) code.push(f);
 /* ---------------------------------------------------------------------------
  * WHAT SHIPS IS THE CODE WITHOUT ITS PROSE. The sources are heavily commented
  * on purpose - that is where the reasoning lives - but a reader downloading the
@@ -120,6 +122,7 @@ code.forEach(f => collect(rd('build/v2/' + f)));
 collect(rd('build/v2/page.html'));
 collect(rd('build/v2/soon.html'));
 collect(rd('build/v2/web-design-body.html'));
+collect(rd('build/v2/consulting-body.html'));
 /* and the Highway Biz page, which names the two card photographs it sells
    with - a page whose examples 404 is a page arguing against itself */
 collect(rd('build/v2/highway-biz.html'));
@@ -131,8 +134,6 @@ wanted.add('assets/v2/meta/og.jpg');
    by file, and only reachable from the pages the service shell builds */
 for (const S of require('./services')) {
   if (S.hero === 'icons') wanted.add('assets/v2/social/hero-instagram-v2.svg');
-  /* a lane icon the home page does not show (the consulting board) */
-  if (S.icon) wanted.add('assets/v2/section-06/' + S.icon);
   for (const x of S.sections || []) for (const it of x.items || [])
     for (const a of (it && it.art) || []) if (!/^HTML/.test(a[1])) wanted.add('assets/v2/social/' + a[1]);
   for (const x of S.sections || []) if (x.img) wanted.add('assets/v2/social/' + x.img[0]);
@@ -383,14 +384,14 @@ const SERVICES = require('./services');
       let page = rd('build/v2/' + S.custom + '.html')
         .replace('<!--BODY-->', () => body.trimEnd())
         .replace('<!--HEADER-->', () => HEADER_FOR('/', '/contact/')
-          .replace('class="skip" href="#top"', 'class="skip" href="#wd-main"'))
+          .replace('class="skip" href="#top"', 'class="skip" href="#' + (S.main || 'wd-main') + '"'))
         .replace('<!--FOOTER-->', () => FOOTER_FOR('/contact/'))
         .replace(/\{\{TITLE\}\}/g, esc(S.title))
         .replace(/\{\{DESC\}\}/g, esc(S.desc))
         .replace(/\{\{SLUG\}\}/g, S.slug)
         .replace('{{HERO_IMG}}', hero || '')
         .replace('{{LD}}', () => JSON.stringify(ld))
-        .replace(/(?:href|src)="((?:section-fonts|section-09|header|consent|web-design)\.css|(?:header|consent|web-design)\.js)"/g,
+        .replace(new RegExp('(?:href|src)="((?:section-fonts|section-09|header|consent|' + S.custom + ')\\.css|(?:header|consent|' + S.custom + ')\\.js)"', 'g'),
                  (m, f) => m.replace('"' + f + '"', '"' + codeHref(f) + '"'))
         .replace(/\.\.\/\.\.\/assets\//g, '/assets/')
         .replace(/\{\{ROOT\}\}/g, '/');
@@ -444,16 +445,6 @@ const SERVICES = require('./services');
           : v.list ? '<ul class="svc-lines">' + v.list.map(l => '<li>' + l + '</li>').join('') + '</ul>'
           : v.h3 ? '<h3>' + v.h3 + '</h3>'
           : v.big ? '<p class="svc-big">' + v.big + '</p>' : '').join('') + '</div>\n'),
-      /* THE PRICE CARDS (consulting): one per tier from S.prices, then the
-         offer that goes with them (S.deal) as its own band underneath */
-      pricing: () => sec('svc-block svc-pricing', S.pricesH,
-        (S.pricesP ? '      <p class="svc-pr-sub">' + S.pricesP + '</p>\n' : '') +
-        '      <ul class="svc-pr">\n' + S.prices.map(([n, p]) =>
-          '        <li><h3><span class="svc-pr-k">Annual revenue</span>' + n + '</h3>' +
-          '<p class="svc-pr-n"><b>$' + p.toLocaleString('en-US') + '</b><span>per session</span></p></li>').join('\n') +
-        '\n      </ul>\n' +
-        (S.deal ? '      <div class="svc-deal"><p class="svc-deal-h">' + S.deal.h + '</p><p>' + S.deal.p + '</p>' +
-          '<a class="svc-btn" href="/contact/">Book 10 Sessions</a></div>\n' : ''), ' id="pricing"'),
       area: () => sec('svc-area', S.areaH || 'Local to Spring Hill. Working along US-19.',
         '      <div class="svc-area-say">' + (S.area ? paras(S.area)
           : '<p>' + SERVICES.AREA + ' <a href="/contact/">Tell us where you are.</a></p>') + '</div>\n'),

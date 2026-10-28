@@ -331,75 +331,33 @@ module.exports = [
     ]
   },
   {
-    /* BUSINESS & MARKETING CONSULTATION (Oct 28, 2026). His prices: a session
-       is priced by the size of the business - under $100K a year $300, under
-       $500K $400, under $1M $500, over $1M $1,299 - and ten sessions booked
-       together make the first one free. The tiers are the `prices` list; the
-       pricing section and the structured data both read it. */
+    /* BUSINESS & MARKETING CONSULTATION (Oct 28, 2026) - his own page in the
+       site's road language (build/v2/consulting-body.html + consulting.css/js).
+       His prices: a session is priced by the size of the business - under
+       $100K a year $300, under $500K $400, under $1M $500, over $1M $1,299 -
+       and ten sessions booked together make the first one free. The prices
+       below are what the structured data says; the page shows the same four.
+       Its questions are read from the page itself. */
     slug: 'business-consulting',
+    custom: 'consulting',
+    main: 'cs-main',
     label: 'Business Consulting',
-    color: '#0067b1',
-    icon: 'icon-consulting.svg',
+    color: '#1c9022',
     title: 'Business & Marketing Consulting in Spring Hill, FL | Highway 19 Media',
-    desc: 'One-on-one business and marketing consultation for Spring Hill & Tampa Bay businesses. Sessions ' +
-          'from $300, priced by business size. Book 10 sessions and the first one is free.',
-    eyebrow: 'Business &amp; marketing consulting &middot; Spring Hill &amp; Tampa Bay',
-    h1: 'Business &amp; Marketing Consulting in Spring Hill, FL',
-    tag: 'Know your next move.',
+    desc: 'Business and marketing consulting for Spring Hill & Tampa Bay: growth, strategy, operations, ' +
+          'employees and AI. Sessions from $300, priced by business size.',
+    h1: 'Business & Marketing Consulting - Take Your Business to the Next Level',
     lead: [
-      'Sit down with someone who builds marketing for a living and talk through your business &mdash; ' +
-      'what is working, what isn&rsquo;t, and where your time and money should go next.',
-      'Priced by the size of your business, so a new business and an established one each pay a fair rate.'
+      'One-on-one consulting on marketing and the whole business - strategy, operations and logistics, ' +
+      'delivery, employees, pricing and AI - from a team that has helped companies grow from $100K to ' +
+      'tens of millions.'
     ],
-    cta: 'Book a Session',
-    ctaH: 'Let&rsquo;s Talk About Where You&rsquo;re Headed.',
-    ctaP: [
-      'Tell us about your business and what you want to work on. We&rsquo;ll set up your first session.',
-      'We reply within 24 hours.'
-    ],
-    ctaBtn: 'Book a Session', ctaBig: true,
-    ctaLocal: 'Based in Spring Hill, serving businesses along US-19 and beyond.',
     serviceType: 'Business and marketing consulting',
     prices: [
       ['Under $100K', 300],
       ['Under $500K', 400],
       ['Under $1 Million', 500],
       ['Over $1 Million', 1299]
-    ],
-    pricesH: 'One Session. One Price, by Business Size.',
-    pricesP: 'Your price per session is set by your business&rsquo;s annual revenue.',
-    deal: { h: 'Book 10 Sessions. Your First One Is Free.',
-            p: 'Commit to ten sessions and we take the first one off the bill &mdash; ten sessions for the price of nine.' },
-    steps: [
-      ['Tell Us Where You Are', 'Your business, your customers, your numbers and what is keeping you up at night.'],
-      ['Work Through It Together', 'Each session is focused on your questions &mdash; marketing, advertising, your website, your brand, pricing, growth.'],
-      ['Leave With a Plan', 'Clear next steps you can act on yourself, or hand to us if you want help doing them.']
-    ],
-    sections: [
-      { type: 'cards', h: 'What We Can Work On', items: [
-        ['Marketing Strategy', ['Who your customers are, where to find them and what to say when you do.']],
-        ['Advertising &amp; Budget', ['Where your ad money is going, what it is bringing back, and what to try next.']],
-        ['Your Website &amp; Online Presence', ['A clear look at your website, Google listing and social media through a customer&rsquo;s eyes.']],
-        ['Brand &amp; Message', ['How your business looks and sounds, and whether it says what you want it to.']],
-        ['Growth &amp; Planning', ['New services, new markets, a launch or a slow season &mdash; thinking it through before you spend.']],
-        ['A Second Opinion', ['Already working with an agency or vendor? Bring what they proposed and we will look at it with you.']]
-      ] },
-      { type: 'pricing' },
-      { type: 'steps', h: 'How a Session Works', compact: true },
-      { type: 'area' },
-      { type: 'faq', h: 'A Few Things You Might Be Wondering.', more: false }
-    ],
-    faq: [
-      { q: 'How is the price of a session set?', a: [
-        'By the size of your business. Under $100K in annual revenue, a session is $300. Under $500K it is ' +
-        '$400, under $1 million $500, and over $1 million $1,299.'] },
-      { q: 'How does the 10-session offer work?', a: [
-        'Book ten sessions and your first one is free, so you pay for nine.'] },
-      { q: 'Can we meet in person?', a: [
-        'Yes. We are based in Spring Hill and can meet at your business, over coffee or by video.'] },
-      { q: 'What if I want help doing what we plan?', a: [
-        'You can take the plan and run with it, or we can do the work &mdash; websites, video, branding, ' +
-        'social media and advertising are what we do every day.'] }
     ]
   }
 ];
