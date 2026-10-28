@@ -363,9 +363,9 @@ const SERVICES = require('./services');
           S.offers ? { offers: S.offers.map(([n, p]) => ({ '@type': 'Offer', name: n,
             priceSpecification: { '@type': 'PriceSpecification', minPrice: p, priceCurrency: 'USD' } })) } : {},
           /* fixed prices, one per tier (consulting: per session, by business size) */
-          S.prices ? { offers: S.prices.map(([n, p]) => ({ '@type': 'Offer', name: 'Consultation session - ' + n + ' annual revenue',
+          S.prices ? { offers: S.prices.map(([n, p]) => ({ '@type': 'Offer', name: n,
             price: p, priceCurrency: 'USD', priceSpecification: { '@type': 'UnitPriceSpecification', price: p,
-              priceCurrency: 'USD', unitText: 'session' } })) } : {},
+              priceCurrency: 'USD', unitText: 'engagement' } })) } : {},
           /* what the page offers, by name, each its own Service */
           S.catalog ? { hasOfferCatalog: { '@type': 'OfferCatalog', name: plain(S.label), itemListElement:
             S.catalog.map(([n, d]) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: n, description: d,

@@ -9,7 +9,7 @@
   if (!root.classList.contains('cs-anim')) return;
 
   /* everything that should arrive rather than simply be there */
-  var sel = '.cs-marker, .cs-exit, .cs-tiles li, .cs-lanes, .cs-board, .cs-offer, .cs-miles li, ' +
+  var sel = '.cs-marker, .cs-exit, .cs-legs li, .cs-lanes, .cs-plan, .cs-open, .cs-miles li, .cs-why-say, ' +
             '.cs-session-img, .cs-session-say, .cs-ai-say, .cs-sign--close';
   var els = [].slice.call(document.querySelectorAll(sel));
   if ('IntersectionObserver' in window) {

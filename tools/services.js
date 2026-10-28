@@ -343,21 +343,20 @@ module.exports = [
     main: 'cs-main',
     label: 'Business Consulting',
     color: '#1c9022',
-    title: 'Business & Marketing Consulting in Spring Hill, FL | Highway 19 Media',
-    desc: 'Business and marketing consulting for Spring Hill & Tampa Bay: growth, strategy, operations, ' +
-          'employees and AI. Sessions from $300, priced by business size.',
-    h1: 'Business & Marketing Consulting - Take Your Business to the Next Level',
+    title: 'Business Consulting & Growth Strategy in Spring Hill, FL | Highway 19 Media',
+    desc: 'Practical business consulting in Spring Hill, FL. Startup guidance, growth strategy, operations, ' +
+          'marketing, CRM and AI. Personal consultations from $249.',
+    h1: 'Business Consulting & Growth Strategy in Spring Hill, FL',
     lead: [
-      'One-on-one consulting on marketing and the whole business - strategy, operations and logistics, ' +
-      'delivery, employees, pricing and AI - from a team that has helped companies grow from $100K to ' +
-      'tens of millions.'
+      'Experienced, practical business consulting in Spring Hill, FL - startup guidance, growth strategy, ' +
+      'operations, marketing, sales and pricing, technology, CRM and AI - from decades of real-world business experience.'
     ],
     serviceType: 'Business and marketing consulting',
     prices: [
-      ['Under $100K', 300],
-      ['Under $500K', 400],
-      ['Under $1 Million', 500],
-      ['Over $1 Million', 1299]
+      ['Startup & Small Business Guidance', 249],
+      ['Business Growth Consultation', 499],
+      ['Advanced Business Strategy', 799],
+      ['Executive & Corporate Consulting', 1399]
     ]
   }
 ];
