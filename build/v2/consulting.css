@@ -1,67 +1,80 @@
 /* ============================================================================
    THE BUSINESS CONSULTING PAGE (Oct 28, 2026) - consulting-body.html.
-   The site's road language, not the service template: his sign green and tab
-   yellow (#1c9022 / #ffda00, read from hero-sign.svg and our-sign.svg), the
-   gantry truss and the 19 shield from the home page, Highway Gothic Expanded
-   on every sign, and his licensed Adobe Stock photographs.
+   One drive down US-19. The site's road language, not a template: his sign
+   green and tab yellow (#1c9022 / #ffda00, read from hero-sign.svg and
+   our-sign.svg), the gantry truss and the 19 shield from the home page,
+   Highway Gothic Expanded for every heading and sign, and his licensed Adobe
+   Stock photographs. The one big moment is the overhead exit sign (section 4);
+   everything else stays quiet around it.
    ========================================================================= */
 .cs-page{ --green:#1c9022; --green-d:#13701a; --yellow:#ffda00; --navy:#00287d; --ink:#0b1f3f;
+  --asphalt:#1b1e22; --blue:#0067b1; --paper:#eef2f6; --body:#2f3e55;
   --sign:"Highway Gothic Expanded","Be Vietnam Pro",Arial,sans-serif;
-  margin:0; background:#f3f7fb; color:var(--ink);
+  margin:0; background:var(--paper); color:var(--ink);
   font-family:"Be Vietnam Pro","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
   font-size:clamp(16px,1.05vw,17.5px); line-height:1.65; -webkit-font-smoothing:antialiased }
 .cs-page *,.cs-page *::before,.cs-page *::after{ box-sizing:border-box }
-.cs-in{ position:relative; max-width:1220px; margin:0 auto; padding:0 clamp(20px,5vw,48px) }
-.cs-narrow{ max-width:880px }
-.cs-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap }
+.cs-in{ position:relative; max-width:1240px; margin:0 auto; padding:0 clamp(20px,5vw,48px) }
 .cs-page section{ position:relative }
-.cs-page h2{ margin:0 0 .6em; font-size:clamp(1.75rem,3.4vw,2.8rem); font-weight:900; line-height:1.08;
-  letter-spacing:-.015em; text-wrap:balance }
-.cs-eyebrow{ margin:0 0 .8em; font-size:.8rem; font-weight:800; letter-spacing:.18em; text-transform:uppercase;
-  color:var(--green) }
-.cs-intro{ max-width:44em; margin:0 0 clamp(28px,4vw,48px); font-size:clamp(1.02rem,1.3vw,1.16rem); color:#33445e }
-.cs-big{ font-size:clamp(1.15rem,1.6vw,1.35rem); font-weight:700; line-height:1.4; color:var(--ink) }
+
+/* ---- headings are set in the sign face, like the home page's ---- */
+.cs-page h2{ margin:0; font:400 clamp(1.65rem,3.1vw,2.75rem)/1.12 var(--sign); letter-spacing:.005em; text-wrap:balance }
+.cs-page h2 > span{ display:block }
+.cs-head{ margin-bottom:clamp(34px,4.4vw,60px) }
+.cs-head--center{ text-align:center }
+.cs-head--split{ display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); gap:clamp(24px,5vw,80px); align-items:end }
+.cs-head-say p{ margin:0 0 .8em; color:var(--body); font-size:clamp(1rem,1.2vw,1.1rem); max-width:34em }
+.cs-head-say p:last-child{ margin-bottom:0 }
+/* the section's small label, as the little yellow plaque that rides on his signs */
+.cs-plaque{ display:inline-block; margin:0 0 1.1em; padding:.42em .85em .36em; border-radius:5px;
+  background:var(--yellow); color:#111; font:400 .88rem/1.2 var(--sign); max-width:100%; letter-spacing:.02em;
+  box-shadow:inset 0 0 0 2px var(--yellow), inset 0 0 0 3.5px #111 }
+.cs-plaque--blue{ background:var(--blue); color:#fff; box-shadow:inset 0 0 0 2px var(--blue), inset 0 0 0 3.5px #fff }
+.cs-first{ font-size:clamp(1.12rem,1.45vw,1.3rem)!important; font-weight:700; line-height:1.4; color:var(--ink)!important }
 
 /* ---- buttons: the site's yellow, 2/3-width on a phone ---- */
 .cs-btn{ display:inline-grid; place-items:center; min-height:3.3em; padding:0 1.9em; border-radius:.5em;
   background:var(--yellow); color:#0b2247; font-weight:800; letter-spacing:.03em; text-transform:uppercase;
-  text-decoration:none; font-size:.95rem; box-shadow:0 6px 18px rgba(0,0,0,.22);
-  transition:transform .18s ease, box-shadow .18s ease, background .18s ease }
-.cs-btn:hover{ background:#ffe44d; transform:translateY(-2px); box-shadow:0 10px 26px rgba(0,0,0,.28) }
-.cs-btn:focus-visible{ outline:3px solid #fff; outline-offset:3px }
+  text-align:center; line-height:1.2; text-decoration:none; font-size:.95rem; box-shadow:0 6px 18px rgba(0,0,0,.22);
+  transition:background .18s ease, box-shadow .18s ease }
+.cs-btn:hover{ background:#ffe44d; box-shadow:0 10px 26px rgba(0,0,0,.28) }
+.cs-btn:focus-visible{ outline:3px solid #fff; outline-offset:3px; box-shadow:0 0 0 6px var(--ink) }
 .cs-btn--ghost{ background:rgba(0,20,60,.25); color:#fff; border:2px solid rgba(255,255,255,.75); box-shadow:none;
   -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px) }
 .cs-btn--ghost:hover{ background:rgba(255,255,255,.14); border-color:#fff }
-.cs-btn--dark{ background:var(--ink); color:#fff }
-.cs-btn--dark:hover{ background:#163463 }
+.cs-btn--green{ background:var(--green); color:#fff; box-shadow:0 6px 16px rgba(19,112,26,.3) }
+.cs-btn--green:hover{ background:var(--green-d) }
 .cs-btn--big{ min-height:3.9em; padding:0 2.8em; font-size:clamp(1rem,1.2vw,1.12rem);
   box-shadow:0 12px 32px rgba(0,0,0,.35), 0 0 0 6px rgba(255,218,0,.2) }
+.cs-acts{ display:flex; flex-wrap:wrap; justify-content:center; gap:14px }
 
-/* ---- THE SIGN. Every green panel on the page is this: his green, a white
-   inset rule a little inside the edge, Highway Gothic, and a yellow tab that
-   sits on its top edge like the ones on his gantry. ---- */
+/* ---- THE SIGN. Every green panel is this: his green, a white inset rule a
+   little inside the edge, Highway Gothic, and a yellow tab on its top edge. ---- */
 .cs-sign{ position:relative; background:var(--green); color:#fff; border-radius:12px;
   box-shadow:inset 0 0 0 4px var(--green), inset 0 0 0 6px #fff, 0 18px 40px rgba(0,20,10,.28) }
-.cs-tab{ position:absolute; left:22px; top:0; translate:0 -55%; margin:0; padding:.32em .9em .26em;
-  background:var(--yellow); color:#111; border-radius:5px; font:700 .78rem/1.1 var(--sign); letter-spacing:.02em;
+.cs-tab{ position:absolute; left:22px; top:0; translate:0 -55%; margin:0; padding:.34em .9em .28em;
+  background:var(--yellow); color:#111; border-radius:5px; font:400 .8rem/1.1 var(--sign); letter-spacing:.02em;
   white-space:nowrap; box-shadow:0 3px 8px rgba(0,0,0,.2) }
 .cs-shield{ display:block; width:clamp(66px,7vw,104px); height:auto; filter:drop-shadow(0 6px 10px rgba(0,0,0,.35)) }
+/* his truss, the same cell the home page's gantry repeats, run the full width */
+.cs-truss{ position:absolute; left:0; right:0; height:clamp(64px,6.4vw,104px);
+  background:url("../../assets/v2/section-01/truss-cell.webp") repeat-x center; background-size:auto 100%;
+  filter:drop-shadow(0 10px 14px rgba(0,0,0,.35)) }
+.cs-mile{ position:relative; z-index:1; display:grid; place-items:center; width:58px; height:96px; padding-top:6px;
+  background:var(--green); color:#fff; border-radius:8px; font:400 .68rem/1 var(--sign); text-transform:uppercase; letter-spacing:.05em;
+  box-shadow:inset 0 0 0 3px var(--green), inset 0 0 0 5px #fff, 0 10px 20px rgba(0,30,10,.3) }
+.cs-mile b{ display:block; font:400 2.3rem/1 var(--sign); letter-spacing:0 }
 
 /* ================= 1. THE GANTRY ================= */
-.cs-hero{ min-height:min(100svh,1000px); display:grid; grid-template-rows:auto 1fr; overflow:hidden;
-  color:#fff; background:#0b2247; padding-bottom:clamp(56px,8vw,110px) }
+.cs-hero{ min-height:min(100svh,980px); display:grid; grid-template-rows:auto 1fr; overflow:hidden;
+  color:#fff; background:#0b2247; padding-bottom:clamp(48px,7vw,96px) }
 .cs-hero-bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 70%;
   will-change:transform }
 .cs-hero::before{ content:""; position:absolute; inset:0; z-index:1;
-  background:linear-gradient(180deg, rgba(0,22,70,.82) 0%, rgba(0,22,70,.35) 38%, rgba(0,10,30,.05) 55%, rgba(0,12,35,.78) 100%) }
-.cs-gantry{ position:relative; z-index:2; display:grid; justify-items:center;
-  padding-top:clamp(80px,10vw,150px) }
-/* his truss, the same cell the home page's gantry repeats, run the full width
-   behind the sign */
-.cs-truss{ position:absolute; left:0; right:0; top:calc(clamp(80px,10vw,150px) + clamp(40px,4vw,62px));
-  height:clamp(64px,6.4vw,104px); background:url("../../assets/v2/section-01/truss-cell.webp") repeat-x center;
-  background-size:auto 100%; filter:drop-shadow(0 10px 14px rgba(0,0,0,.35)) }
-.cs-sign--hero{ width:min(92vw,820px); padding:clamp(40px,4.6vw,64px) clamp(26px,4vw,56px) clamp(26px,3vw,40px);
+  background:linear-gradient(180deg, rgba(0,22,70,.8) 0%, rgba(0,22,70,.3) 36%, rgba(0,10,30,0) 55%, rgba(0,12,35,.7) 100%) }
+.cs-gantry{ position:relative; z-index:2; display:grid; justify-items:center; padding-top:clamp(84px,10vw,150px) }
+.cs-gantry .cs-truss{ top:calc(clamp(84px,10vw,150px) + clamp(40px,4vw,62px)) }
+.cs-sign--hero{ width:min(92vw,840px); padding:clamp(40px,4.6vw,64px) clamp(26px,4vw,56px) clamp(26px,3vw,40px);
   display:grid; grid-template-columns:1fr auto; align-items:center; gap:clamp(14px,2vw,30px) }
 .cs-sign--hero .cs-shield{ position:absolute; left:50%; top:0; translate:-50% -58%; width:clamp(64px,6.4vw,96px) }
 .cs-sign--hero .cs-tab{ font-size:clamp(.66rem,.95vw,.86rem) }
@@ -69,266 +82,302 @@
 .cs-sign h1{ margin:0; font:400 clamp(1.7rem,4.4vw,3.6rem)/1.06 var(--sign); letter-spacing:.005em }
 .cs-sign h1 span{ display:block }
 .cs-sign-arrow{ width:clamp(38px,4.4vw,66px); height:clamp(50px,5.9vw,88px); color:#fff }
-.cs-hero-say{ position:relative; z-index:2; align-self:end; justify-self:center; width:min(92vw,760px);
-  text-align:center; padding-top:clamp(36px,5vw,64px); text-shadow:0 2px 14px rgba(0,10,30,.6) }
-.cs-lede{ margin:0 0 .5em; font-size:clamp(1.3rem,2.3vw,1.9rem); font-weight:800; line-height:1.25; color:var(--yellow) }
-.cs-hero-say p{ margin:0 auto .9em; max-width:38em; font-size:clamp(1.02rem,1.35vw,1.2rem); font-weight:500 }
-.cs-acts{ display:flex; flex-wrap:wrap; justify-content:center; gap:14px; margin-top:1.8em }
+.cs-hero-say{ position:relative; z-index:2; align-self:end; justify-self:center; width:min(92vw,760px); text-align:center }
+.cs-lede{ margin:0 0 1.1em; font:400 clamp(1.25rem,2.4vw,2rem)/1.2 var(--sign); color:#fff;
+  text-shadow:0 2px 18px rgba(0,10,30,.75) }
 
-/* ================= 2. MILE MARKERS ON A ROAD ================= */
+/* ================= 2. MILES ALREADY DRIVEN ================= */
 .cs-proof{ background:linear-gradient(180deg,#00287d 0%,#04306f 100%); color:#fff;
   padding:clamp(64px,8vw,120px) 0 0; overflow:hidden }
+/* the hero's own words, the first thing read after the sign */
+.cs-open-words{ max-width:44em; margin:0 auto clamp(64px,8vw,120px); text-align:center }
+.cs-open-words p{ margin:0 0 1em; font-size:clamp(1.08rem,1.5vw,1.3rem); line-height:1.6; color:rgba(255,255,255,.92) }
+.cs-open-words p:first-child{ font-weight:700; color:#fff }
+.cs-open-words::after{ content:""; display:block; width:120px; height:6px; margin:clamp(40px,5vw,64px) auto 0;
+  background:repeating-linear-gradient(90deg,var(--yellow) 0 34px,transparent 34px 43px) }
 .cs-proof h2{ color:#fff }
-.cs-proof .cs-eyebrow{ color:var(--yellow) }
-.cs-proof .cs-intro{ color:rgba(255,255,255,.85) }
-.cs-markers{ list-style:none; margin:0; padding:22px 0 0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
+.cs-cols{ columns:2 22em; column-gap:clamp(28px,4vw,60px); margin:0 0 clamp(56px,6vw,80px); color:rgba(255,255,255,.86);
+  font-size:clamp(1rem,1.2vw,1.1rem) }
+.cs-cols p{ margin:0 0 1em; break-inside:avoid }
+.cs-cols .cs-cols-end{ font:400 clamp(1.1rem,1.5vw,1.3rem)/1.35 var(--sign); color:var(--yellow) }
+.cs-markers{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
   gap:clamp(16px,2.2vw,30px); align-items:end; position:relative; z-index:1 }
-.cs-marker{ display:grid; padding:2.1em 1.2em 1.4em; text-align:center; margin-bottom:clamp(70px,7vw,96px) }
+.cs-marker{ display:grid; padding:1.6em 1.2em 1.4em; text-align:center; margin-bottom:clamp(70px,7vw,96px) }
 /* each sign stands on two posts that run down to the road */
 .cs-marker::before,.cs-marker::after{ content:""; position:absolute; top:100%; width:8px; height:clamp(78px,7.6vw,104px);
   background:linear-gradient(90deg,#8d97a3,#e6ebf0 45%,#9aa4ae); z-index:-1 }
 .cs-marker::before{ left:24% } .cs-marker::after{ right:24% }
-.cs-marker .cs-tab{ left:50%; translate:-50% -55% }
-.cs-marker b{ font:400 clamp(1.7rem,2.6vw,2.5rem)/1.05 var(--sign); white-space:nowrap }
-.cs-marker b small{ display:block; margin-bottom:.25em; font-size:.5em; color:rgba(255,255,255,.85) }
-.cs-marker b i{ font-style:normal; color:var(--yellow) }
-.cs-marker > span{ margin-top:.55em; font-size:.92rem; line-height:1.45; color:rgba(255,255,255,.9) }
-.cs-road{ height:clamp(70px,7vw,96px); margin-top:-6px;
-  background:linear-gradient(180deg,#3b3f45 0,#2a2d31 100%); position:relative }
+.cs-marker b{ font:400 clamp(1.2rem,1.7vw,1.6rem)/1.12 var(--sign) }
+.cs-marker > span{ margin-top:.6em; font-size:.94rem; line-height:1.45; color:rgba(255,255,255,.92) }
+.cs-road{ height:clamp(70px,7vw,96px); margin-top:-6px; background:linear-gradient(180deg,#3b3f45 0,#2a2d31 100%); position:relative }
 .cs-road::before{ content:""; position:absolute; left:0; right:0; top:50%; height:6px; translate:0 -50%;
   background:repeating-linear-gradient(90deg,var(--yellow) 0 64px,transparent 64px 110px) }
 .cs-road::after{ content:""; position:absolute; left:0; right:0; top:8px; bottom:8px;
   border-top:3px solid rgba(255,255,255,.85); border-bottom:3px solid rgba(255,255,255,.85) }
 
-/* ================= 3. EVERY EXIT ================= */
-.cs-whole{ padding:clamp(70px,9vw,130px) 0 }
-.cs-exits{ list-style:none; margin:0; padding:20px 0 0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:clamp(30px,3vw,40px) clamp(16px,2vw,26px) }
-.cs-exit{ padding:2em 1.4em 1.5em; }
-.cs-exit h3{ margin:0 0 .45em; padding-right:2.4em; font:400 clamp(1.05rem,1.35vw,1.25rem)/1.18 var(--sign) }
-.cs-exit p{ margin:0; font-size:.93rem; line-height:1.5; color:rgba(255,255,255,.92) }
-.cs-exit-a{ position:absolute; right:1.1em; top:1.2em; width:26px; height:34px; color:#fff; rotate:40deg }
-.cs-exit:nth-child(even) .cs-exit-a{ rotate:-40deg }
-.cs-exit--lead{ grid-column:span 2; grid-row:span 2; padding:2.6em 2em 2em; display:flex; flex-direction:column; justify-content:flex-end;
-  background:linear-gradient(160deg,#21a52a 0%,var(--green) 55%,var(--green-d) 100%) }
-.cs-exit--lead h3{ font-size:clamp(1.6rem,2.8vw,2.5rem); padding-right:1.6em }
-.cs-exit--lead p{ font-size:clamp(1rem,1.25vw,1.15rem); max-width:26em }
-.cs-exit--lead .cs-exit-a{ width:clamp(48px,5vw,70px); height:clamp(64px,6.6vw,92px); right:.6em; top:.9em; rotate:0deg }
-.cs-exit--lead .cs-tab{ font-size:.9rem }
-/* the last slot: his blue service-sign colour, and the way in for anything else */
-.cs-exit--any{ background:#0067b1; box-shadow:inset 0 0 0 4px #0067b1, inset 0 0 0 6px #fff, 0 18px 40px rgba(0,30,70,.28) }
-.cs-exit--any a{ color:var(--yellow); font-weight:700; text-decoration:none; white-space:nowrap }
-.cs-exit--any a:hover{ text-decoration:underline }
+/* ================= 3. A DIFFERENT PERSPECTIVE ================= */
+.cs-session{ background:#fff; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) }
+.cs-session-img{ position:relative; margin:0; min-height:100% }
+.cs-session-img img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:40% 50%; display:block }
+.cs-session-say{ padding:clamp(64px,8vw,120px) clamp(20px,5vw,72px); max-width:680px }
+.cs-session-say h2{ margin-bottom:.8em }
+.cs-session-say p{ margin:0 0 .9em; color:var(--body); font-size:clamp(1rem,1.15vw,1.08rem) }
+/* the promise, as one long guide sign with four destinations on it */
+.cs-banner{ margin:0; grid-column:1/-1; display:flex; flex-wrap:wrap; justify-content:center;
+  background:var(--green); color:#fff; padding:clamp(22px,2.6vw,34px) clamp(14px,3vw,40px);
+  box-shadow:inset 0 6px 0 var(--green), inset 0 8px 0 #fff, inset 0 -6px 0 var(--green), inset 0 -8px 0 #fff;
+  font:400 clamp(1.1rem,2vw,1.8rem)/1.2 var(--sign) }
+.cs-banner span{ padding:.25em clamp(14px,2.2vw,34px) }
+.cs-banner span + span{ border-left:3px solid rgba(255,255,255,.9) }
+.cs-banner span:last-child{ color:var(--yellow) }
 
-/* ================= 4. THE SESSION ================= */
-.cs-session{ padding:clamp(60px,8vw,120px) 0; background:#fff }
-.cs-session .cs-in{ display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); gap:clamp(30px,5vw,76px); align-items:center }
-.cs-session-img{ position:relative; margin:0 }
-.cs-session-img img{ display:block; width:100%; height:auto; border-radius:16px; box-shadow:0 28px 60px rgba(11,31,63,.22) }
-.cs-session-say p{ margin:0 0 1em; color:#33445e }
-.cs-session-say .cs-big{ color:var(--ink); margin-top:1.3em; padding-left:.9em; border-left:5px solid var(--yellow) }
-/* a small blue service sign, his rest-area colour, on the photograph's corner */
-.cs-session-img .cs-street{ position:absolute; right:-14px; bottom:-18px; background:#0067b1;
-  box-shadow:inset 0 0 0 3px #0067b1, inset 0 0 0 5px #fff, 0 12px 26px rgba(0,0,0,.3) }
+/* ================= 4. EVERY EXIT: THE OVERHEAD SIGN ================= */
+/* night asphalt, lane lines faintly under it, so his green is the brightest thing here */
+.cs-whole{ padding:clamp(70px,9vw,130px) 0 clamp(80px,10vw,140px); color:#fff; overflow:hidden;
+  background:
+    linear-gradient(90deg,transparent calc(50% - 3px),rgba(255,218,0,.10) calc(50% - 3px),rgba(255,218,0,.10) calc(50% + 3px),transparent calc(50% + 3px)),
+    radial-gradient(120% 70% at 50% 0%,#2a3038 0%,var(--asphalt) 60%) }
+.cs-whole h2{ color:#fff }
+.cs-whole .cs-head-say p{ color:rgba(255,255,255,.8) }
+.cs-overhead{ position:relative; padding-top:clamp(40px,4vw,56px) }
+.cs-truss--over{ top:calc(clamp(40px,4vw,56px) + 26px) }
+.cs-board{ width:min(94vw,1280px); margin:0 auto; padding:clamp(54px,5vw,72px) clamp(8px,1.2vw,16px) clamp(8px,1.2vw,16px);
+  border-radius:16px; box-shadow:inset 0 0 0 5px var(--green), inset 0 0 0 8px #fff, 0 40px 80px rgba(0,0,0,.55) }
+.cs-board > .cs-shield{ position:absolute; left:50%; top:0; translate:-50% -50%; width:clamp(70px,7vw,104px) }
+.cs-exits{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)) }
+.cs-exit{ display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; column-gap:clamp(12px,1.4vw,20px);
+  padding:clamp(20px,2.2vw,30px) clamp(16px,2.4vw,34px); border-top:2px solid rgba(255,255,255,.85) }
+.cs-exit:nth-child(-n+2){ border-top:0 }
+.cs-exit:nth-child(odd){ border-right:2px solid rgba(255,255,255,.85) }
+.cs-num{ margin:0; padding:.38em .62em .3em; border-radius:5px; background:var(--yellow); color:#111;
+  font:400 .78rem/1 var(--sign); white-space:nowrap; align-self:start; margin-top:.3em }
+.cs-exit h3{ margin:0; font:400 clamp(1.15rem,1.75vw,1.6rem)/1.15 var(--sign) }
+.cs-exit-a{ width:clamp(24px,2.3vw,34px); height:clamp(32px,3vw,45px); color:#fff; rotate:45deg; align-self:start }
+.cs-exit:nth-child(odd) .cs-exit-a{ rotate:-45deg }
+.cs-exit > p:last-child{ grid-column:2/4; margin:.55em 0 0; font-size:clamp(.92rem,1vw,1rem); line-height:1.5;
+  color:rgba(255,255,255,.88); max-width:34em }
+/* any exit: a panel in his blue service-sign colour, set into the foot of the board */
+.cs-any{ display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:clamp(14px,2vw,30px);
+  margin-top:clamp(6px,1vw,10px); padding:clamp(22px,2.4vw,30px) clamp(18px,2.6vw,34px); border-radius:10px;
+  background:var(--blue); box-shadow:inset 0 0 0 3px var(--blue), inset 0 0 0 5px #fff }
+.cs-any h3{ margin:0 0 .3em; font:400 clamp(1.15rem,1.75vw,1.6rem)/1.15 var(--sign) }
+.cs-any p:not(.cs-num){ margin:0; color:rgba(255,255,255,.92); font-size:clamp(.92rem,1vw,1rem); max-width:40em }
 
-/* ---- the street-name sign, used on the photographs ---- */
-.cs-street{ display:inline-block; padding:.55em 1em .5em; border-radius:8px; font:400 clamp(.82rem,1vw,.98rem)/1.15 var(--sign);
-  color:#fff; box-shadow:inset 0 0 0 3px var(--green), inset 0 0 0 5px #fff, 0 10px 22px rgba(0,0,0,.35) }
+/* ================= 5. THREE STOPS ================= */
+.cs-stages{ padding:clamp(70px,9vw,130px) 0 0; background:#fff }
+.cs-legs{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:4px; background:#fff }
+.cs-legs li{ position:relative; min-height:clamp(600px,50vw,740px); display:flex; align-items:flex-end; overflow:hidden; color:#fff; background:#0b2247 }
+.cs-legs img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block }
+.cs-legs li:nth-child(3) img{ object-position:62% 50% }
+.cs-legs li::before{ content:""; position:absolute; inset:0; z-index:1;
+  background:linear-gradient(180deg,rgba(0,16,45,0) 18%,rgba(0,16,45,.55) 46%,rgba(0,16,45,.94) 78%) }
+.cs-leg-say{ position:relative; z-index:2; padding:clamp(24px,3vw,44px) }
+.cs-leg-say .cs-mile{ margin-bottom:1.1em }
+.cs-legs h3{ margin:0 0 .5em; font:400 clamp(1.3rem,1.9vw,1.75rem)/1.15 var(--sign) }
+.cs-legs p{ margin:0 0 .75em; font-size:.98rem; color:rgba(255,255,255,.9) }
+.cs-legs .cs-first{ color:#fff!important; font-size:clamp(1.02rem,1.25vw,1.15rem)!important }
 
-/* ================= 6. AI ================= */
-.cs-ai{ padding:clamp(80px,10vw,150px) 0; background:#06051a; color:#fff; overflow:hidden }
-.cs-ai-bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.55 }
+/* ================= 6. THE ROADMAP: four mile markers on the shoulder ================= */
+.cs-steps{ padding:clamp(70px,9vw,130px) 0; background:var(--paper) }
+.cs-route{ height:clamp(84px,7vw,104px); position:relative; background:linear-gradient(180deg,#3b3f45,#2a2d31) }
+.cs-route::before{ content:""; position:absolute; left:0; right:0; top:50%; height:6px; translate:0 -50%;
+  background:repeating-linear-gradient(90deg,var(--yellow) 0 64px,transparent 64px 110px) }
+.cs-route::after{ content:""; position:absolute; left:0; right:0; top:9px; bottom:9px;
+  border-top:3px solid rgba(255,255,255,.85); border-bottom:3px solid rgba(255,255,255,.85) }
+.cs-miles{ list-style:none; margin:-58px 0 0; padding:0; display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr)); gap:clamp(22px,3vw,44px); position:relative; z-index:1 }
+.cs-miles .cs-mile{ margin-bottom:1.4em }
+.cs-miles h3{ margin:0 0 .5em; font:400 clamp(1.15rem,1.5vw,1.38rem)/1.18 var(--sign); color:var(--ink) }
+.cs-miles p{ margin:0 0 .7em; color:var(--body); font-size:.98rem }
+.cs-miles p:first-of-type{ color:var(--ink); font-weight:600 }
+/* the yellow warning-colour sign: the takeaway */
+.cs-say{ display:flex; flex-wrap:wrap; justify-content:center; column-gap:.5em; max-width:62rem;
+  margin:clamp(44px,5vw,70px) auto 0; padding:1.05em 1.4em; text-align:center; border-radius:12px;
+  background:var(--yellow); color:#111; font:400 clamp(1.1rem,1.9vw,1.6rem)/1.3 var(--sign);
+  box-shadow:inset 0 0 0 5px var(--yellow), inset 0 0 0 8px #111, 0 18px 40px rgba(60,50,0,.18) }
+
+/* ================= 7. AI: THE LANES AT NIGHT ================= */
+.cs-ai{ padding:clamp(80px,10vw,140px) 0; background:#06051a; color:#fff; overflow:hidden }
+.cs-ai-bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.45 }
 .cs-ai::before{ content:""; position:absolute; inset:0; z-index:1;
-  background:linear-gradient(90deg,rgba(6,5,26,.96) 0%,rgba(6,5,26,.82) 45%,rgba(6,5,26,.35) 100%) }
-.cs-ai .cs-in{ z-index:2; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(30px,5vw,80px); align-items:center }
+  background:linear-gradient(180deg,rgba(6,5,26,.9) 0%,rgba(6,5,26,.55) 40%,rgba(6,5,26,.92) 100%) }
+.cs-ai > :not(.cs-ai-bg){ position:relative; z-index:2 }
 .cs-ai h2{ color:#fff }
-.cs-ai .cs-eyebrow{ color:#ff5fd2 }
-.cs-ai-say p{ margin:0 0 1em; color:rgba(255,255,255,.88); font-size:clamp(1.02rem,1.3vw,1.14rem) }
-.cs-ai-say em{ font-style:normal; color:var(--yellow); font-weight:700 }
-/* HIS BLUE LANE SIGN (assets/brand/lane-arrows-sign.svg), as markup: four
-   lanes, an arrow in each, and the place AI can take you under it */
-.cs-lanes{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); background:#0067b1; border-radius:12px;
-  padding:clamp(18px,2.4vw,30px) clamp(10px,1.4vw,18px); box-shadow:inset 0 0 0 5px #0067b1, inset 0 0 0 8px #fff, 0 24px 60px rgba(0,0,0,.5) }
-.cs-lane{ display:grid; justify-items:center; align-content:start; gap:14px; padding:6px 6px 4px; text-align:center;
+.cs-overhead--ai{ padding-top:0; margin-bottom:clamp(50px,6vw,84px) }
+.cs-overhead--ai .cs-truss--over{ top:26px }
+/* HIS BLUE LANE SIGN (assets/brand/lane-arrows-sign.svg), as markup: four lanes, an arrow in each */
+.cs-lanes{ position:relative; width:min(94vw,1100px); margin:0 auto; display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
+  background:var(--blue); border-radius:14px; padding:clamp(22px,2.8vw,38px) clamp(10px,1.4vw,18px);
+  box-shadow:inset 0 0 0 5px var(--blue), inset 0 0 0 8px #fff, 0 30px 70px rgba(0,0,0,.6) }
+.cs-lane{ display:grid; justify-items:center; align-content:start; gap:16px; padding:6px 10px 4px; text-align:center;
   border-left:4px dashed rgba(255,255,255,.9) }
 .cs-lane:first-child{ border-left:0 }
-.cs-lane-a{ width:clamp(30px,3.2vw,44px); height:clamp(78px,8.5vw,120px); color:#fff }
+.cs-lane-a{ width:clamp(32px,3.6vw,52px); height:clamp(84px,9.6vw,140px); color:#fff }
 .cs-lane-a--l{ rotate:-24deg } .cs-lane-a--r{ rotate:24deg }
-.cs-lane span{ font:400 clamp(.78rem,1vw,.98rem)/1.2 var(--sign) }
+.cs-lane span{ font:400 clamp(.8rem,1.15vw,1.1rem)/1.2 var(--sign) }
+.cs-ai-say{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(24px,5vw,72px); max-width:1040px; margin:0 auto }
+.cs-ai-say p{ margin:0 0 1em; color:rgba(255,255,255,.86); font-size:clamp(1.02rem,1.25vw,1.12rem) }
+.cs-ai-say > div:first-child p:first-child{ color:#fff; font-weight:700; font-size:clamp(1.12rem,1.45vw,1.3rem); line-height:1.4 }
+.cs-ai-end{ margin:clamp(30px,4vw,52px) auto 0; text-align:center; max-width:40em }
+.cs-ai-end p{ margin:0 0 .3em; color:rgba(255,255,255,.86); font-size:clamp(1.02rem,1.25vw,1.12rem) }
+.cs-ai-end .cs-ai-k{ margin-bottom:1.4em; font:400 clamp(1.15rem,1.8vw,1.5rem)/1.3 var(--sign); color:var(--yellow) }
 
-.cs-ai-say .cs-btn{ margin-top:.8em }
-
-/* ---- the experience section: copy in two columns, then word-signs on posts ---- */
-.cs-cols{ columns:2 22em; column-gap:clamp(28px,4vw,60px); margin:0 0 clamp(40px,5vw,64px); color:rgba(255,255,255,.86);
-  font-size:clamp(1rem,1.2vw,1.1rem) }
-.cs-cols p{ margin:0 0 1em; break-inside:avoid }
-.cs-cols .cs-cols-end{ font-weight:700; color:var(--yellow) }
-.cs-marker b.cs-word, .cs-markers b{ white-space:normal; font-size:clamp(1.2rem,1.7vw,1.6rem); line-height:1.12 }
-.cs-go{ margin-top:clamp(30px,4vw,48px); text-align:center }
-
-/* ================= WHO WE HELP: three photographs, three mile markers ================= */
-.cs-stages{ padding:clamp(70px,9vw,130px) 0; background:#fff }
-.cs-legs{ list-style:none; margin:clamp(20px,3vw,36px) 0 0; padding:0; display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:clamp(22px,3vw,40px) }
-.cs-legs li{ background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 18px 40px rgba(11,31,63,.12); padding-bottom:1.4em }
-.cs-leg-img{ position:relative; aspect-ratio:3/2; overflow:hidden; margin-bottom:1.3em }
-.cs-leg-img img{ width:100%; height:100%; object-fit:cover; display:block }
-.cs-leg-img .cs-mile{ position:absolute; left:16px; bottom:16px; margin:0; width:54px; height:88px;
-  font-size:.64rem }
-.cs-leg-img .cs-mile b{ font-size:2rem }
-.cs-legs h3{ margin:0 1.4rem .5em; padding-top:.4em; font:400 clamp(1.15rem,1.5vw,1.35rem)/1.2 var(--sign); color:var(--green-d) }
-.cs-legs p{ margin:0 1.4rem .75em; color:#33445e; font-size:.97rem }
-
-/* ================= THE ROADMAP: four mile markers beside a road ================= */
-.cs-steps{ padding:clamp(70px,9vw,120px) 0; background:#eef3f8 }
-.cs-miles{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:clamp(22px,3vw,40px); position:relative }
-/* the road the mile markers stand beside */
-.cs-miles::before{ content:""; position:absolute; left:0; right:0; top:46px; height:16px; border-radius:8px;
-  background:repeating-linear-gradient(90deg,var(--yellow) 0 34px,transparent 34px 58px) center/100% 4px no-repeat,#33373c }
-.cs-miles li{ position:relative }
-.cs-mile{ position:relative; z-index:1; display:grid; place-items:center; width:62px; height:106px; padding-top:6px;
-  background:var(--green); color:#fff; border-radius:8px; font:400 .72rem/1 var(--sign); text-transform:uppercase; letter-spacing:.05em;
-  box-shadow:inset 0 0 0 3px var(--green), inset 0 0 0 5px #fff, 0 10px 20px rgba(0,30,10,.25); margin-bottom:1.1em }
-.cs-mile b{ display:block; font:400 2.4rem/1 var(--sign); letter-spacing:0 }
-.cs-miles h3{ margin:0 0 .45em; font:400 clamp(1.1rem,1.4vw,1.3rem)/1.2 var(--sign); color:var(--ink) }
-.cs-miles p{ margin:0 0 .7em; color:#33445e; font-size:.97rem }
-.cs-say{ max-width:40em; margin:clamp(34px,4vw,54px) auto 0; padding:.9em 1.2em; text-align:center; border-radius:10px;
-  background:var(--yellow); color:#111; font:400 clamp(1.05rem,1.6vw,1.35rem)/1.3 var(--sign);
-  box-shadow:inset 0 0 0 4px var(--yellow), inset 0 0 0 6px #111 }
-
-/* ================= CONSULTING OPTIONS: four guide signs ================= */
-.cs-price{ padding:clamp(70px,9vw,130px) 0; background:#eef3f8 }
-.cs-plans{ list-style:none; margin:clamp(24px,3vw,36px) 0 0; padding:0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:clamp(30px,2.4vw,30px) clamp(14px,1.6vw,22px); align-items:stretch }
-.cs-plan{ display:flex; flex-direction:column; padding:2.2em 1.4em 1.5em }
-.cs-plan h3{ margin:0 0 .4em; font:400 clamp(1.08rem,1.3vw,1.24rem)/1.18 var(--sign); min-height:2.4em }
-.cs-plan .cs-plan-p{ margin:0 0 .6em; font:400 clamp(2.2rem,3vw,2.9rem)/1 var(--sign); color:var(--yellow) }
-.cs-plan .cs-plan-p small{ display:block; margin-top:.35em; font:600 .8rem/1.2 "Be Vietnam Pro",sans-serif; color:rgba(255,255,255,.85);
-  letter-spacing:.02em }
-.cs-plan .cs-plan-p .cs-plan-from{ margin:0 0 .3em; text-transform:uppercase; letter-spacing:.12em; font-size:.7rem }
-.cs-plan > p{ font-size:.93rem; line-height:1.5; color:rgba(255,255,255,.92); margin:0 0 .9em }
-.cs-plan .cs-plan-k{ margin:.2em 0 .5em; font:700 .72rem/1.2 var(--sign); text-transform:uppercase; letter-spacing:.1em; color:var(--yellow) }
-.cs-plan ul{ list-style:none; margin:0 0 1.2em; padding:0; font-size:.9rem; line-height:1.4 }
-.cs-plan ul li{ position:relative; padding:.38em 0 .38em 1.35em; border-top:1px solid rgba(255,255,255,.28) }
-.cs-plan ul li::before{ content:""; position:absolute; left:0; top:.78em; width:.6em; height:.6em; background:var(--yellow);
+/* ================= 8. THE ROUTES AND THEIR PRICES ================= */
+.cs-price{ padding:clamp(70px,9vw,130px) 0; background:var(--paper) }
+.cs-plans{ list-style:none; margin:0; padding:22px 0 0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:clamp(40px,3vw,44px) clamp(14px,1.6vw,22px); align-items:stretch }
+.cs-plan{ display:flex; flex-direction:column }
+/* the sign: route, name and price; it hangs over the card below it */
+.cs-plan-sign{ z-index:1; padding:2.1em 1.3em 1.4em }
+.cs-plan-sign h3{ margin:0 0 .7em; font:400 clamp(1.02rem,1.2vw,1.18rem)/1.2 var(--sign); min-height:2.4em }
+.cs-plan .cs-plan-p{ margin:0; font:400 clamp(2.3rem,3.1vw,3rem)/1 var(--sign); color:var(--yellow) }
+.cs-plan .cs-plan-p small{ display:block; margin-top:.45em; font:600 .82rem/1.2 "Be Vietnam Pro",sans-serif; color:rgba(255,255,255,.88) }
+.cs-plan .cs-plan-p .cs-plan-from{ margin:0 0 .4em; font:400 .74rem/1 var(--sign); color:#fff }
+.cs-plan-body{ flex:1; display:flex; flex-direction:column; margin:-10px 8px 0; padding:1.8em 1.3em 1.4em;
+  background:#fff; border-radius:0 0 12px 12px; box-shadow:0 18px 40px rgba(11,31,63,.1) }
+.cs-plan-body > p{ margin:0 0 1em; font-size:.97rem; line-height:1.5; color:var(--body) }
+.cs-plan-body .cs-plan-k{ margin:.2em 0 .4em; font:400 .78rem/1.2 var(--sign); color:var(--green-d) }
+.cs-plan-body ul{ list-style:none; margin:0 0 1.3em; padding:0; font-size:.95rem; line-height:1.4; color:var(--ink) }
+.cs-plan-body li{ position:relative; padding:.5em 0 .5em 1.5em; border-top:1px solid #e3e9f0 }
+.cs-plan-body li::before{ content:""; position:absolute; left:0; top:.82em; width:.75em; height:.75em; background:var(--green);
   clip-path:polygon(0 0,100% 50%,0 100%) }
-.cs-plan .cs-plan-note{ font-size:.82rem; color:rgba(255,255,255,.8); font-style:italic }
-.cs-plan .cs-btn{ margin-top:auto; min-height:3em; padding:0 1em; font-size:.8rem; text-align:center; line-height:1.2 }
-/* the top route: the deep green of a sign seen at night */
-.cs-plan--top{ background:linear-gradient(170deg,#13701a,#0c5212);
+.cs-plan-body .cs-plan-note{ font-size:.86rem; font-style:italic; color:#5a6a80 }
+.cs-plan-body .cs-btn{ margin-top:auto; min-height:3.1em; padding:0 1em; font-size:.82rem }
+/* the top route: the deep green of a sign seen at night, ringed in yellow */
+.cs-plan--top .cs-plan-sign{ background:linear-gradient(170deg,#13701a,#0b4d11);
   box-shadow:inset 0 0 0 4px #0f5e15, inset 0 0 0 6px var(--yellow), 0 18px 40px rgba(0,20,10,.32) }
-/* the open road: his blue service-sign colour, full width under the four */
-.cs-open{ margin-top:clamp(34px,3.6vw,46px); display:grid; grid-template-columns:1fr auto; gap:clamp(20px,3vw,48px); align-items:center;
-  padding:2.3em clamp(22px,3vw,44px) 1.8em; background:#0067b1;
-  box-shadow:inset 0 0 0 4px #0067b1, inset 0 0 0 6px #fff, 0 18px 40px rgba(0,30,70,.28) }
-.cs-open h3{ margin:0 0 .45em; font:400 clamp(1.2rem,2vw,1.7rem)/1.15 var(--sign) }
-.cs-open p{ margin:0 0 .6em; color:rgba(255,255,255,.92); max-width:46em }
-.cs-open .cs-open-p{ margin:0; font-weight:700; color:var(--yellow) }
-.cs-fine{ max-width:52em; margin:1.6em auto 0; text-align:center; font-size:.84rem; color:#5a6a80 }
+.cs-plan--top .cs-plan-body{ box-shadow:0 0 0 2px var(--yellow), 0 18px 40px rgba(11,31,63,.14) }
+/* ongoing advisory: his blue service-sign colour, full width under the four */
+.cs-advise{ margin-top:clamp(50px,5vw,64px); display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) auto;
+  gap:clamp(20px,3vw,48px); align-items:center; padding:2.4em clamp(22px,3vw,44px) 2em; background:var(--blue);
+  box-shadow:inset 0 0 0 4px var(--blue), inset 0 0 0 6px #fff, 0 18px 40px rgba(0,30,70,.25) }
+.cs-advise h3{ margin:0; font:400 clamp(1.3rem,2.2vw,1.9rem)/1.15 var(--sign) }
+.cs-advise h3 span{ display:block }
+.cs-advise h3 span:last-child{ color:var(--yellow) }
+.cs-advise-say p{ margin:0 0 .6em; color:rgba(255,255,255,.92); font-size:.98rem }
+.cs-advise-say .cs-advise-p{ margin:0; font-weight:700; color:#fff }
+.cs-fine{ max-width:52em; margin:1.8em auto 0; text-align:center; font-size:.86rem; color:#5a6a80 }
 
-/* ================= WHY HIGHWAY 19 MEDIA ================= */
-.cs-why{ padding:clamp(70px,9vw,130px) 0; background:#fff }
-.cs-why .cs-in{ display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1fr); gap:clamp(30px,5vw,80px); align-items:start }
+/* ================= 9. WHY HIGHWAY 19 MEDIA ================= */
+.cs-why{ padding:clamp(70px,9vw,130px) 0 0; background:#fff }
+.cs-why .cs-in{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(30px,6vw,96px); align-items:start;
+  padding-bottom:clamp(64px,8vw,110px) }
 .cs-why-head{ position:sticky; top:110px }
-.cs-why-head .cs-shield{ margin-top:1.2em; width:clamp(80px,8vw,120px) }
-.cs-why-say p{ margin:0 0 1em; color:#33445e; font-size:clamp(1rem,1.2vw,1.1rem) }
-.cs-why-say .cs-big{ margin-top:1.4em; padding-left:.9em; border-left:5px solid var(--green) }
+.cs-why-head .cs-shield{ width:clamp(70px,7vw,100px); margin-bottom:1.4em }
+.cs-why-head h2{ font-size:clamp(1.9rem,3.8vw,3.3rem) }
+.cs-why-say p{ margin:0 0 1em; color:var(--body); font-size:clamp(1rem,1.2vw,1.1rem) }
+.cs-banner--why{ flex-direction:column; align-items:center; text-align:center; background:var(--navy); box-shadow:none;
+  padding:clamp(56px,7vw,100px) clamp(20px,5vw,48px); font-size:clamp(1.4rem,3.4vw,2.9rem); line-height:1.18 }
+.cs-banner--why span{ padding:0 }
+.cs-banner--why span + span{ border:0 }
 
-/* ================= QUESTIONS ================= */
-.cs-faq{ padding:clamp(70px,9vw,120px) 0; background:#eef3f8 }
-.cs-q{ border-top:1px solid #d6dfe9 }
-.cs-q:last-of-type{ border-bottom:1px solid #d6dfe9 }
-.cs-q summary{ list-style:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:1em; padding:1.1em 0 }
+/* ================= 10. QUESTIONS ================= */
+.cs-faq{ padding:clamp(70px,9vw,120px) 0; background:var(--paper) }
+.cs-faq .cs-in{ display:grid; grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr); gap:clamp(30px,6vw,90px); align-items:start }
+.cs-faq-head{ position:sticky; top:110px }
+.cs-q{ border-top:1px solid #d3dce7 }
+.cs-q:last-of-type{ border-bottom:1px solid #d3dce7 }
+.cs-q summary{ list-style:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:1em; padding:1.15em 0 }
 .cs-q summary::-webkit-details-marker{ display:none }
-.cs-q summary::after{ content:"+"; flex:none; display:grid; place-items:center; width:32px; height:32px; border-radius:6px;
-  background:var(--green); color:#fff; font-weight:800; font-size:1.2rem; transition:rotate .2s ease }
-.cs-q[open] summary::after{ rotate:45deg }
+.cs-q summary::after{ content:"+"; flex:none; display:grid; place-items:center; width:34px; height:34px; border-radius:6px;
+  background:var(--green); color:#fff; font:400 1.35rem/1 var(--sign); box-shadow:inset 0 0 0 2px var(--green), inset 0 0 0 3.5px #fff;
+}
+.cs-q[open] summary::after{ content:"3" }
 .cs-q summary:focus-visible{ outline:3px solid var(--green); outline-offset:4px }
-.cs-q h3{ margin:0; font-size:clamp(1.02rem,1.3vw,1.15rem); font-weight:800; line-height:1.35 }
-.cs-q div p{ margin:0 0 1.2em; color:#33445e }
+.cs-q h3{ margin:0; font-size:clamp(1.02rem,1.3vw,1.14rem); font-weight:700; line-height:1.35 }
+.cs-q div p{ margin:0 0 1.3em; color:var(--body); max-width:40em }
 
-/* ================= NEXT EXIT ================= */
+/* ================= 11. NEXT EXIT ================= */
 .cs-close{ padding:clamp(90px,11vw,170px) 0; color:#fff; text-align:center; overflow:hidden; background:#0b2247 }
 .cs-close-bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 40% }
-.cs-close::before{ content:""; position:absolute; inset:0; z-index:1; background:linear-gradient(180deg,rgba(0,30,90,.78),rgba(0,14,40,.86)) }
+.cs-close::before{ content:""; position:absolute; inset:0; z-index:1; background:linear-gradient(180deg,rgba(0,30,90,.78),rgba(0,14,40,.88)) }
 .cs-close .cs-in{ z-index:2; display:grid; justify-items:center }
 .cs-sign--close{ display:inline-grid; grid-template-columns:auto auto; align-items:center; gap:clamp(16px,2.4vw,34px);
-  padding:clamp(34px,3.6vw,48px) clamp(30px,4vw,60px) clamp(22px,2.6vw,34px); margin-bottom:clamp(26px,3vw,40px) }
+  padding:clamp(34px,3.6vw,48px) clamp(30px,4vw,60px) clamp(22px,2.6vw,34px); margin-bottom:clamp(30px,3.4vw,46px) }
 .cs-sign--close .cs-tab{ font-size:.9rem }
-.cs-sign--close h2{ margin:0; color:#fff; font:400 clamp(1.6rem,3.6vw,3rem)/1.08 var(--sign); text-align:left }
-.cs-sign--close h2 span{ display:block }
+.cs-sign--close h2{ color:#fff; font-size:clamp(1.6rem,3.6vw,3rem); line-height:1.08; text-align:left }
 .cs-sign-arrow--r{ rotate:45deg }
-.cs-close .cs-in > p{ max-width:36em; margin:0 0 1em; font-size:clamp(1.05rem,1.4vw,1.2rem); font-weight:500 }
-.cs-close .cs-in > p.cs-close-k{ margin:.4em 0 0; font-weight:800; color:var(--yellow); font-size:clamp(1.15rem,1.6vw,1.4rem) }
-.cs-close .cs-acts{ margin-top:1.6em }
-.cs-close .cs-in > p.cs-local{ margin:2em 0 0; font-size:.92rem; color:rgba(255,255,255,.75) }
+.cs-close .cs-in > p{ max-width:36em; margin:0 0 .8em; font-size:clamp(1.05rem,1.4vw,1.2rem); font-weight:500 }
+.cs-close .cs-in > p.cs-close-k{ margin:.6em 0 0; font:400 clamp(1.2rem,2vw,1.6rem)/1.25 var(--sign); color:var(--yellow) }
+.cs-close .cs-acts{ margin-top:1.8em }
+.cs-close .cs-in > p.cs-local{ margin:2.2em 0 0; font-size:.92rem; color:rgba(255,255,255,.75) }
 
-/* ================= MOTION: signs rise in as they reach the screen ================= */
-.cs-anim [data-in]{ opacity:0; translate:0 26px; transition:opacity .7s ease, translate .7s cubic-bezier(.2,.7,.2,1) }
-.cs-anim [data-in].is-in{ opacity:1; translate:0 0 }
+/* ================= MOTION: one moment. The hero sign drops onto its gantry,
+   and the overhead sign's exits light up one after another as it comes into view. */
 .cs-anim .cs-sign--hero{ animation:cs-drop .9s cubic-bezier(.2,.8,.25,1) both .15s }
 .cs-anim .cs-hero-say{ animation:cs-up .9s ease both .55s }
+.cs-anim .cs-exit[data-in], .cs-anim .cs-any[data-in]{ opacity:.12; transition:opacity .6s ease }
+.cs-anim .cs-exit[data-in].is-in, .cs-anim .cs-any[data-in].is-in{ opacity:1 }
 @keyframes cs-drop{ from{ opacity:0; translate:0 -40px } to{ opacity:1; translate:0 0 } }
 @keyframes cs-up{ from{ opacity:0; translate:0 24px } to{ opacity:1; translate:0 0 } }
-@media (hover:hover) and (pointer:fine){
-  .cs-exit,.cs-plan{ transition:translate .2s ease }
-  .cs-exit:hover,.cs-plan:hover{ translate:0 -4px }
-}
 @media (prefers-reduced-motion:reduce){
-  .cs-btn,.cs-exit,.cs-plan{ transition:none }
+  .cs-btn,.cs-q summary::after{ transition:none }
 }
 
 /* ================= SMALLER SCREENS ================= */
 @media (max-width:1100px){
-  .cs-plans{ grid-template-columns:repeat(2,minmax(0,1fr)); row-gap:40px }
-  .cs-plan h3{ min-height:0 }
+  .cs-plans{ grid-template-columns:repeat(2,minmax(0,1fr)) }
+  .cs-plan-sign h3{ min-height:0 }
+  .cs-advise{ grid-template-columns:minmax(0,1fr) auto }
+  .cs-advise h3{ grid-column:1/-1 }
 }
 @media (max-width:1000px){
+  .cs-head--split{ grid-template-columns:1fr; gap:18px }
   .cs-markers{ grid-template-columns:repeat(2,minmax(0,1fr)); row-gap:34px }
   .cs-marker{ margin-bottom:0 }
   .cs-marker::before,.cs-marker::after{ display:none }
   .cs-markers li:nth-last-child(-n+2){ margin-bottom:clamp(70px,7vw,96px) }
   .cs-markers li:nth-last-child(-n+2)::before,.cs-markers li:nth-last-child(-n+2)::after{ display:block }
-  .cs-exits{ grid-template-columns:repeat(2,minmax(0,1fr)) }
-  .cs-exit--lead{ grid-row:auto }
-  .cs-ai .cs-in{ grid-template-columns:1fr }
-  .cs-legs{ grid-template-columns:1fr; max-width:620px; margin-left:auto; margin-right:auto }
-  .cs-miles{ grid-template-columns:repeat(2,minmax(0,1fr)) }
-  .cs-miles::before{ display:none }
-  .cs-why .cs-in{ grid-template-columns:1fr }
-  .cs-why-head{ position:static }
-  .cs-why-head .cs-shield{ display:none }
+  .cs-session{ grid-template-columns:1fr }
+  .cs-session-img{ aspect-ratio:16/10; min-height:0 }
+  .cs-session-say{ max-width:none }
+  .cs-exits{ grid-template-columns:1fr }
+  .cs-exit:nth-child(odd){ border-right:0 }
+  .cs-exit:nth-child(2){ border-top:2px solid rgba(255,255,255,.85) }
+  .cs-legs{ grid-template-columns:1fr }
+  .cs-legs li{ min-height:clamp(520px,90vw,640px) }
+  .cs-miles{ grid-template-columns:repeat(2,minmax(0,1fr)); margin-top:-60px; row-gap:40px }
+  .cs-ai-say{ grid-template-columns:1fr; gap:0 }
+  .cs-why .cs-in, .cs-faq .cs-in{ grid-template-columns:1fr }
+  .cs-why-head, .cs-faq-head{ position:static }
 }
 @media (max-width:760px){
-  .cs-session .cs-in{ grid-template-columns:1fr }
-  .cs-session-img .cs-street{ right:10px }
-  .cs-miles{ grid-template-columns:1fr; gap:26px; padding-left:84px }
-  .cs-miles::before{ display:block; left:23px; right:auto; top:0; bottom:0; width:16px; height:auto;
-    background:repeating-linear-gradient(180deg,var(--yellow) 0 30px,transparent 30px 52px) center/4px 100% no-repeat,#33373c }
-  .cs-miles > li > .cs-mile{ position:absolute; left:-84px; top:0; width:62px; height:96px; margin:0 }
-  .cs-miles li{ min-height:96px }
-  .cs-ai .cs-in{ gap:36px }
-  .cs-ai::before{ background:linear-gradient(180deg,rgba(6,5,26,.9),rgba(6,5,26,.8)) }
-  .cs-open{ grid-template-columns:1fr }
-  .cs-open .cs-btn{ justify-self:center }
+  .cs-route{ display:none }
+  .cs-miles{ grid-template-columns:1fr; gap:30px; margin-top:0; padding-left:84px }
+  .cs-miles::before{ content:""; position:absolute; left:21px; top:0; bottom:0; width:16px;
+    background:repeating-linear-gradient(180deg,var(--yellow) 0 30px,transparent 30px 52px) center/4px 100% no-repeat,#33373c; border-radius:8px }
+  .cs-miles > li > .cs-mile{ position:absolute; left:-84px; top:0; width:58px; height:92px; margin:0 }
+  .cs-miles li{ position:relative; min-height:96px }
+  .cs-lanes{ grid-template-columns:repeat(2,minmax(0,1fr)); row-gap:22px }
+  .cs-lane:nth-child(3){ border-left:0 }
+  .cs-any{ grid-template-columns:1fr; text-align:left }
+  .cs-any .cs-num{ justify-self:start }
+  .cs-advise{ grid-template-columns:1fr }
+  .cs-advise .cs-btn{ justify-self:center }
+  .cs-banner span + span{ border-left:0 }
+  .cs-banner{ flex-direction:column; align-items:center; text-align:center }
+}
+@media (max-width:640px){
+  .cs-plans{ grid-template-columns:1fr; max-width:440px; margin:0 auto }
 }
 @media (max-width:560px){
   .cs-hero{ min-height:0 }
   .cs-sign--hero{ grid-template-columns:1fr; text-align:center; padding-top:52px }
   .cs-sign--hero .cs-sign-arrow{ display:none }
+  .cs-sign h1{ font-size:clamp(1.45rem,7.4vw,2rem); text-wrap:balance }
+  .cs-sign h1 span{ display:inline }
   .cs-sign--hero .cs-tab{ left:50%; right:auto; translate:-50% -55% }
   .cs-sign--hero .cs-tab--l{ top:auto; bottom:0; translate:-50% 55% }
   .cs-sign--hero .cs-tab--r{ display:none }
+  .cs-hero-say{ padding-top:44px }
   .cs-markers{ grid-template-columns:1fr; row-gap:30px }
   .cs-markers li:nth-last-child(2){ margin-bottom:0 }
   .cs-markers li:nth-last-child(2)::before,.cs-markers li:nth-last-child(2)::after{ display:none }
-  .cs-exits{ grid-template-columns:1fr }
-  .cs-exit--lead{ grid-column:auto }
-  .cs-plans{ grid-template-columns:1fr }
-  .cs-lanes{ grid-template-columns:repeat(2,minmax(0,1fr)); row-gap:20px }
-  .cs-lane:nth-child(3){ border-left:0 }
-  .cs-acts .cs-btn, .cs-close .cs-btn, .cs-go .cs-btn, .cs-ai-say .cs-btn{ min-width:66%; max-width:100% }
+  .cs-board{ width:calc(100vw - 20px) }
+  .cs-exit{ grid-template-columns:minmax(0,1fr) auto; row-gap:.5em; padding:20px 16px }
+  .cs-exit .cs-num{ grid-column:1/-1; justify-self:start; margin:0 }
+  .cs-exit > p:last-child{ grid-column:1/-1 }
+  .cs-acts .cs-btn, .cs-close .cs-btn, .cs-any .cs-btn, .cs-ai-end .cs-btn, .cs-advise .cs-btn{ min-width:66%; max-width:100% }
   .cs-btn--big{ padding:0 1.4em }
   .cs-sign--close{ grid-template-columns:auto }
   .cs-sign--close h2{ text-align:center }

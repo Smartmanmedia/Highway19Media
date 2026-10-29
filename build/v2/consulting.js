@@ -1,6 +1,6 @@
 /* THE BUSINESS CONSULTING PAGE - consulting-body.html, consulting.css.
- * Two things only: the signs rise into place as they reach the screen, and
- * the road in the hero drifts a little slower than the page. Both are off for
+ * Two things only: the overhead sign's exits light up one after another as it
+ * comes into view, and the road in the hero drifts a little slower than the page. Both are off for
  * a reader who has asked for less motion (no cs-anim class - see the shell).
  */
 (function () {
@@ -8,16 +8,15 @@
   var root = document.documentElement;
   if (!root.classList.contains('cs-anim')) return;
 
-  /* everything that should arrive rather than simply be there */
-  var sel = '.cs-marker, .cs-exit, .cs-legs li, .cs-lanes, .cs-plan, .cs-open, .cs-miles li, .cs-why-say, ' +
-            '.cs-session-img, .cs-session-say, .cs-ai-say, .cs-sign--close';
+  /* the exits on the overhead sign, lit in order */
+  var sel = '.cs-exit, .cs-any';
   var els = [].slice.call(document.querySelectorAll(sel));
   if ('IntersectionObserver' in window) {
     els.forEach(function (el, i) {
       el.setAttribute('data-in', '');
       /* siblings in a row arrive one after another, not all at once */
       var n = [].indexOf.call(el.parentNode.children, el);
-      el.style.transitionDelay = Math.min(n, 6) * 70 + 'ms';
+      el.style.transitionDelay = Math.min(n, 8) * 110 + 'ms';
     });
     var io = new IntersectionObserver(function (ents) {
       ents.forEach(function (e) {
