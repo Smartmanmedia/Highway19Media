@@ -1,95 +1,69 @@
 <!-- THE BUSINESS CONSULTING PAGE (Oct 28, 2026; his complete revised copy, word
-     for word). BUILT FROM HIS OWN ART, the way the home page is - his note the
-     same evening: "instead of reusing elements already in the site and in the
-     root folder you wasted credits on making your own and using irrelevant
-     stock", "mountain shot for florida business?", "don't copy bad templates".
-     So no photographs and no service-page template. One drive down his
-     Florida road, in the home page's own pieces and order:
-       his palm highway (Highway PPV.png, root folder) with the heading on its
-         overhead sign, the panels cleared and a straight-ahead arrow;
-       the top-down blue with his road down the side, into his waves;
-       the beach sand, into his desert and forest (Desert-Forest-1920.png);
-       the grass and his REST AREA sign (mobile/rest-sign.svg);
-       his rocks into the white page and his lane cards (section 6's tab);
-       his sky and clouds, his gantry sign in panels, his road across;
-       night, his moon; then the routes, his destination sign, the questions,
-       and the same highway again after dark for the last word.
-     The shell is consulting.html; the build reads the questions near the foot
-     of this file into the page's FAQPage data, so each <details> below has to
-     stay on one line in exactly this shape. -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="cs-up" viewBox="0 0 40 60"><path fill="currentColor" d="M20 0 40 24H27v36H13V24H0z"/></symbol>
-  <symbol id="cs-right" viewBox="0 0 60 60"><path fill="currentColor" d="M8 60V30c0-9 7-16 16-16h14V2l22 20-22 20V30H26c-2 0-4 2-4 4v26z"/></symbol>
-  <symbol id="cs-left" viewBox="0 0 60 60"><path fill="currentColor" d="M52 60V30c0-9-7-16-16-16H22V2L0 22l22 20V30h12c2 0 4 2 4 4v26z"/></symbol>
-  <symbol id="cs-tab" viewBox="0 0 137.3 95"><polygon fill="#1a1a1a" points="137.3 15.2 62.5 15.2 62.5 .8 120.9 0 137.3 15.2"/><path fill="var(--c)" d="M0,.2h120.92v34.34c0,33.37-27.09,60.46-60.46,60.46h0C27.09,95,0,67.91,0,34.54V.2H0Z"/></symbol>
-</svg>
+     for word). HIS BRIEF, after two rejected designs: "just do simple section,
+     solid bg, image placement". So every section is one solid colour with the
+     words and, where there is one, a photograph placed beside them - no
+     scenery, no illustration, no backgrounds behind text. Photos are his
+     licensed Adobe Stock (J:\PSD), assets/v2/consulting/. The shell is
+     consulting.html; the build reads the questions near the foot of this file
+     into the page's FAQPage data, so each <details> below has to stay on one
+     line in exactly this shape. -->
 
-<!-- 1. HIS HIGHWAY. The heading is on the overhead sign. -->
-<section class="cs-hero" aria-labelledby="cs-h1">
-  <div class="cs-scene">
-    <img class="cs-scene-art" src="../../assets/v2/consulting2/cs-road.webp" alt="" width="2400" height="1350" fetchpriority="high">
-    <h1 class="cs-scene-sign" id="cs-h1">Every Business Has Somewhere to Go.</h1>
-  </div>
-</section>
-
-<!-- 2. THE TOP-DOWN BLUE, his road down its side; ends in his waves. -->
-<section class="cs-blue" aria-label="Let&rsquo;s find your best way forward">
-  <div class="cs-in cs-center">
-    <p class="cs-kicker">Business &amp; Marketing Consulting &middot; Spring Hill, FL</p>
-    <p class="cs-lede">Let&rsquo;s Find Your Best Way Forward.</p>
-    <p>Every business starts with an idea, a dream, or an opportunity worth pursuing. But turning that vision into
-       a successful business takes more than hard work.</p>
-    <p>Whether you&rsquo;re just getting started, trying to grow, or facing your next big decision, having an
-       experienced perspective by your side can make all the difference.</p>
-    <p>We bring decades of real-world business experience, creative thinking, and practical problem-solving to help
-       you explore opportunities, make informed decisions, and build a clear path forward.</p>
-    <div class="cs-acts">
-      <a class="cs-btn" href="/contact/">Let&rsquo;s Talk About Your Business</a>
-      <a class="cs-btn cs-btn--line" href="#cs-price">Explore Consulting Options</a>
+<!-- 1. HERO - navy -->
+<section class="cs-sec cs-navy cs-hero" aria-labelledby="cs-h1">
+  <div class="cs-in cs-row">
+    <div class="cs-text">
+      <p class="cs-eyebrow">Business &amp; Marketing Consulting &middot; Spring Hill, FL</p>
+      <h1 id="cs-h1">Every Business Has Somewhere to Go.</h1>
+      <p class="cs-sub">Let&rsquo;s Find Your Best Way Forward.</p>
+      <p>Every business starts with an idea, a dream, or an opportunity worth pursuing. But turning that vision into
+         a successful business takes more than hard work.</p>
+      <p>Whether you&rsquo;re just getting started, trying to grow, or facing your next big decision, having an
+         experienced perspective by your side can make all the difference.</p>
+      <p>We bring decades of real-world business experience, creative thinking, and practical problem-solving to help
+         you explore opportunities, make informed decisions, and build a clear path forward.</p>
+      <div class="cs-acts">
+        <a class="cs-btn" href="/contact/">Let&rsquo;s Talk About Your Business</a>
+        <a class="cs-btn cs-btn--line" href="#cs-price">Explore Consulting Options</a>
+      </div>
     </div>
+    <img class="cs-img" src="../../assets/v2/consulting/cs-session.webp" alt="Two business owners talking through a plan across an office table" width="1600" height="1067" fetchpriority="high">
   </div>
-  <img class="cs-edge" src="../../assets/v2/consulting2/waves.webp" alt="" width="2400" height="561" loading="lazy">
 </section>
 
-<!-- 3. THE BEACH. His experience; ends in his desert and rocks. -->
-<section class="cs-sand" aria-labelledby="cs-proof-h">
+<!-- 2. EXPERIENCE - white -->
+<section class="cs-sec cs-white" aria-labelledby="cs-proof-h">
+  <div class="cs-in cs-row">
+    <div class="cs-text">
+      <p class="cs-eyebrow">Miles Already Driven</p>
+      <h2 id="cs-proof-h">We&rsquo;ve Been Down This Road Before.</h2>
+      <p>From small family businesses to multimillion-dollar companies, we&rsquo;ve worked across industries,
+         markets, and nearly every aspect of building and running a business.</p>
+      <p>Our experience goes far beyond marketing. We&rsquo;ve developed products, built brands, managed sales,
+         organized teams, created business systems, established international relationships, produced major
+         campaigns, and helped companies navigate extraordinary growth.</p>
+      <p>We&rsquo;ve seen what it takes to turn an idea into a business, a business into a brand, and a growing
+         company into a serious competitor.</p>
+      <p class="cs-key">And we&rsquo;ve learned that no two businesses take exactly the same road.</p>
+    </div>
+    <img class="cs-img" src="../../assets/v2/consulting/cs-ind-teams.webp" alt="A business team working through ideas together around a laptop" width="900" height="600" loading="lazy" decoding="async">
+  </div>
   <div class="cs-in">
-    <div class="cs-split">
-      <div>
-        <p class="cs-label">Miles Already Driven</p>
-        <h2 id="cs-proof-h">We&rsquo;ve Been Down This Road Before.</h2>
-      </div>
-      <div class="cs-say">
-        <p>From small family businesses to multimillion-dollar companies, we&rsquo;ve worked across industries,
-           markets, and nearly every aspect of building and running a business.</p>
-        <p>Our experience goes far beyond marketing. We&rsquo;ve developed products, built brands, managed sales,
-           organized teams, created business systems, established international relationships, produced major
-           campaigns, and helped companies navigate extraordinary growth.</p>
-        <p>We&rsquo;ve seen what it takes to turn an idea into a business, a business into a brand, and a growing
-           company into a serious competitor.</p>
-        <p class="cs-strong">And we&rsquo;ve learned that no two businesses take exactly the same road.</p>
-      </div>
-    </div>
     <ul class="cs-facts">
-      <li><b>Decades of Experience</b><span>Hands-on involvement in business, creative development, sales, and marketing.</span></li>
-      <li><b>From Startup to Millions</b><span>Experience working with businesses from their earliest stages through multimillion-dollar annual revenue.</span></li>
-      <li><b>Across Industries</b><span>Retail, manufacturing, e-commerce, services, entertainment, logistics, and more.</span></li>
-      <li><b>Real-World Solutions</b><span>Practical knowledge gained from developing, managing, producing, and executing business projects.</span></li>
+      <li><h3>Decades of Experience</h3><p>Hands-on involvement in business, creative development, sales, and marketing.</p></li>
+      <li><h3>From Startup to Millions</h3><p>Experience working with businesses from their earliest stages through multimillion-dollar annual revenue.</p></li>
+      <li><h3>Across Industries</h3><p>Retail, manufacturing, e-commerce, services, entertainment, logistics, and more.</p></li>
+      <li><h3>Real-World Solutions</h3><p>Practical knowledge gained from developing, managing, producing, and executing business projects.</p></li>
     </ul>
   </div>
 </section>
 
-<!-- 4. THE FOREST and his REST AREA sign, as on the home page. -->
-<section class="cs-forest" aria-labelledby="cs-session-h">
-  <img class="cs-edge cs-trees" src="../../assets/v2/consulting2/desert-forest.webp" alt="" width="1920" height="1388" loading="lazy">
-  <div class="cs-in">
-    <div class="cs-rest">
-      <img class="cs-rest-art" src="../../assets/v2/mobile/rest-sign.svg" alt="" width="1003" height="744" loading="lazy">
-      <p class="cs-rest-tab">A Different Perspective</p>
-      <h2 class="cs-rest-say" id="cs-session-h">You Know Your Business. We Help You See What&rsquo;s Possible.</h2>
-    </div>
-    <div class="cs-grass">
-      <p class="cs-strong">Nobody knows your business quite like you do.</p>
+<!-- 3. APPROACH - light grey, photo on the left -->
+<section class="cs-sec cs-grey" aria-labelledby="cs-session-h">
+  <div class="cs-in cs-row cs-row--flip">
+    <div class="cs-text">
+      <p class="cs-eyebrow">A Different Perspective</p>
+      <h2 id="cs-session-h">You Know Your Business. We Help You See What&rsquo;s Possible.</h2>
+      <p class="cs-key">Nobody knows your business quite like you do.</p>
       <p>You know the customers, the daily challenges, the long hours, and everything you&rsquo;ve invested to get
          where you are today.</p>
       <p>But when you&rsquo;re busy running a business, it&rsquo;s not always easy to see every opportunity ahead.</p>
@@ -101,50 +75,38 @@
          business, your budget, and your ambitions.</p>
       <p>We&rsquo;re not here to tell you how to run your business. We&rsquo;re here to help you make the best
          decisions for it.</p>
+      <p class="cs-key cs-key--green">Your business. Your vision. Better decisions. More possibilities.</p>
     </div>
-    <p class="cs-bar"><span class="cs-bar-lanes" aria-hidden="true"><svg><use href="#cs-up"/></svg><svg><use href="#cs-up"/></svg><svg><use href="#cs-right"/></svg></span><span>Your business. Your vision. Better decisions. More possibilities.</span></p>
+    <img class="cs-img" src="../../assets/v2/consulting/cs-ind-local.webp" alt="A small business owner standing proudly in the doorway of her shop" width="900" height="600" loading="lazy" decoding="async">
   </div>
 </section>
 
-<!-- 5. HIS ROCKS, then the white page and his lane cards (home section 6). -->
-<section class="cs-white" aria-labelledby="cs-whole-h">
-  <img class="cs-rocks" src="../../assets/v2/consulting2/rocks.webp" alt="" width="2400" height="480" loading="lazy">
+<!-- 4. THE WHOLE BUSINESS - white, eight areas in a grid -->
+<section class="cs-sec cs-white" aria-labelledby="cs-whole-h">
   <div class="cs-in">
-    <div class="cs-split">
-      <div>
-        <p class="cs-label">Every Exit on the Route</p>
-        <h2 id="cs-whole-h">It&rsquo;s Not Just Marketing. It&rsquo;s the Whole Business.</h2>
-      </div>
-      <div class="cs-say">
-        <p>Every part of a business affects another. Great marketing means little if operations can&rsquo;t keep up.
-           More customers don&rsquo;t always mean more profit. And even the best idea needs the right plan to succeed.</p>
-        <p>We look at the bigger picture and help you connect the moving parts.</p>
-      </div>
+    <div class="cs-head">
+      <p class="cs-eyebrow">Every Exit on the Route</p>
+      <h2 id="cs-whole-h">It&rsquo;s Not Just Marketing. It&rsquo;s the Whole Business.</h2>
+      <p>Every part of a business affects another. Great marketing means little if operations can&rsquo;t keep up.
+         More customers don&rsquo;t always mean more profit. And even the best idea needs the right plan to succeed.</p>
+      <p>We look at the bigger picture and help you connect the moving parts.</p>
     </div>
-    <ul class="cs-cards">
-      <li style="--c:#009245"><svg class="cs-card-tab" aria-hidden="true"><use href="#cs-tab"/></svg><svg class="cs-card-a" aria-hidden="true"><use href="#cs-up"/></svg>
-        <h3>Marketing &amp; Customer Growth</h3>
+    <ul class="cs-grid">
+      <li><h3>Marketing &amp; Customer Growth</h3>
         <p>How customers find you, why they choose you, and how to attract more of the right people. From advertising and branding to digital strategy and customer acquisition.</p></li>
-      <li style="--c:#662d91"><svg class="cs-card-tab" aria-hidden="true"><use href="#cs-tab"/></svg><svg class="cs-card-a" aria-hidden="true"><use href="#cs-right"/></svg>
-        <h3>Business Planning &amp; Strategy</h3>
+      <li><h3>Business Planning &amp; Strategy</h3>
         <p>Whether you&rsquo;re launching something new or planning your next stage of growth, we&rsquo;ll help you evaluate opportunities, establish priorities, and develop a realistic strategy.</p></li>
-      <li style="--c:#d4145a"><svg class="cs-card-tab" aria-hidden="true"><use href="#cs-tab"/></svg><svg class="cs-card-a" aria-hidden="true"><use href="#cs-left"/></svg>
-        <h3>Operations &amp; Logistics</h3>
+      <li><h3>Operations &amp; Logistics</h3>
         <p>Scheduling, suppliers, inventory, equipment, deliveries, workflows, and the everyday systems that keep your business moving efficiently.</p></li>
-      <li style="--c:#f7931e"><svg class="cs-card-tab" aria-hidden="true"><use href="#cs-tab"/></svg><svg class="cs-card-a" aria-hidden="true"><use href="#cs-up"/></svg>
-        <h3>Sales, Pricing &amp; Profitability</h3>
+      <li><h3>Sales, Pricing &amp; Profitability</h3>
         <p>Explore your pricing, sales process, operating costs, and opportunities to improve margins without sacrificing the quality of your business.</p></li>
-      <li style="--c:#009245"><svg class="cs-card-tab" aria-hidden="true"><use href="#cs-tab"/></svg><svg class="cs-card-a" aria-hidden="true"><use href="#cs-right"/></svg>
-        <h3>Employees &amp; Business Organization</h3>
+      <li><h3>Employees &amp; Business Organization</h3>
         <p>Hiring priorities, responsibilities, team structure, communication, and creating a more organized business that doesn&rsquo;t depend on you for every decision.</p></li>
-      <li style="--c:#662d91"><svg class="cs-card-tab" aria-hidden="true"><use href="#cs-tab"/></svg><svg class="cs-card-a" aria-hidden="true"><use href="#cs-up"/></svg>
-        <h3>Technology, CRM &amp; AI</h3>
+      <li><h3>Technology, CRM &amp; AI</h3>
         <p>Discover how software, customer management systems, automation, and artificial intelligence can simplify work, improve communication, and save valuable time.</p></li>
-      <li style="--c:#d4145a"><svg class="cs-card-tab" aria-hidden="true"><use href="#cs-tab"/></svg><svg class="cs-card-a" aria-hidden="true"><use href="#cs-left"/></svg>
-        <h3>Branding, Products &amp; Customer Experience</h3>
+      <li><h3>Branding, Products &amp; Customer Experience</h3>
         <p>From developing new products and services to improving how customers see, experience, and remember your business.</p></li>
-      <li style="--c:#f7931e"><svg class="cs-card-tab" aria-hidden="true"><use href="#cs-tab"/></svg><svg class="cs-card-a" aria-hidden="true"><use href="#cs-right"/></svg>
-        <h3>Expansion &amp; New Opportunities</h3>
+      <li><h3>Expansion &amp; New Opportunities</h3>
         <p>New locations, new markets, partnerships, product lines, business models, and ideas worth exploring before making a major investment.</p></li>
     </ul>
     <div class="cs-any">
@@ -157,60 +119,49 @@
   </div>
 </section>
 
-<!-- 6. HIS SKY. The three stages on his gantry sign in panels, as in the home hero;
-     then the roadmap along his road. -->
-<section class="cs-sky" aria-labelledby="cs-stages-h">
-  <img class="cs-cloud cs-cloud--a" src="../../assets/v2/section-05/cloud-1.svg" alt="" width="216" height="69" loading="lazy">
-  <img class="cs-cloud cs-cloud--b" src="../../assets/v2/section-05/cloud-2.svg" alt="" width="216" height="69" loading="lazy">
-  <img class="cs-cloud cs-cloud--c" src="../../assets/v2/section-04/cloud2.svg" alt="" width="571" height="352" loading="lazy">
-  <div class="cs-in cs-center">
-    <h2 id="cs-stages-h">Different Stages. Different Challenges. The Same Ambition to Succeed.</h2>
-  </div>
-  <div class="cs-gantry">
-    <span class="cs-truss" aria-hidden="true"></span>
-    <div class="cs-board">
-      <p class="cs-board-tab">Every Business Has a Starting Point</p>
-      <ul class="cs-panels">
-        <li><svg class="cs-panel-a" aria-hidden="true"><use href="#cs-right"/></svg>
-          <h3>Just Getting Started?</h3>
-          <p class="cs-strong">You&rsquo;ve got the idea. Maybe you&rsquo;ve even got the funding. But where do you begin?</p>
-          <p>Business planning, branding, suppliers, websites, marketing, equipment, hiring, pricing, and a hundred
-             decisions you might not even know you need to make.</p>
-          <p>We&rsquo;ll help you organize your ideas, understand your options, and build a practical roadmap toward
-             opening your doors.</p></li>
-        <li><svg class="cs-panel-a" aria-hidden="true"><use href="#cs-up"/></svg>
-          <h3>Already in Business?</h3>
-          <p class="cs-strong">Customers are coming in. You&rsquo;re working hard. But growth brings new challenges.</p>
-          <p>Maybe you&rsquo;re spending too much time managing daily operations. Maybe your marketing isn&rsquo;t
-             delivering what you expected. Or perhaps you&rsquo;re ready to hire, expand, or improve your profitability.</p>
-          <p>We&rsquo;ll help you identify opportunities to make your business more efficient, organized, and ready
-             for what&rsquo;s next.</p></li>
-        <li><svg class="cs-panel-a" aria-hidden="true"><use href="#cs-left"/></svg>
-          <h3>Ready for Something Bigger?</h3>
-          <p class="cs-strong">You&rsquo;ve built a successful business, and now you&rsquo;re considering your next move.</p>
-          <p>A new market? Additional locations? A new product? A complete change in strategy?</p>
-          <p>We&rsquo;ll help you explore the opportunities, evaluate the risks and resources, and develop a
-             thoughtful plan before you make your move.</p></li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="cs-in cs-roadmap">
-    <div class="cs-split">
-      <div>
-        <p class="cs-label">Your Business Roadmap</p>
-        <h2 id="cs-steps-h">Good Decisions Start With a Good Conversation.</h2>
-      </div>
-      <div class="cs-say">
-        <p>You don&rsquo;t need to arrive with all the answers. That&rsquo;s why we&rsquo;re meeting.</p>
-        <p>Every consultation starts with understanding where you are, what you&rsquo;re trying to achieve, and what
-           matters most to your business.</p>
-      </div>
-    </div>
-  </div>
-  <div class="cs-road" aria-hidden="true"></div>
+<!-- 5. STAGES - light grey, a photo over each -->
+<section class="cs-sec cs-grey" aria-labelledby="cs-stages-h">
   <div class="cs-in">
-    <ol class="cs-miles">
+    <div class="cs-head">
+      <p class="cs-eyebrow">Every Business Has a Starting Point</p>
+      <h2 id="cs-stages-h">Different Stages. Different Challenges. The Same Ambition to Succeed.</h2>
+    </div>
+    <ul class="cs-three">
+      <li><img src="../../assets/v2/consulting/cs-ind-hospitality.webp" alt="" width="900" height="600" loading="lazy" decoding="async">
+        <h3>Just Getting Started?</h3>
+        <p class="cs-key">You&rsquo;ve got the idea. Maybe you&rsquo;ve even got the funding. But where do you begin?</p>
+        <p>Business planning, branding, suppliers, websites, marketing, equipment, hiring, pricing, and a hundred
+           decisions you might not even know you need to make.</p>
+        <p>We&rsquo;ll help you organize your ideas, understand your options, and build a practical roadmap toward
+           opening your doors.</p></li>
+      <li><img src="../../assets/v2/consulting/cs-ind-logistics.webp" alt="" width="900" height="600" loading="lazy" decoding="async">
+        <h3>Already in Business?</h3>
+        <p class="cs-key">Customers are coming in. You&rsquo;re working hard. But growth brings new challenges.</p>
+        <p>Maybe you&rsquo;re spending too much time managing daily operations. Maybe your marketing isn&rsquo;t
+           delivering what you expected. Or perhaps you&rsquo;re ready to hire, expand, or improve your profitability.</p>
+        <p>We&rsquo;ll help you identify opportunities to make your business more efficient, organized, and ready
+           for what&rsquo;s next.</p></li>
+      <li><img src="../../assets/v2/consulting/cs-close.webp" alt="" width="2200" height="1467" loading="lazy" decoding="async">
+        <h3>Ready for Something Bigger?</h3>
+        <p class="cs-key">You&rsquo;ve built a successful business, and now you&rsquo;re considering your next move.</p>
+        <p>A new market? Additional locations? A new product? A complete change in strategy?</p>
+        <p>We&rsquo;ll help you explore the opportunities, evaluate the risks and resources, and develop a
+           thoughtful plan before you make your move.</p></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 6. ROADMAP - white, four numbered steps -->
+<section class="cs-sec cs-white" aria-labelledby="cs-steps-h">
+  <div class="cs-in">
+    <div class="cs-head">
+      <p class="cs-eyebrow">Your Business Roadmap</p>
+      <h2 id="cs-steps-h">Good Decisions Start With a Good Conversation.</h2>
+      <p>You don&rsquo;t need to arrive with all the answers. That&rsquo;s why we&rsquo;re meeting.</p>
+      <p>Every consultation starts with understanding where you are, what you&rsquo;re trying to achieve, and what
+         matters most to your business.</p>
+    </div>
+    <ol class="cs-steps">
       <li><h3>Tell Us Your Story</h3>
         <p>We begin by learning about your business, your customers, your challenges, and your goals.</p>
         <p>What&rsquo;s working? What are you considering? What&rsquo;s keeping you from taking the next step?</p></li>
@@ -226,110 +177,99 @@
         <p>Take the plan and put it into action yourself, or continue working with us through regular advisory sessions.</p>
         <p>As your business grows, your priorities will change. Your strategy can evolve with them.</p></li>
     </ol>
-    <p class="cs-plate">One decision at a time. One milestone at a time. Real progress you can build on.</p>
+    <p class="cs-key cs-center">One decision at a time. One milestone at a time. Real progress you can build on.</p>
   </div>
 </section>
 
-<!-- 7. NIGHT, his moon. The four lanes on a blue lane sign. -->
-<section class="cs-night" aria-labelledby="cs-ai-h">
-  <img class="cs-moon" src="../../assets/v2/section-05/moon.svg" alt="" width="48" height="48" loading="lazy">
-  <div class="cs-in">
-    <div class="cs-center">
-      <p class="cs-label cs-label--night">The Road Ahead</p>
+<!-- 7. AI - navy, photo on the right -->
+<section class="cs-sec cs-navy" aria-labelledby="cs-ai-h">
+  <div class="cs-in cs-row">
+    <div class="cs-text">
+      <p class="cs-eyebrow">The Road Ahead</p>
       <h2 id="cs-ai-h">The Future of Business Is Already Here. Are You Using It?</h2>
-    </div>
-    <ul class="cs-lanes">
-      <li><svg aria-hidden="true"><use href="#cs-left"/></svg>Customer Service &amp; Communication</li>
-      <li><svg aria-hidden="true"><use href="#cs-up"/></svg>Marketing &amp; Content Creation</li>
-      <li><svg aria-hidden="true"><use href="#cs-up"/></svg>Operations &amp; Automation</li>
-      <li><svg aria-hidden="true"><use href="#cs-right"/></svg>Sales, CRM &amp; Follow-Up</li>
-    </ul>
-    <div class="cs-cols">
-      <div>
-        <p>Artificial intelligence and modern business software are changing the way companies operate.</p>
-        <p>But with so many tools, platforms, and promises, how do you know what&rsquo;s actually worth your time and money?</p>
-        <p>We help you identify where technology can make a meaningful difference in your business.</p>
-      </div>
-      <div>
-        <p>From automating repetitive tasks and organizing customer information to improving marketing, communication,
-           and everyday workflows.</p>
-        <p>We can also help you understand and implement CRM systems, digital tools, and practical AI solutions that
-           fit your operations.</p>
-      </div>
-    </div>
-    <div class="cs-center">
+      <p>Artificial intelligence and modern business software are changing the way companies operate.</p>
+      <p>But with so many tools, platforms, and promises, how do you know what&rsquo;s actually worth your time and money?</p>
+      <p>We help you identify where technology can make a meaningful difference in your business.</p>
+      <ul class="cs-list">
+        <li>Customer Service &amp; Communication</li>
+        <li>Marketing &amp; Content Creation</li>
+        <li>Operations &amp; Automation</li>
+        <li>Sales, CRM &amp; Follow-Up</li>
+      </ul>
+      <p>From automating repetitive tasks and organizing customer information to improving marketing, communication,
+         and everyday workflows.</p>
+      <p>We can also help you understand and implement CRM systems, digital tools, and practical AI solutions that
+         fit your operations.</p>
       <p>You don&rsquo;t need to become a technology expert.</p>
-      <p class="cs-glow">You just need to understand which tools can help your business work smarter.</p>
-      <a class="cs-btn" href="/contact/">Explore AI for Your Business</a>
+      <p class="cs-key">You just need to understand which tools can help your business work smarter.</p>
+      <div class="cs-acts"><a class="cs-btn" href="/contact/">Explore AI for Your Business</a></div>
     </div>
+    <img class="cs-img" src="../../assets/v2/consulting/cs-ind-commerce.webp" alt="Business partners planning on a tablet and phone over a strategy diagram" width="900" height="561" loading="lazy" decoding="async">
   </div>
 </section>
 
-<!-- 8. THE ROUTES. His lane cards again, one per price, and advisory on a guide sign. -->
-<section class="cs-routes" id="cs-price" aria-labelledby="cs-price-h">
+<!-- 8. PRICES - light grey, four white cards, then advisory in green -->
+<section class="cs-sec cs-grey" id="cs-price" aria-labelledby="cs-price-h">
   <div class="cs-in">
-    <div class="cs-split">
-      <div>
-        <p class="cs-label">Consulting Options</p>
-        <h2 id="cs-price-h">The Right Guidance. At the Right Stage of Your Business.</h2>
-      </div>
-      <div class="cs-say">
-        <p>Whether you need help with one important decision or ongoing guidance as your business grows, there&rsquo;s
-           a way to get started.</p>
-        <p>Our consulting options are designed around the complexity of your needs, the preparation involved, and the
-           level of support required.</p>
-      </div>
+    <div class="cs-head">
+      <p class="cs-eyebrow">Consulting Options</p>
+      <h2 id="cs-price-h">The Right Guidance. At the Right Stage of Your Business.</h2>
+      <p>Whether you need help with one important decision or ongoing guidance as your business grows, there&rsquo;s
+         a way to get started.</p>
+      <p>Our consulting options are designed around the complexity of your needs, the preparation involved, and the
+         level of support required.</p>
     </div>
     <ul class="cs-plans">
-      <li style="--c:#009245"><svg class="cs-card-tab" aria-hidden="true"><use href="#cs-tab"/></svg><svg class="cs-card-a" aria-hidden="true"><use href="#cs-up"/></svg>
-        <p class="cs-plan-route">The First Mile</p>
+      <li>
+        <p class="cs-plan-name">The First Mile</p>
         <h3>Startup &amp; Small Business Guidance</h3>
-        <p class="cs-plan-p">$249 <small>/ 60-minute session</small></p>
+        <p class="cs-price">$249 <small>/ 60-minute session</small></p>
         <p>Perfect for entrepreneurs, startups, and small business owners who need experienced guidance on a specific question or decision.</p>
         <p class="cs-plan-k">What&rsquo;s included</p>
         <ul><li>Pre-session business questionnaire</li><li>60-minute personal consultation</li><li>Practical guidance and creative problem-solving</li><li>Clear priorities and next steps</li><li>Brief written session summary</li></ul>
-        <a class="cs-btn" href="/contact/">Book Your First Mile</a></li>
-      <li style="--c:#662d91"><svg class="cs-card-tab" aria-hidden="true"><use href="#cs-tab"/></svg><svg class="cs-card-a" aria-hidden="true"><use href="#cs-right"/></svg>
-        <p class="cs-plan-route">The Growth Route</p>
+        <a class="cs-btn" href="/contact/">Book Your First Mile</a>
+      </li>
+      <li>
+        <p class="cs-plan-name">The Growth Route</p>
         <h3>Business Growth Consultation</h3>
-        <p class="cs-plan-p">$499 <small>/ consultation package</small></p>
+        <p class="cs-price">$499 <small>/ consultation package</small></p>
         <p>For established businesses looking to improve operations, strengthen marketing, explore opportunities, or solve a specific business challenge.</p>
         <p class="cs-plan-k">What&rsquo;s included</p>
         <ul><li>20-minute discovery conversation</li><li>Up to 90 minutes of preliminary research and preparation</li><li>60-minute personal strategy consultation</li><li>Evaluation of practical options</li><li>Written recommendations and action priorities</li></ul>
-        <a class="cs-btn" href="/contact/">Plan Your Growth</a></li>
-      <li style="--c:#d4145a"><svg class="cs-card-tab" aria-hidden="true"><use href="#cs-tab"/></svg><svg class="cs-card-a" aria-hidden="true"><use href="#cs-left"/></svg>
-        <p class="cs-plan-route">The Strategic Route</p>
+        <a class="cs-btn" href="/contact/">Plan Your Growth</a>
+      </li>
+      <li>
+        <p class="cs-plan-name">The Strategic Route</p>
         <h3>Advanced Business Strategy</h3>
-        <p class="cs-plan-p">$799 <small>/ strategy package</small></p>
+        <p class="cs-price">$799 <small>/ strategy package</small></p>
         <p>For businesses considering significant changes, new opportunities, operational improvements, or expansion plans that require deeper analysis.</p>
         <p class="cs-plan-k">What&rsquo;s included</p>
         <ul><li>30-minute discovery meeting</li><li>Up to 3 hours of focused research and preparation</li><li>90-minute strategic consultation</li><li>Comparison of opportunities and approaches</li><li>Customized written action roadmap</li><li>One 20-minute follow-up call</li></ul>
-        <a class="cs-btn" href="/contact/">Explore Your Strategy</a></li>
-      <li style="--c:#f7931e"><svg class="cs-card-tab" aria-hidden="true"><use href="#cs-tab"/></svg><svg class="cs-card-a" aria-hidden="true"><use href="#cs-up"/></svg>
-        <p class="cs-plan-route">The Executive Route</p>
+        <a class="cs-btn" href="/contact/">Explore Your Strategy</a>
+      </li>
+      <li>
+        <p class="cs-plan-name">The Executive Route</p>
         <h3>Executive &amp; Corporate Consulting</h3>
-        <p class="cs-plan-p"><small>Starting at</small> $1,399 <small>/ engagement</small></p>
+        <p class="cs-price"><small>Starting at</small> $1,399 <small>/ engagement</small></p>
         <p>For larger businesses and organizations facing more complex decisions, growth opportunities, operational challenges, or strategic transitions.</p>
         <p class="cs-plan-k">What&rsquo;s included in the starting engagement</p>
         <ul><li>45-minute business discovery meeting</li><li>Up to 4 hours of independent research and preparation</li><li>90-minute executive strategy consultation</li><li>Evaluation of opportunities, priorities, and practical alternatives</li><li>Written strategic recommendations</li><li>One 30-minute follow-up meeting</li></ul>
-        <p class="cs-plan-note">Larger or more complex projects are scoped and quoted individually.</p>
-        <a class="cs-btn" href="/contact/">Request Executive Consultation</a></li>
+        <p class="cs-note">Larger or more complex projects are scoped and quoted individually.</p>
+        <a class="cs-btn" href="/contact/">Request Executive Consultation</a>
+      </li>
     </ul>
     <div class="cs-advise">
-      <img class="cs-advise-shield" src="../../assets/v2/ui-shield.webp" alt="" width="711" height="713" loading="lazy">
-      <p class="cs-board-tab">Ongoing Business Advisory</p>
-      <h3>Weekly. Monthly. Quarterly. Your Business, Your Schedule.</h3>
-      <div class="cs-advise-say">
-        <div>
-          <p>Some businesses need one good conversation. Others benefit from having an experienced advisor alongside
-             them as they grow.</p>
-          <p>We offer ongoing consulting arrangements with scheduled meetings, progress reviews, and strategic guidance
-             tailored to your business.</p>
-        </div>
-        <div>
-          <p class="cs-strong">Pricing: Custom, based on meeting frequency and scope.</p>
-          <a class="cs-btn" href="/contact/">Discuss an Advisory Plan</a>
-        </div>
+      <div>
+        <p class="cs-plan-name">Ongoing Business Advisory</p>
+        <h3>Weekly. Monthly. Quarterly. Your Business, Your Schedule.</h3>
+        <p>Some businesses need one good conversation. Others benefit from having an experienced advisor alongside
+           them as they grow.</p>
+        <p>We offer ongoing consulting arrangements with scheduled meetings, progress reviews, and strategic guidance
+           tailored to your business.</p>
+      </div>
+      <div class="cs-advise-end">
+        <p class="cs-key">Pricing: Custom, based on meeting frequency and scope.</p>
+        <a class="cs-btn" href="/contact/">Discuss an Advisory Plan</a>
       </div>
     </div>
     <p class="cs-fine">Each engagement&rsquo;s included time and deliverables are confirmed before booking. Additional
@@ -337,36 +277,27 @@
   </div>
 </section>
 
-<!-- 9. WHY US, beside his own destination sign; then the footer's guide sign. -->
-<section class="cs-why" aria-labelledby="cs-why-h">
-  <div class="cs-in cs-split cs-split--why">
-    <div class="cs-say">
-      <p class="cs-label">More Than Advice</p>
-      <h2 id="cs-why-h">Creative Thinking Meets Real Business Experience.</h2>
-      <p class="cs-strong">There are plenty of people who can tell you what a business should do.</p>
-      <p>We&rsquo;ve spent decades working on what it actually takes to get things done.</p>
-      <p>Our experience crosses business development, marketing, sales, product design, manufacturing, logistics,
-         technology, media production, and creative strategy.</p>
-      <p>That combination allows us to look at challenges from different angles, connect ideas across industries, and
-         find practical solutions that might otherwise be overlooked.</p>
-      <p>We also understand that every business has limitations.</p>
-      <p>Not every solution needs a massive budget. Not every challenge requires hiring another employee. And not every
-         opportunity requires starting from scratch.</p>
-      <p>Sometimes a better approach can make all the difference.</p>
-    </div>
-    <div class="cs-why-art" aria-hidden="true">
-      <span class="cs-truss"></span>
-      <img src="../../assets/v2/section-05/sign-3.webp" alt="" width="1100" height="345" loading="lazy">
-    </div>
-  </div>
-  <div class="cs-in">
-    <p class="cs-guide"><span>We bring the experience.</span><img src="../../assets/v2/ui-shield.webp" alt="" width="711" height="713" loading="lazy"><span>You bring the vision.</span></p>
-    <p class="cs-guide-end">Together, we explore what&rsquo;s possible.</p>
+<!-- 9. WHY US - white, text only -->
+<section class="cs-sec cs-white" aria-labelledby="cs-why-h">
+  <div class="cs-in cs-narrow">
+    <p class="cs-eyebrow">More Than Advice</p>
+    <h2 id="cs-why-h">Creative Thinking Meets Real Business Experience.</h2>
+    <p class="cs-key">There are plenty of people who can tell you what a business should do.</p>
+    <p>We&rsquo;ve spent decades working on what it actually takes to get things done.</p>
+    <p>Our experience crosses business development, marketing, sales, product design, manufacturing, logistics,
+       technology, media production, and creative strategy.</p>
+    <p>That combination allows us to look at challenges from different angles, connect ideas across industries, and
+       find practical solutions that might otherwise be overlooked.</p>
+    <p>We also understand that every business has limitations.</p>
+    <p>Not every solution needs a massive budget. Not every challenge requires hiring another employee. And not every
+       opportunity requires starting from scratch.</p>
+    <p>Sometimes a better approach can make all the difference.</p>
+    <p class="cs-key cs-key--green">We bring the experience. You bring the vision. Together, we explore what&rsquo;s possible.</p>
   </div>
 </section>
 
-<!-- 10. QUESTIONS. One line each: build_site.js reads them into the FAQPage data. -->
-<section class="cs-faq" aria-labelledby="cs-faq-h">
+<!-- 10. QUESTIONS - light grey. One line each: build_site.js reads them into the FAQPage data. -->
+<section class="cs-sec cs-grey cs-faq" aria-labelledby="cs-faq-h">
   <div class="cs-in cs-narrow">
     <h2 id="cs-faq-h">A Few Things You Might Be Wondering.</h2>
     <details class="cs-q"><summary><h3>Is this only about marketing?</h3></summary><div><p>No. While marketing and creative development are among our strongest areas, our consulting covers business planning, operations, logistics, sales, pricing, technology, product development, growth, and other practical business challenges.</p></div></details>
@@ -383,22 +314,19 @@
   </div>
 </section>
 
-<!-- 11. THE SAME HIGHWAY AFTER DARK. The last word is on the sign. -->
-<section class="cs-close" aria-labelledby="cs-close-h">
-  <div class="cs-scene cs-scene--night">
-    <img class="cs-scene-art" src="../../assets/v2/consulting2/cs-road.webp" alt="" width="2400" height="1350" loading="lazy">
-    <h2 class="cs-scene-sign" id="cs-close-h">Your Next Move Could Change Everything.</h2>
-  </div>
-  <div class="cs-in cs-center cs-close-say">
-    <p class="cs-label cs-label--night">Next Exit</p>
+<!-- 11. CLOSE - green -->
+<section class="cs-sec cs-green" aria-labelledby="cs-close-h">
+  <div class="cs-in cs-narrow cs-center">
+    <p class="cs-eyebrow">Next Exit</p>
+    <h2 id="cs-close-h">Your Next Move Could Change Everything.</h2>
     <p>You&rsquo;ve already invested your time, your energy, your money, and your ideas into your business.</p>
     <p>Imagine what you could accomplish with a fresh perspective, an experienced advisor, and a clear plan for what comes next.</p>
     <p>Whether you&rsquo;re just getting started or planning your next big move, we&rsquo;d love to hear your story.</p>
-    <p class="cs-glow">Let&rsquo;s see where your business can go.</p>
+    <p class="cs-key">Let&rsquo;s see where your business can go.</p>
     <div class="cs-acts">
       <a class="cs-btn" href="/contact/">Let&rsquo;s Talk About Your Business</a>
       <a class="cs-btn cs-btn--line" href="#cs-price">View Consulting Packages</a>
     </div>
-    <p class="cs-local">Based in Spring Hill, Florida. Serving Brooksville, Hudson, Tampa Bay, and businesses beyond US-19.</p>
+    <p class="cs-small">Based in Spring Hill, Florida. Serving Brooksville, Hudson, Tampa Bay, and businesses beyond US-19.</p>
   </div>
 </section>
