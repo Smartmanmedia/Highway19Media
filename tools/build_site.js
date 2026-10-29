@@ -60,7 +60,7 @@ if (!code.includes('service.js')) code.push('service.js');
 /* the Website Design page is his own design, with its own stylesheet and script */
 for (const f of ['web-design.css', 'web-design.js']) if (!code.includes(f)) code.push(f);
 /* and so is the Business Consulting page (Oct 28, 2026) */
-for (const f of ['consulting.css', 'consulting.js']) if (!code.includes(f)) code.push(f);
+for (const f of ['consulting.css']) if (!code.includes(f)) code.push(f);
 /* ---------------------------------------------------------------------------
  * WHAT SHIPS IS THE CODE WITHOUT ITS PROSE. The sources are heavily commented
  * on purpose - that is where the reasoning lives - but a reader downloading the
