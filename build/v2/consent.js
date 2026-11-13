@@ -15,10 +15,16 @@
  * Buttons: Accept all / No thanks (declines marketing only) / Options (two
  * checkboxes, stats pre-ticked). Same size and weight, none hidden.
  *
- * STILL A NO: a visitor who declined under the old banner (h19.consent.v1,
- * ok:false) had said no to GA, so stats stay off for them and they are not
- * asked again. A browser sending Global Privacy Control is treated the same
- * way: no stats, no marketing, no banner. Cookie choices reopens it for anyone.
+ * OLD ANSWERS: a visitor who declined the old one-question banner
+ * (h19.consent.v1, ok:false) is counted from now on, with marketing kept off,
+ * and is not asked again. A browser sending Global Privacy Control is treated
+ * as "No thanks": stats on, marketing off, no banner. Only someone who unticks
+ * Visit stats under the NEW Options (stored with by:'options') stays out of
+ * the stats. Cookie choices at the foot of every page reopens it for anyone.
+ *
+ * STATS OFF still loads the Google tag, with analytics_storage denied, so GA
+ * gets only cookieless gcs=G100 pings: no cookies, no client id, not counted
+ * as visitors. Marketing never loads fbevents.js until it is granted.
  *
  * The answer lives in localStorage (h19.consent.v2) on the visitor's machine.
  * ========================================================================= */
@@ -44,8 +50,8 @@
     try { return JSON.parse(localStorage.getItem(k) || 'null'); }
     catch (e) { return null; }                 /* private window, blocked storage */
   }
-  function store(c) {
-    try { localStorage.setItem(KEY, JSON.stringify({ stats: c.stats, ads: c.ads, at: Date.now() })); }
+  function store(c, by) {
+    try { localStorage.setItem(KEY, JSON.stringify({ stats: c.stats, ads: c.ads, by: by, at: Date.now() })); }
     catch (e) {}                               /* the answer still holds for this visit */
   }
 
@@ -53,11 +59,16 @@
   var choice = { stats: true, ads: false }, answered = false;
   var gpc = navigator.globalPrivacyControl === true;
   var was = read(KEY), old = read(OLD);
-  if (was) { choice = { stats: was.stats !== false, ads: was.ads === true }; answered = true; }
-  else if (gpc) { choice = { stats: false, ads: false }; answered = true; }
-  else if (old && old.ok === false) {          /* declined GA on the old banner */
-    choice = { stats: false, ads: false }; answered = true; store(choice);
+  /* A v2 record with no `by` was written by the first version of this file
+     (Nov 12, 2026, live about an hour) when it moved an old decline across as
+     stats-off. That was not this visitor's choice, so it counts as No thanks. */
+  if (was && (was.by || was.stats !== false)) {
+    choice = { stats: was.stats !== false, ads: was.ads === true }; answered = true;
   }
+  else if (was || (old && old.ok === false)) { /* declined on the old banner */
+    choice = { stats: true, ads: false }; answered = true; store(choice, 'old');
+  }
+  else if (gpc) { choice = { stats: true, ads: false }; answered = true; }
 
   function mark() {
     root.setAttribute('data-consent', choice.ads ? 'yes' : (choice.stats ? 'stats' : 'no'));
@@ -73,9 +84,8 @@
              ad_storage: ad, ad_user_data: ad, ad_personalization: ad };
   }
   function startGA() {
-    if (gaLoaded || !choice.stats) return;
+    if (gaLoaded) return;
     gaLoaded = true;
-    window['ga-disable-' + GA_ID] = false;
     gtag('consent', 'default', consentState());
     gtag('js', new Date());
     gtag('config', GA_ID);
@@ -107,7 +117,6 @@
     mark();
     if (gaLoaded) {
       gtag('consent', 'update', consentState());
-      window['ga-disable-' + GA_ID] = !choice.stats;
     }
     if (window.fbq) try { fbq('consent', choice.ads ? 'grant' : 'revoke'); } catch (e) {}
     startGA();
@@ -182,8 +191,8 @@
     var q = function (s) { return el.querySelector(s); };
     q('input[name=stats]').checked = choice.stats;
     q('input[name=ads]').checked = choice.ads;
-    q('.consent__btn--yes').addEventListener('click', function () { answer({ stats: true, ads: true }); });
-    q('.consent__btn--no').addEventListener('click', function () { answer({ stats: choice.stats, ads: false }); });
+    q('.consent__btn--yes').addEventListener('click', function () { answer({ stats: true, ads: true }, 'accept'); });
+    q('.consent__btn--no').addEventListener('click', function () { answer({ stats: choice.stats, ads: false }, 'no'); });
     q('.consent__btn--opt').addEventListener('click', function () {
       q('.consent__opts').hidden = false;
       q('.consent__btn--opt').hidden = true;
@@ -191,15 +200,15 @@
       el.classList.add('is-open');
     });
     q('.consent__btn--save').addEventListener('click', function () {
-      answer({ stats: q('input[name=stats]').checked, ads: q('input[name=ads]').checked });
+      answer({ stats: q('input[name=stats]').checked, ads: q('input[name=ads]').checked }, 'options');
     });
     document.body.appendChild(el);
     requestAnimationFrame(function () { el.classList.add('is-up'); });
   }
 
-  function answer(c) {
+  function answer(c, by) {
     choice = c; answered = true;
-    store(c);
+    store(c, by);
     apply();
     var el = document.getElementById('h19-consent');
     if (el) { el.classList.remove('is-up');

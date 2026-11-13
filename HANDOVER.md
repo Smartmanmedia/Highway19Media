@@ -254,9 +254,14 @@ against his source, not by guessing. Sources live in `assets/brand/`.
     slot `META_PIXEL_ID` is still empty.
   - Banner buttons: Accept all / No thanks (declines marketing only) / Options
     (checkboxes, stats pre-ticked). Text and details live on `/cookies/`.
-  - Choice stored in localStorage `h19.consent.v2` ({stats, ads}). Anyone who
-    declined the old banner (`h19.consent.v1` ok:false) or sends Global Privacy
-    Control gets stats off, marketing off, no banner.
+  - Choice stored in localStorage `h19.consent.v2` ({stats, ads, by}).
+    Visitors who declined the OLD banner (`h19.consent.v1` ok:false) and
+    browsers sending Global Privacy Control count as "No thanks": stats on,
+    marketing off, no banner. Only an untick under the new Options
+    (by:'options') keeps stats off.
+  - Stats off still loads the Google tag with analytics_storage denied, so GA
+    gets cookieless `gcs=G100` pings only. fbevents.js is never fetched
+    before marketing consent.
   - A fresh visitor's `/g/collect` shows `gcs=G101`; after Accept all, `G111`.
   - The Google tag `G-50PLEN6KSF` forwards its hits to measurement ID
     `G-TCSD07Z020` (configured in Google, not in this repo). The GA property
