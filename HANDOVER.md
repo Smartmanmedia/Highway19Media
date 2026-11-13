@@ -245,8 +245,24 @@ against his source, not by guessing. Sources live in `assets/brand/`.
 
 ### Analytics and consent
 
-- **GA4 `G-50PLEN6KSF`**, loaded **only after consent**. `consent.js` holds
-  a `TAGS` list; nothing is fetched until Accept.
+- **Layered consent (since Nov 12, 2026), all in `build/v2/consent.js`:**
+  - **Visit stats (GA4 `G-50PLEN6KSF`, analytics_storage): ON by default** for
+    every visitor, worldwide; GA loads with the page. Opt-out under Options or
+    the footer's Cookie choices link.
+  - **Marketing (Meta pixel + ad_storage / ad_user_data / ad_personalization):
+    DENIED** until "Accept all" (or Marketing ticked under Options). The pixel
+    slot `META_PIXEL_ID` is still empty.
+  - Banner buttons: Accept all / No thanks (declines marketing only) / Options
+    (checkboxes, stats pre-ticked). Text and details live on `/cookies/`.
+  - Choice stored in localStorage `h19.consent.v2` ({stats, ads}). Anyone who
+    declined the old banner (`h19.consent.v1` ok:false) or sends Global Privacy
+    Control gets stats off, marketing off, no banner.
+  - A fresh visitor's `/g/collect` shows `gcs=G101`; after Accept all, `G111`.
+  - The Google tag `G-50PLEN6KSF` forwards its hits to measurement ID
+    `G-TCSD07Z020` (configured in Google, not in this repo). The GA property
+    that owns `G-TCSD07Z020` is the one that receives the data.
+  - No owner-visit exclusion exists. If wanted, use GA4 Admin > Data filters
+    (internal traffic) rather than code.
 - The CSP allows exactly what is needed for GA and Web3Forms and nothing
   else.
 

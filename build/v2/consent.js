@@ -1,84 +1,122 @@
 /* ============================================================================
- * THE CONSENT BANNER
+ * THE CONSENT BANNER - LAYERED
  * ----------------------------------------------------------------------------
- * There is nothing to consent to yet: no pixel, no analytics, no advertising
- * script anywhere on this site. This exists so that when there IS, the answer
- * to "did it load before he agreed?" is no - by construction rather than by
- * remembering to check.
+ * Two layers, two different defaults (changed Nov 12, 2026):
  *
- * HOW IT WORKS. A tag is not written into the page. It is declared in TAGS
- * below, and nothing in that list is fetched until a visitor has said yes. A
- * declined visit never contacts those hosts at all: not loaded and switched
- * off, not fetched. That is the difference between a banner and a fig leaf,
- * and it is the only version worth shipping.
+ *   VISIT STATS (Google Analytics, analytics_storage)  ON for everyone.
+ *     GA loads with the page so every visit is counted. Anyone can switch it
+ *     off under Options or Cookie choices. Before this change GA was not even
+ *     fetched until Accept, so most visits were never counted at all.
  *
- * WHILE THE LIST IS EMPTY THE BANNER NEVER APPEARS. A site with no cookies
- * asking permission to set cookies is a lie in the other direction, and it
- * trains people to click Accept without reading. Add the first tag and the
- * banner starts appearing on its own.
+ *   MARKETING (Meta pixel; ad_storage, ad_user_data, ad_personalization)
+ *     OFF until the visitor clicks "Accept all" (or ticks it under Options).
+ *     The pixel is not fetched before that.
  *
- * WHERE THE ANSWER LIVES. localStorage, on the visitor's own machine. It never
- * leaves the browser and it is not a cookie, so the banner does not need to ask
- * permission to remember that you answered it.
+ * Buttons: Accept all / No thanks (declines marketing only) / Options (two
+ * checkboxes, stats pre-ticked). Same size and weight, none hidden.
+ *
+ * STILL A NO: a visitor who declined under the old banner (h19.consent.v1,
+ * ok:false) had said no to GA, so stats stay off for them and they are not
+ * asked again. A browser sending Global Privacy Control is treated the same
+ * way: no stats, no marketing, no banner. Cookie choices reopens it for anyone.
+ *
+ * The answer lives in localStorage (h19.consent.v2) on the visitor's machine.
  * ========================================================================= */
 (function () {
   'use strict';
 
-  /* ---- THE TAGS -----------------------------------------------------------
-   * Add one entry per tool. `src` is fetched only after consent; `init` runs
-   * after it loads. Keep the id stable - it is what a returning visitor's
-   * stored answer is matched against, so adding a NEW tool re-asks rather than
-   * quietly assuming last year's yes covered it.
-   *
-   *   { id:'meta', name:'Meta pixel',
-   *     src:'https://connect.facebook.net/en_US/fbevents.js',
-   *     init: function () { fbq('init','<PIXEL ID>'); fbq('track','PageView'); } }
-   *
-   * Anything added here also has to be listed on /cookies/ before it goes
-   * live, and connect-src / script-src in tools/build_site.js has to be
-   * widened to let it through - the content policy will block it otherwise,
-   * which is the safety net working. */
-  var TAGS = [
-    /* GOOGLE ANALYTICS 4, AND NOT IN THE HEAD. Google's own instructions say to
-       paste this immediately after <head> on every page, which would fetch it
-       and set its cookies before a visitor has been asked anything - the exact
-       thing this file exists to prevent, and the opposite of what /cookies/
-       promises. Declared here instead, it is fetched on accept and never
-       otherwise. The two gtag() calls below are Google's, run once the script
-       has actually loaded rather than queued ahead of it. */
-    { id: 'ga4', name: 'Google Analytics',
-      src: 'https://www.googletagmanager.com/gtag/js?id=G-50PLEN6KSF',
-      init: function () {
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){ dataLayer.push(arguments); }
-        window.gtag = gtag;
-        gtag('js', new Date());
-        gtag('config', 'G-50PLEN6KSF');
-      } }
-  ];
+  var GA_ID = 'G-50PLEN6KSF';
 
-  /* META PIXEL - ready, off. Paste the pixel ID here to switch it on; it then
-     joins the list above, so returning visitors are asked once more (their
-     earlier yes covered GA only). Before it goes live: list it on /cookies/,
+  /* META PIXEL - ready, off. Paste the pixel ID here to switch it on. It loads
+     only with marketing consent. Before it goes live: list it on /cookies/,
      and add https://connect.facebook.net to script-src and
      https://www.facebook.com to img-src and connect-src in build_site.js. */
   var META_PIXEL_ID = '';
-  if (META_PIXEL_ID) TAGS.push({ id: 'meta', name: 'Meta Pixel',
-    init: function () {
-      !function (f, b, e, v, n, t, s) {
-        if (f.fbq) return; n = f.fbq = function () {
-          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
-        if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
-        n.queue = []; t = b.createElement(e); t.async = !0; t.src = v;
-        s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
-      }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', META_PIXEL_ID);
-      fbq('track', 'PageView');
-    } });
+
+  var KEY = 'h19.consent.v2', OLD = 'h19.consent.v1';
+  var root = document.documentElement;
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+
+  /* ---- the stored answer -------------------------------------------------- */
+  function read(k) {
+    try { return JSON.parse(localStorage.getItem(k) || 'null'); }
+    catch (e) { return null; }                 /* private window, blocked storage */
+  }
+  function store(c) {
+    try { localStorage.setItem(KEY, JSON.stringify({ stats: c.stats, ads: c.ads, at: Date.now() })); }
+    catch (e) {}                               /* the answer still holds for this visit */
+  }
+
+  /* answered: has the visitor (or their browser) already given an answer? */
+  var choice = { stats: true, ads: false }, answered = false;
+  var gpc = navigator.globalPrivacyControl === true;
+  var was = read(KEY), old = read(OLD);
+  if (was) { choice = { stats: was.stats !== false, ads: was.ads === true }; answered = true; }
+  else if (gpc) { choice = { stats: false, ads: false }; answered = true; }
+  else if (old && old.ok === false) {          /* declined GA on the old banner */
+    choice = { stats: false, ads: false }; answered = true; store(choice);
+  }
+
+  function mark() {
+    root.setAttribute('data-consent', choice.ads ? 'yes' : (choice.stats ? 'stats' : 'no'));
+  }
+
+  /* ---- Google Analytics ---------------------------------------------------
+   * Consent defaults go in before the tag loads: stats as chosen (granted for
+   * a new visitor), every advertising signal denied unless marketing is on. */
+  var gaLoaded = false;
+  function consentState() {
+    var ad = choice.ads ? 'granted' : 'denied';
+    return { analytics_storage: choice.stats ? 'granted' : 'denied',
+             ad_storage: ad, ad_user_data: ad, ad_personalization: ad };
+  }
+  function startGA() {
+    if (gaLoaded || !choice.stats) return;
+    gaLoaded = true;
+    window['ga-disable-' + GA_ID] = false;
+    gtag('consent', 'default', consentState());
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+    window.gtag = gtag;
+    var s = document.createElement('script');
+    s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(s);
+  }
+
+  /* ---- Meta pixel (marketing only) --------------------------------------- */
+  var metaLoaded = false;
+  function startMeta() {
+    if (metaLoaded || !META_PIXEL_ID || !choice.ads) return;
+    metaLoaded = true;
+    !function (f, b, e, v, n, t, s) {
+      if (f.fbq) return; n = f.fbq = function () {
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+      n.queue = []; t = b.createElement(e); t.async = !0; t.src = v;
+      s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
+    }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', META_PIXEL_ID);
+    fbq('track', 'PageView');
+  }
+
+  /* Apply the current choice to whatever has already loaded, then load what
+     the choice now allows. Switching something off mid-visit stops it. */
+  function apply() {
+    mark();
+    if (gaLoaded) {
+      gtag('consent', 'update', consentState());
+      window['ga-disable-' + GA_ID] = !choice.stats;
+    }
+    if (window.fbq) try { fbq('consent', choice.ads ? 'grant' : 'revoke'); } catch (e) {}
+    startGA();
+    startMeta();
+  }
 
   /* ---- WHAT WE COUNT ------------------------------------------------------
-   * Two moments, both only once a visitor has said yes (before that neither
-   * gtag nor fbq exists, and these do nothing):
+   * Two moments. GA gets them unless visit stats are switched off; Meta only
+   * with marketing consent (until then fbq does not exist):
    *   contact_click  any CONTACT US / Send Us Your Site link - to the contact
    *                  page or to a form on the page. Meta: Contact.
    *   generate_lead  the form actually sent (form.js calls h19Track after the
@@ -113,32 +151,6 @@
       link_location: at ? (at.className || at.tagName).toString().split(' ')[0].slice(0, 40) : 'page' });
   }, true);
 
-  var KEY = 'h19.consent.v1';
-  var root = document.documentElement;
-
-  function ids() { return TAGS.map(function (t) { return t.id; }).sort().join(','); }
-
-  function saved() {
-    try { return JSON.parse(localStorage.getItem(KEY) || 'null'); }
-    catch (e) { return null; }                 /* private window, blocked storage */
-  }
-  function store(ok) {
-    try { localStorage.setItem(KEY, JSON.stringify({ ok: ok, tags: ids(), at: Date.now() })); }
-    catch (e) {}                               /* the answer still holds for this visit */
-  }
-
-  function load() {
-    TAGS.forEach(function (t) {
-      if (t.done) return;
-      t.done = true;
-      if (!t.src) { if (t.init) t.init(); return; }
-      var s = document.createElement('script');
-      s.async = true; s.src = t.src;
-      s.onload = function () { if (t.init) try { t.init(); } catch (e) {} };
-      document.head.appendChild(s);
-    });
-  }
-
   /* ---- the bar ----------------------------------------------------------- */
   function show() {
     if (document.getElementById('h19-consent')) return;
@@ -149,66 +161,79 @@
     el.setAttribute('aria-live', 'polite');
     el.setAttribute('aria-label', 'Cookie choice');
     el.innerHTML =
-      '<p class="consent__text">We would like to use Google Analytics to count '
-    + 'visits and see which pages get read. Nothing is loaded unless you say yes, '
-    + 'and the site works either way. <a href="/cookies/">What we would use</a>.</p>'
+      '<p class="consent__text">We count visits so we know how many people come '
+    + 'and what they read (you can switch that off under Options). May we also use '
+    + 'marketing cookies, so we can tell which of our ads are worth paying for? '
+    + '<a href="/cookies/">Details</a>.</p>'
+    + '<div class="consent__opts" hidden>'
+    + '<label class="consent__opt"><input type="checkbox" name="stats"> Visit stats '
+    + '<span>(Google Analytics: counts visits and pages read)</span></label>'
+    + '<label class="consent__opt"><input type="checkbox" name="ads"> Marketing '
+    + '<span>(ad measurement cookies, such as the Meta pixel)</span></label>'
+    + '</div>'
     + '<div class="consent__act">'
-    + '<button type="button" class="consent__btn consent__btn--no">Decline</button>'
-    + '<button type="button" class="consent__btn consent__btn--yes">Accept</button>'
+    + '<button type="button" class="consent__btn consent__btn--opt">Options</button>'
+    + '<button type="button" class="consent__btn consent__btn--no">No thanks</button>'
+    + '<button type="button" class="consent__btn consent__btn--yes">Accept all</button>'
+    + '<button type="button" class="consent__btn consent__btn--save" hidden>Save choices</button>'
     + '</div>';
-    /* the two buttons are the same size and the same weight on purpose: a
-       Decline made deliberately hard to find is not a choice */
-    el.querySelector('.consent__btn--yes').addEventListener('click', function () { answer(true); });
-    el.querySelector('.consent__btn--no').addEventListener('click', function () { answer(false); });
+    /* the buttons are the same size and the same weight on purpose: a
+       No thanks made deliberately hard to find is not a choice */
+    var q = function (s) { return el.querySelector(s); };
+    q('input[name=stats]').checked = choice.stats;
+    q('input[name=ads]').checked = choice.ads;
+    q('.consent__btn--yes').addEventListener('click', function () { answer({ stats: true, ads: true }); });
+    q('.consent__btn--no').addEventListener('click', function () { answer({ stats: choice.stats, ads: false }); });
+    q('.consent__btn--opt').addEventListener('click', function () {
+      q('.consent__opts').hidden = false;
+      q('.consent__btn--opt').hidden = true;
+      q('.consent__btn--save').hidden = false;
+      el.classList.add('is-open');
+    });
+    q('.consent__btn--save').addEventListener('click', function () {
+      answer({ stats: q('input[name=stats]').checked, ads: q('input[name=ads]').checked });
+    });
     document.body.appendChild(el);
     requestAnimationFrame(function () { el.classList.add('is-up'); });
   }
 
-  function answer(ok) {
-    store(ok);
-    root.setAttribute('data-consent', ok ? 'yes' : 'no');
+  function answer(c) {
+    choice = c; answered = true;
+    store(c);
+    apply();
     var el = document.getElementById('h19-consent');
     if (el) { el.classList.remove('is-up');
               setTimeout(function () { el.remove(); }, 260); }
-    if (ok) load();
   }
 
   /* ---- and the way back in ------------------------------------------------
-   * Every page's footer carries a link to this, so a choice is never a one-way
-   * door. It does nothing visible while there is nothing to consent to. */
-  function reopen() {
-    root.removeAttribute('data-consent');
-    if (TAGS.length) show();
-  }
+   * Every page's footer carries a Cookie choices link to this, so a choice is
+   * never a one-way door. It opens with the checkboxes showing. */
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('[data-consent-reopen]');
     if (!a) return;
     e.preventDefault();
-    reopen();
+    answered = true;                           /* the late bar stays away */
+    show();
+    var b = document.querySelector('#h19-consent .consent__btn--opt');
+    if (b) b.click();
   });
 
-  /* GLOBAL PRIVACY CONTROL IS AN ANSWER. A browser that sends it has already
-     said no, so nothing loads and the bar does not ask - the privacy and cookie
-     pages promise exactly this. Cookie choices can still reopen the bar for
-     someone who wants to say yes on purpose. */
-  if (navigator.globalPrivacyControl === true) { root.setAttribute('data-consent', 'no'); return; }
+  /* Stats start straight away (for everyone who has not switched them off). */
+  apply();
+  if (answered) return;
 
-  var was = saved();
-  if (was && was.ok && was.tags === ids()) { root.setAttribute('data-consent', 'yes'); load(); return; }
-  if (was && !was.ok && was.tags === ids()) { root.setAttribute('data-consent', 'no'); return; }
-  if (!TAGS.length) return;                    /* nothing to ask about yet */
   /* LET THEM SEE THE PAGE FIRST. The bar waits five seconds after the page is
      ready, so the first thing a visitor meets is the site, not a question.
-     Nothing loads in the meantime - waiting is the same as not yet saying yes.
-     If they answer sooner through "Cookie choices", the late bar stays away. */
+     Marketing stays off in the meantime - waiting is the same as not yet
+     saying yes. */
   /* A BUSINESS CARD waits four seconds, and its clock starts only once the
-     card's intro film has gone: the film is part of arriving, and the reader
-     should have the card itself in front of them before anything asks. */
+     card's intro film has gone. */
   var DELAY = root.hasAttribute('data-card') ? 4000 : 5000;
   function later() {
     var film = document.getElementById('intro');
     if (film && film.offsetWidth) { setTimeout(later, 250); return; }
-    setTimeout(function () { if (!root.hasAttribute('data-consent')) show(); }, DELAY);
+    setTimeout(function () { if (!answered) show(); }, DELAY);
   }
   if (document.readyState === 'loading')
     document.addEventListener('DOMContentLoaded', later);

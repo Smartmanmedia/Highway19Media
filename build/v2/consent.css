@@ -45,3 +45,27 @@
   .consent__act{ margin-left:0 }
   .consent__btn{ flex:1 1 0 }
 }
+
+/* LAYERED (Nov 2026): Options opens two checkboxes - visit stats (ticked) and
+   marketing - and swaps itself for Save choices. The third button matches the
+   No thanks outline so Accept all stays the one filled button. */
+.consent__btn--opt,
+.consent__btn--save{ background:transparent; color:#fff; border-color:rgba(255,255,255,.45) }
+.consent__btn--opt:hover,
+.consent__btn--save:hover{ border-color:#fff }
+.consent__btn--save{ background:#ffc72c; color:#0b2247; border-color:transparent }
+.consent__btn[hidden], .consent__opts[hidden]{ display:none }
+.consent__opts{
+  flex:1 1 100%; display:flex; flex-wrap:wrap; gap:8px 26px; margin:0;
+  font-size:clamp(.86rem,1.1vw,.95rem); line-height:1.4;
+}
+.consent__opt{ display:flex; align-items:baseline; gap:.5em; cursor:pointer }
+.consent__opt input{ width:1.1em; height:1.1em; accent-color:#ffc72c; translate:0 .15em; flex:none }
+.consent__opt span{ color:rgba(255,255,255,.7) }
+@media (max-width:560px){
+  .consent__opts{ flex-direction:column }
+  .consent__opt{ flex-wrap:wrap; row-gap:2px }
+  .consent__opt span{ flex:1 1 100%; padding-left:1.6em; font-size:.92em }
+  .consent__act{ flex-wrap:wrap }
+  .consent__btn{ padding:.72em .9em }
+}
