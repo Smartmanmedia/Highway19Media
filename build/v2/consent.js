@@ -46,8 +46,10 @@
      https://www.facebook.com to img-src and connect-src in build_site.js. */
   var META_PIXEL_ID = '';
 
-  /* Cloudflare Web Analytics: cookieless, so it loads for everyone. Paste the
-     site token (dash.cloudflare.com > Analytics & Logs > Web Analytics) here. */
+  /* Cloudflare Web Analytics: cookieless, so it loads for everyone. LEAVE THIS
+     EMPTY while Cloudflare injects the beacon itself (automatic setup is on
+     for highway19media.com, token 0d6081fa..., checked Nov 12, 2026); both at
+     once would count every visit twice. Fill it in only if that is turned off. */
   var CF_BEACON_TOKEN = '';
 
   /* EU 27 + Iceland, Liechtenstein, Norway (EEA) + UK + Switzerland */

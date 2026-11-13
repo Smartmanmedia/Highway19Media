@@ -285,8 +285,11 @@ against his source, not by guessing. Sources live in `assets/brand/`.
   names live in its Dropbox source (`video-production-source.html`). Register
   **section** as an event-scoped custom dimension in GA4 (Admin > Custom
   definitions) to report on it.
-- **Cloudflare Web Analytics:** the beacon loads from consent.js for every
-  visitor (cookieless) once `CF_BEACON_TOKEN` is filled in. The CSP already
+- **Cloudflare Web Analytics is ON** (automatic setup on the zone): Cloudflare
+  injects its beacon into every HTML page for real browsers (token
+  `0d6081fa17c94656a12174ffb8f02469`, reports to `/cdn-cgi/rum`). A plain curl
+  doesn't show it. `CF_BEACON_TOKEN` in consent.js stays empty unless
+  automatic injection is turned off, or visits would count twice. The CSP already
   allows static.cloudflareinsights.com and cloudflareinsights.com. The monthly
   archive script is in the Dropbox folder `J:\Dropbox\Dropbox\Customers\Highway19\analytics`,
   kept out of this public repo because its API token lives there.
