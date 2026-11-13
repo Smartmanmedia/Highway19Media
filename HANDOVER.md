@@ -268,6 +268,28 @@ against his source, not by guessing. Sources live in `assets/brand/`.
     that owns `G-TCSD07Z020` is the one that receives the data.
   - No owner-visit exclusion exists. If wanted, use GA4 Admin > Data filters
     (internal traffic) rather than code.
+  - **EU/EEA, UK, Switzerland:** a second gtag consent default with
+    `region: ASK_FIRST` keeps analytics_storage denied there (G100) until an
+    explicit yes to stats (Accept all, or Save with Visit stats ticked).
+    "No thanks" only updates the ad signals, so it never overrides that.
+  - Banner text (Nov 12, 2026): "1. Counting visits ... never sold to anyone
+    (switch it off under Options). 2. Marketing: may we use Google and Meta
+    cookies to show you our ads elsewhere too?"
+- **Section tracking (`section_view`, in consent.js):** once per section per
+  page view, when half the section (or half the screen, for tall sections) is
+  visible: `gtag('event','section_view',{section, page_path})`. The name is
+  the element's `data-section`, else its id. Sections whose working id is
+  cryptic (`s01`, `track-o`, `hb-how`...) carry a readable `data-section`; the
+  rest got readable ids. Service-page sections are named from their headings
+  at build time (`tools/build_site.js`, first four words). The video page's
+  names live in its Dropbox source (`video-production-source.html`). Register
+  **section** as an event-scoped custom dimension in GA4 (Admin > Custom
+  definitions) to report on it.
+- **Cloudflare Web Analytics:** the beacon loads from consent.js for every
+  visitor (cookieless) once `CF_BEACON_TOKEN` is filled in. The CSP already
+  allows static.cloudflareinsights.com and cloudflareinsights.com. The monthly
+  archive script is in the Dropbox folder `J:\Dropbox\Dropbox\Customers\Highway19\analytics`,
+  kept out of this public repo because its API token lives there.
 - The CSP allows exactly what is needed for GA and Web3Forms and nothing
   else.
 

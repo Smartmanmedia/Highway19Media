@@ -473,9 +473,20 @@ const SERVICES = require('./services');
     const order = S.sections || [
       { type: 'cards', h: S.incH, items: S.included }, { type: 'band' }, { type: 'facts' },
       { type: 'steps' }, { type: 'area' }, { type: 'faq' }];
+    /* SECTION NAMES for the section_view event (consent.js): each section
+       without an id gets one from its heading - "What We Make" -> what-we-make,
+       first four words. Duplicates get -2. */
+    const used = new Set(['questions', 'hero', 'cta']);
     const sectionsHtml = order.map(x => {
       if (!KINDS[x.type]) throw new Error(S.slug + ': no section kind "' + x.type + '"');
-      return KINDS[x.type](x);
+      return KINDS[x.type](x).replace(/<section class="([^"]*)"(?![^>]*\bid=)([^>]*)>([\s\S]*?<h[23][^>]*>([\s\S]*?)<\/h[23]>)?/, (m, cls, rest, body, h) => {
+        const label = (rest.match(/aria-label="([^"]*)"/) || [])[1];
+        const slug = (h || label || cls)
+          .replace(/<[^>]*>/g, ' ').replace(/&[a-z]+;/g, '').replace(/[’']/g, '').toLowerCase()
+          .replace(/[^a-z0-9]+/g, ' ').trim().split(' ').slice(0, 4).join(' ').replace(/( (the|a|an|for|to|of|and))+$/, '').split(' ').join('-');
+        let s = slug, n = 1; while (used.has(s)) s = slug + '-' + (++n); used.add(s);
+        return '<section class="' + cls + '" id="' + s + '"' + rest + '>' + (body || '');
+      });
     }).join('\n');
     let page = shell
       .replace('{{SECTIONS}}', () => sectionsHtml)

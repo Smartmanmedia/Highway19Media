@@ -12,6 +12,13 @@
  *     OFF until the visitor clicks "Accept all" (or ticks it under Options).
  *     The pixel is not fetched before that.
  *
+ * EU/EEA, UK AND SWITZERLAND: a second, region-scoped gtag consent default
+ * keeps analytics_storage DENIED there too, so GA asks first in those places
+ * (cookieless G100 pings until the visitor says yes to stats). Only an
+ * explicit yes to stats (Accept all, or Save with Visit stats ticked) sends
+ * analytics_storage 'granted' in an update; "No thanks" updates the marketing
+ * signals only, so it never overrides the regional default.
+ *
  * Buttons: Accept all / No thanks (declines marketing only) / Options (two
  * checkboxes, stats pre-ticked). Same size and weight, none hidden.
  *
@@ -39,6 +46,15 @@
      https://www.facebook.com to img-src and connect-src in build_site.js. */
   var META_PIXEL_ID = '';
 
+  /* Cloudflare Web Analytics: cookieless, so it loads for everyone. Paste the
+     site token (dash.cloudflare.com > Analytics & Logs > Web Analytics) here. */
+  var CF_BEACON_TOKEN = '';
+
+  /* EU 27 + Iceland, Liechtenstein, Norway (EEA) + UK + Switzerland */
+  var ASK_FIRST = ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU',
+    'IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE',
+    'IS','LI','NO','GB','CH'];
+
   var KEY = 'h19.consent.v2', OLD = 'h19.consent.v1';
   var root = document.documentElement;
 
@@ -63,7 +79,7 @@
      (Nov 12, 2026, live about an hour) when it moved an old decline across as
      stats-off. That was not this visitor's choice, so it counts as No thanks. */
   if (was && (was.by || was.stats !== false)) {
-    choice = { stats: was.stats !== false, ads: was.ads === true }; answered = true;
+    choice = { stats: was.stats !== false, ads: was.ads === true, by: was.by }; answered = true;
   }
   else if (was || (old && old.ok === false)) { /* declined on the old banner */
     choice = { stats: true, ads: false }; answered = true; store(choice, 'old');
@@ -78,15 +94,24 @@
    * Consent defaults go in before the tag loads: stats as chosen (granted for
    * a new visitor), every advertising signal denied unless marketing is on. */
   var gaLoaded = false;
+  /* stats were said yes to on purpose (this matters only where GA asks first) */
+  function statsChosen() { return choice.by === 'accept' || choice.by === 'options'; }
   function consentState() {
     var ad = choice.ads ? 'granted' : 'denied';
-    return { analytics_storage: choice.stats ? 'granted' : 'denied',
-             ad_storage: ad, ad_user_data: ad, ad_personalization: ad };
+    var s = { ad_storage: ad, ad_user_data: ad, ad_personalization: ad };
+    if (!choice.stats) s.analytics_storage = 'denied';
+    else if (statsChosen()) s.analytics_storage = 'granted';
+    return s;
   }
   function startGA() {
     if (gaLoaded) return;
     gaLoaded = true;
-    gtag('consent', 'default', consentState());
+    var ad = choice.ads ? 'granted' : 'denied';
+    var stats = choice.stats ? 'granted' : 'denied';
+    gtag('consent', 'default', { analytics_storage: stats,
+      ad_storage: ad, ad_user_data: ad, ad_personalization: ad });
+    gtag('consent', 'default', { analytics_storage: statsChosen() ? stats : 'denied',
+      ad_storage: ad, ad_user_data: ad, ad_personalization: ad, region: ASK_FIRST });
     gtag('js', new Date());
     gtag('config', GA_ID);
     window.gtag = gtag;
@@ -122,6 +147,56 @@
     startGA();
     startMeta();
   }
+
+  /* ---- Cloudflare Web Analytics beacon (no cookies, no consent needed) ---- */
+  if (CF_BEACON_TOKEN) {
+    var cf = document.createElement('script');
+    cf.defer = true; cf.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    cf.setAttribute('data-cf-beacon', JSON.stringify({ token: CF_BEACON_TOKEN }));
+    document.head.appendChild(cf);
+  }
+
+  /* ---- WHERE DO PEOPLE LEAVE? ---------------------------------------------
+   * section_view goes to GA once per section per page view, the first time at
+   * least half of it is on screen (half of the screen, for a section taller
+   * than the screen). A section is named by data-section, else by its id.
+   * Consent is gtag's job: with stats off these are cookieless pings. The
+   * URL is never touched. */
+  var seen = {}, secs = [];
+  function collect() {
+    var all = document.querySelectorAll('[data-section], section[id]');
+    for (var i = 0; i < all.length; i++) {
+      var el = all[i], p = el.parentElement, nested = false;
+      while (p) { if (p.matches && p.matches('[data-section], section[id]')) { nested = true; break; } p = p.parentElement; }
+      if (!nested) secs.push(el);
+    }
+  }
+  var ticking = false;
+  function check() {
+    ticking = false;
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    for (var i = 0; i < secs.length; i++) {
+      var el = secs[i], name = el.getAttribute('data-section') || el.id;
+      if (!name || seen[name]) continue;
+      var r = el.getBoundingClientRect();
+      if (!r.height || !r.width) continue;               /* hidden (phone/desktop twin) */
+      if (getComputedStyle(el).visibility === 'hidden') continue;   /* a closed pop-up */
+      var vis = Math.min(r.bottom, vh) - Math.max(r.top, 0);
+      if (vis >= 0.5 * Math.min(r.height, vh)) {
+        seen[name] = true;
+        gtag('event', 'section_view', { section: name, page_path: location.pathname });
+      }
+    }
+  }
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(check); } }
+  function startSections() {
+    collect();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    setTimeout(check, 600);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', startSections);
+  else startSections();
 
   /* ---- WHAT WE COUNT ------------------------------------------------------
    * Two moments. GA gets them unless visit stats are switched off; Meta only
@@ -170,15 +245,16 @@
     el.setAttribute('aria-live', 'polite');
     el.setAttribute('aria-label', 'Cookie choice');
     el.innerHTML =
-      '<p class="consent__text">We count visits so we know how many people come '
-    + 'and what they read (you can switch that off under Options). May we also use '
-    + 'marketing cookies, so we can tell which of our ads are worth paying for? '
-    + '<a href="/cookies/">Details</a>.</p>'
+      '<p class="consent__text"><b>1. Counting visits:</b> we count how many people '
+    + 'come in and where they get stuck, only to improve the site. It’s never sold '
+    + 'to anyone (switch it off under Options).<br><b>2. Marketing:</b> may we use '
+    + 'Google and Meta cookies to show you our ads elsewhere too? '
+    + '<a href="/cookies/">Details</a></p>'
     + '<div class="consent__opts" hidden>'
     + '<label class="consent__opt"><input type="checkbox" name="stats"> Visit stats '
-    + '<span>(Google Analytics: counts visits and pages read)</span></label>'
+    + '<span>(Google Analytics: counts visits, never sold)</span></label>'
     + '<label class="consent__opt"><input type="checkbox" name="ads"> Marketing '
-    + '<span>(ad measurement cookies, such as the Meta pixel)</span></label>'
+    + '<span>(Google and Meta ad cookies)</span></label>'
     + '</div>'
     + '<div class="consent__act">'
     + '<button type="button" class="consent__btn consent__btn--opt">Options</button>'
@@ -207,7 +283,7 @@
   }
 
   function answer(c, by) {
-    choice = c; answered = true;
+    choice = c; choice.by = by; answered = true;
     store(c, by);
     apply();
     var el = document.getElementById('h19-consent');
