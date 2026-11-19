@@ -144,6 +144,99 @@ body{ margin:0; background:#00287d }
 .hb-ask-h{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden;
   clip:rect(0 0 0 0); white-space:nowrap; border:0 }
 
+/* THE PHONE THAT COMES WITH YOU (Nov 2026). In the hero, a phone on the right
+   shows our real card, live: its own intro plays, and it scrolls and taps like
+   the real thing. Scroll on, and the same phone stays with you into "How the
+   tap works": it turns over to show the tag, a customer's phone touches it,
+   and our card opens on theirs. Desktop: the phone rides a sticky track beside
+   both sections. Phones: it sits between them and the tap plays as the
+   explanation comes into view. */
+.hb-duo{ position:relative }
+.hb-hero .in, .hb-tapsec .in{ position:relative }
+.hb-hero .in > *, .hb-tapsec .hb-tap-copy{ max-width:min(560px,50%) }
+.hb-tapsec{ background:linear-gradient(180deg,#00287d 0%,#001a52 100%);
+  min-height:100vh; display:grid; align-items:center }
+.hb-tapsec h2{ font-size:clamp(34px,4.4vw,56px); line-height:1.04; font-weight:800;
+  letter-spacing:-.025em; margin:0 0 .45em }
+.hb-track{ position:absolute; top:0; bottom:0; pointer-events:none;
+  right:max(clamp(16px,4vw,40px), calc((100% - 1120px) / 2)); width:min(480px,44%) }
+.hb-rig{ position:sticky; top:max(calc(var(--hh, 70px) + 16px), calc(50vh - 270px));
+  width:480px; max-width:100%; height:540px; margin:clamp(40px,6vw,86px) auto 0;
+  pointer-events:auto }
+
+.hb-ph{ position:absolute; top:10px; width:250px; height:520px }
+.hb-ph--you{ left:115px; z-index:1; perspective:1600px; transition:transform .8s cubic-bezier(.5,0,.2,1) }
+.hb-flip{ position:absolute; inset:0; transform-style:preserve-3d;
+  transition:transform .8s cubic-bezier(.5,0,.2,1) }
+.hb-face{ position:absolute; inset:0; border-radius:40px; backface-visibility:hidden;
+  -webkit-backface-visibility:hidden; overflow:hidden }
+.hb-face--front{ background:#0e1116; box-shadow:0 30px 70px rgba(0,8,34,.55), inset 0 0 0 2px #4b525e }
+.hb-face--front .scr{ position:absolute; left:10px; top:10px; width:230px; height:500px;
+  border-radius:31px; overflow:hidden; background:#000 }
+.hb-face--front iframe{ border:0; width:390px; height:848px; transform:scale(.5897);
+  transform-origin:0 0; display:block }
+.hb-face--back{ transform:rotateY(180deg) }
+.hb-face--back svg{ width:100%; height:100%; display:block }
+
+.hb-ph--them{ left:0; z-index:2; opacity:0; transform:translate(-40px,30px) }
+.hb-ph--them .body{ position:absolute; inset:0; border-radius:40px; background:#0e1116;
+  box-shadow:0 30px 70px rgba(0,8,34,.55), inset 0 0 0 2px #4b525e }
+.hb-ph--them .scr{ position:absolute; left:10px; top:10px; width:230px; height:500px;
+  border-radius:31px; overflow:hidden;
+  background:linear-gradient(180deg,#2f80ed 0%,#0b3d91 55%,#081a45 100%) }
+.hb-ph--them .island{ position:absolute; left:50%; top:20px; width:72px; height:20px;
+  margin-left:-36px; border-radius:10px; background:#000; z-index:3 }
+.hb-ph--them .clock{ position:absolute; left:0; right:0; top:120px; text-align:center;
+  color:#fff; font-size:62px; font-weight:300; line-height:1 }
+.hb-ph--them .note{ position:absolute; left:12px; right:12px; top:50px; padding:10px 12px;
+  border-radius:16px; background:#fff; color:#111; display:flex; gap:10px; align-items:center;
+  font-size:12px; line-height:1.3; transform:translateY(-120px); z-index:2 }
+.hb-ph--them .note i{ flex:none; width:28px; height:28px; border-radius:7px; background:#1e7bf2;
+  box-shadow:inset 0 0 0 7px #1e7bf2, inset 0 0 0 9px #fff }
+.hb-ph--them .note b{ display:block; font-size:12.5px }
+.hb-ph--them .note span{ color:#555 }
+.hb-ph--them .card{ position:absolute; inset:0; background:#000 url(../../assets/v2/biz/card-hwy19-v1.jpg) top center/cover;
+  transform:translateY(105%); z-index:2 }
+.hb-ph--them .finger{ position:absolute; right:30px; top:62px; width:30px; height:30px;
+  border-radius:50%; background:rgba(255,255,255,.5); border:2px solid #fff; opacity:0; z-index:3 }
+.hb-wave{ position:absolute; left:355px; top:310px; width:110px; height:110px; margin:-55px 0 0 -55px;
+  border-radius:50%; border:3px solid #ffc72c; opacity:0; z-index:5 }
+
+/* the tap - plays once each time "How the tap works" comes into view */
+.hb-duo.is-tap .hb-ph--you{ transform:translateX(115px) }
+.hb-duo.is-tap .hb-flip{ transform:rotateY(180deg) }
+.hb-duo.is-tap .hb-ph--them{ animation:hbThem 4.2s .7s cubic-bezier(.45,0,.25,1) both }
+.hb-duo.is-tap .hb-wave{ animation:hbWave2 1.1s 1.9s ease-out both }
+.hb-duo.is-tap .hb-wave + .hb-wave{ animation-delay:2.2s }
+.hb-duo.is-tap .hb-wave + .hb-wave + .hb-wave{ animation-delay:2.5s }
+.hb-duo.is-tap .hb-ph--them .note{ animation:hbNote 1.6s 3.4s cubic-bezier(.3,.7,.3,1) both }
+.hb-duo.is-tap .hb-ph--them .finger{ animation:hbFinger .7s 4.2s ease-out both }
+.hb-duo.is-tap .hb-ph--them .card{ animation:hbCardUp .6s 4.6s cubic-bezier(.3,.7,.3,1) both }
+@keyframes hbThem{
+  0%{ opacity:0; transform:translate(-40px,30px) }
+  15%{ opacity:1; transform:translate(-10px,10px) }
+  30%,50%{ opacity:1; transform:translate(225px,-8px) rotate(-8deg) }
+  68%,100%{ opacity:1; transform:translateX(-24px) } }
+@keyframes hbWave2{ 0%{ opacity:.95; transform:scale(.5) } 100%{ opacity:0; transform:scale(2.4) } }
+@keyframes hbNote{ 0%{ transform:translateY(-120px) } 100%{ transform:none } }
+@keyframes hbFinger{ 0%{ opacity:0; transform:scale(1.6) } 40%{ opacity:1; transform:scale(1) } 100%{ opacity:0 } }
+@keyframes hbCardUp{ 0%{ transform:translateY(105%) } 100%{ transform:none } }
+
+@media (max-width:900px){
+  .hb-duo{ display:flex; flex-direction:column }
+  .hb-hero{ order:1 } .hb-track{ order:2 } .hb-tapsec{ order:3 }
+  .hb-hero .in > *, .hb-tapsec .hb-tap-copy{ max-width:none }
+  .hb-tapsec{ min-height:0 }
+  .hb-track{ position:relative; right:auto; width:100%; padding:8px 0 20px;
+    background:linear-gradient(180deg,#00287d,#00287d) }
+  .hb-rig{ position:relative; top:auto; margin:0 auto; zoom:.72 }
+}
+@media (max-width:380px){ .hb-rig{ zoom:.64 } }
+@media (prefers-reduced-motion: reduce){
+  .hb-ph--you, .hb-flip{ transition:none }
+  .hb-duo.is-tap .hb-ph--them, .hb-duo.is-tap .hb-ph--them *, .hb-duo.is-tap .hb-wave{ animation-duration:1ms!important; animation-delay:0s!important }
+}
+
 :root[data-mode="night"] .hb-hero,
 :root[data-mode="night"] .hb-ask{ background:linear-gradient(180deg,#06214e 0%,#010817 100%) }
 </style>
@@ -152,6 +245,7 @@ body{ margin:0; background:#00287d }
 <!--HEADER-->
 <main id="hb-main" class="hb" tabindex="-1">
 
+  <div class="hb-duo">
   <section class="hb-hero" id="hero">
     <div class="in">
       <p class="eyebrow">Highway Biz &middot; Spring Hill &amp; Tampa Bay</p>
@@ -168,6 +262,54 @@ body{ margin:0; background:#00287d }
       </div>
     </div>
   </section>
+
+
+  <section class="hb-tapsec" id="how-tap" data-section="how-the-tap-works">
+    <div class="in"><div class="hb-tap-copy">
+      <p class="eyebrow">How the tap works</p>
+      <h2>Phone to phone. That is the whole thing.</h2>
+      <p class="hb-lead">Your tag rides on the back of your phone, or on your counter, your
+        truck or your door. Your customer holds their phone near it &mdash; no app, no pairing,
+        any recent iPhone or Android &mdash; and your card opens on their screen.</p>
+      <p class="hb-lead">From there it is one tap to call you, text you, follow you or save
+        you to their contacts.</p>
+    </div></div>
+  </section>
+
+  <div class="hb-track">
+    <div class="hb-rig">
+      <div class="hb-ph hb-ph--them" aria-hidden="true">
+        <div class="body"></div>
+        <div class="scr">
+          <div class="clock">9:41</div>
+          <div class="note"><i></i><div><b>NFC Tag</b><span>highway19media.com</span></div></div>
+          <div class="card"></div>
+          <div class="finger"></div>
+        </div>
+        <div class="island"></div>
+      </div>
+      <div class="hb-ph hb-ph--you">
+        <div class="hb-flip">
+          <div class="hb-face hb-face--front"><div class="scr">
+            <iframe src="/hwy19/adambc/" title="Our own Highway Biz card, live: scroll it and tap it" loading="eager"></iframe>
+          </div></div>
+          <div class="hb-face hb-face--back"><svg viewBox="0 0 250 520" aria-hidden="true">
+              <rect x="1" y="1" width="248" height="518" rx="40" fill="#2a2f38" stroke="#4b525e" stroke-width="2"/>
+              <rect x="18" y="18" width="104" height="104" rx="28" fill="#1c2027"/>
+              <circle cx="50" cy="50" r="18" fill="#0b0d11" stroke="#3a404a" stroke-width="3"/>
+              <circle cx="90" cy="50" r="18" fill="#0b0d11" stroke="#3a404a" stroke-width="3"/>
+              <circle cx="50" cy="90" r="18" fill="#0b0d11" stroke="#3a404a" stroke-width="3"/>
+              <circle cx="125" cy="300" r="60" fill="#0d1a3a" stroke="#ffc72c" stroke-width="5"/>
+              <g fill="none" stroke="#ffc72c" stroke-width="6" stroke-linecap="round">
+                <path d="M111 266a31 31 0 0 1 0 36"/><path d="M123 256a46 46 0 0 1 0 56"/><path d="M135 246a60 60 0 0 1 0 76"/></g>
+              <text x="125" y="342" text-anchor="middle" fill="#fff" font-size="13" font-weight="800" letter-spacing="2.5" font-family="Be Vietnam Pro, Arial, sans-serif">TAP</text>
+            </svg></div>
+        </div>
+      </div>
+      <div class="hb-wave"></div><div class="hb-wave"></div><div class="hb-wave"></div>
+    </div>
+  </div>
+  </div>
 
   <section class="hb-dark" id="good-for">
     <div class="in">
@@ -231,7 +373,7 @@ body{ margin:0; background:#00287d }
           <figcaption>
             <b>Carpenter Rick</b>
             <span>Cabin sheds &amp; custom builds &middot; Spring Hill</span>
-            <a href="/community/carpenterrick/bc/">Open his card</a>
+            <a href="/community/carpenterrick/bc/">Open card</a>
           </figcaption>
         </figure>
         <figure>
@@ -240,7 +382,7 @@ body{ margin:0; background:#00287d }
           <figcaption>
             <b>Highway 19 Media</b>
             <span>Our own card &middot; the one we hand out</span>
-            <a href="/hwy19/adambc/">Open our card</a>
+            <a href="/hwy19/adambc/">Open card</a>
           </figcaption>
         </figure>
         <figure>
@@ -249,7 +391,7 @@ body{ margin:0; background:#00287d }
           <figcaption>
             <b>Adam Ayash Music</b>
             <span>Composer &amp; musician &middot; on his own domain</span>
-            <a href="https://www.adamayashmusic.com/nfc">Open his card</a>
+            <a href="https://www.adamayashmusic.com/nfc">Open card</a>
           </figcaption>
         </figure>
       </div>
@@ -304,6 +446,25 @@ body{ margin:0; background:#00287d }
 
 </main>
 
+<script>
+/* the tap plays each time "How the tap works" comes into view */
+(function () {
+  var duo = document.querySelector('.hb-duo'), sec = document.getElementById('how-tap');
+  if (!duo || !sec || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (e.intersectionRatio >= 0.7) duo.classList.add('is-tap');
+      else if (e.intersectionRatio < 0.1) duo.classList.remove('is-tap');
+    });
+  }, { threshold: [0, 0.1, 0.7] }).observe(sec);
+  /* inside the demo phone the card shows no cookie bar of its own */
+  var fr = duo.querySelector('iframe');
+  fr.addEventListener('load', function () {
+    try { var s = fr.contentDocument.createElement('style');
+      s.textContent = '.consent{display:none!important}'; fr.contentDocument.head.appendChild(s); } catch (e) {}
+  });
+})();
+</script>
 <!--FOOTER-->
 
 <script src="header.js" defer></script>

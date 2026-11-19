@@ -37,6 +37,8 @@
  * ========================================================================= */
 (function () {
   'use strict';
+  /* inside a frame (the demo phone on /highway-biz/) a page neither asks nor counts */
+  if (window.self !== window.top) return;
 
   var GA_ID = 'G-50PLEN6KSF';
 
