@@ -32,10 +32,12 @@ const BUSINESS = {
   name: 'Highway 19 Media',
   alternateName: ['Highway19 Media', 'HWY 19 Media'],
   description:
-    'Highway 19 Media is a local marketing agency in Spring Hill, Florida. We design websites and ' +
-    'landing pages, produce video, run social media and paid advertising, and create branding, ' +
-    'graphic design and print for small businesses in Spring Hill, Brooksville and Hernando County, ' +
-    'along the US-19 corridor and across Tampa Bay - one local point of contact for all of it.',
+    'Highway 19 Media is a full-service local marketing agency in Spring Hill, Florida, helping ' +
+    'small businesses attract more customers, build stronger brands and make better use of their ' +
+    'marketing budgets. One local partner instead of five vendors: website design, advertising, ' +
+    'video production, branding, graphic design, photography and print under one roof, with more ' +
+    'than 25 years of professional experience, for businesses in Spring Hill, Brooksville and ' +
+    'Hernando County, along the US-19 corridor and across Tampa Bay.',
   slogan: 'Creative Marketing for Tampa Bay Businesses',
   url: SITE + '/',
   logo: SITE + '/assets/v2/meta/icon-180.png',
@@ -49,6 +51,7 @@ const BUSINESS = {
     city('Spring Hill', 'Hernando County'),
     city('Brooksville', 'Hernando County'),
     city('Weeki Wachee', 'Hernando County'),
+    city('Hernando Beach', 'Hernando County'),
     city('Hudson', 'Pasco County'),
     city('Port Richey', 'Pasco County'),
     city('New Port Richey', 'Pasco County'),
@@ -58,10 +61,11 @@ const BUSINESS = {
     city('Crystal River', 'Citrus County'),
     { '@type': 'AdministrativeArea', name: 'Hernando County, Florida' },
     { '@type': 'AdministrativeArea', name: 'Pasco County, Florida' },
+    { '@type': 'AdministrativeArea', name: 'Citrus County, Florida' },
     { '@type': 'AdministrativeArea', name: 'Tampa Bay Area, Florida' }
   ],
   knowsAbout: [
-    'Small business marketing', 'Website design', 'Landing pages', 'Search engine optimization',
+    'Small business marketing', 'Marketing strategy', 'Local marketing', 'Website design', 'Landing pages', 'Search engine optimization',
     'Video production', 'Commercial video', 'Photography', 'Podcast production', 'Social media marketing',
     'Social media management', 'Paid advertising', 'Pay-per-click advertising', 'Google Ads',
     'Facebook advertising', 'Instagram advertising', 'Social video', 'Advertising on AI platforms', 'Branding',

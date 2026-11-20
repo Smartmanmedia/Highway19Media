@@ -240,7 +240,7 @@ module.exports = [
     area: [
       'Highway 19 Media is based in Spring Hill and works with businesses throughout Hernando County ' +
       'and down the US-19 corridor into the greater Tampa Bay area.',
-      '<span class="svc-towns">Spring Hill. Brooksville. Weeki Wachee. Hudson. Port Richey. New Port ' +
+      '<span class="svc-towns">Spring Hill. Brooksville. Weeki Wachee. Hernando Beach. Hudson. Port Richey. New Port ' +
       'Richey. Holiday. Pinellas &mdash; and everywhere in between.</span>',
       'We can visit your business, look at the space, photograph the vehicle, bring samples, grab a coffee ' +
       'or meet by video.',
