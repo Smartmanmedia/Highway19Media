@@ -31,7 +31,7 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
  {"@type":"ProfessionalService","@id":"https://highway19media.com/#business","name":"Highway 19 Media","url":"https://highway19media.com/","email":"highway19media@gmail.com","sameAs":["https://www.facebook.com/Highway19Media"],"areaServed":{"@type":"AdministrativeArea","name":"Tampa Bay, Florida"}},
- {"@type":"Product","@id":"https://highway19media.com/highway-biz/#product","name":"Highway Biz - NFC Digital Business Card","description":"A hosted digital business card: its own page with your logo and colours, every contact method and social link in one place, a saveable contact file, a QR code and five NFC tags. Built for you by Highway 19 Media.","brand":{"@type":"Brand","name":"Highway 19 Media"},"image":["https://highway19media.com/assets/v2/biz/card-hwy19-v1.jpg","https://highway19media.com/assets/v2/biz/card-carpenterrick-v1.jpg","https://highway19media.com/assets/v2/biz/card-adamayashmusic-v1.jpg"],"manufacturer":{"@id":"https://highway19media.com/#business"},"category":"Digital business card","offers":{"@type":"Offer","price":"199","priceCurrency":"USD","availability":"https://schema.org/InStock","url":"https://highway19media.com/highway-biz/","seller":{"@id":"https://highway19media.com/#business"},"priceValidUntil":"2027-12-31","validFrom":"2026-10-17","shippingDetails":{"@type":"OfferShippingDetails","shippingRate":{"@type":"MonetaryAmount","value":"0","currency":"USD"},"shippingDestination":{"@type":"DefinedRegion","addressCountry":"US"}},"hasMerchantReturnPolicy":{"@type":"MerchantReturnPolicy","applicableCountry":"US","returnPolicyCategory":"https://schema.org/MerchantReturnNotPermitted"}}},
+ {"@type":"Product","@id":"https://highway19media.com/highway-biz/#product","name":"Highway Biz - NFC Digital Business Card","description":"A hosted digital business card: its own page with your logo and colours, every contact method and social link in one place, a saveable contact file, a QR code and five NFC tags. Built for you by Highway 19 Media.","brand":{"@type":"Brand","name":"Highway 19 Media"},"image":["https://highway19media.com/assets/v2/biz/card-hwy19-v1.jpg","https://highway19media.com/assets/v2/biz/card-carpenterrick-v1.jpg","https://highway19media.com/assets/v2/biz/card-adamayashmusic-v1.jpg","https://highway19media.com/assets/v2/biz/card-triquetra-v1.jpg"],"manufacturer":{"@id":"https://highway19media.com/#business"},"category":"Digital business card","offers":{"@type":"Offer","price":"199","priceCurrency":"USD","availability":"https://schema.org/InStock","url":"https://highway19media.com/highway-biz/","seller":{"@id":"https://highway19media.com/#business"},"priceValidUntil":"2027-12-31","validFrom":"2026-10-17","shippingDetails":{"@type":"OfferShippingDetails","shippingRate":{"@type":"MonetaryAmount","value":"0","currency":"USD"},"shippingDestination":{"@type":"DefinedRegion","addressCountry":"US"}},"hasMerchantReturnPolicy":{"@type":"MerchantReturnPolicy","applicableCountry":"US","returnPolicyCategory":"https://schema.org/MerchantReturnNotPermitted"}}},
  {"@type":"WebPage","@id":"https://highway19media.com/highway-biz/#webpage","url":"https://highway19media.com/highway-biz/","name":"Highway Biz - NFC Digital Business Card","inLanguage":"en-US","isPartOf":{"@id":"https://highway19media.com/#website"},"about":{"@id":"https://highway19media.com/highway-biz/#product"},"breadcrumb":{"@id":"https://highway19media.com/highway-biz/#breadcrumb"}},
  {"@type":"BreadcrumbList","@id":"https://highway19media.com/highway-biz/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://highway19media.com/"},{"@type":"ListItem","position":2,"name":"Highway Biz","item":"https://highway19media.com/highway-biz/"}]}
 ]}
@@ -115,7 +115,8 @@ body{ margin:0; background:#00287d }
    on the page selling it. The shots are photographs of live cards, not
    mock-ups, which is why the link under each one goes to the card itself. */
 .hb-eg{ display:grid; gap:clamp(22px,3vw,40px); margin-top:clamp(26px,3vw,38px);
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); align-items:start }
+  grid-template-columns:repeat(4,minmax(0,1fr)); align-items:start }
+@media (max-width:900px){ .hb-eg{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:28px 16px } }
 .hb-eg figure{ margin:0; text-align:center }
 /* HEIGHT:AUTO, OR THE WIDTH IS THE ONLY THING THAT LISTENS. The shots carry
    width and height attributes so the page does not jump while they load, and
@@ -363,7 +364,7 @@ body{ margin:0; background:#00287d }
         <li>Five years of hosting, from the day it goes live.</li>
         <li>The links and plain instructions for using it.</li>
       </ul>
-      <p class="hb-note">Three we built, live right now &mdash; open any of them on your
+      <p class="hb-note">Four we built, live right now &mdash; open any of them on your
         phone and it behaves exactly like the one you would get. A card can live here
         or on your own domain, whichever suits the business.</p>
       <div class="hb-eg">
@@ -392,6 +393,15 @@ body{ margin:0; background:#00287d }
             <b>Adam Ayash Music</b>
             <span>Composer &amp; musician &middot; on his own domain</span>
             <a href="https://www.adamayashmusic.com/nfc">Open card</a>
+          </figcaption>
+        </figure>
+        <figure>
+          <img src="../../assets/v2/biz/card-triquetra-v1.jpg" width="390" height="720"
+               alt="Triquetra Law Group's digital business card on a phone: the gold triquetra mark, Jennifer H. Burdman, Co-Founder, a Save to Contacts button and Email and Website buttons." loading="lazy" decoding="async">
+          <figcaption>
+            <b>Triquetra Law Group</b>
+            <span>Intellectual property law &middot; Boston</span>
+            <a href="/bc/triquetra/">Open card</a>
           </figcaption>
         </figure>
       </div>
