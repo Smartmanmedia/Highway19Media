@@ -120,6 +120,17 @@ body{ margin:0; background:#00287d }
 #good-for.is-in .hb-card:nth-child(5) h3::before{ animation-delay:0.75s }
 #good-for.is-in .hb-card:nth-child(6), #good-for.is-in .hb-card:nth-child(6) h3::before{ animation-delay:0.5s, 0.5s }
 #good-for.is-in .hb-card:nth-child(6) h3::before{ animation-delay:0.85s }
+/* EVERY SECTION RISES IN (Nov 2026): headings, paragraphs, list items and the
+   example phones fade up as they scroll into view, one after another. Without
+   JavaScript, or with reduced motion, everything is simply there. */
+.hb-rv{ opacity:0; transform:translateY(28px);
+  transition:opacity .7s ease, transform .7s cubic-bezier(.2,.7,.3,1); transition-delay:var(--rvd,0s) }
+.hb-rv.is-in{ opacity:1; transform:none }
+.hb-rv.hb-rv--x{ transform:translateX(-26px) }
+.hb-rv.hb-rv--x.is-in{ transform:none }
+.hb-rv.hb-rv--zoom{ transform:translateY(34px) scale(.94) }
+.hb-rv.hb-rv--zoom.is-in{ transform:none }
+@media (prefers-reduced-motion: reduce){ .hb-rv, .hb-rv.hb-rv--x, .hb-rv.hb-rv--zoom{ opacity:1; transform:none; transition:none } }
 @keyframes hbCardIn{ from{ opacity:0; transform:translateY(26px) } to{ opacity:1; transform:none } }
 @keyframes hbCheck{ from{ transform:scale(0) rotate(-30deg) } to{ transform:none } }
 @media (prefers-reduced-motion: reduce){
@@ -512,6 +523,33 @@ body{ margin:0; background:#00287d }
 })();
 </script>
 <script>
+/* every section below the hero rises in as it scrolls into view */
+(function () {
+  if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var groups = [
+    ['#how-tap .hb-tap-copy > *', ''],
+    ['#good-for .in > h2', ''],
+    ['#what-you-get .in > :not(ul):not(.hb-eg)', ''],
+    ['#what-you-get .hb-ticks > li', 'hb-rv--x'],
+    ['#what-you-get .hb-eg > figure', 'hb-rv--zoom'],
+    ['#hb-how .in > h2', ''],
+    ['#hb-how .hb-steps > li', 'hb-rv--x'],
+    ['#price .in > *', ''],
+    ['#hb-ask > :not(h2)', '']
+  ];
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+  groups.forEach(function (g) {
+    var els = document.querySelectorAll(g[0]);
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      el.classList.add('hb-rv'); if (g[1]) el.classList.add(g[1]);
+      el.style.setProperty('--rvd', Math.min(i * 0.08, 0.48) + 's');
+      io.observe(el);
+    }
+  });
+})();
 /* "What it is good for": the cards pop in once, when the section arrives */
 (function () {
   var s = document.getElementById('good-for');
