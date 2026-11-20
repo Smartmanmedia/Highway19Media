@@ -75,7 +75,7 @@
   transition:transform .16s ease,filter .16s ease;
 }
 .sec9 .socials a:hover{ transform:translateY(-2px); filter:brightness(1.1) }
-.sec9 .socials img{ width:100%; height:100%; display:block }
+.sec9 .socials img,.sec9 .socials svg{ width:100%; height:100%; display:block }
 
 .sec9 .foot-rule{
   border-top:1px solid rgba(255,255,255,.17);
