@@ -101,8 +101,8 @@ body{ margin:0; background:#00287d }
   box-shadow:0 18px 40px rgba(0,8,34,.45) }
 #good-for .hb-card:hover::before{ transform:scaleX(1) }
 #good-for .hb-card h3{ display:flex; align-items:center; gap:12px; margin-bottom:12px }
-#good-for .hb-card h3::before{ content:""; flex:none; width:32px; height:32px; border-radius:50%;
-  background:#ffc72c url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='%2300174a' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/20px no-repeat;
+#good-for .hb-card h3::before{ flex:none; width:32px; height:32px; border-radius:50%;
+  background:#ffc72c; color:#00174a; content:"\2713"; font-size:19px; font-weight:900; line-height:32px; text-align:center;
   box-shadow:0 0 0 5px rgba(255,199,44,.16) }
 #good-for.hb-pop .hb-card{ opacity:0; transform:translateY(26px) }
 #good-for.hb-pop .hb-card h3::before{ transform:scale(0) }
@@ -131,6 +131,12 @@ body{ margin:0; background:#00287d }
 .hb-rv.hb-rv--zoom{ transform:translateY(34px) scale(.94) }
 .hb-rv.hb-rv--zoom.is-in{ transform:none }
 @media (prefers-reduced-motion: reduce){ .hb-rv, .hb-rv.hb-rv--x, .hb-rv.hb-rv--zoom{ opacity:1; transform:none; transition:none } }
+/* OUR ROAD, ON THIS PAGE TOO (Nov 2026, desktop only). It comes down the left
+   margin beside "What it is good for", bends at the line into "What you get"
+   and runs along that line off the right of the screen, with the home page's
+   own cars on it, both ways. Drawn and driven by the script at the foot. */
+.hb{ position:relative; overflow-x:clip }
+.hb-road{ position:absolute; left:0; top:0; pointer-events:none; z-index:0; display:block }
 @keyframes hbCardIn{ from{ opacity:0; transform:translateY(26px) } to{ opacity:1; transform:none } }
 @keyframes hbCheck{ from{ transform:scale(0) rotate(-30deg) } to{ transform:none } }
 @media (prefers-reduced-motion: reduce){
@@ -152,8 +158,8 @@ body{ margin:0; background:#00287d }
 .hb-ticks{ list-style:none; margin:0; padding:0; display:grid; gap:11px }
 .hb-ticks li{ display:grid; grid-template-columns:24px 1fr; gap:12px; align-items:start;
   color:var(--dim) }
-.hb-ticks li::before{ content:""; width:22px; height:22px; margin-top:2px; border-radius:50%;
-  background:var(--green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round' d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/15px no-repeat }
+.hb-ticks li::before{ width:22px; height:22px; margin-top:2px; border-radius:50%;
+  background:var(--green); color:#fff; content:"\2713"; font-size:14px; font-weight:900; line-height:22px; text-align:center }
 
 .hb-note{ font-size:14.5px; color:rgba(255,255,255,.62); margin-top:2.2em }
 
@@ -559,6 +565,119 @@ body{ margin:0; background:#00287d }
     if (es[0].isIntersecting) { s.classList.add('is-in'); io.disconnect(); }
   }, { threshold: 0.2 });
   io.observe(s);
+})();
+</script>
+<script>
+/* OUR ROAD: desktop only, with a mouse, and wide enough for a margin to hold it */
+(function () {
+  if (!matchMedia('(min-width:1340px) and (pointer:fine)').matches ||
+      matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var main = document.getElementById('hb-main'), gf = document.getElementById('good-for'),
+      nx = document.getElementById('what-you-get');
+  if (!main || !gf || !nx) return;
+  var s = document.createElement('script');
+  s.src = "SPRITE_JS"; s.onload = go; document.head.appendChild(s);
+
+  function go() {
+    var SPRITE = window.H19_SPRITE, NAMES = window.H19_CARS; if (!SPRITE || !NAMES) return;
+    var NS = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('class', 'hb-road'); svg.setAttribute('aria-hidden', 'true');
+    svg.innerHTML = SPRITE +
+      '<defs><linearGradient id="hbRoadFade" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="0" y2="1">' +
+      '<stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff"/></linearGradient>' +
+      '<mask id="hbRoadMask" maskUnits="userSpaceOnUse"><rect id="hbFadeTop" fill="url(#hbRoadFade)"/>' +
+      '<rect id="hbFadeRest" fill="#fff"/></mask></defs>' +
+      '<g mask="url(#hbRoadMask)"><path fill="none" stroke="rgba(255,255,255,.7)" stroke-width="62"/>' +
+      '<path fill="none" stroke="#161616" stroke-width="57"/>' +
+      '<path fill="none" stroke="#fff" stroke-width="2.6" stroke-dasharray="18 16"/>' +
+      '<g class="r-cars"></g></g>';
+    main.insertBefore(svg, main.firstChild);
+    var paths = svg.querySelectorAll('g[mask] > path'), carsG = svg.querySelector('.r-cars');
+
+    /* each vehicle measured once, all drawn at one scale so a bus is a bus */
+    var box = {}, hs = [];
+    NAMES.forEach(function (n) { var g = svg.querySelector('#' + CSS.escape(n));
+      if (g) { var b = g.getBBox(); if (b.width > 0) { box[n] = b; hs.push(b.height); } } });
+    var names = NAMES.filter(function (n) { return box[n]; });
+    if (!names.length) return;
+    hs.sort(function (a, b) { return a - b; });
+    var SCALE = 17 / hs[hs.length >> 1], LANE = 13.5;
+
+    var P, L = 0;
+    function layout() {
+      var W = main.clientWidth;
+      var cx = Math.max((W - 1120) / 4, 46);
+      var top = gf.offsetTop, seam = nx.offsetTop, R = 150;
+      var d = 'M' + cx + ' ' + top + 'V' + (seam - R) + 'A' + R + ' ' + R + ' 0 0 0 ' +
+              (cx + R) + ' ' + seam + 'H' + (W + 160);
+      svg.setAttribute('width', W); svg.setAttribute('height', seam + 60);
+      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + (seam + 60));
+      [].forEach.call(paths, function (p) { p.setAttribute('d', d); });
+      var ft = svg.querySelector('#hbFadeTop'), fr = svg.querySelector('#hbFadeRest'),
+          gr = svg.querySelector('#hbRoadFade');
+      ft.setAttribute('x', 0); ft.setAttribute('y', top); ft.setAttribute('width', W); ft.setAttribute('height', 160);
+      gr.setAttribute('y1', top); gr.setAttribute('y2', top + 160);
+      fr.setAttribute('x', 0); fr.setAttribute('y', top + 160); fr.setAttribute('width', W); fr.setAttribute('height', seam);
+      P = paths[0]; L = P.getTotalLength();
+    }
+    layout();
+    addEventListener('resize', layout);
+    addEventListener('load', layout);
+
+    /* two lanes, driving on the right; each car keeps its distance from the one ahead.
+       s is the distance driven from that lane's own start: lane 0 starts at the top,
+       lane 1 comes in from the right edge. */
+    var lanes = [[], []];
+    function make(dir, at) {
+      var n = names[(Math.random() * names.length) | 0], b = box[n];
+      var u = document.createElementNS(NS, 'use');
+      u.setAttribute('href', '#' + n);
+      carsG.appendChild(u);
+      return { el: u, len: b.width * SCALE, s: at, v: 0, vmax: 70 + Math.random() * 55, dir: dir,
+               fix: ' scale(' + SCALE + ') translate(' + (-b.x - b.width / 2) + ' ' + (-b.y - b.height / 2) + ')' };
+    }
+    lanes.forEach(function (lane, k) {
+      var at = L - 40;
+      while (at > 0) { var c = make(k, at); c.v = c.vmax; lane.push(c); at -= 150 + Math.random() * 260; }
+    });
+    function draw(c) {
+      var along = Math.max(0, Math.min(L - 1, c.dir === 0 ? c.s : L - c.s));
+      var p = P.getPointAtLength(along), q = P.getPointAtLength(along + 1);
+      var tx = q.x - p.x, ty = q.y - p.y, m = Math.hypot(tx, ty) || 1; tx /= m; ty /= m;
+      var side = c.dir === 0 ? 1 : -1;
+      var x = p.x - ty * LANE * side, y = p.y + tx * LANE * side;
+      var ang = Math.atan2(ty, tx) * 180 / Math.PI + (c.dir === 0 ? 0 : 180);
+      c.el.setAttribute('transform', 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + ang.toFixed(1) + ')' + c.fix);
+    }
+    var last = 0, raf = 0, seen = new Set();
+    function tick(t) {
+      var dt = Math.min(0.05, (t - (last || t)) / 1000); last = t;
+      lanes.forEach(function (lane, k) {
+        lane.sort(function (a, b) { return b.s - a.s; });
+        for (var i = 0; i < lane.length; i++) {
+          var c = lane[i], ahead = lane[i - 1], want = c.vmax;
+          if (ahead) { var gap = ahead.s - c.s - (ahead.len + c.len) / 2;
+            want = Math.min(want, Math.max(0, (gap - 22) * 1.6)); }
+          c.v += Math.max(-160 * dt, Math.min(60 * dt, want - c.v));
+          c.s += c.v * dt;
+        }
+        var first = lane[0], tail = lane[lane.length - 1];
+        if (first && first.s > L + 60 && (!tail || tail.s > 140 + Math.random() * 220)) {
+          lane.shift(); carsG.removeChild(first.el);
+          var nc = make(k, -40); nc.v = nc.vmax * 0.8; lane.push(nc);
+        }
+        lane.forEach(draw);
+      });
+      raf = seen.size ? requestAnimationFrame(tick) : 0;
+    }
+    lanes.forEach(function (l) { l.forEach(draw); });
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) seen.add(e.target); else seen.delete(e.target); });
+      if (seen.size && !raf) { last = 0; raf = requestAnimationFrame(tick); }
+    });
+    io.observe(gf); io.observe(nx);
+  }
 })();
 </script>
 <!--FOOTER-->

@@ -251,6 +251,8 @@ const bizOut = minifyHtml(rd('build/v2/highway-biz.html')
   .replace('<!--HEADER-->', () => HEADER_FOR('/', '/contact/')
     .replace('class="skip" href="#top"', 'class="skip" href="#hb-main"'))
   .replace('<!--FOOTER-->', () => FOOTER_FOR('/contact/'))
+  /* the home page's cars, for the road down its side - loaded only on desktop */
+  .replace('"SPRITE_JS"', () => '"' + codeHref('sprite.js') + '"')
   .replace('<!--FORM-CARD-->', () => rd('build/v2/form-card.html'))
   .replace(/(?:href|src)="((?:section-fonts|form-card|section-09|header|consent)\.css|(?:form|header|consent)\.js)"/g,
            (m, f) => m.replace('"' + f + '"', '"' + codeHref(f) + '"'))
