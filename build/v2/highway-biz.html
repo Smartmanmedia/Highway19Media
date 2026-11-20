@@ -89,6 +89,42 @@ body{ margin:0; background:#00287d }
 .hb-card{ background:rgba(255,255,255,.055); border:1px solid var(--rule);
   border-radius:10px; padding:clamp(20px,2.2vw,28px) }
 .hb-card p{ color:var(--dim); font-size:15.5px }
+/* WHAT IT IS GOOD FOR, WITH SOME LIFT (Nov 2026): a yellow check on every
+   benefit, a yellow edge that lights on hover, and the six cards pop in one
+   after another as the section arrives - the check last, with a little bounce. */
+#good-for .hb-card{ position:relative; overflow:hidden;
+  background:linear-gradient(160deg,rgba(255,255,255,.085),rgba(255,255,255,.035));
+  transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease }
+#good-for .hb-card::before{ content:""; position:absolute; left:0; top:0; right:0; height:3px;
+  background:#ffc72c; transform:scaleX(.18); transform-origin:left; transition:transform .35s ease }
+#good-for .hb-card:hover{ transform:translateY(-4px); border-color:rgba(255,199,44,.55);
+  box-shadow:0 18px 40px rgba(0,8,34,.45) }
+#good-for .hb-card:hover::before{ transform:scaleX(1) }
+#good-for .hb-card h3{ display:flex; align-items:center; gap:12px; margin-bottom:12px }
+#good-for .hb-card h3::before{ content:""; flex:none; width:32px; height:32px; border-radius:50%;
+  background:#ffc72c url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='%2300174a' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/20px no-repeat;
+  box-shadow:0 0 0 5px rgba(255,199,44,.16) }
+#good-for.hb-pop .hb-card{ opacity:0; transform:translateY(26px) }
+#good-for.hb-pop .hb-card h3::before{ transform:scale(0) }
+#good-for.hb-pop.is-in .hb-card{ animation:hbCardIn .6s cubic-bezier(.2,.7,.3,1) both }
+#good-for.hb-pop.is-in .hb-card h3::before{ animation:hbCheck .5s cubic-bezier(.3,1.6,.5,1) both }
+#good-for.is-in .hb-card:nth-child(1), #good-for.is-in .hb-card:nth-child(1) h3::before{ animation-delay:0s, 0s }
+#good-for.is-in .hb-card:nth-child(1) h3::before{ animation-delay:0.35s }
+#good-for.is-in .hb-card:nth-child(2), #good-for.is-in .hb-card:nth-child(2) h3::before{ animation-delay:0.1s, 0.1s }
+#good-for.is-in .hb-card:nth-child(2) h3::before{ animation-delay:0.45s }
+#good-for.is-in .hb-card:nth-child(3), #good-for.is-in .hb-card:nth-child(3) h3::before{ animation-delay:0.2s, 0.2s }
+#good-for.is-in .hb-card:nth-child(3) h3::before{ animation-delay:0.55s }
+#good-for.is-in .hb-card:nth-child(4), #good-for.is-in .hb-card:nth-child(4) h3::before{ animation-delay:0.30000000000000004s, 0.30000000000000004s }
+#good-for.is-in .hb-card:nth-child(4) h3::before{ animation-delay:0.65s }
+#good-for.is-in .hb-card:nth-child(5), #good-for.is-in .hb-card:nth-child(5) h3::before{ animation-delay:0.4s, 0.4s }
+#good-for.is-in .hb-card:nth-child(5) h3::before{ animation-delay:0.75s }
+#good-for.is-in .hb-card:nth-child(6), #good-for.is-in .hb-card:nth-child(6) h3::before{ animation-delay:0.5s, 0.5s }
+#good-for.is-in .hb-card:nth-child(6) h3::before{ animation-delay:0.85s }
+@keyframes hbCardIn{ from{ opacity:0; transform:translateY(26px) } to{ opacity:1; transform:none } }
+@keyframes hbCheck{ from{ transform:scale(0) rotate(-30deg) } to{ transform:none } }
+@media (prefers-reduced-motion: reduce){
+  #good-for.hb-pop .hb-card, #good-for.hb-pop .hb-card h3::before{ opacity:1; transform:none; animation:none!important }
+}
 
 /* the five steps */
 .hb-steps{ counter-reset:step; list-style:none; margin:0; padding:0;
@@ -473,6 +509,18 @@ body{ margin:0; background:#00287d }
     try { var s = fr.contentDocument.createElement('style');
       s.textContent = '.consent{display:none!important}'; fr.contentDocument.head.appendChild(s); } catch (e) {}
   });
+})();
+</script>
+<script>
+/* "What it is good for": the cards pop in once, when the section arrives */
+(function () {
+  var s = document.getElementById('good-for');
+  if (!s || !('IntersectionObserver' in window)) return;
+  s.classList.add('hb-pop');
+  var io = new IntersectionObserver(function (es) {
+    if (es[0].isIntersecting) { s.classList.add('is-in'); io.disconnect(); }
+  }, { threshold: 0.2 });
+  io.observe(s);
 })();
 </script>
 <!--FOOTER-->
